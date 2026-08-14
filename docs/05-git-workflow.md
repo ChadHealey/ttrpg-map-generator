@@ -5,7 +5,10 @@ history and recoverable changes, not process for its own sake.
 
 ## Branches
 
-- `main` is releasable and protected from force pushes.
+- `main` is releasable and must never be force-pushed or deleted. Enforce this with
+  GitHub branch protection when the repository plan supports rules for private
+  repositories; until then it remains a mandatory project rule rather than a
+  server-side control.
 - Use short-lived branches for changes that need more than one safe commit or CI
   cycle.
 - Prefer one active change at a time for a solo project; unfinished work multiplies
