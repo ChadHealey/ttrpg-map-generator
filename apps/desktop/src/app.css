@@ -31,7 +31,7 @@ main {
 }
 
 section {
-  width: min(44rem, 100%);
+  width: min(76rem, 100%);
   padding: 3rem;
   border: 1px solid rgb(54 51 39 / 30%);
   background: rgb(244 239 220 / 74%);
@@ -61,4 +61,65 @@ h1 {
   color: #555140;
   font-size: 1.1rem;
   line-height: 1.6;
+}
+
+.scene-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+figure {
+  margin: 0;
+}
+
+figcaption {
+  margin-bottom: 0.65rem;
+  color: #605b49;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+canvas,
+img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid rgb(54 51 39 / 35%);
+  box-shadow: 0 0.6rem 1.6rem rgb(44 39 28 / 14%);
+}
+
+.export-link {
+  display: inline-block;
+  margin-top: 1.5rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #302d21;
+  color: #302d21;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.export-link:hover {
+  background: #302d21;
+  color: #f3e7c6;
+}
+
+@media (width < 46rem) {
+  main {
+    padding: 1rem;
+  }
+
+  section {
+    padding: 1.5rem;
+  }
+
+  .scene-grid {
+    grid-template-columns: 1fr;
+  }
 }
