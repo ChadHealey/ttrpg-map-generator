@@ -1,0 +1,15 @@
+packages:
+  - apps/*
+  - packages/*
+
+engineStrict: true
+saveExact: true
+sharedWorkspaceLockfile: true
+strictDepBuilds: true
+strictPeerDependencies: true
+verifyDepsBeforeRun: error
+
+allowBuilds:
+  esbuild: true
+  simple-git-hooks: true
+  unrs-resolver: true

@@ -4,13 +4,13 @@ Formatting, typing, linting, and package boundaries should turn recurring review
 comments into executable checks. Exact configuration belongs in the checked-in
 tool files; this document owns the intended policy.
 
-The repository does not yet contain the application scaffold. Commands in this
-document are the required interface for Milestone 0, not a claim that they already
-exist.
+The repository contains the Milestone 0 application scaffold and the root command
+contract below. Specialized suites are added with the milestone that first needs
+them.
 
 ## Root command contract
 
-The pnpm workspace should provide:
+The pnpm workspace provides:
 
 ```bash
 pnpm format          # rewrite supported source and config files
@@ -226,15 +226,15 @@ implements and state any deliberate deviation.
 
 ## Enforcement points
 
-Milestone 0 should install:
+Milestone 0 installs:
 
 - a fast pre-commit hook for formatting, linting, obvious forbidden files, and
   staged-file hygiene;
 - full `pnpm check` in CI on every branch or pull request;
-- cross-platform deterministic fixtures on macOS and Linux at release gates;
+- Linux and macOS CI jobs, ready to run deterministic fixtures when those fixtures
+  are introduced;
 - visual and end-to-end suites at the frequencies defined in
   [04 — Testing](04-testing.md).
 
 Hooks reject; they do not silently rewrite staged files. If bypassing a hook becomes
 normal, recalibrate the hook rather than normalizing bypasses.
-

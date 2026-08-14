@@ -15,16 +15,17 @@ for historical context. They are not current requirements or decision records.
 
 ## Read before changing code
 
-| Document | Owns |
-|---|---|
-| [Project plan](PROJECT_PLAN.md) | Product scope, architecture, roadmap, risks, and MVP acceptance criteria |
-| [01 — Architecture](01-architecture.md) | Package boundaries, data layers, generation, identity, coordinates, persistence, and cross-map rules |
-| [02 — Naming and vocabulary](02-naming-and-vocabulary.md) | Identifier conventions, units, events, files, and the canonical domain language |
-| [03 — Code style and tooling](03-code-style-and-tooling.md) | TypeScript, Svelte, Rust, formatting, linting, module size, comments, and enforcement |
-| [04 — Testing](04-testing.md) | Test tiers, determinism, geometry, persistence, fixtures, snapshots, and visual review |
-| [05 — Git workflow](05-git-workflow.md) | Branches, commits, generated files, versions, dependencies, and ADRs |
-| [06 — Definition of done](06-definition-of-done.md) | Completion checklists and named anti-patterns |
-| [ADR template](adr/0000-template.md) | Durable technical decisions and their consequences |
+| Document                                                    | Owns                                                                                                 |
+| ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| [Project plan](PROJECT_PLAN.md)                             | Product scope, architecture, roadmap, risks, and MVP acceptance criteria                             |
+| [01 — Architecture](01-architecture.md)                     | Package boundaries, data layers, generation, identity, coordinates, persistence, and cross-map rules |
+| [02 — Naming and vocabulary](02-naming-and-vocabulary.md)   | Identifier conventions, units, events, files, and the canonical domain language                      |
+| [03 — Code style and tooling](03-code-style-and-tooling.md) | TypeScript, Svelte, Rust, formatting, linting, module size, comments, and enforcement                |
+| [04 — Testing](04-testing.md)                               | Test tiers, determinism, geometry, persistence, fixtures, snapshots, and visual review               |
+| [05 — Git workflow](05-git-workflow.md)                     | Branches, commits, generated files, versions, dependencies, and ADRs                                 |
+| [06 — Definition of done](06-definition-of-done.md)         | Completion checklists and named anti-patterns                                                        |
+| [ADR template](adr/0000-template.md)                        | Durable technical decisions and their consequences                                                   |
+| [Dependency reviews](dependency-reviews/README.md)          | Required capability, maintenance, license, runtime, and determinism review for adopted dependencies  |
 
 ## Authority and conflicts
 

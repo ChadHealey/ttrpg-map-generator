@@ -143,11 +143,7 @@ separation of responsibilities may not:
 interface Generator<P, O> {
   readonly manifest: GeneratorManifest;
   plan(context: ReadContext, target: GenerationTarget): GenerationPlan;
-  generate(
-    context: GenerationContext,
-    plan: GenerationPlan,
-    params: P,
-  ): O;
+  generate(context: GenerationContext, plan: GenerationPlan, params: P): O;
   validate(output: O, context: ValidationContext): Diagnostic[];
 }
 ```
@@ -245,13 +241,13 @@ extract or optimize the proven seam.
 
 ## Where a new thing goes
 
-| Adding | Location | Reason |
-|---|---|---|
-| Stable IDs, units, transforms, domain records, scene types | `packages/core` | Shared contracts with no higher-layer dependency |
-| World or regional generation behavior | `packages/generation` | Pure domain generation |
-| Motif family or style definition | `packages/assets` | Procedural visual content independent of rendering backend |
-| Canvas, SVG, or PNG interpretation | `packages/render` | Consumes `RenderScene` only |
-| Schemas, migrations, or `.mapworld` I/O | `packages/persistence` | Boundary validation and storage |
-| Panels, tools, selection, navigation, orchestration | `apps/desktop` | Transient interaction and application composition |
-| Fixed seeds, old saves, seam/pole cases, adversarial geometry | `fixtures` | Shared reproducible evidence |
-| Durable decision with alternatives | `docs/adr` | Preserves why the choice was made |
+| Adding                                                        | Location               | Reason                                                     |
+| ------------------------------------------------------------- | ---------------------- | ---------------------------------------------------------- |
+| Stable IDs, units, transforms, domain records, scene types    | `packages/core`        | Shared contracts with no higher-layer dependency           |
+| World or regional generation behavior                         | `packages/generation`  | Pure domain generation                                     |
+| Motif family or style definition                              | `packages/assets`      | Procedural visual content independent of rendering backend |
+| Canvas, SVG, or PNG interpretation                            | `packages/render`      | Consumes `RenderScene` only                                |
+| Schemas, migrations, or `.mapworld` I/O                       | `packages/persistence` | Boundary validation and storage                            |
+| Panels, tools, selection, navigation, orchestration           | `apps/desktop`         | Transient interaction and application composition          |
+| Fixed seeds, old saves, seam/pole cases, adversarial geometry | `fixtures`             | Shared reproducible evidence                               |
+| Durable decision with alternatives                            | `docs/adr`             | Preserves why the choice was made                          |

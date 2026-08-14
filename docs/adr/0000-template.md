@@ -77,4 +77,3 @@ measure. Record thresholds where the decision depends on them.
 
 List evidence that would justify reopening the decision. Avoid calendar dates when
 the real trigger is a measured workload or completed product milestone.
-

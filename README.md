@@ -7,8 +7,9 @@ style.
 
 ## Status
 
-The project is in repository foundation work before Milestone 0 implementation. There is no
-application scaffold yet.
+The repository foundation and Milestone 0 workspace scaffold are in place. The desktop shell
+currently proves that Svelte, Vite, Tauri, TypeScript, Rust, and the internal package graph build
+together; map rendering is the next implementation slice.
 
 Milestone 0 will prove the application and rendering architecture by displaying a small
 hard-coded scene in a Svelte/Tauri desktop app and exporting that same scene through SVG. Its
@@ -43,6 +44,25 @@ Historical proposals live in `docs/archive/` and are not current requirements.
 
 ## Development
 
-The root development commands and contributor setup will be added with the Milestone 0
-workspace scaffold. Their required command contract is already defined in
+Prerequisites:
+
+- macOS development tools from Xcode;
+- Node.js `24.11.0` (recorded in `.node-version`);
+- Corepack, included with the pinned Node.js release;
+- Rust `1.97.1` through rustup (recorded in `rust-toolchain.toml`).
+
+Install and verify the workspace:
+
+```bash
+corepack pnpm install --frozen-lockfile
+corepack pnpm check
+```
+
+Run the desktop app:
+
+```bash
+corepack pnpm dev
+```
+
+The complete command contract and enforcement policy live in
 [`docs/03-code-style-and-tooling.md`](docs/03-code-style-and-tooling.md).

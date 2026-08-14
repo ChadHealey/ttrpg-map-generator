@@ -1,0 +1,10 @@
+.DS_Store
+node_modules/
+dist/
+target/
+apps/desktop/src-tauri/gen/schemas/
+coverage/
+playwright-report/
+test-results/
+docs/archive/
+apps/desktop/src-tauri/icons/

@@ -6,22 +6,22 @@ language of the map domain.
 
 ## Identifier conventions
 
-| Thing | Convention | Example |
-|---|---|---|
-| TypeScript files and folders | `kebab-case` | `seed-derivation.ts`, `inherited-context/` |
-| Svelte component files | `PascalCase.svelte` | `MapViewport.svelte` |
-| Unit test files | `<subject>.test.ts` | `seed-derivation.test.ts` |
-| Integration test files | `<workflow>.integration.test.ts` | `save-reopen.integration.test.ts` |
-| Types, classes, components | `PascalCase` | `WorldDocument`, `MapViewport` |
-| Functions and variables | `camelCase` | `deriveAspectSeed`, `worldMapId` |
-| Private class fields | language-private `#camelCase` when useful | `#activeTool` |
-| Module constants | `UPPER_SNAKE_CASE` | `DEFAULT_TILE_SIZE_PX` |
-| Schema values | `<name>Schema` | `worldDocumentSchema` |
-| Branded IDs | `<Concept>Id` | `EntityId`, `MapId`, `AspectId` |
-| Svelte stores | noun describing stored state | `viewportState`, `selectionState` |
-| Rust modules/functions | `snake_case` | `atomic_save` |
-| Rust types/traits | `PascalCase` | `AtomicSaveError` |
-| CLI-like script names | `kebab-case` | `update-goldens.ts` |
+| Thing                        | Convention                                | Example                                    |
+| ---------------------------- | ----------------------------------------- | ------------------------------------------ |
+| TypeScript files and folders | `kebab-case`                              | `seed-derivation.ts`, `inherited-context/` |
+| Svelte component files       | `PascalCase.svelte`                       | `MapViewport.svelte`                       |
+| Unit test files              | `<subject>.test.ts`                       | `seed-derivation.test.ts`                  |
+| Integration test files       | `<workflow>.integration.test.ts`          | `save-reopen.integration.test.ts`          |
+| Types, classes, components   | `PascalCase`                              | `WorldDocument`, `MapViewport`             |
+| Functions and variables      | `camelCase`                               | `deriveAspectSeed`, `worldMapId`           |
+| Private class fields         | language-private `#camelCase` when useful | `#activeTool`                              |
+| Module constants             | `UPPER_SNAKE_CASE`                        | `DEFAULT_TILE_SIZE_PX`                     |
+| Schema values                | `<name>Schema`                            | `worldDocumentSchema`                      |
+| Branded IDs                  | `<Concept>Id`                             | `EntityId`, `MapId`, `AspectId`            |
+| Svelte stores                | noun describing stored state              | `viewportState`, `selectionState`          |
+| Rust modules/functions       | `snake_case`                              | `atomic_save`                              |
+| Rust types/traits            | `PascalCase`                              | `AtomicSaveError`                          |
+| CLI-like script names        | `kebab-case`                              | `update-goldens.ts`                        |
 
 Treat acronyms as words in identifiers: `SvgRenderer`, `PngExport`, `worldId`,
 and `Rng`, not `SVGRenderer`, `PNGExport`, `worldID`, or `RNG`.
@@ -34,20 +34,20 @@ Do not prefix interfaces with `I`. Do not suffix a value with `Data`, `Info`,
 Commands use verbs:
 
 ```ts
-generateTerrain()
-saveWorldDocument()
-rerollAspect()
-reconcileInheritedContext()
+generateTerrain();
+saveWorldDocument();
+rerollAspect();
+reconcileInheritedContext();
 ```
 
 Queries and predicates make their read-only nature clear:
 
 ```ts
-getEntityById()
-findContainingRegion()
-isCoastlineValid()
-hasConflictingLocks()
-canRegenerateAspect()
+getEntityById();
+findContainingRegion();
+isCoastlineValid();
+hasConflictingLocks();
+canRegenerateAspect();
 ```
 
 A function that mutates state and returns an unrelated meaningful result is a
@@ -64,10 +64,10 @@ Boolean names start with `is`, `has`, `can`, or `should` and read naturally in a
 condition:
 
 ```ts
-isLocked
-hasValidSink
-canReconcile
-shouldRenderLabels
+isLocked;
+hasValidSink;
+canReconcile;
+shouldRenderLabels;
 ```
 
 Avoid negative state such as `isNotStale`, `disableValidation`, or
@@ -78,10 +78,10 @@ Avoid negative state such as `isNotStale`, `disableValidation`, or
 An event reports something that happened; it is not a command:
 
 ```ts
-generationCompleted
-documentSaved
-selectionChanged
-contextBecameStale
+generationCompleted;
+documentSaved;
+selectionChanged;
+contextBecameStale;
 ```
 
 Commands are expressed through function calls or command objects. Name UI event
@@ -93,24 +93,24 @@ application; domain packages do not expose framework handlers.
 Use a domain type when mixing values would be dangerous:
 
 ```ts
-WorldKilometers
-ScreenPixels
-PrintPoints
-PlanetPoint
-RegionalPoint
-ScreenPoint
+WorldKilometers;
+ScreenPixels;
+PrintPoints;
+PlanetPoint;
+RegionalPoint;
+ScreenPoint;
 ```
 
 Raw numbers at configuration, serialization, or framework boundaries carry a
 unit suffix:
 
 ```ts
-timeoutMs
-rotationRad
-distanceKm
-strokeWidthPx
-opacityRatio
-gridWidthCells
+timeoutMs;
+rotationRad;
+distanceKm;
+strokeWidthPx;
+opacityRatio;
+gridWidthCells;
 ```
 
 Use one angular unit inside a given algorithm. Convert explicitly at its boundary.
@@ -135,43 +135,43 @@ unattractive.
 Use one term per concept in code, schemas, diagnostics, and technical docs. The
 approved word may have a narrower meaning than ordinary English.
 
-| Concept | Use | Avoid for this concept |
-|---|---|---|
-| The complete persisted project | **world document** | project file, workspace |
-| The root scale-specific map | **world map** | atlas map, global map, planet map |
-| A detailed child selected from the world | **regional map** | region document, zoom map |
-| One scale-specific owned record | **map document**, or **map** when clear | canvas, scene, level |
-| A meaningful world object with identity | **entity** | object, item, node |
-| One independently generated concern | **aspect** | layer, field, property |
-| Containment of maps and entities | **ownership tree** | scene tree, hierarchy graph |
-| Regeneration relationships | **dependency DAG** | ownership graph, pipeline tree |
-| Persisted parent input used by a child | **inherited context** | parent data, source blob |
-| The stored value of that input | **context snapshot** | cache, copy |
-| Origin trail for inherited data | **source lineage** | ancestry, history |
-| A connection crossing a map boundary | **boundary portal** | connector, exit, seam point |
-| User intent that guides generation | **constraint** | hint, edit instruction |
-| User-authored replacement of derived data | **override** | patch, exception |
-| Protection from regeneration | **lock** | freeze, pin |
-| User-fixed location within an aspect | **pin** | lock, anchor |
-| Parent-supplied fixed geographic reference | **anchor** | pin, control point |
-| Recompute from the same accepted inputs | **regenerate** | rebuild, redraw |
-| Change an aspect revision, then regenerate | **reroll** | randomize, reseed |
-| Output that the user has kept | **accepted state** | current cache, generated result |
-| Style-neutral geographic shape | **canonical geometry** | raw path, base shape |
-| Renderer-neutral drawing description | **render scene** | scene graph, canvas model |
-| Visual treatment of canonical geometry | **style** | theme, skin |
-| Related procedural symbol definition | **asset family** | stamp set, brush pack |
-| One reusable generated symbol | **motif** | stamp, glyph, sprite |
-| One positioned motif instance | **placement** | stamp, mark |
-| Derived visual arrangement | **decoration** | art layer, styling |
-| Data safe to delete and rebuild | **cache** | accepted output, snapshot |
-| Structured actionable generation finding | **diagnostic** | log, message, error string |
-| Rule that valid output must satisfy | **invariant** | preference, heuristic |
-| Child context differs from its source | **stale** | dirty, outdated |
-| Can be applied without changing accepted child meaning | **reconcilable** | mergeable |
-| Requires an explicit user decision | **conflicting** | invalid, broken |
-| Planet's projection-independent coordinates | **planet-native coordinates** | world pixels, atlas coordinates |
-| Local physical child-map coordinates | **regional coordinates** | local pixels, world coordinates |
+| Concept                                                | Use                                     | Avoid for this concept            |
+| ------------------------------------------------------ | --------------------------------------- | --------------------------------- |
+| The complete persisted project                         | **world document**                      | project file, workspace           |
+| The root scale-specific map                            | **world map**                           | atlas map, global map, planet map |
+| A detailed child selected from the world               | **regional map**                        | region document, zoom map         |
+| One scale-specific owned record                        | **map document**, or **map** when clear | canvas, scene, level              |
+| A meaningful world object with identity                | **entity**                              | object, item, node                |
+| One independently generated concern                    | **aspect**                              | layer, field, property            |
+| Containment of maps and entities                       | **ownership tree**                      | scene tree, hierarchy graph       |
+| Regeneration relationships                             | **dependency DAG**                      | ownership graph, pipeline tree    |
+| Persisted parent input used by a child                 | **inherited context**                   | parent data, source blob          |
+| The stored value of that input                         | **context snapshot**                    | cache, copy                       |
+| Origin trail for inherited data                        | **source lineage**                      | ancestry, history                 |
+| A connection crossing a map boundary                   | **boundary portal**                     | connector, exit, seam point       |
+| User intent that guides generation                     | **constraint**                          | hint, edit instruction            |
+| User-authored replacement of derived data              | **override**                            | patch, exception                  |
+| Protection from regeneration                           | **lock**                                | freeze, pin                       |
+| User-fixed location within an aspect                   | **pin**                                 | lock, anchor                      |
+| Parent-supplied fixed geographic reference             | **anchor**                              | pin, control point                |
+| Recompute from the same accepted inputs                | **regenerate**                          | rebuild, redraw                   |
+| Change an aspect revision, then regenerate             | **reroll**                              | randomize, reseed                 |
+| Output that the user has kept                          | **accepted state**                      | current cache, generated result   |
+| Style-neutral geographic shape                         | **canonical geometry**                  | raw path, base shape              |
+| Renderer-neutral drawing description                   | **render scene**                        | scene graph, canvas model         |
+| Visual treatment of canonical geometry                 | **style**                               | theme, skin                       |
+| Related procedural symbol definition                   | **asset family**                        | stamp set, brush pack             |
+| One reusable generated symbol                          | **motif**                               | stamp, glyph, sprite              |
+| One positioned motif instance                          | **placement**                           | stamp, mark                       |
+| Derived visual arrangement                             | **decoration**                          | art layer, styling                |
+| Data safe to delete and rebuild                        | **cache**                               | accepted output, snapshot         |
+| Structured actionable generation finding               | **diagnostic**                          | log, message, error string        |
+| Rule that valid output must satisfy                    | **invariant**                           | preference, heuristic             |
+| Child context differs from its source                  | **stale**                               | dirty, outdated                   |
+| Can be applied without changing accepted child meaning | **reconcilable**                        | mergeable                         |
+| Requires an explicit user decision                     | **conflicting**                         | invalid, broken                   |
+| Planet's projection-independent coordinates            | **planet-native coordinates**           | world pixels, atlas coordinates   |
+| Local physical child-map coordinates                   | **regional coordinates**                | local pixels, world coordinates   |
 
 `scene graph`, `stamp`, and `glyph` may appear when discussing third-party APIs,
 general graphics concepts, or older planning language. The current plan's

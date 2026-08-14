@@ -34,18 +34,18 @@ Refs #123
 
 Types:
 
-| Type | Use |
-|---|---|
-| `feat` | User-visible or domain capability |
-| `fix` | Incorrect behavior |
-| `tune` | Parameter, preset, or style-number change without structural code change |
-| `refactor` | Structural change intended to preserve behavior |
-| `perf` | Measured performance improvement |
-| `docs` | Documentation only |
-| `test` | Test-only change |
-| `chore` | Repository maintenance |
-| `build` | Build, packaging, or dependency configuration |
-| `ci` | Continuous integration |
+| Type       | Use                                                                      |
+| ---------- | ------------------------------------------------------------------------ |
+| `feat`     | User-visible or domain capability                                        |
+| `fix`      | Incorrect behavior                                                       |
+| `tune`     | Parameter, preset, or style-number change without structural code change |
+| `refactor` | Structural change intended to preserve behavior                          |
+| `perf`     | Measured performance improvement                                         |
+| `docs`     | Documentation only                                                       |
+| `test`     | Test-only change                                                         |
+| `chore`    | Repository maintenance                                                   |
+| `build`    | Build, packaging, or dependency configuration                            |
+| `ci`       | Continuous integration                                                   |
 
 Initial scopes:
 
@@ -192,4 +192,3 @@ review purpose are documented. Never hand-edit a generated golden file.
 - Do not reformat, rename, or reorganize unrelated files while implementing a
   scoped change.
 - Never use destructive Git recovery commands on work you do not own.
-

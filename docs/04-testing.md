@@ -167,9 +167,9 @@ fixtures/visual-gallery/
 Test names read as sentences and identify the broken promise:
 
 ```ts
-it("keeps an accepted regional child unchanged when its parent becomes stale")
-it("derives the same boundary sample for adjacent regional maps")
-it("rejects a coast ring that self-intersects after quantization")
+it('keeps an accepted regional child unchanged when its parent becomes stale');
+it('derives the same boundary sample for adjacent regional maps');
+it('rejects a coast ring that self-intersects after quantization');
 ```
 
 Avoid names such as `works`, `test one`, or `handles edge cases`.
@@ -226,4 +226,3 @@ Before a milestone tag:
 6. A previous-version world document opens without regeneration or drift.
 7. A fixed previous-version generator result remains stable unless an explicit
    upgrade path is under test.
-

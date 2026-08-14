@@ -118,14 +118,14 @@ cannot meet its frame budget with Canvas level-of-detail rendering.
 Evaluate these libraries in the first technical spike and hide each behind an internal
 interface:
 
-| Need | Initial candidate |
-|---|---|
-| Delaunay/Voronoi | `d3-delaunay` |
-| Seeded noise | `simplex-noise` |
-| Blue-noise placement | `poisson-disk-sampling` |
-| Polygon boolean operations | `polygon-clipping` |
-| Curve operations | `bezier-js` |
-| Schema validation | `zod` |
+| Need                       | Initial candidate       |
+| -------------------------- | ----------------------- |
+| Delaunay/Voronoi           | `d3-delaunay`           |
+| Seeded noise               | `simplex-noise`         |
+| Blue-noise placement       | `poisson-disk-sampling` |
+| Polygon boolean operations | `polygon-clipping`      |
+| Curve operations           | `bezier-js`             |
+| Schema validation          | `zod`                   |
 
 Use project-owned modules for coordinate types, seed derivation, basic vector math,
 quantization, stable sorting, spatial hashing, and canonical serialization. Do not expose a
@@ -1043,21 +1043,21 @@ The MVP is complete when:
 
 ## 16. Principal risks and controls
 
-| Risk | Control |
-|---|---|
-| Infrastructure delays visible progress | End every milestone in an on-screen product proof; deliver coast and stamps before full simulation |
-| TypeScript generation becomes slow | Workers, coarse previews, tiled fields, spatial indexing, profiling, then isolated Rust/WASM only if justified |
-| Old maps change after upgrades | Persist accepted canonical state; version generators and seeds; never auto-upgrade |
-| Small rerolls affect unrelated content | Aspect-scoped seeds, stable IDs, dependency isolation tests |
-| Noisy geometry becomes invalid | Quantization, validation/repair, adversarial fixtures, canonical geometry distinct from styling |
-| General editing becomes a project of its own | Build coastline and river tools first; generalize only from working examples |
-| SVG becomes huge | Symbol reuse, stable definitions, level of detail, path batching, bounded texture detail |
-| Canvas and SVG diverge | Both consume the same scene; visual fixtures compare representative outputs |
-| Browser/WebView differences affect PNG | Treat SVG and canonical semantic state as authoritative; add native rasterization only if observed |
-| Whole-world scope becomes a planetary simulator | Generate only atlas-scale fields and features needed for a coherent world and regional boundary conditions; keep full plate tectonics, history, and economy deferred |
+| Risk                                                        | Control                                                                                                                                                                   |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Infrastructure delays visible progress                      | End every milestone in an on-screen product proof; deliver coast and stamps before full simulation                                                                        |
+| TypeScript generation becomes slow                          | Workers, coarse previews, tiled fields, spatial indexing, profiling, then isolated Rust/WASM only if justified                                                            |
+| Old maps change after upgrades                              | Persist accepted canonical state; version generators and seeds; never auto-upgrade                                                                                        |
+| Small rerolls affect unrelated content                      | Aspect-scoped seeds, stable IDs, dependency isolation tests                                                                                                               |
+| Noisy geometry becomes invalid                              | Quantization, validation/repair, adversarial fixtures, canonical geometry distinct from styling                                                                           |
+| General editing becomes a project of its own                | Build coastline and river tools first; generalize only from working examples                                                                                              |
+| SVG becomes huge                                            | Symbol reuse, stable definitions, level of detail, path batching, bounded texture detail                                                                                  |
+| Canvas and SVG diverge                                      | Both consume the same scene; visual fixtures compare representative outputs                                                                                               |
+| Browser/WebView differences affect PNG                      | Treat SVG and canonical semantic state as authoritative; add native rasterization only if observed                                                                        |
+| Whole-world scope becomes a planetary simulator             | Generate only atlas-scale fields and features needed for a coherent world and regional boundary conditions; keep full plate tectonics, history, and economy deferred      |
 | World, regional, or adjacent regional maps visibly disagree | Persist inherited context; use root-coordinate refinement seeds and boundary collars; validate classifications, anchors, transforms, and portals; require paired fixtures |
-| Projection seams or poles corrupt geometry | Keep planet-native coordinates authoritative; test seam/pole fixtures; isolate projections behind typed transforms |
-| A selected battle-map area is too large to use or export | Choose dimensions before placement; show physical and cell size; apply warnings and hard budgets; support linked splits and tiled export |
+| Projection seams or poles corrupt geometry                  | Keep planet-native coordinates authoritative; test seam/pole fixtures; isolate projections behind typed transforms                                                        |
+| A selected battle-map area is too large to use or export    | Choose dimensions before placement; show physical and cell size; apply warnings and hard budgets; support linked splits and tiled export                                  |
 
 ## 17. Decisions deliberately left to early spikes
 
