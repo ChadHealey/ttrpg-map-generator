@@ -1,0 +1,40 @@
+# macOS
+.DS_Store
+
+# Dependencies and package-manager state
+node_modules/
+.pnpm-store/
+
+# JavaScript and application builds
+dist/
+build/
+.vite/
+
+# Rust builds
+target/
+
+# Test and analysis output
+coverage/
+playwright-report/
+test-results/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Local environment and machine-specific configuration
+.env
+.env.*
+!.env.example
+*.local
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# User projects, exports, and interrupted saves
+*.mapworld
+!fixtures/**/*.mapworld
+*.mapworld.tmp
+*.tmp
