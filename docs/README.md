@@ -18,6 +18,7 @@ for historical context. They are not current requirements or decision records.
 | Document                                                    | Owns                                                                                                 |
 | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
 | [Project plan](PROJECT_PLAN.md)                             | Product scope, architecture, roadmap, risks, and MVP acceptance criteria                             |
+| [Milestone 1 kernel proof](milestone-1-kernel-proof.md)     | Fixed synthetic proof composition, reroll boundary, canonical comparisons, and visible workflow      |
 | [01 — Architecture](01-architecture.md)                     | Package boundaries, data layers, generation, identity, coordinates, persistence, and cross-map rules |
 | [02 — Naming and vocabulary](02-naming-and-vocabulary.md)   | Identifier conventions, units, events, files, and the canonical domain language                      |
 | [03 — Code style and tooling](03-code-style-and-tooling.md) | TypeScript, Svelte, Rust, formatting, linting, module size, comments, and enforcement                |
