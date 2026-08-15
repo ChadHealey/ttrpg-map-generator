@@ -6,5 +6,10 @@
     "noEmit": true,
     "types": ["node"]
   },
-  "include": ["vite.config.ts", "svelte.config.js"]
+  "include": [
+    "vite.config.ts",
+    "vite.mapworld-recovery-policy.config.ts",
+    "test-support/**/*.ts",
+    "svelte.config.js"
+  ]
 }

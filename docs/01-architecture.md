@@ -203,7 +203,9 @@ the world without running a generator. Loading performs validation, migration wh
 explicitly supported, and reconstruction of disposable caches only.
 
 - Saves use an immutable snapshot, canonical ordering, checksums, and atomic
-  replacement with recovery information.
+  replacement with recovery information. Persistence owns the deterministic policy and validated
+  package/marker bytes; the desktop adapter and narrow native filesystem layer implement
+  [ADR-0008](adr/0008-mapworld-directory-commit-recovery.md) without moving domain policy into Rust.
 - Every released schema retains a migration fixture.
 - Output-changing generator, seed, style, and parameter-schema behavior is
   versioned independently where appropriate.

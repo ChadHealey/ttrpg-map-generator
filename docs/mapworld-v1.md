@@ -129,6 +129,8 @@ valid document has been exposed.
 
 ## Deliberate exclusions
 
-Version 1 does not implement filesystem replacement/recovery, autosave, migration UI, binary chunks,
-SQLite, imported assets, generator upgrades, or a production headless CLI. Those capabilities must
-compose around this byte contract without weakening accepted-state restoration.
+Version 1 does not place filesystem replacement/recovery state inside the package. The desktop
+adapter implements [ADR-0008](adr/0008-mapworld-directory-commit-recovery.md) with fixed sibling
+artifacts around this unchanged byte contract. Autosave, migration UI, binary chunks, SQLite,
+imported assets, generator upgrades, and a production headless CLI remain excluded. Future
+capabilities must compose around this byte contract without weakening accepted-state restoration.

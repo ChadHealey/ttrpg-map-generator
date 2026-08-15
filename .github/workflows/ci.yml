@@ -19,7 +19,7 @@ jobs:
           - name: Linux
             runner: ubuntu-24.04
           - name: macOS
-            runner: macos-15
+            runner: macos-26
 
     steps:
       - name: Check out repository
@@ -61,6 +61,24 @@ jobs:
 
       - name: Verify deterministic fixtures
         run: pnpm test:cross-platform
+
+      - name: Record native recovery filesystem
+        shell: bash
+        run: |
+          if [[ "$RUNNER_OS" == "macOS" ]]; then
+            RECOVERY_FILESYSTEM="$(
+              diskutil info "$GITHUB_WORKSPACE" |
+                awk -F: '/File System Personality/ { value=$2; gsub(/^[[:space:]]+|[[:space:]]+$/, "", value); print value }'
+            )"
+            [[ "$RECOVERY_FILESYSTEM" == APFS* ]]
+          else
+            RECOVERY_FILESYSTEM="$(stat -f -c %T "$GITHUB_WORKSPACE")"
+            test -n "$RECOVERY_FILESYSTEM"
+          fi
+          echo "mapworld-native-filesystem=$RECOVERY_FILESYSTEM"
+
+      - name: Verify native mapworld recovery
+        run: pnpm test:native-recovery
 
   quality-gate:
     name: quality-gate

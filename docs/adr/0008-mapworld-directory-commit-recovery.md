@@ -34,8 +34,8 @@ released `.mapworld` contract and stop conservatively when filesystem state does
 choice safe.
 
 This ADR keeps the transitions, recovery decisions, and interruption matrix together because they
-are one executable protocol; splitting the handwritten decision would create a drift-prone second
-source for valid states despite its resulting file length.
+are one executable protocol. The implementation may split pure helpers for reviewability, but the
+public decision entry point and this state table remain the only policy surface and protocol source.
 
 ## Decision drivers
 
@@ -182,6 +182,11 @@ The implementation uses these primitives:
   future authoritative subdirectory, then `W`) after its children are durable. The pre-save
   TypeScript validation plus native exact-byte readback is equivalent to rerunning the issue #8
   contract on the on-disk candidate without reimplementing that schema in Rust.
+- **Durable recovery promotion:** before recovery renames a byte-valid `W` or `B` into `T`, repeat
+  every authoritative-file `fsync`/full flush and containing-directory sync bottom-up. A candidate
+  discovered after interruption may validate byte-for-byte even though the interrupted writer did
+  not complete its original durability barrier; recovery never treats byte validity alone as proof
+  that those bytes are durable.
 - **Durable directory entry:** call `fsync` on the directory containing a create, unlink, `mkdir`,
   `rmdir`, or rename. Both package renames use the same open parent `P`, so one parent sync covers
   both source and destination entries. Linux explicitly requires this in addition to file `fsync`.
@@ -208,6 +213,30 @@ required calls succeed. A failure before a rename leaves the current target unch
 barrier failure after a rename returns `persistence.recovery.durability-failed`, keeps `J`, and
 requires the normal recovery path because the durable phase is uncertain. No success is reported
 until the commit barrier completes.
+
+### Isolated native FFI safety boundary
+
+Rust's safe standard library does not expose every descriptor-relative and platform-specific
+primitive required above. The implementation therefore confines all foreign declarations and
+`unsafe` blocks to
+`apps/desktop/src-tauri/src/mapworld_native/platform_ffi.rs`, with separate macOS and Linux
+`cfg` arms. No higher module may call a raw symbol or manipulate a raw pointer.
+
+The safe wrappers maintain these invariants:
+
+- every basename is converted to an owned, NUL-free `CString` that remains alive for the complete
+  native call;
+- every passed file descriptor is valid for the call duration, and a newly returned descriptor is
+  checked before it is immediately wrapped as an owned `File`;
+- `fdopendir` receives ownership exactly once, directory-entry names are copied within the reported
+  record/name bounds before the next `readdir`, and no pointer from the directory stream escapes;
+- byte buffers remain allocated and correctly sized for the complete call; and
+- failure return values are checked and `errno` is captured immediately, before another operation
+  can overwrite it.
+
+Focused native tests exercise every safe wrapper through real syscalls, fault injection, wrong-kind
+and symlink inputs, lock contention, partial writes, `EINTR`, and the P00–P17 recovery matrix. The
+unsafe boundary adds no domain interpretation and no fallback that copies over or deletes a target.
 
 ### First-save transitions
 
@@ -259,7 +288,11 @@ backup left by interrupted cleanup remains discoverable with `J`; it is not auto
 
 Opening `P/N` always runs recovery discovery before exposing a world document:
 
-1. lock `P`, derive the four exact names, and `lstat` only `T`, `W`, `B`, and `J` in fixed role order;
+1. lock `P`, derive the four exact names, and raw-observe only `T`, `W`, `B`, and `J` in fixed
+   role order; enumerate `P` once through the same descriptor with a 4,096-entry bound and require
+   every non-absent role lookup to have an exactly byte-equal dirent basename; a case- or
+   normalization-alias lookup whose exact bytes are absent is an unreadable
+   `verify-exact-artifact-name` conflict and is never removable by the protocol;
 2. reject symlinks and wrong kinds without following or mutating them;
 3. parse `J` as strict canonical recovery JSON and verify its version, operation, names, and nullable
    previous fingerprint;
@@ -317,6 +350,13 @@ simultaneously in impossible roles, a backup on a first save, or more than one d
 a role stops automatic mutation of recovery artifacts. A valid `T` may still be opened read-only.
 `J` remains until every conflict is explicitly resolved.
 
+A readable, bounded directory tree that fails package validation is represented with its complete
+sorted paths and bytes so a confirmation token identifies that exact candidate. An entry that cannot
+be enumerated without following a symlink, opening a special node, or exceeding a bound stays
+unreadable or wrong-kind and is never mutated. Confirmation remains necessary, but deletion is not
+enabled until the role can be re-enumerated as the exact readable candidate; symlinks and special
+files must always be resolved outside the application.
+
 An attention result supplies the target and artifact role, expected fingerprint, actual fingerprint
 when validation succeeds, issue #8 diagnostics when it fails, observed kind or read error, and the
 candidate-specific actions that require confirmation.
@@ -367,6 +407,13 @@ cancel. Symlinks and special files are never removed by this protocol; the user 
 outside the application. No automatic cleanup path may delete unvalidated non-empty bytes or the
 only valid package. `J` remains while any such artifact awaits confirmation.
 
+Every confirmed removal of a non-empty package-role candidate also carries the
+persistence-selected survivor's role, exact observation token, and validated manifest fingerprint.
+Rust binds those fields to the locked initial snapshot, checks the expected postcondition after every
+step instead of adopting new ambient state, and refuses candidate cleanup unless that exact selected
+package survives. Snapshot freshness alone is not deletion authority. Exact marker removal and
+recognized cleanup of proven-empty scaffolding remain separately constrained by the state table.
+
 ### Stable recovery result codes
 
 Issue #46 will expose these exact codes through the public persistence recovery result and validated
@@ -401,10 +448,12 @@ never the platform message.
 | Tauri/Rust native code     | Parent locking; descriptor-relative no-follow enumeration; exclusive create/write/readback; file and directory sync; macOS barriers; no-replace renames; authorized cleanup; injected-failure hooks and structured OS context | World-document/schema interpretation, candidate selection policy, migration, regeneration, UI |
 
 The normal save command may execute native preparation and commit in one invocation because the
-candidate was already validated and native readback is exact. Reopen is two-phase: Rust returns the
-bounded artifact snapshot, persistence validates and chooses a plan, and Rust re-locks and verifies
-that the snapshot fingerprints and role kinds are unchanged before applying it. Any change causes
-`persistence.recovery.target-changed` or `fingerprint-mismatch`, not a stale plan execution.
+candidate was already validated through `decodeMapworld`, its marker and fingerprints match the same
+immutable plan, and native readback is exact. Reopen is two-phase: Rust returns the bounded artifact
+snapshot, persistence validates and chooses a plan, and Rust re-locks and verifies that the snapshot
+fingerprints, role kinds, and selected survivor identity are unchanged before applying it. Every
+step has an exact expected postcondition and unaffected roles must remain byte-identical. Any change
+causes `persistence.recovery.target-changed` or `fingerprint-mismatch`, not a stale plan execution.
 
 ## Consequences
 
@@ -483,9 +532,9 @@ the selected package when permitted, and repeats recovery to prove idempotence. 
 a rename and parent sync, the test accepts the documented pre- or post-rename namespace after a real
 crash, but never a mixture that causes automatic deletion of unvalidated bytes or the only valid
 package. A P14 interruption that leaves non-empty partial `B` must repeatedly preserve `B` and `J`
-while opening committed `Vn` read-only; a separate test supplies explicit candidate-specific
-confirmation and proves cleanup can then finish. Ordinary syscall-error injection must assert the
-exact immediate state.
+while opening committed `Vn` read-only; tests supply explicit candidate-specific confirmation for
+every partial-cleanup occurrence and prove cleanup can then finish. Ordinary syscall-error injection
+must assert the exact immediate state.
 
 The matrix is combined with these adversarial states: invalid/partial `J`; unknown marker version;
 each role as symlink, file, special node, unreadable directory, or case-colliding name; target changed
@@ -494,11 +543,18 @@ valid fingerprints; byte-identical duplicates; invalid partial backup cleanup; `
 `EINTR`, `EACCES`, `EROFS`, `EXDEV`, unsupported sync, unsupported no-replace rename; and two
 cooperating processes contending for the parent lock.
 
+Named error injection enters the actual write, sync, full-flush, rename, and capability-probe seams
+as an `io::Error`; the normal adapter must produce the stable code and structured OS context. A
+synthetic unsupported-capability probe proves the preflight and mutation paths fail closed without a
+copy/delete fallback. It is not evidence that an untested network, removable, or FUSE volume is
+supported.
+
 ### Required platform evidence
 
 Issue #46 is not complete until the same native integration suite passes:
 
-1. on current macOS on a local APFS volume, exercising directory `fsync`, `F_FULLFSYNC`,
+1. on the current macOS CI image and a local APFS volume, exercising directory `fsync`,
+   `F_FULLFSYNC`,
    `RENAME_EXCL | RENAME_NOFOLLOW_ANY`, process-kill recovery, and the complete P00–P17 matrix;
 2. on Linux on the development/CI local filesystem with the filesystem type recorded, exercising
    regular-file and directory `fsync`, `RENAME_NOREPLACE`, process-kill recovery, and the same matrix;
@@ -506,7 +562,8 @@ Issue #46 is not complete until the same native integration suite passes:
    complete `decodeMapworld` reopen of the selected package;
 4. with the target continuously checked so replacement interruption never leaves both `T` and `B`
    without a valid `Vo` before R6; and
-5. with unsupported-volume probes proving a stable fail-closed result rather than a copy fallback.
+5. with unsupported-capability responses injected at the real probe/sync/rename seams, proving a
+   stable fail-closed result rather than a copy fallback.
 
 CI process termination and syscall injection prove protocol logic and OS boundary behavior, not
 literal sudden power loss or every storage device's firmware. macOS full-flush and directory barriers

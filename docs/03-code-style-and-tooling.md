@@ -21,12 +21,13 @@ pnpm test            # default unit/property/integration suite
 pnpm check           # format:check + lint + typecheck + test + Rust checks
 ```
 
-Special suites use separate commands when they are not part of every local check:
+Specialized suites have focused commands for direct iteration and named evidence gates:
 
 ```bash
 pnpm test:visual
 pnpm test:e2e
 pnpm test:cross-platform
+pnpm test:native-recovery
 pnpm benchmark
 ```
 
@@ -34,6 +35,14 @@ pnpm benchmark
 [07 — Deterministic Fixture Conventions](07-fixture-conventions.md). The existing Linux and
 macOS CI matrix runs this exact command. One spelling for each operation prevents README
 snippets, CI, hooks, and local workflows from drifting apart.
+
+`pnpm test:native-recovery` runs the real-filesystem `.mapworld` commit/recovery contract and
+prints its native platform evidence. CI runs it separately on macOS and Linux and records the
+filesystem containing the checked-out workspace where the integration tests create their parents.
+The suite is also covered by `pnpm check`, then deliberately repeated under this named CI step so its
+filesystem/platform output is easy to audit. The gate is serialized because its hard-exit child
+processes and deterministic fault controller share one test filesystem contract. A local run proves
+only the platform and filesystem it reports; it does not substitute for the other CI matrix leg.
 
 ## TypeScript is strict
 
@@ -154,7 +163,7 @@ The root check runs the equivalents of:
 ```bash
 cargo fmt --check
 cargo clippy --all-targets --all-features -- -D warnings
-cargo test --all-targets --all-features
+cargo test --all-targets --all-features -- --test-threads=1
 ```
 
 - Tauri commands accept and return validated adapter DTOs.
@@ -162,6 +171,9 @@ cargo test --all-targets --all-features
 - Do not panic on user data or recoverable operating-system failures.
 - `unsafe` is absent by default. Any future use requires an isolated module, a
   safety explanation, an ADR, and focused tests.
+- ADR-0008's required POSIX operations use the single isolated unsafe boundary at
+  `apps/desktop/src-tauri/src/mapworld_native/platform_ffi.rs`; all callers use safe wrappers and
+  the same native recovery suite must exercise those wrappers on macOS and Linux.
 - Moving a generation algorithm into Rust or WASM requires a representative
   benchmark, a deterministic compatibility strategy, and an ADR.
 

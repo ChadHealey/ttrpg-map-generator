@@ -6,6 +6,53 @@ export {
   canonicalAspectOutputBytes,
   encodeMapworld,
 } from './mapworld-encode.js';
+export { classifyMapworldRecoverySnapshot } from './mapworld-recovery-classification.js';
+export { planConfirmedMapworldRecovery } from './mapworld-recovery-confirmation.js';
+export { decideMapworldRecovery } from './mapworld-recovery-decision.js';
+export {
+  createMapworldSavePlan,
+  deriveMapworldRecoveryArtifactNames,
+} from './mapworld-recovery-marker.js';
+export {
+  type ClassifiedMapworldMarkerCandidate,
+  type ClassifiedMapworldPackageCandidate,
+  type ClassifiedMapworldRecoverySnapshot,
+  MAPWORLD_NATIVE_LIMITS,
+  MAPWORLD_RECOVERY_CODES,
+  MAPWORLD_RECOVERY_PROTOCOL_VERSION,
+  type MapworldPackageRole,
+  type MapworldRecoveryArtifactNames,
+  type MapworldRecoveryAttention,
+  type MapworldRecoveryCode,
+  type MapworldRecoveryConfirmation,
+  type MapworldRecoveryDecision,
+  type MapworldRecoveryError,
+  type MapworldRecoveryExpectedObservation,
+  type MapworldRecoveryMarker,
+  type MapworldRecoveryNativePlan,
+  type MapworldRecoveryResult,
+  type MapworldRecoveryRole,
+  type MapworldRecoveryStep,
+  type MapworldSaveIntent,
+  type MapworldSavePlan,
+  type MapworldSavePlanFile,
+  type NativeMapworldObservedKind,
+  type NativeMapworldOsContext,
+  type ReadonlyClassifiedMapworldRecoverySnapshot,
+} from './mapworld-recovery-model.js';
+export {
+  type MapworldNativeApplyRequestDto,
+  type MapworldNativeErrorDto,
+  type MapworldNativeMutationDto,
+  type MapworldNativePlatformDto,
+  type MapworldNativeRoleDto,
+  type MapworldNativeSaveRequestDto,
+  parseMapworldNativeApplyRequestDto,
+  parseMapworldNativeMutationResponse,
+  parseMapworldNativeSaveRequestDto,
+  parseMapworldNativeSnapshotResponse,
+  validateMapworldNativeSaveRequestDto,
+} from './mapworld-recovery-native-dto.js';
 export {
   ACCEPTED_ASPECT_SCHEMA_VERSION,
   type CanonicalJsonPrimitive,

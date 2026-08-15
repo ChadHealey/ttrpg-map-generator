@@ -84,7 +84,8 @@ passes afterward. Name the behavior, not the issue number alone.
 These tests cross a process, filesystem, worker, renderer, or UI boundary. Add them
 for critical workflows and for failures that pure tests cannot represent.
 
-- Atomic save, interrupted replacement, backup, and recovery.
+- Atomic save, interrupted replacement, backup, and recovery, using the complete P00–P17 matrix
+  and platform contract in [ADR-0008](adr/0008-mapworld-directory-commit-recovery.md).
 - Worker request validation, progress, cancellation, failure, and scheduling.
 - Tauri file-dialog and native atomic-save adapters.
 - Canvas and SVG interpretation of the same `RenderScene`.
@@ -101,6 +102,20 @@ unit test through the browser.
 System- or platform-dependent tests must state their requirements. A skipped test
 is visible and fails a release gate when that platform capability is required for
 the release.
+
+Run `pnpm test:native-recovery` on both supported development platforms. The suite prints the
+native platform it exercised, while CI separately records the filesystem used for its checked-out
+workspace test parent. Reopened native DTOs cross a test-only process bridge into the released
+`classifyMapworldRecoverySnapshot`/`decideMapworldRecovery` policy, and the selected package must pass
+complete `decodeMapworld` validation. The matrix names injected OS errors and asserts their stable
+code, primitive, role, number/name context, and immediate filesystem state. macOS evidence must come
+from the macOS job and Linux evidence from the Linux job; a successful local macOS run cannot be
+reported as Linux evidence. Fault injection and process termination model documented interruption
+points, not sudden power loss or every storage device's firmware behavior.
+The real-filesystem suite creates differently cased spellings for every recovery role. On a case-
+or normalization-insensitive filesystem the derived lookup must be an unreadable exact-name
+conflict and remain untouched; on a case-sensitive filesystem the differently named sibling must
+remain outside the protocol while the exact role is absent.
 
 ## Tier 3 — Visual and human judgment
 
@@ -230,9 +245,10 @@ Before a milestone tag:
 
 1. `pnpm check` passes.
 2. Cross-platform canonical fixtures pass on macOS and Linux.
-3. Required integration and Playwright workflows pass.
-4. Migration fixtures from every released schema pass.
-5. The reviewed visual gallery has been inspected.
-6. A previous-version world document opens without regeneration or drift.
-7. A fixed previous-version generator result remains stable unless an explicit
+3. Required native recovery evidence passes on macOS and Linux with the filesystem recorded.
+4. Required integration and Playwright workflows pass.
+5. Migration fixtures from every released schema pass.
+6. The reviewed visual gallery has been inspected.
+7. A previous-version world document opens without regeneration or drift.
+8. A fixed previous-version generator result remains stable unless an explicit
    upgrade path is under test.

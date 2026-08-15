@@ -285,7 +285,10 @@ function transpilePackage(packageName, runtimeRoot, replacements) {
   const sourceNames = readdirSync(sourceDirectory)
     .filter(
       (name) =>
-        name.endsWith('.ts') && !name.endsWith('.test.ts') && !name.endsWith('.type-test.ts'),
+        name.endsWith('.ts') &&
+        !name.endsWith('.d.ts') &&
+        !name.endsWith('.test.ts') &&
+        !name.endsWith('.type-test.ts'),
     )
     .sort(compareText);
   for (const sourceName of sourceNames) {
