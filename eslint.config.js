@@ -150,7 +150,8 @@ export default tseslint.config(
                 '@ttrpg-map/render',
                 'fs',
                 'fs/*',
-                'node:*',
+                'node:fs',
+                'node:fs/*',
               ],
               message:
                 'Generation may depend only on the core internal package and cannot access filesystem modules.',
