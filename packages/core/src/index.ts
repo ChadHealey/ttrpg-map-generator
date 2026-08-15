@@ -122,8 +122,10 @@ export {
   type AcceptedAspectRecord,
   ASPECT_DEPENDENCY_PROVENANCE_KINDS,
   type AspectDependencyReference,
+  type AspectGenerationTarget,
   type AspectName,
   type AspectReference,
+  type AspectReplacementProposal,
   type DeepReadonly,
   GENERATED_ASPECT_DIAGNOSTIC_CODES,
   type GeneratedAspectContractDiagnostic,
@@ -134,6 +136,7 @@ export {
   type GenerationDiagnosticSeverity,
   type GenerationStatus,
   type InheritedContextDependencyProvenance,
+  orderGenerationDiagnostics,
   parseAspectName,
   parseGenerationDiagnosticCode,
   type SeedScope,
@@ -230,6 +233,21 @@ export {
   type OwnershipTraversalResult,
   validateWorldDocumentOwnership,
 } from './world-document-ownership.js';
+export {
+  type AspectProposalCommit,
+  type CommitAspectProposalCommand,
+  type CommitAspectProposalResult,
+  DOCUMENT_COMMAND_KINDS,
+  DOCUMENT_DEPENDENCY_EFFECT_KINDS,
+  DOCUMENT_TRANSACTION_DIAGNOSTIC_CODES,
+  type DocumentAspectTarget,
+  type DocumentDependencyEffect,
+  type DocumentTransactionDiagnostic,
+  type DocumentTransactionDiagnosticCode,
+  type ReplacementDocumentDependencyEffect,
+  type RetainedDocumentDependencyEffect,
+} from './world-document-transaction-model.js';
+export { commitAspectProposal } from './world-document-transactions.js';
 
 /** A point in the fixed render-pixel coordinate space of a {@link RenderScene}. */
 export interface RenderPoint {

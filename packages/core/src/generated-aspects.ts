@@ -63,6 +63,37 @@ export interface GenerationDiagnostic {
   readonly suggestedAction: string;
 }
 
+/** The stable map/entity/aspect address selected for one generated replacement. */
+export interface AspectGenerationTarget {
+  readonly mapId: MapId;
+  readonly entityId: EntityId;
+  readonly aspect: AspectReference;
+  readonly aspectName: AspectName;
+  readonly variantRevision: VariantRevision;
+}
+
+/**
+ * A complete generator proposal understood by the document transaction without exposing the
+ * generator implementation to `core`.
+ */
+export interface AspectReplacementProposal<
+  Parameters = unknown,
+  Output = unknown,
+  SeedMetadata extends SeedInput = SeedInput,
+> {
+  readonly status: 'proposed';
+  readonly target: AspectGenerationTarget;
+  readonly generatorId: GeneratorId;
+  readonly generatorVersion: BehaviorVersion;
+  readonly parameterSchemaVersion: ParameterSchemaVersion;
+  readonly parameters: DeepReadonly<Parameters>;
+  readonly seedScope: SeedScope;
+  readonly seedMetadata: DeepReadonly<SeedMetadata>;
+  readonly dependencyAspects: readonly AspectDependencyReference[];
+  readonly output: DeepReadonly<Output>;
+  readonly diagnostics: readonly GenerationDiagnostic[];
+}
+
 /** Recursively readonly view used at generator boundaries. */
 export type DeepReadonly<Value> = Value extends
   null | undefined | string | number | boolean | bigint | symbol
@@ -153,6 +184,13 @@ export function parseGenerationDiagnosticCode(
   return { ok: true, value: input as GenerationDiagnosticCode };
 }
 
+/** Return a platform-independent order for persisted and transaction diagnostics. */
+export function orderGenerationDiagnostics(
+  diagnostics: readonly GenerationDiagnostic[],
+): readonly GenerationDiagnostic[] {
+  return Object.freeze([...diagnostics].sort(compareGenerationDiagnostics));
+}
+
 function isValidSymbolicValue(input: unknown, pattern: RegExp): input is string {
   return (
     typeof input === 'string' && input.length <= MAX_SYMBOLIC_VALUE_LENGTH && pattern.test(input)
@@ -170,4 +208,23 @@ function invalidSymbolicValue(
       message: `${label} must contain two or more lowercase dot-separated segments; every segment begins with a lowercase letter and otherwise uses letters, digits, or internal hyphens (maximum 128 characters).`,
     },
   };
+}
+
+function compareGenerationDiagnostics(
+  left: GenerationDiagnostic,
+  right: GenerationDiagnostic,
+): number {
+  return (
+    compareAscii(left.target.aspectId, right.target.aspectId) ||
+    compareAscii(left.code, right.code) ||
+    compareAscii(left.severity, right.severity) ||
+    compareAscii(left.message, right.message) ||
+    compareAscii(left.suggestedAction, right.suggestedAction)
+  );
+}
+
+function compareAscii(left: string, right: string): -1 | 0 | 1 {
+  if (left < right) return -1;
+  if (left > right) return 1;
+  return 0;
 }

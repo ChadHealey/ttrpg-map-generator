@@ -8,17 +8,21 @@
 
 import {
   type AspectDependencyReference,
+  type AspectGenerationTarget,
   type AspectName,
   type AspectReference,
+  type AspectReplacementProposal,
   type BehaviorVersion,
+  type CommitAspectProposalCommand,
   compareStableReferences,
   type DeepReadonly,
   type DeterministicRandomStream,
-  type EntityId,
+  DOCUMENT_COMMAND_KINDS,
+  type DocumentDependencyEffect,
   type GenerationDiagnostic,
   type GenerationDiagnosticCode,
   type GeneratorId,
-  type MapId,
+  orderGenerationDiagnostics,
   type ParameterSchemaVersion,
   type SeedInput,
   type SeedScope,
@@ -71,13 +75,7 @@ export interface GenerationContext<
 }
 
 /** The stable map/entity/aspect address selected for generation. */
-export interface GenerationTarget {
-  readonly mapId: MapId;
-  readonly entityId: EntityId;
-  readonly aspect: AspectReference;
-  readonly aspectName: AspectName;
-  readonly variantRevision: VariantRevision;
-}
+export type GenerationTarget = AspectGenerationTarget;
 
 /** Immutable base plan shared by concrete generator-specific plans. */
 export interface GenerationPlan {
@@ -87,23 +85,11 @@ export interface GenerationPlan {
 }
 
 /** A complete proposed replacement that a later transaction service may validate and commit. */
-export interface GenerationProposal<
+export type GenerationProposal<
   Parameters = unknown,
   Output = unknown,
   SeedMetadata extends SeedInput = SeedInput,
-> {
-  readonly status: 'proposed';
-  readonly target: GenerationTarget;
-  readonly generatorId: GeneratorId;
-  readonly generatorVersion: BehaviorVersion;
-  readonly parameterSchemaVersion: ParameterSchemaVersion;
-  readonly parameters: DeepReadonly<Parameters>;
-  readonly seedScope: SeedScope;
-  readonly seedMetadata: DeepReadonly<SeedMetadata>;
-  readonly dependencyAspects: readonly AspectDependencyReference[];
-  readonly output: DeepReadonly<Output>;
-  readonly diagnostics: readonly GenerationDiagnostic[];
-}
+> = AspectReplacementProposal<Parameters, Output, SeedMetadata>;
 
 /** Result of generator-owned validation; invalid output remains inspectable but not committable. */
 export type GenerationProposalValidation<
@@ -164,11 +150,7 @@ export function orderAspectReferences<Reference extends AspectReference>(
  * Return a platform-independent diagnostic order. Human-readable text is only a final tie-break;
  * callers make decisions from severity and stable code.
  */
-export function orderGenerationDiagnostics(
-  diagnostics: readonly GenerationDiagnostic[],
-): readonly GenerationDiagnostic[] {
-  return Object.freeze([...diagnostics].sort(compareGenerationDiagnostics));
-}
+export { orderGenerationDiagnostics };
 
 /** Apply generator-owned validation and make expected invalid output explicit. */
 export function validateGenerationProposal<
@@ -192,25 +174,30 @@ export function validateGenerationProposal<
   return Object.freeze({ status, proposal, diagnostics });
 }
 
-function compareGenerationDiagnostics(
-  left: GenerationDiagnostic,
-  right: GenerationDiagnostic,
-): number {
-  return (
-    compareAscii(left.target.aspectId, right.target.aspectId) ||
-    compareAscii(left.code, right.code) ||
-    compareAscii(left.severity, right.severity) ||
-    compareAscii(left.message, right.message) ||
-    compareAscii(left.suggestedAction, right.suggestedAction)
-  );
-}
-
-function compareAscii(left: string, right: string): -1 | 0 | 1 {
-  if (left < right) {
-    return -1;
-  }
-  if (left > right) {
-    return 1;
-  }
-  return 0;
+/**
+ * Build the named document command from the complete generator-validation result. Invalid
+ * validation results remain representable so the transaction can return its stable rejection.
+ */
+export function createCommitAspectProposalCommand<
+  Parameters,
+  Output,
+  SeedMetadata extends SeedInput,
+>(
+  validation: GenerationProposalValidation<Parameters, Output, SeedMetadata>,
+  expectedPreviousRevision: VariantRevision,
+  declaredDependencyEffects: readonly DocumentDependencyEffect[],
+): CommitAspectProposalCommand {
+  const target = validation.proposal.target;
+  return Object.freeze({
+    kind: DOCUMENT_COMMAND_KINDS.commitAspectProposal,
+    target: Object.freeze({
+      mapId: target.mapId,
+      entityId: target.entityId,
+      aspectId: target.aspect.aspectId,
+    }),
+    expectedPreviousRevision,
+    proposedReplacement: validation.proposal,
+    diagnostics: validation.diagnostics,
+    declaredDependencyEffects: Object.freeze([...declaredDependencyEffects]),
+  });
 }
