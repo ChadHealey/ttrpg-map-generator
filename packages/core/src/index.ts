@@ -166,6 +166,43 @@ export {
   WORLD_SEED_MAX,
   type WorldSeed,
 } from './seed-input.js';
+export {
+  type AcceptedDecoration,
+  type AspectConstraint,
+  type AspectLock,
+  CONSTRAINT_KINDS,
+  type ConstraintKind,
+  MAP_COORDINATE_SYSTEM_KINDS,
+  MAP_KINDS,
+  MAP_RELATIONSHIP_KINDS,
+  MAP_SCALE_CLASSES,
+  type MapAcceptedState,
+  type MapDocument,
+  type MapEntity,
+  type MapKind,
+  type MapLayoutState,
+  type MapRelationshipKind,
+  type MapScaleClass,
+  type OwnershipRecordId,
+  type RegionalMap,
+  type RegionalMapCoordinateSystem,
+  type RegionalMapParent,
+  WORLD_MAP_EXTENT_KIND,
+  type WorldDocument,
+  type WorldMap,
+  type WorldMapCoordinateSystem,
+  type WorldMapExtent,
+} from './world-document.js';
+export {
+  getCanonicalOwnershipTraversal,
+  OWNERSHIP_DIAGNOSTIC_CODES,
+  type OwnershipDiagnostic,
+  type OwnershipDiagnosticCode,
+  type OwnershipRecordKind,
+  type OwnershipTraversalNode,
+  type OwnershipTraversalResult,
+  validateWorldDocumentOwnership,
+} from './world-document-ownership.js';
 
 /** A point in the fixed render-pixel coordinate space of a {@link RenderScene}. */
 export interface RenderPoint {
