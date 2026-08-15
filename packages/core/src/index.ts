@@ -3,6 +3,49 @@
  * and desktop orchestration layers.
  */
 
+export {
+  type BehaviorVersion,
+  COMPATIBILITY_DIAGNOSTIC_CODES,
+  type CompatibilityDiagnostic,
+  type CompatibilityDiagnosticCode,
+  type CompatibilityParseResult,
+  createBehaviorVersion,
+  createParameterSchemaVersion,
+  createVariantRevision,
+  incrementVariantRevision,
+  type ParameterSchemaVersion,
+  parseBehaviorVersion,
+  parseParameterSchemaVersion,
+  parseVariantRevision,
+  type VariantRevision,
+} from './compatibility.js';
+export {
+  type AspectId,
+  type BoundaryPortalId,
+  compareStableReferences,
+  type ConstraintId,
+  createStableId,
+  deriveStableId,
+  encodeStableReference,
+  type EntityId,
+  type GeneratorId,
+  type IdentityDiagnostic,
+  type IdentityDiagnosticCode,
+  type IdentityParseResult,
+  type LockId,
+  type MapId,
+  parseGeneratorId,
+  parseSemanticKey,
+  parseStableId,
+  type SemanticKey,
+  type StableIdByKind,
+  type StableIdKind,
+  type StableIdSource,
+  type StableReference,
+  stableReferencesEqual,
+  type WorldDocumentId,
+} from './identity.js';
+
 /** A point in the fixed render-pixel coordinate space of a {@link RenderScene}. */
 export interface RenderPoint {
   readonly xPx: number;
