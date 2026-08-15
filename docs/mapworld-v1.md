@@ -42,8 +42,10 @@ Each entry uses `checksumAlgorithm: "sha256"` and hashes the exact canonical fil
 authoritative checksum set to avoid recursion. Version 1 has no cache, preview, asset, data-chunk,
 or recovery file; an undeclared or unsupported file is rejected.
 
-The manifest's only recovery metadata is `recovery: { "mode": "none" }`. Atomic temporary-package
-replacement, backup, commit markers, and interrupted-save recovery belong to issue #46.
+The manifest's only recovery metadata is `recovery: { "mode": "none" }`. Sibling temporary-package
+replacement, backup, commit-marker, durability, and interrupted-save behavior follow
+[ADR-0008](adr/0008-mapworld-directory-commit-recovery.md) and belong to issue #46's native adapter
+implementation; those artifacts are not package contents.
 
 `world.json` contains the world-document ID and display name, canonical decimal `worldSeed`, root
 map ID, and the complete map-file index. Index identity comes from stable map IDs, never labels or
