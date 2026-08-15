@@ -6,3 +6,4 @@ when an upgrade materially changes capability, licensing, native requirements, o
 deterministic-output risk.
 
 - [0001 — Milestone 0 foundation](0001-milestone-0-foundation.md)
+- [0002 — Zod for Milestone 1 persistence boundaries](0002-zod-milestone-1-persistence-boundaries.md)
