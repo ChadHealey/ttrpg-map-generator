@@ -81,6 +81,23 @@ export {
   worldRadiusToKilometers,
 } from './coordinates.js';
 export {
+  type AcceptedAspectRecord,
+  type AspectName,
+  type AspectReference,
+  type DeepReadonly,
+  GENERATED_ASPECT_DIAGNOSTIC_CODES,
+  type GeneratedAspectContractDiagnostic,
+  type GeneratedAspectContractDiagnosticCode,
+  type GeneratedAspectContractParseResult,
+  type GenerationDiagnostic,
+  type GenerationDiagnosticCode,
+  type GenerationDiagnosticSeverity,
+  type GenerationStatus,
+  parseAspectName,
+  parseGenerationDiagnosticCode,
+  type SeedScope,
+} from './generated-aspects.js';
+export {
   type AspectId,
   type BoundaryPortalId,
   compareStableReferences,

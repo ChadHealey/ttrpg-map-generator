@@ -20,6 +20,9 @@ const privateImportPattern = {
 const deterministicPathRules = {
   'no-restricted-globals': [
     'error',
+    { name: 'Date', message: 'Deterministic output cannot read the wall clock.' },
+    { name: 'Intl', message: 'Deterministic output cannot depend on locale behavior.' },
+    { name: 'performance', message: 'Deterministic output cannot read an ambient clock.' },
     { name: 'document', message: 'Deterministic packages cannot access the DOM.' },
     { name: 'window', message: 'Deterministic packages cannot access the DOM.' },
   ],
@@ -145,8 +148,12 @@ export default tseslint.config(
                 '@ttrpg-map/desktop',
                 '@ttrpg-map/persistence',
                 '@ttrpg-map/render',
+                'fs',
+                'fs/*',
+                'node:*',
               ],
-              message: 'Generation may depend only on the core internal package.',
+              message:
+                'Generation may depend only on the core internal package and cannot access filesystem modules.',
             },
           ],
         },
