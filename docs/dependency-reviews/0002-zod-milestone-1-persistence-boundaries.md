@@ -133,3 +133,22 @@ The subsequent #8 commits implement and test the v1 DTO schemas and adapter, can
 serializer and checksums, fixtures, and bundle measurement described above. Any later Zod
 version change repeats this review's maintenance, license, transitive, deterministic, and
 measured bundle checks.
+
+## Issue #8 measured production impact
+
+Issue #8 adopted exact `zod` `4.4.3` in commit `3a40f07`. On 2026-08-15, the current desktop
+production control build was 51,600 bytes minified JavaScript and 19,870 bytes gzip; persistence was
+not yet reachable from that UI entry and was correctly tree-shaken out.
+
+The implemented persistence public entry was therefore measured directly with the same installed
+Rolldown 1.2.4 production bundler and minification, with `@ttrpg-map/core` external in both cases.
+Bundling Zod produced 102,927 bytes minified and 27,912 bytes gzip. Treating only Zod as external
+produced 36,817 bytes minified and 10,544 bytes gzip. The measured Zod contribution is therefore
+66,110 minified bytes and 17,368 gzip bytes. Commands used no source maps and gzip level 9.
+
+The relative increase is visible because the current desktop proof is intentionally small, but the
+absolute 17,368-byte compressed boundary cost is modest, adds no runtime transitive or native
+dependency, and remains outside generation and rendering. Valibot was reconsidered as required; its
+smaller potential bundle does not outweigh replacing the accepted validation DSL before a real load
+latency or application-size budget is missed. Reassess if persistence becomes an eager startup chunk
+or this measured contribution prevents a declared bundle target.

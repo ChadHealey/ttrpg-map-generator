@@ -169,6 +169,10 @@ export {
   type WorldDocumentId,
 } from './identity.js';
 export {
+  createImmutableDomainSnapshot,
+  type ImmutableDomainSnapshotResult,
+} from './immutable-domain-snapshot.js';
+export {
   type DerivedSeed,
   deriveSeed,
   encodeSeedInput,
@@ -196,6 +200,7 @@ export {
   WORLD_SEED_MAX,
   type WorldSeed,
 } from './seed-input.js';
+export { sha256 } from './sha-256.js';
 export {
   type AcceptedDecoration,
   type AspectConstraint,

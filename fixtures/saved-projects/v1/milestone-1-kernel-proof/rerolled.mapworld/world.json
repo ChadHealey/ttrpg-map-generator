@@ -1,0 +1,14 @@
+{
+  "displayName": "Milestone 1 kernel proof",
+  "mapFiles": [
+    {
+      "mapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7",
+      "mapKind": "world",
+      "path": "maps/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7.json"
+    }
+  ],
+  "rootMapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7",
+  "worldDocumentId": "29646d87-2997-44f8-8b6d-7153f93e6e99",
+  "worldIndexSchemaVersion": 1,
+  "worldSeed": "81985529216486895"
+}

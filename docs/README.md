@@ -26,6 +26,7 @@ for historical context. They are not current requirements or decision records.
 | [05 — Git workflow](05-git-workflow.md)                     | Branches, commits, generated files, versions, dependencies, and ADRs                                 |
 | [06 — Definition of done](06-definition-of-done.md)         | Completion checklists and named anti-patterns                                                        |
 | [07 — Fixture conventions](07-fixture-conventions.md)       | Durable fixture layout, provenance, hashing, updates, and evidence review                            |
+| [`.mapworld` v1](mapworld-v1.md)                            | Released package/record versions, canonical JSON, file ordering, and authoritative checksums         |
 | [ADR template](adr/0000-template.md)                        | Durable technical decisions and their consequences                                                   |
 | [Dependency reviews](dependency-reviews/README.md)          | Required capability, maintenance, license, runtime, and determinism review for adopted dependencies  |
 | [Retrospectives](retrospectives/README.md)                  | Short milestone learnings, scope cuts, and the next visible proof                                    |

@@ -1,0 +1,102 @@
+{
+  "acceptedAspectSchemaVersion": 1,
+  "acceptedOutput": {
+    "markers": [
+      {
+        "markerId": "0693797a-8224-54ab-907b-3f9f3b53cbae",
+        "position": {
+          "latitudeTicks": 24641536,
+          "longitudeTicks": 120651776
+        }
+      },
+      {
+        "markerId": "0b593806-8b80-547e-9af6-1fe02d803244",
+        "position": {
+          "latitudeTicks": 16318464,
+          "longitudeTicks": -17825792
+        }
+      },
+      {
+        "markerId": "255791bf-6f25-5a02-8e04-887a57ac3226",
+        "position": {
+          "latitudeTicks": -24248320,
+          "longitudeTicks": -170983424
+        }
+      },
+      {
+        "markerId": "62470d05-2726-5d99-8793-89e612b2b33e",
+        "position": {
+          "latitudeTicks": 152109056,
+          "longitudeTicks": -135462912
+        }
+      },
+      {
+        "markerId": "8823b145-8087-5dae-af1a-9761602e99d7",
+        "position": {
+          "latitudeTicks": -39190528,
+          "longitudeTicks": 146604032
+        }
+      },
+      {
+        "markerId": "92b9f51a-c309-587a-bf4c-b176e53f77ce",
+        "position": {
+          "latitudeTicks": 51904512,
+          "longitudeTicks": -69009408
+        }
+      },
+      {
+        "markerId": "b11dcafc-4c71-5bf8-ad93-e748b641a2cd",
+        "position": {
+          "latitudeTicks": -94502912,
+          "longitudeTicks": 141819904
+        }
+      },
+      {
+        "markerId": "bdb6af39-2148-5f32-b136-6a9c4cb63e8f",
+        "position": {
+          "latitudeTicks": -49217536,
+          "longitudeTicks": 117047296
+        }
+      },
+      {
+        "markerId": "cdb9df04-6be6-545e-a7cd-a70b2c8368d2",
+        "position": {
+          "latitudeTicks": 155189248,
+          "longitudeTicks": -13303808
+        }
+      }
+    ]
+  },
+  "aspectId": "42928679-db9b-4de2-a8d4-0baecd709cc9",
+  "aspectName": "proof.markers",
+  "dependencyAspects": [
+    {
+      "aspectId": "54b92092-3d5f-4bca-a12c-353185de1557"
+    }
+  ],
+  "diagnostics": [],
+  "entityId": "c6f4a17b-dfaf-4dce-9904-9a900d300da4",
+  "generationStatus": "accepted",
+  "generatorId": "proof.markers",
+  "generatorVersion": 1,
+  "mapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7",
+  "parameterSchemaVersion": 1,
+  "parameters": {
+    "edgeClearancePermille": 40,
+    "markerCount": 9
+  },
+  "seedMetadata": {
+    "aspectName": "proof.markers",
+    "deterministicStreamVersion": 1,
+    "entityId": "c6f4a17b-dfaf-4dce-9904-9a900d300da4",
+    "generatorId": "proof.markers",
+    "generatorVersion": 1,
+    "mapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7",
+    "seedDerivationVersion": 1,
+    "seedScope": "map/entity",
+    "variantRevision": 0,
+    "worldSeed": "81985529216486895"
+  },
+  "seedScope": "map/entity",
+  "variantRevision": 0
+}

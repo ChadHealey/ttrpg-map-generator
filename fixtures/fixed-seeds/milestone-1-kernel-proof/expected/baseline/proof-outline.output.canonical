@@ -1,0 +1,40 @@
+{
+  "points": [
+    {
+      "latitudeTicks": -262144000,
+      "longitudeTicks": -196608000
+    },
+    {
+      "latitudeTicks": -262144000,
+      "longitudeTicks": 196608000
+    },
+    {
+      "latitudeTicks": -196608000,
+      "longitudeTicks": 262144000
+    },
+    {
+      "latitudeTicks": 196608000,
+      "longitudeTicks": 262144000
+    },
+    {
+      "latitudeTicks": 262144000,
+      "longitudeTicks": 196608000
+    },
+    {
+      "latitudeTicks": 262144000,
+      "longitudeTicks": -196608000
+    },
+    {
+      "latitudeTicks": 196608000,
+      "longitudeTicks": -262144000
+    },
+    {
+      "latitudeTicks": -196608000,
+      "longitudeTicks": -262144000
+    },
+    {
+      "latitudeTicks": -262144000,
+      "longitudeTicks": -196608000
+    }
+  ]
+}

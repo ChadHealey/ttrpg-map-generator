@@ -22,4 +22,10 @@ the targeted `pnpm fixtures:update` command documented there.
   workflow are defined by the
   [Milestone 1 kernel-proof contract](../docs/milestone-1-kernel-proof.md). Its registered
   fixture ID is `milestone-1-kernel-proof`, and its checkpoints are `baseline`, `rerolled`, and
-  `reopened`.
+  `reopened`. The fixture records canonical aspect/output evidence plus the checksum-validated
+  `rerolled` v1 saved package; reopening is generator-free and compares with `rerolled` rather
+  than duplicating identical golden files. Its accepted update command is:
+
+  ```bash
+  pnpm fixtures:update --fixture milestone-1-kernel-proof --review-record fixed-seeds/milestone-1-kernel-proof/reviews/0001-initial-acceptance.md
+  ```

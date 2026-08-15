@@ -1,0 +1,72 @@
+{
+  "acceptedAspectSchemaVersion": 1,
+  "acceptedOutput": {
+    "points": [
+      {
+        "latitudeTicks": -262144000,
+        "longitudeTicks": -196608000
+      },
+      {
+        "latitudeTicks": -262144000,
+        "longitudeTicks": 196608000
+      },
+      {
+        "latitudeTicks": -196608000,
+        "longitudeTicks": 262144000
+      },
+      {
+        "latitudeTicks": 196608000,
+        "longitudeTicks": 262144000
+      },
+      {
+        "latitudeTicks": 262144000,
+        "longitudeTicks": 196608000
+      },
+      {
+        "latitudeTicks": 262144000,
+        "longitudeTicks": -196608000
+      },
+      {
+        "latitudeTicks": 196608000,
+        "longitudeTicks": -262144000
+      },
+      {
+        "latitudeTicks": -196608000,
+        "longitudeTicks": -262144000
+      },
+      {
+        "latitudeTicks": -262144000,
+        "longitudeTicks": -196608000
+      }
+    ]
+  },
+  "aspectId": "54b92092-3d5f-4bca-a12c-353185de1557",
+  "aspectName": "proof.outline",
+  "dependencyAspects": [],
+  "diagnostics": [],
+  "entityId": "c6f4a17b-dfaf-4dce-9904-9a900d300da4",
+  "generationStatus": "accepted",
+  "generatorId": "proof.outline",
+  "generatorVersion": 1,
+  "mapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7",
+  "parameterSchemaVersion": 1,
+  "parameters": {
+    "insetPermille": 120,
+    "pointCount": 8,
+    "radialJitterPermille": 180
+  },
+  "seedMetadata": {
+    "aspectName": "proof.outline",
+    "deterministicStreamVersion": 1,
+    "entityId": "c6f4a17b-dfaf-4dce-9904-9a900d300da4",
+    "generatorId": "proof.outline",
+    "generatorVersion": 1,
+    "mapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7",
+    "seedDerivationVersion": 1,
+    "seedScope": "map/entity",
+    "variantRevision": 0,
+    "worldSeed": "81985529216486895"
+  },
+  "seedScope": "map/entity",
+  "variantRevision": 0
+}

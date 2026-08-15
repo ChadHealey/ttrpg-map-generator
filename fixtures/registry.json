@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "fixtures": [
     {
+      "fixtureId": "milestone-1-kernel-proof",
+      "manifestPath": "manifests/milestone-1-kernel-proof.fixture.generated.json",
+      "runnerPath": "fixed-seeds/milestone-1-kernel-proof/fixture-runner.mjs"
+    },
+    {
       "fixtureId": "seed-derivation-v1",
       "manifestPath": "manifests/seed-derivation-v1.fixture.generated.json",
       "runnerPath": "fixed-seeds/seed-derivation-v1/fixture-runner.mjs"

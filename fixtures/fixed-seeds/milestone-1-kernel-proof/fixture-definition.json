@@ -1,0 +1,51 @@
+{
+  "fixtureDefinitionVersion": 1,
+  "worldSeed": "81985529216486895",
+  "stableIds": {
+    "constraintId": "ac35a7ae-3f2c-4433-9351-e23d52c65870",
+    "lockId": "1562f399-119d-4702-aafd-66349098c85f",
+    "marker000Id": "8823b145-8087-5dae-af1a-9761602e99d7",
+    "marker001Id": "62470d05-2726-5d99-8793-89e612b2b33e",
+    "marker002Id": "b11dcafc-4c71-5bf8-ad93-e748b641a2cd",
+    "marker003Id": "92b9f51a-c309-587a-bf4c-b176e53f77ce",
+    "marker004Id": "bdb6af39-2148-5f32-b136-6a9c4cb63e8f",
+    "marker005Id": "0693797a-8224-54ab-907b-3f9f3b53cbae",
+    "marker006Id": "0b593806-8b80-547e-9af6-1fe02d803244",
+    "marker007Id": "cdb9df04-6be6-545e-a7cd-a70b2c8368d2",
+    "marker008Id": "255791bf-6f25-5a02-8e04-887a57ac3226",
+    "markerAspectId": "42928679-db9b-4de2-a8d4-0baecd709cc9",
+    "outlineAspectId": "54b92092-3d5f-4bca-a12c-353185de1557",
+    "proofEntityId": "c6f4a17b-dfaf-4dce-9904-9a900d300da4",
+    "rootSurfaceId": "41c0988c-d65f-4dab-a064-fc8a8755eaec",
+    "worldDocumentId": "29646d87-2997-44f8-8b6d-7153f93e6e99",
+    "worldMapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7"
+  },
+  "versions": {
+    "acceptedAspectSchemaVersion": 1,
+    "deterministicStreamVersion": 1,
+    "mapDocumentSchemaVersion": 1,
+    "markerGeneratorVersion": 1,
+    "markerParameterSchemaVersion": 1,
+    "outlineGeneratorVersion": 1,
+    "outlineParameterSchemaVersion": 1,
+    "packageSchemaVersion": 1,
+    "packageVersion": 1,
+    "proofInputTransformVersion": 1,
+    "seedDerivationVersion": 1,
+    "worldIndexSchemaVersion": 1
+  },
+  "checkpoints": {
+    "baseline": {
+      "proof.markers": 0,
+      "proof.outline": 0
+    },
+    "reopened": {
+      "proof.markers": 1,
+      "proof.outline": 0
+    },
+    "rerolled": {
+      "proof.markers": 1,
+      "proof.outline": 0
+    }
+  }
+}
