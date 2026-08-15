@@ -59,6 +59,9 @@ jobs:
       - name: Run repository checks
         run: pnpm check
 
+      - name: Verify deterministic fixtures
+        run: pnpm test:cross-platform
+
   quality-gate:
     name: quality-gate
     if: always()

@@ -182,8 +182,11 @@ Do not commit:
 - `.mapworld` packages containing personal/user content;
 - large binaries outside the repository's chosen large-file policy.
 
-Generated fixtures are allowed only when their provenance, update command, and
-review purpose are documented. Never hand-edit a generated golden file.
+Generated fixtures are allowed only when they follow
+[07 — Deterministic Fixture Conventions](07-fixture-conventions.md): provenance and review
+purpose are generated into the manifest, updates target one registered fixture, and a new
+append-only review record names the intended behavior and version/compatibility consequence.
+Never hand-edit a generated golden file or use a broad snapshot update.
 
 ## Repository hygiene
 

@@ -21,7 +21,7 @@ pnpm test            # default unit/property/integration suite
 pnpm check           # format:check + lint + typecheck + test + Rust checks
 ```
 
-Special suites may have separate commands:
+Special suites use separate commands when they are not part of every local check:
 
 ```bash
 pnpm test:visual
@@ -30,8 +30,10 @@ pnpm test:cross-platform
 pnpm benchmark
 ```
 
-One spelling for each operation prevents README snippets, CI, hooks, and local
-workflows from drifting apart.
+`pnpm test:cross-platform` is the read-only deterministic fixture command defined by
+[07 — Deterministic Fixture Conventions](07-fixture-conventions.md). The existing Linux and
+macOS CI matrix runs this exact command. One spelling for each operation prevents README
+snippets, CI, hooks, and local workflows from drifting apart.
 
 ## TypeScript is strict
 

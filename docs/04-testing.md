@@ -9,6 +9,10 @@ critical desktop/webview workflows. Rust tests cover the native adapter. Fixture
 live under `fixtures/` when they are shared, persisted, adversarial, visual, or
 cross-package evidence.
 
+The generated-fixture layout, manifest, integrity, targeted update command, and review-record
+requirements are owned by
+[07 — Deterministic Fixture Conventions](07-fixture-conventions.md).
+
 ## Tier 1 — Test always
 
 These tests are fast, deterministic, and primarily exercise pure logic.
@@ -139,6 +143,12 @@ Do not update all three simply because CI failed. For every update:
 - look at the rendered images;
 - confirm unrelated aspects and paired maps did not change;
 - record the generator/style version consequence.
+
+Generated fixture updates additionally use one append-only review record and the targeted
+`pnpm fixtures:update` command. Canonical aspect/output hashes, authoritative `.mapworld` file
+checksums, and fixture-integrity hashes have distinct inputs and meanings even when they use
+the same digest algorithm. Review them under their owning evidence class rather than treating
+one passing hash as proof for another.
 
 Visual comparisons use an explicit tolerance and deterministic fonts/assets.
 Intentional style changes may update PNGs without changing semantic fixtures.
