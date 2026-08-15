@@ -26,6 +26,7 @@ for historical context. They are not current requirements or decision records.
 | [06 — Definition of done](06-definition-of-done.md)         | Completion checklists and named anti-patterns                                                        |
 | [ADR template](adr/0000-template.md)                        | Durable technical decisions and their consequences                                                   |
 | [Dependency reviews](dependency-reviews/README.md)          | Required capability, maintenance, license, runtime, and determinism review for adopted dependencies  |
+| [Retrospectives](retrospectives/README.md)                  | Short milestone learnings, scope cuts, and the next visible proof                                    |
 
 ## Authority and conflicts
 
