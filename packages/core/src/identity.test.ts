@@ -33,6 +33,7 @@ describe('stable identity parsing', () => {
       'constraint',
       'lock',
       'boundary-portal',
+      'root-surface',
     ];
 
     for (const kind of kinds) {

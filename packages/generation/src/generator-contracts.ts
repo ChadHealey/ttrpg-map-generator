@@ -12,12 +12,14 @@ import {
   type BehaviorVersion,
   compareStableReferences,
   type DeepReadonly,
+  type DeterministicRandomStream,
   type EntityId,
   type GenerationDiagnostic,
   type GenerationDiagnosticCode,
   type GeneratorId,
   type MapId,
   type ParameterSchemaVersion,
+  type SeedInput,
   type SeedScope,
   type VariantRevision,
 } from '@ttrpg-map/core';
@@ -58,19 +60,10 @@ export interface GenerationReadContext<Input = unknown> {
   readonly inputs: readonly GenerationInput<Input>[];
 }
 
-/**
- * An aspect-scoped deterministic stream created from explicit seed metadata by its caller.
- * A fresh stream is supplied for every repeated proposal; stream creation and seed derivation
- * remain outside this issue.
- */
-export interface DeterministicRandomStream {
-  readonly nextUint32: () => number;
-}
-
 /** Readonly generation inputs plus the one explicit random capability used by the proposal. */
 export interface GenerationContext<
   Input = unknown,
-  SeedMetadata = unknown,
+  SeedMetadata extends SeedInput = SeedInput,
 > extends GenerationReadContext<Input> {
   readonly seedMetadata: DeepReadonly<SeedMetadata>;
   readonly random: DeterministicRandomStream;
@@ -96,7 +89,7 @@ export interface GenerationPlan {
 export interface GenerationProposal<
   Parameters = unknown,
   Output = unknown,
-  SeedMetadata = unknown,
+  SeedMetadata extends SeedInput = SeedInput,
 > {
   readonly status: 'proposed';
   readonly target: GenerationTarget;
@@ -115,7 +108,7 @@ export interface GenerationProposal<
 export type GenerationProposalValidation<
   Parameters = unknown,
   Output = unknown,
-  SeedMetadata = unknown,
+  SeedMetadata extends SeedInput = SeedInput,
 > =
   | {
       readonly status: 'proposed';
@@ -141,7 +134,7 @@ export interface Generator<
   Parameters,
   Output,
   Input = unknown,
-  SeedMetadata = unknown,
+  SeedMetadata extends SeedInput = SeedInput,
   Plan extends GenerationPlan = GenerationPlan,
 > {
   readonly manifest: GeneratorManifest;
@@ -177,7 +170,12 @@ export function orderGenerationDiagnostics(
 }
 
 /** Apply generator-owned validation and make expected invalid output explicit. */
-export function validateGenerationProposal<Parameters, Output, Input, SeedMetadata>(
+export function validateGenerationProposal<
+  Parameters,
+  Output,
+  Input,
+  SeedMetadata extends SeedInput,
+>(
   generator: Pick<Generator<Parameters, Output, Input, SeedMetadata>, 'validate'>,
   proposal: GenerationProposal<Parameters, Output, SeedMetadata>,
   context: GenerationValidationContext<Input>,

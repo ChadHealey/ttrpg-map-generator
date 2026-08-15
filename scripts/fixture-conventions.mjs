@@ -145,7 +145,7 @@ export function parseUpdateArguments(args) {
   }
   if (args.length !== 4) {
     throw new Error(
-      'Usage: pnpm fixtures:update -- --fixture <fixture-id> --review-record <fixture-relative-path>',
+      'Usage: pnpm fixtures:update --fixture <fixture-id> --review-record <fixture-relative-path>',
     );
   }
   const values = new Map();

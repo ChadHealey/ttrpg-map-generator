@@ -1,7 +1,6 @@
 /** Pure generator contracts and implementations with no UI, persistence, or renderer access. */
 
 export {
-  type DeterministicRandomStream,
   type GenerationContext,
   type GenerationInput,
   type GenerationPlan,
@@ -18,3 +17,4 @@ export {
   orderGenerationDiagnostics,
   validateGenerationProposal,
 } from './generator-contracts.js';
+export type { DeterministicRandomStream } from '@ttrpg-map/core';

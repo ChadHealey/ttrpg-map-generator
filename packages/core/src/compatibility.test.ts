@@ -4,13 +4,18 @@ import {
   type BehaviorVersion,
   COMPATIBILITY_DIAGNOSTIC_CODES,
   createBehaviorVersion,
+  createDeterministicStreamVersion,
   createParameterSchemaVersion,
+  createSeedDerivationVersion,
   createVariantRevision,
+  type DeterministicStreamVersion,
   incrementVariantRevision,
   type ParameterSchemaVersion,
   parseBehaviorVersion,
   parseParameterSchemaVersion,
+  parseSeedDerivationVersion,
   parseVariantRevision,
+  type SeedDerivationVersion,
   type VariantRevision,
 } from './compatibility.js';
 
@@ -30,6 +35,21 @@ describe('compatibility values', () => {
     expect(createParameterSchemaVersion(Number.MAX_SAFE_INTEGER)).toStrictEqual({
       ok: true,
       value: Number.MAX_SAFE_INTEGER,
+    });
+  });
+
+  it('keeps seed-derivation and deterministic-stream versions explicit and positive', () => {
+    expect(createSeedDerivationVersion(1)).toStrictEqual({ ok: true, value: 1 });
+    expect(createDeterministicStreamVersion(Number.MAX_SAFE_INTEGER)).toStrictEqual({
+      ok: true,
+      value: Number.MAX_SAFE_INTEGER,
+    });
+    expect(parseSeedDerivationVersion(0)).toStrictEqual({
+      ok: false,
+      diagnostic: {
+        code: COMPATIBILITY_DIAGNOSTIC_CODES.invalidSeedDerivationVersion,
+        message: 'Seed-derivation version must be a positive safe integer.',
+      },
     });
   });
 
@@ -86,6 +106,8 @@ describe('compatibility values', () => {
   it('keeps behavior versions, parameter schema versions, and revisions distinct at compile time', () => {
     const behaviorVersion = expectValue(createBehaviorVersion(1));
     const parameterSchemaVersion = expectValue(createParameterSchemaVersion(1));
+    const seedDerivationVersion = expectValue(createSeedDerivationVersion(1));
+    const deterministicStreamVersion = expectValue(createDeterministicStreamVersion(1));
     const variantRevision = expectValue(createVariantRevision(0));
 
     function acceptsBehaviorVersion(value: BehaviorVersion): void {
@@ -97,10 +119,18 @@ describe('compatibility values', () => {
     function acceptsVariantRevision(value: VariantRevision): void {
       void value;
     }
+    function acceptsSeedDerivationVersion(value: SeedDerivationVersion): void {
+      void value;
+    }
+    function acceptsDeterministicStreamVersion(value: DeterministicStreamVersion): void {
+      void value;
+    }
 
     acceptsBehaviorVersion(behaviorVersion);
     acceptsParameterSchemaVersion(parameterSchemaVersion);
     acceptsVariantRevision(variantRevision);
+    acceptsSeedDerivationVersion(seedDerivationVersion);
+    acceptsDeterministicStreamVersion(deterministicStreamVersion);
 
     // @ts-expect-error Behavior versions cannot stand in for parameter schema versions.
     acceptsParameterSchemaVersion(behaviorVersion);
@@ -108,5 +138,9 @@ describe('compatibility values', () => {
     acceptsVariantRevision(parameterSchemaVersion);
     // @ts-expect-error Variant revisions cannot stand in for behavior versions.
     acceptsBehaviorVersion(variantRevision);
+    // @ts-expect-error Seed-derivation versions cannot stand in for stream versions.
+    acceptsDeterministicStreamVersion(seedDerivationVersion);
+    // @ts-expect-error Stream versions cannot stand in for generator behavior versions.
+    acceptsBehaviorVersion(deterministicStreamVersion);
   });
 });

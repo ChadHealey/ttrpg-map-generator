@@ -36,6 +36,9 @@ export type LockId = StableUuidId<'lock'>;
 /** Stable identity shared by records that describe one map-boundary crossing. */
 export type BoundaryPortalId = StableUuidId<'boundary-portal'>;
 
+/** Stable identity of one persisted authoritative root surface. */
+export type RootSurfaceId = StableUuidId<'root-surface'>;
+
 /** A validated symbolic generator identifier such as `proof.outline`. */
 export type GeneratorId = string & { readonly [GENERATOR_ID_BRAND]: true };
 
@@ -43,7 +46,14 @@ export type GeneratorId = string & { readonly [GENERATOR_ID_BRAND]: true };
 export type SemanticKey = string & { readonly [SEMANTIC_KEY_BRAND]: true };
 
 export type StableIdKind =
-  'world-document' | 'map' | 'entity' | 'aspect' | 'constraint' | 'lock' | 'boundary-portal';
+  | 'world-document'
+  | 'map'
+  | 'entity'
+  | 'aspect'
+  | 'constraint'
+  | 'lock'
+  | 'boundary-portal'
+  | 'root-surface';
 
 export interface StableIdByKind {
   readonly 'world-document': WorldDocumentId;
@@ -53,6 +63,7 @@ export interface StableIdByKind {
   readonly constraint: ConstraintId;
   readonly lock: LockId;
   readonly 'boundary-portal': BoundaryPortalId;
+  readonly 'root-surface': RootSurfaceId;
 }
 
 /** UUID-backed and symbolic identities that have deterministic canonical text encodings. */

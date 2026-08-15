@@ -4,11 +4,12 @@ import type {
   AspectReference,
   GenerationStatus,
 } from './generated-aspects.js';
+import type { MapEntitySeedInput } from './seed-input.js';
 
 declare const accepted: AcceptedAspectRecord<
   { readonly markerCount: number },
   { readonly markers: readonly { readonly x: number }[] },
-  { readonly worldSeed: string }
+  MapEntitySeedInput
 >;
 declare const reference: AspectReference;
 
@@ -24,7 +25,7 @@ accepted.parameters.markerCount = 4;
 // @ts-expect-error Accepted child output collections are deeply readonly.
 accepted.acceptedOutput.markers[0] = { x: 4 };
 // @ts-expect-error Seed metadata is deeply readonly.
-accepted.seedMetadata.worldSeed = 'changed';
+accepted.seedMetadata.worldSeed = 1n;
 // @ts-expect-error Opaque references contain an aspect ID, not a descriptive aspect name.
 reference.aspectName = unparsedAspectName;
 

@@ -95,7 +95,7 @@ Semantic evidence reviewed; SVG and visual evidence are not applicable.
     fixtureId,
     generated: true,
     editPolicy: 'regenerate-only',
-    generatingCommand: `pnpm fixtures:update -- --fixture ${fixtureId} --review-record ${reviewRecordPath}`,
+    generatingCommand: `pnpm fixtures:update --fixture ${fixtureId} --review-record ${reviewRecordPath}`,
     sourceDefinition: {
       path: `fixed-seeds/${fixtureId}/fixture-definition.json`,
       sha256: digest(definition),

@@ -14,6 +14,10 @@ the targeted `pnpm fixtures:update` command documented there.
 
 ## Milestone 1
 
+- The registered `seed-derivation-v1` fixture records ADR-0006 preimages, derived SHA-256 seeds,
+  raw stream samples, revision isolation, and root/shared identity agreement across child
+  contexts.
+
 - The fixed composition, permitted reroll changes, canonical comparison boundary, and visible
   workflow are defined by the
   [Milestone 1 kernel-proof contract](../docs/milestone-1-kernel-proof.md). Its registered

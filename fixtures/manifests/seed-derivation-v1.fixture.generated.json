@@ -1,0 +1,118 @@
+{
+  "fixtureManifestVersion": 1,
+  "fixtureId": "seed-derivation-v1",
+  "generated": true,
+  "editPolicy": "regenerate-only",
+  "generatingCommand": "pnpm fixtures:update --fixture seed-derivation-v1 --review-record fixed-seeds/seed-derivation-v1/reviews/0001-initial-acceptance.md",
+  "sourceDefinition": {
+    "path": "fixed-seeds/seed-derivation-v1/fixture-definition.json",
+    "sha256": "ebb827c9b72e4da0787052431372a8006d762085e58ab2f82833a0bfc4236522"
+  },
+  "worldSeed": "81985529216486895",
+  "stableIds": {
+    "boundaryPortalId": "7f59b4c3-bf70-42b5-9b5e-c97f7e8d8321",
+    "childMapAId": "11111111-1111-4111-8111-111111111111",
+    "childMapBId": "22222222-2222-4222-8222-222222222222",
+    "entityId": "c6f4a17b-dfaf-4dce-9904-9a900d300da4",
+    "mapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7",
+    "markerAspectId": "42928679-db9b-4de2-a8d4-0baecd709cc9",
+    "rootSurfaceId": "41c0988c-d65f-4dab-a064-fc8a8755eaec"
+  },
+  "versions": {
+    "deterministicStreamVersion": 1,
+    "generatorVersion": 1,
+    "seedDerivationVersion": 1
+  },
+  "checkpointRevisions": {
+    "map-entity-r0": { "proof.markers": 0 },
+    "map-entity-r1": { "proof.markers": 1 },
+    "root-child-a": { "proof.markers": 0 },
+    "root-child-b": { "proof.markers": 0 },
+    "shared-child-a": { "proof.markers": 0 },
+    "shared-child-b": { "proof.markers": 0 }
+  },
+  "expectedAssertions": [
+    {
+      "assertionId": "map-entity-revision-changes-vector",
+      "operator": "bytes-not-equal",
+      "reviewPurpose": "Prove the selected aspect revision changes its complete seed vector.",
+      "leftArtifactPath": "fixed-seeds/seed-derivation-v1/expected/map-entity-r0/seed.kernel.canonical",
+      "rightArtifactPath": "fixed-seeds/seed-derivation-v1/expected/map-entity-r1/seed.kernel.canonical"
+    },
+    {
+      "assertionId": "root-child-contexts-agree",
+      "operator": "bytes-equal",
+      "reviewPurpose": "Prove child map identity does not enter a root-coordinate namespace.",
+      "leftArtifactPath": "fixed-seeds/seed-derivation-v1/expected/root-child-a/seed.kernel.canonical",
+      "rightArtifactPath": "fixed-seeds/seed-derivation-v1/expected/root-child-b/seed.kernel.canonical"
+    },
+    {
+      "assertionId": "runner-validates-seed-vectors",
+      "operator": "runner-pass",
+      "reviewPurpose": "Prove the core reproduces all ADR-0006 bytes and samples."
+    },
+    {
+      "assertionId": "shared-child-contexts-agree",
+      "operator": "bytes-equal",
+      "reviewPurpose": "Prove child map identity does not enter a shared-boundary namespace.",
+      "leftArtifactPath": "fixed-seeds/seed-derivation-v1/expected/shared-child-a/seed.kernel.canonical",
+      "rightArtifactPath": "fixed-seeds/seed-derivation-v1/expected/shared-child-b/seed.kernel.canonical"
+    }
+  ],
+  "reviewPurpose": "Prove cross-platform seed derivation, stream compatibility, revision isolation, and cross-child agreement.",
+  "reviewRecord": {
+    "path": "fixed-seeds/seed-derivation-v1/reviews/0001-initial-acceptance.md",
+    "sha256": "996d97e93a9d02ba2660c04b24776f7429b9e86752512893363d20604dd39722"
+  },
+  "generatedRoots": ["fixed-seeds/seed-derivation-v1/expected"],
+  "artifacts": [
+    {
+      "path": "fixed-seeds/seed-derivation-v1/expected/map-entity-r0/seed.kernel.canonical",
+      "kind": "canonical-kernel-vector",
+      "checkpoint": "map-entity-r0",
+      "byteLength": 743,
+      "canonicalKernelVectorSha256": "dea5df44674c2ddc44b8730626d956edfb9672a629327eb29995d32a2186cc90",
+      "fixtureIntegritySha256": "dea5df44674c2ddc44b8730626d956edfb9672a629327eb29995d32a2186cc90"
+    },
+    {
+      "path": "fixed-seeds/seed-derivation-v1/expected/map-entity-r1/seed.kernel.canonical",
+      "kind": "canonical-kernel-vector",
+      "checkpoint": "map-entity-r1",
+      "byteLength": 618,
+      "canonicalKernelVectorSha256": "16f0a69ed7affc2ae4b3de9ee5925398a304371f04fe8dc74d9ba5880888e7c4",
+      "fixtureIntegritySha256": "16f0a69ed7affc2ae4b3de9ee5925398a304371f04fe8dc74d9ba5880888e7c4"
+    },
+    {
+      "path": "fixed-seeds/seed-derivation-v1/expected/root-child-a/seed.kernel.canonical",
+      "kind": "canonical-kernel-vector",
+      "checkpoint": "root-child-a",
+      "byteLength": 615,
+      "canonicalKernelVectorSha256": "1843b95d383682fb3d8891c26be20e6bc2d42be752bdbeb59e6a4d4b67fc5fc4",
+      "fixtureIntegritySha256": "1843b95d383682fb3d8891c26be20e6bc2d42be752bdbeb59e6a4d4b67fc5fc4"
+    },
+    {
+      "path": "fixed-seeds/seed-derivation-v1/expected/root-child-b/seed.kernel.canonical",
+      "kind": "canonical-kernel-vector",
+      "checkpoint": "root-child-b",
+      "byteLength": 615,
+      "canonicalKernelVectorSha256": "1843b95d383682fb3d8891c26be20e6bc2d42be752bdbeb59e6a4d4b67fc5fc4",
+      "fixtureIntegritySha256": "1843b95d383682fb3d8891c26be20e6bc2d42be752bdbeb59e6a4d4b67fc5fc4"
+    },
+    {
+      "path": "fixed-seeds/seed-derivation-v1/expected/shared-child-a/seed.kernel.canonical",
+      "kind": "canonical-kernel-vector",
+      "checkpoint": "shared-child-a",
+      "byteLength": 578,
+      "canonicalKernelVectorSha256": "274d79a4d5e5fce9b9c148a7248449f2d8bf2e36c0480ceb0d566e4ac48dc8e7",
+      "fixtureIntegritySha256": "274d79a4d5e5fce9b9c148a7248449f2d8bf2e36c0480ceb0d566e4ac48dc8e7"
+    },
+    {
+      "path": "fixed-seeds/seed-derivation-v1/expected/shared-child-b/seed.kernel.canonical",
+      "kind": "canonical-kernel-vector",
+      "checkpoint": "shared-child-b",
+      "byteLength": 578,
+      "canonicalKernelVectorSha256": "274d79a4d5e5fce9b9c148a7248449f2d8bf2e36c0480ceb0d566e4ac48dc8e7",
+      "fixtureIntegritySha256": "274d79a4d5e5fce9b9c148a7248449f2d8bf2e36c0480ceb0d566e4ac48dc8e7"
+    }
+  ]
+}

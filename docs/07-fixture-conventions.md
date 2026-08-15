@@ -16,7 +16,7 @@ The repository exposes exactly two fixture operations:
 
 ```bash
 pnpm test:cross-platform
-pnpm fixtures:update -- --fixture <fixture-id> --review-record <path>
+pnpm fixtures:update --fixture <fixture-id> --review-record <path>
 ```
 
 `test:cross-platform` is read-only. It validates the registry, provenance, review records, and
@@ -49,6 +49,7 @@ fixtures/
       fixture-runner.mjs
       expected/
         <checkpoint>/
+          <vector-name>.kernel.canonical
           <aspect-name>.aspect.canonical
           <aspect-name>.output.canonical
       reviews/
@@ -126,7 +127,17 @@ match the exact checked-in bytes.
 All fixture digests use SHA-256 with lowercase hexadecimal output, but their names and inputs
 must remain separate.
 
-### Canonical aspect evidence
+### Canonical deterministic evidence
+
+Before an accepted aspect or persistence serializer exists, a deterministic core compatibility
+fixture may emit a `canonical-kernel-vector` artifact ending in `.kernel.canonical`. Its runner
+writes a stable, documented representation of the exact versioned input bytes, derived evidence,
+and samples under review. The generated manifest names its digest
+`canonicalKernelVectorSha256`. This evidence is limited to a compatibility kernel such as seed
+derivation; it must not substitute for canonical aspect/output evidence once accepted aspects are
+the comparison boundary.
+
+Canonical aspect evidence uses the following additional rules.
 
 The v1 persistence serializer supplies `canonicalAspectBytes` for one complete accepted aspect
 record and `canonicalAspectOutputBytes` for only its accepted output. Fixture tooling writes
@@ -207,6 +218,7 @@ to make a failing check green.
 
 | Evidence                      | Review when                                                                                              | What it proves                                                                 |
 | ----------------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Canonical kernel vectors      | Seed, identity, coordinate, or another pre-aspect deterministic compatibility primitive changes          | Exact compatibility bytes and samples across supported platforms               |
 | Semantic aspect/output bytes  | Generator, seed, identity, ordering, quantization, transaction, or accepted persistence behavior changes | Determinism, output change, isolation, and exact accepted state                |
 | Authoritative files/checksums | Persistence encoding, package layout, schema, or checksum behavior changes                               | Exact saved authoritative content and package integrity                        |
 | Canonical SVG                 | Render-scene adaptation, backend serialization/order, or SVG semantics change                            | Stable structural render output, not semantic determinism                      |

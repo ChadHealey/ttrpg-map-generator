@@ -250,7 +250,7 @@ Semantic evidence reviewed; SVG and visual evidence are not applicable.
 `;
     write(repositoryRoot, `fixtures/${reviewRecordPath}`, review);
     const candidateManifest = structuredClone(manifest);
-    candidateManifest.generatingCommand = `pnpm fixtures:update -- --fixture deterministic-proof --review-record ${reviewRecordPath}`;
+    candidateManifest.generatingCommand = `pnpm fixtures:update --fixture deterministic-proof --review-record ${reviewRecordPath}`;
     candidateManifest.reviewRecord = { path: reviewRecordPath, sha256: digest(review) };
     candidateManifest.versions.generatorVersion = 2;
     for (const artifact of candidateManifest.artifacts) {
@@ -307,7 +307,7 @@ Semantic evidence reviewed; SVG and visual evidence are not applicable.
     write(repositoryRoot, `fixtures/${reviewRecordPath}`, review);
     write(repositoryRoot, `fixtures/${extraPath}`, 'untracked user content\n');
     const candidateManifest = structuredClone(manifest);
-    candidateManifest.generatingCommand = `pnpm fixtures:update -- --fixture deterministic-proof --review-record ${reviewRecordPath}`;
+    candidateManifest.generatingCommand = `pnpm fixtures:update --fixture deterministic-proof --review-record ${reviewRecordPath}`;
     candidateManifest.reviewRecord = { path: reviewRecordPath, sha256: digest(review) };
     const generatedExtra = '{"accepted":"extra"}\n';
     candidateManifest.artifacts.push({
@@ -373,7 +373,7 @@ Semantic evidence is intentionally invalid; SVG and visual evidence are not appl
 `;
     write(repositoryRoot, `fixtures/${reviewRecordPath}`, review);
     const candidateManifest = structuredClone(manifest);
-    candidateManifest.generatingCommand = `pnpm fixtures:update -- --fixture deterministic-proof --review-record ${reviewRecordPath}`;
+    candidateManifest.generatingCommand = `pnpm fixtures:update --fixture deterministic-proof --review-record ${reviewRecordPath}`;
     candidateManifest.reviewRecord = { path: reviewRecordPath, sha256: digest(review) };
     const runner = `import { createHash } from 'node:crypto';
 import { mkdirSync, writeFileSync } from 'node:fs';

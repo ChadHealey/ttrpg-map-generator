@@ -1,4 +1,10 @@
 {
   "schemaVersion": 1,
-  "fixtures": []
+  "fixtures": [
+    {
+      "fixtureId": "seed-derivation-v1",
+      "manifestPath": "manifests/seed-derivation-v1.fixture.generated.json",
+      "runnerPath": "fixed-seeds/seed-derivation-v1/fixture-runner.mjs"
+    }
+  ]
 }

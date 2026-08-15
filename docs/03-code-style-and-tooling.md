@@ -91,7 +91,8 @@ context. User-facing logic must not depend on matching human-readable error text
 Use flat ESLint configuration with type-aware TypeScript and Svelte rules. It
 must enforce, directly or through a focused custom rule:
 
-- no `Math.random()` in `generation`, `assets`, or `render`;
+- no `Math.random()` in `generation`, `assets`, `render`, or the explicitly listed deterministic
+  seed-kernel modules under `core`;
 - no forbidden package direction or private deep import;
 - no import cycles;
 - no explicit `any`;

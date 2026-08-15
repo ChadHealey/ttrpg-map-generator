@@ -10,13 +10,19 @@ export {
   type CompatibilityDiagnosticCode,
   type CompatibilityParseResult,
   createBehaviorVersion,
+  createDeterministicStreamVersion,
   createParameterSchemaVersion,
+  createSeedDerivationVersion,
   createVariantRevision,
+  type DeterministicStreamVersion,
   incrementVariantRevision,
   type ParameterSchemaVersion,
   parseBehaviorVersion,
+  parseDeterministicStreamVersion,
   parseParameterSchemaVersion,
+  parseSeedDerivationVersion,
   parseVariantRevision,
+  type SeedDerivationVersion,
   type VariantRevision,
 } from './compatibility.js';
 export {
@@ -81,6 +87,14 @@ export {
   worldRadiusToKilometers,
 } from './coordinates.js';
 export {
+  createDeterministicRandomStream,
+  DETERMINISTIC_STREAM_DIAGNOSTIC_CODES,
+  type DeterministicRandomStream,
+  type DeterministicStreamCreationResult,
+  type DeterministicStreamDiagnostic,
+  type DeterministicStreamDiagnosticCode,
+} from './deterministic-random-stream.js';
+export {
   type AcceptedAspectRecord,
   type AspectName,
   type AspectReference,
@@ -115,6 +129,7 @@ export {
   parseGeneratorId,
   parseSemanticKey,
   parseStableId,
+  type RootSurfaceId,
   type SemanticKey,
   type StableIdByKind,
   type StableIdKind,
@@ -123,6 +138,34 @@ export {
   stableReferencesEqual,
   type WorldDocumentId,
 } from './identity.js';
+export {
+  type DerivedSeed,
+  deriveSeed,
+  encodeSeedInput,
+  parseDerivedSeedHex,
+  SEED_DERIVATION_DIAGNOSTIC_CODES,
+  type SeedDerivationDiagnostic,
+  type SeedDerivationDiagnosticCode,
+  type SeedDerivationResult,
+  validateSeedInputEncodingV1,
+} from './seed-derivation.js';
+export {
+  DETERMINISTIC_STREAM_VERSION,
+  formatWorldSeed,
+  type MapEntitySeedInput,
+  parseSeedInput,
+  parseWorldSeed,
+  type RootCoordinateSeedInput,
+  SEED_DERIVATION_VERSION,
+  SEED_INPUT_DIAGNOSTIC_CODES,
+  type SeedInput,
+  type SeedInputDiagnostic,
+  type SeedInputDiagnosticCode,
+  type SeedInputParseResult,
+  type SharedBoundarySeedInput,
+  WORLD_SEED_MAX,
+  type WorldSeed,
+} from './seed-input.js';
 
 /** A point in the fixed render-pixel coordinate space of a {@link RenderScene}. */
 export interface RenderPoint {

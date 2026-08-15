@@ -11,6 +11,7 @@ const UUID_PATTERN = /^[a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3
 const ARTIFACT_KINDS = new Set([
   'canonical-aspect-bytes',
   'canonical-aspect-output-bytes',
+  'canonical-kernel-vector',
   'canonical-svg',
   'saved-project-authoritative-file',
   'saved-project-manifest',
@@ -207,6 +208,9 @@ function validateArtifact(candidate, index, fixtureId) {
     (kind === 'canonical-aspect-output-bytes' &&
       isWithin(artifactPath, expectedRoot) &&
       artifactPath.endsWith('.output.canonical')) ||
+    (kind === 'canonical-kernel-vector' &&
+      isWithin(artifactPath, expectedRoot) &&
+      artifactPath.endsWith('.kernel.canonical')) ||
     (kind === 'canonical-svg' && artifactPath === `canonical-svg/${fixtureId}/${checkpoint}.svg`) ||
     (kind === 'visual-evidence' &&
       artifactPath === `visual-gallery/${fixtureId}/${checkpoint}.png`) ||
@@ -236,9 +240,11 @@ function validateArtifact(candidate, index, fixtureId) {
       ? 'canonicalAspectSha256'
       : kind === 'canonical-aspect-output-bytes'
         ? 'canonicalAspectOutputSha256'
-        : kind === 'canonical-svg'
-          ? 'canonicalSvgSha256'
-          : undefined;
+        : kind === 'canonical-kernel-vector'
+          ? 'canonicalKernelVectorSha256'
+          : kind === 'canonical-svg'
+            ? 'canonicalSvgSha256'
+            : undefined;
   const evidenceDigest =
     evidenceDigestField === undefined
       ? undefined
@@ -249,6 +255,7 @@ function validateArtifact(candidate, index, fixtureId) {
   for (const field of [
     'canonicalAspectSha256',
     'canonicalAspectOutputSha256',
+    'canonicalKernelVectorSha256',
     'canonicalSvgSha256',
   ]) {
     if (field !== evidenceDigestField && artifact[field] !== undefined) {
@@ -364,7 +371,7 @@ export function validateManifest(
     reviewRecord.path,
     `${entry.fixtureId} reviewRecord path`,
   );
-  const expectedCommand = `pnpm fixtures:update -- --fixture ${entry.fixtureId} --review-record ${reviewRecordPath}`;
+  const expectedCommand = `pnpm fixtures:update --fixture ${entry.fixtureId} --review-record ${reviewRecordPath}`;
   if (manifest.generatingCommand !== expectedCommand) {
     fail(`${entry.fixtureId} generatingCommand must be the exact targeted update command.`);
   }

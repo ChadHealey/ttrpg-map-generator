@@ -8,6 +8,7 @@
 
 import type { BehaviorVersion, ParameterSchemaVersion, VariantRevision } from './compatibility.js';
 import type { AspectId, EntityId, GeneratorId, MapId } from './identity.js';
+import type { SeedInput } from './seed-input.js';
 
 declare const ASPECT_NAME_BRAND: unique symbol;
 declare const GENERATION_DIAGNOSTIC_CODE_BRAND: unique symbol;
@@ -62,7 +63,7 @@ export type DeepReadonly<Value> = Value extends
 export interface AcceptedAspectRecord<
   Parameters = unknown,
   Output = unknown,
-  SeedMetadata = unknown,
+  SeedMetadata extends SeedInput = SeedInput,
 > {
   readonly mapId: MapId;
   readonly entityId: EntityId;
@@ -72,7 +73,7 @@ export interface AcceptedAspectRecord<
   readonly generatorVersion: BehaviorVersion;
   readonly parameterSchemaVersion: ParameterSchemaVersion;
   readonly parameters: DeepReadonly<Parameters>;
-  readonly seedScope: SeedScope;
+  readonly seedScope: SeedMetadata['seedScope'];
   readonly seedMetadata: DeepReadonly<SeedMetadata>;
   readonly variantRevision: VariantRevision;
   readonly dependencyAspects: readonly AspectReference[];

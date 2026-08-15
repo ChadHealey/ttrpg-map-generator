@@ -1,6 +1,7 @@
 {
   "extends": ["../../tsconfig.base.json", "@tsconfig/svelte/tsconfig.json"],
   "compilerOptions": {
+    "target": "ES2023",
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "composite": true,
     "noEmit": true,

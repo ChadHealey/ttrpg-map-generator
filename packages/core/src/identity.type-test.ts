@@ -8,6 +8,7 @@ import {
   parseGeneratorId,
   parseSemanticKey,
   parseStableId,
+  type RootSurfaceId,
   type StableIdSource,
   stableReferencesEqual,
 } from './identity.js';
@@ -16,6 +17,7 @@ const mapId = parseStableId('map', 'a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7');
 const entityId = parseStableId('entity', 'c6f4a17b-dfaf-4dce-9904-9a900d300da4');
 const generatorId = parseGeneratorId('proof.outline');
 const semanticKey = parseSemanticKey('marker-000');
+const rootSurfaceId = parseStableId('root-surface', '41c0988c-d65f-4dab-a064-fc8a8755eaec');
 
 // @ts-expect-error Raw strings cannot bypass map-ID parsing.
 const unparsedMapId: MapId = 'a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7';
@@ -53,4 +55,11 @@ if (mapId.ok && entityId.ok && generatorId.ok && semanticKey.ok) {
     invalidSource,
     unparsedMapId,
   ];
+}
+
+if (rootSurfaceId.ok && mapId.ok) {
+  const exactRootSurfaceId: RootSurfaceId = rootSurfaceId.value;
+  // @ts-expect-error A child map cannot stand in for the persisted root-surface namespace.
+  const invalidRootSurfaceId: RootSurfaceId = mapId.value;
+  void [exactRootSurfaceId, invalidRootSurfaceId];
 }

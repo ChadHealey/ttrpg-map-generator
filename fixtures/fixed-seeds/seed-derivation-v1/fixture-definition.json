@@ -1,0 +1,147 @@
+{
+  "fixtureDefinitionVersion": 1,
+  "worldSeed": "81985529216486895",
+  "generatorId": "proof.markers",
+  "generatorVersion": 1,
+  "aspectName": "proof.markers",
+  "stableIds": {
+    "mapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7",
+    "entityId": "c6f4a17b-dfaf-4dce-9904-9a900d300da4",
+    "markerAspectId": "42928679-db9b-4de2-a8d4-0baecd709cc9",
+    "rootSurfaceId": "41c0988c-d65f-4dab-a064-fc8a8755eaec",
+    "boundaryPortalId": "7f59b4c3-bf70-42b5-9b5e-c97f7e8d8321",
+    "childMapAId": "11111111-1111-4111-8111-111111111111",
+    "childMapBId": "22222222-2222-4222-8222-222222222222"
+  },
+  "versions": {
+    "seedDerivationVersion": 1,
+    "deterministicStreamVersion": 1
+  },
+  "vectors": [
+    {
+      "checkpoint": "map-entity-r0",
+      "seedScope": "map/entity",
+      "variantRevision": 0,
+      "expected": {
+        "encodedByteLength": 147,
+        "encodedHex": "74747270672d6d61702f736565642d696e7075742f76310001000000010102000000080123456789abcdef030000000d70726f6f662e6d61726b65727304000000080000000000000001050000000d70726f6f662e6d61726b657273060000000800000000000000001000000010a6f9999609e84f5fbf5f80b6bb38bdb71100000010c6f4a17bdfaf4dce99049a900d300da4",
+        "derivedSeedHex": "1a2f8b58dd15bc73225e165c502a3b05f27c71466b375d6e7ec01f1977040d56",
+        "nextUint64": [
+          "4969472649965073277",
+          "4126389313282449473",
+          "12255398325814149716",
+          "6219055558446306254",
+          "17257435883629250169",
+          "12766772300167332155"
+        ],
+        "independentSamples": {
+          "nextUint32": 1157045515,
+          "nextFloat64": 0.2693956521599714,
+          "nextInt1000": 277
+        }
+      }
+    },
+    {
+      "checkpoint": "map-entity-r1",
+      "seedScope": "map/entity",
+      "variantRevision": 1,
+      "expected": {
+        "encodedByteLength": 147,
+        "encodedHex": "74747270672d6d61702f736565642d696e7075742f76310001000000010102000000080123456789abcdef030000000d70726f6f662e6d61726b65727304000000080000000000000001050000000d70726f6f662e6d61726b657273060000000800000000000000011000000010a6f9999609e84f5fbf5f80b6bb38bdb71100000010c6f4a17bdfaf4dce99049a900d300da4",
+        "derivedSeedHex": "00848c0bb927d5ef71c768a0ab25c62dd1c2492ad9b79f694229851e85083367",
+        "nextUint64": [
+          "482482241414034812",
+          "7331834249422374937",
+          "5071566112739751929",
+          "17259582541064106200",
+          "8692955153456199867",
+          "13616984490983226921"
+        ]
+      }
+    },
+    {
+      "checkpoint": "root-child-a",
+      "contextMapId": "11111111-1111-4111-8111-111111111111",
+      "seedScope": "root-coordinate",
+      "variantRevision": 0,
+      "point": {
+        "longitudeTicks": -2147483648,
+        "latitudeTicks": 0
+      },
+      "expected": {
+        "encodedByteLength": 144,
+        "encodedHex": "74747270672d6d61702f736565642d696e7075742f76310001000000010202000000080123456789abcdef030000000d70726f6f662e6d61726b65727304000000080000000000000001050000000d70726f6f662e6d61726b65727306000000080000000000000000200000001041c0988cd65f4daba064fc8a8755eaec210000000480000000220000000400000000",
+        "derivedSeedHex": "e0df5749db434e06a7fc283ea57833b3fe11c35e389576f6d83f504c68822089",
+        "nextUint64": [
+          "12216437898497178811",
+          "17692849315921094206",
+          "15229514985953005997",
+          "3414435803347387516",
+          "15069927402757322134",
+          "2129342890703147323"
+        ]
+      }
+    },
+    {
+      "checkpoint": "root-child-b",
+      "contextMapId": "22222222-2222-4222-8222-222222222222",
+      "seedScope": "root-coordinate",
+      "variantRevision": 0,
+      "point": {
+        "longitudeTicks": -2147483648,
+        "latitudeTicks": 0
+      },
+      "expected": {
+        "encodedByteLength": 144,
+        "encodedHex": "74747270672d6d61702f736565642d696e7075742f76310001000000010202000000080123456789abcdef030000000d70726f6f662e6d61726b65727304000000080000000000000001050000000d70726f6f662e6d61726b65727306000000080000000000000000200000001041c0988cd65f4daba064fc8a8755eaec210000000480000000220000000400000000",
+        "derivedSeedHex": "e0df5749db434e06a7fc283ea57833b3fe11c35e389576f6d83f504c68822089",
+        "nextUint64": [
+          "12216437898497178811",
+          "17692849315921094206",
+          "15229514985953005997",
+          "3414435803347387516",
+          "15069927402757322134",
+          "2129342890703147323"
+        ]
+      }
+    },
+    {
+      "checkpoint": "shared-child-a",
+      "contextMapId": "11111111-1111-4111-8111-111111111111",
+      "seedScope": "shared-boundary",
+      "variantRevision": 0,
+      "expected": {
+        "encodedByteLength": 126,
+        "encodedHex": "74747270672d6d61702f736565642d696e7075742f76310001000000010302000000080123456789abcdef030000000d70726f6f662e6d61726b65727304000000080000000000000001050000000d70726f6f662e6d61726b6572730600000008000000000000000030000000107f59b4c3bf7042b59b5ec97f7e8d8321",
+        "derivedSeedHex": "9d7796bda6544cea685a288d2b4364410ed4d61dc182963d0b8a60c8afff2360",
+        "nextUint64": [
+          "17046239271336261284",
+          "7757445114682684189",
+          "15827175737314354443",
+          "4320748786356295447",
+          "5858308439689601826",
+          "10457685005984530350"
+        ]
+      }
+    },
+    {
+      "checkpoint": "shared-child-b",
+      "contextMapId": "22222222-2222-4222-8222-222222222222",
+      "seedScope": "shared-boundary",
+      "variantRevision": 0,
+      "expected": {
+        "encodedByteLength": 126,
+        "encodedHex": "74747270672d6d61702f736565642d696e7075742f76310001000000010302000000080123456789abcdef030000000d70726f6f662e6d61726b65727304000000080000000000000001050000000d70726f6f662e6d61726b6572730600000008000000000000000030000000107f59b4c3bf7042b59b5ec97f7e8d8321",
+        "derivedSeedHex": "9d7796bda6544cea685a288d2b4364410ed4d61dc182963d0b8a60c8afff2360",
+        "nextUint64": [
+          "17046239271336261284",
+          "7757445114682684189",
+          "15827175737314354443",
+          "4320748786356295447",
+          "5858308439689601826",
+          "10457685005984530350"
+        ]
+      }
+    }
+  ]
+}

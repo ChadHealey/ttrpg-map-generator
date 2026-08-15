@@ -3,6 +3,7 @@ import {
   type AspectName,
   compareStableReferences,
   createBehaviorVersion,
+  createDeterministicRandomStream,
   createParameterSchemaVersion,
   createProofInputPoint,
   createVariantRevision,
@@ -11,10 +12,12 @@ import {
   type GenerationDiagnostic,
   type GenerationDiagnosticCode,
   type GeneratorId,
+  type MapEntitySeedInput,
   type MapId,
   parseAspectName,
   parseGenerationDiagnosticCode,
   parseGeneratorId,
+  parseSeedInput,
   parseSemanticKey,
   parseStableId,
   type PlanetPoint,
@@ -25,7 +28,6 @@ import {
 import { describe, expect, it } from 'vitest';
 
 import {
-  type DeterministicRandomStream,
   type GenerationContext,
   type GenerationPlan,
   type GenerationProposal,
@@ -60,11 +62,7 @@ interface MarkerPlan extends GenerationPlan {
   readonly outline: readonly PlanetPoint[];
 }
 
-interface ProofSeedMetadata {
-  readonly worldSeed: string;
-  readonly seedDerivationVersion: 1;
-  readonly variantRevision: VariantRevision;
-}
+type ProofSeedMetadata = MapEntitySeedInput;
 
 const WORLD_MAP_ID = expectParsed(parseStableId('map', 'a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7'));
 const PROOF_ENTITY_ID = expectParsed(
@@ -264,7 +262,14 @@ describe('generator contract', () => {
       parameters: PARAMETERS,
       seedScope: 'map/entity',
       seedMetadata: {
-        worldSeed: '81985529216486895',
+        aspectName: MARKER_ASPECT_NAME,
+        deterministicStreamVersion: 1,
+        entityId: PROOF_ENTITY_ID,
+        generatorId: MARKER_GENERATOR_ID,
+        generatorVersion: GENERATOR_VERSION,
+        mapId: WORLD_MAP_ID,
+        seedScope: 'map/entity',
+        worldSeed: 81_985_529_216_486_895n,
         seedDerivationVersion: 1,
         variantRevision: REROLLED_REVISION,
       },
@@ -369,14 +374,11 @@ function readContext(): GenerationReadContext<ProofOutlineOutput> {
 function generationContext(
   revision: VariantRevision,
 ): GenerationContext<ProofOutlineOutput, ProofSeedMetadata> {
+  const seedMetadata = seedInput(revision);
   return Object.freeze({
     ...readContext(),
-    seedMetadata: Object.freeze({
-      worldSeed: '81985529216486895',
-      seedDerivationVersion: 1,
-      variantRevision: revision,
-    }),
-    random: streamForRevision(revision),
+    seedMetadata,
+    random: expectParsed(createDeterministicRandomStream(seedMetadata)),
   });
 }
 
@@ -384,16 +386,25 @@ function validationContext(): GenerationValidationContext<ProofOutlineOutput> {
   return Object.freeze({ ...readContext(), target: target(REROLLED_REVISION) });
 }
 
-function streamForRevision(revision: VariantRevision): DeterministicRandomStream {
-  let index = 0;
-  const offset = revision === BASELINE_REVISION ? 17 : 4_099;
-  return Object.freeze({
-    nextUint32(): number {
-      const value = (offset + index * 2_654_435_761) >>> 0;
-      index += 1;
-      return value;
-    },
-  });
+function seedInput(revision: VariantRevision): MapEntitySeedInput {
+  const parsed = expectParsed(
+    parseSeedInput({
+      seedDerivationVersion: 1,
+      deterministicStreamVersion: 1,
+      seedScope: 'map/entity',
+      worldSeed: '81985529216486895',
+      generatorId: MARKER_GENERATOR_ID,
+      generatorVersion: GENERATOR_VERSION,
+      aspectName: MARKER_ASPECT_NAME,
+      variantRevision: revision,
+      mapId: WORLD_MAP_ID,
+      entityId: PROOF_ENTITY_ID,
+    }),
+  );
+  if (parsed.seedScope !== 'map/entity') {
+    throw new Error('Expected the proof generator to use map/entity seed metadata.');
+  }
+  return parsed;
 }
 
 function markerKey(index: number): SemanticKey {

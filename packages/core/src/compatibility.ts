@@ -17,12 +17,20 @@ export type ParameterSchemaVersion = CompatibilityValue<'ParameterSchemaVersion'
 /** An intentionally incremented counter selecting a generated variant. */
 export type VariantRevision = CompatibilityValue<'VariantRevision'>;
 
+/** A version for the byte grammar and hash used to derive aspect seeds. */
+export type SeedDerivationVersion = CompatibilityValue<'SeedDerivationVersion'>;
+
+/** A version for deterministic stream initialization, transition, and sampling behavior. */
+export type DeterministicStreamVersion = CompatibilityValue<'DeterministicStreamVersion'>;
+
 /** Stable codes emitted while validating compatibility values at a trust boundary. */
 export const COMPATIBILITY_DIAGNOSTIC_CODES = {
   invalidBehaviorVersion: 'compatibility.behavior-version.invalid',
   invalidParameterSchemaVersion: 'compatibility.parameter-schema-version.invalid',
   invalidVariantRevision: 'compatibility.variant-revision.invalid',
   variantRevisionExhausted: 'compatibility.variant-revision.exhausted',
+  invalidSeedDerivationVersion: 'compatibility.seed-derivation-version.invalid',
+  invalidDeterministicStreamVersion: 'compatibility.deterministic-stream-version.invalid',
 } as const;
 
 export type CompatibilityDiagnosticCode =
@@ -98,6 +106,42 @@ export function createParameterSchemaVersion(
   value: number,
 ): CompatibilityParseResult<ParameterSchemaVersion> {
   return parseParameterSchemaVersion(value);
+}
+
+/** Validates unknown input as a seed-derivation compatibility version. */
+export function parseSeedDerivationVersion(
+  value: unknown,
+): CompatibilityParseResult<SeedDerivationVersion> {
+  return parsePositiveVersion(
+    value,
+    COMPATIBILITY_DIAGNOSTIC_CODES.invalidSeedDerivationVersion,
+    'Seed-derivation version',
+  );
+}
+
+/** Explicitly constructs a seed-derivation version from a numeric caller value. */
+export function createSeedDerivationVersion(
+  value: number,
+): CompatibilityParseResult<SeedDerivationVersion> {
+  return parseSeedDerivationVersion(value);
+}
+
+/** Validates unknown input as a deterministic-stream compatibility version. */
+export function parseDeterministicStreamVersion(
+  value: unknown,
+): CompatibilityParseResult<DeterministicStreamVersion> {
+  return parsePositiveVersion(
+    value,
+    COMPATIBILITY_DIAGNOSTIC_CODES.invalidDeterministicStreamVersion,
+    'Deterministic-stream version',
+  );
+}
+
+/** Explicitly constructs a deterministic-stream version from a numeric caller value. */
+export function createDeterministicStreamVersion(
+  value: number,
+): CompatibilityParseResult<DeterministicStreamVersion> {
+  return parseDeterministicStreamVersion(value);
 }
 
 /** Validates unknown input as an intentionally incremented variant revision. */

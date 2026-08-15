@@ -4,6 +4,7 @@ import {
   type EntityId,
   type GenerationDiagnosticCode,
   type GeneratorId,
+  type MapEntitySeedInput,
   type MapId,
   type ParameterSchemaVersion,
   type VariantRevision,
@@ -29,14 +30,14 @@ declare const variantRevision: VariantRevision;
 declare const manifest: GeneratorManifest;
 declare const context: GenerationContext<
   { readonly points: readonly number[] },
-  { readonly seedVersion: number }
+  MapEntitySeedInput
 >;
 declare const input: GenerationInput<{ readonly points: readonly number[] }>;
 declare const plan: GenerationPlan;
 declare const proposal: GenerationProposal<
   { readonly markerCount: number },
   { readonly markers: readonly { readonly x: number }[] },
-  { readonly seedVersion: number }
+  MapEntitySeedInput
 >;
 
 // @ts-expect-error Generator manifests are readonly declarations.
@@ -46,7 +47,7 @@ context.inputs = [];
 // @ts-expect-error Accepted dependency output is deeply readonly.
 input.acceptedOutput.points[0] = 4;
 // @ts-expect-error Explicit seed metadata is deeply readonly.
-context.seedMetadata.seedVersion = 2;
+context.seedMetadata.seedDerivationVersion = 2;
 // @ts-expect-error Plans cannot redirect their target after planning.
 plan.target.aspect = { aspectId };
 // @ts-expect-error Proposal parameters are deeply readonly.

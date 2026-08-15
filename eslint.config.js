@@ -17,6 +17,14 @@ const privateImportPattern = {
   message: 'Import another package through its declared public entry point.',
 };
 
+const noMathRandomRule = [
+  'error',
+  {
+    selector: "CallExpression[callee.object.name='Math'][callee.property.name='random']",
+    message: 'Use an explicitly injected deterministic random stream.',
+  },
+];
+
 const deterministicPathRules = {
   'no-restricted-globals': [
     'error',
@@ -26,13 +34,7 @@ const deterministicPathRules = {
     { name: 'document', message: 'Deterministic packages cannot access the DOM.' },
     { name: 'window', message: 'Deterministic packages cannot access the DOM.' },
   ],
-  'no-restricted-syntax': [
-    'error',
-    {
-      selector: "CallExpression[callee.object.name='Math'][callee.property.name='random']",
-      message: 'Use an explicitly injected deterministic random stream.',
-    },
-  ],
+  'no-restricted-syntax': [...noMathRandomRule],
 };
 
 export default tseslint.config(
@@ -131,6 +133,17 @@ export default tseslint.config(
           ],
         },
       ],
+    },
+  },
+  {
+    files: [
+      'packages/core/src/deterministic-random-stream.ts',
+      'packages/core/src/seed-derivation.ts',
+      'packages/core/src/seed-input.ts',
+      'packages/core/src/sha-256.ts',
+    ],
+    rules: {
+      'no-restricted-syntax': noMathRandomRule,
     },
   },
   {
