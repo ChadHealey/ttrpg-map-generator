@@ -120,6 +120,8 @@ export interface RegionalMapParent {
   readonly parentMapId: MapId;
   readonly rootMapId: MapId;
   readonly relationshipKind: typeof MAP_RELATIONSHIP_KINDS.worldToRegional;
+  /** Stable aspect whose query-time metadata reports whether inherited context is stale. */
+  readonly contextStatusAspectId: AspectId;
 }
 
 /** The exactly-one root map kind in a valid world document. */

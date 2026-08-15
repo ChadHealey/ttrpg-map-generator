@@ -7,6 +7,7 @@
  */
 
 import {
+  type AspectDependencyReference,
   type AspectName,
   type AspectReference,
   type BehaviorVersion,
@@ -81,7 +82,7 @@ export interface GenerationTarget {
 /** Immutable base plan shared by concrete generator-specific plans. */
 export interface GenerationPlan {
   readonly target: GenerationTarget;
-  readonly dependencyAspects: readonly AspectReference[];
+  readonly dependencyAspects: readonly AspectDependencyReference[];
   readonly seedScope: SeedScope;
 }
 
@@ -99,7 +100,7 @@ export interface GenerationProposal<
   readonly parameters: DeepReadonly<Parameters>;
   readonly seedScope: SeedScope;
   readonly seedMetadata: DeepReadonly<SeedMetadata>;
-  readonly dependencyAspects: readonly AspectReference[];
+  readonly dependencyAspects: readonly AspectDependencyReference[];
   readonly output: DeepReadonly<Output>;
   readonly diagnostics: readonly GenerationDiagnostic[];
 }
@@ -151,9 +152,9 @@ export interface Generator<
 }
 
 /** Order opaque aspect references by their canonical stable-ID encoding. */
-export function orderAspectReferences(
-  references: readonly AspectReference[],
-): readonly AspectReference[] {
+export function orderAspectReferences<Reference extends AspectReference>(
+  references: readonly Reference[],
+): readonly Reference[] {
   return Object.freeze(
     [...references].sort((left, right) => compareStableReferences(left.aspectId, right.aspectId)),
   );

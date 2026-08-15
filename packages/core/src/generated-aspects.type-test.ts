@@ -1,5 +1,6 @@
 import type {
   AcceptedAspectRecord,
+  AspectDependencyReference,
   AspectName,
   AspectReference,
   GenerationStatus,
@@ -12,6 +13,7 @@ declare const accepted: AcceptedAspectRecord<
   MapEntitySeedInput
 >;
 declare const reference: AspectReference;
+declare const dependency: AspectDependencyReference;
 
 const acceptedStatus: GenerationStatus = accepted.generationStatus;
 const proposedStatus: GenerationStatus = 'proposed';
@@ -28,5 +30,9 @@ accepted.acceptedOutput.markers[0] = { x: 4 };
 accepted.seedMetadata.worldSeed = 1n;
 // @ts-expect-error Opaque references contain an aspect ID, not a descriptive aspect name.
 reference.aspectName = unparsedAspectName;
+// @ts-expect-error Dependency identity cannot be replaced by a descriptive label.
+dependency.aspectId = unparsedAspectName;
+// @ts-expect-error Cross-map provenance is immutable accepted metadata.
+dependency.contextProvenance = undefined;
 
-void [acceptedStatus, proposedStatus, reference, unparsedAspectName];
+void [acceptedStatus, proposedStatus, reference, dependency, unparsedAspectName];

@@ -86,6 +86,7 @@ describe('world-document ownership', () => {
       parentMapId: WORLD_MAP_ID,
       rootMapId: WORLD_MAP_ID,
       relationshipKind: MAP_RELATIONSHIP_KINDS.worldToRegional,
+      contextStatusAspectId: ASPECT_B_ID,
     });
     expect(region.coordinateSystem).toMatchObject({
       kind: MAP_COORDINATE_SYSTEM_KINDS.regionalAzimuthalEquidistant,
@@ -230,6 +231,7 @@ describe('world-document ownership', () => {
         parentMapId: MISSING_MAP_ID,
         rootMapId: REGION_B_ID,
         relationshipKind: MAP_RELATIONSHIP_KINDS.worldToRegional,
+        contextStatusAspectId: ASPECT_B_ID,
       },
       entities: [{ entityId: ENTITY_A_ID, displayName: 'Owned here' }],
       aspects: [aspect(ASPECT_A_ID, WORLD_MAP_ID, ENTITY_A_ID)],
@@ -251,6 +253,7 @@ describe('world-document ownership', () => {
         parentMapId: REGION_B_ID,
         rootMapId: WORLD_MAP_ID,
         relationshipKind: MAP_RELATIONSHIP_KINDS.worldToRegional,
+        contextStatusAspectId: ASPECT_B_ID,
       },
     });
     const regionB = regionalMap(REGION_B_ID, {
@@ -258,6 +261,7 @@ describe('world-document ownership', () => {
         parentMapId: REGION_A_ID,
         rootMapId: WORLD_MAP_ID,
         relationshipKind: MAP_RELATIONSHIP_KINDS.worldToRegional,
+        contextStatusAspectId: ASPECT_B_ID,
       },
     });
     const document = worldDocument([regionB, worldMap(), regionA]);
@@ -281,6 +285,7 @@ describe('world-document ownership', () => {
         parentMapId: WORLD_MAP_ID,
         rootMapId: WORLD_MAP_ID,
         relationshipKind: 'regional-to-settlement',
+        contextStatusAspectId: ASPECT_B_ID,
       },
     } as unknown as RegionalMap;
     const diagnosticCodes = codes(worldDocument([worldMap(), futureMap, futureRelationship]));
@@ -336,6 +341,7 @@ function regionalMap(mapId: MapId, overrides: Partial<RegionalMap> = {}): Region
       parentMapId: WORLD_MAP_ID,
       rootMapId: WORLD_MAP_ID,
       relationshipKind: MAP_RELATIONSHIP_KINDS.worldToRegional,
+      contextStatusAspectId: ASPECT_B_ID,
     },
     coordinateSystem: {
       kind: MAP_COORDINATE_SYSTEM_KINDS.regionalAzimuthalEquidistant,

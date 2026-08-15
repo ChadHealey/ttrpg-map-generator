@@ -32,6 +32,25 @@ export interface AspectReference {
   readonly aspectId: AspectId;
 }
 
+export const ASPECT_DEPENDENCY_PROVENANCE_KINDS = {
+  inheritedContext: 'inherited-context',
+} as const;
+
+/** Minimal provenance required when an aspect dependency crosses a map boundary. */
+export interface InheritedContextDependencyProvenance {
+  readonly kind: typeof ASPECT_DEPENDENCY_PROVENANCE_KINDS.inheritedContext;
+  readonly parentMapId: MapId;
+  readonly childMapId: MapId;
+}
+
+/**
+ * A stable upstream-aspect reference. Same-map dependencies omit provenance; cross-map
+ * dependencies must declare the inherited-context boundary they cross.
+ */
+export interface AspectDependencyReference extends AspectReference {
+  readonly contextProvenance?: InheritedContextDependencyProvenance;
+}
+
 /** Severity controls whether a proposal may cross the later document transaction boundary. */
 export type GenerationDiagnosticSeverity = 'error' | 'warning';
 
@@ -76,7 +95,7 @@ export interface AcceptedAspectRecord<
   readonly seedScope: SeedMetadata['seedScope'];
   readonly seedMetadata: DeepReadonly<SeedMetadata>;
   readonly variantRevision: VariantRevision;
-  readonly dependencyAspects: readonly AspectReference[];
+  readonly dependencyAspects: readonly AspectDependencyReference[];
   readonly generationStatus: 'accepted';
   readonly diagnostics: readonly GenerationDiagnostic[];
   readonly acceptedOutput: DeepReadonly<Output>;

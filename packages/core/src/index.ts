@@ -4,6 +4,30 @@
  */
 
 export {
+  createAspectDependencyGraph,
+  getCanonicalAspectDependencyTraversal,
+  validateAspectDependencyGraph,
+} from './aspect-dependency-graph.js';
+export {
+  type AffectedAspect,
+  ASPECT_DEPENDENCY_DIAGNOSTIC_CODES,
+  ASPECT_INVALIDATION_EFFECTS,
+  type AspectDependencyDiagnostic,
+  type AspectDependencyDiagnosticCode,
+  type AspectDependencyEdge,
+  type AspectDependencyGraph,
+  type AspectDependencyGraphResult,
+  type AspectDependencyNode,
+  type AspectDependencyNodeKind,
+  type AspectInvalidationEffect,
+  type AspectInvalidationResult,
+  type RegionalContextStaleness,
+} from './aspect-dependency-model.js';
+export {
+  getDirectAspectInvalidation,
+  getTransitiveAspectInvalidation,
+} from './aspect-invalidation.js';
+export {
   type BehaviorVersion,
   COMPATIBILITY_DIAGNOSTIC_CODES,
   type CompatibilityDiagnostic,
@@ -96,6 +120,8 @@ export {
 } from './deterministic-random-stream.js';
 export {
   type AcceptedAspectRecord,
+  ASPECT_DEPENDENCY_PROVENANCE_KINDS,
+  type AspectDependencyReference,
   type AspectName,
   type AspectReference,
   type DeepReadonly,
@@ -107,6 +133,7 @@ export {
   type GenerationDiagnosticCode,
   type GenerationDiagnosticSeverity,
   type GenerationStatus,
+  type InheritedContextDependencyProvenance,
   parseAspectName,
   parseGenerationDiagnosticCode,
   type SeedScope,
