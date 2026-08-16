@@ -141,6 +141,7 @@ impl ParentSession {
         platform_ffi::open_regular_at(&self.parent, self.names.role_name(role))
     }
 
+    #[cfg(target_os = "macos")]
     pub fn open_role_manifest(&self, role: ArtifactRole) -> io::Result<File> {
         let directory = self.open_role_directory(role)?;
         platform_ffi::open_regular_at(&directory, OsStr::new("manifest.json"))

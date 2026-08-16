@@ -2,7 +2,9 @@ use std::collections::BTreeSet;
 use std::ffi::OsStr;
 use std::fs::File;
 
-use super::adapter_error::{backup_cleanup_error, durability_error, fingerprint_error, io_error};
+#[cfg(target_os = "macos")]
+use super::adapter_error::durability_error;
+use super::adapter_error::{backup_cleanup_error, fingerprint_error, io_error};
 use super::fault::{
     FaultController, FaultSpec, durability_call, io_call, io_checkpoint, rename_call,
 };

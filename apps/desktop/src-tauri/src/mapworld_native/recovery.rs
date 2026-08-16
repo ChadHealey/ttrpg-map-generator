@@ -401,16 +401,20 @@ fn durable_cleanup(
         .map_err(|error| durability_error("sync-parent-after-cleanup", Some(role), error))
 }
 
+#[cfg(target_os = "linux")]
 fn cleanup_anchor(
     session: &ParentSession,
     role: ArtifactRole,
 ) -> Result<Option<File>, NativeError> {
-    #[cfg(target_os = "linux")]
-    {
-        let _ = (session, role);
-        return Ok(None);
-    }
-    #[cfg(target_os = "macos")]
+    let _ = (session, role);
+    Ok(None)
+}
+
+#[cfg(target_os = "macos")]
+fn cleanup_anchor(
+    session: &ParentSession,
+    role: ArtifactRole,
+) -> Result<Option<File>, NativeError> {
     if role == ArtifactRole::Backup {
         return open_role_anchor(session, ArtifactRole::Target)
             .map(Some)
@@ -422,7 +426,6 @@ fn cleanup_anchor(
                 )
             });
     }
-    #[cfg(target_os = "macos")]
     for candidate in [
         role,
         ArtifactRole::Target,
@@ -434,7 +437,6 @@ fn cleanup_anchor(
             return Ok(Some(anchor));
         }
     }
-    #[cfg(target_os = "macos")]
     Err(NativeError::new(
         "persistence.recovery.durability-unsupported",
         "acquire-cleanup-anchor",

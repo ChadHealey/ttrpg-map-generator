@@ -110,6 +110,7 @@ unsafe extern "C" {
     fn readdir(directory: *mut Dir) -> *mut Dirent;
     fn closedir(directory: *mut Dir) -> c_int;
     fn fsync(descriptor: c_int) -> c_int;
+    #[cfg(target_os = "macos")]
     fn fcntl(descriptor: c_int, command: c_int, ...) -> c_int;
 }
 
