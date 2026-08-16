@@ -3,10 +3,10 @@
   "fixtureId": "milestone-2-atlas-proof",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-proof --review-record fixed-seeds/milestone-2-atlas-proof/reviews/0004-display-projection.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-proof --review-record fixed-seeds/milestone-2-atlas-proof/reviews/0007-spherical-fill-interior.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-proof/fixture-definition.json",
-    "sha256": "e92ef2f6775a7976a32ba5e2588666683f2de7a2493a4f98db6c11c54fc7afa2"
+    "sha256": "6dcec870dd50af4e38ba1e2bd870f1e7596eb97cba810de0cc2e3f539154a389"
   },
   "worldSeed": "81985529216486895",
   "stableIds": {
@@ -56,6 +56,7 @@
     "atlasPreviewVersion": 1,
     "atlasRealizationVersion": 1,
     "atlasSamplingPolicyVersion": 1,
+    "atlasSceneCompositionVersion": 1,
     "atlasSemanticClassificationVersion": 1,
     "atlasSemanticGeneratorManifestVersion": 1,
     "atlasSemanticParameterSchemaVersion": 1,
@@ -80,23 +81,42 @@
     {
       "assertionId": "runner-validates-full-generator-kernel",
       "operator": "runner-pass",
-      "reviewPurpose": "Prove exact full-profile generation, semantic classification, source-linked canonical coastline geometry, simplification, topology, identity, ordering, and deterministic seam-safe display projection."
+      "reviewPurpose": "Prove exact full-profile generation, semantic classification, source-linked canonical coastline geometry, simplification, topology, identity, ordering, deterministic seam-safe display projection, and cache-free atlas scene composition."
     }
   ],
-  "reviewPurpose": "Prove the version-1 atlas field, partition, semantic geography, canonical coastline generator, and disposable display projection for one fixed seed/control row before accepted-aspect persistence integration.",
+  "reviewPurpose": "Prove the version-1 atlas field, partition, semantic geography, canonical coastline generator, disposable display projection, and renderer-neutral atlas scene for one fixed seed/control row before accepted-aspect persistence integration.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-proof/reviews/0004-display-projection.md",
-    "sha256": "f560855d5c0b972115604f8ee7ca63596db890d572ad9748066cb9c1c175b240"
+    "path": "fixed-seeds/milestone-2-atlas-proof/reviews/0007-spherical-fill-interior.md",
+    "sha256": "81896909ff3fcba3af28450e16521f918dc180b1e0d6fb0cc35ac6e07adf6ef2"
   },
-  "generatedRoots": ["fixed-seeds/milestone-2-atlas-proof/expected"],
+  "generatedRoots": [
+    "canonical-svg/milestone-2-atlas-proof",
+    "fixed-seeds/milestone-2-atlas-proof/expected"
+  ],
   "artifacts": [
+    {
+      "path": "canonical-svg/milestone-2-atlas-proof/baseline.svg",
+      "kind": "canonical-svg",
+      "checkpoint": "baseline",
+      "byteLength": 305267,
+      "canonicalSvgSha256": "c5a75797df51fe842638870fa57b0913586e27ead1c5141de27223f8075f553e",
+      "fixtureIntegritySha256": "c5a75797df51fe842638870fa57b0913586e27ead1c5141de27223f8075f553e"
+    },
     {
       "path": "fixed-seeds/milestone-2-atlas-proof/expected/baseline/atlas-land-water.kernel.canonical",
       "kind": "canonical-kernel-vector",
       "checkpoint": "baseline",
-      "byteLength": 7239,
-      "canonicalKernelVectorSha256": "7d60e7582740ee7cf501bd4313bfb8660e9436089d150bfbb4954f6af4965ec1",
-      "fixtureIntegritySha256": "7d60e7582740ee7cf501bd4313bfb8660e9436089d150bfbb4954f6af4965ec1"
+      "byteLength": 8025,
+      "canonicalKernelVectorSha256": "5f117ac4b30da20cab386676cb36c26ca042ee713330be65928cd0339c6a0d0d",
+      "fixtureIntegritySha256": "5f117ac4b30da20cab386676cb36c26ca042ee713330be65928cd0339c6a0d0d"
+    },
+    {
+      "path": "fixed-seeds/milestone-2-atlas-proof/expected/baseline/atlas-render-scene.scene.canonical",
+      "kind": "canonical-render-scene",
+      "checkpoint": "baseline",
+      "byteLength": 677782,
+      "canonicalSceneSha256": "e3731e2fbaa8d3e14bc486d2564a55b3412f181cad8fb9dd73dc88885d1d23d4",
+      "fixtureIntegritySha256": "e3731e2fbaa8d3e14bc486d2564a55b3412f181cad8fb9dd73dc88885d1d23d4"
     }
   ]
 }
