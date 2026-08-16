@@ -24,6 +24,12 @@
     "polarCharacter": "landBiased"
   },
   "versions": {
+    "atlasCoastlineExtractionAlgorithmVersion": 1,
+    "atlasCoastlineGeneratorManifestVersion": 1,
+    "atlasCoastlineGeometryBehaviorVersion": 1,
+    "atlasCoastlineParameterSchemaVersion": 1,
+    "atlasCoastlineSimplificationPolicyVersion": 1,
+    "atlasCoastlineTopologyValidationVersion": 1,
     "atlasFieldBehaviorVersion": 1,
     "atlasGeneratorManifestVersion": 1,
     "atlasGeographyContractVersion": 1,
@@ -64,7 +70,7 @@
     "seaLevelContourDoubledTicks": -12489723,
     "macroFieldTicksSha256": "a7d4aa88f4f284435f69432a0c84bf4090af8683cb0f8b7f1afb501277030a21",
     "landWaterPackedBitsSha256": "8a2167fc5817aabc18a0105323a0c8e3332a5c5ed73fe351bf001deb8ca970f2",
-    "primitiveTraversalSha256": "07b067e6c098c43fdfab5fc8202b99f20cb01bef7286157e93c76973aa37a7b8",
+    "primitiveTraversalSha256": "4d191b14324280216660350dcf14fc5793e7f9e27f563f947d07fcf79ffb3933",
     "sampleCounts": { "land": 1447771, "water": 647335 },
     "realization": {
       "realizationVersion": 1,
@@ -93,6 +99,25 @@
         "enclosedSea": 0
       },
       "semanticPrimitiveTraversalSha256": "0dc97b4c5cef354e7b8ea49a08e2cbc78a527c4787de46911f85647bce6ecf5f"
+    },
+    "coastline": {
+      "geometryBehaviorVersion": 1,
+      "extractionAlgorithmVersion": 1,
+      "simplificationPolicyVersion": 1,
+      "simplificationToleranceTicks": 524288,
+      "topologyValidationVersion": 1,
+      "winding": "land-on-left",
+      "repairPolicy": "reject-invalid-no-silent-repair",
+      "replacementAspectName": "worldCoastline.geometry",
+      "dependencyAspectIds": [
+        "04628f37-6408-5087-a139-bdd2bdff42d3",
+        "70ec67f8-7be0-53f4-ba97-2d1f732bbc24",
+        "7d255896-6c0d-597b-a468-b026a2ceeed6"
+      ],
+      "rawPointCount": 4312,
+      "canonicalPointCount": 2928,
+      "ringCount": 1,
+      "coastlinePrimitiveTraversalSha256": "e2912bd97dc062ef17c2a72e8fa3699d17ffaa1cee5e553a1aa98a745981716b"
     }
   },
   "invariants": {
@@ -114,6 +139,14 @@
       "stableEntityOrder": true,
       "stableAspectOrder": true,
       "validatedSemanticRecords": true
+    },
+    "coastline": {
+      "validatedCanonicalCoastlineRecords": true,
+      "exactSourceLinks": true,
+      "stableRingOrder": true,
+      "seamCrossingRingCount": 1,
+      "southPoleClassification": "land",
+      "northPoleClassification": "land"
     }
   }
 }

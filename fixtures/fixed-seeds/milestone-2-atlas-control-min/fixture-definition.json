@@ -22,6 +22,12 @@
     "polarCharacter": "landBiased"
   },
   "versions": {
+    "atlasCoastlineExtractionAlgorithmVersion": 1,
+    "atlasCoastlineGeneratorManifestVersion": 1,
+    "atlasCoastlineGeometryBehaviorVersion": 1,
+    "atlasCoastlineParameterSchemaVersion": 1,
+    "atlasCoastlineSimplificationPolicyVersion": 1,
+    "atlasCoastlineTopologyValidationVersion": 1,
     "atlasFieldBehaviorVersion": 1,
     "atlasGeneratorManifestVersion": 1,
     "atlasGeographyContractVersion": 1,
@@ -44,6 +50,7 @@
       "islandGroup.classification": 0,
       "landmass.classification": 0,
       "waterBody.classification": 0,
+      "worldCoastline.geometry": 0,
       "worldSurface.landWaterClassification": 0,
       "worldTerrain.macroElevation": 0
     }

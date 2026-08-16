@@ -3,13 +3,15 @@
   "fixtureId": "milestone-2-atlas-control-min",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-control-min --review-record fixed-seeds/milestone-2-atlas-control-min/reviews/0002-semantic-classification.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-control-min --review-record fixed-seeds/milestone-2-atlas-control-min/reviews/0003-canonical-coastline.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-control-min/fixture-definition.json",
-    "sha256": "b854f7171031715d7af7f4ca075376ce80362e005c226d5a8ca7f3d5d7f9075d"
+    "sha256": "cbbba918e87f5477a7baa28e83c8e6b89449e2b6661dd6ce6ac990caf7015642"
   },
   "worldSeed": "6148914691236517205",
   "stableIds": {
+    "coastlineAspectId": "371a6a8c-9fe8-5cdb-adca-1a46ffa19645",
+    "coastlineRingId000": "e8637a83-a6d6-5578-bee9-fec61adf2745",
     "landWaterClassificationAspectId": "04628f37-6408-5087-a139-bdd2bdff42d3",
     "macroElevationAspectId": "e588eb7f-d585-5c27-9ce5-81c2fb1ebc43",
     "semanticAspectId000": "70ec67f8-7be0-53f4-ba97-2d1f732bbc24",
@@ -18,10 +20,17 @@
     "semanticEntityId001": "8d2f4655-17e4-51b0-957f-eac1e3d67427",
     "surfaceComponentId000": "0d1495f1-267e-52b9-920a-2e0d07dd6eec",
     "surfaceComponentId001": "edbf84ea-a8b8-5f11-af58-7420ae3e10b2",
+    "worldCoastlineEntityId": "8737ec2a-5dd2-5b77-85f3-d8cd683ef073",
     "worldMapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7",
     "worldSurfaceEntityId": "eaa0cecc-8c5d-559f-b18a-bbd0c53248ac"
   },
   "versions": {
+    "atlasCoastlineExtractionAlgorithmVersion": 1,
+    "atlasCoastlineGeneratorManifestVersion": 1,
+    "atlasCoastlineGeometryBehaviorVersion": 1,
+    "atlasCoastlineParameterSchemaVersion": 1,
+    "atlasCoastlineSimplificationPolicyVersion": 1,
+    "atlasCoastlineTopologyValidationVersion": 1,
     "atlasFieldBehaviorVersion": 1,
     "atlasGeneratorManifestVersion": 1,
     "atlasGeographyContractVersion": 1,
@@ -44,6 +53,7 @@
       "islandGroup.classification": 0,
       "landmass.classification": 0,
       "waterBody.classification": 0,
+      "worldCoastline.geometry": 0,
       "worldSurface.landWaterClassification": 0,
       "worldTerrain.macroElevation": 0
     }
@@ -52,13 +62,13 @@
     {
       "assertionId": "runner-validates-full-generator-kernel",
       "operator": "runner-pass",
-      "reviewPurpose": "Prove exact full-profile generation plus stable semantic classification, ownership, connectivity, containment, identity, and ordering."
+      "reviewPurpose": "Prove exact full-profile generation, semantic classification, and source-linked canonical coastline geometry, simplification, topology, identity, and ordering."
     }
   ],
-  "reviewPurpose": "Prove the version-1 atlas field, partition, and semantic geography generator for one fixed seed/control row before accepted-aspect persistence integration.",
+  "reviewPurpose": "Prove the version-1 atlas field, partition, semantic geography, and canonical coastline generator for one fixed seed/control row before accepted-aspect persistence integration.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-control-min/reviews/0002-semantic-classification.md",
-    "sha256": "5e93cbc4e2c501fdecd727c2974d4a8af9c2b417915b7ab973991daa1cc62727"
+    "path": "fixed-seeds/milestone-2-atlas-control-min/reviews/0003-canonical-coastline.md",
+    "sha256": "53ea94d7c700c92cc4c1e49261f27c0e8ab30916b2dd681fbb85a4f007d905c1"
   },
   "generatedRoots": ["fixed-seeds/milestone-2-atlas-control-min/expected"],
   "artifacts": [
@@ -66,9 +76,9 @@
       "path": "fixed-seeds/milestone-2-atlas-control-min/expected/baseline/atlas-land-water.kernel.canonical",
       "kind": "canonical-kernel-vector",
       "checkpoint": "baseline",
-      "byteLength": 4430,
-      "canonicalKernelVectorSha256": "5b769ccdf8f11f2d2b46685813750d05b143533f8721ebf5f6589285c1dfc31c",
-      "fixtureIntegritySha256": "5b769ccdf8f11f2d2b46685813750d05b143533f8721ebf5f6589285c1dfc31c"
+      "byteLength": 5733,
+      "canonicalKernelVectorSha256": "5ef26d381790ff72a33b29632c2e76c4cf2a7cac375e6471f2aa2b3ab57b8832",
+      "fixtureIntegritySha256": "5ef26d381790ff72a33b29632c2e76c4cf2a7cac375e6471f2aa2b3ab57b8832"
     }
   ]
 }
