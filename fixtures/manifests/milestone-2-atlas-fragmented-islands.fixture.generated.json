@@ -3,10 +3,10 @@
   "fixtureId": "milestone-2-atlas-fragmented-islands",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-fragmented-islands --review-record fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0004-display-projection.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-fragmented-islands --review-record fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0006-spherical-fill-interior.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/fixture-definition.json",
-    "sha256": "dc995b0ed4ed08237320232eb768c1b30209e0ba247e690d500bc198203ede21"
+    "sha256": "b2ccdf70debf4ff5288509a69574ad2409f7f4a255e0bf3dff104be2ffa65cc4"
   },
   "worldSeed": "18364758544493064720",
   "stableIds": {
@@ -72,6 +72,7 @@
     "atlasPreviewVersion": 1,
     "atlasRealizationVersion": 1,
     "atlasSamplingPolicyVersion": 1,
+    "atlasSceneCompositionVersion": 1,
     "atlasSemanticClassificationVersion": 1,
     "atlasSemanticGeneratorManifestVersion": 1,
     "atlasSemanticParameterSchemaVersion": 1,
@@ -96,23 +97,42 @@
     {
       "assertionId": "runner-validates-full-generator-kernel",
       "operator": "runner-pass",
-      "reviewPurpose": "Prove exact full-profile generation, semantic classification, source-linked canonical coastline geometry, simplification, topology, identity, ordering, and deterministic seam-safe display projection."
+      "reviewPurpose": "Prove exact full-profile generation, semantic classification, source-linked canonical coastline geometry, simplification, topology, identity, ordering, deterministic seam-safe display projection, and cache-free atlas scene composition."
     }
   ],
-  "reviewPurpose": "Prove the version-1 atlas field, partition, semantic geography, canonical coastline generator, and disposable display projection for one fixed seed/control row before accepted-aspect persistence integration.",
+  "reviewPurpose": "Prove the version-1 atlas field, partition, semantic geography, canonical coastline generator, disposable display projection, and renderer-neutral atlas scene for one fixed seed/control row before accepted-aspect persistence integration.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0004-display-projection.md",
-    "sha256": "24cfe421eaaebb3b0fb3b4ae6657acd4658bd305945d1f9b9059295446e79fb8"
+    "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0006-spherical-fill-interior.md",
+    "sha256": "6bf33ee7314d013e4b75a2c65d0d7b8ef1a3d5544a5c53e615bc65788e3353df"
   },
-  "generatedRoots": ["fixed-seeds/milestone-2-atlas-fragmented-islands/expected"],
+  "generatedRoots": [
+    "canonical-svg/milestone-2-atlas-fragmented-islands",
+    "fixed-seeds/milestone-2-atlas-fragmented-islands/expected"
+  ],
   "artifacts": [
+    {
+      "path": "canonical-svg/milestone-2-atlas-fragmented-islands/baseline.svg",
+      "kind": "canonical-svg",
+      "checkpoint": "baseline",
+      "byteLength": 400526,
+      "canonicalSvgSha256": "b1348265ff58f22ce8800412c98f7623ebdbfa13cf101b806796991cac7ac324",
+      "fixtureIntegritySha256": "b1348265ff58f22ce8800412c98f7623ebdbfa13cf101b806796991cac7ac324"
+    },
     {
       "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/expected/baseline/atlas-land-water.kernel.canonical",
       "kind": "canonical-kernel-vector",
       "checkpoint": "baseline",
-      "byteLength": 7581,
-      "canonicalKernelVectorSha256": "aab1db1f96ca89028a250328b0229ca17b854ecda914593cfc9d6889755fbf3b",
-      "fixtureIntegritySha256": "aab1db1f96ca89028a250328b0229ca17b854ecda914593cfc9d6889755fbf3b"
+      "byteLength": 8367,
+      "canonicalKernelVectorSha256": "d2b3df1707c2c42daf5df212808333e6c7b9f4dd857ec2a89b31de1098a18d95",
+      "fixtureIntegritySha256": "d2b3df1707c2c42daf5df212808333e6c7b9f4dd857ec2a89b31de1098a18d95"
+    },
+    {
+      "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/expected/baseline/atlas-render-scene.scene.canonical",
+      "kind": "canonical-render-scene",
+      "checkpoint": "baseline",
+      "byteLength": 889385,
+      "canonicalSceneSha256": "efba0d68ce39d6cf771e2aced83a25cdd4fb7facd1310c014bd0f3d8b41a66d0",
+      "fixtureIntegritySha256": "efba0d68ce39d6cf771e2aced83a25cdd4fb7facd1310c014bd0f3d8b41a66d0"
     }
   ]
 }
