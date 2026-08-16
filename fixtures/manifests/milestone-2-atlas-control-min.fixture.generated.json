@@ -3,15 +3,21 @@
   "fixtureId": "milestone-2-atlas-control-min",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-control-min --review-record fixed-seeds/milestone-2-atlas-control-min/reviews/0001-initial-acceptance.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-control-min --review-record fixed-seeds/milestone-2-atlas-control-min/reviews/0002-semantic-classification.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-control-min/fixture-definition.json",
-    "sha256": "7feb26c8333ecb1c37f174addbcb30d52282ea6c8ac13538c86362d4c4ffdeb5"
+    "sha256": "b854f7171031715d7af7f4ca075376ce80362e005c226d5a8ca7f3d5d7f9075d"
   },
   "worldSeed": "6148914691236517205",
   "stableIds": {
     "landWaterClassificationAspectId": "04628f37-6408-5087-a139-bdd2bdff42d3",
     "macroElevationAspectId": "e588eb7f-d585-5c27-9ce5-81c2fb1ebc43",
+    "semanticAspectId000": "70ec67f8-7be0-53f4-ba97-2d1f732bbc24",
+    "semanticAspectId001": "7d255896-6c0d-597b-a468-b026a2ceeed6",
+    "semanticEntityId000": "33d0d1e6-11df-579b-ba70-80979685a177",
+    "semanticEntityId001": "8d2f4655-17e4-51b0-957f-eac1e3d67427",
+    "surfaceComponentId000": "0d1495f1-267e-52b9-920a-2e0d07dd6eec",
+    "surfaceComponentId001": "edbf84ea-a8b8-5f11-af58-7420ae3e10b2",
     "worldMapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7",
     "worldSurfaceEntityId": "eaa0cecc-8c5d-559f-b18a-bbd0c53248ac"
   },
@@ -23,6 +29,10 @@
     "atlasPreviewVersion": 1,
     "atlasRealizationVersion": 1,
     "atlasSamplingPolicyVersion": 1,
+    "atlasSemanticClassificationVersion": 1,
+    "atlasSemanticGeneratorManifestVersion": 1,
+    "atlasSemanticParameterSchemaVersion": 1,
+    "atlasSemanticPolicyVersion": 1,
     "deterministicStreamVersion": 1,
     "landWaterClassificationBehaviorVersion": 1,
     "landWaterClassificationGeneratorVersion": 1,
@@ -30,19 +40,25 @@
     "seedDerivationVersion": 1
   },
   "checkpointRevisions": {
-    "baseline": { "worldSurface.landWaterClassification": 0, "worldTerrain.macroElevation": 0 }
+    "baseline": {
+      "islandGroup.classification": 0,
+      "landmass.classification": 0,
+      "waterBody.classification": 0,
+      "worldSurface.landWaterClassification": 0,
+      "worldTerrain.macroElevation": 0
+    }
   },
   "expectedAssertions": [
     {
       "assertionId": "runner-validates-full-generator-kernel",
       "operator": "runner-pass",
-      "reviewPurpose": "Prove exact full-profile generation, output validation, nesting, seam/pole behavior, progress, and declared realization tolerances."
+      "reviewPurpose": "Prove exact full-profile generation plus stable semantic classification, ownership, connectivity, containment, identity, and ordering."
     }
   ],
-  "reviewPurpose": "Prove the version-1 atlas macro-elevation and land/water generator for one fixed seed/control row before accepted-aspect persistence integration.",
+  "reviewPurpose": "Prove the version-1 atlas field, partition, and semantic geography generator for one fixed seed/control row before accepted-aspect persistence integration.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-control-min/reviews/0001-initial-acceptance.md",
-    "sha256": "fcbf776c28aa629e58d421b24a0cb3498dbc296ef6b0a338bbb251cadda42d6e"
+    "path": "fixed-seeds/milestone-2-atlas-control-min/reviews/0002-semantic-classification.md",
+    "sha256": "5e93cbc4e2c501fdecd727c2974d4a8af9c2b417915b7ab973991daa1cc62727"
   },
   "generatedRoots": ["fixed-seeds/milestone-2-atlas-control-min/expected"],
   "artifacts": [
@@ -50,9 +66,9 @@
       "path": "fixed-seeds/milestone-2-atlas-control-min/expected/baseline/atlas-land-water.kernel.canonical",
       "kind": "canonical-kernel-vector",
       "checkpoint": "baseline",
-      "byteLength": 3356,
-      "canonicalKernelVectorSha256": "3e597201607015520784e7ea1960662fdfe31d9313e54543419126ee6ff7b18a",
-      "fixtureIntegritySha256": "3e597201607015520784e7ea1960662fdfe31d9313e54543419126ee6ff7b18a"
+      "byteLength": 4430,
+      "canonicalKernelVectorSha256": "5b769ccdf8f11f2d2b46685813750d05b143533f8721ebf5f6589285c1dfc31c",
+      "fixtureIntegritySha256": "5b769ccdf8f11f2d2b46685813750d05b143533f8721ebf5f6589285c1dfc31c"
     }
   ]
 }
