@@ -1,14 +1,17 @@
 import { describe, expect, it } from 'vitest';
 
-import { createPlanetPoint } from './coordinates.js';
+import { createPlanetPoint, roundTiesAwayFromZero } from './coordinates.js';
 import { parseSemanticKey, parseStableId } from './identity.js';
 import {
   ATLAS_ASPECT_DEFINITIONS,
   ATLAS_CONTROL_DEFINITIONS,
+  ATLAS_FULL_LATITUDE_BAND_COUNT,
+  ATLAS_FULL_LONGITUDE_CELL_COUNT,
   ATLAS_FULL_SAMPLE_COUNT,
   ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES,
   ATLAS_LANDMASS_KINDS,
   ATLAS_OCEAN_CONNECTIVITY,
+  ATLAS_SEMANTIC_AREA_WEIGHT_SCALE,
   ATLAS_WATER_BODY_KINDS,
   atlasControlsMatchWorldRadius,
   type AtlasGeographyRecords,
@@ -16,8 +19,8 @@ import {
   deriveAtlasAspectId,
   deriveAtlasCoastlineRingId,
   deriveAtlasFeatureEntityId,
+  deriveAtlasSemanticComponentIdentity,
   deriveAtlasSingletonEntityIds,
-  deriveAtlasSurfaceComponentId,
   deriveAtlasWorldRadius,
   getAtlasControlInvalidationRoots,
   type MacroElevationValueTicks,
@@ -28,28 +31,34 @@ import {
 
 const WORLD_MAP_ID = value(parseStableId('map', '00000000-0000-4000-8000-000000000001'));
 const SINGLETONS = deriveAtlasSingletonEntityIds(WORLD_MAP_ID);
-const LAND_COMPONENT_ID = deriveAtlasSurfaceComponentId(
-  SINGLETONS.worldSurfaceEntityId,
-  value(parseSemanticKey('land-component-001')),
-);
-const WATER_COMPONENT_ID = deriveAtlasSurfaceComponentId(
-  SINGLETONS.worldSurfaceEntityId,
-  value(parseSemanticKey('water-component-001')),
-);
-const LANDMASS_ID = deriveAtlasFeatureEntityId(
+const SAMPLE_MIDPOINT = ATLAS_FULL_SAMPLE_COUNT / 2;
+const LAND_RANGES = [{ startIndex: 0, endIndexExclusive: SAMPLE_MIDPOINT }];
+const WATER_RANGES = [{ startIndex: SAMPLE_MIDPOINT, endIndexExclusive: ATLAS_FULL_SAMPLE_COUNT }];
+const LAND_AREA_WEIGHT = areaWeightForRanges(LAND_RANGES);
+const WATER_AREA_WEIGHT = areaWeightForRanges(WATER_RANGES);
+const LAND_IDENTITY = deriveAtlasSemanticComponentIdentity(
   WORLD_MAP_ID,
-  value(parseSemanticKey('landmass-001')),
+  SINGLETONS.worldSurfaceEntityId,
+  'land',
+  LAND_RANGES,
 );
-const WATER_BODY_ID = deriveAtlasFeatureEntityId(
+const WATER_IDENTITY = deriveAtlasSemanticComponentIdentity(
   WORLD_MAP_ID,
-  value(parseSemanticKey('water-body-001')),
+  SINGLETONS.worldSurfaceEntityId,
+  'water',
+  WATER_RANGES,
 );
+const LAND_COMPONENT_ID = LAND_IDENTITY.componentId;
+const WATER_COMPONENT_ID = WATER_IDENTITY.componentId;
+const LANDMASS_ID = LAND_IDENTITY.entityId;
+const WATER_BODY_ID = WATER_IDENTITY.entityId;
 const RING_ID = deriveAtlasCoastlineRingId(
   SINGLETONS.worldCoastlineEntityId,
   value(parseSemanticKey('coastline-ring-001')),
 );
-const CLASSIFICATION_ASPECT_ID = value(
-  parseStableId('aspect', '00000000-0000-4000-8000-000000000001'),
+const CLASSIFICATION_ASPECT_ID = deriveAtlasAspectId(
+  SINGLETONS.worldSurfaceEntityId,
+  'worldSurface.landWaterClassification',
 );
 
 describe('Milestone 2 atlas geography contracts', () => {
@@ -84,7 +93,7 @@ describe('Milestone 2 atlas geography contracts', () => {
   it('derives all singleton, feature, aspect, component, and ring identities without names or positions', () => {
     expect(deriveAtlasSingletonEntityIds(WORLD_MAP_ID)).toStrictEqual(SINGLETONS);
     expect(deriveAtlasFeatureEntityId(WORLD_MAP_ID, value(parseSemanticKey('landmass-001')))).toBe(
-      LANDMASS_ID,
+      '22c09949-866a-5c0d-b883-3bfdd23918a4',
     );
     expect(
       deriveAtlasAspectId(SINGLETONS.worldSurfaceEntityId, 'worldTerrain.macroElevation'),
@@ -196,7 +205,7 @@ describe('Milestone 2 atlas geography contracts', () => {
       ...records,
       landWaterClassification: {
         ...records.landWaterClassification,
-        samples: ['land', ...records.landWaterClassification.samples.slice(1)] as readonly (
+        samples: ['water', ...records.landWaterClassification.samples.slice(1)] as readonly (
           'land' | 'water'
         )[],
       },
@@ -270,6 +279,88 @@ describe('Milestone 2 atlas geography contracts', () => {
       ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.brokenConnectivity,
     );
     expect(diagnosticCodes(unordered)).toContain(ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidOrdering);
+    expect(diagnosticCodes(unordered)).toContain(
+      ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.brokenContainment,
+    );
+  });
+
+  it('reports stable ownership, disconnectedness, and identity diagnostics', () => {
+    const records = validRecords();
+    const landmass = first(records.landmasses);
+    const waterBody = first(records.waterBodies);
+    const overlap = validRecords({
+      waterBodies: [
+        {
+          ...waterBody,
+          membership: { ...landmass.membership },
+        },
+      ],
+    });
+    const missing = validRecords({
+      landmasses: [
+        {
+          ...landmass,
+          membership: {
+            ...landmass.membership,
+            sampleCount: landmass.membership.sampleCount - 1,
+            sampleRanges: [
+              {
+                startIndex: 0,
+                endIndexExclusive: SAMPLE_MIDPOINT - 1,
+              },
+            ],
+          },
+        },
+      ],
+    });
+    const disconnected = validRecords({
+      landmasses: [
+        {
+          ...landmass,
+          membership: {
+            ...landmass.membership,
+            sampleCount: 2,
+            sampleRanges: [
+              { startIndex: 0, endIndexExclusive: 1 },
+              { startIndex: SAMPLE_MIDPOINT - 1, endIndexExclusive: SAMPLE_MIDPOINT },
+            ],
+          },
+        },
+      ],
+    });
+    const collision = validRecords({
+      landmasses: [
+        {
+          ...landmass,
+          membership: { ...landmass.membership, fingerprint: '0'.repeat(64) },
+        },
+      ],
+    });
+    const wrongArea = validRecords({
+      landmasses: [
+        {
+          ...landmass,
+          membership: {
+            ...landmass.membership,
+            sphericalAreaWeight: landmass.membership.sphericalAreaWeight + 1,
+          },
+        },
+      ],
+    });
+
+    expect(diagnosticCodes(overlap)).toContain(
+      ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.overlappingOwnership,
+    );
+    expect(diagnosticCodes(missing)).toContain(ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.unownedSample);
+    expect(diagnosticCodes(disconnected)).toContain(
+      ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.disconnectedComponent,
+    );
+    expect(diagnosticCodes(collision)).toContain(
+      ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.identityCollision,
+    );
+    expect(diagnosticCodes(wrongArea)).toContain(
+      ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassification,
+    );
   });
 });
 
@@ -287,18 +378,33 @@ function validRecords(overrides: Partial<AtlasGeographyRecords> = {}): AtlasGeog
         fieldBehaviorVersion: 1,
         quantizationScale: 2 ** 24,
       },
-      values: Array.from({ length: ATLAS_FULL_SAMPLE_COUNT }, () => 0 as MacroElevationValueTicks),
+      values: Array.from(
+        { length: ATLAS_FULL_SAMPLE_COUNT },
+        (_, index) => (index < SAMPLE_MIDPOINT ? 1 : 0) as MacroElevationValueTicks,
+      ),
     },
     landWaterClassification: {
       classificationBehaviorVersion: 1,
       seaLevelContourDoubledTicks: 1,
-      samples: Array.from({ length: ATLAS_FULL_SAMPLE_COUNT }, () => 'water' as const),
+      samples: Array.from({ length: ATLAS_FULL_SAMPLE_COUNT }, (_, index) =>
+        index < SAMPLE_MIDPOINT ? ('land' as const) : ('water' as const),
+      ),
     },
+    semanticClassificationVersion: 1,
+    worldMapId: WORLD_MAP_ID,
+    worldSurfaceEntityId: SINGLETONS.worldSurfaceEntityId,
     landmasses: [
       {
         entityId: LANDMASS_ID,
         sourceClassificationAspectId: CLASSIFICATION_ASPECT_ID,
         componentId: LAND_COMPONENT_ID,
+        membership: {
+          classificationVersion: 1,
+          fingerprint: LAND_IDENTITY.fingerprint,
+          sampleCount: SAMPLE_MIDPOINT,
+          sphericalAreaWeight: LAND_AREA_WEIGHT,
+          sampleRanges: LAND_RANGES,
+        },
         kind: ATLAS_LANDMASS_KINDS.continent,
         adjacentWaterBodyIds: [WATER_BODY_ID],
       },
@@ -309,6 +415,13 @@ function validRecords(overrides: Partial<AtlasGeographyRecords> = {}): AtlasGeog
         entityId: WATER_BODY_ID,
         sourceClassificationAspectId: CLASSIFICATION_ASPECT_ID,
         componentId: WATER_COMPONENT_ID,
+        membership: {
+          classificationVersion: 1,
+          fingerprint: WATER_IDENTITY.fingerprint,
+          sampleCount: SAMPLE_MIDPOINT,
+          sphericalAreaWeight: WATER_AREA_WEIGHT,
+          sampleRanges: WATER_RANGES,
+        },
         kind: ATLAS_WATER_BODY_KINDS.oceanBasin,
         enclosure: 'open-marine',
         enclosedByLandmassIds: [],
@@ -334,6 +447,25 @@ function validRecords(overrides: Partial<AtlasGeographyRecords> = {}): AtlasGeog
     landWaterClassificationAspectId: CLASSIFICATION_ASPECT_ID,
     ...overrides,
   };
+}
+
+function areaWeightForRanges(ranges: readonly { startIndex: number; endIndexExclusive: number }[]) {
+  let total = 0;
+  for (const { startIndex, endIndexExclusive } of ranges) {
+    for (let index = startIndex; index < endIndexExclusive; index += 1) {
+      const latitudeIndex =
+        index === 0
+          ? 0
+          : index === ATLAS_FULL_SAMPLE_COUNT - 1
+            ? ATLAS_FULL_LATITUDE_BAND_COUNT
+            : Math.floor((index - 1) / ATLAS_FULL_LONGITUDE_CELL_COUNT) + 1;
+      total += roundTiesAwayFromZero(
+        Math.cos(-Math.PI / 2 + (Math.PI * latitudeIndex) / ATLAS_FULL_LATITUDE_BAND_COUNT) *
+          ATLAS_SEMANTIC_AREA_WEIGHT_SCALE,
+      );
+    }
+  }
+  return total;
 }
 
 function diagnosticCodes(records: AtlasGeographyRecords): readonly string[] {

@@ -203,6 +203,27 @@ Marginal seas participate in their connected open-marine component but remain di
 regions. Enclosed seas are excluded from ocean-basin component counts and the connected-majority
 area denominator. All seas still count toward total target water coverage.
 
+Issue #59 realizes these meanings through semantic-classification policy version 1, recorded in
+[ADR-0010](adr/0010-atlas-semantic-classification-and-identity.md). Components use the accepted
+wrapped four-neighbor rows and single pole vertices. Integer spherical area uses the `2^20` row
+weight scale already used by #58. A land component is a `continent` at 20% of retained land
+weight, a non-continent is a `majorIsland` at 2%, and every remaining accepted component is an
+`island`. The classifier does not edit or suppress #58 samples.
+
+Open-marine clearance cores contain water farther than 16 accepted full-profile graph edges from
+land. They distinguish basin roots and marginal seas without changing exact cell ownership:
+`singleGlobal` and `connectedMajority` retain one basin root and connect marginal seas through
+reciprocal neck edges, while `multipleBasins` requires at least two clearance cores separated at
+that atlas-scale policy. Other raw water components are enclosed seas. Connected-majority retains
+the #58 90% minimum over non-enclosed marine area.
+
+Island grouping budgets
+`floor(nonContinentalCount * archipelagoAbundancePercent / 100)` candidates by nearest spherical
+centroid distance. A compact archipelago seed has at most 750 milliradians member separation;
+island-chain neighbors have at most 1800 milliradians separation. A budget of at least four may
+realize one compact archipelago and one disjoint ordered chain. Stable-ID ties resolve every
+otherwise equal choice.
+
 World circumference also owns the `WorldMap` coordinate-system radius. Issue #57 defines the
 versioned circumference-to-radius calculation and ADR-0005 integer-millimeter quantization. A full
 control acceptance atomically updates and validates the persisted circumference, derived radius,

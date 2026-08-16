@@ -7,6 +7,8 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { format } from 'prettier';
 import ts from 'typescript';
 
+import { expectedVersions, semanticProof } from './atlas-semantic-fixture-support.mjs';
+
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 export async function runAtlasLandWaterFixture(expectedFixtureId) {
@@ -20,13 +22,14 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
   const definition = JSON.parse(definitionBytes.toString('utf8'));
   const reviewBytes = readFileSync(reviewRecordPath);
   const { core, generation } = await loadProjectModules(outputRoot);
+  const includesSemantic = definition.versions.atlasSemanticPolicyVersion !== undefined;
 
   assert.equal(fixtureId, expectedFixtureId);
   assert.equal(definition.fixtureId, fixtureId);
   assert.equal(definition.fixtureDefinitionVersion, 1);
   assert.equal(definition.evidenceBoundary, 'pre-persistence-atlas-generator-kernel-v1');
   assert.equal(definition.notCanonicalAspectBytes, true);
-  assert.deepEqual(definition.versions, expectedVersions(core, generation));
+  assert.deepEqual(definition.versions, expectedVersions(core, generation, includesSemantic));
   assert.deepEqual(definition.stableIds, expectedStableIds(core, definition));
 
   const input = parsed(
@@ -99,6 +102,9 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
   const sampleCounts = classificationCounts(records.landWaterClassification.samples);
   assert.ok(sampleCounts.land > 0);
   assert.ok(sampleCounts.water > 0);
+  const semantic = includesSemantic
+    ? semanticProof(core, generation, definition, input, records)
+    : undefined;
 
   const vector = {
     kernelVectorVersion: 1,
@@ -137,6 +143,7 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
       sampleCounts,
       realization: fullResult.realization,
       diagnosticCodes: fullResult.diagnostics.map(({ code }) => code),
+      ...(semantic === undefined ? {} : { semantic: semantic.vector }),
     },
     invariants: {
       validatedAcceptedOutputRecords: true,
@@ -153,6 +160,7 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
         fullReportCount: fullProgress.length,
         totalWork: generation.ATLAS_GENERATION_PROGRESS_TOTAL_WORK,
       },
+      ...(semantic === undefined ? {} : { semantic: semantic.invariants }),
     },
   };
   const canonicalBytes = Buffer.from(await formatJson(vector), 'utf8');
@@ -178,7 +186,10 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
       sha256: sha256(definitionBytes),
     },
     worldSeed: definition.worldSeed,
-    stableIds: definition.stableIds,
+    stableIds:
+      semantic === undefined
+        ? definition.stableIds
+        : sortedRecord({ ...definition.stableIds, ...semantic.stableIds }),
     versions: definition.versions,
     checkpointRevisions: definition.checkpoints,
     expectedAssertions: [
@@ -186,11 +197,15 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
         assertionId: 'runner-validates-full-generator-kernel',
         operator: 'runner-pass',
         reviewPurpose:
-          'Prove exact full-profile generation, output validation, nesting, seam/pole behavior, progress, and declared realization tolerances.',
+          semantic === undefined
+            ? 'Prove exact full-profile generation, output validation, nesting, seam/pole behavior, progress, and declared realization tolerances.'
+            : 'Prove exact full-profile generation plus stable semantic classification, ownership, connectivity, containment, identity, and ordering.',
       },
     ],
     reviewPurpose:
-      'Prove the version-1 atlas macro-elevation and land/water generator for one fixed seed/control row before accepted-aspect persistence integration.',
+      semantic === undefined
+        ? 'Prove the version-1 atlas macro-elevation and land/water generator for one fixed seed/control row before accepted-aspect persistence integration.'
+        : 'Prove the version-1 atlas field, partition, and semantic geography generator for one fixed seed/control row before accepted-aspect persistence integration.',
     reviewRecord: { path: fixtureReviewRecordPath, sha256: sha256(reviewBytes) },
     generatedRoots: [`fixed-seeds/${fixtureId}/expected`],
     artifacts: [artifact],
@@ -202,23 +217,6 @@ async function formatJson(value) {
   const options = { parser: 'json', printWidth: 100 };
   const firstPass = await format(JSON.stringify(value), options);
   return format(firstPass, options);
-}
-
-function expectedVersions(core, generation) {
-  return {
-    atlasFieldBehaviorVersion: generation.ATLAS_FIELD_ALGORITHM_VERSION,
-    atlasGeneratorManifestVersion: generation.ATLAS_LAND_WATER_GENERATOR_MANIFEST_VERSION,
-    atlasGeographyContractVersion: core.ATLAS_GEOGRAPHY_CONTRACT_VERSION,
-    atlasParameterSchemaVersion: generation.ATLAS_LAND_WATER_PARAMETER_SCHEMA_VERSION,
-    atlasPreviewVersion: generation.ATLAS_LAND_WATER_PREVIEW_VERSION,
-    atlasRealizationVersion: generation.ATLAS_LAND_WATER_REALIZATION_VERSION,
-    atlasSamplingPolicyVersion: generation.ATLAS_SAMPLING_POLICY_VERSION,
-    deterministicStreamVersion: core.DETERMINISTIC_STREAM_VERSION,
-    landWaterClassificationBehaviorVersion: generation.ATLAS_LAND_WATER_CLASSIFICATION_VERSION,
-    landWaterClassificationGeneratorVersion: 1,
-    macroElevationGeneratorVersion: 1,
-    seedDerivationVersion: core.SEED_DERIVATION_VERSION,
-  };
 }
 
 function expectedStableIds(core, definition) {
@@ -477,4 +475,10 @@ function sha256(bytes) {
 
 function compareText(left, right) {
   return left < right ? -1 : left > right ? 1 : 0;
+}
+
+function sortedRecord(value) {
+  return Object.fromEntries(
+    Object.entries(value).sort(([left], [right]) => compareText(left, right)),
+  );
 }

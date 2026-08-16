@@ -47,7 +47,16 @@ export {
   getAtlasControlInvalidationRoots,
 } from './atlas-geography-aspects.js';
 export {
+  type AtlasSemanticComponentIdentity,
+  type AtlasSurfaceKind,
+  deriveAtlasIslandGroupEntityId,
+  deriveAtlasSemanticComponentIdentity,
+  fingerprintAtlasSurfaceComponent,
+  isAtlasSemanticFingerprint,
+} from './atlas-geography-identity.js';
+export {
   ATLAS_CANONICAL_FIELD_TRAVERSAL,
+  ATLAS_CONNECTED_MAJORITY_MINIMUM_PERCENT,
   ATLAS_CONTINENT_DISTRIBUTIONS,
   ATLAS_FIELD_QUANTIZATION_SCALE,
   ATLAS_FULL_LATITUDE_BAND_COUNT,
@@ -59,6 +68,8 @@ export {
   ATLAS_LANDMASS_KINDS,
   ATLAS_OCEAN_CONNECTIVITY,
   ATLAS_POLAR_CHARACTERS,
+  ATLAS_SEMANTIC_AREA_WEIGHT_SCALE,
+  ATLAS_SEMANTIC_CLASSIFICATION_VERSION,
   ATLAS_WATER_BODY_KINDS,
   type AtlasContinentDistribution,
   type AtlasControls,
@@ -68,6 +79,9 @@ export {
   type AtlasLandWaterRecords,
   type AtlasOceanConnectivity,
   type AtlasPolarCharacter,
+  type AtlasSemanticGeographyRecords,
+  type AtlasSurfaceComponentMembership,
+  type AtlasSurfaceSampleRange,
   type AtlasWaterBodyKind,
   type CanonicalWorldCoastline,
   type CanonicalWorldCoastlineRing,
@@ -91,6 +105,7 @@ export {
   validateAtlasControls,
   validateAtlasGeographyRecords,
   validateAtlasLandWaterRecords,
+  validateAtlasSemanticGeographyRecords,
 } from './atlas-geography-validation.js';
 export {
   type BehaviorVersion,

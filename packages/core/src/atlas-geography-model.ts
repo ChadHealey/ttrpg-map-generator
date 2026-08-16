@@ -3,7 +3,7 @@
  *
  * These records hold semantic geography and canonical planet-native geometry only. They exclude
  * generator implementations, display projections, render scenes, persistence DTOs, previews, and
- * caches. Classification thresholds, matching, and coastline extraction remain future work.
+ * caches. Coastline extraction remains future work.
  */
 
 import type { PlanetPoint } from './coordinates.js';
@@ -11,10 +11,14 @@ import {
   type AspectId,
   type CoastlineRingId,
   type EntityId,
+  type MapId,
   type SurfaceComponentId,
 } from './identity.js';
 
 export const ATLAS_GEOGRAPHY_CONTRACT_VERSION = 1 as const;
+export const ATLAS_SEMANTIC_CLASSIFICATION_VERSION = 1 as const;
+export const ATLAS_CONNECTED_MAJORITY_MINIMUM_PERCENT = 90;
+export const ATLAS_SEMANTIC_AREA_WEIGHT_SCALE = 2 ** 20;
 export const ATLAS_FIELD_QUANTIZATION_SCALE = 2 ** 24;
 export const ATLAS_FULL_PROFILE_ID = 'world-atlas-full-v1' as const;
 export const ATLAS_FULL_LONGITUDE_CELL_COUNT = 2_048;
@@ -131,11 +135,28 @@ export interface AtlasLandWaterRecords {
   readonly landWaterClassification: LandWaterClassification;
 }
 
+/** One half-open range in canonical full-profile sample traversal order. */
+export interface AtlasSurfaceSampleRange {
+  readonly startIndex: number;
+  readonly endIndexExclusive: number;
+}
+
+/** Compact, canonical exactly-once ownership evidence for one coherent surface component. */
+export interface AtlasSurfaceComponentMembership {
+  readonly classificationVersion: typeof ATLAS_SEMANTIC_CLASSIFICATION_VERSION;
+  readonly fingerprint: string;
+  readonly sampleCount: number;
+  /** Sum of version-1 integer spherical row weights for threshold and connectivity policy. */
+  readonly sphericalAreaWeight: number;
+  readonly sampleRanges: readonly AtlasSurfaceSampleRange[];
+}
+
 /** A component-local semantic entity; its name is never part of its identity. */
 export interface Landmass {
   readonly entityId: EntityId;
   readonly sourceClassificationAspectId: AspectId;
   readonly componentId: SurfaceComponentId;
+  readonly membership: AtlasSurfaceComponentMembership;
   readonly kind: AtlasLandmassKind;
   /** Significant islands are explicitly contained by one adjacent accepted water body. */
   readonly containingWaterBodyId?: EntityId;
@@ -161,6 +182,7 @@ export interface WaterBody {
   readonly entityId: EntityId;
   readonly sourceClassificationAspectId: AspectId;
   readonly componentId: SurfaceComponentId;
+  readonly membership: AtlasSurfaceComponentMembership;
   readonly kind: AtlasWaterBodyKind;
   readonly enclosure: 'enclosed' | 'open-marine';
   /** Landmasses enclosing this retained sea; open-marine bodies have no containment owner. */
@@ -184,11 +206,17 @@ export interface CanonicalWorldCoastline {
 }
 
 /** Semantic geography accepted by the Milestone 2 world map, never render or cache state. */
-export interface AtlasGeographyRecords extends AtlasLandWaterRecords {
-  /** Stable upstream aspect that #59 semantic records consume without replacing. */
+export interface AtlasGeographyRecords extends AtlasSemanticGeographyRecords {
+  readonly coastline: CanonicalWorldCoastline;
+}
+
+/** Accepted semantic geography before #60 adds canonical coastline geometry. */
+export interface AtlasSemanticGeographyRecords extends AtlasLandWaterRecords {
+  readonly semanticClassificationVersion: typeof ATLAS_SEMANTIC_CLASSIFICATION_VERSION;
+  readonly worldMapId: MapId;
+  readonly worldSurfaceEntityId: EntityId;
   readonly landWaterClassificationAspectId: AspectId;
   readonly landmasses: readonly Landmass[];
   readonly islandGroups: readonly IslandGroup[];
   readonly waterBodies: readonly WaterBody[];
-  readonly coastline: CanonicalWorldCoastline;
 }

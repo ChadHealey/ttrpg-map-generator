@@ -1,7 +1,13 @@
 /** Deterministic validation and ordering for accepted Milestone 2 atlas geography. */
 
 import {
+  ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES,
+  type AtlasGeographyDiagnostic,
+  type AtlasGeographyDiagnosticCode,
+} from './atlas-geography-diagnostics.js';
+import {
   ATLAS_CANONICAL_FIELD_TRAVERSAL,
+  ATLAS_CONNECTED_MAJORITY_MINIMUM_PERCENT,
   ATLAS_CONTINENT_DISTRIBUTIONS,
   ATLAS_FIELD_QUANTIZATION_SCALE,
   ATLAS_FULL_LATITUDE_BAND_COUNT,
@@ -20,36 +26,22 @@ import {
   type AtlasLandmassKind,
   type AtlasLandWaterRecords,
   type AtlasOceanConnectivity,
+  type AtlasSemanticGeographyRecords,
   type AtlasWaterBodyKind,
   type CanonicalWorldCoastlineRing,
   type IslandGroup,
   type Landmass,
   type WaterBody,
 } from './atlas-geography-model.js';
+import { validateAtlasSemanticMembership } from './atlas-geography-semantic-validation.js';
 import { parsePlanetPoint } from './coordinates.js';
 import { type EntityId, type SurfaceComponentId } from './identity.js';
 
-export const ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES = {
-  brokenConnectivity: 'atlas-geography.connectivity.broken',
-  brokenContainment: 'atlas-geography.containment.broken',
-  impossibleControls: 'atlas-geography.controls.impossible',
-  invalidClassification: 'atlas-geography.classification.invalid',
-  invalidClassificationVersion: 'atlas-geography.classification.version.invalid',
-  invalidCoastlineReference: 'atlas-geography.coastline.reference.invalid',
-  invalidCoastlineVersion: 'atlas-geography.coastline.version.invalid',
-  invalidControls: 'atlas-geography.controls.invalid',
-  invalidFieldMetadata: 'atlas-geography.field.metadata.invalid',
-  invalidFieldValue: 'atlas-geography.field.value.invalid',
-  invalidOrdering: 'atlas-geography.ordering.invalid',
-} as const;
-
-export type AtlasGeographyDiagnosticCode =
-  (typeof ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES)[keyof typeof ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES];
-
-export interface AtlasGeographyDiagnostic {
-  readonly code: AtlasGeographyDiagnosticCode;
-  readonly message: string;
-}
+export {
+  ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES,
+  type AtlasGeographyDiagnostic,
+  type AtlasGeographyDiagnosticCode,
+} from './atlas-geography-diagnostics.js';
 
 export type AtlasControlsParseResult =
   | { readonly ok: true; readonly value: AtlasControls }
@@ -127,14 +119,28 @@ export function validateAtlasControls(
 export function validateAtlasGeographyRecords(
   records: AtlasGeographyRecords,
 ): AtlasGeographyValidationResult {
-  const diagnostics = [
+  const diagnostics = [...semanticDiagnostics(records), ...validateCoastline(records)];
+  const ordered = orderedDiagnostics(diagnostics);
+  return ordered.length === 0 ? { ok: true } : { ok: false, diagnostics: ordered };
+}
+
+/** Validate accepted #59 entities without requiring #60 coastline geometry. */
+export function validateAtlasSemanticGeographyRecords(
+  records: AtlasSemanticGeographyRecords,
+): AtlasGeographyValidationResult {
+  const diagnostics = orderedDiagnostics(semanticDiagnostics(records));
+  return diagnostics.length === 0 ? { ok: true } : { ok: false, diagnostics };
+}
+
+function semanticDiagnostics(
+  records: AtlasSemanticGeographyRecords,
+): readonly AtlasGeographyDiagnostic[] {
+  return [
     ...validateAtlasLandWaterRecords(records),
     ...validateOrdering(records),
     ...validateClassification(records),
-    ...validateCoastline(records),
+    ...validateAtlasSemanticMembership(records),
   ];
-  const ordered = orderedDiagnostics(diagnostics);
-  return ordered.length === 0 ? { ok: true } : { ok: false, diagnostics: ordered };
 }
 
 /** Validate the complete upstream #58 field/partition output independently of #59 entities. */
@@ -255,7 +261,9 @@ function validateField(records: AtlasLandWaterRecords): readonly AtlasGeographyD
   return diagnostics;
 }
 
-function validateOrdering(records: AtlasGeographyRecords): readonly AtlasGeographyDiagnostic[] {
+function validateOrdering(
+  records: AtlasSemanticGeographyRecords,
+): readonly AtlasGeographyDiagnostic[] {
   const diagnostics: AtlasGeographyDiagnostic[] = [];
   orderedStableIds(
     diagnostics,
@@ -271,11 +279,6 @@ function validateOrdering(records: AtlasGeographyRecords): readonly AtlasGeograp
     diagnostics,
     records.waterBodies.map((waterBody) => waterBody.entityId),
     'Water bodies',
-  );
-  orderedStableIds(
-    diagnostics,
-    records.coastline.rings.map((ring) => ring.ringId),
-    'Coastline rings',
   );
   for (const landmass of records.landmasses) {
     orderedStableIds(
@@ -309,7 +312,7 @@ function validateOrdering(records: AtlasGeographyRecords): readonly AtlasGeograp
 }
 
 function validateClassification(
-  records: AtlasGeographyRecords,
+  records: AtlasSemanticGeographyRecords,
 ): readonly AtlasGeographyDiagnostic[] {
   const diagnostics: AtlasGeographyDiagnostic[] = [];
   const semanticEntityIds = [
@@ -320,7 +323,7 @@ function validateClassification(
   if (new Set(semanticEntityIds).size !== semanticEntityIds.length) {
     diagnostics.push(
       diagnostic(
-        ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassification,
+        ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.identityCollision,
         'Every semantic landmass, island group, and water body must have one globally unique entity ID.',
       ),
     );
@@ -348,7 +351,7 @@ function validateClassification(
     if (landmassesById.has(landmass.entityId) || landmassByComponent.has(landmass.componentId)) {
       diagnostics.push(
         diagnostic(
-          ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassification,
+          ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.ambiguousClassification,
           'Every accepted land component must have exactly one stable landmass entity.',
         ),
       );
@@ -382,7 +385,7 @@ function validateClassification(
     ) {
       diagnostics.push(
         diagnostic(
-          ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassification,
+          ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.ambiguousClassification,
           'Every accepted water component must have exactly one stable water-body entity.',
         ),
       );
@@ -617,15 +620,19 @@ function validateOceanControlRealization(
   const seen = new Set<EntityId>();
   let basinRootedComponents = 0;
   let unrooted = false;
+  let largestComponentArea = 0;
+  let totalOpenArea = 0;
   for (const body of open) {
     if (seen.has(body.entityId)) continue;
     const queue = [body.entityId];
     let hasBasin = false;
+    let componentArea = 0;
     seen.add(body.entityId);
     while (queue.length > 0) {
       const current = queue.shift();
       if (current === undefined) continue;
       if (byId.get(current)?.kind === ATLAS_WATER_BODY_KINDS.oceanBasin) hasBasin = true;
+      componentArea += byId.get(current)?.membership.sphericalAreaWeight ?? 0;
       for (const edge of byId.get(current)?.connectivity ?? [])
         if (byId.has(edge.connectedWaterBodyId) && !seen.has(edge.connectedWaterBodyId)) {
           seen.add(edge.connectedWaterBodyId);
@@ -634,11 +641,16 @@ function validateOceanControlRealization(
     }
     if (hasBasin) basinRootedComponents += 1;
     else unrooted = true;
+    totalOpenArea += componentArea;
+    largestComponentArea = Math.max(largestComponentArea, componentArea);
   }
+  const majorityPercent = totalOpenArea === 0 ? 0 : (largestComponentArea / totalOpenArea) * 100;
   if (
     unrooted ||
     basinRootedComponents === 0 ||
     (connectivity === ATLAS_OCEAN_CONNECTIVITY.singleGlobal && basinRootedComponents !== 1) ||
+    (connectivity === ATLAS_OCEAN_CONNECTIVITY.connectedMajority &&
+      majorityPercent < ATLAS_CONNECTED_MAJORITY_MINIMUM_PERCENT) ||
     (connectivity === ATLAS_OCEAN_CONNECTIVITY.multipleBasins && basinRootedComponents < 2)
   ) {
     diagnostics.push(
@@ -652,6 +664,11 @@ function validateOceanControlRealization(
 
 function validateCoastline(records: AtlasGeographyRecords): readonly AtlasGeographyDiagnostic[] {
   const diagnostics: AtlasGeographyDiagnostic[] = [];
+  orderedStableIds(
+    diagnostics,
+    records.coastline.rings.map((ring) => ring.ringId),
+    'Coastline rings',
+  );
   if (
     (records.coastline as unknown as Readonly<Record<string, unknown>>).geometryBehaviorVersion !==
     1

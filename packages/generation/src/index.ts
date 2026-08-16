@@ -87,6 +87,31 @@ export {
   WORLD_ATLAS_PROFILE_REFINEMENT_FACTOR,
 } from './atlas-sampling-profiles.js';
 export {
+  type AtlasSemanticClassificationDiagnostic,
+  type AtlasSemanticClassificationInput,
+  type AtlasSemanticClassificationResult,
+  classifyAtlasSemanticGeography,
+} from './atlas-semantic-classifier.js';
+export {
+  ATLAS_SEMANTIC_CLASSIFICATION_PARAMETERS,
+  ATLAS_SEMANTIC_GENERATOR_MANIFEST_VERSION,
+  ATLAS_SEMANTIC_PARAMETER_SCHEMA_VERSION,
+  ATLAS_SEMANTIC_POLICY,
+  ATLAS_SEMANTIC_POLICY_VERSION,
+  type AtlasSemanticClassificationParameters,
+  type AtlasSemanticPolicy,
+} from './atlas-semantic-classifier-policy.js';
+export {
+  ATLAS_SEMANTIC_DIAGNOSTIC_CODES,
+  ATLAS_SEMANTIC_GENERATOR_MANIFEST,
+  type AtlasSemanticAspectOutput,
+  type AtlasSemanticAspectProposal,
+  type AtlasSemanticGenerationInput,
+  type AtlasSemanticGenerationResult,
+  type AtlasSemanticGeographyProposedPatch,
+  generateAtlasSemanticGeography,
+} from './atlas-semantic-generator-contract.js';
+export {
   createCommitAspectProposalCommand,
   type GenerationContext,
   type GenerationInput,
