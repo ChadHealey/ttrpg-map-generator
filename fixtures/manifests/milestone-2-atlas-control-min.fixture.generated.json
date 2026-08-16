@@ -1,0 +1,58 @@
+{
+  "fixtureManifestVersion": 1,
+  "fixtureId": "milestone-2-atlas-control-min",
+  "generated": true,
+  "editPolicy": "regenerate-only",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-control-min --review-record fixed-seeds/milestone-2-atlas-control-min/reviews/0001-initial-acceptance.md",
+  "sourceDefinition": {
+    "path": "fixed-seeds/milestone-2-atlas-control-min/fixture-definition.json",
+    "sha256": "7feb26c8333ecb1c37f174addbcb30d52282ea6c8ac13538c86362d4c4ffdeb5"
+  },
+  "worldSeed": "6148914691236517205",
+  "stableIds": {
+    "landWaterClassificationAspectId": "04628f37-6408-5087-a139-bdd2bdff42d3",
+    "macroElevationAspectId": "e588eb7f-d585-5c27-9ce5-81c2fb1ebc43",
+    "worldMapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7",
+    "worldSurfaceEntityId": "eaa0cecc-8c5d-559f-b18a-bbd0c53248ac"
+  },
+  "versions": {
+    "atlasFieldBehaviorVersion": 1,
+    "atlasGeneratorManifestVersion": 1,
+    "atlasGeographyContractVersion": 1,
+    "atlasParameterSchemaVersion": 1,
+    "atlasPreviewVersion": 1,
+    "atlasRealizationVersion": 1,
+    "atlasSamplingPolicyVersion": 1,
+    "deterministicStreamVersion": 1,
+    "landWaterClassificationBehaviorVersion": 1,
+    "landWaterClassificationGeneratorVersion": 1,
+    "macroElevationGeneratorVersion": 1,
+    "seedDerivationVersion": 1
+  },
+  "checkpointRevisions": {
+    "baseline": { "worldSurface.landWaterClassification": 0, "worldTerrain.macroElevation": 0 }
+  },
+  "expectedAssertions": [
+    {
+      "assertionId": "runner-validates-full-generator-kernel",
+      "operator": "runner-pass",
+      "reviewPurpose": "Prove exact full-profile generation, output validation, nesting, seam/pole behavior, progress, and declared realization tolerances."
+    }
+  ],
+  "reviewPurpose": "Prove the version-1 atlas macro-elevation and land/water generator for one fixed seed/control row before accepted-aspect persistence integration.",
+  "reviewRecord": {
+    "path": "fixed-seeds/milestone-2-atlas-control-min/reviews/0001-initial-acceptance.md",
+    "sha256": "fcbf776c28aa629e58d421b24a0cb3498dbc296ef6b0a338bbb251cadda42d6e"
+  },
+  "generatedRoots": ["fixed-seeds/milestone-2-atlas-control-min/expected"],
+  "artifacts": [
+    {
+      "path": "fixed-seeds/milestone-2-atlas-control-min/expected/baseline/atlas-land-water.kernel.canonical",
+      "kind": "canonical-kernel-vector",
+      "checkpoint": "baseline",
+      "byteLength": 3356,
+      "canonicalKernelVectorSha256": "3e597201607015520784e7ea1960662fdfe31d9313e54543419126ee6ff7b18a",
+      "fixtureIntegritySha256": "3e597201607015520784e7ea1960662fdfe31d9313e54543419126ee6ff7b18a"
+    }
+  ]
+}
