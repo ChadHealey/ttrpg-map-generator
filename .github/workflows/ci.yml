@@ -66,8 +66,10 @@ jobs:
         shell: bash
         run: |
           if [[ "$RUNNER_OS" == "macOS" ]]; then
+            RECOVERY_DEVICE="$(df -P "$GITHUB_WORKSPACE" | awk 'NR == 2 { print $1 }')"
+            test -n "$RECOVERY_DEVICE"
             RECOVERY_FILESYSTEM="$(
-              diskutil info "$GITHUB_WORKSPACE" |
+              diskutil info "$RECOVERY_DEVICE" |
                 awk -F: '/File System Personality/ { value=$2; gsub(/^[[:space:]]+|[[:space:]]+$/, "", value); print value }'
             )"
             [[ "$RECOVERY_FILESYSTEM" == APFS* ]]
