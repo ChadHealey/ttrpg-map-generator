@@ -28,6 +28,8 @@
     "atlasCoastlineParameterSchemaVersion": 1,
     "atlasCoastlineSimplificationPolicyVersion": 1,
     "atlasCoastlineTopologyValidationVersion": 1,
+    "atlasDisplayProjectionVersion": 1,
+    "atlasDisplaySeamPolicyVersion": 1,
     "atlasFieldBehaviorVersion": 1,
     "atlasGeneratorManifestVersion": 1,
     "atlasGeographyContractVersion": 1,

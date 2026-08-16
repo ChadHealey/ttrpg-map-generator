@@ -3,10 +3,10 @@
   "fixtureId": "milestone-2-atlas-fragmented-islands",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-fragmented-islands --review-record fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0003-canonical-coastline.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-fragmented-islands --review-record fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0004-display-projection.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/fixture-definition.json",
-    "sha256": "6de14b0ac74183169c7047bb1ffba5fe668f503deb586bead73cce808b3a6c36"
+    "sha256": "dc995b0ed4ed08237320232eb768c1b30209e0ba247e690d500bc198203ede21"
   },
   "worldSeed": "18364758544493064720",
   "stableIds": {
@@ -63,6 +63,8 @@
     "atlasCoastlineParameterSchemaVersion": 1,
     "atlasCoastlineSimplificationPolicyVersion": 1,
     "atlasCoastlineTopologyValidationVersion": 1,
+    "atlasDisplayProjectionVersion": 1,
+    "atlasDisplaySeamPolicyVersion": 1,
     "atlasFieldBehaviorVersion": 1,
     "atlasGeneratorManifestVersion": 1,
     "atlasGeographyContractVersion": 1,
@@ -94,13 +96,13 @@
     {
       "assertionId": "runner-validates-full-generator-kernel",
       "operator": "runner-pass",
-      "reviewPurpose": "Prove exact full-profile generation, semantic classification, and source-linked canonical coastline geometry, simplification, topology, identity, and ordering."
+      "reviewPurpose": "Prove exact full-profile generation, semantic classification, source-linked canonical coastline geometry, simplification, topology, identity, ordering, and deterministic seam-safe display projection."
     }
   ],
-  "reviewPurpose": "Prove the version-1 atlas field, partition, semantic geography, and canonical coastline generator for one fixed seed/control row before accepted-aspect persistence integration.",
+  "reviewPurpose": "Prove the version-1 atlas field, partition, semantic geography, canonical coastline generator, and disposable display projection for one fixed seed/control row before accepted-aspect persistence integration.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0003-canonical-coastline.md",
-    "sha256": "d375bbb6790e880c92943e0aa2e54aa829a86fc04ec1f9f1c475a391cb45e10c"
+    "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0004-display-projection.md",
+    "sha256": "24cfe421eaaebb3b0fb3b4ae6657acd4658bd305945d1f9b9059295446e79fb8"
   },
   "generatedRoots": ["fixed-seeds/milestone-2-atlas-fragmented-islands/expected"],
   "artifacts": [
@@ -108,9 +110,9 @@
       "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/expected/baseline/atlas-land-water.kernel.canonical",
       "kind": "canonical-kernel-vector",
       "checkpoint": "baseline",
-      "byteLength": 6504,
-      "canonicalKernelVectorSha256": "cfc1007e0f155db4062436df1c0900f51f594739bae53988c338659d529191e4",
-      "fixtureIntegritySha256": "cfc1007e0f155db4062436df1c0900f51f594739bae53988c338659d529191e4"
+      "byteLength": 7581,
+      "canonicalKernelVectorSha256": "aab1db1f96ca89028a250328b0229ca17b854ecda914593cfc9d6889755fbf3b",
+      "fixtureIntegritySha256": "aab1db1f96ca89028a250328b0229ca17b854ecda914593cfc9d6889755fbf3b"
     }
   ]
 }
