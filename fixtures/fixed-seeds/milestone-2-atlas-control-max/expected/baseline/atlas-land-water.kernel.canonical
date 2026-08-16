@@ -39,6 +39,7 @@
     "atlasPreviewVersion": 1,
     "atlasRealizationVersion": 1,
     "atlasSamplingPolicyVersion": 1,
+    "atlasSceneCompositionVersion": 1,
     "atlasSemanticClassificationVersion": 1,
     "atlasSemanticGeneratorManifestVersion": 1,
     "atlasSemanticParameterSchemaVersion": 1,
@@ -72,7 +73,7 @@
     "seaLevelContourDoubledTicks": -13340379,
     "macroFieldTicksSha256": "4243390966c883df26b4e515e77db99d08b82bd9bed6ddc35222f3b9d2893949",
     "landWaterPackedBitsSha256": "aba612823cd6b7741566239a72c2e27c91c82180ad828f6e70461866ea9675ce",
-    "primitiveTraversalSha256": "6b856b3abc569ff827ef785f9e26f1853984604f718407ebd988258e459be5a0",
+    "primitiveTraversalSha256": "11be451093d14be55890cfad05e0bf890dfda00aa4b831bd2276fe8dbcd86fe6",
     "sampleCounts": { "land": 358743, "water": 1736363 },
     "realization": {
       "realizationVersion": 1,
@@ -174,6 +175,19 @@
       "seamSplitRingCount": 1,
       "seamEndpointCount": 4,
       "projectedPrimitiveTraversalSha256": "2888acbd39fc193b7e99302a6bf437703bc58abf1a8acc404abbd0c68d7a95ea"
+    },
+    "scene": {
+      "sceneCompositionVersion": 1,
+      "sceneKind": "whole-world-atlas",
+      "levelOfDetail": "normal-atlas",
+      "widthPx": 2048,
+      "heightPx": 1024,
+      "nodeCount": 31,
+      "landFillNodeCount": 14,
+      "coastlineNodeCount": 15,
+      "seamClosureCount": 2,
+      "sourceLinkedNodeCount": 31,
+      "coarseNodeCount": 16
     }
   },
   "invariants": {
@@ -211,6 +225,17 @@
       "noWorldSpanningProjectedSegments": true,
       "previewFullSemanticToleranceTicks": 0,
       "canvasSvgSharedSceneCoveredByIntegrationTest": true
+    },
+    "scene": {
+      "acceptedSourceUnchanged": true,
+      "cacheFreeRebuildEqual": true,
+      "equivalentInsertionOrderEqual": true,
+      "stableUniqueNodeIds": true,
+      "deterministicLayerOrder": true,
+      "sourceEntityAndAspectLinks": true,
+      "coarseLodPreservesFillGeometry": true,
+      "canvasSvgSharedSceneParity": true,
+      "projectedPointsWithinScene": true
     }
   }
 }
