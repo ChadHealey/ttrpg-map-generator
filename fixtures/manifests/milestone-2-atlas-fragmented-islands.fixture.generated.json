@@ -3,13 +3,22 @@
   "fixtureId": "milestone-2-atlas-fragmented-islands",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-fragmented-islands --review-record fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0002-semantic-classification.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-fragmented-islands --review-record fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0003-canonical-coastline.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/fixture-definition.json",
-    "sha256": "361ae8bbe63ac73fb766bcc5fc2326d71b97f69c9ccee59e7d95bea185370ef4"
+    "sha256": "6de14b0ac74183169c7047bb1ffba5fe668f503deb586bead73cce808b3a6c36"
   },
   "worldSeed": "18364758544493064720",
   "stableIds": {
+    "coastlineAspectId": "371a6a8c-9fe8-5cdb-adca-1a46ffa19645",
+    "coastlineRingId000": "0924d4c4-69db-5b5b-849a-c690458dc030",
+    "coastlineRingId001": "1356b5e6-1dca-5b1c-833e-a490f45b5a4a",
+    "coastlineRingId002": "55997ea2-a85a-57b2-aa33-86eb8cba5346",
+    "coastlineRingId003": "633b6eb1-e802-55fd-9009-f65bad03aa76",
+    "coastlineRingId004": "71534df2-9876-5ada-be3f-0676094e0768",
+    "coastlineRingId005": "d83c9291-258b-59a9-ae9a-1d1a123948d0",
+    "coastlineRingId006": "da69cbad-0769-54a0-8a89-573860b0ac22",
+    "coastlineRingId007": "efd42406-4dd5-5e0c-8e76-d4aee8dc3d65",
     "landWaterClassificationAspectId": "04628f37-6408-5087-a139-bdd2bdff42d3",
     "macroElevationAspectId": "e588eb7f-d585-5c27-9ce5-81c2fb1ebc43",
     "semanticAspectId000": "03bfdb6f-68e6-568b-8155-013008098eec",
@@ -43,10 +52,17 @@
     "surfaceComponentId006": "acdd031b-8f64-517b-8edd-1ff1180483b9",
     "surfaceComponentId007": "d0d02ef8-acf5-5ed1-9ec0-3d313e913f3e",
     "surfaceComponentId008": "f8fc6396-d277-5e5e-8bf7-93e62d36c1dc",
+    "worldCoastlineEntityId": "8737ec2a-5dd2-5b77-85f3-d8cd683ef073",
     "worldMapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7",
     "worldSurfaceEntityId": "eaa0cecc-8c5d-559f-b18a-bbd0c53248ac"
   },
   "versions": {
+    "atlasCoastlineExtractionAlgorithmVersion": 1,
+    "atlasCoastlineGeneratorManifestVersion": 1,
+    "atlasCoastlineGeometryBehaviorVersion": 1,
+    "atlasCoastlineParameterSchemaVersion": 1,
+    "atlasCoastlineSimplificationPolicyVersion": 1,
+    "atlasCoastlineTopologyValidationVersion": 1,
     "atlasFieldBehaviorVersion": 1,
     "atlasGeneratorManifestVersion": 1,
     "atlasGeographyContractVersion": 1,
@@ -69,6 +85,7 @@
       "islandGroup.classification": 0,
       "landmass.classification": 0,
       "waterBody.classification": 0,
+      "worldCoastline.geometry": 0,
       "worldSurface.landWaterClassification": 0,
       "worldTerrain.macroElevation": 0
     }
@@ -77,13 +94,13 @@
     {
       "assertionId": "runner-validates-full-generator-kernel",
       "operator": "runner-pass",
-      "reviewPurpose": "Prove exact full-profile generation plus stable semantic classification, ownership, connectivity, containment, identity, and ordering."
+      "reviewPurpose": "Prove exact full-profile generation, semantic classification, and source-linked canonical coastline geometry, simplification, topology, identity, and ordering."
     }
   ],
-  "reviewPurpose": "Prove the version-1 atlas field, partition, and semantic geography generator for one fixed seed/control row before accepted-aspect persistence integration.",
+  "reviewPurpose": "Prove the version-1 atlas field, partition, semantic geography, and canonical coastline generator for one fixed seed/control row before accepted-aspect persistence integration.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0002-semantic-classification.md",
-    "sha256": "7f46193b58fe25f1bf4bc99d8a2ffdae0125059d283e3ff1df61c3e8f0d92bad"
+    "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0003-canonical-coastline.md",
+    "sha256": "d375bbb6790e880c92943e0aa2e54aa829a86fc04ec1f9f1c475a391cb45e10c"
   },
   "generatedRoots": ["fixed-seeds/milestone-2-atlas-fragmented-islands/expected"],
   "artifacts": [
@@ -91,9 +108,9 @@
       "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/expected/baseline/atlas-land-water.kernel.canonical",
       "kind": "canonical-kernel-vector",
       "checkpoint": "baseline",
-      "byteLength": 4862,
-      "canonicalKernelVectorSha256": "10cf1196b6bdd82ce9da601ed72136693ac1848762db0936c990638157517fa9",
-      "fixtureIntegritySha256": "10cf1196b6bdd82ce9da601ed72136693ac1848762db0936c990638157517fa9"
+      "byteLength": 6504,
+      "canonicalKernelVectorSha256": "cfc1007e0f155db4062436df1c0900f51f594739bae53988c338659d529191e4",
+      "fixtureIntegritySha256": "cfc1007e0f155db4062436df1c0900f51f594739bae53988c338659d529191e4"
     }
   ]
 }

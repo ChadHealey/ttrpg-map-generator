@@ -24,6 +24,12 @@
     "polarCharacter": "neutral"
   },
   "versions": {
+    "atlasCoastlineExtractionAlgorithmVersion": 1,
+    "atlasCoastlineGeneratorManifestVersion": 1,
+    "atlasCoastlineGeometryBehaviorVersion": 1,
+    "atlasCoastlineParameterSchemaVersion": 1,
+    "atlasCoastlineSimplificationPolicyVersion": 1,
+    "atlasCoastlineTopologyValidationVersion": 1,
     "atlasFieldBehaviorVersion": 1,
     "atlasGeneratorManifestVersion": 1,
     "atlasGeographyContractVersion": 1,
@@ -64,7 +70,7 @@
     "seaLevelContourDoubledTicks": -13386485,
     "macroFieldTicksSha256": "d9d3bb6e390b54a7dd9377afadc9986c0d4bec7e3139f1743c1bc8c4100fd55f",
     "landWaterPackedBitsSha256": "c758385c57670321c00cbb7f6f51d7bc31758bddc4548bfa0d8e56dfe86984b4",
-    "primitiveTraversalSha256": "d50c4d2923e0c03cbb8c0985abe0121156c582e2d238fbf5fda131955dd01171",
+    "primitiveTraversalSha256": "30d6ba04c39a2ac3f92c22a248f1819b4fdeb4799de8123ddb85b3ac4fe63802",
     "sampleCounts": { "land": 525494, "water": 1569612 },
     "realization": {
       "realizationVersion": 1,
@@ -108,6 +114,32 @@
         "enclosedSea": 2
       },
       "semanticPrimitiveTraversalSha256": "321947391094bcefab1166087d133e193fe085c6ca69b3273745999803f5dad6"
+    },
+    "coastline": {
+      "geometryBehaviorVersion": 1,
+      "extractionAlgorithmVersion": 1,
+      "simplificationPolicyVersion": 1,
+      "simplificationToleranceTicks": 524288,
+      "topologyValidationVersion": 1,
+      "winding": "land-on-left",
+      "repairPolicy": "reject-invalid-no-silent-repair",
+      "replacementAspectName": "worldCoastline.geometry",
+      "dependencyAspectIds": [
+        "03bfdb6f-68e6-568b-8155-013008098eec",
+        "04628f37-6408-5087-a139-bdd2bdff42d3",
+        "113081fd-d241-5c32-835e-e8c60889e50b",
+        "1b84ed9c-e4a7-588b-9f5f-1bcc923a9ee0",
+        "3e5faa25-2d4b-54a1-a258-4df3bca9d968",
+        "3f282b42-baac-5c1c-b372-8c09d84411bd",
+        "97e48b6a-c172-51f2-a55e-85f7a6656cde",
+        "d457a579-b550-5bbc-ba16-47d11f6d5e01",
+        "e15c39c9-93c6-5c28-98a2-d33b0dafd66a",
+        "fc0620fd-6dc3-54a7-beb0-27135df2a456"
+      ],
+      "rawPointCount": 11590,
+      "canonicalPointCount": 8382,
+      "ringCount": 8,
+      "coastlinePrimitiveTraversalSha256": "c59cb2f03581052f82c7d3cf4ce35ba7223205adb2816fa2ac6653c4e1963d81"
     }
   },
   "invariants": {
@@ -129,6 +161,14 @@
       "stableEntityOrder": true,
       "stableAspectOrder": true,
       "validatedSemanticRecords": true
+    },
+    "coastline": {
+      "validatedCanonicalCoastlineRecords": true,
+      "exactSourceLinks": true,
+      "stableRingOrder": true,
+      "seamCrossingRingCount": 3,
+      "southPoleClassification": "water",
+      "northPoleClassification": "water"
     }
   }
 }
