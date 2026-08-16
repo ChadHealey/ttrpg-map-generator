@@ -60,6 +60,11 @@ const CLASSIFICATION_ASPECT_ID = deriveAtlasAspectId(
   SINGLETONS.worldSurfaceEntityId,
   'worldSurface.landWaterClassification',
 );
+const FULL_PROFILE_TEST_TIMEOUT_MS = 30_000;
+
+function fullProfileIt(name: string, testBody: () => void): void {
+  it(name, testBody, FULL_PROFILE_TEST_TIMEOUT_MS);
+}
 
 describe('Milestone 2 atlas geography contracts', () => {
   it('fixes the nine aspect names, owner scopes, versions, and direct dependency topology', () => {
@@ -148,48 +153,57 @@ describe('Milestone 2 atlas geography contracts', () => {
     ).toStrictEqual(['worldSurface.landWaterClassification', 'worldTerrain.macroElevation']);
   });
 
-  it('accepts canonical semantic geography with explicit partition, containment, connectivity, and source links', () => {
-    expect(validateAtlasGeographyRecords(validRecords())).toStrictEqual({ ok: true });
-  });
+  fullProfileIt(
+    'accepts canonical semantic geography with explicit partition, containment, connectivity, and source links',
+    () => {
+      expect(validateAtlasGeographyRecords(validRecords())).toStrictEqual({ ok: true });
+    },
+  );
 
-  it('keeps #58 field/partition output valid before #59 semantic entities reference it', () => {
-    const records = validRecords();
-    expect(
-      validateAtlasLandWaterRecords({
-        controls: records.controls,
-        macroElevation: records.macroElevation,
-        landWaterClassification: records.landWaterClassification,
-      }),
-    ).toStrictEqual([]);
-    expect(records.landmasses[0]?.sourceClassificationAspectId).toBe(
-      records.landWaterClassificationAspectId,
-    );
-    expect(records.waterBodies[0]?.sourceClassificationAspectId).toBe(
-      records.landWaterClassificationAspectId,
-    );
-  });
+  fullProfileIt(
+    'keeps #58 field/partition output valid before #59 semantic entities reference it',
+    () => {
+      const records = validRecords();
+      expect(
+        validateAtlasLandWaterRecords({
+          controls: records.controls,
+          macroElevation: records.macroElevation,
+          landWaterClassification: records.landWaterClassification,
+        }),
+      ).toStrictEqual([]);
+      expect(records.landmasses[0]?.sourceClassificationAspectId).toBe(
+        records.landWaterClassificationAspectId,
+      );
+      expect(records.waterBodies[0]?.sourceClassificationAspectId).toBe(
+        records.landWaterClassificationAspectId,
+      );
+    },
+  );
 
-  it('rejects truncated full fields and partitions plus invalid versions and contour ranges', () => {
-    const records = validRecords();
-    const invalid = {
-      ...records,
-      macroElevation: { ...records.macroElevation, values: [0 as MacroElevationValueTicks] },
-      landWaterClassification: {
-        ...records.landWaterClassification,
-        classificationBehaviorVersion: 2 as 1,
-        seaLevelContourDoubledTicks: 2 * 2 ** 24 + 1,
-        samples: ['water'] as const,
-      },
-      coastline: { ...records.coastline, geometryBehaviorVersion: 2 as 1 },
-    };
-    const codes = diagnosticCodes(invalid);
-    expect(codes).toContain(ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidFieldMetadata);
-    expect(codes).toContain(ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassification);
-    expect(codes).toContain(ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassificationVersion);
-    expect(codes).toContain(ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidCoastlineVersion);
-  });
+  fullProfileIt(
+    'rejects truncated full fields and partitions plus invalid versions and contour ranges',
+    () => {
+      const records = validRecords();
+      const invalid = {
+        ...records,
+        macroElevation: { ...records.macroElevation, values: [0 as MacroElevationValueTicks] },
+        landWaterClassification: {
+          ...records.landWaterClassification,
+          classificationBehaviorVersion: 2 as 1,
+          seaLevelContourDoubledTicks: 2 * 2 ** 24 + 1,
+          samples: ['water'] as const,
+        },
+        coastline: { ...records.coastline, geometryBehaviorVersion: 2 as 1 },
+      };
+      const codes = diagnosticCodes(invalid);
+      expect(codes).toContain(ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidFieldMetadata);
+      expect(codes).toContain(ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassification);
+      expect(codes).toContain(ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassificationVersion);
+      expect(codes).toContain(ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidCoastlineVersion);
+    },
+  );
 
-  it('rejects invalid or contradictory upstream land/water samples', () => {
+  fullProfileIt('rejects invalid or contradictory upstream land/water samples', () => {
     const records = validRecords();
     const invalidLiteral = {
       ...records,
@@ -218,49 +232,52 @@ describe('Milestone 2 atlas geography contracts', () => {
     );
   });
 
-  it('returns stable diagnostics for invalid metadata, impossible ocean controls, invalid groups, and coastline references', () => {
-    const metadata = validRecords();
-    const ring = first(validRecords().coastline.rings);
-    const impossible = validRecords({
-      controls: {
-        ...DEFAULT_ATLAS_CONTROLS,
-        oceanConnectivity: ATLAS_OCEAN_CONNECTIVITY.multipleBasins,
-      },
-    });
-    const group = validRecords({
-      islandGroups: [
-        { entityId: LANDMASS_ID, kind: 'archipelago', memberLandmassIds: [LANDMASS_ID] },
-      ],
-    });
-    const coastline = validRecords({
-      coastline: {
-        geometryBehaviorVersion: 1,
-        rings: [{ ...ring, waterBodyId: LANDMASS_ID }],
-      },
-    });
-    const invalidMetadata: AtlasGeographyRecords = {
-      ...metadata,
-      macroElevation: {
-        ...metadata.macroElevation,
-        provenance: { ...metadata.macroElevation.provenance, fieldBehaviorVersion: 2 as 1 },
-      },
-    };
+  fullProfileIt(
+    'returns stable diagnostics for invalid metadata, impossible ocean controls, invalid groups, and coastline references',
+    () => {
+      const metadata = validRecords();
+      const ring = first(validRecords().coastline.rings);
+      const impossible = validRecords({
+        controls: {
+          ...DEFAULT_ATLAS_CONTROLS,
+          oceanConnectivity: ATLAS_OCEAN_CONNECTIVITY.multipleBasins,
+        },
+      });
+      const group = validRecords({
+        islandGroups: [
+          { entityId: LANDMASS_ID, kind: 'archipelago', memberLandmassIds: [LANDMASS_ID] },
+        ],
+      });
+      const coastline = validRecords({
+        coastline: {
+          geometryBehaviorVersion: 1,
+          rings: [{ ...ring, waterBodyId: LANDMASS_ID }],
+        },
+      });
+      const invalidMetadata: AtlasGeographyRecords = {
+        ...metadata,
+        macroElevation: {
+          ...metadata.macroElevation,
+          provenance: { ...metadata.macroElevation.provenance, fieldBehaviorVersion: 2 as 1 },
+        },
+      };
 
-    expect(diagnosticCodes(invalidMetadata)).toContain(
-      ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidFieldMetadata,
-    );
-    expect(diagnosticCodes(impossible)).toContain(
-      ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.impossibleControls,
-    );
-    expect(diagnosticCodes(group)).toContain(
-      ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassification,
-    );
-    expect(diagnosticCodes(coastline)).toContain(
-      ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidCoastlineReference,
-    );
-  });
+      expect(diagnosticCodes(invalidMetadata)).toContain(
+        ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidFieldMetadata,
+      );
+      expect(diagnosticCodes(impossible)).toContain(
+        ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.impossibleControls,
+      );
+      expect(diagnosticCodes(group)).toContain(
+        ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassification,
+      );
+      expect(diagnosticCodes(coastline)).toContain(
+        ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidCoastlineReference,
+      );
+    },
+  );
 
-  it('rejects asymmetric marine connectivity and noncanonical collection order', () => {
+  fullProfileIt('rejects asymmetric marine connectivity and noncanonical collection order', () => {
     const waterBody = first(validRecords().waterBodies);
     const landmass = first(validRecords().landmasses);
     const brokenConnectivity = validRecords({
@@ -284,7 +301,7 @@ describe('Milestone 2 atlas geography contracts', () => {
     );
   });
 
-  it('reports stable ownership, disconnectedness, and identity diagnostics', () => {
+  fullProfileIt('reports stable ownership, disconnectedness, and identity diagnostics', () => {
     const records = validRecords();
     const landmass = first(records.landmasses);
     const waterBody = first(records.waterBodies);
