@@ -51,6 +51,7 @@ fixtures/
       expected/
         <checkpoint>/
           <vector-name>.kernel.canonical
+          <scene-name>.scene.canonical
           <aspect-name>.aspect.canonical
           <aspect-name>.output.canonical
       reviews/
@@ -157,6 +158,13 @@ lands; it cannot define an alternative serializer or satisfy later persistence a
 
 Canonical aspect evidence uses the following additional rules.
 
+Canonical render-scene evidence uses a `.scene.canonical` artifact containing the complete
+renderer-neutral scene semantics in stable node order. Its manifest kind is
+`canonical-render-scene` and its exact-byte digest is `canonicalSceneSha256`. Scene evidence is
+disposable reconstruction evidence: it proves deterministic scene structure, source links, and
+z-order without becoming accepted geography or an authoritative package file. Canonical SVG and
+PNG remain separate evidence classes.
+
 The v1 persistence serializer supplies `canonicalAspectBytes` for one complete accepted aspect
 record and `canonicalAspectOutputBytes` for only its accepted output. Fixture tooling writes
 the returned bytes unchanged and hashes those exact bytes. It does not prescribe their media
@@ -247,6 +255,7 @@ to make a failing check green.
 | Semantic aspect/output bytes  | Generator, seed, identity, ordering, quantization, transaction, or accepted persistence behavior changes | Determinism, output change, isolation, and exact accepted state                |
 | Authoritative files/checksums | Persistence encoding, package layout, schema, or checksum behavior changes                               | Exact saved authoritative content and package integrity                        |
 | Canonical SVG                 | Render-scene adaptation, backend serialization/order, or SVG semantics change                            | Stable structural render output, not semantic determinism                      |
+| Canonical render scene        | Scene composition, node provenance, level-of-detail, or stable z-order changes                           | Stable disposable scene semantics reconstructed from accepted state            |
 | Visual evidence               | A rendered proof, style, density, layout, or visible interaction changes                                 | Human-visible quality, expected reroll difference, and absence of reopen drift |
 
 A failure in one class does not authorize updating another. A style-only visual change may

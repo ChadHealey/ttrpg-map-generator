@@ -1,4 +1,4 @@
-import { inkedProofScene } from '@ttrpg-map/core';
+import { inkedProofScene, type RenderScene } from '@ttrpg-map/core';
 import { describe, expect, it } from 'vitest';
 
 import { findTopmostNodeAt } from './scene-selection.js';
@@ -41,5 +41,42 @@ describe('desktop viewport interactions', () => {
 
   it('chooses labels over the lower scene nodes in render order', () => {
     expect(findTopmostNodeAt(inkedProofScene, { xPx: 480, yPx: 550 })?.id).toBe('proof-title');
+  });
+
+  it('selects compound land fills without selecting their even-odd water holes', () => {
+    const scene: RenderScene = {
+      widthPx: 10,
+      heightPx: 10,
+      nodes: [
+        {
+          id: 'land',
+          kind: 'compoundPath',
+          sourceId: 'landmass-id',
+          subpaths: [
+            {
+              points: [
+                { xPx: 0, yPx: 0 },
+                { xPx: 10, yPx: 0 },
+                { xPx: 10, yPx: 10 },
+                { xPx: 0, yPx: 10 },
+              ],
+            },
+            {
+              points: [
+                { xPx: 4, yPx: 4 },
+                { xPx: 6, yPx: 4 },
+                { xPx: 6, yPx: 6 },
+                { xPx: 4, yPx: 6 },
+              ],
+            },
+          ],
+          fillColor: '#d9d2a7',
+          fillRule: 'evenodd',
+        },
+      ],
+    };
+
+    expect(findTopmostNodeAt(scene, { xPx: 2, yPx: 2 })?.sourceId).toBe('landmass-id');
+    expect(findTopmostNodeAt(scene, { xPx: 5, yPx: 5 })).toBeUndefined();
   });
 });

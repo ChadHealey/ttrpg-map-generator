@@ -9,6 +9,7 @@ import ts from 'typescript';
 
 import { coastlineProof } from './atlas-coastline-fixture-support.mjs';
 import { projectionProof } from './atlas-projection-fixture-support.mjs';
+import { sceneProof } from './atlas-scene-fixture-support.mjs';
 import { expectedVersions, semanticProof } from './atlas-semantic-fixture-support.mjs';
 
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -129,6 +130,10 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
     !includesProjection || coastline === undefined
       ? undefined
       : projectionProof(render, coastline.records);
+  const scene =
+    projection === undefined || coastline === undefined || semantic === undefined
+      ? undefined
+      : sceneProof(render, { ...semantic.records, coastline: coastline.records });
 
   const vector = {
     kernelVectorVersion: 1,
@@ -170,6 +175,7 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
       ...(semantic === undefined ? {} : { semantic: semantic.vector }),
       ...(coastline === undefined ? {} : { coastline: coastline.vector }),
       ...(projection === undefined ? {} : { projection: projection.vector }),
+      ...(scene === undefined ? {} : { scene: scene.vector }),
     },
     invariants: {
       validatedAcceptedOutputRecords: true,
@@ -189,20 +195,50 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
       ...(semantic === undefined ? {} : { semantic: semantic.invariants }),
       ...(coastline === undefined ? {} : { coastline: coastline.invariants }),
       ...(projection === undefined ? {} : { projection: projection.invariants }),
+      ...(scene === undefined ? {} : { scene: scene.invariants }),
     },
   };
   const canonicalBytes = Buffer.from(await formatJson(vector), 'utf8');
-  const artifactPath = `fixed-seeds/${fixtureId}/expected/baseline/atlas-land-water.kernel.canonical`;
-  write(outputRoot, artifactPath, canonicalBytes);
-  const digest = sha256(canonicalBytes);
-  const artifact = {
-    path: artifactPath,
+  const kernelArtifactPath = `fixed-seeds/${fixtureId}/expected/baseline/atlas-land-water.kernel.canonical`;
+  write(outputRoot, kernelArtifactPath, canonicalBytes);
+  const kernelDigest = sha256(canonicalBytes);
+  const kernelArtifact = {
+    path: kernelArtifactPath,
     kind: 'canonical-kernel-vector',
     checkpoint: 'baseline',
     byteLength: canonicalBytes.byteLength,
-    canonicalKernelVectorSha256: digest,
-    fixtureIntegritySha256: digest,
+    canonicalKernelVectorSha256: kernelDigest,
+    fixtureIntegritySha256: kernelDigest,
   };
+  const sceneArtifacts = [];
+  if (scene !== undefined) {
+    const sceneBytes = Buffer.from(await formatJson(scene.scene), 'utf8');
+    const sceneArtifactPath = `fixed-seeds/${fixtureId}/expected/baseline/atlas-render-scene.scene.canonical`;
+    write(outputRoot, sceneArtifactPath, sceneBytes);
+    const sceneDigest = sha256(sceneBytes);
+    const svgBytes = Buffer.from(`${scene.svg}\n`, 'utf8');
+    const svgArtifactPath = `canonical-svg/${fixtureId}/baseline.svg`;
+    write(outputRoot, svgArtifactPath, svgBytes);
+    const svgDigest = sha256(svgBytes);
+    sceneArtifacts.push(
+      {
+        path: svgArtifactPath,
+        kind: 'canonical-svg',
+        checkpoint: 'baseline',
+        byteLength: svgBytes.byteLength,
+        canonicalSvgSha256: svgDigest,
+        fixtureIntegritySha256: svgDigest,
+      },
+      {
+        path: sceneArtifactPath,
+        kind: 'canonical-render-scene',
+        checkpoint: 'baseline',
+        byteLength: sceneBytes.byteLength,
+        canonicalSceneSha256: sceneDigest,
+        fixtureIntegritySha256: sceneDigest,
+      },
+    );
+  }
   const manifest = {
     fixtureManifestVersion: 1,
     fixtureId,
@@ -233,7 +269,7 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
             ? 'Prove exact full-profile generation, output validation, nesting, seam/pole behavior, progress, and declared realization tolerances.'
             : coastline === undefined
               ? 'Prove exact full-profile generation plus stable semantic classification, ownership, connectivity, containment, identity, and ordering.'
-              : 'Prove exact full-profile generation, semantic classification, source-linked canonical coastline geometry, simplification, topology, identity, ordering, and deterministic seam-safe display projection.',
+              : 'Prove exact full-profile generation, semantic classification, source-linked canonical coastline geometry, simplification, topology, identity, ordering, deterministic seam-safe display projection, and cache-free atlas scene composition.',
       },
     ],
     reviewPurpose:
@@ -241,10 +277,15 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
         ? 'Prove the version-1 atlas macro-elevation and land/water generator for one fixed seed/control row before accepted-aspect persistence integration.'
         : coastline === undefined
           ? 'Prove the version-1 atlas field, partition, and semantic geography generator for one fixed seed/control row before accepted-aspect persistence integration.'
-          : 'Prove the version-1 atlas field, partition, semantic geography, canonical coastline generator, and disposable display projection for one fixed seed/control row before accepted-aspect persistence integration.',
+          : 'Prove the version-1 atlas field, partition, semantic geography, canonical coastline generator, disposable display projection, and renderer-neutral atlas scene for one fixed seed/control row before accepted-aspect persistence integration.',
     reviewRecord: { path: fixtureReviewRecordPath, sha256: sha256(reviewBytes) },
-    generatedRoots: [`fixed-seeds/${fixtureId}/expected`],
-    artifacts: [artifact],
+    generatedRoots:
+      scene === undefined
+        ? [`fixed-seeds/${fixtureId}/expected`]
+        : [`canonical-svg/${fixtureId}`, `fixed-seeds/${fixtureId}/expected`],
+    artifacts: [...sceneArtifacts, kernelArtifact].sort((left, right) =>
+      left.path < right.path ? -1 : left.path > right.path ? 1 : 0,
+    ),
   };
   write(outputRoot, `manifests/${fixtureId}.fixture.generated.json`, await formatJson(manifest));
 }

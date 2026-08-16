@@ -23,6 +23,11 @@ function isPointInNode(point: RenderPoint, node: RenderNode): boolean {
       );
     case 'polygon':
       return isPointInPolygon(point, node.points);
+    case 'compoundPath':
+      return node.subpaths.reduce(
+        (isInside, subpath) => isPointInPolygon(point, subpath.points) !== isInside,
+        false,
+      );
     case 'polyline':
       return isPointNearPolyline(point, node.points, node.strokeWidthPx / 2 + 8);
     case 'label':

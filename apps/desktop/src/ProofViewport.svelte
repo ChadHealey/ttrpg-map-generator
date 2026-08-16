@@ -184,6 +184,8 @@
         return `Rectangle · ${String(node.widthPx)} × ${String(node.heightPx)} px`;
       case 'polygon':
         return `Polygon · ${String(node.points.length)} anchor points`;
+      case 'compoundPath':
+        return `Land fill · ${String(node.subpaths.length)} closed paths`;
       case 'polyline':
         return `Ink path · ${String(node.points.length)} anchor points`;
       case 'label':

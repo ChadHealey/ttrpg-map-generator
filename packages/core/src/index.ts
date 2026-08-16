@@ -390,11 +390,18 @@ export interface RenderPaint {
   readonly strokeWidthPx: number;
 }
 
+/** One closed contour within a compound render path. */
+export interface RenderSubpath {
+  readonly points: readonly RenderPoint[];
+}
+
 /** A filled rectangular render node. */
 export interface RenderRectangle {
   readonly id: string;
   readonly kind: 'rectangle';
   readonly sourceId: RenderSourceId;
+  readonly sourceAspectId?: RenderSourceId;
+  readonly relatedSourceIds?: readonly RenderSourceId[];
   readonly xPx: number;
   readonly yPx: number;
   readonly widthPx: number;
@@ -407,8 +414,25 @@ export interface RenderPolygon {
   readonly id: string;
   readonly kind: 'polygon';
   readonly sourceId: RenderSourceId;
+  readonly sourceAspectId?: RenderSourceId;
+  readonly relatedSourceIds?: readonly RenderSourceId[];
   readonly points: readonly RenderPoint[];
   readonly paint: RenderPaint;
+}
+
+/**
+ * A filled path containing one or more closed contours. Even-odd filling preserves holes and
+ * seam-split pieces without asking a renderer to reconstruct semantic geography.
+ */
+export interface RenderCompoundPath {
+  readonly id: string;
+  readonly kind: 'compoundPath';
+  readonly sourceId: RenderSourceId;
+  readonly sourceAspectId?: RenderSourceId;
+  readonly relatedSourceIds?: readonly RenderSourceId[];
+  readonly subpaths: readonly RenderSubpath[];
+  readonly fillColor: string;
+  readonly fillRule: 'evenodd';
 }
 
 /** An open ink path. */
@@ -416,6 +440,8 @@ export interface RenderPolyline {
   readonly id: string;
   readonly kind: 'polyline';
   readonly sourceId: RenderSourceId;
+  readonly sourceAspectId?: RenderSourceId;
+  readonly relatedSourceIds?: readonly RenderSourceId[];
   readonly points: readonly RenderPoint[];
   readonly strokeColor: string;
   readonly strokeWidthPx: number;
@@ -426,6 +452,8 @@ export interface RenderLabel {
   readonly id: string;
   readonly kind: 'label';
   readonly sourceId: RenderSourceId;
+  readonly sourceAspectId?: RenderSourceId;
+  readonly relatedSourceIds?: readonly RenderSourceId[];
   readonly text: string;
   readonly position: RenderPoint;
   readonly fontFamily: string;
@@ -436,7 +464,8 @@ export interface RenderLabel {
 }
 
 /** A single renderer-neutral drawing instruction. */
-export type RenderNode = RenderRectangle | RenderPolygon | RenderPolyline | RenderLabel;
+export type RenderNode =
+  RenderRectangle | RenderPolygon | RenderCompoundPath | RenderPolyline | RenderLabel;
 
 /**
  * An ordered, immutable description of visual output in fixed render-pixel coordinates.

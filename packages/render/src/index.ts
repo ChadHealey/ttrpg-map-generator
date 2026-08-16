@@ -23,6 +23,20 @@ export {
   type AtlasProjectionResult,
   projectAtlasCanonicalCoastline,
 } from './atlas-display-projection.js';
+export {
+  ATLAS_SCENE_COMPOSITION_VERSION,
+  ATLAS_SCENE_DIAGNOSTIC_CODES,
+  ATLAS_SCENE_HEIGHT_PX,
+  ATLAS_SCENE_LEVELS_OF_DETAIL,
+  ATLAS_SCENE_WIDTH_PX,
+  type AtlasRenderScene,
+  type AtlasSceneCompositionOptions,
+  type AtlasSceneCompositionResult,
+  type AtlasSceneDiagnostic,
+  type AtlasSceneDiagnosticCode,
+  type AtlasSceneLevelOfDetail,
+  composeAtlasRenderScene,
+} from './atlas-scene.js';
 
 /** Draws a render scene into a Canvas 2D context without changing its semantic interpretation. */
 export function renderSceneToCanvas(context: CanvasRenderingContext2D, scene: RenderScene): void {
@@ -57,6 +71,12 @@ function renderNodeToCanvas(context: CanvasRenderingContext2D, node: RenderNode)
       context.lineJoin = 'round';
       context.stroke();
       return;
+    case 'compoundPath':
+      context.beginPath();
+      for (const subpath of node.subpaths) appendCanvasSubpath(context, subpath.points, true);
+      context.fillStyle = node.fillColor;
+      context.fill(node.fillRule);
+      return;
     case 'polyline':
       drawCanvasPath(context, node.points, false);
       context.strokeStyle = node.strokeColor;
@@ -79,13 +99,21 @@ function drawCanvasPath(
   points: readonly RenderPoint[],
   isClosed: boolean,
 ): void {
+  context.beginPath();
+  appendCanvasSubpath(context, points, isClosed);
+}
+
+function appendCanvasSubpath(
+  context: CanvasRenderingContext2D,
+  points: readonly RenderPoint[],
+  isClosed: boolean,
+): void {
   const firstPoint = points[0];
 
   if (firstPoint === undefined) {
     return;
   }
 
-  context.beginPath();
   context.moveTo(firstPoint.xPx, firstPoint.yPx);
 
   for (const point of points.slice(1)) {
@@ -98,16 +126,45 @@ function drawCanvasPath(
 }
 
 function renderNodeToSvg(node: RenderNode): string {
+  const sourceAttributes = renderSourceAttributes(node);
   switch (node.kind) {
     case 'rectangle':
-      return `<rect data-render-node-id="${escapeXml(node.id)}" data-source-id="${escapeXml(node.sourceId)}" x="${formatNumber(node.xPx)}" y="${formatNumber(node.yPx)}" width="${formatNumber(node.widthPx)}" height="${formatNumber(node.heightPx)}" fill="${escapeXml(node.fillColor)}"/>`;
+      return `<rect data-render-node-id="${escapeXml(node.id)}" ${sourceAttributes} x="${formatNumber(node.xPx)}" y="${formatNumber(node.yPx)}" width="${formatNumber(node.widthPx)}" height="${formatNumber(node.heightPx)}" fill="${escapeXml(node.fillColor)}"/>`;
     case 'polygon':
-      return `<polygon data-render-node-id="${escapeXml(node.id)}" data-source-id="${escapeXml(node.sourceId)}" points="${formatPoints(node.points)}" fill="${escapeXml(node.paint.fillColor)}" stroke="${escapeXml(node.paint.strokeColor)}" stroke-width="${formatNumber(node.paint.strokeWidthPx)}" stroke-linejoin="round"/>`;
+      return `<polygon data-render-node-id="${escapeXml(node.id)}" ${sourceAttributes} points="${formatPoints(node.points)}" fill="${escapeXml(node.paint.fillColor)}" stroke="${escapeXml(node.paint.strokeColor)}" stroke-width="${formatNumber(node.paint.strokeWidthPx)}" stroke-linejoin="round"/>`;
+    case 'compoundPath':
+      return `<path data-render-node-id="${escapeXml(node.id)}" ${sourceAttributes} d="${formatSubpaths(node.subpaths)}" fill="${escapeXml(node.fillColor)}" fill-rule="${node.fillRule}"/>`;
     case 'polyline':
-      return `<polyline data-render-node-id="${escapeXml(node.id)}" data-source-id="${escapeXml(node.sourceId)}" points="${formatPoints(node.points)}" fill="none" stroke="${escapeXml(node.strokeColor)}" stroke-width="${formatNumber(node.strokeWidthPx)}" stroke-linecap="round" stroke-linejoin="round"/>`;
+      return `<polyline data-render-node-id="${escapeXml(node.id)}" ${sourceAttributes} points="${formatPoints(node.points)}" fill="none" stroke="${escapeXml(node.strokeColor)}" stroke-width="${formatNumber(node.strokeWidthPx)}" stroke-linecap="round" stroke-linejoin="round"/>`;
     case 'label':
-      return `<text data-render-node-id="${escapeXml(node.id)}" data-source-id="${escapeXml(node.sourceId)}" x="${formatNumber(node.position.xPx)}" y="${formatNumber(node.position.yPx)}" fill="${escapeXml(node.fillColor)}" font-family="${escapeXml(node.fontFamily)}" font-size="${formatNumber(node.fontSizePx)}" font-weight="${formatNumber(node.fontWeight)}" text-anchor="${node.textAnchor}">${escapeXml(node.text)}</text>`;
+      return `<text data-render-node-id="${escapeXml(node.id)}" ${sourceAttributes} x="${formatNumber(node.position.xPx)}" y="${formatNumber(node.position.yPx)}" fill="${escapeXml(node.fillColor)}" font-family="${escapeXml(node.fontFamily)}" font-size="${formatNumber(node.fontSizePx)}" font-weight="${formatNumber(node.fontWeight)}" text-anchor="${node.textAnchor}">${escapeXml(node.text)}</text>`;
   }
+}
+
+function renderSourceAttributes(node: RenderNode): string {
+  const attributes = [`data-source-id="${escapeXml(node.sourceId)}"`];
+  if (node.sourceAspectId !== undefined) {
+    attributes.push(`data-source-aspect-id="${escapeXml(node.sourceAspectId)}"`);
+  }
+  if (node.relatedSourceIds !== undefined) {
+    attributes.push(`data-related-source-ids="${escapeXml(node.relatedSourceIds.join(','))}"`);
+  }
+  return attributes.join(' ');
+}
+
+function formatSubpaths(subpaths: readonly { readonly points: readonly RenderPoint[] }[]): string {
+  return subpaths
+    .map(({ points }) => {
+      const first = points[0];
+      if (first === undefined) return '';
+      const remainder = points
+        .slice(1)
+        .map((point) => `L ${formatNumber(point.xPx)},${formatNumber(point.yPx)}`)
+        .join(' ');
+      return `M ${formatNumber(first.xPx)},${formatNumber(first.yPx)}${remainder === '' ? '' : ` ${remainder}`} Z`;
+    })
+    .filter(Boolean)
+    .join(' ');
 }
 
 function formatPoints(points: readonly RenderPoint[]): string {

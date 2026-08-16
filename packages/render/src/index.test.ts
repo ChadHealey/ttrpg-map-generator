@@ -88,6 +88,61 @@ describe('render scene backends', () => {
     expect(renderSceneToSvg(scene)).toContain('font-family="Example &quot;Font&quot;"');
     expect(renderSceneToSvg(scene)).toContain('>A &lt; B &amp; C</text>');
   });
+
+  it('fills one source-linked compound path with identical Canvas and SVG semantics', () => {
+    const scene: RenderScene = {
+      widthPx: 10,
+      heightPx: 10,
+      nodes: [
+        {
+          id: 'land',
+          kind: 'compoundPath',
+          sourceId: 'landmass-id',
+          sourceAspectId: 'landmass-aspect-id',
+          relatedSourceIds: ['water-body-id'],
+          subpaths: [
+            {
+              points: [
+                { xPx: 0, yPx: 0 },
+                { xPx: 10, yPx: 0 },
+                { xPx: 10, yPx: 10 },
+              ],
+            },
+            {
+              points: [
+                { xPx: 2, yPx: 2 },
+                { xPx: 3, yPx: 2 },
+                { xPx: 3, yPx: 3 },
+              ],
+            },
+          ],
+          fillColor: '#d9d2a7',
+          fillRule: 'evenodd',
+        },
+      ],
+    };
+    const context = new RecordingCanvasContext();
+
+    renderSceneToCanvas(context as unknown as CanvasRenderingContext2D, scene);
+    const svg = renderSceneToSvg(scene);
+
+    expect(context.operations).toEqual([
+      'beginPath',
+      'moveTo:0,0',
+      'lineTo:10,0',
+      'lineTo:10,10',
+      'closePath',
+      'moveTo:2,2',
+      'lineTo:3,2',
+      'lineTo:3,3',
+      'closePath',
+      'fillStyle:#d9d2a7',
+      'fill:evenodd',
+    ]);
+    expect(svg).toContain(
+      '<path data-render-node-id="land" data-source-id="landmass-id" data-source-aspect-id="landmass-aspect-id" data-related-source-ids="water-body-id" d="M 0,0 L 10,0 L 10,10 Z M 2,2 L 3,2 L 3,3 Z" fill="#d9d2a7" fill-rule="evenodd"/>',
+    );
+  });
 });
 
 class RecordingCanvasContext {
@@ -129,8 +184,8 @@ class RecordingCanvasContext {
     this.operations.push('closePath');
   }
 
-  fill(): void {
-    this.operations.push('fill');
+  fill(fillRule?: CanvasFillRule): void {
+    this.operations.push(fillRule === undefined ? 'fill' : `fill:${fillRule}`);
   }
 
   fillRect(xPx: number, yPx: number, widthPx: number, heightPx: number): void {

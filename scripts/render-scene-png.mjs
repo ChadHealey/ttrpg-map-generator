@@ -28,6 +28,9 @@ export function renderSceneToDeterministicPng(scene) {
           parseColor(node.paint.strokeColor),
         );
         break;
+      case 'compoundPath':
+        fillCompoundPath(pixels, width, height, node.subpaths, parseColor(node.fillColor));
+        break;
       case 'polyline':
         strokePath(
           pixels,
@@ -126,6 +129,22 @@ function fillPolygon(pixels, width, height, points, color) {
   for (let y = bounds.minimumY; y < bounds.maximumY; y += 1) {
     for (let x = bounds.minimumX; x < bounds.maximumX; x += 1) {
       if (isPointInPolygon(x + 0.5, y + 0.5, points)) setPixel(pixels, width, x, y, color);
+    }
+  }
+}
+
+function fillCompoundPath(pixels, width, height, subpaths, color) {
+  const points = subpaths.flatMap(({ points: subpathPoints }) => subpathPoints);
+  if (points.length < 3) return;
+  const bounds = pointBounds(points, 0, width, height);
+  for (let y = bounds.minimumY; y < bounds.maximumY; y += 1) {
+    for (let x = bounds.minimumX; x < bounds.maximumX; x += 1) {
+      const isInside = subpaths.reduce(
+        (inside, { points: subpathPoints }) =>
+          isPointInPolygon(x + 0.5, y + 0.5, subpathPoints) !== inside,
+        false,
+      );
+      if (isInside) setPixel(pixels, width, x, y, color);
     }
   }
 }

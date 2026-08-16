@@ -48,6 +48,7 @@ export function expectedVersions(
       ? {
           atlasDisplayProjectionVersion: render.ATLAS_DISPLAY_PROJECTION_VERSION,
           atlasDisplaySeamPolicyVersion: render.ATLAS_DISPLAY_SEAM_POLICY_VERSION,
+          atlasSceneCompositionVersion: render.ATLAS_SCENE_COMPOSITION_VERSION,
         }
       : {}),
   };

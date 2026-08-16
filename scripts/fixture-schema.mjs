@@ -12,6 +12,7 @@ const ARTIFACT_KINDS = new Set([
   'canonical-aspect-bytes',
   'canonical-aspect-output-bytes',
   'canonical-kernel-vector',
+  'canonical-render-scene',
   'canonical-svg',
   'saved-project-authoritative-file',
   'saved-project-manifest',
@@ -211,6 +212,9 @@ function validateArtifact(candidate, index, fixtureId) {
     (kind === 'canonical-kernel-vector' &&
       isWithin(artifactPath, expectedRoot) &&
       artifactPath.endsWith('.kernel.canonical')) ||
+    (kind === 'canonical-render-scene' &&
+      isWithin(artifactPath, expectedRoot) &&
+      artifactPath.endsWith('.scene.canonical')) ||
     (kind === 'canonical-svg' && artifactPath === `canonical-svg/${fixtureId}/${checkpoint}.svg`) ||
     (kind === 'visual-evidence' &&
       artifactPath === `visual-gallery/${fixtureId}/${checkpoint}.png`) ||
@@ -242,9 +246,11 @@ function validateArtifact(candidate, index, fixtureId) {
         ? 'canonicalAspectOutputSha256'
         : kind === 'canonical-kernel-vector'
           ? 'canonicalKernelVectorSha256'
-          : kind === 'canonical-svg'
-            ? 'canonicalSvgSha256'
-            : undefined;
+          : kind === 'canonical-render-scene'
+            ? 'canonicalSceneSha256'
+            : kind === 'canonical-svg'
+              ? 'canonicalSvgSha256'
+              : undefined;
   const evidenceDigest =
     evidenceDigestField === undefined
       ? undefined
@@ -256,6 +262,7 @@ function validateArtifact(candidate, index, fixtureId) {
     'canonicalAspectSha256',
     'canonicalAspectOutputSha256',
     'canonicalKernelVectorSha256',
+    'canonicalSceneSha256',
     'canonicalSvgSha256',
   ]) {
     if (field !== evidenceDigestField && artifact[field] !== undefined) {
