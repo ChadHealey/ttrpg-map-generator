@@ -1,0 +1,58 @@
+{
+  "fixtureManifestVersion": 1,
+  "fixtureId": "milestone-2-atlas-seam-crossing",
+  "generated": true,
+  "editPolicy": "regenerate-only",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-seam-crossing --review-record fixed-seeds/milestone-2-atlas-seam-crossing/reviews/0001-initial-acceptance.md",
+  "sourceDefinition": {
+    "path": "fixed-seeds/milestone-2-atlas-seam-crossing/fixture-definition.json",
+    "sha256": "05790a0584b692c5f39e8f59e817b246954d49e40eef8bda97c3d0a7e6eb546d"
+  },
+  "worldSeed": "12297829382473034410",
+  "stableIds": {
+    "landWaterClassificationAspectId": "04628f37-6408-5087-a139-bdd2bdff42d3",
+    "macroElevationAspectId": "e588eb7f-d585-5c27-9ce5-81c2fb1ebc43",
+    "worldMapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7",
+    "worldSurfaceEntityId": "eaa0cecc-8c5d-559f-b18a-bbd0c53248ac"
+  },
+  "versions": {
+    "atlasFieldBehaviorVersion": 1,
+    "atlasGeneratorManifestVersion": 1,
+    "atlasGeographyContractVersion": 1,
+    "atlasParameterSchemaVersion": 1,
+    "atlasPreviewVersion": 1,
+    "atlasRealizationVersion": 1,
+    "atlasSamplingPolicyVersion": 1,
+    "deterministicStreamVersion": 1,
+    "landWaterClassificationBehaviorVersion": 1,
+    "landWaterClassificationGeneratorVersion": 1,
+    "macroElevationGeneratorVersion": 1,
+    "seedDerivationVersion": 1
+  },
+  "checkpointRevisions": {
+    "baseline": { "worldSurface.landWaterClassification": 0, "worldTerrain.macroElevation": 0 }
+  },
+  "expectedAssertions": [
+    {
+      "assertionId": "runner-validates-full-generator-kernel",
+      "operator": "runner-pass",
+      "reviewPurpose": "Prove exact full-profile generation, output validation, nesting, seam/pole behavior, progress, and declared realization tolerances."
+    }
+  ],
+  "reviewPurpose": "Prove the version-1 atlas macro-elevation and land/water generator for one fixed seed/control row before accepted-aspect persistence integration.",
+  "reviewRecord": {
+    "path": "fixed-seeds/milestone-2-atlas-seam-crossing/reviews/0001-initial-acceptance.md",
+    "sha256": "b1d36887ecb481cbe4969efa15457681d27de6c000b35788f768d8614a046f13"
+  },
+  "generatedRoots": ["fixed-seeds/milestone-2-atlas-seam-crossing/expected"],
+  "artifacts": [
+    {
+      "path": "fixed-seeds/milestone-2-atlas-seam-crossing/expected/baseline/atlas-land-water.kernel.canonical",
+      "kind": "canonical-kernel-vector",
+      "checkpoint": "baseline",
+      "byteLength": 3435,
+      "canonicalKernelVectorSha256": "5c47344a474a8a90c385cad2f5b5d46d580f6c60ef8d8428d8da2dda6b85cae9",
+      "fixtureIntegritySha256": "5c47344a474a8a90c385cad2f5b5d46d580f6c60ef8d8428d8da2dda6b85cae9"
+    }
+  ]
+}

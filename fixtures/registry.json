@@ -32,6 +32,11 @@
       "runnerPath": "fixed-seeds/milestone-2-atlas-proof/fixture-runner.mjs"
     },
     {
+      "fixtureId": "milestone-2-atlas-seam-crossing",
+      "manifestPath": "manifests/milestone-2-atlas-seam-crossing.fixture.generated.json",
+      "runnerPath": "fixed-seeds/milestone-2-atlas-seam-crossing/fixture-runner.mjs"
+    },
+    {
       "fixtureId": "seed-derivation-v1",
       "manifestPath": "manifests/seed-derivation-v1.fixture.generated.json",
       "runnerPath": "fixed-seeds/seed-derivation-v1/fixture-runner.mjs"
