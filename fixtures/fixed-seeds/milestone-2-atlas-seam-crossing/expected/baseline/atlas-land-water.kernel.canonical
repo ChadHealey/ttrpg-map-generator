@@ -39,6 +39,7 @@
     "atlasPreviewVersion": 1,
     "atlasRealizationVersion": 1,
     "atlasSamplingPolicyVersion": 1,
+    "atlasSceneCompositionVersion": 1,
     "atlasSemanticClassificationVersion": 1,
     "atlasSemanticGeneratorManifestVersion": 1,
     "atlasSemanticParameterSchemaVersion": 1,
@@ -72,7 +73,7 @@
     "seaLevelContourDoubledTicks": -13844265,
     "macroFieldTicksSha256": "d4d730b5fcf0c9c182fa134751d1ea3da7a7e5d2bb3ba46f8ebf6bbce67c4464",
     "landWaterPackedBitsSha256": "d6c52f40a5026d8987fbc5f34a1ed51977d3c748371998605b2c36322fd58859",
-    "primitiveTraversalSha256": "0e005bb53cc5792c6fca511651bd42a8155a4a625be6acc157b9ef66b90c6a8b",
+    "primitiveTraversalSha256": "ee0a43b06c802c0880071690649754c1a7df78b549d39ba3a643c638388f1835",
     "sampleCounts": { "land": 605318, "water": 1489788 },
     "realization": {
       "realizationVersion": 1,
@@ -154,6 +155,19 @@
       "seamSplitRingCount": 0,
       "seamEndpointCount": 4,
       "projectedPrimitiveTraversalSha256": "3925f1c399cccc5599a93346e2cbd6ca203656c483503586470e7b58ea3e8c96"
+    },
+    "scene": {
+      "sceneCompositionVersion": 1,
+      "sceneKind": "whole-world-atlas",
+      "levelOfDetail": "normal-atlas",
+      "widthPx": 2048,
+      "heightPx": 1024,
+      "nodeCount": 13,
+      "landFillNodeCount": 5,
+      "coastlineNodeCount": 6,
+      "seamClosureCount": 2,
+      "sourceLinkedNodeCount": 13,
+      "coarseNodeCount": 7
     }
   },
   "invariants": {
@@ -191,6 +205,17 @@
       "noWorldSpanningProjectedSegments": true,
       "previewFullSemanticToleranceTicks": 0,
       "canvasSvgSharedSceneCoveredByIntegrationTest": true
+    },
+    "scene": {
+      "acceptedSourceUnchanged": true,
+      "cacheFreeRebuildEqual": true,
+      "equivalentInsertionOrderEqual": true,
+      "stableUniqueNodeIds": true,
+      "deterministicLayerOrder": true,
+      "sourceEntityAndAspectLinks": true,
+      "coarseLodPreservesFillGeometry": true,
+      "canvasSvgSharedSceneParity": true,
+      "projectedPointsWithinScene": true
     }
   }
 }
