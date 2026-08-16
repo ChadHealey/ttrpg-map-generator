@@ -6,9 +6,10 @@ remain owned by the persistence work; this document defines how fixture tooling 
 evidence without creating a second serializer or checksum contract.
 
 The first consumer is the
-[Milestone 1 kernel proof](milestone-1-kernel-proof.md). These conventions deliberately do not
-create its golden files before the identity, coordinate, generator, transaction, and v1
-persistence contracts can produce them.
+[Milestone 1 kernel proof](milestone-1-kernel-proof.md). The
+[Milestone 2 atlas proof](milestone-2-atlas-proof.md) plans the first geographic fixture matrix.
+These conventions deliberately do not create golden files before the owning domain, generator,
+transaction, render, and persistence contracts can produce them.
 
 ## Commands
 
@@ -112,6 +113,12 @@ Every registered set has a generated JSON manifest with `fixtureManifestVersion:
 - every generated artifact, sorted by POSIX repository-relative path, with its evidence kind,
   checkpoint and aspect ID when applicable, byte length, evidence-specific SHA-256 when
   applicable, and fixture-integrity SHA-256.
+
+Manifest version 1 records exactly one `worldSeed`. A representative multi-seed matrix therefore
+uses one registered fixture per seed. Every fixture owns its conventional runner file, although
+those thin runners may import a shared implementation module. Do not hide multiple cases in an
+unversioned seed array or register a placeholder before its runner and initial review record can
+produce complete evidence.
 
 Do not record timestamps, absolute or temporary paths, operating-system names, locale output,
 directory iteration order, or package-manager noise. Paths use `/` and artifact names are

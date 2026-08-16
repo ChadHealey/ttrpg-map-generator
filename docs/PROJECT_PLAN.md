@@ -821,7 +821,9 @@ leaves every unrelated aspect byte-for-byte unchanged after save/reopen.
 - Export deterministic SVG and high-resolution PNG.
 
 **Visible exit:** the application creates, saves, reopens, rerolls, and exports an attractive
-whole-world atlas with recognizable continents and oceans.
+whole-world atlas with recognizable continents and oceans. The exact composition, controls,
+isolation, budgets, evidence, and workflow are fixed by the
+[Milestone 2 atlas-proof contract](milestone-2-atlas-proof.md).
 
 ### Milestone 3 — Coherent world and regional handoff
 

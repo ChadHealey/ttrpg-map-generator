@@ -176,8 +176,9 @@ Intentional style changes may update PNGs without changing semantic fixtures.
 
 Milestone 1's relevant gallery is intentionally only the fixed `baseline`, `rerolled`, and
 `reopened` synthetic checkpoints: the normative composition contains one world map and no regional
-map or geography. The broader representative-seed and world/region-pair requirement begins with
-the geographic generators in later milestones; this narrow proof does not claim to satisfy it.
+map or geography. The first broader representative seed/control gallery is fixed by the
+[Milestone 2 atlas-proof contract](milestone-2-atlas-proof.md); paired world/region evidence begins
+with the later handoff milestones.
 
 ## Test organization and naming
 

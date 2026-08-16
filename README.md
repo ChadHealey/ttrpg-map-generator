@@ -35,6 +35,7 @@ not currently grant an open-source license.
 ## Documentation
 
 - [Consolidated project plan](docs/PROJECT_PLAN.md)
+- [Milestone 2 whole-world atlas-proof contract](docs/milestone-2-atlas-proof.md)
 - [Engineering rules and document ownership](docs/README.md)
 - [Architecture](docs/01-architecture.md)
 - [Naming and vocabulary](docs/02-naming-and-vocabulary.md)
