@@ -1,6 +1,32 @@
 /** Pure generator contracts and implementations with no UI, persistence, or renderer access. */
 
 export {
+  ATLAS_FIELD_ALGORITHM_VERSION,
+  ATLAS_FIELD_QUANTIZATION_SCALE,
+  ATLAS_FIELD_QUANTUM,
+  ATLAS_SAMPLING_DIAGNOSTIC_CODES,
+  ATLAS_SAMPLING_POLICY_VERSION,
+  type AtlasContourLevel,
+  type AtlasFieldValueTicks,
+  type AtlasSamplingDiagnostic,
+  type AtlasSamplingDiagnosticCode,
+  type AtlasSamplingProfile,
+  type AtlasSamplingProfileId,
+  type AtlasSamplingResult,
+  createAtlasContourLevel,
+  getAtlasGridVertex,
+  getAtlasSampleAnchorCount,
+  getAtlasSampleStorageIndex,
+  getFullProfileAddressForPreview,
+  isAtlasLand,
+  parseAtlasFieldValueTicks,
+  quantizeAtlasFieldValue,
+  WORLD_ATLAS_FULL_PROFILE,
+  WORLD_ATLAS_PREVIEW_BOUNDARY_TOLERANCE_RAD,
+  WORLD_ATLAS_PREVIEW_PROFILE,
+  WORLD_ATLAS_PROFILE_REFINEMENT_FACTOR,
+} from './atlas-sampling-profiles.js';
+export {
   createCommitAspectProposalCommand,
   type GenerationContext,
   type GenerationInput,
@@ -18,6 +44,17 @@ export {
   orderGenerationDiagnostics,
   validateGenerationProposal,
 } from './generator-contracts.js';
+export {
+  GEOGRAPHY_ADAPTER_DIAGNOSTIC_CODES,
+  type GeographyAdapterDiagnostic,
+  type GeographyAdapterDiagnosticCode,
+  type PlanetContourExtraction,
+  type PlanetContourExtractionAdapter,
+  type PlanetTopologyValidationAdapter,
+  type ProposedPlanetRing,
+  type QuantizedPlanetFieldAdapter,
+  type QuantizedSphericalField,
+} from './geography-algorithm-adapters.js';
 export {
   createMilestoneOneProofDocument,
   isMilestoneOneProofSeed,

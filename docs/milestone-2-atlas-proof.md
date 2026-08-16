@@ -202,19 +202,25 @@ The coarse preview is a deterministic, visibly labelled proposal. It uses the sa
 world seed, controls, generator behavior, parameter meanings, topology, and style meaning as full
 generation, but uses a separately versioned preview-resolution profile in a disposable cache key.
 Proof profile `world-atlas-preview-v1` has an effective 512 by 256 field workload; accepted profile
-`world-atlas-full-v1` has an effective 2048 by 1024 workload. Issue #56 fixes the exact canonical
-sample anchors, seam/pole placement, nesting, and equivalence rule for grid, non-grid, or
-multiresolution implementations. The preview anchors must be a declared subset of full-profile
-evaluation anchors, and an implementation may add, never omit, work required by its accepted full
-profile. Profile IDs, effective dimensions, and sampling policy are generator-parameter
-compatibility inputs.
+`world-atlas-full-v1` has an effective 2048 by 1024 workload. Sampling-policy version 1 is fixed by
+[ADR-0009](adr/0009-spherical-fields-and-quantized-contours.md). A profile has `W` wrapped
+longitude cells and `H` equiangular latitude bands. Interior anchors are exact ADR-0005 ticks at
+`-pi + 2*pi*x/W` and `-pi/2 + pi*y/H`; each pole is one canonical anchor, the seam is the cell from
+longitude index `W - 1` to `0`, and the polar bands are triangle fans. Canonical traversal is south
+pole, interior rows south-to-north and west-to-east, north pole. Preview has 130,562 unique anchors,
+full has 2,095,106, and preview address `(x, y)` maps to full `(4*x, 4*y)` with both poles mapped to
+their one canonical full pole. An implementation may add, never omit, work required by its accepted
+full profile. Profile IDs, effective dimensions, anchor policy, and sampling-policy version are
+generator-parameter compatibility inputs.
 
-Preview may omit geometry below its declared level of detail. At every declared preview anchor,
-land/water classification exactly equals the corresponding full-profile evaluation. Elevation and
-other continuous values agree within #56's versioned numeric tolerance; boundary/geometry LOD uses
-its separately declared visual tolerance. Preview simplification may not move a retained semantic
-boundary outside that tolerance, invent a semantic entity, repair invalid full geography, or
-change accepted records.
+Preview may omit geometry below its declared level of detail. Both profiles evaluate the same
+pointwise behavior and reuse classification thresholds derived from the shared preview anchors. At
+every declared preview anchor, normalized `2^-24` field ticks and land/water classification exactly
+equal the corresponding full-profile evaluation: the numeric tolerance is zero ticks. The maximum
+displacement for a retained disposable preview boundary is one preview-cell angular diagonal,
+`sqrt(2) * pi / 256` radians. Preview simplification may not move a retained semantic boundary
+outside that visual tolerance, invent a semantic entity, repair invalid full geography, relax
+accepted full geometry, or change accepted records.
 
 Preview output has no accepted aspect ID, accepted revision, `accepted` status, or authoritative
 package path. The interface must not expose preview output as saveable accepted geography. An
