@@ -8,6 +8,7 @@ import {
   type AtlasLandWaterRecords,
   type AtlasSemanticGeographyRecords,
   type AtlasSurfaceComponentMembership,
+  classifyAtlasLandmassKind,
   deriveAtlasSemanticComponentIdentity,
   deriveAtlasSingletonEntityIds,
   type EntityId,
@@ -18,7 +19,6 @@ import {
   type WaterBody,
 } from '@ttrpg-map/core';
 
-import { ATLAS_SEMANTIC_POLICY } from './atlas-semantic-classifier-policy.js';
 import { classifyAtlasIslandGroups } from './atlas-semantic-island-groups.js';
 import { segmentAtlasWaterBodies } from './atlas-semantic-water.js';
 import {
@@ -111,14 +111,7 @@ export function classifyAtlasSemanticGeography(
       'land',
       analysis.sampleRanges,
     );
-    const kind =
-      analysis.sphericalAreaWeight * 100 >=
-      totalLandArea * ATLAS_SEMANTIC_POLICY.continentMinimumLandAreaPercent
-        ? ATLAS_LANDMASS_KINDS.continent
-        : analysis.sphericalAreaWeight * 100 >=
-            totalLandArea * ATLAS_SEMANTIC_POLICY.majorIslandMinimumLandAreaPercent
-          ? ATLAS_LANDMASS_KINDS.majorIsland
-          : ATLAS_LANDMASS_KINDS.island;
+    const kind = classifyAtlasLandmassKind(analysis.sphericalAreaWeight, totalLandArea);
     return Object.freeze({
       analysis,
       entityId: identity.entityId,

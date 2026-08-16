@@ -33,6 +33,7 @@ import {
   type Landmass,
   type WaterBody,
 } from './atlas-geography-model.js';
+import { validateAtlasSemanticPolicyConformance } from './atlas-geography-semantic-policy-validation.js';
 import { validateAtlasSemanticMembership } from './atlas-geography-semantic-validation.js';
 import { parsePlanetPoint } from './coordinates.js';
 import { type EntityId, type SurfaceComponentId } from './identity.js';
@@ -119,7 +120,11 @@ export function validateAtlasControls(
 export function validateAtlasGeographyRecords(
   records: AtlasGeographyRecords,
 ): AtlasGeographyValidationResult {
-  const diagnostics = [...semanticDiagnostics(records), ...validateCoastline(records)];
+  const coastlineDiagnostics = validateCoastline(records);
+  const diagnostics = [
+    ...semanticDiagnostics(records, coastlineDiagnostics.length === 0),
+    ...coastlineDiagnostics,
+  ];
   const ordered = orderedDiagnostics(diagnostics);
   return ordered.length === 0 ? { ok: true } : { ok: false, diagnostics: ordered };
 }
@@ -134,13 +139,18 @@ export function validateAtlasSemanticGeographyRecords(
 
 function semanticDiagnostics(
   records: AtlasSemanticGeographyRecords,
+  validatePolicy = true,
 ): readonly AtlasGeographyDiagnostic[] {
-  return [
-    ...validateAtlasLandWaterRecords(records),
+  const upstreamDiagnostics = validateAtlasLandWaterRecords(records);
+  const structuralDiagnostics = [
+    ...upstreamDiagnostics,
     ...validateOrdering(records),
     ...validateClassification(records),
     ...validateAtlasSemanticMembership(records),
   ];
+  return structuralDiagnostics.length === 0 && validatePolicy
+    ? validateAtlasSemanticPolicyConformance(records)
+    : structuralDiagnostics;
 }
 
 /** Validate the complete upstream #58 field/partition output independently of #59 entities. */
@@ -618,20 +628,21 @@ function validateOceanControlRealization(
   const open = waterBodies.filter((body) => body.enclosure === 'open-marine');
   const byId = new Map(open.map((body) => [body.entityId, body] as const));
   const seen = new Set<EntityId>();
-  let basinRootedComponents = 0;
-  let unrooted = false;
+  let openComponentCount = 0;
+  let invalidRootComponent = false;
   let largestComponentArea = 0;
   let totalOpenArea = 0;
   for (const body of open) {
     if (seen.has(body.entityId)) continue;
+    openComponentCount += 1;
     const queue = [body.entityId];
-    let hasBasin = false;
+    let basinRootCount = 0;
     let componentArea = 0;
     seen.add(body.entityId);
     while (queue.length > 0) {
       const current = queue.shift();
       if (current === undefined) continue;
-      if (byId.get(current)?.kind === ATLAS_WATER_BODY_KINDS.oceanBasin) hasBasin = true;
+      if (byId.get(current)?.kind === ATLAS_WATER_BODY_KINDS.oceanBasin) basinRootCount += 1;
       componentArea += byId.get(current)?.membership.sphericalAreaWeight ?? 0;
       for (const edge of byId.get(current)?.connectivity ?? [])
         if (byId.has(edge.connectedWaterBodyId) && !seen.has(edge.connectedWaterBodyId)) {
@@ -639,24 +650,37 @@ function validateOceanControlRealization(
           queue.push(edge.connectedWaterBodyId);
         }
     }
-    if (hasBasin) basinRootedComponents += 1;
-    else unrooted = true;
+    if (basinRootCount !== 1) invalidRootComponent = true;
     totalOpenArea += componentArea;
     largestComponentArea = Math.max(largestComponentArea, componentArea);
   }
   const majorityPercent = totalOpenArea === 0 ? 0 : (largestComponentArea / totalOpenArea) * 100;
+  const largestOpenRegion = [...open].sort(
+    (left, right) =>
+      right.membership.sphericalAreaWeight - left.membership.sphericalAreaWeight ||
+      (left.membership.sampleRanges[0]?.startIndex ?? 0) -
+        (right.membership.sampleRanges[0]?.startIndex ?? 0),
+  )[0];
   if (
-    unrooted ||
-    basinRootedComponents === 0 ||
-    (connectivity === ATLAS_OCEAN_CONNECTIVITY.singleGlobal && basinRootedComponents !== 1) ||
+    invalidRootComponent ||
+    (connectivity === ATLAS_OCEAN_CONNECTIVITY.singleGlobal && openComponentCount !== 1) ||
     (connectivity === ATLAS_OCEAN_CONNECTIVITY.connectedMajority &&
-      majorityPercent < ATLAS_CONNECTED_MAJORITY_MINIMUM_PERCENT) ||
-    (connectivity === ATLAS_OCEAN_CONNECTIVITY.multipleBasins && basinRootedComponents < 2)
+      (majorityPercent < ATLAS_CONNECTED_MAJORITY_MINIMUM_PERCENT ||
+        largestOpenRegion?.kind !== ATLAS_WATER_BODY_KINDS.oceanBasin)) ||
+    (connectivity === ATLAS_OCEAN_CONNECTIVITY.singleGlobal &&
+      largestOpenRegion?.kind !== ATLAS_WATER_BODY_KINDS.oceanBasin) ||
+    (connectivity === ATLAS_OCEAN_CONNECTIVITY.multipleBasins &&
+      (openComponentCount < 2 ||
+        open.some(({ kind }) => kind !== ATLAS_WATER_BODY_KINDS.oceanBasin)))
   ) {
     diagnostics.push(
       diagnostic(
         ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.impossibleControls,
         `Accepted water bodies cannot realize ${connectivity} ocean-connectivity intent.`,
+      ),
+      diagnostic(
+        ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.policyMisclassification,
+        `Accepted water bodies violate version-1 ${connectivity} basin-root policy.`,
       ),
     );
   }

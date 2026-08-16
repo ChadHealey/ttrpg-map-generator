@@ -17,6 +17,7 @@ export const ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES = {
   invalidOrdering: 'atlas-geography.ordering.invalid',
   invalidRelationship: 'atlas-geography.relationship.invalid',
   overlappingOwnership: 'atlas-geography.ownership.overlap',
+  policyMisclassification: 'atlas-geography.policy.misclassified',
   unownedSample: 'atlas-geography.ownership.missing',
 } as const;
 

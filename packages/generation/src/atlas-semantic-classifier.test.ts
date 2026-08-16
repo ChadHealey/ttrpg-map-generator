@@ -1,4 +1,9 @@
-import { validateAtlasSemanticGeographyRecords } from '@ttrpg-map/core';
+import {
+  ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES,
+  type AtlasSemanticGeographyRecords,
+  deriveAtlasIslandGroupEntityId,
+  validateAtlasSemanticGeographyRecords,
+} from '@ttrpg-map/core';
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -85,6 +90,138 @@ describe('atlas semantic classification', () => {
       true,
     );
   });
+
+  it('rejects structurally valid mutations of land thresholds and island-group policy', async () => {
+    const source = (await fixedSemantic('milestone-2-atlas-fragmented-islands')).records;
+    const groupedIds = new Set(
+      source.islandGroups.flatMap(({ memberLandmassIds }) => memberLandmassIds),
+    );
+    const ungroupedIsland = source.landmasses.find(
+      ({ entityId, kind }) => kind !== 'continent' && !groupedIds.has(entityId),
+    );
+    expect(ungroupedIsland).toBeDefined();
+    if (ungroupedIsland === undefined) return;
+    const wrongLandKind: AtlasSemanticGeographyRecords = {
+      ...source,
+      landmasses: source.landmasses.map((landmass) => {
+        if (landmass.entityId !== ungroupedIsland.entityId) return landmass;
+        const { containingWaterBodyId: _containingWaterBodyId, ...withoutContainment } = landmass;
+        return { ...withoutContainment, kind: 'continent' };
+      }),
+    };
+
+    const missingBudgetedGroup: AtlasSemanticGeographyRecords = {
+      ...source,
+      islandGroups: source.islandGroups.slice(1),
+    };
+    const archipelago = source.islandGroups.find(({ kind }) => kind === 'archipelago');
+    const chain = source.islandGroups.find(({ kind }) => kind === 'islandChain');
+    expect(archipelago).toBeDefined();
+    expect(chain).toBeDefined();
+    if (archipelago === undefined || chain === undefined) return;
+    const wrongGroupKind = {
+      ...archipelago,
+      kind: 'islandChain' as const,
+      entityId: deriveAtlasIslandGroupEntityId(
+        source.worldMapId,
+        'islandChain',
+        archipelago.memberLandmassIds,
+      ),
+    };
+    const misclassifiedGroup: AtlasSemanticGeographyRecords = {
+      ...source,
+      islandGroups: [wrongGroupKind, chain].sort((left, right) =>
+        left.entityId < right.entityId ? -1 : left.entityId > right.entityId ? 1 : 0,
+      ),
+    };
+    const reversedChain: AtlasSemanticGeographyRecords = {
+      ...source,
+      islandGroups: source.islandGroups.map((group) =>
+        group.entityId === chain.entityId
+          ? { ...group, memberLandmassIds: [...group.memberLandmassIds].reverse() }
+          : group,
+      ),
+    };
+
+    for (const malformed of [
+      wrongLandKind,
+      missingBudgetedGroup,
+      misclassifiedGroup,
+      reversedChain,
+    ]) {
+      expectPolicyRejection(malformed);
+    }
+  }, 120_000);
+
+  it('rejects duplicate and misplaced ocean-basin roots in one open-marine graph', async () => {
+    const source = (await fixedSemantic('milestone-2-atlas-connected-majority')).records;
+    const basin = source.waterBodies.find(({ kind }) => kind === 'oceanBasin');
+    const marginalSea = source.waterBodies.find(
+      ({ kind, enclosure }) => kind === 'sea' && enclosure === 'open-marine',
+    );
+    expect(basin).toBeDefined();
+    expect(marginalSea).toBeDefined();
+    if (basin === undefined || marginalSea === undefined) return;
+
+    const duplicateRoot: AtlasSemanticGeographyRecords = {
+      ...source,
+      waterBodies: source.waterBodies.map((body) =>
+        body.entityId === marginalSea.entityId ? { ...body, kind: 'oceanBasin' } : body,
+      ),
+    };
+    const misplacedRoot: AtlasSemanticGeographyRecords = {
+      ...source,
+      waterBodies: source.waterBodies.map((body) => {
+        if (body.entityId === basin.entityId) return { ...body, kind: 'sea' };
+        if (body.entityId === marginalSea.entityId) return { ...body, kind: 'oceanBasin' };
+        return body;
+      }),
+    };
+    expectPolicyRejection(duplicateRoot);
+    expectPolicyRejection(misplacedRoot);
+  }, 60_000);
+
+  it('rejects open/enclosed mutations that violate connected-majority or multiple-basin policy', async () => {
+    const connectedMajority = (await fixedSemantic('milestone-2-atlas-connected-majority')).records;
+    const enclosedSea = connectedMajority.waterBodies.find(
+      ({ enclosure }) => enclosure === 'enclosed',
+    );
+    expect(enclosedSea).toBeDefined();
+    if (enclosedSea === undefined) return;
+    const falseOpenSea: AtlasSemanticGeographyRecords = {
+      ...connectedMajority,
+      waterBodies: connectedMajority.waterBodies.map((body) =>
+        body.entityId === enclosedSea.entityId
+          ? {
+              ...body,
+              kind: 'oceanBasin',
+              enclosure: 'open-marine',
+              enclosedByLandmassIds: [],
+            }
+          : body,
+      ),
+    };
+
+    const multipleBasins = (await fixedSemantic('milestone-2-atlas-control-max')).records;
+    const basin = multipleBasins.waterBodies.find(({ kind }) => kind === 'oceanBasin');
+    expect(basin).toBeDefined();
+    if (basin === undefined) return;
+    const falseEnclosedSea: AtlasSemanticGeographyRecords = {
+      ...multipleBasins,
+      waterBodies: multipleBasins.waterBodies.map((body) =>
+        body.entityId === basin.entityId
+          ? {
+              ...body,
+              kind: 'sea',
+              enclosure: 'enclosed',
+              enclosedByLandmassIds: body.adjacentLandmassIds,
+            }
+          : body,
+      ),
+    };
+    expectPolicyRejection(falseOpenSea);
+    expectPolicyRejection(falseEnclosedSea);
+  }, 60_000);
 });
 
 async function fixedLandWater(fixtureId: FixedAtlasGeneratorCase['fixtureId']) {
@@ -93,6 +230,15 @@ async function fixedLandWater(fixtureId: FixedAtlasGeneratorCase['fixtureId']) {
   const generated = await generateFixedAtlasFull(requiredCase(fixtureId));
   landWaterCache.set(fixtureId, generated);
   return generated;
+}
+
+function expectPolicyRejection(records: AtlasSemanticGeographyRecords): void {
+  const result = validateAtlasSemanticGeographyRecords(records);
+  expect(result.ok).toBe(false);
+  if (result.ok) return;
+  expect(result.diagnostics.map(({ code }) => code)).toContain(
+    ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.policyMisclassification,
+  );
 }
 
 async function fixedSemantic(fixtureId: FixedAtlasGeneratorCase['fixtureId']) {

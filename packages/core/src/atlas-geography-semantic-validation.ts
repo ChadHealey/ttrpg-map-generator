@@ -16,12 +16,14 @@ import {
   ATLAS_FULL_LATITUDE_BAND_COUNT,
   ATLAS_FULL_LONGITUDE_CELL_COUNT,
   ATLAS_FULL_SAMPLE_COUNT,
-  ATLAS_SEMANTIC_AREA_WEIGHT_SCALE,
   ATLAS_SEMANTIC_CLASSIFICATION_VERSION,
   type AtlasSemanticGeographyRecords,
   type AtlasSurfaceComponentMembership,
 } from './atlas-geography-model.js';
-import { roundTiesAwayFromZero } from './coordinates.js';
+import {
+  createAtlasRowWeights,
+  forEachAtlasSurfaceNeighbor,
+} from './atlas-geography-surface-topology.js';
 import type { EntityId, SurfaceComponentId } from './identity.js';
 
 interface SemanticOwner {
@@ -99,7 +101,7 @@ function validateGeographicRelationships(
   for (let index = 0; index < ownerBySample.length; index += 1) {
     const owner = owners[ownerBySample[index] ?? -1];
     if (owner === undefined) continue;
-    forEachAtlasNeighbor(index, (neighbor) => {
+    forEachAtlasSurfaceNeighbor(index, (neighbor) => {
       const other = owners[ownerBySample[neighbor] ?? -1];
       if (other === undefined || other.entityId === owner.entityId) return;
       if (owner.kind === 'land' && other.kind === 'water') {
@@ -332,17 +334,6 @@ function assignMembership(
   }
 }
 
-function createAtlasRowWeights(): Int32Array {
-  const weights = new Int32Array(ATLAS_FULL_LATITUDE_BAND_COUNT + 1);
-  for (let latitudeIndex = 1; latitudeIndex < ATLAS_FULL_LATITUDE_BAND_COUNT; latitudeIndex += 1) {
-    const latitudeRad = -Math.PI / 2 + (Math.PI * latitudeIndex) / ATLAS_FULL_LATITUDE_BAND_COUNT;
-    weights[latitudeIndex] = roundTiesAwayFromZero(
-      Math.cos(latitudeRad) * ATLAS_SEMANTIC_AREA_WEIGHT_SCALE,
-    );
-  }
-  return weights;
-}
-
 function latitudeIndexForStorageIndex(index: number): number {
   if (index === 0) return 0;
   if (index === ATLAS_FULL_SAMPLE_COUNT - 1) return ATLAS_FULL_LATITUDE_BAND_COUNT;
@@ -370,7 +361,7 @@ function validateConnectedOwners(
       const current = queue[head];
       head += 1;
       if (current === undefined) continue;
-      forEachAtlasNeighbor(current, (neighbor) => {
+      forEachAtlasSurfaceNeighbor(current, (neighbor) => {
         if (visited[neighbor] === 0 && ownerBySample[neighbor] === ownerIndex) {
           visited[neighbor] = 1;
           queue[tail] = neighbor;
@@ -389,31 +380,6 @@ function validateConnectedOwners(
       );
     }
   }
-}
-
-function forEachAtlasNeighbor(index: number, visit: (neighbor: number) => void): void {
-  const width = ATLAS_FULL_LONGITUDE_CELL_COUNT;
-  const height = ATLAS_FULL_LATITUDE_BAND_COUNT;
-  if (index === 0 || index === ATLAS_FULL_SAMPLE_COUNT - 1) {
-    const latitudeIndex = index === 0 ? 1 : height - 1;
-    for (let longitudeIndex = 0; longitudeIndex < width; longitudeIndex += 1) {
-      visit(storageIndex(longitudeIndex, latitudeIndex));
-    }
-    return;
-  }
-  const offset = index - 1;
-  const latitudeIndex = Math.floor(offset / width) + 1;
-  const longitudeIndex = offset % width;
-  visit(storageIndex(longitudeIndex, latitudeIndex - 1));
-  visit(storageIndex((longitudeIndex + width - 1) % width, latitudeIndex));
-  visit(storageIndex((longitudeIndex + 1) % width, latitudeIndex));
-  visit(storageIndex(longitudeIndex, latitudeIndex + 1));
-}
-
-function storageIndex(longitudeIndex: number, latitudeIndex: number): number {
-  if (latitudeIndex === 0) return 0;
-  if (latitudeIndex === ATLAS_FULL_LATITUDE_BAND_COUNT) return ATLAS_FULL_SAMPLE_COUNT - 1;
-  return 1 + (latitudeIndex - 1) * ATLAS_FULL_LONGITUDE_CELL_COUNT + longitudeIndex;
 }
 
 function diagnostic(

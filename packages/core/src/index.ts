@@ -96,6 +96,27 @@ export {
   type WaterBodyConnectivity,
 } from './atlas-geography-model.js';
 export {
+  ATLAS_SEMANTIC_POLICY,
+  ATLAS_SEMANTIC_POLICY_VERSION,
+  type AtlasIslandGroupCandidate,
+  type AtlasSemanticCentroid,
+  type AtlasSemanticPolicy,
+  classifyAtlasIslandGroups,
+  classifyAtlasLandmassKind,
+} from './atlas-geography-semantic-policy.js';
+export {
+  analyzeAtlasSurfacePartition,
+  atlasMembershipCentroid,
+  atlasStorageAddress,
+  atlasStorageIndex,
+  type AtlasSurfaceCentroid,
+  type AtlasSurfaceComponentAnalysis,
+  type AtlasSurfacePartitionAnalysis,
+  createAtlasRowWeights,
+  forEachAtlasSurfaceNeighbor,
+  summarizeAtlasLabeledRegions,
+} from './atlas-geography-surface-topology.js';
+export {
   ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES,
   type AtlasControlsParseResult,
   type AtlasGeographyDiagnostic,
@@ -107,6 +128,11 @@ export {
   validateAtlasLandWaterRecords,
   validateAtlasSemanticGeographyRecords,
 } from './atlas-geography-validation.js';
+export {
+  type AtlasWaterRegionAnalysis,
+  type AtlasWaterSegmentationResult,
+  segmentAtlasWaterBodies,
+} from './atlas-geography-water-policy.js';
 export {
   type BehaviorVersion,
   COMPATIBILITY_DIAGNOSTIC_CODES,
