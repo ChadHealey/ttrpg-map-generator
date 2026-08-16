@@ -180,6 +180,35 @@ describe('Milestone 2 atlas geography contracts', () => {
     expect(codes).toContain(ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidCoastlineVersion);
   });
 
+  it('rejects invalid or contradictory upstream land/water samples', () => {
+    const records = validRecords();
+    const invalidLiteral = {
+      ...records,
+      landWaterClassification: {
+        ...records.landWaterClassification,
+        samples: [
+          'bogus',
+          ...records.landWaterClassification.samples.slice(1),
+        ] as unknown as readonly ('land' | 'water')[],
+      },
+    };
+    const mismatch = {
+      ...records,
+      landWaterClassification: {
+        ...records.landWaterClassification,
+        samples: ['land', ...records.landWaterClassification.samples.slice(1)] as readonly (
+          'land' | 'water'
+        )[],
+      },
+    };
+    expect(validateAtlasLandWaterRecords(invalidLiteral).map((finding) => finding.code)).toContain(
+      ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassification,
+    );
+    expect(validateAtlasLandWaterRecords(mismatch).map((finding) => finding.code)).toContain(
+      ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassification,
+    );
+  });
+
   it('returns stable diagnostics for invalid metadata, impossible ocean controls, invalid groups, and coastline references', () => {
     const metadata = validRecords();
     const ring = first(validRecords().coastline.rings);

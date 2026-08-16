@@ -212,6 +212,32 @@ function validateField(records: AtlasLandWaterRecords): readonly AtlasGeographyD
       ),
     );
   }
+  for (const [index, sample] of records.landWaterClassification.samples.entries()) {
+    const sampleValue = sample as unknown;
+    if (sampleValue !== 'land' && sampleValue !== 'water') {
+      diagnostics.push(
+        diagnostic(
+          ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassification,
+          `Land/water sample ${String(index)} must be land or water.`,
+        ),
+      );
+      break;
+    }
+    const fieldValue = records.macroElevation.values[index];
+    if (
+      fieldValue !== undefined &&
+      (sample === 'land') !==
+        fieldValue * 2 > records.landWaterClassification.seaLevelContourDoubledTicks
+    ) {
+      diagnostics.push(
+        diagnostic(
+          ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassification,
+          `Land/water sample ${String(index)} contradicts the quantized macro-elevation threshold.`,
+        ),
+      );
+      break;
+    }
+  }
   const contour = records.landWaterClassification.seaLevelContourDoubledTicks;
   if (
     !Number.isSafeInteger(contour) ||
@@ -388,6 +414,43 @@ function validateLandmassRelationships(
   landmass: Landmass,
   waterBodiesById: ReadonlyMap<EntityId, WaterBody>,
 ): void {
+  const requiresContainment =
+    landmass.kind === ATLAS_LANDMASS_KINDS.majorIsland ||
+    landmass.kind === ATLAS_LANDMASS_KINDS.island;
+  if (
+    landmass.kind === ATLAS_LANDMASS_KINDS.continent &&
+    landmass.containingWaterBodyId !== undefined
+  ) {
+    diagnostics.push(
+      diagnostic(
+        ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.brokenContainment,
+        `Continent ${landmass.entityId} cannot declare island containment.`,
+      ),
+    );
+  }
+  if (requiresContainment && landmass.containingWaterBodyId === undefined) {
+    diagnostics.push(
+      diagnostic(
+        ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.brokenContainment,
+        `Island landmass ${landmass.entityId} must declare a containing water body.`,
+      ),
+    );
+  }
+  if (landmass.containingWaterBodyId !== undefined) {
+    const containing = waterBodiesById.get(landmass.containingWaterBodyId);
+    if (
+      containing === undefined ||
+      !landmass.adjacentWaterBodyIds.includes(landmass.containingWaterBodyId) ||
+      !containing.adjacentLandmassIds.includes(landmass.entityId)
+    ) {
+      diagnostics.push(
+        diagnostic(
+          ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.brokenContainment,
+          `Landmass ${landmass.entityId} must be reciprocally adjacent to its containing water body.`,
+        ),
+      );
+    }
+  }
   for (const waterBodyId of landmass.adjacentWaterBodyIds) {
     const waterBody = waterBodiesById.get(waterBodyId);
     if (!waterBody?.adjacentLandmassIds.includes(landmass.entityId)) {
@@ -492,6 +555,20 @@ function validateWaterBodyRelationships(
         `Only a sea may be an enclosed water body.`,
       ),
     );
+  if (waterBody.enclosure === 'enclosed' && waterBody.enclosedByLandmassIds.length === 0)
+    diagnostics.push(
+      diagnostic(
+        ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.brokenContainment,
+        `Enclosed sea ${waterBody.entityId} must declare enclosing landmasses.`,
+      ),
+    );
+  if (waterBody.enclosure === 'enclosed' && waterBody.connectivity.length > 0)
+    diagnostics.push(
+      diagnostic(
+        ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.brokenConnectivity,
+        `Enclosed sea ${waterBody.entityId} cannot use open-marine connectivity.`,
+      ),
+    );
   for (const landmassId of waterBody.adjacentLandmassIds) {
     const landmass = landmassesById.get(landmassId);
     if (!landmass?.adjacentWaterBodyIds.includes(waterBody.entityId)) {
@@ -504,7 +581,8 @@ function validateWaterBodyRelationships(
     }
   }
   for (const landmassId of waterBody.enclosedByLandmassIds) {
-    if (!landmassesById.has(landmassId))
+    const enclosing = landmassesById.get(landmassId);
+    if (!enclosing?.adjacentWaterBodyIds.includes(waterBody.entityId))
       diagnostics.push(
         diagnostic(
           ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.brokenContainment,
@@ -534,14 +612,34 @@ function validateOceanControlRealization(
   connectivity: AtlasOceanConnectivity,
   waterBodies: readonly WaterBody[],
 ): void {
-  const openOceanBasins = waterBodies.filter(
-    (waterBody) =>
-      waterBody.kind === ATLAS_WATER_BODY_KINDS.oceanBasin && waterBody.enclosure === 'open-marine',
-  );
-  const required = connectivity === ATLAS_OCEAN_CONNECTIVITY.multipleBasins ? 2 : 1;
+  const open = waterBodies.filter((body) => body.enclosure === 'open-marine');
+  const byId = new Map(open.map((body) => [body.entityId, body] as const));
+  const seen = new Set<EntityId>();
+  let basinRootedComponents = 0;
+  let unrooted = false;
+  for (const body of open) {
+    if (seen.has(body.entityId)) continue;
+    const queue = [body.entityId];
+    let hasBasin = false;
+    seen.add(body.entityId);
+    while (queue.length > 0) {
+      const current = queue.shift();
+      if (current === undefined) continue;
+      if (byId.get(current)?.kind === ATLAS_WATER_BODY_KINDS.oceanBasin) hasBasin = true;
+      for (const edge of byId.get(current)?.connectivity ?? [])
+        if (byId.has(edge.connectedWaterBodyId) && !seen.has(edge.connectedWaterBodyId)) {
+          seen.add(edge.connectedWaterBodyId);
+          queue.push(edge.connectedWaterBodyId);
+        }
+    }
+    if (hasBasin) basinRootedComponents += 1;
+    else unrooted = true;
+  }
   if (
-    openOceanBasins.length < required ||
-    (connectivity === ATLAS_OCEAN_CONNECTIVITY.singleGlobal && openOceanBasins.length !== 1)
+    unrooted ||
+    basinRootedComponents === 0 ||
+    (connectivity === ATLAS_OCEAN_CONNECTIVITY.singleGlobal && basinRootedComponents !== 1) ||
+    (connectivity === ATLAS_OCEAN_CONNECTIVITY.multipleBasins && basinRootedComponents < 2)
   ) {
     diagnostics.push(
       diagnostic(

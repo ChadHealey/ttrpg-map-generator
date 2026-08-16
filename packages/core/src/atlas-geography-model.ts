@@ -137,6 +137,8 @@ export interface Landmass {
   readonly sourceClassificationAspectId: AspectId;
   readonly componentId: SurfaceComponentId;
   readonly kind: AtlasLandmassKind;
+  /** Significant islands are explicitly contained by one adjacent accepted water body. */
+  readonly containingWaterBodyId?: EntityId;
   readonly adjacentWaterBodyIds: readonly EntityId[];
 }
 
