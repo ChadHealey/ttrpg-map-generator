@@ -550,7 +550,8 @@ with their owning issues:
 - [#59](https://github.com/ChadHealey/ttrpg-map-generator/issues/59) implements stable semantic
   classification, thresholds, connectivity, containment, and tie-breaking.
 - [#60](https://github.com/ChadHealey/ttrpg-map-generator/issues/60) owns canonical coastline
-  extraction, repair, simplification, quantization, and geometry validation.
+  extraction, repair, simplification, quantization, and geometry validation; its accepted
+  version-1 policy is recorded in [ADR-0011](adr/0011-canonical-world-coastline-policy.md).
 - [#61](https://github.com/ChadHealey/ttrpg-map-generator/issues/61) selects and implements the
   versioned display projection and adversarial seam handling and records the durable choice in an
   ADR.

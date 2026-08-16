@@ -202,7 +202,12 @@ export function updateFixture(args, repositoryRoot = REPOSITORY_ROOT) {
   }
   const review = validateReviewRecord(repositoryRoot, fixtureId, reviewRecordPath);
   requireNewReviewRecord(repositoryRoot, reviewRecordPath);
-  const stored = loadStoredFixture(repositoryRoot, entry, { allowMissing: true });
+  // A targeted update is the only workflow allowed to advance a human-reviewed source
+  // definition. The repeated candidate must bind the new bytes before anything is installed.
+  const stored = loadStoredFixture(repositoryRoot, entry, {
+    allowMissing: true,
+    allowChangedSourceDefinition: true,
+  });
   const otherStoredFixtures = entries
     .filter((candidate) => candidate.fixtureId !== fixtureId)
     .map((candidate) => ({

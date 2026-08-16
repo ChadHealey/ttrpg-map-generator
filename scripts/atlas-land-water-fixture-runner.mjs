@@ -7,6 +7,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { format } from 'prettier';
 import ts from 'typescript';
 
+import { coastlineProof } from './atlas-coastline-fixture-support.mjs';
 import { expectedVersions, semanticProof } from './atlas-semantic-fixture-support.mjs';
 
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -23,13 +24,17 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
   const reviewBytes = readFileSync(reviewRecordPath);
   const { core, generation } = await loadProjectModules(outputRoot);
   const includesSemantic = definition.versions.atlasSemanticPolicyVersion !== undefined;
+  const includesCoastline = definition.versions.atlasCoastlineGeometryBehaviorVersion !== undefined;
 
   assert.equal(fixtureId, expectedFixtureId);
   assert.equal(definition.fixtureId, fixtureId);
   assert.equal(definition.fixtureDefinitionVersion, 1);
   assert.equal(definition.evidenceBoundary, 'pre-persistence-atlas-generator-kernel-v1');
   assert.equal(definition.notCanonicalAspectBytes, true);
-  assert.deepEqual(definition.versions, expectedVersions(core, generation, includesSemantic));
+  assert.deepEqual(
+    definition.versions,
+    expectedVersions(core, generation, includesSemantic, includesCoastline),
+  );
   assert.deepEqual(definition.stableIds, expectedStableIds(core, definition));
 
   const input = parsed(
@@ -105,6 +110,11 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
   const semantic = includesSemantic
     ? semanticProof(core, generation, definition, input, records)
     : undefined;
+  assert.equal(includesCoastline && semantic === undefined, false);
+  const coastline =
+    includesCoastline && semantic !== undefined
+      ? coastlineProof(core, generation, definition, input, semantic)
+      : undefined;
 
   const vector = {
     kernelVectorVersion: 1,
@@ -144,6 +154,7 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
       realization: fullResult.realization,
       diagnosticCodes: fullResult.diagnostics.map(({ code }) => code),
       ...(semantic === undefined ? {} : { semantic: semantic.vector }),
+      ...(coastline === undefined ? {} : { coastline: coastline.vector }),
     },
     invariants: {
       validatedAcceptedOutputRecords: true,
@@ -161,6 +172,7 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
         totalWork: generation.ATLAS_GENERATION_PROGRESS_TOTAL_WORK,
       },
       ...(semantic === undefined ? {} : { semantic: semantic.invariants }),
+      ...(coastline === undefined ? {} : { coastline: coastline.invariants }),
     },
   };
   const canonicalBytes = Buffer.from(await formatJson(vector), 'utf8');
@@ -189,7 +201,11 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
     stableIds:
       semantic === undefined
         ? definition.stableIds
-        : sortedRecord({ ...definition.stableIds, ...semantic.stableIds }),
+        : sortedRecord({
+            ...definition.stableIds,
+            ...semantic.stableIds,
+            ...(coastline === undefined ? {} : coastline.stableIds),
+          }),
     versions: definition.versions,
     checkpointRevisions: definition.checkpoints,
     expectedAssertions: [
@@ -199,13 +215,17 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
         reviewPurpose:
           semantic === undefined
             ? 'Prove exact full-profile generation, output validation, nesting, seam/pole behavior, progress, and declared realization tolerances.'
-            : 'Prove exact full-profile generation plus stable semantic classification, ownership, connectivity, containment, identity, and ordering.',
+            : coastline === undefined
+              ? 'Prove exact full-profile generation plus stable semantic classification, ownership, connectivity, containment, identity, and ordering.'
+              : 'Prove exact full-profile generation, semantic classification, and source-linked canonical coastline geometry, simplification, topology, identity, and ordering.',
       },
     ],
     reviewPurpose:
       semantic === undefined
         ? 'Prove the version-1 atlas macro-elevation and land/water generator for one fixed seed/control row before accepted-aspect persistence integration.'
-        : 'Prove the version-1 atlas field, partition, and semantic geography generator for one fixed seed/control row before accepted-aspect persistence integration.',
+        : coastline === undefined
+          ? 'Prove the version-1 atlas field, partition, and semantic geography generator for one fixed seed/control row before accepted-aspect persistence integration.'
+          : 'Prove the version-1 atlas field, partition, semantic geography, and canonical coastline generator for one fixed seed/control row before accepted-aspect persistence integration.',
     reviewRecord: { path: fixtureReviewRecordPath, sha256: sha256(reviewBytes) },
     generatedRoots: [`fixed-seeds/${fixtureId}/expected`],
     artifacts: [artifact],

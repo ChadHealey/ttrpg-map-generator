@@ -47,15 +47,27 @@ export {
   getAtlasControlInvalidationRoots,
 } from './atlas-geography-aspects.js';
 export {
+  type AtlasCoastlineBoundaryTransition,
+  type AtlasCoastlineRingIdentity,
   type AtlasSemanticComponentIdentity,
   type AtlasSurfaceKind,
+  deriveAtlasCoastlineRingIdentity,
+  deriveAtlasCoastlineRingIdFromFingerprint,
   deriveAtlasIslandGroupEntityId,
   deriveAtlasSemanticComponentIdentity,
+  fingerprintAtlasCoastlineBoundary,
   fingerprintAtlasSurfaceComponent,
   isAtlasSemanticFingerprint,
 } from './atlas-geography-identity.js';
 export {
   ATLAS_CANONICAL_FIELD_TRAVERSAL,
+  ATLAS_COASTLINE_EXTRACTION_ALGORITHM_VERSION,
+  ATLAS_COASTLINE_GEOMETRY_BEHAVIOR_VERSION,
+  ATLAS_COASTLINE_REPAIR_POLICY,
+  ATLAS_COASTLINE_SIMPLIFICATION_POLICY_VERSION,
+  ATLAS_COASTLINE_SIMPLIFICATION_TOLERANCE_TICKS,
+  ATLAS_COASTLINE_TOPOLOGY_VALIDATION_VERSION,
+  ATLAS_COASTLINE_WINDING,
   ATLAS_CONNECTED_MAJORITY_MINIMUM_PERCENT,
   ATLAS_CONTINENT_DISTRIBUTIONS,
   ATLAS_FIELD_QUANTIZATION_SCALE,

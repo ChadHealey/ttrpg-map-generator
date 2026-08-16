@@ -25,6 +25,14 @@ export const ATLAS_FULL_LONGITUDE_CELL_COUNT = 2_048;
 export const ATLAS_FULL_LATITUDE_BAND_COUNT = 1_024;
 export const ATLAS_FULL_SAMPLE_COUNT = 2_095_106;
 export const ATLAS_CANONICAL_FIELD_TRAVERSAL = 'south-pole-then-rows-then-north-pole' as const;
+export const ATLAS_COASTLINE_GEOMETRY_BEHAVIOR_VERSION = 1 as const;
+export const ATLAS_COASTLINE_EXTRACTION_ALGORITHM_VERSION = 1 as const;
+export const ATLAS_COASTLINE_SIMPLIFICATION_POLICY_VERSION = 1 as const;
+export const ATLAS_COASTLINE_TOPOLOGY_VALIDATION_VERSION = 1 as const;
+/** One quarter of a version-1 full-profile longitude/latitude cell. */
+export const ATLAS_COASTLINE_SIMPLIFICATION_TOLERANCE_TICKS = 524_288 as const;
+export const ATLAS_COASTLINE_WINDING = 'land-on-left' as const;
+export const ATLAS_COASTLINE_REPAIR_POLICY = 'reject-invalid-no-silent-repair' as const;
 
 export const ATLAS_LANDMASS_KINDS = {
   continent: 'continent',
@@ -194,14 +202,23 @@ export interface WaterBody {
 /** A closed, implicit-closure, planet-native coastline ring with semantic source links. */
 export interface CanonicalWorldCoastlineRing {
   readonly ringId: CoastlineRingId;
+  /** SHA-256 of the canonical source land/water transition cycle before simplification. */
+  readonly sourceBoundaryFingerprint: string;
   readonly landmassId: EntityId;
-  readonly waterBodyId: EntityId;
+  /** Every accepted water body adjacent to this physical loop, in stable-ID order. */
+  readonly waterBodyIds: readonly EntityId[];
   readonly points: readonly PlanetPoint[];
 }
 
 /** Canonical geometry only; winding, nesting, simplification, and extraction are owned separately. */
 export interface CanonicalWorldCoastline {
-  readonly geometryBehaviorVersion: 1;
+  readonly geometryBehaviorVersion: typeof ATLAS_COASTLINE_GEOMETRY_BEHAVIOR_VERSION;
+  readonly extractionAlgorithmVersion: typeof ATLAS_COASTLINE_EXTRACTION_ALGORITHM_VERSION;
+  readonly simplificationPolicyVersion: typeof ATLAS_COASTLINE_SIMPLIFICATION_POLICY_VERSION;
+  readonly simplificationToleranceTicks: typeof ATLAS_COASTLINE_SIMPLIFICATION_TOLERANCE_TICKS;
+  readonly topologyValidationVersion: typeof ATLAS_COASTLINE_TOPOLOGY_VALIDATION_VERSION;
+  readonly winding: typeof ATLAS_COASTLINE_WINDING;
+  readonly repairPolicy: typeof ATLAS_COASTLINE_REPAIR_POLICY;
   readonly rings: readonly CanonicalWorldCoastlineRing[];
 }
 

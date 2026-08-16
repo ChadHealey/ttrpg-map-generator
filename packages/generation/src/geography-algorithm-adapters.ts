@@ -31,6 +31,15 @@ export interface QuantizedSphericalField {
 /** Disposable proposed ring in authoritative planet-native coordinates with implicit closure. */
 export interface ProposedPlanetRing {
   readonly points: readonly PlanetPoint[];
+  /** One source land/water sample transition for each point, in the same oriented cycle. */
+  readonly sourceTransitions?: readonly ProposedCoastlineBoundaryTransition[];
+  /** Classified land anchor proving the left side of each outgoing raw contour segment. */
+  readonly leftLandSampleIndices?: readonly number[];
+}
+
+export interface ProposedCoastlineBoundaryTransition {
+  readonly landSampleIndex: number;
+  readonly waterSampleIndex: number;
 }
 
 export const GEOGRAPHY_ADAPTER_DIAGNOSTIC_CODES = {
@@ -39,7 +48,9 @@ export const GEOGRAPHY_ADAPTER_DIAGNOSTIC_CODES = {
   contourDegreeMismatch: 'geography.contour.degree-mismatch',
   contourDuplicateVertex: 'geography.contour.duplicate-vertex',
   contourSelfIntersection: 'geography.contour.self-intersection',
+  contourRingIntersection: 'geography.contour.ring-intersection',
   contourTooShort: 'geography.contour.too-short',
+  contourSourceMissing: 'geography.contour.source-missing',
 } as const;
 
 export type GeographyAdapterDiagnosticCode =

@@ -55,12 +55,18 @@ function fixtureFileExists(repositoryRoot, fixtureRelativePath) {
   return true;
 }
 
-export function loadStoredFixture(repositoryRoot, entry, { allowMissing = false } = {}) {
+export function loadStoredFixture(
+  repositoryRoot,
+  entry,
+  { allowMissing = false, allowChangedSourceDefinition = false } = {},
+) {
   if (allowMissing && !fixtureFileExists(repositoryRoot, entry.manifestPath)) {
     return undefined;
   }
   const value = readFixtureJson(repositoryRoot, entry.manifestPath, `${entry.fixtureId} manifest`);
-  return validateManifest(repositoryRoot, entry, value);
+  return validateManifest(repositoryRoot, entry, value, {
+    verifySourceDefinition: !allowChangedSourceDefinition,
+  });
 }
 
 function assertCandidateFileList(candidateRepositoryRoot, entry, validatedManifest) {

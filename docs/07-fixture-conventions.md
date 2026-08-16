@@ -228,6 +228,13 @@ same fixture. It also rejects edits or deletion of historical review records and
 removal until a dedicated reviewed fixture-retirement workflow is defined. CI regeneration
 remains the final guard against editing an artifact and its hash together.
 
+The targeted update command is also the only workflow allowed to advance a fixture's reviewed
+`fixture-definition.json` bytes. Normal verification still binds the exact source-definition hash
+recorded by the stored manifest and rejects a direct source edit. A targeted update may load the
+prior manifest after that edit only so it can generate twice from the new read-only definition,
+bind the candidate manifest to the new definition hash, require the new append-only review record,
+and install the one named fixture atomically.
+
 Never use Vitest snapshot update mode, a repository-wide golden rewrite, or a script that
 accepts all current output. A fixture update is a reviewed compatibility operation, not a way
 to make a failing check green.

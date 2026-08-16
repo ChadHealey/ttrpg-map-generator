@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 
-export function expectedVersions(core, generation, includesSemantic) {
+export function expectedVersions(core, generation, includesSemantic, includesCoastline = false) {
   return {
     atlasFieldBehaviorVersion: generation.ATLAS_FIELD_ALGORITHM_VERSION,
     atlasGeneratorManifestVersion: generation.ATLAS_LAND_WATER_GENERATOR_MANIFEST_VERSION,
@@ -22,6 +22,19 @@ export function expectedVersions(core, generation, includesSemantic) {
             generation.ATLAS_SEMANTIC_GENERATOR_MANIFEST_VERSION,
           atlasSemanticParameterSchemaVersion: generation.ATLAS_SEMANTIC_PARAMETER_SCHEMA_VERSION,
           atlasSemanticPolicyVersion: generation.ATLAS_SEMANTIC_POLICY_VERSION,
+        }
+      : {}),
+    ...(includesCoastline
+      ? {
+          atlasCoastlineExtractionAlgorithmVersion:
+            core.ATLAS_COASTLINE_EXTRACTION_ALGORITHM_VERSION,
+          atlasCoastlineGeneratorManifestVersion:
+            generation.ATLAS_COASTLINE_GENERATOR_MANIFEST_VERSION,
+          atlasCoastlineGeometryBehaviorVersion: core.ATLAS_COASTLINE_GEOMETRY_BEHAVIOR_VERSION,
+          atlasCoastlineParameterSchemaVersion: generation.ATLAS_COASTLINE_PARAMETER_SCHEMA_VERSION,
+          atlasCoastlineSimplificationPolicyVersion:
+            core.ATLAS_COASTLINE_SIMPLIFICATION_POLICY_VERSION,
+          atlasCoastlineTopologyValidationVersion: core.ATLAS_COASTLINE_TOPOLOGY_VALIDATION_VERSION,
         }
       : {}),
   };
@@ -72,6 +85,8 @@ export function semanticProof(core, generation, definition, input, records) {
     ...semanticRecords.waterBodies.map(({ componentId }) => componentId),
   ].sort(compareText);
   return {
+    records: result.patch.records,
+    replacements: result.patch.replacements,
     stableIds: {
       ...indexedStableIds('semanticAspectId', semanticAspectIds),
       ...indexedStableIds('semanticEntityId', semanticEntityIds),

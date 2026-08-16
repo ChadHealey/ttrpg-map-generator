@@ -356,7 +356,7 @@ export function validateManifest(
   repositoryRoot,
   entry,
   value,
-  { artifactsRepositoryRoot = repositoryRoot } = {},
+  { artifactsRepositoryRoot = repositoryRoot, verifySourceDefinition = true } = {},
 ) {
   const manifest = requireRecord(value, `${entry.fixtureId} manifest`);
   if (manifest.fixtureManifestVersion !== 1 || manifest.fixtureId !== entry.fixtureId) {
@@ -449,11 +449,8 @@ export function validateManifest(
     fail(`${entry.fixtureId} artifact paths must not collide on case-insensitive filesystems.`);
   }
 
-  verifyFile(
-    repositoryRoot,
-    sourcePath,
-    requireSha256(sourceDefinition.sha256, `${entry.fixtureId} source SHA-256`),
-  );
+  const sourceSha256 = requireSha256(sourceDefinition.sha256, `${entry.fixtureId} source SHA-256`);
+  if (verifySourceDefinition) verifyFile(repositoryRoot, sourcePath, sourceSha256);
   const { bytes: reviewBytes, changedEvidencePaths } = validateReviewRecord(
     repositoryRoot,
     entry.fixtureId,

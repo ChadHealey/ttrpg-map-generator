@@ -282,6 +282,68 @@ Semantic evidence reviewed; SVG and visual evidence are not applicable.
     ).toBe(reviewRecordPath);
   });
 
+  it('allows only a targeted reviewed update to advance source-definition bytes', () => {
+    const { baselinePath, entry, manifest, repositoryRoot, rerolledPath } = makeFixtureRepository();
+    const sourceDefinitionPath = `fixed-seeds/${entry.fixtureId}/fixture-definition.json`;
+    const nextDefinition = '{"worldSeed":"17","policyVersion":2}\n';
+    write(repositoryRoot, `fixtures/${sourceDefinitionPath}`, nextDefinition);
+    expect(() => verifyFixtureEntry(repositoryRoot, entry, { runRunner: false })).toThrow(
+      /SHA-256 does not match checked-in bytes/u,
+    );
+
+    const reviewRecordPath = 'fixed-seeds/deterministic-proof/reviews/0002-source-policy-change.md';
+    const changedArtifact = '{"accepted":"source-v2"}\n';
+    const review = `# Fixture review: source policy change
+
+## Intended behavior
+
+Accept the reviewed source policy and its version 2 output.
+
+## Changed evidence
+
+- \`${baselinePath}\`
+- \`${rerolledPath}\`
+
+## Version and compatibility consequence
+
+Source policy version 2 changes canonical output; existing accepted projects remain unchanged.
+
+## Evidence reviewed
+
+Semantic evidence reviewed; SVG and visual evidence are not applicable.
+`;
+    write(repositoryRoot, `fixtures/${reviewRecordPath}`, review);
+    const candidateManifest = structuredClone(manifest);
+    candidateManifest.generatingCommand = `pnpm fixtures:update --fixture deterministic-proof --review-record ${reviewRecordPath}`;
+    candidateManifest.sourceDefinition.sha256 = digest(nextDefinition);
+    candidateManifest.reviewRecord = { path: reviewRecordPath, sha256: digest(review) };
+    candidateManifest.versions.generatorVersion = 2;
+    for (const artifact of candidateManifest.artifacts) {
+      artifact.byteLength = Buffer.byteLength(changedArtifact);
+      artifact.canonicalAspectSha256 = digest(changedArtifact);
+      artifact.fixtureIntegritySha256 = digest(changedArtifact);
+    }
+    write(
+      repositoryRoot,
+      `fixtures/${entry.runnerPath}`,
+      createConstantFixtureRunner({
+        [entry.manifestPath]: `${JSON.stringify(candidateManifest, null, 2)}\n`,
+        [baselinePath]: changedArtifact,
+        [rerolledPath]: changedArtifact,
+      }),
+    );
+
+    updateFixture(
+      ['--fixture', 'deterministic-proof', '--review-record', reviewRecordPath],
+      repositoryRoot,
+    );
+
+    expect(
+      JSON.parse(readFileSync(resolve(repositoryRoot, 'fixtures', entry.manifestPath), 'utf8'))
+        .sourceDefinition.sha256,
+    ).toBe(digest(nextDefinition));
+  });
+
   it('rejects a newly generated artifact that would overwrite an unowned file', () => {
     const { baselinePath, entry, manifest, repositoryRoot, rerolledPath } = makeFixtureRepository();
     const reviewRecordPath = 'fixed-seeds/deterministic-proof/reviews/0002-add-extra-evidence.md';

@@ -1,5 +1,31 @@
 /** Pure generator contracts and implementations with no UI, persistence, or renderer access. */
 
+export { atlasPlanetContourExtractionAdapter } from './atlas-coastline-contours.js';
+export {
+  ATLAS_COASTLINE_DIAGNOSTIC_CODES,
+  ATLAS_COASTLINE_GENERATOR_MANIFEST,
+  ATLAS_COASTLINE_GENERATOR_MANIFEST_VERSION,
+  ATLAS_COASTLINE_PARAMETER_SCHEMA_VERSION,
+  ATLAS_COASTLINE_PARAMETERS,
+  type AtlasCoastlineAspectProposal,
+  type AtlasCoastlineGenerationDiagnostic,
+  type AtlasCoastlineGenerationInput,
+  type AtlasCoastlineGenerationResult,
+  type AtlasCoastlineParameters,
+  type AtlasCoastlineProposedPatch,
+  generateAtlasCanonicalCoastline,
+} from './atlas-coastline-generator.js';
+export {
+  type AtlasCoastlineSimplificationResult,
+  simplifyAtlasCoastlineRing,
+} from './atlas-coastline-simplification.js';
+export {
+  atlasPlanetTopologyValidationAdapter,
+  exactOrientation,
+  exactSegmentsIntersect,
+  type UnwrappedTickPoint,
+  unwrapPlanetRing,
+} from './atlas-coastline-topology.js';
 export {
   type AtlasClassificationCooperation,
   type AtlasClassificationOutput,
@@ -136,6 +162,7 @@ export {
   type PlanetContourExtraction,
   type PlanetContourExtractionAdapter,
   type PlanetTopologyValidationAdapter,
+  type ProposedCoastlineBoundaryTransition,
   type ProposedPlanetRing,
   type QuantizedPlanetFieldAdapter,
   type QuantizedSphericalField,

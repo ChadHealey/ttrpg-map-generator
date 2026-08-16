@@ -1,12 +1,21 @@
 /** Deterministic validation and ordering for accepted Milestone 2 atlas geography. */
 
+import { deriveAtlasSingletonEntityIds } from './atlas-geography-aspects.js';
 import {
   ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES,
   type AtlasGeographyDiagnostic,
   type AtlasGeographyDiagnosticCode,
 } from './atlas-geography-diagnostics.js';
+import { deriveAtlasCoastlineRingIdFromFingerprint } from './atlas-geography-identity.js';
 import {
   ATLAS_CANONICAL_FIELD_TRAVERSAL,
+  ATLAS_COASTLINE_EXTRACTION_ALGORITHM_VERSION,
+  ATLAS_COASTLINE_GEOMETRY_BEHAVIOR_VERSION,
+  ATLAS_COASTLINE_REPAIR_POLICY,
+  ATLAS_COASTLINE_SIMPLIFICATION_POLICY_VERSION,
+  ATLAS_COASTLINE_SIMPLIFICATION_TOLERANCE_TICKS,
+  ATLAS_COASTLINE_TOPOLOGY_VALIDATION_VERSION,
+  ATLAS_COASTLINE_WINDING,
   ATLAS_CONNECTED_MAJORITY_MINIMUM_PERCENT,
   ATLAS_CONTINENT_DISTRIBUTIONS,
   ATLAS_FIELD_QUANTIZATION_SCALE,
@@ -35,7 +44,7 @@ import {
 } from './atlas-geography-model.js';
 import { validateAtlasSemanticPolicyConformance } from './atlas-geography-semantic-policy-validation.js';
 import { validateAtlasSemanticMembership } from './atlas-geography-semantic-validation.js';
-import { parsePlanetPoint } from './coordinates.js';
+import { parsePlanetPoint, PLANET_TICKS_PER_TURN, type PlanetPoint } from './coordinates.js';
 import { type EntityId, type SurfaceComponentId } from './identity.js';
 
 export {
@@ -688,14 +697,20 @@ function validateOceanControlRealization(
 
 function validateCoastline(records: AtlasGeographyRecords): readonly AtlasGeographyDiagnostic[] {
   const diagnostics: AtlasGeographyDiagnostic[] = [];
+  const metadata = records.coastline as unknown as Readonly<Record<string, unknown>>;
   orderedStableIds(
     diagnostics,
     records.coastline.rings.map((ring) => ring.ringId),
     'Coastline rings',
   );
   if (
-    (records.coastline as unknown as Readonly<Record<string, unknown>>).geometryBehaviorVersion !==
-    1
+    metadata.geometryBehaviorVersion !== ATLAS_COASTLINE_GEOMETRY_BEHAVIOR_VERSION ||
+    metadata.extractionAlgorithmVersion !== ATLAS_COASTLINE_EXTRACTION_ALGORITHM_VERSION ||
+    metadata.simplificationPolicyVersion !== ATLAS_COASTLINE_SIMPLIFICATION_POLICY_VERSION ||
+    metadata.simplificationToleranceTicks !== ATLAS_COASTLINE_SIMPLIFICATION_TOLERANCE_TICKS ||
+    metadata.topologyValidationVersion !== ATLAS_COASTLINE_TOPOLOGY_VALIDATION_VERSION ||
+    metadata.winding !== ATLAS_COASTLINE_WINDING ||
+    metadata.repairPolicy !== ATLAS_COASTLINE_REPAIR_POLICY
   ) {
     diagnostics.push(
       diagnostic(
@@ -712,6 +727,27 @@ function validateCoastline(records: AtlasGeographyRecords): readonly AtlasGeogra
   );
   for (const ring of records.coastline.rings)
     validateCoastlineRing(diagnostics, ring, landmasses, waterBodies);
+  const worldCoastlineEntityId = deriveAtlasSingletonEntityIds(
+    records.worldMapId,
+  ).worldCoastlineEntityId;
+  for (const ring of records.coastline.rings) {
+    if (
+      /^[0-9a-f]{64}$/.test(ring.sourceBoundaryFingerprint) &&
+      ring.ringId !==
+        deriveAtlasCoastlineRingIdFromFingerprint(
+          worldCoastlineEntityId,
+          ring.sourceBoundaryFingerprint,
+        )
+    ) {
+      diagnostics.push(
+        diagnostic(
+          ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidCoastlineReference,
+          `Coastline ring ${ring.ringId} does not match its source-boundary fingerprint.`,
+        ),
+      );
+    }
+  }
+  validateCoastlineTopology(diagnostics, records.coastline.rings);
   return diagnostics;
 }
 
@@ -722,16 +758,28 @@ function validateCoastlineRing(
   waterBodies: ReadonlyMap<EntityId, WaterBody>,
 ): void {
   const landmass = landmasses.get(ring.landmassId);
-  if (
-    landmass === undefined ||
-    !waterBodies.has(ring.waterBodyId) ||
-    !landmass.adjacentWaterBodyIds.includes(ring.waterBodyId) ||
-    !waterBodies.get(ring.waterBodyId)?.adjacentLandmassIds.includes(ring.landmassId)
-  ) {
+  const hasInvalidWaterReference =
+    ring.waterBodyIds.length === 0 ||
+    ring.waterBodyIds.some(
+      (waterBodyId) =>
+        !waterBodies.has(waterBodyId) ||
+        landmass?.adjacentWaterBodyIds.includes(waterBodyId) !== true ||
+        waterBodies.get(waterBodyId)?.adjacentLandmassIds.includes(ring.landmassId) !== true,
+    );
+  if (landmass === undefined || hasInvalidWaterReference) {
     diagnostics.push(
       diagnostic(
         ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidCoastlineReference,
         `Coastline ring ${ring.ringId} must reference an adjacent accepted landmass and water body.`,
+      ),
+    );
+  }
+  orderedStableIds(diagnostics, ring.waterBodyIds, `Coastline ring ${ring.ringId} water bodies`);
+  if (!/^[0-9a-f]{64}$/.test(ring.sourceBoundaryFingerprint)) {
+    diagnostics.push(
+      diagnostic(
+        ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidCoastlineReference,
+        `Coastline ring ${ring.ringId} must retain a canonical source-boundary fingerprint.`,
       ),
     );
   }
@@ -743,6 +791,212 @@ function validateCoastlineRing(
       ),
     );
   }
+}
+
+interface CoastlineTickPoint {
+  readonly longitudeTicks: number;
+  readonly latitudeTicks: number;
+}
+
+function validateCoastlineTopology(
+  diagnostics: AtlasGeographyDiagnostic[],
+  rings: readonly CanonicalWorldCoastlineRing[],
+): void {
+  const unwrapped = rings.map((ring) => unwrapCoastlinePoints(ring.points));
+  for (let ringIndex = 0; ringIndex < rings.length; ringIndex += 1) {
+    const ring = rings[ringIndex];
+    const points = unwrapped[ringIndex] ?? [];
+    if (ring === undefined) continue;
+    const unique = new Set(
+      ring.points.map((point) => `${String(point.longitudeTicks)}:${String(point.latitudeTicks)}`),
+    );
+    if (unique.size !== ring.points.length || coastlineSelfIntersects(points)) {
+      diagnostics.push(
+        diagnostic(
+          ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidCoastlineReference,
+          `Coastline ring ${ring.ringId} must be unique and non-self-intersecting after quantization.`,
+        ),
+      );
+    }
+  }
+  for (let firstIndex = 0; firstIndex < rings.length; firstIndex += 1) {
+    const first = unwrapped[firstIndex] ?? [];
+    const firstBounds = coastlineBounds(first);
+    for (let secondIndex = firstIndex + 1; secondIndex < rings.length; secondIndex += 1) {
+      const secondRing = rings[secondIndex];
+      const second = alignCoastlineRing(firstBounds, unwrapped[secondIndex] ?? []);
+      if (
+        secondRing !== undefined &&
+        coastlineBoundsOverlap(firstBounds, coastlineBounds(second)) &&
+        coastlineRingsIntersect(first, second)
+      ) {
+        diagnostics.push(
+          diagnostic(
+            ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidCoastlineReference,
+            `Coastline ring ${secondRing.ringId} intersects another accepted ring after quantization.`,
+          ),
+        );
+      }
+    }
+  }
+}
+
+function unwrapCoastlinePoints(points: readonly PlanetPoint[]): readonly CoastlineTickPoint[] {
+  const first = points[0];
+  if (first === undefined) return [];
+  const output: CoastlineTickPoint[] = [first];
+  let priorLongitude = first.longitudeTicks;
+  for (let index = 1; index <= points.length; index += 1) {
+    const point = points[index % points.length];
+    if (point === undefined) continue;
+    let longitudeTicks = point.longitudeTicks;
+    while (longitudeTicks - priorLongitude > PLANET_TICKS_PER_TURN / 2) {
+      longitudeTicks -= PLANET_TICKS_PER_TURN;
+    }
+    while (longitudeTicks - priorLongitude < -PLANET_TICKS_PER_TURN / 2) {
+      longitudeTicks += PLANET_TICKS_PER_TURN;
+    }
+    output.push(Object.freeze({ longitudeTicks, latitudeTicks: point.latitudeTicks }));
+    priorLongitude = longitudeTicks;
+  }
+  return Object.freeze(output);
+}
+
+function coastlineSelfIntersects(points: readonly CoastlineTickPoint[]): boolean {
+  for (let firstIndex = 0; firstIndex < points.length - 1; firstIndex += 1) {
+    const firstStart = points[firstIndex];
+    const firstEnd = points[firstIndex + 1];
+    if (firstStart === undefined || firstEnd === undefined) continue;
+    for (let secondIndex = firstIndex + 2; secondIndex < points.length - 1; secondIndex += 1) {
+      if (firstIndex === 0 && secondIndex === points.length - 2) continue;
+      const secondStart = points[secondIndex];
+      const secondEnd = points[secondIndex + 1];
+      if (
+        secondStart !== undefined &&
+        secondEnd !== undefined &&
+        coastlineSegmentsIntersect(firstStart, firstEnd, secondStart, secondEnd)
+      ) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+function coastlineRingsIntersect(
+  first: readonly CoastlineTickPoint[],
+  second: readonly CoastlineTickPoint[],
+): boolean {
+  for (let firstIndex = 0; firstIndex < first.length - 1; firstIndex += 1) {
+    const firstStart = first[firstIndex];
+    const firstEnd = first[firstIndex + 1];
+    if (firstStart === undefined || firstEnd === undefined) continue;
+    for (let secondIndex = 0; secondIndex < second.length - 1; secondIndex += 1) {
+      const secondStart = second[secondIndex];
+      const secondEnd = second[secondIndex + 1];
+      if (
+        secondStart !== undefined &&
+        secondEnd !== undefined &&
+        coastlineSegmentsIntersect(firstStart, firstEnd, secondStart, secondEnd)
+      ) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+function coastlineSegmentsIntersect(
+  firstStart: CoastlineTickPoint,
+  firstEnd: CoastlineTickPoint,
+  secondStart: CoastlineTickPoint,
+  secondEnd: CoastlineTickPoint,
+): boolean {
+  const firstA = coastlineOrientation(firstStart, firstEnd, secondStart);
+  const firstB = coastlineOrientation(firstStart, firstEnd, secondEnd);
+  const secondA = coastlineOrientation(secondStart, secondEnd, firstStart);
+  const secondB = coastlineOrientation(secondStart, secondEnd, firstEnd);
+  if (firstA === 0n && coastlinePointOnSegment(secondStart, firstStart, firstEnd)) return true;
+  if (firstB === 0n && coastlinePointOnSegment(secondEnd, firstStart, firstEnd)) return true;
+  if (secondA === 0n && coastlinePointOnSegment(firstStart, secondStart, secondEnd)) return true;
+  if (secondB === 0n && coastlinePointOnSegment(firstEnd, secondStart, secondEnd)) return true;
+  return (
+    ((firstA < 0n && firstB > 0n) || (firstA > 0n && firstB < 0n)) &&
+    ((secondA < 0n && secondB > 0n) || (secondA > 0n && secondB < 0n))
+  );
+}
+
+function coastlineOrientation(
+  start: CoastlineTickPoint,
+  end: CoastlineTickPoint,
+  point: CoastlineTickPoint,
+): bigint {
+  return (
+    BigInt(end.longitudeTicks - start.longitudeTicks) *
+      BigInt(point.latitudeTicks - start.latitudeTicks) -
+    BigInt(end.latitudeTicks - start.latitudeTicks) *
+      BigInt(point.longitudeTicks - start.longitudeTicks)
+  );
+}
+
+function coastlinePointOnSegment(
+  point: CoastlineTickPoint,
+  start: CoastlineTickPoint,
+  end: CoastlineTickPoint,
+): boolean {
+  return (
+    point.longitudeTicks >= Math.min(start.longitudeTicks, end.longitudeTicks) &&
+    point.longitudeTicks <= Math.max(start.longitudeTicks, end.longitudeTicks) &&
+    point.latitudeTicks >= Math.min(start.latitudeTicks, end.latitudeTicks) &&
+    point.latitudeTicks <= Math.max(start.latitudeTicks, end.latitudeTicks)
+  );
+}
+
+interface CoastlineBounds {
+  readonly minLongitude: number;
+  readonly maxLongitude: number;
+  readonly minLatitude: number;
+  readonly maxLatitude: number;
+}
+
+function coastlineBounds(points: readonly CoastlineTickPoint[]): CoastlineBounds {
+  let minLongitude = Number.POSITIVE_INFINITY;
+  let maxLongitude = Number.NEGATIVE_INFINITY;
+  let minLatitude = Number.POSITIVE_INFINITY;
+  let maxLatitude = Number.NEGATIVE_INFINITY;
+  for (const point of points) {
+    minLongitude = Math.min(minLongitude, point.longitudeTicks);
+    maxLongitude = Math.max(maxLongitude, point.longitudeTicks);
+    minLatitude = Math.min(minLatitude, point.latitudeTicks);
+    maxLatitude = Math.max(maxLatitude, point.latitudeTicks);
+  }
+  return Object.freeze({ minLongitude, maxLongitude, minLatitude, maxLatitude });
+}
+
+function alignCoastlineRing(
+  target: CoastlineBounds,
+  points: readonly CoastlineTickPoint[],
+): readonly CoastlineTickPoint[] {
+  const source = coastlineBounds(points);
+  const targetCenter = (target.minLongitude + target.maxLongitude) / 2;
+  const sourceCenter = (source.minLongitude + source.maxLongitude) / 2;
+  const shift =
+    Math.round((targetCenter - sourceCenter) / PLANET_TICKS_PER_TURN) * PLANET_TICKS_PER_TURN;
+  if (shift === 0) return points;
+  return Object.freeze(
+    points.map(({ longitudeTicks, latitudeTicks }) =>
+      Object.freeze({ longitudeTicks: longitudeTicks + shift, latitudeTicks }),
+    ),
+  );
+}
+
+function coastlineBoundsOverlap(first: CoastlineBounds, second: CoastlineBounds): boolean {
+  return !(
+    first.maxLongitude < second.minLongitude ||
+    second.maxLongitude < first.minLongitude ||
+    first.maxLatitude < second.minLatitude ||
+    second.maxLatitude < first.minLatitude
+  );
 }
 
 function orderedStableIds(

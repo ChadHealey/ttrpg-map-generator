@@ -18,6 +18,7 @@ import {
   DEFAULT_ATLAS_CONTROLS,
   deriveAtlasAspectId,
   deriveAtlasCoastlineRingId,
+  deriveAtlasCoastlineRingIdFromFingerprint,
   deriveAtlasFeatureEntityId,
   deriveAtlasSemanticComponentIdentity,
   deriveAtlasSingletonEntityIds,
@@ -52,9 +53,10 @@ const LAND_COMPONENT_ID = LAND_IDENTITY.componentId;
 const WATER_COMPONENT_ID = WATER_IDENTITY.componentId;
 const LANDMASS_ID = LAND_IDENTITY.entityId;
 const WATER_BODY_ID = WATER_IDENTITY.entityId;
-const RING_ID = deriveAtlasCoastlineRingId(
+const RING_FINGERPRINT = 'a'.repeat(64);
+const RING_ID = deriveAtlasCoastlineRingIdFromFingerprint(
   SINGLETONS.worldCoastlineEntityId,
-  value(parseSemanticKey('coastline-ring-001')),
+  RING_FINGERPRINT,
 );
 const CLASSIFICATION_ASPECT_ID = deriveAtlasAspectId(
   SINGLETONS.worldSurfaceEntityId,
@@ -251,7 +253,13 @@ describe('Milestone 2 atlas geography contracts', () => {
       const coastline = validRecords({
         coastline: {
           geometryBehaviorVersion: 1,
-          rings: [{ ...ring, waterBodyId: LANDMASS_ID }],
+          extractionAlgorithmVersion: 1,
+          simplificationPolicyVersion: 1,
+          simplificationToleranceTicks: 524_288,
+          topologyValidationVersion: 1,
+          winding: 'land-on-left',
+          repairPolicy: 'reject-invalid-no-silent-repair',
+          rings: [{ ...ring, waterBodyIds: [LANDMASS_ID] }],
         },
       });
       const invalidMetadata: AtlasGeographyRecords = {
@@ -276,6 +284,31 @@ describe('Milestone 2 atlas geography contracts', () => {
       );
     },
   );
+
+  fullProfileIt('rejects self-intersecting canonical coastline rings without a generator', () => {
+    const records = validRecords();
+    const ring = first(records.coastline.rings);
+    const selfIntersecting = validRecords({
+      coastline: {
+        ...records.coastline,
+        rings: [
+          {
+            ...ring,
+            points: [
+              value(createPlanetPoint(-1, -1)),
+              value(createPlanetPoint(1, 1)),
+              value(createPlanetPoint(-1, 1)),
+              value(createPlanetPoint(1, -1)),
+            ],
+          },
+        ],
+      },
+    });
+
+    expect(diagnosticCodes(selfIntersecting)).toContain(
+      ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidCoastlineReference,
+    );
+  });
 
   fullProfileIt('rejects asymmetric marine connectivity and noncanonical collection order', () => {
     const waterBody = first(validRecords().waterBodies);
@@ -448,11 +481,18 @@ function validRecords(overrides: Partial<AtlasGeographyRecords> = {}): AtlasGeog
     ],
     coastline: {
       geometryBehaviorVersion: 1,
+      extractionAlgorithmVersion: 1,
+      simplificationPolicyVersion: 1,
+      simplificationToleranceTicks: 524_288,
+      topologyValidationVersion: 1,
+      winding: 'land-on-left',
+      repairPolicy: 'reject-invalid-no-silent-repair',
       rings: [
         {
           ringId: RING_ID,
+          sourceBoundaryFingerprint: RING_FINGERPRINT,
           landmassId: LANDMASS_ID,
-          waterBodyId: WATER_BODY_ID,
+          waterBodyIds: [WATER_BODY_ID],
           points: [
             value(createPlanetPoint(-1, -0.5)),
             value(createPlanetPoint(0, 0.5)),
