@@ -21,12 +21,13 @@ semantic keys; generated entity and aspect identities derive from stable owner i
 canonical semantic keys, never traversal order or display names.
 
 The `WorldMap` uses the authoritative spherical planet topology and quantization from
-[ADR-0005](adr/0005-planet-and-regional-coordinate-contract.md). A display projection is
-versioned metadata and never authoritative geography. Issue
-[#61](https://github.com/ChadHealey/ttrpg-map-generator/issues/61) selects its exact algorithm;
-the selected projection must show the complete world in a rectangular postcard, handle both
-poles explicitly, and place its horizontal split at the canonical longitude seam. The proof
-scene has a 2:1 logical extent independent of screen or export resolution.
+[ADR-0005](adr/0005-planet-and-regional-coordinate-contract.md). A display projection is versioned
+metadata and never authoritative geography. The initial projection is the version-1
+equirectangular display-tick and seam-splitting contract in
+[ADR-0012](adr/0012-equirectangular-atlas-display-projection.md): it shows the complete world in a
+rectangular postcard, handles both poles explicitly, and places its horizontal split at the
+canonical longitude seam. The proof scene has a 2:1 logical extent independent of screen or export
+resolution.
 
 Accepted state consists of:
 
@@ -552,9 +553,9 @@ with their owning issues:
 - [#60](https://github.com/ChadHealey/ttrpg-map-generator/issues/60) owns canonical coastline
   extraction, repair, simplification, quantization, and geometry validation; its accepted
   version-1 policy is recorded in [ADR-0011](adr/0011-canonical-world-coastline-policy.md).
-- [#61](https://github.com/ChadHealey/ttrpg-map-generator/issues/61) selects and implements the
-  versioned display projection and adversarial seam handling and records the durable choice in an
-  ADR.
+- [#61](https://github.com/ChadHealey/ttrpg-map-generator/issues/61) implements the versioned
+  display projection and adversarial seam handling recorded in
+  [ADR-0012](adr/0012-equirectangular-atlas-display-projection.md).
 - [#62](https://github.com/ChadHealey/ttrpg-map-generator/issues/62) composes disposable,
   deterministic renderer-neutral scenes from accepted records.
 - [#63](https://github.com/ChadHealey/ttrpg-map-generator/issues/63) implements accepted ink,

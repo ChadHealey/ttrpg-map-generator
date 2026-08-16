@@ -36,6 +36,7 @@ export function coastlineProof(core, generation, definition, input, semantic) {
   }
   const coastlineAspectId = result.patch.replacement.target.aspect.aspectId;
   return {
+    records: result.patch.records.coastline,
     stableIds: {
       coastlineAspectId,
       worldCoastlineEntityId,

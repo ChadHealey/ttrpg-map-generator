@@ -1,0 +1,87 @@
+{
+  "fixtureVersion": 1,
+  "projectionId": "atlas-equirectangular",
+  "projectionVersion": 1,
+  "cases": [
+    {
+      "caseId": "east-to-west-seam-crossing",
+      "purpose": "Cross the canonical seam in the east-to-west direction.",
+      "points": [
+        [2147483646, -100],
+        [-2147483646, -100],
+        [-2147483646, 100],
+        [2147483646, 100]
+      ],
+      "expectedPathCount": 2
+    },
+    {
+      "caseId": "west-to-east-seam-crossing",
+      "purpose": "Cross the canonical seam in the west-to-east direction.",
+      "points": [
+        [-2147483646, 100],
+        [-2147483646, -100],
+        [2147483646, -100],
+        [2147483646, 100]
+      ],
+      "expectedPathCount": 2
+    },
+    {
+      "caseId": "multiple-seam-crossings",
+      "purpose": "Retain a ring that touches or crosses the seam repeatedly in both directions.",
+      "points": [
+        [-2147483638, -400],
+        [2147483638, -300],
+        [-2147483628, -200],
+        [2147483628, -100],
+        [2147483628, 100],
+        [-2147483628, 200],
+        [2147483638, 300],
+        [-2147483638, 400]
+      ],
+      "expectedPathCount": 6
+    },
+    {
+      "caseId": "near-north-pole",
+      "purpose": "Split seam-adjacent geometry one tick below the canonical north pole.",
+      "points": [
+        [2147483645, 1073741819],
+        [-2147483645, 1073741819],
+        [-2147483645, 1073741823],
+        [2147483645, 1073741823]
+      ],
+      "expectedPathCount": 2
+    },
+    {
+      "caseId": "seam-spanning-hole",
+      "purpose": "Preserve opposite-wound hole provenance while splitting its displayed stroke.",
+      "points": [
+        [2147483638, 20],
+        [2147483638, -20],
+        [-2147483638, -20],
+        [-2147483638, 20]
+      ],
+      "expectedPathCount": 2
+    },
+    {
+      "caseId": "seam-quantization-boundaries",
+      "purpose": "Keep exact seam and adjacent quantized tick endpoints deterministic.",
+      "points": [
+        [2147483647, -2],
+        [-2147483648, -1],
+        [-2147483647, 2],
+        [2147483646, 1]
+      ],
+      "expectedPathCount": 2
+    },
+    {
+      "caseId": "very-small-retained-feature",
+      "purpose": "Retain a one-tick-wide drawable feature without display-space suppression.",
+      "points": [
+        [0, 0],
+        [1, 0],
+        [0, 1]
+      ],
+      "expectedPathCount": 1
+    }
+  ]
+}

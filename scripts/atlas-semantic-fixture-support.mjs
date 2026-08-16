@@ -1,7 +1,14 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 
-export function expectedVersions(core, generation, includesSemantic, includesCoastline = false) {
+export function expectedVersions(
+  core,
+  generation,
+  render,
+  includesSemantic,
+  includesCoastline = false,
+  includesProjection = false,
+) {
   return {
     atlasFieldBehaviorVersion: generation.ATLAS_FIELD_ALGORITHM_VERSION,
     atlasGeneratorManifestVersion: generation.ATLAS_LAND_WATER_GENERATOR_MANIFEST_VERSION,
@@ -35,6 +42,12 @@ export function expectedVersions(core, generation, includesSemantic, includesCoa
           atlasCoastlineSimplificationPolicyVersion:
             core.ATLAS_COASTLINE_SIMPLIFICATION_POLICY_VERSION,
           atlasCoastlineTopologyValidationVersion: core.ATLAS_COASTLINE_TOPOLOGY_VALIDATION_VERSION,
+        }
+      : {}),
+    ...(includesProjection
+      ? {
+          atlasDisplayProjectionVersion: render.ATLAS_DISPLAY_PROJECTION_VERSION,
+          atlasDisplaySeamPolicyVersion: render.ATLAS_DISPLAY_SEAM_POLICY_VERSION,
         }
       : {}),
   };

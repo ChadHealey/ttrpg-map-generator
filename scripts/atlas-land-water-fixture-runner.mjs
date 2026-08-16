@@ -8,6 +8,7 @@ import { format } from 'prettier';
 import ts from 'typescript';
 
 import { coastlineProof } from './atlas-coastline-fixture-support.mjs';
+import { projectionProof } from './atlas-projection-fixture-support.mjs';
 import { expectedVersions, semanticProof } from './atlas-semantic-fixture-support.mjs';
 
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -22,9 +23,11 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
   const definitionBytes = readFileSync(sourceDefinitionPath);
   const definition = JSON.parse(definitionBytes.toString('utf8'));
   const reviewBytes = readFileSync(reviewRecordPath);
-  const { core, generation } = await loadProjectModules(outputRoot);
+  const { core, generation, render } = await loadProjectModules(outputRoot);
   const includesSemantic = definition.versions.atlasSemanticPolicyVersion !== undefined;
   const includesCoastline = definition.versions.atlasCoastlineGeometryBehaviorVersion !== undefined;
+  const includesProjection = definition.versions.atlasDisplayProjectionVersion !== undefined;
+  assert.equal(includesProjection && !includesCoastline, false);
 
   assert.equal(fixtureId, expectedFixtureId);
   assert.equal(definition.fixtureId, fixtureId);
@@ -33,7 +36,14 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
   assert.equal(definition.notCanonicalAspectBytes, true);
   assert.deepEqual(
     definition.versions,
-    expectedVersions(core, generation, includesSemantic, includesCoastline),
+    expectedVersions(
+      core,
+      generation,
+      render,
+      includesSemantic,
+      includesCoastline,
+      includesProjection,
+    ),
   );
   assert.deepEqual(definition.stableIds, expectedStableIds(core, definition));
 
@@ -115,6 +125,10 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
     includesCoastline && semantic !== undefined
       ? coastlineProof(core, generation, definition, input, semantic)
       : undefined;
+  const projection =
+    !includesProjection || coastline === undefined
+      ? undefined
+      : projectionProof(render, coastline.records);
 
   const vector = {
     kernelVectorVersion: 1,
@@ -155,6 +169,7 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
       diagnosticCodes: fullResult.diagnostics.map(({ code }) => code),
       ...(semantic === undefined ? {} : { semantic: semantic.vector }),
       ...(coastline === undefined ? {} : { coastline: coastline.vector }),
+      ...(projection === undefined ? {} : { projection: projection.vector }),
     },
     invariants: {
       validatedAcceptedOutputRecords: true,
@@ -173,6 +188,7 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
       },
       ...(semantic === undefined ? {} : { semantic: semantic.invariants }),
       ...(coastline === undefined ? {} : { coastline: coastline.invariants }),
+      ...(projection === undefined ? {} : { projection: projection.invariants }),
     },
   };
   const canonicalBytes = Buffer.from(await formatJson(vector), 'utf8');
@@ -217,7 +233,7 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
             ? 'Prove exact full-profile generation, output validation, nesting, seam/pole behavior, progress, and declared realization tolerances.'
             : coastline === undefined
               ? 'Prove exact full-profile generation plus stable semantic classification, ownership, connectivity, containment, identity, and ordering.'
-              : 'Prove exact full-profile generation, semantic classification, and source-linked canonical coastline geometry, simplification, topology, identity, and ordering.',
+              : 'Prove exact full-profile generation, semantic classification, source-linked canonical coastline geometry, simplification, topology, identity, ordering, and deterministic seam-safe display projection.',
       },
     ],
     reviewPurpose:
@@ -225,7 +241,7 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
         ? 'Prove the version-1 atlas macro-elevation and land/water generator for one fixed seed/control row before accepted-aspect persistence integration.'
         : coastline === undefined
           ? 'Prove the version-1 atlas field, partition, and semantic geography generator for one fixed seed/control row before accepted-aspect persistence integration.'
-          : 'Prove the version-1 atlas field, partition, semantic geography, and canonical coastline generator for one fixed seed/control row before accepted-aspect persistence integration.',
+          : 'Prove the version-1 atlas field, partition, semantic geography, canonical coastline generator, and disposable display projection for one fixed seed/control row before accepted-aspect persistence integration.',
     reviewRecord: { path: fixtureReviewRecordPath, sha256: sha256(reviewBytes) },
     generatedRoots: [`fixed-seeds/${fixtureId}/expected`],
     artifacts: [artifact],
@@ -435,9 +451,13 @@ async function loadProjectModules(outputRoot) {
   const generationDirectory = transpilePackage('generation', runtimeRoot, {
     '@ttrpg-map/core': '../core/index.js',
   });
+  const renderDirectory = transpilePackage('render', runtimeRoot, {
+    '@ttrpg-map/core': '../core/index.js',
+  });
   return {
     core: await import(pathToFileURL(resolve(coreDirectory, 'index.js')).href),
     generation: await import(pathToFileURL(resolve(generationDirectory, 'index.js')).href),
+    render: await import(pathToFileURL(resolve(renderDirectory, 'index.js')).href),
   };
 }
 

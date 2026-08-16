@@ -2,6 +2,28 @@
 
 import type { RenderNode, RenderPoint, RenderScene } from '@ttrpg-map/core';
 
+export {
+  ATLAS_DISPLAY_COORDINATE_SPACE,
+  ATLAS_DISPLAY_HEIGHT_TICKS,
+  ATLAS_DISPLAY_PROJECTION_ID,
+  ATLAS_DISPLAY_PROJECTION_METADATA,
+  ATLAS_DISPLAY_PROJECTION_VERSION,
+  ATLAS_DISPLAY_SEAM_LONGITUDE_TICKS,
+  ATLAS_DISPLAY_SEAM_POLICY_VERSION,
+  ATLAS_DISPLAY_WIDTH_TICKS,
+  ATLAS_PROJECTION_DIAGNOSTIC_CODES,
+  ATLAS_PROJECTION_SEMANTIC_TOLERANCE_TICKS,
+  type AtlasDisplayPoint,
+  type AtlasDisplayProjectionMetadata,
+  type AtlasProjectedCoastline,
+  type AtlasProjectedCoastlinePath,
+  type AtlasProjectedPathId,
+  type AtlasProjectionDiagnostic,
+  type AtlasProjectionDiagnosticCode,
+  type AtlasProjectionResult,
+  projectAtlasCanonicalCoastline,
+} from './atlas-display-projection.js';
+
 /** Draws a render scene into a Canvas 2D context without changing its semantic interpretation. */
 export function renderSceneToCanvas(context: CanvasRenderingContext2D, scene: RenderScene): void {
   for (const node of scene.nodes) {
