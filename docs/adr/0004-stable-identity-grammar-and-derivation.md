@@ -47,17 +47,19 @@ selective reroll and edit preservation.
 
 ## Decision
 
-World-document, map, entity, aspect, constraint, lock, and boundary-portal IDs are distinct
-branded TypeScript types with one canonical representation: an unprefixed, lowercase,
+World-document, map, entity, aspect, constraint, lock, boundary-portal, root-surface,
+surface-component, and coastline-ring IDs are distinct branded TypeScript types with one
+canonical representation: an unprefixed, lowercase,
 hyphenated `8-4-4-4-12` UUID string. Parsing unknown values does not coerce or normalize them;
 uppercase UUID text receives a stable non-canonical diagnostic that identifies the lowercase
 replacement. The nil UUID is reserved as a sentinel and rejected because it cannot identify a
 record. Equality is canonical string equality. Ordering is ascending ASCII order of the canonical
 string, and canonical encoding emits that string unchanged.
 
-`GeneratorId` is a separate branded symbolic ID. It uses two or more lowercase dot-separated
-segments; segments begin with a letter and otherwise contain lowercase letters, digits, or
-internal hyphens. `proof.outline` and `proof.markers` are canonical examples. Symbolic
+`GeneratorId` is a separate branded symbolic ID. It uses two or more lower-camel dot-separated
+segments; segments begin with a lowercase letter and otherwise contain ASCII letters, digits, or
+internal hyphens.
+`proof.outline`, `proof.markers`, and `worldTerrain.macroElevation` are canonical examples. Symbolic
 generator IDs and semantic keys are at most 128 ASCII characters.
 
 Generated-subfeature semantic keys contain lowercase ASCII letters or digits separated by a

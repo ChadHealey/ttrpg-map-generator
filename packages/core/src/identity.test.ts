@@ -79,6 +79,10 @@ describe('stable identity parsing', () => {
 
   it('validates generator IDs and semantic keys without normalization', () => {
     expect(parseGeneratorId('proof.outline')).toEqual({ ok: true, value: 'proof.outline' });
+    expect(parseGeneratorId('worldTerrain.macroElevation')).toEqual({
+      ok: true,
+      value: 'worldTerrain.macroElevation',
+    });
     expect(parseGeneratorId('Proof.Outline')).toMatchObject({
       ok: false,
       diagnostic: { code: 'identity.invalid-generator-id' },
@@ -97,7 +101,7 @@ describe('stable identity parsing', () => {
         code: 'identity.invalid-generator-id',
         subject: 'generator',
         message:
-          'Expected generator ID to contain two or more lowercase dot-separated segments; every segment begins with a lowercase letter and otherwise uses letters, digits, or internal hyphens (maximum 128 characters).',
+          'Expected generator ID to contain two or more lower-camel dot-separated ASCII segments; every segment begins with a lowercase letter and otherwise uses ASCII letters, digits, or internal hyphens (maximum 128 characters).',
       },
     });
     expect(parseSemanticKey('marker-000')).toEqual({ ok: true, value: 'marker-000' });

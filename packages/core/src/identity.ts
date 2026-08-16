@@ -39,6 +39,12 @@ export type BoundaryPortalId = StableUuidId<'boundary-portal'>;
 /** Stable identity of one persisted authoritative root surface. */
 export type RootSurfaceId = StableUuidId<'root-surface'>;
 
+/** Stable identity of one accepted macro land or water component. */
+export type SurfaceComponentId = StableUuidId<'surface-component'>;
+
+/** Stable identity of one accepted canonical world-coastline ring. */
+export type CoastlineRingId = StableUuidId<'coastline-ring'>;
+
 /** A validated symbolic generator identifier such as `proof.outline`. */
 export type GeneratorId = string & { readonly [GENERATOR_ID_BRAND]: true };
 
@@ -53,7 +59,9 @@ export type StableIdKind =
   | 'constraint'
   | 'lock'
   | 'boundary-portal'
-  | 'root-surface';
+  | 'root-surface'
+  | 'surface-component'
+  | 'coastline-ring';
 
 export interface StableIdByKind {
   readonly 'world-document': WorldDocumentId;
@@ -64,6 +72,8 @@ export interface StableIdByKind {
   readonly lock: LockId;
   readonly 'boundary-portal': BoundaryPortalId;
   readonly 'root-surface': RootSurfaceId;
+  readonly 'surface-component': SurfaceComponentId;
+  readonly 'coastline-ring': CoastlineRingId;
 }
 
 /** UUID-backed and symbolic identities that have deterministic canonical text encodings. */
@@ -96,7 +106,8 @@ export interface StableIdSource {
 const CANONICAL_UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const UUID_PATTERN_CASE_INSENSITIVE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-const GENERATOR_ID_PATTERN = /^[a-z](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z](?:[a-z0-9-]*[a-z0-9])?)+$/;
+const GENERATOR_ID_PATTERN =
+  /^[a-z](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[a-z](?:[A-Za-z0-9-]*[A-Za-z0-9])?)+$/;
 const SEMANTIC_KEY_PATTERN = /^[a-z0-9]+(?:[._-][a-z0-9]+)*$/;
 const MAX_SYMBOLIC_ID_LENGTH = 128;
 const DERIVATION_PREFIX = 'ttrpg-map/stable-id/v1';
@@ -156,7 +167,7 @@ export function parseGeneratorId(input: unknown): IdentityParseResult<GeneratorI
     return failure(
       'identity.invalid-generator-id',
       'generator',
-      'Expected generator ID to contain two or more lowercase dot-separated segments; every segment begins with a lowercase letter and otherwise uses letters, digits, or internal hyphens (maximum 128 characters).',
+      'Expected generator ID to contain two or more lower-camel dot-separated ASCII segments; every segment begins with a lowercase letter and otherwise uses ASCII letters, digits, or internal hyphens (maximum 128 characters).',
     );
   }
 
