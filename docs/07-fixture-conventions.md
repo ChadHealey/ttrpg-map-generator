@@ -146,6 +146,15 @@ and samples under review. The generated manifest names its digest
 derivation; it must not substitute for canonical aspect/output evidence once accepted aspects are
 the comparison boundary.
 
+An output-changing generator may use that boundary while its strict accepted-output record exists
+but its owning transaction and persistence issue has not yet provided an accepted aspect or
+scalable canonical encoding for the record. The vector must run the full accepted profile, validate
+the complete output record, hash its canonical primitive traversal without omission, identify
+itself as pre-persistence evidence, and explicitly state that it is neither canonical aspect nor
+canonical aspect-output bytes. This temporary evidence proves generator compatibility only. It
+must migrate to the persistence serializer's unchanged bytes when accepted aspect integration
+lands; it cannot define an alternative serializer or satisfy later persistence acceptance.
+
 Canonical aspect evidence uses the following additional rules.
 
 The v1 persistence serializer supplies `canonicalAspectBytes` for one complete accepted aspect

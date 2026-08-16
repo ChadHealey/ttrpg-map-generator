@@ -41,19 +41,19 @@ export const ATLAS_FIELD_ALGORITHM_VERSION = 1 as const;
 export const ATLAS_FIELD_QUANTIZATION_SCALE = 2 ** 24;
 export const ATLAS_FIELD_QUANTUM = 1 / ATLAS_FIELD_QUANTIZATION_SCALE;
 
-export const WORLD_ATLAS_PREVIEW_PROFILE: AtlasSamplingProfile = Object.freeze({
+export const WORLD_ATLAS_PREVIEW_PROFILE = Object.freeze({
   profileId: 'world-atlas-preview-v1',
   samplingPolicyVersion: ATLAS_SAMPLING_POLICY_VERSION,
   longitudeCellCount: 512,
   latitudeBandCount: 256,
-});
+}) satisfies AtlasSamplingProfile;
 
-export const WORLD_ATLAS_FULL_PROFILE: AtlasSamplingProfile = Object.freeze({
+export const WORLD_ATLAS_FULL_PROFILE = Object.freeze({
   profileId: 'world-atlas-full-v1',
   samplingPolicyVersion: ATLAS_SAMPLING_POLICY_VERSION,
   longitudeCellCount: 2_048,
   latitudeBandCount: 1_024,
-});
+}) satisfies AtlasSamplingProfile;
 
 export const WORLD_ATLAS_PROFILE_REFINEMENT_FACTOR = 4;
 

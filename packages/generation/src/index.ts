@@ -1,6 +1,66 @@
 /** Pure generator contracts and implementations with no UI, persistence, or renderer access. */
 
 export {
+  type AtlasClassificationCooperation,
+  type AtlasClassificationOutput,
+  type AtlasClassificationResult,
+  type AtlasThresholdSelection,
+  type AtlasThresholdSelectionCooperation,
+  type AtlasThresholdSelectionResult,
+  type AtlasWaterComponentProxy,
+  classifyAtlasLandWater,
+  selectAtlasLandWaterThreshold,
+} from './atlas-land-water-classification.js';
+export {
+  generateAtlasLandWaterFull,
+  generateAtlasLandWaterPreview,
+} from './atlas-land-water-generator.js';
+export {
+  ATLAS_CONNECTED_MAJORITY_PROXY_MIN_PERCENT,
+  ATLAS_GENERATION_COOPERATION_ROW_INTERVAL,
+  ATLAS_GENERATION_PROGRESS_TOTAL_WORK,
+  ATLAS_LAND_WATER_CANCELLATION_VERSION,
+  ATLAS_LAND_WATER_CLASSIFICATION_VERSION,
+  ATLAS_LAND_WATER_DIAGNOSTIC_CODES,
+  ATLAS_LAND_WATER_GENERATOR_MANIFEST,
+  ATLAS_LAND_WATER_GENERATOR_MANIFEST_VERSION,
+  ATLAS_LAND_WATER_INPUT_DIAGNOSTIC_CODES,
+  ATLAS_LAND_WATER_PARAMETER_SCHEMA_VERSION,
+  ATLAS_LAND_WATER_PREVIEW_VERSION,
+  ATLAS_LAND_WATER_PROGRESS_VERSION,
+  ATLAS_LAND_WATER_REALIZATION_VERSION,
+  ATLAS_WATER_COVERAGE_TOLERANCE_BASIS_POINTS,
+  type AtlasGenerationCancellationSignal,
+  type AtlasGenerationProgress,
+  type AtlasGenerationStage,
+  type AtlasLandWaterClassificationParameters,
+  atlasLandWaterClassificationParameters,
+  type AtlasLandWaterDiagnosticCode,
+  type AtlasLandWaterFullGenerationResult,
+  type AtlasLandWaterGenerationInput,
+  type AtlasLandWaterGenerationInputResult,
+  type AtlasLandWaterGenerationInputSource,
+  type AtlasLandWaterGenerationRuntime,
+  type AtlasLandWaterInputDiagnostic,
+  type AtlasLandWaterInputDiagnosticCode,
+  type AtlasLandWaterPreview,
+  type AtlasLandWaterPreviewGenerationResult,
+  type AtlasLandWaterProposedPatch,
+  type AtlasLandWaterRealization,
+  type AtlasMacroElevationParameters,
+  atlasMacroElevationParameters,
+  createAtlasLandWaterGenerationInput,
+  orderedAtlasLandWaterDiagnostics,
+} from './atlas-land-water-generator-contract.js';
+export { ATLAS_CONNECTIVITY_SELECTION_MAX_COVERAGE_ERROR_BASIS_POINTS } from './atlas-land-water-generator-metadata.js';
+export {
+  type AtlasFieldSamplingCooperation,
+  type AtlasFieldSamplingResult,
+  createAtlasMacroElevationFieldAdapter,
+  sampleAtlasMacroElevationField,
+  type SampledAtlasMacroElevationField,
+} from './atlas-macro-elevation-field.js';
+export {
   ATLAS_FIELD_ALGORITHM_VERSION,
   ATLAS_FIELD_QUANTIZATION_SCALE,
   ATLAS_FIELD_QUANTUM,

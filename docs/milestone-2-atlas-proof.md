@@ -172,6 +172,23 @@ other retained landmass to become an island. Island and archipelago abundance ar
 the generator can produce isolated islands without forcing groups, or groups without filling the
 atlas with unrelated islands.
 
+Realization version 1 measures water coverage over the accepted full-profile anchors with fixed
+integer-quantized spherical row weights. Its maximum absolute error is 25 basis points, where one
+basis point is 0.01 percentage points. The shared preview anchors select the exact classification
+threshold used by both profiles; a full result outside that tolerance returns
+`atlas.land-water.water-coverage-unsatisfied` and no proposed full patch. Shared field ticks and
+classification values have zero tolerance, the longitude seam has zero canonical-identity
+tolerance, and each pole has exactly one sample.
+
+Before #59, ocean intent may only prefer a transient sampled-component proxy among thresholds no
+more than 10 basis points from target when such candidates exist. The proxy treats one sampled
+water component as `singleGlobal`, at least two as `multipleBasins`, and a largest-component share
+of at least 90% as `connectedMajority`. It never emits or proves semantic oceans, seas, landmasses,
+or containment. Every result therefore reports
+`atlas.land-water.ocean-connectivity-unverified`; an unmet proxy additionally reports
+`atlas.land-water.ocean-connectivity-unsupported` without invalidating an otherwise valid
+land/water partition.
+
 Ocean-connectivity values have these exact outcome meanings under #59's versioned enclosure
 policy:
 
