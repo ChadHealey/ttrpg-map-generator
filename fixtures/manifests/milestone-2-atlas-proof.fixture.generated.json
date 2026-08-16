@@ -3,15 +3,33 @@
   "fixtureId": "milestone-2-atlas-proof",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-proof --review-record fixed-seeds/milestone-2-atlas-proof/reviews/0001-initial-acceptance.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-proof --review-record fixed-seeds/milestone-2-atlas-proof/reviews/0002-semantic-classification.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-proof/fixture-definition.json",
-    "sha256": "47f1dd3824428f9e15ab7e85ca705b6d2111b05f2608491ac14c110eb6a3ee09"
+    "sha256": "0bb340bc536ea3aec3f27684604eef0ea1412d950fdd836d8b4a3dd166a046e2"
   },
   "worldSeed": "81985529216486895",
   "stableIds": {
     "landWaterClassificationAspectId": "04628f37-6408-5087-a139-bdd2bdff42d3",
     "macroElevationAspectId": "e588eb7f-d585-5c27-9ce5-81c2fb1ebc43",
+    "semanticAspectId000": "65c5113e-fd17-5f39-a65a-1bba5f21f0fe",
+    "semanticAspectId001": "8c312953-f749-52b5-83f3-717bde6901e5",
+    "semanticAspectId002": "99b0095c-d97a-5891-8296-718774d0cf60",
+    "semanticAspectId003": "a9ee8c7a-5b07-5745-bb22-5d22c5cdaa45",
+    "semanticAspectId004": "edbe82c3-3e77-5e74-8bba-a1598b105b2f",
+    "semanticAspectId005": "f3c00774-0182-5fca-83e6-454c70efc745",
+    "semanticEntityId000": "153e27d6-9e9f-57f4-8f4d-4535a856314e",
+    "semanticEntityId001": "2e9a9b27-a717-5150-b5b6-85d7d06fb37f",
+    "semanticEntityId002": "4b8548b9-04e3-507b-b479-1eaa0ef5be92",
+    "semanticEntityId003": "7dc63efd-e384-513e-bab1-234b8f1338f9",
+    "semanticEntityId004": "81a9ddc2-1c81-5cf6-af0b-5ddca705d7d1",
+    "semanticEntityId005": "f9917469-2f96-5072-89bb-c19bb0d6eb3c",
+    "surfaceComponentId000": "36cc9252-d0cf-520d-8e36-cd0a0261fded",
+    "surfaceComponentId001": "56c950f5-869b-5758-a222-f13e670f6980",
+    "surfaceComponentId002": "6b75d359-5326-5a30-b050-8776a8e901f4",
+    "surfaceComponentId003": "a59a41e1-a1fb-544e-8595-3540536792b4",
+    "surfaceComponentId004": "a8604188-b35c-51aa-bd0c-6136b055b2ea",
+    "surfaceComponentId005": "a8c2fde5-ba30-5196-b11f-e74e6df0f116",
     "worldMapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7",
     "worldSurfaceEntityId": "eaa0cecc-8c5d-559f-b18a-bbd0c53248ac"
   },
@@ -23,6 +41,10 @@
     "atlasPreviewVersion": 1,
     "atlasRealizationVersion": 1,
     "atlasSamplingPolicyVersion": 1,
+    "atlasSemanticClassificationVersion": 1,
+    "atlasSemanticGeneratorManifestVersion": 1,
+    "atlasSemanticParameterSchemaVersion": 1,
+    "atlasSemanticPolicyVersion": 1,
     "deterministicStreamVersion": 1,
     "landWaterClassificationBehaviorVersion": 1,
     "landWaterClassificationGeneratorVersion": 1,
@@ -30,19 +52,25 @@
     "seedDerivationVersion": 1
   },
   "checkpointRevisions": {
-    "baseline": { "worldSurface.landWaterClassification": 0, "worldTerrain.macroElevation": 0 }
+    "baseline": {
+      "islandGroup.classification": 0,
+      "landmass.classification": 0,
+      "waterBody.classification": 0,
+      "worldSurface.landWaterClassification": 0,
+      "worldTerrain.macroElevation": 0
+    }
   },
   "expectedAssertions": [
     {
       "assertionId": "runner-validates-full-generator-kernel",
       "operator": "runner-pass",
-      "reviewPurpose": "Prove exact full-profile generation, output validation, nesting, seam/pole behavior, progress, and declared realization tolerances."
+      "reviewPurpose": "Prove exact full-profile generation plus stable semantic classification, ownership, connectivity, containment, identity, and ordering."
     }
   ],
-  "reviewPurpose": "Prove the version-1 atlas macro-elevation and land/water generator for one fixed seed/control row before accepted-aspect persistence integration.",
+  "reviewPurpose": "Prove the version-1 atlas field, partition, and semantic geography generator for one fixed seed/control row before accepted-aspect persistence integration.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-proof/reviews/0001-initial-acceptance.md",
-    "sha256": "b1b80be79e39eb658c9627fbb2b2c8361c45654725461a33df7ad8dfb6c4ce79"
+    "path": "fixed-seeds/milestone-2-atlas-proof/reviews/0002-semantic-classification.md",
+    "sha256": "f8fdb9dae95b7695d2114097471caa6df0a69838ac54f873ce074349f1d62a22"
   },
   "generatedRoots": ["fixed-seeds/milestone-2-atlas-proof/expected"],
   "artifacts": [
@@ -50,9 +78,9 @@
       "path": "fixed-seeds/milestone-2-atlas-proof/expected/baseline/atlas-land-water.kernel.canonical",
       "kind": "canonical-kernel-vector",
       "checkpoint": "baseline",
-      "byteLength": 3424,
-      "canonicalKernelVectorSha256": "509cad8eb03daee06b6d54aea77d1d46e8b3d485c8544f78eb7006448d8420cd",
-      "fixtureIntegritySha256": "509cad8eb03daee06b6d54aea77d1d46e8b3d485c8544f78eb7006448d8420cd"
+      "byteLength": 4664,
+      "canonicalKernelVectorSha256": "5f7bcef227515f09c9f361da2e893608d658b1e50aece01660fc40b98d62b010",
+      "fixtureIntegritySha256": "5f7bcef227515f09c9f361da2e893608d658b1e50aece01660fc40b98d62b010"
     }
   ]
 }
