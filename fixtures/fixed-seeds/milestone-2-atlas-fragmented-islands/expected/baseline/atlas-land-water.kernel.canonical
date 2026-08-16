@@ -1,0 +1,90 @@
+{
+  "kernelVectorVersion": 1,
+  "canonicalJsonFormatting": "prettier-json-print-width-100-v1",
+  "evidenceBoundary": "pre-persistence-atlas-generator-kernel-v1",
+  "notCanonicalAspectBytes": true,
+  "notCanonicalAspectOutputBytes": true,
+  "fixtureId": "milestone-2-atlas-fragmented-islands",
+  "worldSeed": "18364758544493064720",
+  "stableIds": {
+    "landWaterClassificationAspectId": "04628f37-6408-5087-a139-bdd2bdff42d3",
+    "macroElevationAspectId": "e588eb7f-d585-5c27-9ce5-81c2fb1ebc43",
+    "worldMapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7",
+    "worldSurfaceEntityId": "eaa0cecc-8c5d-559f-b18a-bbd0c53248ac"
+  },
+  "controls": {
+    "worldCircumferenceKm": 40000,
+    "targetWaterCoveragePercent": 70,
+    "continentCountIntent": 5,
+    "continentDistribution": "varied",
+    "fragmentationPercent": 90,
+    "islandAbundancePercent": 95,
+    "archipelagoAbundancePercent": 95,
+    "oceanConnectivity": "singleGlobal",
+    "polarCharacter": "neutral"
+  },
+  "versions": {
+    "atlasFieldBehaviorVersion": 1,
+    "atlasGeneratorManifestVersion": 1,
+    "atlasGeographyContractVersion": 1,
+    "atlasParameterSchemaVersion": 1,
+    "atlasPreviewVersion": 1,
+    "atlasRealizationVersion": 1,
+    "atlasSamplingPolicyVersion": 1,
+    "deterministicStreamVersion": 1,
+    "landWaterClassificationBehaviorVersion": 1,
+    "landWaterClassificationGeneratorVersion": 1,
+    "macroElevationGeneratorVersion": 1,
+    "seedDerivationVersion": 1
+  },
+  "profiles": {
+    "full": {
+      "profileId": "world-atlas-full-v1",
+      "longitudeCellCount": 2048,
+      "latitudeBandCount": 1024,
+      "sampleCount": 2095106
+    },
+    "preview": {
+      "profileId": "world-atlas-preview-v1",
+      "longitudeCellCount": 512,
+      "latitudeBandCount": 256,
+      "sampleCount": 130562
+    }
+  },
+  "proposal": {
+    "replacementAspectNames": [
+      "worldTerrain.macroElevation",
+      "worldSurface.landWaterClassification"
+    ],
+    "classificationDependencyAspectIds": ["e588eb7f-d585-5c27-9ce5-81c2fb1ebc43"],
+    "seaLevelContourDoubledTicks": -13386485,
+    "macroFieldTicksSha256": "d9d3bb6e390b54a7dd9377afadc9986c0d4bec7e3139f1743c1bc8c4100fd55f",
+    "landWaterPackedBitsSha256": "c758385c57670321c00cbb7f6f51d7bc31758bddc4548bfa0d8e56dfe86984b4",
+    "primitiveTraversalSha256": "a4e40a65753cce13a55214997fda3174ab8dc98b93f8822be180f145cb2383f7",
+    "sampleCounts": { "land": 525494, "water": 1569612 },
+    "realization": {
+      "realizationVersion": 1,
+      "targetWaterCoveragePercent": 70,
+      "realizedWaterCoveragePercent": 69.998779,
+      "absoluteWaterCoverageErrorBasisPoints": 0.1221,
+      "waterComponentProxyCount": 7,
+      "largestWaterComponentProxyPercent": 54.385296
+    },
+    "diagnosticCodes": [
+      "atlas.land-water.ocean-connectivity-unsupported",
+      "atlas.land-water.ocean-connectivity-unverified"
+    ]
+  },
+  "invariants": {
+    "validatedAcceptedOutputRecords": true,
+    "sharedAnchorCount": 130562,
+    "sharedAnchorFieldTickDifferences": 0,
+    "sharedAnchorClassificationDifferences": 0,
+    "sharedSeaLevelContourDoubledTicks": -13386485,
+    "southPole": { "sampleCount": 1, "fieldTicks": -16237001, "classification": "water" },
+    "northPole": { "sampleCount": 1, "fieldTicks": -7046431, "classification": "water" },
+    "canonicalSeamIdentityTicks": 0,
+    "adjacentSeamDeltaTicks": 0,
+    "progress": { "previewReportCount": 55, "fullReportCount": 170, "totalWork": 1000 }
+  }
+}

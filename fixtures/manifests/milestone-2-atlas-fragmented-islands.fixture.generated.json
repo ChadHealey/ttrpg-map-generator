@@ -1,0 +1,58 @@
+{
+  "fixtureManifestVersion": 1,
+  "fixtureId": "milestone-2-atlas-fragmented-islands",
+  "generated": true,
+  "editPolicy": "regenerate-only",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-fragmented-islands --review-record fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0001-initial-acceptance.md",
+  "sourceDefinition": {
+    "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/fixture-definition.json",
+    "sha256": "8bbdf1449e93e70f945cb0ad8afc17f4d9ebe7c518e26f9ec760de46516f7f66"
+  },
+  "worldSeed": "18364758544493064720",
+  "stableIds": {
+    "landWaterClassificationAspectId": "04628f37-6408-5087-a139-bdd2bdff42d3",
+    "macroElevationAspectId": "e588eb7f-d585-5c27-9ce5-81c2fb1ebc43",
+    "worldMapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7",
+    "worldSurfaceEntityId": "eaa0cecc-8c5d-559f-b18a-bbd0c53248ac"
+  },
+  "versions": {
+    "atlasFieldBehaviorVersion": 1,
+    "atlasGeneratorManifestVersion": 1,
+    "atlasGeographyContractVersion": 1,
+    "atlasParameterSchemaVersion": 1,
+    "atlasPreviewVersion": 1,
+    "atlasRealizationVersion": 1,
+    "atlasSamplingPolicyVersion": 1,
+    "deterministicStreamVersion": 1,
+    "landWaterClassificationBehaviorVersion": 1,
+    "landWaterClassificationGeneratorVersion": 1,
+    "macroElevationGeneratorVersion": 1,
+    "seedDerivationVersion": 1
+  },
+  "checkpointRevisions": {
+    "baseline": { "worldSurface.landWaterClassification": 0, "worldTerrain.macroElevation": 0 }
+  },
+  "expectedAssertions": [
+    {
+      "assertionId": "runner-validates-full-generator-kernel",
+      "operator": "runner-pass",
+      "reviewPurpose": "Prove exact full-profile generation, output validation, nesting, seam/pole behavior, progress, and declared realization tolerances."
+    }
+  ],
+  "reviewPurpose": "Prove the version-1 atlas macro-elevation and land/water generator for one fixed seed/control row before accepted-aspect persistence integration.",
+  "reviewRecord": {
+    "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0001-initial-acceptance.md",
+    "sha256": "26966500aff1ae28168ec2433ee29158dca69737a91a90eabf039f2b149094e6"
+  },
+  "generatedRoots": ["fixed-seeds/milestone-2-atlas-fragmented-islands/expected"],
+  "artifacts": [
+    {
+      "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/expected/baseline/atlas-land-water.kernel.canonical",
+      "kind": "canonical-kernel-vector",
+      "checkpoint": "baseline",
+      "byteLength": 3441,
+      "canonicalKernelVectorSha256": "31be8aba84697ebf208fd73c5f6627840066956401ef379291817c686762f9a5",
+      "fixtureIntegritySha256": "31be8aba84697ebf208fd73c5f6627840066956401ef379291817c686762f9a5"
+    }
+  ]
+}
