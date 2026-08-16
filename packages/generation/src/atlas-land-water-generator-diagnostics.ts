@@ -126,12 +126,19 @@ export function atlasLandWaterInvalidRuntimeResult(
     'The injected atlas generation runtime failed while observing or yielding costly work.',
     'Retry with non-throwing progress, cancellation, and cooperative-yield capabilities.',
   );
+  return atlasLandWaterInvalidResult(progress, [finding]);
+}
+
+export function atlasLandWaterInvalidResult(
+  progress: AtlasLandWaterProgressReporter,
+  diagnostics: readonly GenerationDiagnostic[],
+): { readonly status: 'invalid'; readonly diagnostics: readonly GenerationDiagnostic[] } {
   try {
-    progress.cancel();
+    progress.fail();
   } catch {
-    // The returned stable finding remains authoritative when the observer itself is broken.
+    // The returned stable diagnostics remain authoritative when the observer itself is broken.
   }
-  return Object.freeze({ status: 'invalid', diagnostics: Object.freeze([finding]) });
+  return Object.freeze({ status: 'invalid', diagnostics: Object.freeze([...diagnostics]) });
 }
 
 function diagnostic(

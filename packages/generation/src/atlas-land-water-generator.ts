@@ -22,6 +22,7 @@ import {
 } from './atlas-land-water-generator-contract.js';
 import {
   atlasLandWaterCancelledResult,
+  atlasLandWaterInvalidResult,
   atlasLandWaterInvalidRuntimeResult,
   mapAtlasLandWaterValidationDiagnostic,
   validateAtlasLandWaterRealization,
@@ -58,7 +59,7 @@ export async function generateAtlasLandWaterFull(
   const progress = new AtlasLandWaterProgressReporter(runtime, WORLD_ATLAS_FULL_PROFILE.profileId);
 
   try {
-    progress.report('preparing', 0, 1, 0, 0, false);
+    progress.report('preparing', 0, 1, 0, 0);
     if (progress.isCancellationRequested()) {
       return atlasLandWaterCancelledResult(input, progress, 'macro');
     }
@@ -135,7 +136,7 @@ export async function generateAtlasLandWaterFull(
       return atlasLandWaterCancelledResult(input, progress, 'classification');
     }
     if (diagnostics.some(({ severity }) => severity === 'error')) {
-      return Object.freeze({ status: 'invalid', diagnostics });
+      return atlasLandWaterInvalidResult(progress, diagnostics);
     }
 
     const patch = createAtlasLandWaterProposedPatch(
@@ -180,7 +181,7 @@ export async function generateAtlasLandWaterPreview(
   );
 
   try {
-    progress.report('preparing', 0, 1, 0, 0, false);
+    progress.report('preparing', 0, 1, 0, 0);
     if (progress.isCancellationRequested()) {
       return atlasLandWaterCancelledResult(input, progress, 'macro');
     }
@@ -230,7 +231,7 @@ export async function generateAtlasLandWaterPreview(
       ),
     );
     if (diagnostics.some(({ severity }) => severity === 'error')) {
-      return Object.freeze({ status: 'invalid', diagnostics });
+      return atlasLandWaterInvalidResult(progress, diagnostics);
     }
 
     const preview: AtlasLandWaterPreview = Object.freeze({

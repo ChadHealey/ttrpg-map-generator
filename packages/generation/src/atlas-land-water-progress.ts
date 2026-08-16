@@ -20,6 +20,8 @@ export class AtlasLandWaterProgressReporter {
   #completedWork = 0;
   #stageCompletedWork = 0;
   #stageTotalWork = 1;
+  #lastCancellationRequested = false;
+  #hasTerminalEvent = false;
 
   public constructor(
     runtime: AtlasLandWaterGenerationRuntime,
@@ -53,13 +55,15 @@ export class AtlasLandWaterProgressReporter {
       this.#completedWork,
       Math.min(rangeEnd, Math.floor(rangeStart + (rangeEnd - rangeStart) * ratio)),
     );
-    this.report(stage, completed, total, work, work, false);
+    this.report(stage, completed, total, work, work);
     await this.#runtime.yieldControl();
     return this.isCancellationRequested();
   }
 
   public isCancellationRequested(): boolean {
-    return this.#runtime.cancellation.isCancellationRequested();
+    const isRequested = this.#runtime.cancellation.isCancellationRequested();
+    this.#lastCancellationRequested = isRequested;
+    return isRequested;
   }
 
   public report(
@@ -68,8 +72,64 @@ export class AtlasLandWaterProgressReporter {
     stageTotalWork: number,
     completedWork: number,
     minimumCompletedWork: number,
+  ): void {
+    this.#emit(
+      stage,
+      stageCompletedWork,
+      stageTotalWork,
+      completedWork,
+      minimumCompletedWork,
+      this.isCancellationRequested(),
+      false,
+    );
+  }
+
+  public cancel(): void {
+    this.#emit(
+      'cancelled',
+      this.#stageCompletedWork,
+      this.#stageTotalWork,
+      this.#completedWork,
+      this.#completedWork,
+      this.#lastCancellationRequested,
+      true,
+    );
+  }
+
+  public fail(): void {
+    this.#emit(
+      'failed',
+      this.#stageCompletedWork,
+      this.#stageTotalWork,
+      this.#completedWork,
+      this.#completedWork,
+      this.#lastCancellationRequested,
+      true,
+    );
+  }
+
+  public complete(): void {
+    this.#emit(
+      'completed',
+      1,
+      1,
+      ATLAS_GENERATION_PROGRESS_TOTAL_WORK,
+      ATLAS_GENERATION_PROGRESS_TOTAL_WORK,
+      this.#lastCancellationRequested,
+      true,
+    );
+  }
+
+  #emit(
+    stage: AtlasGenerationStage,
+    stageCompletedWork: number,
+    stageTotalWork: number,
+    completedWork: number,
+    minimumCompletedWork: number,
+    isCancellationRequested: boolean,
     isTerminal: boolean,
   ): void {
+    if (this.#hasTerminalEvent) return;
     this.#completedWork = Math.max(this.#completedWork, completedWork, minimumCompletedWork);
     this.#stageCompletedWork = stageCompletedWork;
     this.#stageTotalWork = stageTotalWork;
@@ -83,31 +143,10 @@ export class AtlasLandWaterProgressReporter {
         totalWork: ATLAS_GENERATION_PROGRESS_TOTAL_WORK,
         stageCompletedWork,
         stageTotalWork,
-        isCancellationRequested: this.isCancellationRequested(),
+        isCancellationRequested,
         isTerminal,
       }),
     );
-  }
-
-  public cancel(): void {
-    this.report(
-      'cancelled',
-      this.#stageCompletedWork,
-      this.#stageTotalWork,
-      this.#completedWork,
-      this.#completedWork,
-      true,
-    );
-  }
-
-  public complete(): void {
-    this.report(
-      'completed',
-      1,
-      1,
-      ATLAS_GENERATION_PROGRESS_TOTAL_WORK,
-      ATLAS_GENERATION_PROGRESS_TOTAL_WORK,
-      true,
-    );
+    if (isTerminal) this.#hasTerminalEvent = true;
   }
 }

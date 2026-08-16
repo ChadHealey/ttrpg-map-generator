@@ -191,7 +191,8 @@ export type AtlasGenerationStage =
   | 'classifying-land-water'
   | 'validating-proposal'
   | 'completed'
-  | 'cancelled';
+  | 'cancelled'
+  | 'failed';
 
 export interface AtlasGenerationProgress {
   readonly progressVersion: typeof ATLAS_LAND_WATER_PROGRESS_VERSION;
@@ -212,7 +213,6 @@ export interface AtlasGenerationCancellationSignal {
   readonly isCancellationRequested: () => boolean;
 }
 
-/** Explicit observation/scheduling capabilities; none enter accepted output. */
 export interface AtlasLandWaterGenerationRuntime {
   readonly operationId: string;
   readonly macroElevationRandom: DeterministicRandomStream;
