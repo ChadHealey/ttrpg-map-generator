@@ -7,6 +7,7 @@ import {
   ATLAS_FULL_LATITUDE_BAND_COUNT,
   ATLAS_FULL_LONGITUDE_CELL_COUNT,
   ATLAS_FULL_PROFILE_ID,
+  ATLAS_FULL_SAMPLE_COUNT,
   ATLAS_GEOGRAPHY_CONTRACT_VERSION,
   ATLAS_ISLAND_GROUP_KINDS,
   ATLAS_LANDMASS_KINDS,
@@ -17,6 +18,7 @@ import {
   type AtlasGeographyRecords,
   type AtlasIslandGroupKind,
   type AtlasLandmassKind,
+  type AtlasLandWaterRecords,
   type AtlasOceanConnectivity,
   type AtlasWaterBodyKind,
   type CanonicalWorldCoastlineRing,
@@ -32,7 +34,9 @@ export const ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES = {
   brokenContainment: 'atlas-geography.containment.broken',
   impossibleControls: 'atlas-geography.controls.impossible',
   invalidClassification: 'atlas-geography.classification.invalid',
+  invalidClassificationVersion: 'atlas-geography.classification.version.invalid',
   invalidCoastlineReference: 'atlas-geography.coastline.reference.invalid',
+  invalidCoastlineVersion: 'atlas-geography.coastline.version.invalid',
   invalidControls: 'atlas-geography.controls.invalid',
   invalidFieldMetadata: 'atlas-geography.field.metadata.invalid',
   invalidFieldValue: 'atlas-geography.field.value.invalid',
@@ -124,8 +128,7 @@ export function validateAtlasGeographyRecords(
   records: AtlasGeographyRecords,
 ): AtlasGeographyValidationResult {
   const diagnostics = [
-    ...validateAtlasControls(records.controls),
-    ...validateField(records),
+    ...validateAtlasLandWaterRecords(records),
     ...validateOrdering(records),
     ...validateClassification(records),
     ...validateCoastline(records),
@@ -134,7 +137,17 @@ export function validateAtlasGeographyRecords(
   return ordered.length === 0 ? { ok: true } : { ok: false, diagnostics: ordered };
 }
 
-function validateField(records: AtlasGeographyRecords): readonly AtlasGeographyDiagnostic[] {
+/** Validate the complete upstream #58 field/partition output independently of #59 entities. */
+export function validateAtlasLandWaterRecords(
+  records: AtlasLandWaterRecords,
+): readonly AtlasGeographyDiagnostic[] {
+  return orderedDiagnostics([
+    ...validateAtlasControls(records.controls),
+    ...validateField(records),
+  ]);
+}
+
+function validateField(records: AtlasLandWaterRecords): readonly AtlasGeographyDiagnostic[] {
   const diagnostics: AtlasGeographyDiagnostic[] = [];
   const provenance = records.macroElevation.provenance as unknown as Readonly<
     Record<string, unknown>
@@ -172,12 +185,44 @@ function validateField(records: AtlasGeographyRecords): readonly AtlasGeographyD
       break;
     }
   }
-  const contour = records.landWaterClassification.seaLevelContourDoubledTicks;
-  if (!Number.isSafeInteger(contour) || contour % 2 === 0) {
+  if (records.macroElevation.values.length !== ATLAS_FULL_SAMPLE_COUNT) {
     diagnostics.push(
       diagnostic(
         ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidFieldMetadata,
-        'The accepted land/water threshold must be a safe odd doubled macro-elevation tick.',
+        `Macro elevation must contain exactly ${String(ATLAS_FULL_SAMPLE_COUNT)} full-profile values.`,
+      ),
+    );
+  }
+  const classification = records.landWaterClassification as unknown as Readonly<
+    Record<string, unknown>
+  >;
+  if (classification.classificationBehaviorVersion !== 1) {
+    diagnostics.push(
+      diagnostic(
+        ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassificationVersion,
+        'Land/water classification must use behavior version 1.',
+      ),
+    );
+  }
+  if (records.landWaterClassification.samples.length !== ATLAS_FULL_SAMPLE_COUNT) {
+    diagnostics.push(
+      diagnostic(
+        ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassification,
+        `Land/water classification must contain exactly ${String(ATLAS_FULL_SAMPLE_COUNT)} full-profile samples.`,
+      ),
+    );
+  }
+  const contour = records.landWaterClassification.seaLevelContourDoubledTicks;
+  if (
+    !Number.isSafeInteger(contour) ||
+    contour % 2 === 0 ||
+    contour < -2 * ATLAS_FIELD_QUANTIZATION_SCALE + 1 ||
+    contour > 2 * ATLAS_FIELD_QUANTIZATION_SCALE - 1
+  ) {
+    diagnostics.push(
+      diagnostic(
+        ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidFieldMetadata,
+        'The accepted land/water threshold must be an odd doubled macro-elevation tick within the quantized field range.',
       ),
     );
   }
@@ -186,16 +231,6 @@ function validateField(records: AtlasGeographyRecords): readonly AtlasGeographyD
 
 function validateOrdering(records: AtlasGeographyRecords): readonly AtlasGeographyDiagnostic[] {
   const diagnostics: AtlasGeographyDiagnostic[] = [];
-  orderedStableIds(
-    diagnostics,
-    records.landWaterClassification.landComponentIds,
-    'Land components',
-  );
-  orderedStableIds(
-    diagnostics,
-    records.landWaterClassification.waterComponentIds,
-    'Water components',
-  );
   orderedStableIds(
     diagnostics,
     records.landmasses.map((landmass) => landmass.entityId),
@@ -264,25 +299,19 @@ function validateClassification(
       ),
     );
   }
-  const landComponents = new Set(records.landWaterClassification.landComponentIds);
-  const waterComponents = new Set(records.landWaterClassification.waterComponentIds);
-  if (
-    landComponents.size !== records.landWaterClassification.landComponentIds.length ||
-    waterComponents.size !== records.landWaterClassification.waterComponentIds.length ||
-    [...landComponents].some((componentId) => waterComponents.has(componentId))
-  ) {
-    diagnostics.push(
-      diagnostic(
-        ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassification,
-        'Land and water component collections must be duplicate-free, sorted, and disjoint.',
-      ),
-    );
-  }
 
   const landmassesById = new Map<EntityId, Landmass>();
   const landmassByComponent = new Map<SurfaceComponentId, Landmass>();
   for (const landmass of records.landmasses) {
-    if (!isLandmassKind(landmass.kind) || !landComponents.has(landmass.componentId)) {
+    if (landmass.sourceClassificationAspectId !== records.landWaterClassificationAspectId) {
+      diagnostics.push(
+        diagnostic(
+          ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassification,
+          `Landmass ${landmass.entityId} must reference the accepted upstream land/water aspect.`,
+        ),
+      );
+    }
+    if (!isLandmassKind(landmass.kind)) {
       diagnostics.push(
         diagnostic(
           ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassification,
@@ -301,19 +330,19 @@ function validateClassification(
     landmassesById.set(landmass.entityId, landmass);
     landmassByComponent.set(landmass.componentId, landmass);
   }
-  if (landmassByComponent.size !== landComponents.size) {
-    diagnostics.push(
-      diagnostic(
-        ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassification,
-        'Every accepted land component must be represented by exactly one landmass entity.',
-      ),
-    );
-  }
 
   const waterBodiesById = new Map<EntityId, WaterBody>();
   const waterBodyByComponent = new Map<SurfaceComponentId, WaterBody>();
   for (const waterBody of records.waterBodies) {
-    if (!isWaterBodyKind(waterBody.kind) || !waterComponents.has(waterBody.componentId)) {
+    if (waterBody.sourceClassificationAspectId !== records.landWaterClassificationAspectId) {
+      diagnostics.push(
+        diagnostic(
+          ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassification,
+          `Water body ${waterBody.entityId} must reference the accepted upstream land/water aspect.`,
+        ),
+      );
+    }
+    if (!isWaterBodyKind(waterBody.kind)) {
       diagnostics.push(
         diagnostic(
           ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassification,
@@ -334,14 +363,6 @@ function validateClassification(
     }
     waterBodiesById.set(waterBody.entityId, waterBody);
     waterBodyByComponent.set(waterBody.componentId, waterBody);
-  }
-  if (waterBodyByComponent.size !== waterComponents.size) {
-    diagnostics.push(
-      diagnostic(
-        ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassification,
-        'Every accepted water component must be represented by exactly one water-body entity.',
-      ),
-    );
   }
 
   for (const landmass of records.landmasses) {
@@ -368,7 +389,8 @@ function validateLandmassRelationships(
   waterBodiesById: ReadonlyMap<EntityId, WaterBody>,
 ): void {
   for (const waterBodyId of landmass.adjacentWaterBodyIds) {
-    if (!waterBodiesById.has(waterBodyId)) {
+    const waterBody = waterBodiesById.get(waterBodyId);
+    if (!waterBody?.adjacentLandmassIds.includes(landmass.entityId)) {
       diagnostics.push(
         diagnostic(
           ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.brokenContainment,
@@ -376,17 +398,6 @@ function validateLandmassRelationships(
         ),
       );
     }
-  }
-  if (
-    landmass.containingWaterBodyId !== undefined &&
-    !waterBodiesById.has(landmass.containingWaterBodyId)
-  ) {
-    diagnostics.push(
-      diagnostic(
-        ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.brokenContainment,
-        `Landmass ${landmass.entityId} references missing containing water body ${landmass.containingWaterBodyId}.`,
-      ),
-    );
   }
 }
 
@@ -428,10 +439,28 @@ function validateWaterBodyRelationships(
   landmassesById: ReadonlyMap<EntityId, Landmass>,
   waterBodiesById: ReadonlyMap<EntityId, WaterBody>,
 ): void {
+  const rawWaterBody = waterBody as unknown as Readonly<Record<string, unknown>>;
+  if (rawWaterBody.enclosure !== 'enclosed' && rawWaterBody.enclosure !== 'open-marine') {
+    diagnostics.push(
+      diagnostic(
+        ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassification,
+        `Water body ${waterBody.entityId} has an invalid enclosure.`,
+      ),
+    );
+  }
   if (
-    waterBody.containingWaterBodyId === waterBody.entityId ||
-    waterBody.connectivity.some((edge) => edge.connectedWaterBodyId === waterBody.entityId)
+    waterBody.connectivity.some(
+      (edge) => (edge as unknown as { readonly kind: unknown }).kind !== 'open-marine-neck',
+    )
   ) {
+    diagnostics.push(
+      diagnostic(
+        ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.brokenConnectivity,
+        `Water body ${waterBody.entityId} has an invalid marine connectivity edge kind.`,
+      ),
+    );
+  }
+  if (waterBody.connectivity.some((edge) => edge.connectedWaterBodyId === waterBody.entityId)) {
     diagnostics.push(
       diagnostic(
         ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.brokenConnectivity,
@@ -439,19 +468,33 @@ function validateWaterBodyRelationships(
       ),
     );
   }
-  if (
-    waterBody.containingWaterBodyId !== undefined &&
-    !waterBodiesById.has(waterBody.containingWaterBodyId)
-  ) {
+  const validOpenBasin =
+    waterBody.kind === ATLAS_WATER_BODY_KINDS.oceanBasin && waterBody.enclosure === 'open-marine';
+  const validSea = waterBody.kind === ATLAS_WATER_BODY_KINDS.sea;
+  if (!validOpenBasin && !validSea)
+    diagnostics.push(
+      diagnostic(
+        ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassification,
+        `Only open-marine ocean basins and seas are accepted water-body classifications.`,
+      ),
+    );
+  if (waterBody.enclosure === 'open-marine' && waterBody.enclosedByLandmassIds.length > 0)
     diagnostics.push(
       diagnostic(
         ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.brokenContainment,
-        `Water body ${waterBody.entityId} references missing containing water body ${waterBody.containingWaterBodyId}.`,
+        `Open-marine water body ${waterBody.entityId} cannot be enclosed by landmasses.`,
       ),
     );
-  }
+  if (waterBody.enclosure === 'enclosed' && waterBody.kind !== ATLAS_WATER_BODY_KINDS.sea)
+    diagnostics.push(
+      diagnostic(
+        ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassification,
+        `Only a sea may be an enclosed water body.`,
+      ),
+    );
   for (const landmassId of waterBody.adjacentLandmassIds) {
-    if (!landmassesById.has(landmassId)) {
+    const landmass = landmassesById.get(landmassId);
+    if (!landmass?.adjacentWaterBodyIds.includes(waterBody.entityId)) {
       diagnostics.push(
         diagnostic(
           ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.brokenContainment,
@@ -459,6 +502,15 @@ function validateWaterBodyRelationships(
         ),
       );
     }
+  }
+  for (const landmassId of waterBody.enclosedByLandmassIds) {
+    if (!landmassesById.has(landmassId))
+      diagnostics.push(
+        diagnostic(
+          ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.brokenContainment,
+          `Water body ${waterBody.entityId} references missing enclosing landmass ${landmassId}.`,
+        ),
+      );
   }
   for (const edge of waterBody.connectivity) {
     const other = waterBodiesById.get(edge.connectedWaterBodyId);
@@ -502,10 +554,23 @@ function validateOceanControlRealization(
 
 function validateCoastline(records: AtlasGeographyRecords): readonly AtlasGeographyDiagnostic[] {
   const diagnostics: AtlasGeographyDiagnostic[] = [];
+  if (
+    (records.coastline as unknown as Readonly<Record<string, unknown>>).geometryBehaviorVersion !==
+    1
+  ) {
+    diagnostics.push(
+      diagnostic(
+        ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidCoastlineVersion,
+        'Canonical coastline geometry must use behavior version 1.',
+      ),
+    );
+  }
   const landmasses = new Map(
     records.landmasses.map((landmass) => [landmass.entityId, landmass] as const),
   );
-  const waterBodies = new Set(records.waterBodies.map((waterBody) => waterBody.entityId));
+  const waterBodies = new Map(
+    records.waterBodies.map((waterBody) => [waterBody.entityId, waterBody] as const),
+  );
   for (const ring of records.coastline.rings)
     validateCoastlineRing(diagnostics, ring, landmasses, waterBodies);
   return diagnostics;
@@ -515,13 +580,14 @@ function validateCoastlineRing(
   diagnostics: AtlasGeographyDiagnostic[],
   ring: CanonicalWorldCoastlineRing,
   landmasses: ReadonlyMap<EntityId, Landmass>,
-  waterBodies: ReadonlySet<EntityId>,
+  waterBodies: ReadonlyMap<EntityId, WaterBody>,
 ): void {
   const landmass = landmasses.get(ring.landmassId);
   if (
     landmass === undefined ||
     !waterBodies.has(ring.waterBodyId) ||
-    !landmass.adjacentWaterBodyIds.includes(ring.waterBodyId)
+    !landmass.adjacentWaterBodyIds.includes(ring.waterBodyId) ||
+    !waterBodies.get(ring.waterBodyId)?.adjacentLandmassIds.includes(ring.landmassId)
   ) {
     diagnostics.push(
       diagnostic(

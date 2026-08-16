@@ -53,6 +53,7 @@ export {
   ATLAS_FULL_LATITUDE_BAND_COUNT,
   ATLAS_FULL_LONGITUDE_CELL_COUNT,
   ATLAS_FULL_PROFILE_ID,
+  ATLAS_FULL_SAMPLE_COUNT,
   ATLAS_GEOGRAPHY_CONTRACT_VERSION,
   ATLAS_ISLAND_GROUP_KINDS,
   ATLAS_LANDMASS_KINDS,
@@ -64,6 +65,7 @@ export {
   type AtlasGeographyRecords,
   type AtlasIslandGroupKind,
   type AtlasLandmassKind,
+  type AtlasLandWaterRecords,
   type AtlasOceanConnectivity,
   type AtlasPolarCharacter,
   type AtlasWaterBodyKind,
@@ -88,6 +90,7 @@ export {
   parseAtlasControls,
   validateAtlasControls,
   validateAtlasGeographyRecords,
+  validateAtlasLandWaterRecords,
 } from './atlas-geography-validation.js';
 export {
   type BehaviorVersion,

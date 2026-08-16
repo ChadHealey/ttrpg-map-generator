@@ -5,6 +5,7 @@ import { parseSemanticKey, parseStableId } from './identity.js';
 import {
   ATLAS_ASPECT_DEFINITIONS,
   ATLAS_CONTROL_DEFINITIONS,
+  ATLAS_FULL_SAMPLE_COUNT,
   ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES,
   ATLAS_LANDMASS_KINDS,
   ATLAS_OCEAN_CONNECTIVITY,
@@ -22,6 +23,7 @@ import {
   type MacroElevationValueTicks,
   parseAtlasControls,
   validateAtlasGeographyRecords,
+  validateAtlasLandWaterRecords,
 } from './index.js';
 
 const WORLD_MAP_ID = value(parseStableId('map', '00000000-0000-4000-8000-000000000001'));
@@ -45,6 +47,9 @@ const WATER_BODY_ID = deriveAtlasFeatureEntityId(
 const RING_ID = deriveAtlasCoastlineRingId(
   SINGLETONS.worldCoastlineEntityId,
   value(parseSemanticKey('coastline-ring-001')),
+);
+const CLASSIFICATION_ASPECT_ID = value(
+  parseStableId('aspect', '00000000-0000-4000-8000-000000000001'),
 );
 
 describe('Milestone 2 atlas geography contracts', () => {
@@ -138,6 +143,43 @@ describe('Milestone 2 atlas geography contracts', () => {
     expect(validateAtlasGeographyRecords(validRecords())).toStrictEqual({ ok: true });
   });
 
+  it('keeps #58 field/partition output valid before #59 semantic entities reference it', () => {
+    const records = validRecords();
+    expect(
+      validateAtlasLandWaterRecords({
+        controls: records.controls,
+        macroElevation: records.macroElevation,
+        landWaterClassification: records.landWaterClassification,
+      }),
+    ).toStrictEqual([]);
+    expect(records.landmasses[0]?.sourceClassificationAspectId).toBe(
+      records.landWaterClassificationAspectId,
+    );
+    expect(records.waterBodies[0]?.sourceClassificationAspectId).toBe(
+      records.landWaterClassificationAspectId,
+    );
+  });
+
+  it('rejects truncated full fields and partitions plus invalid versions and contour ranges', () => {
+    const records = validRecords();
+    const invalid = {
+      ...records,
+      macroElevation: { ...records.macroElevation, values: [0 as MacroElevationValueTicks] },
+      landWaterClassification: {
+        ...records.landWaterClassification,
+        classificationBehaviorVersion: 2 as 1,
+        seaLevelContourDoubledTicks: 2 * 2 ** 24 + 1,
+        samples: ['water'] as const,
+      },
+      coastline: { ...records.coastline, geometryBehaviorVersion: 2 as 1 },
+    };
+    const codes = diagnosticCodes(invalid);
+    expect(codes).toContain(ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidFieldMetadata);
+    expect(codes).toContain(ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassification);
+    expect(codes).toContain(ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidClassificationVersion);
+    expect(codes).toContain(ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidCoastlineVersion);
+  });
+
   it('returns stable diagnostics for invalid metadata, impossible ocean controls, invalid groups, and coastline references', () => {
     const metadata = validRecords();
     const ring = first(validRecords().coastline.rings);
@@ -216,17 +258,17 @@ function validRecords(overrides: Partial<AtlasGeographyRecords> = {}): AtlasGeog
         fieldBehaviorVersion: 1,
         quantizationScale: 2 ** 24,
       },
-      values: [0 as MacroElevationValueTicks],
+      values: Array.from({ length: ATLAS_FULL_SAMPLE_COUNT }, () => 0 as MacroElevationValueTicks),
     },
     landWaterClassification: {
       classificationBehaviorVersion: 1,
       seaLevelContourDoubledTicks: 1,
-      landComponentIds: [LAND_COMPONENT_ID],
-      waterComponentIds: [WATER_COMPONENT_ID],
+      samples: Array.from({ length: ATLAS_FULL_SAMPLE_COUNT }, () => 'water' as const),
     },
     landmasses: [
       {
         entityId: LANDMASS_ID,
+        sourceClassificationAspectId: CLASSIFICATION_ASPECT_ID,
         componentId: LAND_COMPONENT_ID,
         kind: ATLAS_LANDMASS_KINDS.continent,
         adjacentWaterBodyIds: [WATER_BODY_ID],
@@ -236,9 +278,11 @@ function validRecords(overrides: Partial<AtlasGeographyRecords> = {}): AtlasGeog
     waterBodies: [
       {
         entityId: WATER_BODY_ID,
+        sourceClassificationAspectId: CLASSIFICATION_ASPECT_ID,
         componentId: WATER_COMPONENT_ID,
         kind: ATLAS_WATER_BODY_KINDS.oceanBasin,
         enclosure: 'open-marine',
+        enclosedByLandmassIds: [],
         adjacentLandmassIds: [LANDMASS_ID],
         connectivity: [],
       },
@@ -258,6 +302,7 @@ function validRecords(overrides: Partial<AtlasGeographyRecords> = {}): AtlasGeog
         },
       ],
     },
+    landWaterClassificationAspectId: CLASSIFICATION_ASPECT_ID,
     ...overrides,
   };
 }

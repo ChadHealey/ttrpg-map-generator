@@ -7,13 +7,19 @@
  */
 
 import type { PlanetPoint } from './coordinates.js';
-import { type CoastlineRingId, type EntityId, type SurfaceComponentId } from './identity.js';
+import {
+  type AspectId,
+  type CoastlineRingId,
+  type EntityId,
+  type SurfaceComponentId,
+} from './identity.js';
 
 export const ATLAS_GEOGRAPHY_CONTRACT_VERSION = 1 as const;
 export const ATLAS_FIELD_QUANTIZATION_SCALE = 2 ** 24;
 export const ATLAS_FULL_PROFILE_ID = 'world-atlas-full-v1' as const;
 export const ATLAS_FULL_LONGITUDE_CELL_COUNT = 2_048;
 export const ATLAS_FULL_LATITUDE_BAND_COUNT = 1_024;
+export const ATLAS_FULL_SAMPLE_COUNT = 2_095_106;
 export const ATLAS_CANONICAL_FIELD_TRAVERSAL = 'south-pole-then-rows-then-north-pole' as const;
 
 export const ATLAS_LANDMASS_KINDS = {
@@ -114,16 +120,23 @@ export interface MacroElevationField {
 export interface LandWaterClassification {
   readonly classificationBehaviorVersion: 1;
   readonly seaLevelContourDoubledTicks: number;
-  readonly landComponentIds: readonly SurfaceComponentId[];
-  readonly waterComponentIds: readonly SurfaceComponentId[];
+  /** Full-profile land/water values in the field's canonical anchor traversal order. */
+  readonly samples: readonly ('land' | 'water')[];
+}
+
+/** Complete accepted #58 output, before #59 derives connected components or semantic entities. */
+export interface AtlasLandWaterRecords {
+  readonly controls: AtlasControls;
+  readonly macroElevation: MacroElevationField;
+  readonly landWaterClassification: LandWaterClassification;
 }
 
 /** A component-local semantic entity; its name is never part of its identity. */
 export interface Landmass {
   readonly entityId: EntityId;
+  readonly sourceClassificationAspectId: AspectId;
   readonly componentId: SurfaceComponentId;
   readonly kind: AtlasLandmassKind;
-  readonly containingWaterBodyId?: EntityId;
   readonly adjacentWaterBodyIds: readonly EntityId[];
 }
 
@@ -144,10 +157,12 @@ export interface WaterBodyConnectivity {
 /** One accepted partition member for either a primary ocean basin or retained sea. */
 export interface WaterBody {
   readonly entityId: EntityId;
+  readonly sourceClassificationAspectId: AspectId;
   readonly componentId: SurfaceComponentId;
   readonly kind: AtlasWaterBodyKind;
   readonly enclosure: 'enclosed' | 'open-marine';
-  readonly containingWaterBodyId?: EntityId;
+  /** Landmasses enclosing this retained sea; open-marine bodies have no containment owner. */
+  readonly enclosedByLandmassIds: readonly EntityId[];
   readonly adjacentLandmassIds: readonly EntityId[];
   readonly connectivity: readonly WaterBodyConnectivity[];
 }
@@ -167,10 +182,9 @@ export interface CanonicalWorldCoastline {
 }
 
 /** Semantic geography accepted by the Milestone 2 world map, never render or cache state. */
-export interface AtlasGeographyRecords {
-  readonly controls: AtlasControls;
-  readonly macroElevation: MacroElevationField;
-  readonly landWaterClassification: LandWaterClassification;
+export interface AtlasGeographyRecords extends AtlasLandWaterRecords {
+  /** Stable upstream aspect that #59 semantic records consume without replacing. */
+  readonly landWaterClassificationAspectId: AspectId;
   readonly landmasses: readonly Landmass[];
   readonly islandGroups: readonly IslandGroup[];
   readonly waterBodies: readonly WaterBody[];
