@@ -3,10 +3,10 @@
   "fixtureId": "milestone-2-atlas-control-min",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-control-min --review-record fixed-seeds/milestone-2-atlas-control-min/reviews/0004-display-projection.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-control-min --review-record fixed-seeds/milestone-2-atlas-control-min/reviews/0006-spherical-fill-interior.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-control-min/fixture-definition.json",
-    "sha256": "c79b434993c8a741bd2be951353ad6398ccab232db3fce0a56d066d26f3376cf"
+    "sha256": "c1b203cc8b3a71adb7d87fed966bf67d4c4aa30751e01916749aea271534f3d5"
   },
   "worldSeed": "6148914691236517205",
   "stableIds": {
@@ -40,6 +40,7 @@
     "atlasPreviewVersion": 1,
     "atlasRealizationVersion": 1,
     "atlasSamplingPolicyVersion": 1,
+    "atlasSceneCompositionVersion": 1,
     "atlasSemanticClassificationVersion": 1,
     "atlasSemanticGeneratorManifestVersion": 1,
     "atlasSemanticParameterSchemaVersion": 1,
@@ -64,23 +65,42 @@
     {
       "assertionId": "runner-validates-full-generator-kernel",
       "operator": "runner-pass",
-      "reviewPurpose": "Prove exact full-profile generation, semantic classification, source-linked canonical coastline geometry, simplification, topology, identity, ordering, and deterministic seam-safe display projection."
+      "reviewPurpose": "Prove exact full-profile generation, semantic classification, source-linked canonical coastline geometry, simplification, topology, identity, ordering, deterministic seam-safe display projection, and cache-free atlas scene composition."
     }
   ],
-  "reviewPurpose": "Prove the version-1 atlas field, partition, semantic geography, canonical coastline generator, and disposable display projection for one fixed seed/control row before accepted-aspect persistence integration.",
+  "reviewPurpose": "Prove the version-1 atlas field, partition, semantic geography, canonical coastline generator, disposable display projection, and renderer-neutral atlas scene for one fixed seed/control row before accepted-aspect persistence integration.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-control-min/reviews/0004-display-projection.md",
-    "sha256": "8b767a42a0dfce6ec44699c37cd38456c8c02f06ca89397e4bbd5f24997d6091"
+    "path": "fixed-seeds/milestone-2-atlas-control-min/reviews/0006-spherical-fill-interior.md",
+    "sha256": "f14188dc7d1903db425542d342c86ab87b82c2b39bce6bb92625a67dbb21f136"
   },
-  "generatedRoots": ["fixed-seeds/milestone-2-atlas-control-min/expected"],
+  "generatedRoots": [
+    "canonical-svg/milestone-2-atlas-control-min",
+    "fixed-seeds/milestone-2-atlas-control-min/expected"
+  ],
   "artifacts": [
+    {
+      "path": "canonical-svg/milestone-2-atlas-control-min/baseline.svg",
+      "kind": "canonical-svg",
+      "checkpoint": "baseline",
+      "byteLength": 139236,
+      "canonicalSvgSha256": "ac0d830081443c996914b8c4a43d522b22853235de84f4ff76e2b771036716cb",
+      "fixtureIntegritySha256": "ac0d830081443c996914b8c4a43d522b22853235de84f4ff76e2b771036716cb"
+    },
     {
       "path": "fixed-seeds/milestone-2-atlas-control-min/expected/baseline/atlas-land-water.kernel.canonical",
       "kind": "canonical-kernel-vector",
       "checkpoint": "baseline",
-      "byteLength": 6810,
-      "canonicalKernelVectorSha256": "2f3777b2c656fd01488e83637be734198da3eda98a3514bceecb1e84cd91614e",
-      "fixtureIntegritySha256": "2f3777b2c656fd01488e83637be734198da3eda98a3514bceecb1e84cd91614e"
+      "byteLength": 7594,
+      "canonicalKernelVectorSha256": "09886a361499f6c038f4a1bef22814c145c66e331223f8ff456cf5049702914b",
+      "fixtureIntegritySha256": "09886a361499f6c038f4a1bef22814c145c66e331223f8ff456cf5049702914b"
+    },
+    {
+      "path": "fixed-seeds/milestone-2-atlas-control-min/expected/baseline/atlas-render-scene.scene.canonical",
+      "kind": "canonical-render-scene",
+      "checkpoint": "baseline",
+      "byteLength": 310407,
+      "canonicalSceneSha256": "44a8f6e541afcb4034c9c5a4f4ba0b43eac367a497cad60f99d7bd508236f422",
+      "fixtureIntegritySha256": "44a8f6e541afcb4034c9c5a4f4ba0b43eac367a497cad60f99d7bd508236f422"
     }
   ]
 }
