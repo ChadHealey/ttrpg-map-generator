@@ -70,7 +70,9 @@ fixtures/
 
 Only create evidence classes required by the fixture. `canonical-svg/` is needed when render
 scene or SVG behavior is under review. `visual-gallery/` is reserved for reviewed images when
-visual evidence enters scope; issue #53 does not add PNG regression infrastructure.
+visual evidence enters scope. The Milestone 1 runner rasterizes its fixed geometric `RenderScene`
+with a dependency-free, platform-independent evidence helper. That helper is not a production PNG
+backend, font renderer, perceptual comparison framework, or substitute for inspecting the images.
 
 The Milestone 1 fixture ID is `milestone-1-kernel-proof`. Its checkpoint names are `baseline`,
 `rerolled`, and `reopened`. Persist the `rerolled` project as the v1 saved-project fixture;

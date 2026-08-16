@@ -28,8 +28,17 @@ pnpm test:visual
 pnpm test:e2e
 pnpm test:cross-platform
 pnpm test:native-recovery
-pnpm benchmark
 ```
+
+`pnpm test:e2e` runs the focused desktop orchestration test and the real native Milestone 1
+workflow bridge. That bridge drives the production generate → reroll markers → save → close →
+reopen sequence across Node and Rust, writes an actual sibling-directory `.mapworld` package, and
+arms a generator-free reopen tripwire after unload.
+
+`pnpm test:visual` runs the scene-adapter, semantic/render comparison, and deterministic PNG
+rasterizer tests before regenerating every registered fixture into a disposable directory and
+byte-comparing the reviewed semantic, SVG, PNG, and authoritative evidence. The PNG rasterizer is
+test-only evidence tooling; production Canvas and SVG remain the application render backends.
 
 `pnpm test:cross-platform` is the read-only deterministic fixture command defined by
 [07 — Deterministic Fixture Conventions](07-fixture-conventions.md). The existing Linux and
@@ -43,6 +52,9 @@ The suite is also covered by `pnpm check`, then deliberately repeated under this
 filesystem/platform output is easy to audit. The gate is serialized because its hard-exit child
 processes and deterministic fault controller share one test filesystem contract. A local run proves
 only the platform and filesystem it reports; it does not substitute for the other CI matrix leg.
+
+No `pnpm benchmark` command exists yet. Benchmarks remain deferred until a costly generator or
+large-output render path makes that specialized suite applicable.
 
 ## TypeScript is strict
 

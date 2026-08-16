@@ -178,6 +178,19 @@ Visual review confirms that both aspects appear, the marker reroll is visible, a
 not visibly drift. Canonical semantic assertions—not screenshots or SVG—prove determinism,
 isolation, and restoration.
 
+### Delivered proof harness
+
+Run `corepack pnpm dev`, keep the registered seed, and use **Generate baseline** → **Reroll
+markers** → **Save .mapworld** → **Close proof** → **Reopen proof**. Save requires an absolute,
+previously unused `.mapworld` target below an existing parent directory. Close unloads both the
+accepted document and derived scene; reopen obtains a fresh native recovery snapshot and consumes
+only the fully decoded selected package.
+
+The UI exposes both fixed aspect IDs, revisions, complete canonical aspect/output hashes,
+marker-only isolation, native reopen equality, reopen generator-call count, and the derived SVG
+hash. `pnpm test:e2e` exercises the actual native boundary, while `pnpm test:visual` validates the
+reviewed baseline/rerolled/reopened RenderScene, SVG, and PNG evidence.
+
 ## Fixture and cross-platform evidence
 
 macOS and Linux run the same checked-in input and expected canonical evidence through one

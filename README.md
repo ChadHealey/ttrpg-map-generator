@@ -7,15 +7,18 @@ style.
 
 ## Status
 
-The repository foundation and Milestone 0 workspace scaffold are in place. The desktop shell
-currently proves that Svelte, Vite, Tauri, TypeScript, Rust, and the internal package graph build
-together; map rendering is the next implementation slice.
+Milestones 0 and 1 are implemented. The desktop app now exposes the fixed deterministic-kernel
+proof: seed `81985529216486895` produces one accepted outline and nine markers, **Reroll markers**
+changes only the marker aspect, and a native `.mapworld` save can be unloaded and reopened without
+calling either generator.
 
-Milestone 0 will prove the application and rendering architecture by displaying a small
-hard-coded scene in a Svelte/Tauri desktop app and exporting that same scene through SVG. Its
-visible exit is:
+The Milestone 1 visible exit is:
 
-> The desktop app displays and exports the same simple inked scene.
+> A seed produces a small repeatable composition; rerolling one test aspect leaves every unrelated
+> aspect byte-for-byte unchanged after save/reopen.
+
+This is deliberately a synthetic one-world-map proof with no `RegionalMap`; Milestone 2 owns the
+first geographic whole-world atlas.
 
 ## Planned Stack
 
@@ -62,6 +65,25 @@ Run the desktop app:
 
 ```bash
 corepack pnpm dev
+```
+
+In the proof window:
+
+1. Leave the registered seed in place and select **Generate baseline**.
+2. Inspect outline revision 0, marker revision 0, and their canonical SHA-256 evidence.
+3. Select **Reroll markers** and confirm the outline stays fixed while the nine markers move and
+   the marker-only isolation result is `PASS`.
+4. Enter an absolute, previously unused `.mapworld` path whose parent exists, then select **Save
+   .mapworld**. The proof uses first-save semantics and will not overwrite an existing target.
+5. Select **Close proof** to unload the accepted document and `RenderScene`, then **Reopen proof**.
+6. Confirm native reopen equality is `PASS`, generator calls on reopen is `0`, and the restored
+   scene matches the rerolled checkpoint.
+
+Run the focused workflow and visual evidence gates with:
+
+```bash
+corepack pnpm test:e2e
+corepack pnpm test:visual
 ```
 
 The complete command contract and enforcement policy live in

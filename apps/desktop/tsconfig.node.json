@@ -9,7 +9,10 @@
   "include": [
     "vite.config.ts",
     "vite.mapworld-recovery-policy.config.ts",
+    "vite.milestone-one-native-workflow.config.ts",
+    "src/**/*.ts",
     "test-support/**/*.ts",
     "svelte.config.js"
-  ]
+  ],
+  "exclude": ["src/main.ts"]
 }

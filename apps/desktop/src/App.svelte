@@ -1,313 +1,125 @@
 <script lang="ts">
-  import { inkedProofScene, type RenderNode, type RenderPoint } from '@ttrpg-map/core';
-  import { renderSceneToCanvas, renderSceneToSvg } from '@ttrpg-map/render';
-  import { onMount } from 'svelte';
+  import { MILESTONE_ONE_PROOF_SEED } from '@ttrpg-map/generation';
+  import { renderSceneToSvg } from '@ttrpg-map/render';
 
-  import { findTopmostNodeAt } from './scene-selection.js';
-  import {
-    INITIAL_VIEWPORT,
-    panViewport,
-    scaleClientDeltaToCanvas,
-    scenePointFromCanvasPoint,
-    type ViewportState,
-    zoomViewport,
-  } from './viewport.js';
+  import { MilestoneOneProofWorkflow } from './milestone-one-proof-workflow.js';
+  import ProofEvidencePanel from './ProofEvidencePanel.svelte';
+  import ProofViewport from './ProofViewport.svelte';
+  import { tauriMapworldInvoke } from './tauri-mapworld-invoke.js';
 
-  const milestone = 'Milestone 0 — App and rendering proof';
-  const svgExportHref = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(renderSceneToSvg(inkedProofScene))}`;
-  const PAN_STEP_PX = 64;
-  const ZOOM_FACTOR = 1.2;
-  const MIN_ZOOM_RATIO = 0.5;
-  const MAX_ZOOM_RATIO = 3;
+  const workflow = new MilestoneOneProofWorkflow();
+  let proof = workflow.snapshot;
+  let seed = MILESTONE_ONE_PROOF_SEED;
+  let targetPath = '/tmp/Milestone-One.mapworld';
+  let isBusy = false;
 
-  interface DragState {
-    readonly pointerId: number;
-    readonly startClientX: number;
-    readonly startClientY: number;
-    readonly startViewport: ViewportState;
+  $: svgExportHref =
+    proof.scene === undefined
+      ? undefined
+      : `data:image/svg+xml;charset=utf-8,${encodeURIComponent(renderSceneToSvg(proof.scene))}`;
+
+  function generate(): void {
+    workflow.generate(seed);
+    refresh();
   }
 
-  let canvasElement: HTMLCanvasElement;
-  let canvasContext: CanvasRenderingContext2D | undefined;
-  let viewport = INITIAL_VIEWPORT;
-  let selectedNodeId = 'proof-island';
-  let dragState: DragState | undefined;
-  let hasDragged = false;
-
-  $: selectedNode = findNodeById(selectedNodeId) ?? inkedProofScene.nodes[0];
-
-  onMount(() => {
-    canvasContext = canvasElement.getContext('2d') ?? undefined;
-    if (canvasContext === undefined) throw new Error('Canvas 2D rendering is not available');
-    redrawCanvas();
-  });
-
-  function redrawCanvas(): void {
-    if (canvasContext === undefined) return;
-    canvasContext.save();
-    canvasContext.setTransform(1, 0, 0, 1, 0, 0);
-    canvasContext.clearRect(0, 0, inkedProofScene.widthPx, inkedProofScene.heightPx);
-    canvasContext.setTransform(
-      viewport.zoomRatio,
-      0,
-      0,
-      viewport.zoomRatio,
-      viewport.offsetXPx,
-      viewport.offsetYPx,
-    );
-    renderSceneToCanvas(canvasContext, inkedProofScene);
-    canvasContext.restore();
+  function rerollMarkers(): void {
+    workflow.rerollMarkers();
+    refresh();
   }
 
-  function updateViewport(nextViewport: ViewportState): void {
-    viewport = nextViewport;
-    redrawCanvas();
+  async function save(): Promise<void> {
+    isBusy = true;
+    await workflow.save(tauriMapworldInvoke, targetPath);
+    isBusy = false;
+    refresh();
   }
 
-  function panBy(deltaXPx: number, deltaYPx: number): void {
-    updateViewport(panViewport(viewport, deltaXPx, deltaYPx));
+  function closeProof(): void {
+    workflow.close();
+    refresh();
   }
 
-  function zoomBy(factor: number): void {
-    updateViewport(zoomViewport(viewport, factor, inkedProofScene, MIN_ZOOM_RATIO, MAX_ZOOM_RATIO));
+  async function reopen(): Promise<void> {
+    isBusy = true;
+    await workflow.reopen(tauriMapworldInvoke);
+    isBusy = false;
+    refresh();
   }
 
-  function resetViewport(): void {
-    updateViewport(INITIAL_VIEWPORT);
-  }
-
-  function onCanvasPointerDown(event: PointerEvent): void {
-    canvasElement.setPointerCapture(event.pointerId);
-    dragState = {
-      pointerId: event.pointerId,
-      startClientX: event.clientX,
-      startClientY: event.clientY,
-      startViewport: viewport,
-    };
-    hasDragged = false;
-  }
-
-  function onCanvasPointerMove(event: PointerEvent): void {
-    const activeDrag = dragState;
-    if (activeDrag?.pointerId !== event.pointerId) return;
-    const clientDeltaXPx = event.clientX - activeDrag.startClientX;
-    const clientDeltaYPx = event.clientY - activeDrag.startClientY;
-    hasDragged ||= Math.abs(clientDeltaXPx) > 3 || Math.abs(clientDeltaYPx) > 3;
-    const bounds = canvasElement.getBoundingClientRect();
-    const canvasDelta = scaleClientDeltaToCanvas(
-      clientDeltaXPx,
-      clientDeltaYPx,
-      canvasElement.width,
-      canvasElement.height,
-      bounds.width,
-      bounds.height,
-    );
-    updateViewport(panViewport(activeDrag.startViewport, canvasDelta.xPx, canvasDelta.yPx));
-  }
-
-  function onCanvasPointerUp(event: PointerEvent): void {
-    if (dragState?.pointerId !== event.pointerId) return;
-    if (canvasElement.hasPointerCapture(event.pointerId))
-      canvasElement.releasePointerCapture(event.pointerId);
-    dragState = undefined;
-    if (!hasDragged) selectNodeAt(event);
-  }
-
-  function onCanvasWheel(event: WheelEvent): void {
-    if (event.deltaY === 0) return;
-    event.preventDefault();
-    zoomBy(event.deltaY < 0 ? ZOOM_FACTOR : 1 / ZOOM_FACTOR);
-  }
-
-  function onCanvasKeyDown(event: KeyboardEvent): void {
-    switch (event.key) {
-      case 'ArrowDown':
-        event.preventDefault();
-        panBy(0, -PAN_STEP_PX);
-        return;
-      case 'ArrowLeft':
-        event.preventDefault();
-        panBy(-PAN_STEP_PX, 0);
-        return;
-      case 'ArrowRight':
-        event.preventDefault();
-        panBy(PAN_STEP_PX, 0);
-        return;
-      case 'ArrowUp':
-        event.preventDefault();
-        panBy(0, PAN_STEP_PX);
-        return;
-      case '+':
-      case '=':
-        event.preventDefault();
-        zoomBy(ZOOM_FACTOR);
-        return;
-      case '-':
-      case '_':
-        event.preventDefault();
-        zoomBy(1 / ZOOM_FACTOR);
-        return;
-      case '0':
-        event.preventDefault();
-        resetViewport();
-        return;
-    }
-  }
-
-  function selectNodeAt(event: PointerEvent): void {
-    const canvasPoint = toCanvasPoint(event);
-    const selected = findTopmostNodeAt(
-      inkedProofScene,
-      scenePointFromCanvasPoint(canvasPoint, viewport),
-    );
-    if (selected !== undefined) selectedNodeId = selected.id;
-  }
-
-  function toCanvasPoint(event: PointerEvent): RenderPoint {
-    const bounds = canvasElement.getBoundingClientRect();
-    return {
-      xPx: (event.clientX - bounds.left) * (canvasElement.width / bounds.width),
-      yPx: (event.clientY - bounds.top) * (canvasElement.height / bounds.height),
-    };
-  }
-
-  function findNodeById(id: string): RenderNode | undefined {
-    return inkedProofScene.nodes.find((node) => node.id === id);
-  }
-
-  function describeNode(node: RenderNode): string {
-    switch (node.kind) {
-      case 'rectangle':
-        return `Rectangle · ${String(node.widthPx)} × ${String(node.heightPx)} px`;
-      case 'polygon':
-        return `Polygon · ${String(node.points.length)} anchor points`;
-      case 'polyline':
-        return `Ink path · ${String(node.points.length)} anchor points`;
-      case 'label':
-        return `Label · “${node.text}”`;
-    }
+  function refresh(): void {
+    proof = workflow.snapshot;
   }
 </script>
 
 <svelte:head
-  ><meta
-    name="description"
-    content="Offline world-to-region fantasy map generator and editor"
-  /></svelte:head
+  ><meta name="description" content="Milestone 1 deterministic kernel proof" /></svelte:head
 >
 
 <main>
-  <section aria-labelledby="app-title">
-    <p class="eyebrow">{milestone}</p>
-    <h1 id="app-title">TTRPG Map Generator</h1>
-    <p class="summary">
-      Navigate the proof scene, select an element, and inspect the same renderer-neutral content
-      that powers the SVG export.
-    </p>
-    <div class="workspace">
-      <div class="map-column">
-        <div class="viewport-toolbar" aria-label="Map viewport controls">
-          <div class="pan-controls" aria-label="Pan map">
-            <button
-              aria-label="Pan up"
-              onclick={() => {
-                panBy(0, PAN_STEP_PX);
-              }}
-              type="button">↑</button
-            ><button
-              aria-label="Pan left"
-              onclick={() => {
-                panBy(-PAN_STEP_PX, 0);
-              }}
-              type="button">←</button
-            ><button
-              aria-label="Pan right"
-              onclick={() => {
-                panBy(PAN_STEP_PX, 0);
-              }}
-              type="button">→</button
-            ><button
-              aria-label="Pan down"
-              onclick={() => {
-                panBy(0, -PAN_STEP_PX);
-              }}
-              type="button">↓</button
-            >
-          </div>
-          <div class="zoom-controls">
-            <button
-              aria-label="Zoom out"
-              onclick={() => {
-                zoomBy(1 / ZOOM_FACTOR);
-              }}
-              type="button">−</button
-            ><output aria-live="polite">{Math.round(viewport.zoomRatio * 100)}%</output><button
-              aria-label="Zoom in"
-              onclick={() => {
-                zoomBy(ZOOM_FACTOR);
-              }}
-              type="button">+</button
-            ><button onclick={resetViewport} type="button">Reset</button>
-          </div>
-        </div>
-        <figure>
-          <figcaption>
-            Canvas preview — drag to pan; scroll or use +/− to zoom; click a feature to inspect it.
-          </figcaption>
-          <canvas
-            bind:this={canvasElement}
-            aria-describedby="viewport-instructions"
-            aria-label="Interactive Canvas rendering of the inked proof scene"
-            height={inkedProofScene.heightPx}
-            onkeydown={onCanvasKeyDown}
-            onpointerdown={onCanvasPointerDown}
-            onpointermove={onCanvasPointerMove}
-            onpointerup={onCanvasPointerUp}
-            onwheel={onCanvasWheel}
-            tabindex="0"
-            width={inkedProofScene.widthPx}
-          ></canvas>
-          <p class="sr-only" id="viewport-instructions">
-            Use arrow keys to pan, plus and minus to zoom, or zero to reset the map view.
-          </p>
-        </figure>
+  <section aria-labelledby="app-title" class="proof-shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Milestone 1 — Deterministic kernel</p>
+        <h1 id="app-title">Selective reroll proof</h1>
       </div>
-      <aside aria-labelledby="inspector-heading" class="inspector">
-        <p class="eyebrow">Selection</p>
-        <h2 id="inspector-heading">Inspector</h2>
-        <label class="node-picker" for="scene-node">Select proof-scene element</label>
-        <select bind:value={selectedNodeId} id="scene-node">
-          {#each inkedProofScene.nodes as node (node.id)}<option value={node.id}>{node.id}</option
-            >{/each}
-        </select>
-        {#if selectedNode !== undefined}
-          <p aria-live="polite" class="inspector-title">{describeNode(selectedNode)}</p>
-          <dl>
-            <div>
-              <dt>Render node</dt>
-              <dd>{selectedNode.id}</dd>
-            </div>
-            <div>
-              <dt>Source</dt>
-              <dd>{selectedNode.sourceId}</dd>
-            </div>
-            <div>
-              <dt>Kind</dt>
-              <dd>{selectedNode.kind}</dd>
-            </div>
-          </dl>
-        {/if}
-        <p class="inspector-hint">
-          The selected item comes from the ordered render scene; no renderer-specific copy is used.
-        </p>
-      </aside>
+      <p class="summary">
+        Generate the registered composition, reroll only its markers, then save, unload, and reopen
+        authoritative state through the native <code>.mapworld</code> boundary.
+      </p>
+    </header>
+
+    <form
+      class="workflow-card"
+      onsubmit={(event) => {
+        event.preventDefault();
+      }}
+    >
+      <div class="input-group seed-field">
+        <label class="field-label" for="world-seed">Registered world seed</label>
+        <input bind:value={seed} id="world-seed" inputmode="numeric" spellcheck="false" />
+      </div>
+      <button
+        disabled={isBusy || proof.phase === 'saved' || proof.phase === 'closed'}
+        onclick={generate}
+        type="button">Generate baseline</button
+      >
+      <button disabled={isBusy || proof.phase !== 'baseline'} onclick={rerollMarkers} type="button"
+        >Reroll markers</button
+      >
+      <div class="input-group path-field">
+        <label class="field-label" for="target-path">Fresh native save target</label>
+        <input bind:value={targetPath} id="target-path" spellcheck="false" />
+      </div>
+      <button
+        disabled={isBusy || proof.phase !== 'rerolled'}
+        onclick={() => void save()}
+        type="button">Save .mapworld</button
+      >
+      <button disabled={isBusy || proof.phase !== 'saved'} onclick={closeProof} type="button"
+        >Close proof</button
+      >
+      <button
+        disabled={isBusy || proof.phase !== 'closed'}
+        onclick={() => void reopen()}
+        type="button">Reopen proof</button
+      >
+    </form>
+
+    <p aria-live="polite" class="status-line" data-phase={proof.phase}>
+      <span>{proof.phase}</span>{proof.statusMessage}
+    </p>
+
+    <div class="proof-grid">
+      <div class="map-stack">
+        <ProofViewport scene={proof.scene} />
+        {#if svgExportHref !== undefined}<a
+            class="export-link"
+            download={`milestone-one-${proof.phase}.svg`}
+            href={svgExportHref}>Export current SVG</a
+          >{/if}
+      </div>
+      <ProofEvidencePanel {proof} />
     </div>
-    <details class="svg-proof">
-      <summary>Compare the matching SVG preview</summary><img
-        alt="SVG rendering of the inked proof scene"
-        src={svgExportHref}
-      />
-    </details>
-    <a class="export-link" download="inked-proof-scene.svg" href={svgExportHref}>Export SVG</a>
   </section>
 </main>

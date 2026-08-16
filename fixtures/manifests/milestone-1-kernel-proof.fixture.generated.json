@@ -3,7 +3,7 @@
   "fixtureId": "milestone-1-kernel-proof",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-1-kernel-proof --review-record fixed-seeds/milestone-1-kernel-proof/reviews/0001-initial-acceptance.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-1-kernel-proof --review-record fixed-seeds/milestone-1-kernel-proof/reviews/0002-rendered-workflow-proof.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-1-kernel-proof/fixture-definition.json",
     "sha256": "5207e7781672f666b7048180556632ae3d07432b1d832228065a1f79a59342dd"
@@ -49,6 +49,13 @@
   },
   "expectedAssertions": [
     {
+      "assertionId": "baseline-render-changes-on-marker-reroll",
+      "operator": "bytes-not-equal",
+      "reviewPurpose": "Prove marker reroll creates a visible structural render delta.",
+      "leftArtifactPath": "canonical-svg/milestone-1-kernel-proof/baseline.svg",
+      "rightArtifactPath": "canonical-svg/milestone-1-kernel-proof/rerolled.svg"
+    },
+    {
       "assertionId": "marker-aspect-changes",
       "operator": "bytes-not-equal",
       "reviewPurpose": "Prove the selected marker accepted record changes after its reroll.",
@@ -70,21 +77,54 @@
       "rightArtifactPath": "fixed-seeds/milestone-1-kernel-proof/expected/rerolled/proof-outline.aspect.canonical"
     },
     {
+      "assertionId": "reopened-render-equals-rerolled",
+      "operator": "bytes-equal",
+      "reviewPurpose": "Prove native-authoritative reopen has no render-scene or SVG drift.",
+      "leftArtifactPath": "canonical-svg/milestone-1-kernel-proof/reopened.svg",
+      "rightArtifactPath": "canonical-svg/milestone-1-kernel-proof/rerolled.svg"
+    },
+    {
       "assertionId": "runner-validates-persistence-round-trip",
       "operator": "runner-pass",
       "reviewPurpose": "Prove deterministic encoding, authoritative checksums, generator-free decode, and exact reopen."
     }
   ],
-  "reviewPurpose": "Prove selective reroll isolation plus deterministic, checksummed, generator-free mapworld v1 restoration.",
+  "reviewPurpose": "Prove selective reroll isolation, stable RenderScene derivation, and deterministic, checksummed, generator-free mapworld v1 restoration.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-1-kernel-proof/reviews/0001-initial-acceptance.md",
-    "sha256": "b0512e6ea00bd3bd0cc777411e2d50f85bef30ae62d239d394373f4033030439"
+    "path": "fixed-seeds/milestone-1-kernel-proof/reviews/0002-rendered-workflow-proof.md",
+    "sha256": "e7c70ba8296d69350430c4b69dc1e472e57be50ff78762bec942054f97f3045c"
   },
   "generatedRoots": [
+    "canonical-svg/milestone-1-kernel-proof",
     "fixed-seeds/milestone-1-kernel-proof/expected",
-    "saved-projects/v1/milestone-1-kernel-proof"
+    "saved-projects/v1/milestone-1-kernel-proof",
+    "visual-gallery/milestone-1-kernel-proof"
   ],
   "artifacts": [
+    {
+      "path": "canonical-svg/milestone-1-kernel-proof/baseline.svg",
+      "kind": "canonical-svg",
+      "checkpoint": "baseline",
+      "byteLength": 3503,
+      "canonicalSvgSha256": "b1811851eafc76e1596939d2b25baccb2f82f65bd7f0c3df1203e51121e18f15",
+      "fixtureIntegritySha256": "b1811851eafc76e1596939d2b25baccb2f82f65bd7f0c3df1203e51121e18f15"
+    },
+    {
+      "path": "canonical-svg/milestone-1-kernel-proof/reopened.svg",
+      "kind": "canonical-svg",
+      "checkpoint": "reopened",
+      "byteLength": 3428,
+      "canonicalSvgSha256": "956019543cbc1e484f2fc0bc30c5e43d10417bea5fb2b4cc4b3c68a9b0a10372",
+      "fixtureIntegritySha256": "956019543cbc1e484f2fc0bc30c5e43d10417bea5fb2b4cc4b3c68a9b0a10372"
+    },
+    {
+      "path": "canonical-svg/milestone-1-kernel-proof/rerolled.svg",
+      "kind": "canonical-svg",
+      "checkpoint": "rerolled",
+      "byteLength": 3428,
+      "canonicalSvgSha256": "956019543cbc1e484f2fc0bc30c5e43d10417bea5fb2b4cc4b3c68a9b0a10372",
+      "fixtureIntegritySha256": "956019543cbc1e484f2fc0bc30c5e43d10417bea5fb2b4cc4b3c68a9b0a10372"
+    },
     {
       "path": "fixed-seeds/milestone-1-kernel-proof/expected/baseline/proof-markers.aspect.canonical",
       "kind": "canonical-aspect-bytes",
@@ -177,6 +217,27 @@
       "checkpoint": "rerolled",
       "byteLength": 409,
       "fixtureIntegritySha256": "98470e309b7cdb1bbff87320795aa2895d8c137096f2e7ffa7a8fd0f8e22ae2e"
+    },
+    {
+      "path": "visual-gallery/milestone-1-kernel-proof/baseline.png",
+      "kind": "visual-evidence",
+      "checkpoint": "baseline",
+      "byteLength": 144702,
+      "fixtureIntegritySha256": "b47de58223e3854c03a91a06e4e837eb1fa9707d3087713877399f1855f155ea"
+    },
+    {
+      "path": "visual-gallery/milestone-1-kernel-proof/reopened.png",
+      "kind": "visual-evidence",
+      "checkpoint": "reopened",
+      "byteLength": 144702,
+      "fixtureIntegritySha256": "8831c31f17426005a625afb6f30ecaadd5ec99c0999e3e039b3317fc44eaab14"
+    },
+    {
+      "path": "visual-gallery/milestone-1-kernel-proof/rerolled.png",
+      "kind": "visual-evidence",
+      "checkpoint": "rerolled",
+      "byteLength": 144702,
+      "fixtureIntegritySha256": "8831c31f17426005a625afb6f30ecaadd5ec99c0999e3e039b3317fc44eaab14"
     }
   ]
 }

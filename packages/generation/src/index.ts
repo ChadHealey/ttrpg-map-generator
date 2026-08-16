@@ -19,6 +19,26 @@ export {
   validateGenerationProposal,
 } from './generator-contracts.js';
 export {
+  createMilestoneOneProofDocument,
+  isMilestoneOneProofSeed,
+  MILESTONE_ONE_CONSTRAINT_ID,
+  MILESTONE_ONE_OUTLINE_LOCK_ID,
+  MILESTONE_ONE_OUTLINE_OUTPUT,
+  MILESTONE_ONE_PROOF_ENTITY_ID,
+  MILESTONE_ONE_PROOF_SEED,
+  MILESTONE_ONE_REVISION_ONE,
+  MILESTONE_ONE_REVISION_ZERO,
+  MILESTONE_ONE_WORLD_DOCUMENT_ID,
+  MILESTONE_ONE_WORLD_MAP_ID,
+  milestoneOneMarkerIds,
+  type MilestoneOneProofAspects,
+  milestoneOneProofAspects,
+  type MilestoneOneProofSeed,
+  milestoneOneRootMap,
+  proposeMilestoneOneMarkers,
+  rerollMilestoneOneMarkers,
+} from './milestone-one-proof.js';
+export {
   PROOF_MARKER_ASPECT_ID,
   PROOF_MARKER_ASPECT_NAME,
   PROOF_MARKER_GENERATOR_ID,

@@ -7,6 +7,8 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { format } from 'prettier';
 import ts from 'typescript';
 
+import { renderSceneToDeterministicPng } from '../../../scripts/render-scene-png.mjs';
+
 const args = process.argv.slice(2);
 const fixtureId = argument('--fixture-id');
 const sourceDefinitionPath = argument('--source-definition');
@@ -17,32 +19,52 @@ const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../../.
 const definitionBytes = readFileSync(sourceDefinitionPath);
 const definition = JSON.parse(definitionBytes.toString('utf8'));
 const reviewBytes = readFileSync(reviewRecordPath);
-const { core, generation, persistence, support } = await loadProjectModules();
+const { core, desktop, generation, persistence, render } = await loadProjectModules();
 
 assert.equal(fixtureId, 'milestone-1-kernel-proof');
 assert.equal(definition.fixtureDefinitionVersion, 1);
 assert.deepEqual(definition.versions, expectedVersions());
 
-const baseline = support.proofDocument();
-const repeatedBaseline = support.proofDocument();
-const firstReroll = reroll(baseline);
-const repeatedReroll = reroll(baseline);
+const baseline = generation.createMilestoneOneProofDocument(definition.worldSeed);
+const repeatedBaseline = generation.createMilestoneOneProofDocument(definition.worldSeed);
+const firstProposal = generation.proposeMilestoneOneMarkers(
+  baseline,
+  generation.MILESTONE_ONE_REVISION_ONE,
+);
+const repeatedProposal = generation.proposeMilestoneOneMarkers(
+  baseline,
+  generation.MILESTONE_ONE_REVISION_ONE,
+);
+assert.deepEqual(repeatedProposal, firstProposal);
+const firstReroll = generation.rerollMilestoneOneMarkers(baseline);
+const repeatedReroll = generation.rerollMilestoneOneMarkers(baseline);
+assert.equal(firstReroll.ok, true);
+assert.equal(repeatedReroll.ok, true);
+if (!firstReroll.ok || !repeatedReroll.ok) throw new Error('Marker reroll transaction failed.');
 const rerolled = firstReroll.document;
 assert.deepEqual(repeatedBaseline, baseline);
 assert.deepEqual(repeatedReroll.document, rerolled);
 assert.deepEqual(firstReroll.committedAspectIds, [generation.PROOF_MARKER_ASPECT_ID]);
 assert.deepEqual(firstReroll.dependencyEffects, []);
 
-const baselineOutline = support.aspect(baseline, generation.PROOF_OUTLINE_ASPECT_ID);
-const baselineMarkers = support.aspect(baseline, generation.PROOF_MARKER_ASPECT_ID);
-const rerolledOutline = support.aspect(rerolled, generation.PROOF_OUTLINE_ASPECT_ID);
-const rerolledMarkers = support.aspect(rerolled, generation.PROOF_MARKER_ASPECT_ID);
+const baselineAspects = generation.milestoneOneProofAspects(baseline);
+const repeatedBaselineAspects = generation.milestoneOneProofAspects(repeatedBaseline);
+const rerolledAspects = generation.milestoneOneProofAspects(rerolled);
+const baselineOutline = baselineAspects.outline;
+const baselineMarkers = baselineAspects.markers;
+const rerolledOutline = rerolledAspects.outline;
+const rerolledMarkers = rerolledAspects.markers;
+assert.deepEqual(aspectBytes(repeatedBaselineAspects.outline), aspectBytes(baselineOutline));
+assert.deepEqual(aspectBytes(repeatedBaselineAspects.markers), aspectBytes(baselineMarkers));
 assert.deepEqual(rerolledOutline, baselineOutline);
 assert.notDeepEqual(rerolledMarkers.acceptedOutput, baselineMarkers.acceptedOutput);
-assert.deepEqual(support.markerIds(rerolledMarkers), support.markerIds(baselineMarkers));
-assert.deepEqual(support.markerIds(baselineMarkers), expectedMarkerIds());
-assert.equal(rerolledMarkers.variantRevision, support.REVISION_ONE);
-assert.equal(rerolledOutline.variantRevision, support.REVISION_ZERO);
+assert.deepEqual(
+  generation.milestoneOneMarkerIds(rerolled),
+  generation.milestoneOneMarkerIds(baseline),
+);
+assert.deepEqual(generation.milestoneOneMarkerIds(baseline), expectedMarkerIds());
+assert.equal(rerolledMarkers.variantRevision, generation.MILESTONE_ONE_REVISION_ONE);
+assert.equal(rerolledOutline.variantRevision, generation.MILESTONE_ONE_REVISION_ZERO);
 assert.deepEqual(unselectedMapState(rerolled), unselectedMapState(baseline));
 
 const packageResult = value(persistence.encodeMapworld(rerolled));
@@ -50,19 +72,18 @@ const repeatedPackage = value(persistence.encodeMapworld(reorderedDocument(rerol
 assert.deepEqual(repeatedPackage, packageResult);
 const reopened = value(persistence.decodeMapworld(packageResult));
 assert.deepEqual(value(persistence.encodeMapworld(reopened)), packageResult);
-assert.deepEqual(
-  value(
-    persistence.canonicalAspectBytes(support.aspect(reopened, generation.PROOF_OUTLINE_ASPECT_ID)),
-  ),
-  value(persistence.canonicalAspectBytes(rerolledOutline)),
-);
-assert.deepEqual(
-  value(
-    persistence.canonicalAspectBytes(support.aspect(reopened, generation.PROOF_MARKER_ASPECT_ID)),
-  ),
-  value(persistence.canonicalAspectBytes(rerolledMarkers)),
-);
+const reopenedAspects = generation.milestoneOneProofAspects(reopened);
+assert.deepEqual(aspectBytes(reopenedAspects.outline), aspectBytes(rerolledOutline));
+assert.deepEqual(outputBytes(reopenedAspects.outline), outputBytes(rerolledOutline));
+assert.deepEqual(aspectBytes(reopenedAspects.markers), aspectBytes(rerolledMarkers));
+assert.deepEqual(outputBytes(reopenedAspects.markers), outputBytes(rerolledMarkers));
+assert.deepEqual(unselectedMapState(reopened), unselectedMapState(rerolled));
 assertGeneratorFreePersistenceSources();
+
+const baselineScene = proofScene(baseline);
+const rerolledScene = proofScene(rerolled);
+const reopenedScene = proofScene(reopened);
+assertRenderComparison(baselineScene, rerolledScene, reopenedScene);
 
 const canonicalArtifacts = [
   aspectArtifact('baseline', 'proof-markers', baselineMarkers),
@@ -75,7 +96,17 @@ const canonicalArtifacts = [
   outputArtifact('rerolled', 'proof-outline', rerolledOutline),
 ];
 const savedArtifacts = packageResult.files.map(savedProjectArtifact);
-const artifacts = [...canonicalArtifacts, ...savedArtifacts].sort(compareByPath);
+const renderArtifacts = [
+  svgArtifact('baseline', baselineScene),
+  svgArtifact('reopened', reopenedScene),
+  svgArtifact('rerolled', rerolledScene),
+  visualArtifact('baseline', baselineScene),
+  visualArtifact('reopened', reopenedScene),
+  visualArtifact('rerolled', rerolledScene),
+];
+const artifacts = [...canonicalArtifacts, ...renderArtifacts, ...savedArtifacts].sort(
+  compareByPath,
+);
 for (const artifact of artifacts) write(artifact.path, artifact.bytes);
 
 const expectedPath = (checkpoint, name, suffix) =>
@@ -95,6 +126,13 @@ const manifest = {
   versions: definition.versions,
   checkpointRevisions: definition.checkpoints,
   expectedAssertions: [
+    {
+      assertionId: 'baseline-render-changes-on-marker-reroll',
+      operator: 'bytes-not-equal',
+      reviewPurpose: 'Prove marker reroll creates a visible structural render delta.',
+      leftArtifactPath: `canonical-svg/${fixtureId}/baseline.svg`,
+      rightArtifactPath: `canonical-svg/${fixtureId}/rerolled.svg`,
+    },
     {
       assertionId: 'marker-aspect-changes',
       operator: 'bytes-not-equal',
@@ -117,6 +155,13 @@ const manifest = {
       rightArtifactPath: expectedPath('rerolled', 'proof-outline', 'aspect'),
     },
     {
+      assertionId: 'reopened-render-equals-rerolled',
+      operator: 'bytes-equal',
+      reviewPurpose: 'Prove native-authoritative reopen has no render-scene or SVG drift.',
+      leftArtifactPath: `canonical-svg/${fixtureId}/reopened.svg`,
+      rightArtifactPath: `canonical-svg/${fixtureId}/rerolled.svg`,
+    },
+    {
       assertionId: 'runner-validates-persistence-round-trip',
       operator: 'runner-pass',
       reviewPurpose:
@@ -124,9 +169,14 @@ const manifest = {
     },
   ],
   reviewPurpose:
-    'Prove selective reroll isolation plus deterministic, checksummed, generator-free mapworld v1 restoration.',
+    'Prove selective reroll isolation, stable RenderScene derivation, and deterministic, checksummed, generator-free mapworld v1 restoration.',
   reviewRecord: { path: fixtureReviewRecordPath, sha256: sha256(reviewBytes) },
-  generatedRoots: [`fixed-seeds/${fixtureId}/expected`, `saved-projects/v1/${fixtureId}`],
+  generatedRoots: [
+    `canonical-svg/${fixtureId}`,
+    `fixed-seeds/${fixtureId}/expected`,
+    `saved-projects/v1/${fixtureId}`,
+    `visual-gallery/${fixtureId}`,
+  ],
   artifacts: artifacts.map((artifact) =>
     Object.fromEntries(Object.entries(artifact).filter(([key]) => key !== 'bytes')),
   ),
@@ -136,18 +186,8 @@ write(
   await format(JSON.stringify(manifest), { parser: 'json' }),
 );
 
-function reroll(document) {
-  const proposal = support.proposeMarkers(document, support.REVISION_ONE);
-  assert.equal(proposal.status, 'proposed');
-  const command = generation.createCommitAspectProposalCommand(proposal, support.REVISION_ZERO, []);
-  const result = core.commitAspectProposal(document, command);
-  assert.equal(result.ok, true);
-  if (!result.ok) throw new Error(JSON.stringify(result.diagnostics));
-  return result;
-}
-
 function unselectedMapState(document) {
-  const map = support.rootMap(document);
+  const map = generation.milestoneOneRootMap(document);
   return {
     worldDocumentId: document.worldDocumentId,
     rootMapId: document.rootMapId,
@@ -160,7 +200,7 @@ function unselectedMapState(document) {
 }
 
 function reorderedDocument(document) {
-  const map = support.rootMap(document);
+  const map = generation.milestoneOneRootMap(document);
   return {
     ...document,
     maps: [
@@ -195,6 +235,14 @@ function outputArtifact(checkpoint, name, aspect) {
   );
 }
 
+function aspectBytes(aspect) {
+  return value(persistence.canonicalAspectBytes(aspect));
+}
+
+function outputBytes(aspect) {
+  return value(persistence.canonicalAspectOutputBytes(aspect));
+}
+
 function canonicalArtifact(checkpoint, name, boundary, aspectId, bytes) {
   const digest = sha256(bytes);
   const isAspect = boundary === 'aspect';
@@ -221,6 +269,65 @@ function savedProjectArtifact(file) {
     fixtureIntegritySha256: sha256(file.bytes),
     bytes: file.bytes,
   };
+}
+
+function svgArtifact(checkpoint, scene) {
+  const bytes = Buffer.from(render.renderSceneToSvg(scene), 'utf8');
+  const digest = sha256(bytes);
+  return {
+    path: `canonical-svg/${fixtureId}/${checkpoint}.svg`,
+    kind: 'canonical-svg',
+    checkpoint,
+    byteLength: bytes.byteLength,
+    canonicalSvgSha256: digest,
+    fixtureIntegritySha256: digest,
+    bytes,
+  };
+}
+
+function visualArtifact(checkpoint, scene) {
+  const bytes = renderSceneToDeterministicPng(scene);
+  return {
+    path: `visual-gallery/${fixtureId}/${checkpoint}.png`,
+    kind: 'visual-evidence',
+    checkpoint,
+    byteLength: bytes.byteLength,
+    fixtureIntegritySha256: sha256(bytes),
+    bytes,
+  };
+}
+
+function proofScene(document) {
+  const aspects = generation.milestoneOneProofAspects(document);
+  return desktop.createMilestoneOneProofScene({
+    sourceEntityId: generation.MILESTONE_ONE_PROOF_ENTITY_ID,
+    outline: aspects.outline.acceptedOutput.points,
+    markers: aspects.markers.acceptedOutput.markers,
+  });
+}
+
+function assertRenderComparison(baselineScene, rerolledScene, reopenedScene) {
+  assert.equal(baselineScene.widthPx, 960);
+  assert.equal(baselineScene.heightPx, 600);
+  const outline = (scene) => scene.nodes.find(({ id }) => id === 'milestone-one-proof-outline');
+  const markers = (scene) =>
+    scene.nodes.filter(({ id }) => id.startsWith('milestone-one-proof-marker-'));
+  const baselineMarkers = markers(baselineScene);
+  const rerolledMarkers = markers(rerolledScene);
+  assert.deepEqual(outline(baselineScene), outline(rerolledScene));
+  assert.deepEqual(outline(rerolledScene), outline(reopenedScene));
+  assert.deepEqual(
+    baselineMarkers.map(({ id }) => id),
+    rerolledMarkers.map(({ id }) => id),
+  );
+  assert.equal(baselineMarkers.length, 9);
+  assert.notDeepEqual(baselineMarkers, rerolledMarkers);
+  assert.deepEqual(rerolledMarkers, markers(reopenedScene));
+  assert.notDeepEqual(baselineScene, rerolledScene);
+  assert.deepEqual(rerolledScene, reopenedScene);
+  for (const node of baselineScene.nodes) {
+    assert.equal(node.sourceId, generation.MILESTONE_ONE_PROOF_ENTITY_ID);
+  }
 }
 
 function expectedMarkerIds() {
@@ -268,13 +375,24 @@ async function loadProjectModules() {
     '@ttrpg-map/core': '../core/index.js',
     zod: zodUrl,
   });
+  const renderDirectory = transpilePackage('render', runtimeRoot, {
+    '@ttrpg-map/core': '../core/index.js',
+  });
+  const desktopDirectory = resolve(runtimeRoot, 'desktop');
+  mkdirSync(desktopDirectory, { recursive: true });
+  transpileSourceFile(
+    resolve(repositoryRoot, 'apps/desktop/src/milestone-one-proof-scene.ts'),
+    resolve(desktopDirectory, 'milestone-one-proof-scene.js'),
+    { '@ttrpg-map/core': '../core/index.js' },
+  );
   return {
     core: await import(pathToFileURL(resolve(coreDirectory, 'index.js')).href),
+    desktop: await import(
+      pathToFileURL(resolve(desktopDirectory, 'milestone-one-proof-scene.js')).href
+    ),
     generation: await import(pathToFileURL(resolve(generationDirectory, 'index.js')).href),
     persistence: await import(pathToFileURL(resolve(persistenceDirectory, 'index.js')).href),
-    support: await import(
-      pathToFileURL(resolve(generationDirectory, 'selective-reroll-test-support.js')).href
-    ),
+    render: await import(pathToFileURL(resolve(renderDirectory, 'index.js')).href),
   };
 }
 
@@ -292,19 +410,27 @@ function transpilePackage(packageName, runtimeRoot, replacements) {
     )
     .sort(compareText);
   for (const sourceName of sourceNames) {
-    const source = readFileSync(resolve(sourceDirectory, sourceName), 'utf8');
-    let output = ts.transpileModule(source, {
-      compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2023 },
-      fileName: sourceName,
-    }).outputText;
-    for (const [specifier, replacement] of Object.entries(replacements)) {
-      output = output
-        .replaceAll(`'${specifier}'`, `'${replacement}'`)
-        .replaceAll(`"${specifier}"`, `"${replacement}"`);
-    }
-    writeFileSync(resolve(runtimeDirectory, sourceName.replace(/\.ts$/u, '.js')), output);
+    transpileSourceFile(
+      resolve(sourceDirectory, sourceName),
+      resolve(runtimeDirectory, sourceName.replace(/\.ts$/u, '.js')),
+      replacements,
+    );
   }
   return runtimeDirectory;
+}
+
+function transpileSourceFile(sourcePath, destinationPath, replacements) {
+  const source = readFileSync(sourcePath, 'utf8');
+  let output = ts.transpileModule(source, {
+    compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2023 },
+    fileName: sourcePath,
+  }).outputText;
+  for (const [specifier, replacement] of Object.entries(replacements)) {
+    output = output
+      .replaceAll(`'${specifier}'`, `'${replacement}'`)
+      .replaceAll(`"${specifier}"`, `"${replacement}"`);
+  }
+  writeFileSync(destinationPath, output);
 }
 
 function argument(name) {

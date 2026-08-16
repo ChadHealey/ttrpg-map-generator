@@ -117,6 +117,12 @@ or normalization-insensitive filesystem the derived lookup must be an unreadable
 conflict and remain untouched; on a case-sensitive filesystem the differently named sibling must
 remain outside the protocol while the exact role is absent.
 
+Milestone 1 adds one high-value desktop workflow under `pnpm test:e2e`. A focused Vitest test
+checks user-action ordering and unload state; a test-only Node/Rust process bridge then drives the
+same production workflow across the real native save and snapshot commands. The bridge disables
+generation after close and fails if reopen invokes a generator. It deliberately reuses ADR-0008's
+native implementation instead of mocking or reimplementing filesystem commit policy.
+
 ## Tier 3 — Visual and human judgment
 
 Automated tests cannot decide:
@@ -167,6 +173,11 @@ one passing hash as proof for another.
 
 Visual comparisons use an explicit tolerance and deterministic fonts/assets.
 Intentional style changes may update PNGs without changing semantic fixtures.
+
+Milestone 1's relevant gallery is intentionally only the fixed `baseline`, `rerolled`, and
+`reopened` synthetic checkpoints: the normative composition contains one world map and no regional
+map or geography. The broader representative-seed and world/region-pair requirement begins with
+the geographic generators in later milestones; this narrow proof does not claim to satisfy it.
 
 ## Test organization and naming
 
