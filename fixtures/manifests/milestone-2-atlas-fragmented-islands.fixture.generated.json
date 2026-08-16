@@ -3,15 +3,46 @@
   "fixtureId": "milestone-2-atlas-fragmented-islands",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-fragmented-islands --review-record fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0001-initial-acceptance.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-fragmented-islands --review-record fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0002-semantic-classification.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/fixture-definition.json",
-    "sha256": "8bbdf1449e93e70f945cb0ad8afc17f4d9ebe7c518e26f9ec760de46516f7f66"
+    "sha256": "361ae8bbe63ac73fb766bcc5fc2326d71b97f69c9ccee59e7d95bea185370ef4"
   },
   "worldSeed": "18364758544493064720",
   "stableIds": {
     "landWaterClassificationAspectId": "04628f37-6408-5087-a139-bdd2bdff42d3",
     "macroElevationAspectId": "e588eb7f-d585-5c27-9ce5-81c2fb1ebc43",
+    "semanticAspectId000": "03bfdb6f-68e6-568b-8155-013008098eec",
+    "semanticAspectId001": "113081fd-d241-5c32-835e-e8c60889e50b",
+    "semanticAspectId002": "1b84ed9c-e4a7-588b-9f5f-1bcc923a9ee0",
+    "semanticAspectId003": "3e5faa25-2d4b-54a1-a258-4df3bca9d968",
+    "semanticAspectId004": "3f282b42-baac-5c1c-b372-8c09d84411bd",
+    "semanticAspectId005": "84a47615-5a0e-5adb-936c-dadd2cdd4b7c",
+    "semanticAspectId006": "97e48b6a-c172-51f2-a55e-85f7a6656cde",
+    "semanticAspectId007": "d457a579-b550-5bbc-ba16-47d11f6d5e01",
+    "semanticAspectId008": "dcf4e36b-7e8e-5d3b-89e5-2033aadf7e6a",
+    "semanticAspectId009": "e15c39c9-93c6-5c28-98a2-d33b0dafd66a",
+    "semanticAspectId010": "fc0620fd-6dc3-54a7-beb0-27135df2a456",
+    "semanticEntityId000": "3443d7af-159e-56bd-93b3-81eda5c755d5",
+    "semanticEntityId001": "44aff1d7-172a-55af-9094-23ece800c775",
+    "semanticEntityId002": "45f1ac36-f008-5eb9-b474-2356e2fb5997",
+    "semanticEntityId003": "53e71a62-6494-57d2-a188-8b84dfbb5b7b",
+    "semanticEntityId004": "78dd819a-5737-5f59-9a8b-5f0f1d9fdddc",
+    "semanticEntityId005": "938f6b83-a91f-539d-8ced-b1da9dd01559",
+    "semanticEntityId006": "a5806952-d512-5621-b1cc-4828ab34b16e",
+    "semanticEntityId007": "ae1133cb-687a-5ef9-986c-e1e0e6908eea",
+    "semanticEntityId008": "bb336f03-7333-52a7-9950-e09d4b717069",
+    "semanticEntityId009": "e71fd62c-aa1b-5607-b37f-c7861237e5fe",
+    "semanticEntityId010": "f28dcb1e-ff49-5e0d-8166-ef6917652eec",
+    "surfaceComponentId000": "39899a6b-4853-510e-a50e-bb64f080e357",
+    "surfaceComponentId001": "4f638117-38f4-5e28-9545-7af3f0681283",
+    "surfaceComponentId002": "78326eab-00fe-53ec-9d9c-34477a2fbac3",
+    "surfaceComponentId003": "7e94c6a2-9d3b-5471-948b-72d9d8fa6cef",
+    "surfaceComponentId004": "95f8f5e0-a5e0-5ac1-ab22-012917d7fc32",
+    "surfaceComponentId005": "a9cebdd9-e6b7-535e-92eb-2220591d35bd",
+    "surfaceComponentId006": "acdd031b-8f64-517b-8edd-1ff1180483b9",
+    "surfaceComponentId007": "d0d02ef8-acf5-5ed1-9ec0-3d313e913f3e",
+    "surfaceComponentId008": "f8fc6396-d277-5e5e-8bf7-93e62d36c1dc",
     "worldMapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7",
     "worldSurfaceEntityId": "eaa0cecc-8c5d-559f-b18a-bbd0c53248ac"
   },
@@ -23,6 +54,10 @@
     "atlasPreviewVersion": 1,
     "atlasRealizationVersion": 1,
     "atlasSamplingPolicyVersion": 1,
+    "atlasSemanticClassificationVersion": 1,
+    "atlasSemanticGeneratorManifestVersion": 1,
+    "atlasSemanticParameterSchemaVersion": 1,
+    "atlasSemanticPolicyVersion": 1,
     "deterministicStreamVersion": 1,
     "landWaterClassificationBehaviorVersion": 1,
     "landWaterClassificationGeneratorVersion": 1,
@@ -30,19 +65,25 @@
     "seedDerivationVersion": 1
   },
   "checkpointRevisions": {
-    "baseline": { "worldSurface.landWaterClassification": 0, "worldTerrain.macroElevation": 0 }
+    "baseline": {
+      "islandGroup.classification": 0,
+      "landmass.classification": 0,
+      "waterBody.classification": 0,
+      "worldSurface.landWaterClassification": 0,
+      "worldTerrain.macroElevation": 0
+    }
   },
   "expectedAssertions": [
     {
       "assertionId": "runner-validates-full-generator-kernel",
       "operator": "runner-pass",
-      "reviewPurpose": "Prove exact full-profile generation, output validation, nesting, seam/pole behavior, progress, and declared realization tolerances."
+      "reviewPurpose": "Prove exact full-profile generation plus stable semantic classification, ownership, connectivity, containment, identity, and ordering."
     }
   ],
-  "reviewPurpose": "Prove the version-1 atlas macro-elevation and land/water generator for one fixed seed/control row before accepted-aspect persistence integration.",
+  "reviewPurpose": "Prove the version-1 atlas field, partition, and semantic geography generator for one fixed seed/control row before accepted-aspect persistence integration.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0001-initial-acceptance.md",
-    "sha256": "26966500aff1ae28168ec2433ee29158dca69737a91a90eabf039f2b149094e6"
+    "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0002-semantic-classification.md",
+    "sha256": "7f46193b58fe25f1bf4bc99d8a2ffdae0125059d283e3ff1df61c3e8f0d92bad"
   },
   "generatedRoots": ["fixed-seeds/milestone-2-atlas-fragmented-islands/expected"],
   "artifacts": [
@@ -50,9 +91,9 @@
       "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/expected/baseline/atlas-land-water.kernel.canonical",
       "kind": "canonical-kernel-vector",
       "checkpoint": "baseline",
-      "byteLength": 3441,
-      "canonicalKernelVectorSha256": "31be8aba84697ebf208fd73c5f6627840066956401ef379291817c686762f9a5",
-      "fixtureIntegritySha256": "31be8aba84697ebf208fd73c5f6627840066956401ef379291817c686762f9a5"
+      "byteLength": 4862,
+      "canonicalKernelVectorSha256": "10cf1196b6bdd82ce9da601ed72136693ac1848762db0936c990638157517fa9",
+      "fixtureIntegritySha256": "10cf1196b6bdd82ce9da601ed72136693ac1848762db0936c990638157517fa9"
     }
   ]
 }
