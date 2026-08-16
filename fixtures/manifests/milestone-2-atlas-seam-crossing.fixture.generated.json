@@ -3,13 +3,20 @@
   "fixtureId": "milestone-2-atlas-seam-crossing",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-seam-crossing --review-record fixed-seeds/milestone-2-atlas-seam-crossing/reviews/0002-semantic-classification.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-seam-crossing --review-record fixed-seeds/milestone-2-atlas-seam-crossing/reviews/0003-canonical-coastline.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-seam-crossing/fixture-definition.json",
-    "sha256": "5016c9b23949485c877bb20b044e0b8a4b3d8e5235bc6e51550ffa0f739c327a"
+    "sha256": "9ca50731c10707032defa750e6e7d123f0db89ab5bd6ef7efb1e47108d4324c1"
   },
   "worldSeed": "12297829382473034410",
   "stableIds": {
+    "coastlineAspectId": "371a6a8c-9fe8-5cdb-adca-1a46ffa19645",
+    "coastlineRingId000": "34b09bf5-8531-56a7-9de3-32f5c7ca44f8",
+    "coastlineRingId001": "8012ca0b-b2a8-55a4-8367-179d95632065",
+    "coastlineRingId002": "a69bb179-8473-5772-8147-ccd022b5cfe1",
+    "coastlineRingId003": "af8e3137-1c82-5af6-bb6a-2051643808ea",
+    "coastlineRingId004": "cfb5c01a-4e03-5656-8c60-91286300e363",
+    "coastlineRingId005": "d6800c2b-d54a-52a1-9d1d-74ba4ca8e3ed",
     "landWaterClassificationAspectId": "04628f37-6408-5087-a139-bdd2bdff42d3",
     "macroElevationAspectId": "e588eb7f-d585-5c27-9ce5-81c2fb1ebc43",
     "semanticAspectId000": "07740c11-3c0a-5bea-8617-4dbde5fee695",
@@ -33,10 +40,17 @@
     "surfaceComponentId004": "5946abc5-52bb-5b72-a8c3-6b90a3b54b41",
     "surfaceComponentId005": "6fc9d2e6-eb5c-58ea-b6b8-1b8e68e8ad17",
     "surfaceComponentId006": "8d5a5983-9055-5acc-b079-39c2b054efff",
+    "worldCoastlineEntityId": "8737ec2a-5dd2-5b77-85f3-d8cd683ef073",
     "worldMapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7",
     "worldSurfaceEntityId": "eaa0cecc-8c5d-559f-b18a-bbd0c53248ac"
   },
   "versions": {
+    "atlasCoastlineExtractionAlgorithmVersion": 1,
+    "atlasCoastlineGeneratorManifestVersion": 1,
+    "atlasCoastlineGeometryBehaviorVersion": 1,
+    "atlasCoastlineParameterSchemaVersion": 1,
+    "atlasCoastlineSimplificationPolicyVersion": 1,
+    "atlasCoastlineTopologyValidationVersion": 1,
     "atlasFieldBehaviorVersion": 1,
     "atlasGeneratorManifestVersion": 1,
     "atlasGeographyContractVersion": 1,
@@ -59,6 +73,7 @@
       "islandGroup.classification": 0,
       "landmass.classification": 0,
       "waterBody.classification": 0,
+      "worldCoastline.geometry": 0,
       "worldSurface.landWaterClassification": 0,
       "worldTerrain.macroElevation": 0
     }
@@ -67,13 +82,13 @@
     {
       "assertionId": "runner-validates-full-generator-kernel",
       "operator": "runner-pass",
-      "reviewPurpose": "Prove exact full-profile generation plus stable semantic classification, ownership, connectivity, containment, identity, and ordering."
+      "reviewPurpose": "Prove exact full-profile generation, semantic classification, and source-linked canonical coastline geometry, simplification, topology, identity, and ordering."
     }
   ],
-  "reviewPurpose": "Prove the version-1 atlas field, partition, and semantic geography generator for one fixed seed/control row before accepted-aspect persistence integration.",
+  "reviewPurpose": "Prove the version-1 atlas field, partition, semantic geography, and canonical coastline generator for one fixed seed/control row before accepted-aspect persistence integration.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-seam-crossing/reviews/0002-semantic-classification.md",
-    "sha256": "c5aa12e5e98ad5680aa774735eb9ed776f78dc7fc878115ee3c76b226d5f5f52"
+    "path": "fixed-seeds/milestone-2-atlas-seam-crossing/reviews/0003-canonical-coastline.md",
+    "sha256": "1b8bb05a5e2196a3476a5a58f5147804a8b535f581346101da0f9256bbab6963"
   },
   "generatedRoots": ["fixed-seeds/milestone-2-atlas-seam-crossing/expected"],
   "artifacts": [
@@ -81,9 +96,9 @@
       "path": "fixed-seeds/milestone-2-atlas-seam-crossing/expected/baseline/atlas-land-water.kernel.canonical",
       "kind": "canonical-kernel-vector",
       "checkpoint": "baseline",
-      "byteLength": 4709,
-      "canonicalKernelVectorSha256": "7ac20ab5de37f767b05244fbe32ee658b1f66ec15081f1cc1dd285272751c16f",
-      "fixtureIntegritySha256": "7ac20ab5de37f767b05244fbe32ee658b1f66ec15081f1cc1dd285272751c16f"
+      "byteLength": 6254,
+      "canonicalKernelVectorSha256": "3af8d2b8a4e658ea87959525390f706c85b65504a5d65719d63bb2399acb005b",
+      "fixtureIntegritySha256": "3af8d2b8a4e658ea87959525390f706c85b65504a5d65719d63bb2399acb005b"
     }
   ]
 }
