@@ -31,6 +31,10 @@
     "atlasPreviewVersion": 1,
     "atlasRealizationVersion": 1,
     "atlasSamplingPolicyVersion": 1,
+    "atlasSemanticClassificationVersion": 1,
+    "atlasSemanticGeneratorManifestVersion": 1,
+    "atlasSemanticParameterSchemaVersion": 1,
+    "atlasSemanticPolicyVersion": 1,
     "deterministicStreamVersion": 1,
     "landWaterClassificationBehaviorVersion": 1,
     "landWaterClassificationGeneratorVersion": 1,
@@ -60,7 +64,7 @@
     "seaLevelContourDoubledTicks": -13844265,
     "macroFieldTicksSha256": "d4d730b5fcf0c9c182fa134751d1ea3da7a7e5d2bb3ba46f8ebf6bbce67c4464",
     "landWaterPackedBitsSha256": "d6c52f40a5026d8987fbc5f34a1ed51977d3c748371998605b2c36322fd58859",
-    "primitiveTraversalSha256": "c16413749bbae599b189ce06f41b57dc0d45e532204df033146305bf4c692e68",
+    "primitiveTraversalSha256": "4605c6d43db2ab4850c48fe2179291531e6c427c2cc239b2d723752e207d6cd2",
     "sampleCounts": { "land": 605318, "water": 1489788 },
     "realization": {
       "realizationVersion": 1,
@@ -73,7 +77,34 @@
     "diagnosticCodes": [
       "atlas.land-water.ocean-connectivity-unsupported",
       "atlas.land-water.ocean-connectivity-unverified"
-    ]
+    ],
+    "semantic": {
+      "semanticClassificationVersion": 1,
+      "semanticPolicyVersion": 1,
+      "semanticParameterSchemaVersion": 1,
+      "replacementAspectNames": [
+        "landmass.classification",
+        "landmass.classification",
+        "landmass.classification",
+        "landmass.classification",
+        "landmass.classification",
+        "waterBody.classification",
+        "waterBody.classification"
+      ],
+      "removedAspectIds": [],
+      "explicitlyIncrementedAspectIds": [],
+      "kindCounts": {
+        "continent": 1,
+        "majorIsland": 2,
+        "island": 2,
+        "islandChain": 0,
+        "archipelago": 0,
+        "oceanBasin": 1,
+        "marginalSea": 0,
+        "enclosedSea": 1
+      },
+      "semanticPrimitiveTraversalSha256": "0e373a6e432a7b40b8912da854737f19f4324c90f063378033c646417e135fcb"
+    }
   },
   "invariants": {
     "validatedAcceptedOutputRecords": true,
@@ -85,6 +116,15 @@
     "northPole": { "sampleCount": 1, "fieldTicks": -7046431, "classification": "water" },
     "canonicalSeamIdentityTicks": 0,
     "adjacentSeamDeltaTicks": 0,
-    "progress": { "previewReportCount": 55, "fullReportCount": 170, "totalWork": 1000 }
+    "progress": { "previewReportCount": 55, "fullReportCount": 170, "totalWork": 1000 },
+    "semantic": {
+      "exactOwnedSampleCount": 2095106,
+      "landmassCount": 5,
+      "islandGroupCount": 0,
+      "waterBodyCount": 2,
+      "stableEntityOrder": true,
+      "stableAspectOrder": true,
+      "validatedSemanticRecords": true
+    }
   }
 }
