@@ -30,6 +30,8 @@
     "atlasCoastlineParameterSchemaVersion": 1,
     "atlasCoastlineSimplificationPolicyVersion": 1,
     "atlasCoastlineTopologyValidationVersion": 1,
+    "atlasDisplayProjectionVersion": 1,
+    "atlasDisplaySeamPolicyVersion": 1,
     "atlasFieldBehaviorVersion": 1,
     "atlasGeneratorManifestVersion": 1,
     "atlasGeographyContractVersion": 1,
@@ -70,7 +72,7 @@
     "seaLevelContourDoubledTicks": -13854891,
     "macroFieldTicksSha256": "513f3352f26f7711400daf38e76d27fa9489e5f1112cbfec04e211926ea2bce9",
     "landWaterPackedBitsSha256": "4e7718c22a9034a77cf1a005bb5ca6db1c438f77c4a77a35ded1bf32e156e419",
-    "primitiveTraversalSha256": "4df24f794a74c98eb60f7e4142f1a25d623078c4cb2437010c9a718c326cbc94",
+    "primitiveTraversalSha256": "5237d04e662b7a63ecd065320176d3669447eedd250226b91a271ceaa5286cfd",
     "sampleCounts": { "land": 617614, "water": 1477492 },
     "realization": {
       "realizationVersion": 1,
@@ -132,6 +134,24 @@
       "canonicalPointCount": 6381,
       "ringCount": 5,
       "coastlinePrimitiveTraversalSha256": "5961a8016d0aba3faa446e4db6d381a5e898402904dbd1b91ca992ab3a42513f"
+    },
+    "projection": {
+      "projectionId": "atlas-equirectangular",
+      "projectionVersion": 1,
+      "seamPolicyVersion": 1,
+      "coordinateSpace": "atlas-display-equirectangular-v1",
+      "authority": "disposable-display",
+      "seamLongitudeTicks": -2147483648,
+      "widthDisplayTicks": 4294967296,
+      "heightDisplayTicks": 2147483648,
+      "logicalAspectRatio": 2,
+      "semanticToleranceTicks": 0,
+      "sourceGeometryBehaviorVersion": 1,
+      "pathCount": 8,
+      "pointCount": 6389,
+      "seamSplitRingCount": 2,
+      "seamEndpointCount": 12,
+      "projectedPrimitiveTraversalSha256": "68a1509bf0451ae0447c05eccf45c480a46af22b4e81061967a1ce2856aacbc4"
     }
   },
   "invariants": {
@@ -161,6 +181,14 @@
       "seamCrossingRingCount": 3,
       "southPoleClassification": "water",
       "northPoleClassification": "water"
+    },
+    "projection": {
+      "sourceCoastlineUnchanged": true,
+      "sourceIdentityAndProvenancePreserved": true,
+      "stablePathIdentityAndOrder": true,
+      "noWorldSpanningProjectedSegments": true,
+      "previewFullSemanticToleranceTicks": 0,
+      "canvasSvgSharedSceneCoveredByIntegrationTest": true
     }
   }
 }

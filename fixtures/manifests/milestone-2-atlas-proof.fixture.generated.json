@@ -3,10 +3,10 @@
   "fixtureId": "milestone-2-atlas-proof",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-proof --review-record fixed-seeds/milestone-2-atlas-proof/reviews/0003-canonical-coastline.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-proof --review-record fixed-seeds/milestone-2-atlas-proof/reviews/0004-display-projection.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-proof/fixture-definition.json",
-    "sha256": "8dbace28fd3edb00a9c51944acc54e28ff734e0c5f442d66304d20dcc3669cec"
+    "sha256": "e92ef2f6775a7976a32ba5e2588666683f2de7a2493a4f98db6c11c54fc7afa2"
   },
   "worldSeed": "81985529216486895",
   "stableIds": {
@@ -47,6 +47,8 @@
     "atlasCoastlineParameterSchemaVersion": 1,
     "atlasCoastlineSimplificationPolicyVersion": 1,
     "atlasCoastlineTopologyValidationVersion": 1,
+    "atlasDisplayProjectionVersion": 1,
+    "atlasDisplaySeamPolicyVersion": 1,
     "atlasFieldBehaviorVersion": 1,
     "atlasGeneratorManifestVersion": 1,
     "atlasGeographyContractVersion": 1,
@@ -78,13 +80,13 @@
     {
       "assertionId": "runner-validates-full-generator-kernel",
       "operator": "runner-pass",
-      "reviewPurpose": "Prove exact full-profile generation, semantic classification, and source-linked canonical coastline geometry, simplification, topology, identity, and ordering."
+      "reviewPurpose": "Prove exact full-profile generation, semantic classification, source-linked canonical coastline geometry, simplification, topology, identity, ordering, and deterministic seam-safe display projection."
     }
   ],
-  "reviewPurpose": "Prove the version-1 atlas field, partition, semantic geography, and canonical coastline generator for one fixed seed/control row before accepted-aspect persistence integration.",
+  "reviewPurpose": "Prove the version-1 atlas field, partition, semantic geography, canonical coastline generator, and disposable display projection for one fixed seed/control row before accepted-aspect persistence integration.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-proof/reviews/0003-canonical-coastline.md",
-    "sha256": "ab0a75c55cf4053811f8d57ece8626d6cb5afad619d1860d0e0f0e780a41b90a"
+    "path": "fixed-seeds/milestone-2-atlas-proof/reviews/0004-display-projection.md",
+    "sha256": "f560855d5c0b972115604f8ee7ca63596db890d572ad9748066cb9c1c175b240"
   },
   "generatedRoots": ["fixed-seeds/milestone-2-atlas-proof/expected"],
   "artifacts": [
@@ -92,9 +94,9 @@
       "path": "fixed-seeds/milestone-2-atlas-proof/expected/baseline/atlas-land-water.kernel.canonical",
       "kind": "canonical-kernel-vector",
       "checkpoint": "baseline",
-      "byteLength": 6161,
-      "canonicalKernelVectorSha256": "e181df8bd2180c2ae563469447b5c07fd29c5b16e9fafd2fe0c76879e59f36a4",
-      "fixtureIntegritySha256": "e181df8bd2180c2ae563469447b5c07fd29c5b16e9fafd2fe0c76879e59f36a4"
+      "byteLength": 7239,
+      "canonicalKernelVectorSha256": "7d60e7582740ee7cf501bd4313bfb8660e9436089d150bfbb4954f6af4965ec1",
+      "fixtureIntegritySha256": "7d60e7582740ee7cf501bd4313bfb8660e9436089d150bfbb4954f6af4965ec1"
     }
   ]
 }
