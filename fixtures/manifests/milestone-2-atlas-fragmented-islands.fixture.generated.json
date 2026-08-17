@@ -3,7 +3,7 @@
   "fixtureId": "milestone-2-atlas-fragmented-islands",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-fragmented-islands --review-record fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0009-production-atlas-svg.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-fragmented-islands --review-record fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0010-production-atlas-png.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/fixture-definition.json",
     "sha256": "5a3d25b051129cadc85cc78ca0a422faa63b75bf222318a5350cab52e9baca08"
@@ -116,8 +116,8 @@
   ],
   "reviewPurpose": "Prove the restrained version-1 ink style and appearance isolation over unchanged accepted atlas geography before persistence integration.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0009-production-atlas-svg.md",
-    "sha256": "b4237c53e80569b8eaabc4a1ff634dd916a68313eb562644ea46d488db712ec0"
+    "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0010-production-atlas-png.md",
+    "sha256": "d65c575cf2efa0690236bca9885fcec30ceeaf336ac7b48b5172dd548b7ecfcf"
   },
   "generatedRoots": [
     "canonical-svg/milestone-2-atlas-fragmented-islands",
@@ -153,9 +153,19 @@
       "path": "visual-gallery/milestone-2-atlas-fragmented-islands/baseline.png",
       "kind": "visual-evidence",
       "checkpoint": "baseline",
-      "byteLength": 1049775,
-      "visualEvidenceSha256": "563bdf3063ffdfa8e422fb7200a2760352ccb1faaf887c9bb2c3478cd7555dc2",
-      "fixtureIntegritySha256": "563bdf3063ffdfa8e422fb7200a2760352ccb1faaf887c9bb2c3478cd7555dc2"
+      "byteLength": 110733,
+      "visualEvidenceSha256": "3de5c19e9c04427273c6e00cc69c276d9b8d94433e651bff0565cd1eb5dcf689",
+      "fixtureIntegritySha256": "3de5c19e9c04427273c6e00cc69c276d9b8d94433e651bff0565cd1eb5dcf689",
+      "pngProfileId": "atlas-png-v1",
+      "pngProfileVersion": 1,
+      "widthPx": 1600,
+      "heightPx": 800,
+      "bitDepth": 8,
+      "colorType": 2,
+      "srgbRenderingIntent": 0,
+      "bandCoreHeightPx": 64,
+      "bandHaloPx": 8,
+      "idatChunkBytes": 1048576
     }
   ]
 }
