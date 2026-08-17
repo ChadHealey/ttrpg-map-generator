@@ -3,7 +3,7 @@
   "fixtureId": "milestone-2-atlas-connected-majority",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-connected-majority --review-record fixed-seeds/milestone-2-atlas-connected-majority/reviews/0007-restrained-ink-atlas.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-connected-majority --review-record fixed-seeds/milestone-2-atlas-connected-majority/reviews/0008-production-atlas-svg.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-connected-majority/fixture-definition.json",
     "sha256": "61dc97b65b02cb051d43248233527f7e6ca91bc057d86349a951f074e26166c6"
@@ -120,8 +120,8 @@
   ],
   "reviewPurpose": "Prove the restrained version-1 ink style and appearance isolation over unchanged accepted atlas geography before persistence integration.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-connected-majority/reviews/0007-restrained-ink-atlas.md",
-    "sha256": "5b70496058c75ddbdb336a0cb87ad1293eb4229e2ec6b7d60ccee85418e26ea5"
+    "path": "fixed-seeds/milestone-2-atlas-connected-majority/reviews/0008-production-atlas-svg.md",
+    "sha256": "7cee8ed7ebcef1011265567a4ce429d56b22099c292746ad1e5e88a0db803764"
   },
   "generatedRoots": [
     "canonical-svg/milestone-2-atlas-connected-majority",
@@ -133,9 +133,9 @@
       "path": "canonical-svg/milestone-2-atlas-connected-majority/baseline.svg",
       "kind": "canonical-svg",
       "checkpoint": "baseline",
-      "byteLength": 920780,
-      "canonicalSvgSha256": "1697c1f605aebdbefd766fd9b882e44eba589e2d97b46c1e88ff1e2642c01bb9",
-      "fixtureIntegritySha256": "1697c1f605aebdbefd766fd9b882e44eba589e2d97b46c1e88ff1e2642c01bb9"
+      "byteLength": 808155,
+      "canonicalSvgSha256": "673452687a5cd21cabf0ac186b52a32fae4500357c45bdf59123805dfaf03fb3",
+      "fixtureIntegritySha256": "673452687a5cd21cabf0ac186b52a32fae4500357c45bdf59123805dfaf03fb3"
     },
     {
       "path": "fixed-seeds/milestone-2-atlas-connected-majority/expected/baseline/atlas-land-water.kernel.canonical",
