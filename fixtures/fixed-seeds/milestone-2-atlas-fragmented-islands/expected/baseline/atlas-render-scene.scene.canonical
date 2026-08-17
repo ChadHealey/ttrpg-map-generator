@@ -15145,12 +15145,12 @@
       "sourceAspectId": "90916e2f-286a-5722-984e-0981392bcfd8",
       "relatedSourceIds": [],
       "points": [
-        { "xPx": 2019, "yPx": 1005 },
-        { "xPx": 2029, "yPx": 1004.333333492279 },
-        { "xPx": 2039, "yPx": 1005 }
+        { "xPx": 1247, "yPx": 819 },
+        { "xPx": 1256, "yPx": 819.333333492279 },
+        { "xPx": 1265, "yPx": 819 }
       ],
       "strokeColor": "#71888b",
-      "strokeWidthPx": 0.5826600000000001
+      "strokeWidthPx": 0.67392
     },
     {
       "id": "atlas-water/mark/45f1ac36-f008-5eb9-b474-2356e2fb5997/0009",
@@ -15159,29 +15159,15 @@
       "sourceAspectId": "90916e2f-286a-5722-984e-0981392bcfd8",
       "relatedSourceIds": [],
       "points": [
-        { "xPx": 1607, "yPx": 953 },
-        { "xPx": 1617, "yPx": 953 },
-        { "xPx": 1627, "yPx": 953 }
+        { "xPx": 1072, "yPx": 765 },
+        { "xPx": 1077, "yPx": 765 },
+        { "xPx": 1082, "yPx": 765 }
       ],
       "strokeColor": "#71888b",
-      "strokeWidthPx": 0.54366
+      "strokeWidthPx": 0.6162000000000001
     },
     {
       "id": "atlas-water/mark/45f1ac36-f008-5eb9-b474-2356e2fb5997/0010",
-      "kind": "polyline",
-      "sourceId": "45f1ac36-f008-5eb9-b474-2356e2fb5997",
-      "sourceAspectId": "90916e2f-286a-5722-984e-0981392bcfd8",
-      "relatedSourceIds": [],
-      "points": [
-        { "xPx": 885, "yPx": 994 },
-        { "xPx": 891, "yPx": 994.666666507721 },
-        { "xPx": 897, "yPx": 994 }
-      ],
-      "strokeColor": "#71888b",
-      "strokeWidthPx": 0.5818800000000001
-    },
-    {
-      "id": "atlas-water/mark/45f1ac36-f008-5eb9-b474-2356e2fb5997/0011",
       "kind": "polyline",
       "sourceId": "45f1ac36-f008-5eb9-b474-2356e2fb5997",
       "sourceAspectId": "90916e2f-286a-5722-984e-0981392bcfd8",
@@ -15195,7 +15181,7 @@
       "strokeWidthPx": 0.69108
     },
     {
-      "id": "atlas-water/mark/45f1ac36-f008-5eb9-b474-2356e2fb5997/0012",
+      "id": "atlas-water/mark/45f1ac36-f008-5eb9-b474-2356e2fb5997/0011",
       "kind": "polyline",
       "sourceId": "45f1ac36-f008-5eb9-b474-2356e2fb5997",
       "sourceAspectId": "90916e2f-286a-5722-984e-0981392bcfd8",
@@ -15209,21 +15195,21 @@
       "strokeWidthPx": 0.6786
     },
     {
-      "id": "atlas-water/mark/53e71a62-6494-57d2-a188-8b84dfbb5b7b/0000",
+      "id": "atlas-water/mark/45f1ac36-f008-5eb9-b474-2356e2fb5997/0012",
       "kind": "polyline",
-      "sourceId": "53e71a62-6494-57d2-a188-8b84dfbb5b7b",
+      "sourceId": "45f1ac36-f008-5eb9-b474-2356e2fb5997",
       "sourceAspectId": "90916e2f-286a-5722-984e-0981392bcfd8",
       "relatedSourceIds": [],
       "points": [
-        { "xPx": 1331, "yPx": 51 },
-        { "xPx": 1336, "yPx": 51 },
-        { "xPx": 1341, "yPx": 51 }
+        { "xPx": 1427, "yPx": 653 },
+        { "xPx": 1432, "yPx": 653 },
+        { "xPx": 1437, "yPx": 653 }
       ],
       "strokeColor": "#71888b",
       "strokeWidthPx": 0.6700200000000001
     },
     {
-      "id": "atlas-water/mark/53e71a62-6494-57d2-a188-8b84dfbb5b7b/0001",
+      "id": "atlas-water/mark/53e71a62-6494-57d2-a188-8b84dfbb5b7b/0000",
       "kind": "polyline",
       "sourceId": "53e71a62-6494-57d2-a188-8b84dfbb5b7b",
       "sourceAspectId": "90916e2f-286a-5722-984e-0981392bcfd8",
@@ -15237,7 +15223,7 @@
       "strokeWidthPx": 0.69654
     },
     {
-      "id": "atlas-water/mark/53e71a62-6494-57d2-a188-8b84dfbb5b7b/0002",
+      "id": "atlas-water/mark/53e71a62-6494-57d2-a188-8b84dfbb5b7b/0001",
       "kind": "polyline",
       "sourceId": "53e71a62-6494-57d2-a188-8b84dfbb5b7b",
       "sourceAspectId": "90916e2f-286a-5722-984e-0981392bcfd8",
@@ -15251,7 +15237,7 @@
       "strokeWidthPx": 0.63102
     },
     {
-      "id": "atlas-water/mark/53e71a62-6494-57d2-a188-8b84dfbb5b7b/0003",
+      "id": "atlas-water/mark/53e71a62-6494-57d2-a188-8b84dfbb5b7b/0002",
       "kind": "polyline",
       "sourceId": "53e71a62-6494-57d2-a188-8b84dfbb5b7b",
       "sourceAspectId": "90916e2f-286a-5722-984e-0981392bcfd8",
@@ -15265,7 +15251,7 @@
       "strokeWidthPx": 0.59826
     },
     {
-      "id": "atlas-water/mark/53e71a62-6494-57d2-a188-8b84dfbb5b7b/0004",
+      "id": "atlas-water/mark/53e71a62-6494-57d2-a188-8b84dfbb5b7b/0003",
       "kind": "polyline",
       "sourceId": "53e71a62-6494-57d2-a188-8b84dfbb5b7b",
       "sourceAspectId": "90916e2f-286a-5722-984e-0981392bcfd8",
@@ -15279,7 +15265,7 @@
       "strokeWidthPx": 0.64194
     },
     {
-      "id": "atlas-water/mark/53e71a62-6494-57d2-a188-8b84dfbb5b7b/0005",
+      "id": "atlas-water/mark/53e71a62-6494-57d2-a188-8b84dfbb5b7b/0004",
       "kind": "polyline",
       "sourceId": "53e71a62-6494-57d2-a188-8b84dfbb5b7b",
       "sourceAspectId": "90916e2f-286a-5722-984e-0981392bcfd8",
@@ -15293,7 +15279,7 @@
       "strokeWidthPx": 0.59748
     },
     {
-      "id": "atlas-water/mark/53e71a62-6494-57d2-a188-8b84dfbb5b7b/0006",
+      "id": "atlas-water/mark/53e71a62-6494-57d2-a188-8b84dfbb5b7b/0005",
       "kind": "polyline",
       "sourceId": "53e71a62-6494-57d2-a188-8b84dfbb5b7b",
       "sourceAspectId": "90916e2f-286a-5722-984e-0981392bcfd8",
@@ -15307,7 +15293,7 @@
       "strokeWidthPx": 0.51714
     },
     {
-      "id": "atlas-water/mark/53e71a62-6494-57d2-a188-8b84dfbb5b7b/0007",
+      "id": "atlas-water/mark/53e71a62-6494-57d2-a188-8b84dfbb5b7b/0006",
       "kind": "polyline",
       "sourceId": "53e71a62-6494-57d2-a188-8b84dfbb5b7b",
       "sourceAspectId": "90916e2f-286a-5722-984e-0981392bcfd8",
@@ -15321,7 +15307,7 @@
       "strokeWidthPx": 0.6723600000000001
     },
     {
-      "id": "atlas-water/mark/53e71a62-6494-57d2-a188-8b84dfbb5b7b/0008",
+      "id": "atlas-water/mark/53e71a62-6494-57d2-a188-8b84dfbb5b7b/0007",
       "kind": "polyline",
       "sourceId": "53e71a62-6494-57d2-a188-8b84dfbb5b7b",
       "sourceAspectId": "90916e2f-286a-5722-984e-0981392bcfd8",
@@ -15335,7 +15321,7 @@
       "strokeWidthPx": 0.64818
     },
     {
-      "id": "atlas-water/mark/53e71a62-6494-57d2-a188-8b84dfbb5b7b/0009",
+      "id": "atlas-water/mark/53e71a62-6494-57d2-a188-8b84dfbb5b7b/0008",
       "kind": "polyline",
       "sourceId": "53e71a62-6494-57d2-a188-8b84dfbb5b7b",
       "sourceAspectId": "90916e2f-286a-5722-984e-0981392bcfd8",
@@ -15349,7 +15335,7 @@
       "strokeWidthPx": 0.50856
     },
     {
-      "id": "atlas-water/mark/53e71a62-6494-57d2-a188-8b84dfbb5b7b/0010",
+      "id": "atlas-water/mark/53e71a62-6494-57d2-a188-8b84dfbb5b7b/0009",
       "kind": "polyline",
       "sourceId": "53e71a62-6494-57d2-a188-8b84dfbb5b7b",
       "sourceAspectId": "90916e2f-286a-5722-984e-0981392bcfd8",
@@ -15363,21 +15349,21 @@
       "strokeWidthPx": 0.6045
     },
     {
-      "id": "atlas-water/mark/ae1133cb-687a-5ef9-986c-e1e0e6908eea/0000",
+      "id": "atlas-water/mark/53e71a62-6494-57d2-a188-8b84dfbb5b7b/0010",
       "kind": "polyline",
-      "sourceId": "ae1133cb-687a-5ef9-986c-e1e0e6908eea",
+      "sourceId": "53e71a62-6494-57d2-a188-8b84dfbb5b7b",
       "sourceAspectId": "90916e2f-286a-5722-984e-0981392bcfd8",
       "relatedSourceIds": [],
       "points": [
-        { "xPx": 470, "yPx": 554 },
-        { "xPx": 477, "yPx": 554.333333492279 },
-        { "xPx": 484, "yPx": 554 }
+        { "xPx": 1150, "yPx": 519 },
+        { "xPx": 1157, "yPx": 519.333333492279 },
+        { "xPx": 1164, "yPx": 519 }
       ],
       "strokeColor": "#71888b",
       "strokeWidthPx": 0.55536
     },
     {
-      "id": "atlas-water/mark/ae1133cb-687a-5ef9-986c-e1e0e6908eea/0001",
+      "id": "atlas-water/mark/ae1133cb-687a-5ef9-986c-e1e0e6908eea/0000",
       "kind": "polyline",
       "sourceId": "ae1133cb-687a-5ef9-986c-e1e0e6908eea",
       "sourceAspectId": "90916e2f-286a-5722-984e-0981392bcfd8",
@@ -15389,6 +15375,20 @@
       ],
       "strokeColor": "#71888b",
       "strokeWidthPx": 0.60528
+    },
+    {
+      "id": "atlas-water/mark/ae1133cb-687a-5ef9-986c-e1e0e6908eea/0001",
+      "kind": "polyline",
+      "sourceId": "ae1133cb-687a-5ef9-986c-e1e0e6908eea",
+      "sourceAspectId": "90916e2f-286a-5722-984e-0981392bcfd8",
+      "relatedSourceIds": [],
+      "points": [
+        { "xPx": 489, "yPx": 569 },
+        { "xPx": 500, "yPx": 569.333333492279 },
+        { "xPx": 511, "yPx": 569 }
+      ],
+      "strokeColor": "#71888b",
+      "strokeWidthPx": 0.65208
     },
     {
       "id": "atlas/coastline/0924d4c4-69db-5b5b-849a-c690458dc030/atlas-equirectangular-v1/path-0000/stroke-0000",

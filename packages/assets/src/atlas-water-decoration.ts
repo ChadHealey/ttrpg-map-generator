@@ -170,7 +170,8 @@ function waterMarkPoints(
     canonicalPoint(anchor.longitudeTicks, anchor.latitudeTicks + bowTicks),
     canonicalPoint(anchor.longitudeTicks + halfLengthTicks, anchor.latitudeTicks),
   ];
-  return points.some((point) => point === undefined) || crossesSeam(points as PlanetPoint[])
+  return points.some((point) => point === undefined || isNearChartBoundary(point)) ||
+    crossesSeam(points as PlanetPoint[])
     ? undefined
     : Object.freeze(points as PlanetPoint[]);
 }

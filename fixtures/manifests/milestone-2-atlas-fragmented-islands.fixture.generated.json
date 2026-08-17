@@ -3,7 +3,7 @@
   "fixtureId": "milestone-2-atlas-fragmented-islands",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-fragmented-islands --review-record fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0007-restrained-ink-atlas.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-fragmented-islands --review-record fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0008-water-mark-seam-clearance.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/fixture-definition.json",
     "sha256": "5a3d25b051129cadc85cc78ca0a422faa63b75bf222318a5350cab52e9baca08"
@@ -116,8 +116,8 @@
   ],
   "reviewPurpose": "Prove the restrained version-1 ink style and appearance isolation over unchanged accepted atlas geography before persistence integration.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0007-restrained-ink-atlas.md",
-    "sha256": "4394028273b4ec4a78a3efd26585af87c9fe10486526e450a76aeb7d00ac6638"
+    "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0008-water-mark-seam-clearance.md",
+    "sha256": "6d991896302e28a7229ec18e5988aa2c8c5a7e8bc0482c19a9db0e51579192d2"
   },
   "generatedRoots": [
     "canonical-svg/milestone-2-atlas-fragmented-islands",
@@ -129,33 +129,33 @@
       "path": "canonical-svg/milestone-2-atlas-fragmented-islands/baseline.svg",
       "kind": "canonical-svg",
       "checkpoint": "baseline",
-      "byteLength": 967006,
-      "canonicalSvgSha256": "f8e3e089e16b8661d7f72c7ce952afffe88bf44bdf976d882b1a94037dc88d03",
-      "fixtureIntegritySha256": "f8e3e089e16b8661d7f72c7ce952afffe88bf44bdf976d882b1a94037dc88d03"
+      "byteLength": 966998,
+      "canonicalSvgSha256": "0ed9549842b0ac39aa751ee168ed5a957eff71fd534945d5a09372188fb513cf",
+      "fixtureIntegritySha256": "0ed9549842b0ac39aa751ee168ed5a957eff71fd534945d5a09372188fb513cf"
     },
     {
       "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/expected/baseline/atlas-land-water.kernel.canonical",
       "kind": "canonical-kernel-vector",
       "checkpoint": "baseline",
       "byteLength": 10015,
-      "canonicalKernelVectorSha256": "f4c423898ef423b87732ccd4d5fae5df99d6f5908f963f47f1ea88e9a83bb85c",
-      "fixtureIntegritySha256": "f4c423898ef423b87732ccd4d5fae5df99d6f5908f963f47f1ea88e9a83bb85c"
+      "canonicalKernelVectorSha256": "f27894e23fee03d298efece9cab535d2d776d5ec84cd77e70131729ff4c7fbab",
+      "fixtureIntegritySha256": "f27894e23fee03d298efece9cab535d2d776d5ec84cd77e70131729ff4c7fbab"
     },
     {
       "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/expected/baseline/atlas-render-scene.scene.canonical",
       "kind": "canonical-render-scene",
       "checkpoint": "baseline",
-      "byteLength": 1526130,
-      "canonicalSceneSha256": "2e2dba40a1af36fee7bac20c856f7fd3dcc5c20c00ad3357aba5d687cca08827",
-      "fixtureIntegritySha256": "2e2dba40a1af36fee7bac20c856f7fd3dcc5c20c00ad3357aba5d687cca08827"
+      "byteLength": 1526122,
+      "canonicalSceneSha256": "99fd7212d6048e916171c5d112b3065f9f047f3be88051156657109fc1d7c7a3",
+      "fixtureIntegritySha256": "99fd7212d6048e916171c5d112b3065f9f047f3be88051156657109fc1d7c7a3"
     },
     {
       "path": "visual-gallery/milestone-2-atlas-fragmented-islands/baseline.png",
       "kind": "visual-evidence",
       "checkpoint": "baseline",
       "byteLength": 1049775,
-      "visualEvidenceSha256": "3f33a70bd0cd7837d53526bbdf934d3eebe8f9c7d516ca04ee2e1bb07c7395c5",
-      "fixtureIntegritySha256": "3f33a70bd0cd7837d53526bbdf934d3eebe8f9c7d516ca04ee2e1bb07c7395c5"
+      "visualEvidenceSha256": "563bdf3063ffdfa8e422fb7200a2760352ccb1faaf887c9bb2c3478cd7555dc2",
+      "fixtureIntegritySha256": "563bdf3063ffdfa8e422fb7200a2760352ccb1faaf887c9bb2c3478cd7555dc2"
     }
   ]
 }
