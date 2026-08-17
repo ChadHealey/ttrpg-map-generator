@@ -419,10 +419,27 @@ boundary. Repeated SVG export is byte-identical. Repeated PNG export is byte-ide
 versioned `atlas-png-v1` encoder/profile contract; it contains no time, host, locale, or
 nondeterministic encoder metadata. Semantic equality is never inferred from SVG or PNG equality.
 
-`atlas-png-v1` uses an opaque 8-bit RGB paper background, an sRGB chunk with rendering intent `0`,
-stable chunk ordering, and no physical-size, time, host, locale, or free-form text chunks. Issue #67
-fixes and versions the deterministic compression/filter policy before initial fixture acceptance;
-changing it is an explicit PNG evidence and compatibility review.
+`atlas-png-v1` export-profile version 1 supports exactly `1600 × 800`, `4096 × 2048`, and
+`8192 × 4096` pixels; the desktop default and fixed release workload are `8192 × 4096`. It uses an
+opaque paper background and a fixed PNG signature, 8-bit truecolor type-2 `IHDR`, rendering-intent-0
+`sRGB`, consecutive `IDAT`, and `IEND` sequence. It emits no alpha, physical-size/DPI, time, host,
+locale, text, or other ancillary chunk.
+
+The production rasterizer scales then quantizes scene geometry to `1/256` output pixel and averages
+four fixed binary-coverage samples at quarter-pixel offsets. Even-odd fills and capsule round
+strokes replace opaque sample colors in scene painter order. It renders row-major full-width bands
+with 64 core rows and an 8-pixel vertical halo, keeps exactly one expanded four-sample RGB band and
+two RGB scanline buffers live, and never allocates a complete raster duplicate. At 8192 pixels wide
+the largest live band is exactly `8192 × 80 × 12 = 7,864,320` bytes.
+
+The first row uses PNG `Sub` filtering and later rows use `Up`. A project-owned zlib stream with
+header `0x78 0x01` contains one final fixed-Huffman DEFLATE block. Greedy equal-byte runs restart at
+each scanline and use only distance-1 matches of at most 258 bytes; canonical Adler-32 closes the
+stream. Consecutive `IDAT` chunks partition that one stream into 1-MiB payloads without resetting it.
+The complete raster, band, filter, compression, chunk, progress/cancellation, diagnostic, and native
+atomic-commit compatibility boundary is fixed by
+[ADR-0016](adr/0016-deterministic-whole-world-atlas-png-export.md). Changing any output byte is an
+explicit PNG evidence and compatibility review.
 
 `atlas-svg-v1` version 1 uses the fixed `0 0 2048 1024` scene viewBox and whole-millimetre 2:1
 physical dimensions from `200 × 100 mm` through `1600 × 800 mm`; desktop export defaults to
@@ -472,7 +489,9 @@ remain pixel-aligned at their canonical projected boundary.
 Visual review covers a normal 1440 by 900 viewport, canonical SVG at the proof's 2:1 logical
 extent, and deterministic 8192 by 4096 PNG produced by the production export path. Reviewers
 inspect full views plus seam, pole, narrow-channel, small-island, echo-line, and
-raster-tile-boundary crops. A favorable screenshot cannot substitute for the registered gallery.
+raster-tile-boundary crops. Automated PNG and reconstructed boundary-row comparisons have zero
+byte/pixel tolerance; human review accepts no visible seam, clipping, repetition, or decoration
+discontinuity. A favorable screenshot cannot substitute for the registered gallery.
 
 ## Performance, progress, cancellation, and resource budgets
 
@@ -493,6 +512,13 @@ enforce shared-runner wall-clock or cancellation-acknowledgement latency.
 | Full generation | dispatch through validated commit and first fully painted accepted full atlas                 | `10 s`     | `768 MiB`              | not applicable            |
 | SVG export      | reopened accepted atlas, request through atomically written and verified complete 2:1 output  | `3 s`      | `512 MiB`              | `32 MiB` destination file |
 | PNG export      | reopened accepted atlas, request through atomically written and verified `8192 × 4096` output | `15 s`     | `1 GiB`                | `64 MiB` destination file |
+
+`pnpm test:png-export` enforces deterministic bytes, dimensions, the file-size ceiling, bounded
+band/surface allocation, progress/cancellation state semantics, native replacement behavior, and
+deterministic aftermath. It is not the release benchmark. The base Apple M1/8-GB five-fresh-process
+time, aggregate-memory, and 500-ms cancellation-acknowledgement proof remains outstanding to issue
+#68. A result from this or any newer development machine does not substitute for that formal
+reference-hardware evidence.
 
 Wall-clock and memory gates run for `milestone-2-atlas-proof`,
 `milestone-2-atlas-fragmented-islands`, and `milestone-2-atlas-control-max`; all six rows must meet

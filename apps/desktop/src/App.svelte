@@ -42,6 +42,10 @@
     await run(workflow.exportSvg());
   }
 
+  async function exportPng(): Promise<void> {
+    await run(workflow.exportPng());
+  }
+
   function cancel(): void {
     workflow.cancelActiveOperation();
     refresh();
@@ -250,6 +254,11 @@
       >
       <button
         disabled={atlas.isBusy || atlas.accepted === undefined || atlas.preview !== undefined}
+        onclick={() => void exportPng()}
+        type="button">Export 8192 × 4096 PNG</button
+      >
+      <button
+        disabled={atlas.isBusy || atlas.accepted === undefined || atlas.preview !== undefined}
         onclick={() => void exportSvg()}
         type="button">Export deterministic SVG</button
       >
@@ -291,6 +300,28 @@
             </ul>
           </div>
         </div>
+      </section>
+    {/if}
+
+    {#if atlas.pngExportReceipt !== undefined}
+      <section aria-labelledby="png-export-heading" class="workflow-card">
+        <p class="eyebrow">atlas-png-v1 · verified native export</p>
+        <h2 id="png-export-heading">PNG export complete</h2>
+        <p>{atlas.pngExportReceipt.targetPath}</p>
+        <dl>
+          <div>
+            <dt>Pixel size</dt>
+            <dd>{atlas.pngExportReceipt.widthPx} × {atlas.pngExportReceipt.heightPx} px</dd>
+          </div>
+          <div>
+            <dt>Bytes</dt>
+            <dd>{atlas.pngExportReceipt.byteLength}</dd>
+          </div>
+          <div>
+            <dt>SHA-256</dt>
+            <dd><code>{atlas.pngExportReceipt.sha256}</code></dd>
+          </div>
+        </dl>
       </section>
     {/if}
 

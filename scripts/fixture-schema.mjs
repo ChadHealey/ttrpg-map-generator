@@ -1,5 +1,6 @@
 import { posix } from 'node:path';
 
+import { validateAtlasPngArtifactMetadata } from './atlas-png-fixture-schema.mjs';
 import { readRequiredFile, sha256, verifyArtifacts, verifyFile } from './fixture-files.mjs';
 
 const FIXTURE_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
@@ -187,6 +188,8 @@ function validateArtifact(candidate, index, fixtureId) {
   const artifact = requireRecord(candidate, `Artifact ${index}`);
   const artifactPath = requireFixtureRelativePath(artifact.path, `Artifact ${index} path`);
   const kind = requireNonEmptyString(artifact.kind, `Artifact ${index} kind`);
+  const isMilestoneTwoAtlasVisual =
+    kind === 'visual-evidence' && fixtureId.startsWith('milestone-2-atlas-');
   if (!ARTIFACT_KINDS.has(kind)) {
     fail(`Artifact ${artifactPath} has an unknown evidence kind.`);
   }
@@ -250,7 +253,10 @@ function validateArtifact(candidate, index, fixtureId) {
             ? 'canonicalSceneSha256'
             : kind === 'canonical-svg'
               ? 'canonicalSvgSha256'
-              : undefined;
+              : kind === 'visual-evidence' &&
+                  (artifact.visualEvidenceSha256 !== undefined || isMilestoneTwoAtlasVisual)
+                ? 'visualEvidenceSha256'
+                : undefined;
   const evidenceDigest =
     evidenceDigestField === undefined
       ? undefined
@@ -264,14 +270,19 @@ function validateArtifact(candidate, index, fixtureId) {
     'canonicalKernelVectorSha256',
     'canonicalSceneSha256',
     'canonicalSvgSha256',
+    'visualEvidenceSha256',
   ]) {
     if (field !== evidenceDigestField && artifact[field] !== undefined) {
       fail(`Artifact ${artifactPath} cannot declare ${field} for evidence kind ${kind}.`);
     }
   }
   if (evidenceDigest !== undefined && evidenceDigest !== fixtureIntegritySha256) {
-    fail(`Artifact ${artifactPath} canonical evidence hash must match its exact artifact bytes.`);
+    fail(`Artifact ${artifactPath} evidence hash must match its exact artifact bytes.`);
   }
+  const isProductionAtlasPng = isMilestoneTwoAtlasVisual;
+  const pngMetadata = isProductionAtlasPng
+    ? validateAtlasPngArtifactMetadata(artifact, artifactPath)
+    : {};
   return {
     path: artifactPath,
     kind,
@@ -280,6 +291,7 @@ function validateArtifact(candidate, index, fixtureId) {
     byteLength: artifact.byteLength,
     fixtureIntegritySha256,
     ...(evidenceDigestField === undefined ? {} : { [evidenceDigestField]: evidenceDigest }),
+    ...pngMetadata,
   };
 }
 

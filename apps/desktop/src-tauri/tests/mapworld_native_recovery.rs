@@ -1,3 +1,5 @@
+#[path = "mapworld_native_recovery/atlas_png_export.rs"]
+mod atlas_png_export;
 #[path = "mapworld_native_recovery/basic.rs"]
 mod basic;
 #[path = "mapworld_native_recovery/case_collision.rs"]

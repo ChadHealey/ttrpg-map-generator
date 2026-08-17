@@ -1,20 +1,10 @@
 import { RESTRAINED_INK_ATLAS_STYLE } from '@ttrpg-map/assets';
 import {
   ACCEPTED_ATLAS_DIAGNOSTIC_CODES,
-  type AspectReplacementProposal,
-  ATLAS_DOCUMENT_COMMAND_KIND,
-  ATLAS_DOCUMENT_OPERATION_MODES,
   ATLAS_DOCUMENT_TRANSACTION_DIAGNOSTIC_CODES,
   type AtlasControls,
-  type AtlasStyleProvenance,
-  type AtlasWaterDecoration,
-  commitAtlasProposal,
-  CONSTRAINT_KINDS,
-  type ConstraintId,
   DEFAULT_ATLAS_CONTROLS,
-  type LockId,
   parseGenerationDiagnosticCode,
-  parseStableId,
   reconstructAcceptedAtlas,
   type WorldDocument,
 } from '@ttrpg-map/core';
@@ -26,7 +16,12 @@ import {
   MAPWORLD_NATIVE_LIMITS,
   type MapworldPackage,
 } from '@ttrpg-map/persistence';
-import { ATLAS_SVG_MAXIMUM_BYTES, exportAtlasSceneToSvg } from '@ttrpg-map/render';
+import {
+  ATLAS_PNG_MAXIMUM_BYTES,
+  ATLAS_SVG_MAXIMUM_BYTES,
+  exportAtlasSceneToPngAsync,
+  exportAtlasSceneToSvg,
+} from '@ttrpg-map/render';
 import { beforeAll, describe, expect, it } from 'vitest';
 
 import {
@@ -38,14 +33,22 @@ import {
   reverseOrderInsensitiveAtlasOutput,
   reverseOrderInsensitiveCollections,
 } from './atlas-persistence-integration-support.js';
-import { MILESTONE_TWO_ATLAS_PROOF_SEED } from './atlas-workflow.js';
+import type { AcceptedAtlasState } from './atlas-workflow-generation.js';
 import {
-  type AcceptedAtlasState,
-  type AtlasWorkflowRuntime,
-  productionAtlasWorkflowGeneration,
-} from './atlas-workflow-generation.js';
-import { retainedAspectProposal } from './atlas-workflow-generation-support.js';
+  acceptedAspectRevision,
+  addSeamJump,
+  addUnknownDecorationKind,
+  attemptAtlasGeneration,
+  commitGeneratedAtlas,
+  invalidStyleId,
+  protectPaperTreatment,
+  recommitAppearance,
+  unsupportedStyleVersion,
+  withAcceptedDiagnostic,
+} from './atlas-workflow-generation-integration-test-support.js';
 import { reopenAcceptedAtlas } from './atlas-workflow-reopen.js';
+
+const PNG_INTEGRATION_DIMENSIONS = Object.freeze({ widthPx: 1_600, heightPx: 800 });
 
 interface GeneratedAtlasStates {
   readonly baseline: AcceptedAtlasState;
@@ -60,15 +63,19 @@ let generatedStates: GeneratedAtlasStates | undefined;
 
 describe('complete Milestone 2 atlas proposal transaction', () => {
   beforeAll(async () => {
-    const baseline = await commit('initial-atlas');
+    const baseline = await commitGeneratedAtlas('initial-atlas');
     const changedControls = Object.freeze({
       ...DEFAULT_ATLAS_CONTROLS,
       targetWaterCoveragePercent: 66,
     });
-    const controlled = await commit('control-driven-replacement', baseline, changedControls);
-    const geography = await commit('geography-reroll', controlled, changedControls);
+    const controlled = await commitGeneratedAtlas(
+      'control-driven-replacement',
+      baseline,
+      changedControls,
+    );
+    const geography = await commitGeneratedAtlas('geography-reroll', controlled, changedControls);
     const appearanceProgress: string[] = [];
-    const appearance = await commit('appearance-reroll', geography, changedControls, {
+    const appearance = await commitGeneratedAtlas('appearance-reroll', geography, changedControls, {
       isCancellationRequested: () => false,
       reportProgress: ({ stage }) => appearanceProgress.push(stage),
       yieldControl: () => Promise.resolve(),
@@ -87,19 +94,19 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
     const { appearance, appearanceProgress, baseline, changedControls, controlled, geography } =
       requiredGeneratedStates();
 
-    expect(revision(baseline, 'worldTerrain.macroElevation')).toBe(0);
-    expect(revision(controlled, 'worldTerrain.macroElevation')).toBe(0);
-    expect(revision(geography, 'worldTerrain.macroElevation')).toBe(1);
-    expect(revision(appearance, 'worldTerrain.macroElevation')).toBe(1);
+    expect(acceptedAspectRevision(baseline, 'worldTerrain.macroElevation')).toBe(0);
+    expect(acceptedAspectRevision(controlled, 'worldTerrain.macroElevation')).toBe(0);
+    expect(acceptedAspectRevision(geography, 'worldTerrain.macroElevation')).toBe(1);
+    expect(acceptedAspectRevision(appearance, 'worldTerrain.macroElevation')).toBe(1);
     for (const name of [
       'atlas.coastlineAppearance',
       'atlas.paperTreatment',
       'atlas.waterDecoration',
     ]) {
-      expect(revision(baseline, name)).toBe(0);
-      expect(revision(controlled, name)).toBe(0);
-      expect(revision(geography, name)).toBe(0);
-      expect(revision(appearance, name)).toBe(1);
+      expect(acceptedAspectRevision(baseline, name)).toBe(0);
+      expect(acceptedAspectRevision(controlled, name)).toBe(0);
+      expect(acceptedAspectRevision(geography, name)).toBe(0);
+      expect(acceptedAspectRevision(appearance, name)).toBe(1);
     }
     expect(appearance.geography).toEqual(geography.geography);
     expect(geography.appearance.paperTreatment).toEqual(controlled.appearance.paperTreatment);
@@ -108,7 +115,7 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
     expect(appearanceProgress).toStrictEqual(['validating-proposal', 'completed']);
 
     const locked = protectPaperTreatment(appearance, 'lock');
-    const lockedResult = await attempt('appearance-reroll', locked, changedControls);
+    const lockedResult = await attemptAtlasGeneration('appearance-reroll', locked, changedControls);
     expect(lockedResult).toMatchObject({
       ok: false,
       diagnosticCodes: ['atlas-transaction.lock.conflict'],
@@ -116,7 +123,11 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
     expect(locked.document.maps[0]?.locks).toHaveLength(1);
 
     const constrained = protectPaperTreatment(appearance, 'constraint');
-    const constrainedResult = await attempt('appearance-reroll', constrained, changedControls);
+    const constrainedResult = await attemptAtlasGeneration(
+      'appearance-reroll',
+      constrained,
+      changedControls,
+    );
     expect(constrainedResult).toMatchObject({
       ok: false,
       diagnosticCodes: ['atlas-transaction.constraint.conflict'],
@@ -215,6 +226,58 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
     expect(canonicalSvg(reopened.accepted)).toEqual(appearanceSvg);
     expect(reopened.accepted.document).toBe(reopenedDocument);
   }, 90_000);
+
+  it('keeps semantic and production PNG evidence separate across transitions and reopen', async () => {
+    const { appearance, baseline, controlled, geography } = requiredGeneratedStates();
+    const acceptedReferences = Object.freeze({
+      document: appearance.document,
+      geography: appearance.geography,
+      coastline: appearance.geography.coastline,
+      appearance: appearance.appearance,
+      scene: appearance.scene,
+      nodes: appearance.scene.nodes,
+    });
+
+    const baselinePng = await canonicalPng(baseline);
+    const controlledPng = await canonicalPng(controlled);
+    const geographyPng = await canonicalPng(geography);
+    const appearancePng = await canonicalPng(appearance);
+    const repeatedAppearancePng = await canonicalPng(appearance);
+
+    expect(equalBytes(controlledPng, baselinePng)).toBe(false);
+    expect(equalBytes(geographyPng, controlledPng)).toBe(false);
+    expect(equalBytes(appearancePng, geographyPng)).toBe(false);
+    expect(appearance.geography).toBe(geography.geography);
+    expect(appearance.geography.coastline).toBe(geography.geography.coastline);
+    expect(equalBytes(repeatedAppearancePng, appearancePng)).toBe(true);
+
+    const reopenedDocument = required(
+      decodeMapworld(required(encodeMapworld(appearance.document))),
+    );
+    const reopened = reopenAcceptedAtlas(reopenedDocument);
+    expect(reopened.ok, reopened.ok ? undefined : JSON.stringify(reopened)).toBe(true);
+    if (!reopened.ok) return;
+    const reopenedPng = await canonicalPng(reopened.accepted);
+    expect(equalBytes(reopenedPng, appearancePng)).toBe(true);
+    expect(reopened.accepted.document).toBe(reopenedDocument);
+
+    for (const bytes of [
+      baselinePng,
+      controlledPng,
+      geographyPng,
+      appearancePng,
+      repeatedAppearancePng,
+      reopenedPng,
+    ]) {
+      expect(bytes.byteLength).toBeLessThanOrEqual(ATLAS_PNG_MAXIMUM_BYTES);
+    }
+    expect(appearance.document).toBe(acceptedReferences.document);
+    expect(appearance.geography).toBe(acceptedReferences.geography);
+    expect(appearance.geography.coastline).toBe(acceptedReferences.coastline);
+    expect(appearance.appearance).toBe(acceptedReferences.appearance);
+    expect(appearance.scene).toBe(acceptedReferences.scene);
+    expect(appearance.scene.nodes).toBe(acceptedReferences.nodes);
+  }, 180_000);
 
   it('produces identical authoritative bytes for repeated and insertion-varied snapshots', () => {
     const accepted = requiredGeneratedStates().appearance;
@@ -369,212 +432,19 @@ function canonicalSvg(accepted: Pick<AcceptedAtlasState, 'scene'>): Uint8Array {
   return result.value.bytes;
 }
 
-function recommitAppearance(
-  accepted: AcceptedAtlasState,
-  mutate: (proposal: AspectReplacementProposal) => AspectReplacementProposal,
-) {
-  const root = accepted.document.maps[0];
-  if (root?.mapKind !== 'world') throw new Error('Accepted atlas root map is missing.');
-  const proposedAspects = Object.freeze(root.aspects.map(retainedAspectProposal).map(mutate));
-  return commitAtlasProposal(accepted.document, {
-    kind: ATLAS_DOCUMENT_COMMAND_KIND,
-    operationMode: ATLAS_DOCUMENT_OPERATION_MODES.controls,
-    targetMapId: root.mapId,
-    expectedWorldSeed: accepted.document.worldSeed,
-    expectedAspectRevisions: Object.freeze(
-      root.aspects.map(({ aspectId, variantRevision }) =>
-        Object.freeze({ aspectId, variantRevision }),
-      ),
-    ),
-    controls: accepted.geography.controls,
-    proposedCoordinateSystem: root.coordinateSystem,
-    proposedEntities: root.entities,
-    proposedAspects,
-    explicitlyIncrementedAspectIds: Object.freeze([]),
-  });
-}
-
-function addUnknownDecorationKind(proposal: AspectReplacementProposal): AspectReplacementProposal {
-  if (proposal.target.aspectName !== 'atlas.waterDecoration') return proposal;
-  const output = proposal.output as AtlasWaterDecoration;
-  const echo = output.paths.find(({ kind }) => kind === 'coastal-echo');
-  if (echo === undefined) throw new Error('Expected a coastal echo test source.');
-  const unknownPath = Object.freeze({
-    ...echo,
-    decorationId: `${echo.decorationId}/unknown`,
-    kind: 'shoal-hatching',
-  });
-  return withOutput(proposal, {
-    ...output,
-    paths: Object.freeze([...output.paths, unknownPath]),
-  });
-}
-
-function invalidStyleId(proposal: AspectReplacementProposal): AspectReplacementProposal {
-  return withInvalidStyle(
-    proposal,
-    Object.freeze({
-      styleId: ' Invalid Style ',
-      styleBehaviorVersion: 1,
-    }),
-  );
-}
-
-function unsupportedStyleVersion(proposal: AspectReplacementProposal): AspectReplacementProposal {
-  return withInvalidStyle(
-    proposal,
-    Object.freeze({
-      styleId: 'future-atlas-style',
-      styleBehaviorVersion: 2,
-    }),
-  );
-}
-
-function withInvalidStyle(
-  proposal: AspectReplacementProposal,
-  style: Readonly<{ readonly styleId: string; readonly styleBehaviorVersion: number }>,
-): AspectReplacementProposal {
-  if (!proposal.target.aspectName.startsWith('atlas.')) return proposal;
-  return withOutput(proposal, {
-    ...(proposal.output as object),
-    style: style as unknown as AtlasStyleProvenance,
-  });
-}
-
-function addSeamJump(proposal: AspectReplacementProposal): AspectReplacementProposal {
-  if (proposal.target.aspectName !== 'atlas.waterDecoration') return proposal;
-  const output = proposal.output as AtlasWaterDecoration;
-  const source = output.paths[0];
-  const first = source?.points[0];
-  const second = source?.points[1];
-  if (source === undefined || first === undefined || second === undefined) {
-    throw new Error('Expected a water-decoration path test source.');
-  }
-  const mutatedPath = Object.freeze({
-    ...source,
-    points: Object.freeze([
-      Object.freeze({ ...first, longitudeTicks: -(2 ** 31) }),
-      Object.freeze({ ...second, longitudeTicks: 2 ** 31 - 1 }),
-      ...source.points.slice(2),
-    ]),
-  });
-  return withOutput(proposal, {
-    ...output,
-    paths: Object.freeze([mutatedPath, ...output.paths.slice(1)]),
-  });
-}
-
-function withOutput(
-  proposal: AspectReplacementProposal,
-  output: unknown,
-): AspectReplacementProposal {
-  return Object.freeze({ ...proposal, output });
-}
-
-async function commit(
-  operation:
-    'initial-atlas' | 'control-driven-replacement' | 'geography-reroll' | 'appearance-reroll',
-  accepted?: AcceptedAtlasState,
-  controls: AtlasControls = DEFAULT_ATLAS_CONTROLS,
-  runtime?: AtlasWorkflowRuntime,
-): Promise<AcceptedAtlasState> {
-  const result = await attempt(operation, accepted, controls, runtime);
-  if (!result.ok) throw new Error(`${result.diagnosticCodes.join(',')}: ${result.message}`);
-  return result.accepted;
-}
-
-async function attempt(
-  operation:
-    'initial-atlas' | 'control-driven-replacement' | 'geography-reroll' | 'appearance-reroll',
-  accepted?: AcceptedAtlasState,
-  controls: AtlasControls = DEFAULT_ATLAS_CONTROLS,
-  runtime: AtlasWorkflowRuntime = {
-    isCancellationRequested: () => false,
-    reportProgress: () => undefined,
-    yieldControl: () => Promise.resolve(),
-  },
-) {
-  return productionAtlasWorkflowGeneration.commit(
+async function canonicalPng(accepted: Pick<AcceptedAtlasState, 'scene'>): Promise<Uint8Array> {
+  const result = await exportAtlasSceneToPngAsync(
     {
-      operationId: `test:${operation}`,
-      operation,
-      worldSeed: MILESTONE_TWO_ATLAS_PROOF_SEED,
-      controls,
-      accepted,
+      scene: accepted.scene,
+      style: RESTRAINED_INK_ATLAS_STYLE,
+      dimensions: PNG_INTEGRATION_DIMENSIONS,
     },
-    runtime,
+    {
+      isCancellationRequested: () => false,
+      reportProgress: () => undefined,
+      yieldControl: () => Promise.resolve(),
+    },
   );
-}
-
-function revision(accepted: AcceptedAtlasState, name: string): number | undefined {
-  return accepted.document.maps[0]?.aspects.find(({ aspectName }) => aspectName === name)
-    ?.variantRevision;
-}
-
-function withAcceptedDiagnostic(
-  document: WorldDocument,
-  targetAspectId: WorldDocument['maps'][number]['aspects'][number]['aspectId'],
-  severity: 'error' | 'warning',
-  code: WorldDocument['maps'][number]['aspects'][number]['diagnostics'][number]['code'],
-): WorldDocument {
-  return mutateAspect(document, 'atlas.paperTreatment', (aspect) => ({
-    ...aspect,
-    diagnostics: Object.freeze([
-      Object.freeze({
-        code,
-        severity,
-        target: Object.freeze({ aspectId: targetAspectId }),
-        message: 'Focused accepted atlas diagnostic invariant mutation.',
-        suggestedAction: 'Restore the accepted diagnostic envelope.',
-      }),
-    ]),
-  }));
-}
-
-function protectPaperTreatment(
-  accepted: AcceptedAtlasState,
-  kind: 'constraint' | 'lock',
-): AcceptedAtlasState {
-  const root = accepted.document.maps[0];
-  const paper = root?.aspects.find(({ aspectName }) => aspectName === 'atlas.paperTreatment');
-  if (root?.mapKind !== 'world' || paper === undefined) throw new Error('Missing paper treatment.');
-  const protectedRoot = Object.freeze({
-    ...root,
-    constraints:
-      kind === 'constraint'
-        ? Object.freeze([
-            Object.freeze({
-              constraintId: constraintId(),
-              constraintKind: CONSTRAINT_KINDS.proofKeepWithinExtent,
-              target: Object.freeze({ aspectId: paper.aspectId }),
-              parameters: Object.freeze({}),
-            }),
-          ])
-        : root.constraints,
-    locks:
-      kind === 'lock'
-        ? Object.freeze([
-            Object.freeze({
-              lockId: lockId(),
-              target: Object.freeze({ aspectId: paper.aspectId }),
-            }),
-          ])
-        : root.locks,
-  });
-  return Object.freeze({
-    ...accepted,
-    document: Object.freeze({ ...accepted.document, maps: Object.freeze([protectedRoot]) }),
-  });
-}
-
-function lockId(): LockId {
-  const parsed = parseStableId('lock', '1562f399-119d-4702-aafd-66349098c85f');
-  if (!parsed.ok) throw new Error(parsed.diagnostic.message);
-  return parsed.value;
-}
-
-function constraintId(): ConstraintId {
-  const parsed = parseStableId('constraint', 'ac35a7ae-3f2c-4433-9351-e23d52c65870');
-  if (!parsed.ok) throw new Error(parsed.diagnostic.message);
-  return parsed.value;
+  if (!result.ok) throw new Error(JSON.stringify(result.diagnostics));
+  return result.value.bytes;
 }

@@ -76,6 +76,14 @@ visual evidence enters scope. The Milestone 1 runner rasterizes its fixed geomet
 with a dependency-free, platform-independent evidence helper. That helper is not a production PNG
 backend, font renderer, perceptual comparison framework, or substitute for inspecting the images.
 
+Each registered Milestone 2 atlas row instead owns one reviewed 1600 by 800 `atlas-png-v1` visual
+artifact generated from its exact canonical `AtlasRenderScene` through the production exporter.
+Its generated manifest records the PNG profile/version, dimensions, RGB/sRGB fields, band core and
+halo, IDAT partition, exact length, and digest without adding those values to the semantic fixture
+definition/version kernel. The same production path creates two byte-compared 8192 by 4096 outputs
+per row in a disposable verification directory; those large files are inspected but not checked
+into `visual-gallery/`.
+
 The Milestone 1 fixture ID is `milestone-1-kernel-proof`. Its checkpoint names are `baseline`,
 `rerolled`, and `reopened`. Persist the `rerolled` project as the v1 saved-project fixture;
 reopen assertions compare the decoded records with `rerolled` evidence rather than duplicating

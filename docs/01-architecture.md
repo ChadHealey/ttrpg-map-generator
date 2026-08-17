@@ -229,6 +229,12 @@ interpretation.
 - Preview simplification cannot move semantic boundaries or change classification.
 - Renderers do not repair or validate semantic geography; generators and domain
   validators own those rules.
+- Canonical PNG rasterization, tiling, filtering, compression, and format policy remain in
+  `packages/render`; the native layer receives already verified bytes and owns only bounded atomic
+  filesystem commit and readback.
+- A large raster export declares its live surfaces, row/encoder buffers, compressed assembly,
+  progress/cancellation safe points, and output cap rather than relying on an opaque browser or OS
+  image encoder.
 
 ## Rule 11 — Dependencies and optimizations are earned
 

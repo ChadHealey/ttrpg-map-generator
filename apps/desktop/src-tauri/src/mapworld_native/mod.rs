@@ -1,4 +1,5 @@
 mod adapter_error;
+pub mod atlas_png;
 pub mod atlas_svg;
 mod base64;
 mod fault;

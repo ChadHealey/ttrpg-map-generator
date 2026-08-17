@@ -62,6 +62,9 @@ jobs:
       - name: Verify deterministic fixtures
         run: pnpm test:cross-platform
 
+      - name: Verify deterministic atlas PNG export
+        run: pnpm test:png-export
+
       - name: Record native recovery filesystem
         shell: bash
         run: |
