@@ -1,3 +1,4 @@
+import { RESTRAINED_INK_ATLAS_STYLE } from '@ttrpg-map/assets';
 import {
   ACCEPTED_ATLAS_DIAGNOSTIC_CODES,
   type AspectReplacementProposal,
@@ -25,6 +26,7 @@ import {
   MAPWORLD_NATIVE_LIMITS,
   type MapworldPackage,
 } from '@ttrpg-map/persistence';
+import { ATLAS_SVG_MAXIMUM_BYTES, exportAtlasSceneToSvg } from '@ttrpg-map/render';
 import { beforeAll, describe, expect, it } from 'vitest';
 
 import {
@@ -190,6 +192,30 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
     }
   }, 90_000);
 
+  it('keeps semantic and canonical SVG evidence separate across both rerolls and reopen', () => {
+    const { appearance, controlled, geography } = requiredGeneratedStates();
+    const controlledSvg = canonicalSvg(controlled);
+    const geographySvg = canonicalSvg(geography);
+    const appearanceSvg = canonicalSvg(appearance);
+    const repeatedAppearanceSvg = canonicalSvg(appearance);
+
+    expect(geography.geography).not.toEqual(controlled.geography);
+    expect(geographySvg).not.toEqual(controlledSvg);
+    expect(appearance.geography).toEqual(geography.geography);
+    expect(appearanceSvg).not.toEqual(geographySvg);
+    expect(repeatedAppearanceSvg).toEqual(appearanceSvg);
+    expect(appearanceSvg.byteLength).toBeLessThanOrEqual(ATLAS_SVG_MAXIMUM_BYTES);
+
+    const reopenedDocument = required(
+      decodeMapworld(required(encodeMapworld(appearance.document))),
+    );
+    const reopened = reopenAcceptedAtlas(reopenedDocument);
+    expect(reopened.ok, reopened.ok ? undefined : JSON.stringify(reopened)).toBe(true);
+    if (!reopened.ok) return;
+    expect(canonicalSvg(reopened.accepted)).toEqual(appearanceSvg);
+    expect(reopened.accepted.document).toBe(reopenedDocument);
+  }, 90_000);
+
   it('produces identical authoritative bytes for repeated and insertion-varied snapshots', () => {
     const accepted = requiredGeneratedStates().appearance;
     const first = required(encodeMapworld(accepted.document));
@@ -332,6 +358,15 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
 function requiredGeneratedStates(): GeneratedAtlasStates {
   if (generatedStates === undefined) throw new Error('Atlas integration setup did not complete.');
   return generatedStates;
+}
+
+function canonicalSvg(accepted: Pick<AcceptedAtlasState, 'scene'>): Uint8Array {
+  const result = exportAtlasSceneToSvg({
+    scene: accepted.scene,
+    style: RESTRAINED_INK_ATLAS_STYLE,
+  });
+  if (!result.ok) throw new Error(JSON.stringify(result.diagnostics));
+  return result.value.bytes;
 }
 
 function recommitAppearance(

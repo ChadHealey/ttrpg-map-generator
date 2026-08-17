@@ -424,6 +424,20 @@ stable chunk ordering, and no physical-size, time, host, locale, or free-form te
 fixes and versions the deterministic compression/filter policy before initial fixture acceptance;
 changing it is an explicit PNG evidence and compatibility review.
 
+`atlas-svg-v1` version 1 uses the fixed `0 0 2048 1024` scene viewBox and whole-millimetre 2:1
+physical dimensions from `200 × 100 mm` through `1600 × 800 mm`; desktop export defaults to
+`400 × 200 mm`. It serializes the complete normal-detail `AtlasRenderScene` in node/z-order with
+stable element IDs, source entity/aspect links, sorted related-source links, versioned metadata,
+six-decimal numeric formatting, and one stable user-space clip definition/reference. Font policy
+`no-rendered-text-v1` rejects rendered text and embeds no font because Milestone 2 requires no
+labels. Output above 32 MiB is rejected before destination commit. The validated UTF-8 bytes are
+written through a same-directory temporary file, flushed, read back, atomically replaced, and read
+back again without invoking a generator or changing the document. Stable diagnostics cover
+unsupported scene/style versions, dimensions, fonts, source links, geometry, z-order, size,
+cancellation, destination conflicts, fingerprints, and native I/O. The complete rationale and
+compatibility boundary are recorded in
+[ADR-0015](adr/0015-deterministic-whole-world-atlas-svg-export.md).
+
 The other matrix rows require baseline semantic evidence and the focused classifications,
 connectivity, containment, seam, control, and geometry assertions named above. Every fixture owns
 a baseline canonical SVG and reviewed 1600 by 800 deterministic PNG produced by the production #67

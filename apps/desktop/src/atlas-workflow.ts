@@ -6,10 +6,16 @@ import {
   formatWorldSeed,
   parseAtlasControls,
   parseWorldSeed,
-  type RenderScene,
 } from '@ttrpg-map/core';
 import type { AtlasGenerationProgress, AtlasLandWaterPreview } from '@ttrpg-map/generation';
 
+import {
+  type AtlasSvgDestinationPort,
+  type AtlasSvgWorkflowProgress,
+  type AtlasSvgWorkflowReceipt,
+  exportAcceptedAtlasSvg,
+  productionAtlasSvgDestination,
+} from './atlas-svg-export-orchestrator.js';
 import {
   type AcceptedAtlasState,
   type AtlasWorkflowGenerationPort,
@@ -39,11 +45,13 @@ export interface AtlasWorkflowSnapshot {
   readonly phase: AtlasWorkflowPhase;
   readonly controls: AtlasControls;
   readonly accepted: AcceptedAtlasState | undefined;
-  readonly scene: RenderScene | undefined;
+  readonly scene: AcceptedAtlasState['scene'] | undefined;
   readonly preview: AtlasLandWaterPreview | undefined;
   readonly isPreviewState: boolean;
   readonly isBusy: boolean;
-  readonly progress: AtlasGenerationProgress | undefined;
+  readonly isCancellationAllowed: boolean;
+  readonly progress: AtlasWorkflowProgress | undefined;
+  readonly svgExportReceipt: AtlasSvgWorkflowReceipt | undefined;
   readonly pendingReroll: AtlasRerollChangeSet | undefined;
   readonly diagnosticCodes: readonly string[];
   readonly statusMessage: string;
@@ -57,24 +65,40 @@ interface ActiveOperation {
   readonly sequence: number;
   readonly operationId: string;
   isCancellationRequested: boolean;
+  isCancellationAllowed: boolean;
+}
+
+export interface AtlasWorkflowProgress {
+  readonly operationId: string;
+  readonly stage: string;
+  readonly completedWork: number;
+  readonly totalWork: number;
+  readonly isCancellationRequested: boolean;
+  readonly isTerminal: boolean;
 }
 
 export class AtlasWorkflow {
   readonly #generation: AtlasWorkflowGenerationPort;
+  readonly #svgDestination: AtlasSvgDestinationPort;
   #phase: AtlasWorkflowPhase = 'empty';
   #controls: AtlasControls = DEFAULT_ATLAS_CONTROLS;
   #accepted: AcceptedAtlasState | undefined;
   #preview: AtlasLandWaterPreview | undefined;
   #isBusy = false;
-  #progress: AtlasGenerationProgress | undefined;
+  #progress: AtlasWorkflowProgress | undefined;
+  #svgExportReceipt: AtlasSvgWorkflowReceipt | undefined;
   #pendingReroll: AtlasRerollChangeSet | undefined;
   #diagnosticCodes: readonly string[] = Object.freeze([]);
   #statusMessage = 'Configure a seed and request a disposable coarse preview.';
   #active: ActiveOperation | undefined;
   #operationSequence = 0;
 
-  constructor(generation: AtlasWorkflowGenerationPort = productionAtlasWorkflowGeneration) {
+  constructor(
+    generation: AtlasWorkflowGenerationPort = productionAtlasWorkflowGeneration,
+    svgDestination: AtlasSvgDestinationPort = productionAtlasSvgDestination,
+  ) {
     this.#generation = generation;
+    this.#svgDestination = svgDestination;
   }
 
   get snapshot(): AtlasWorkflowSnapshot {
@@ -86,7 +110,9 @@ export class AtlasWorkflow {
       preview: this.#preview,
       isPreviewState: this.#preview !== undefined,
       isBusy: this.#isBusy,
+      isCancellationAllowed: this.#active?.isCancellationAllowed ?? false,
       progress: this.#progress,
+      svgExportReceipt: this.#svgExportReceipt,
       pendingReroll: this.#pendingReroll,
       diagnosticCodes: this.#diagnosticCodes,
       statusMessage: this.#statusMessage,
@@ -119,6 +145,8 @@ export class AtlasWorkflow {
   }
 
   async requestPreview(seed: string, controls: unknown): Promise<AtlasWorkflowResult> {
+    const blocked = this.#rejectDuringNativeCommit();
+    if (blocked !== undefined) return blocked;
     const validated = this.validateInputs(seed, controls);
     if (!validated.ok) return validated;
     const operation = this.#begin('preview');
@@ -149,6 +177,8 @@ export class AtlasWorkflow {
   }
 
   async acceptFull(seed: string, controls: unknown): Promise<AtlasWorkflowResult> {
+    const blocked = this.#rejectDuringNativeCommit();
+    if (blocked !== undefined) return blocked;
     const validated = this.validateInputs(seed, controls);
     if (!validated.ok) return validated;
     const operation = this.#begin('full');
@@ -199,6 +229,8 @@ export class AtlasWorkflow {
   }
 
   async commitPlannedReroll(): Promise<AtlasWorkflowResult> {
+    const blocked = this.#rejectDuringNativeCommit();
+    if (blocked !== undefined) return blocked;
     const pending = this.#pendingReroll;
     const accepted = this.#accepted;
     if (pending === undefined || accepted === undefined) {
@@ -221,11 +253,62 @@ export class AtlasWorkflow {
     );
   }
 
+  async exportSvg(targetPath?: string): Promise<AtlasWorkflowResult> {
+    if (this.#accepted === undefined || this.#isBusy || this.#preview !== undefined) {
+      return this.#failure(
+        'atlas-svg.accepted-clean-state-required',
+        'Accept or reopen an atlas and discard disposable preview state before exporting SVG.',
+      );
+    }
+    const acceptedBefore = this.#accepted;
+    const operation = this.#begin('svg-export');
+    const result = await exportAcceptedAtlasSvg(
+      acceptedBefore,
+      targetPath,
+      {
+        operationId: operation.operationId,
+        isCancellationRequested: () => operation.isCancellationRequested,
+        reportProgress: (progress: AtlasSvgWorkflowProgress) => {
+          if (this.#isCurrent(operation)) this.#progress = progress;
+        },
+        yieldControl: () => new Promise<void>((resolve) => globalThis.setTimeout(resolve, 0)),
+        beginNativeCommit: () => {
+          operation.isCancellationAllowed = false;
+          this.#statusMessage =
+            'Canonical SVG verified; the atomic destination commit is now non-cancellable.';
+        },
+      },
+      this.#svgDestination,
+    );
+    if (!this.#isCurrent(operation)) return Object.freeze({ ok: true });
+    this.#finish();
+    this.#accepted = acceptedBefore;
+    if (!result.ok) {
+      this.#diagnosticCodes = result.diagnosticCodes;
+      this.#statusMessage = result.message;
+      return Object.freeze({
+        ok: false,
+        code: result.diagnosticCodes[0] ?? 'atlas-svg.export.failed',
+        message: result.message,
+      });
+    }
+    this.#svgExportReceipt = result.receipt;
+    this.#diagnosticCodes = Object.freeze([]);
+    this.#statusMessage = `Deterministic SVG written and verified at ${result.receipt.targetPath}.`;
+    return Object.freeze({ ok: true });
+  }
+
   cancelActiveOperation(): AtlasWorkflowResult {
     if (this.#active === undefined) {
       return this.#failure(
         'atlas.operation.none-active',
         'There is no active atlas operation to cancel.',
+      );
+    }
+    if (!this.#active.isCancellationAllowed) {
+      return this.#failure(
+        'atlas-svg.commit.non-cancellable',
+        'The verified SVG is already in its atomic destination commit and can no longer be cancelled safely.',
       );
     }
     this.#active.isCancellationRequested = true;
@@ -261,6 +344,7 @@ export class AtlasWorkflow {
       });
     }
     this.#accepted = result.accepted;
+    this.#svgExportReceipt = undefined;
     this.#controls = request.controls;
     this.#phase = 'accepted';
     this.#preview = undefined;
@@ -291,6 +375,7 @@ export class AtlasWorkflow {
       sequence,
       operationId: `atlas:${label}:${String(sequence)}`,
       isCancellationRequested: false,
+      isCancellationAllowed: true,
     };
     this.#active = operation;
     this.#isBusy = true;
@@ -317,6 +402,14 @@ export class AtlasWorkflow {
   #finish(): void {
     this.#active = undefined;
     this.#isBusy = false;
+  }
+
+  #rejectDuringNativeCommit(): AtlasWorkflowResult | undefined {
+    if (this.#active?.isCancellationAllowed !== false) return undefined;
+    return this.#failure(
+      'atlas-svg.commit.non-cancellable',
+      'The verified SVG is already in its atomic destination commit; wait for its verified result before starting other work.',
+    );
   }
 
   #failure(code: string, message: string): AtlasWorkflowResult {

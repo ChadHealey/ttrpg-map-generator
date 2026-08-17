@@ -37,6 +37,28 @@ export {
   type AtlasSceneLevelOfDetail,
   composeAtlasRenderScene,
 } from './atlas-scene.js';
+export {
+  ATLAS_SVG_DEFAULT_DIMENSIONS,
+  ATLAS_SVG_DIAGNOSTIC_CODES,
+  ATLAS_SVG_DIMENSION_LIMITS,
+  ATLAS_SVG_EXPORT_PROFILE_ID,
+  ATLAS_SVG_EXPORT_VERSION,
+  ATLAS_SVG_FONT_POLICY,
+  ATLAS_SVG_MAXIMUM_BYTES,
+  ATLAS_SVG_SUPPORTED_STYLE_ID,
+  type AtlasSvgDiagnostic,
+  type AtlasSvgDiagnosticCode,
+  type AtlasSvgDimensions,
+  type AtlasSvgExport,
+  type AtlasSvgExportProgress,
+  type AtlasSvgExportRequest,
+  type AtlasSvgExportResult,
+  type AtlasSvgExportRuntime,
+  type AtlasSvgSceneInput,
+  type AtlasSvgStyleMetadata,
+  exportAtlasSceneToSvg,
+  exportAtlasSceneToSvgAsync,
+} from './atlas-svg-export.js';
 
 /** Draws a render scene into a Canvas 2D context without changing its semantic interpretation. */
 export function renderSceneToCanvas(context: CanvasRenderingContext2D, scene: RenderScene): void {

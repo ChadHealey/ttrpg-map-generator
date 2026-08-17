@@ -117,7 +117,19 @@ export function sceneProof(render, records, appearance, style) {
     false,
   );
 
-  const svg = render.renderSceneToSvg(scene);
+  const svgResult = render.exportAtlasSceneToSvg({ scene, style });
+  const repeatedSvgResult = render.exportAtlasSceneToSvg({ scene, style });
+  assert.equal(svgResult.ok, true);
+  assert.deepEqual(repeatedSvgResult, svgResult);
+  if (!svgResult.ok) throw new Error(JSON.stringify(svgResult.diagnostics));
+  const svg = svgResult.value.svg;
+  assert.equal(svgResult.value.profileId, render.ATLAS_SVG_EXPORT_PROFILE_ID);
+  assert.equal(svgResult.value.profileVersion, render.ATLAS_SVG_EXPORT_VERSION);
+  assert.equal(svgResult.value.widthMillimeters, 400);
+  assert.equal(svgResult.value.heightMillimeters, 200);
+  assert.ok(svgResult.value.byteLength <= render.ATLAS_SVG_MAXIMUM_BYTES);
+  assert.ok(svg.includes('clip-path="url(#atlas-svg-v1-clip)"'));
+  assert.ok(svg.includes('fontPolicy&quot;:&quot;no-rendered-text-v1'));
   const svgNodeIds = [...svg.matchAll(/data-render-node-id="([^"]+)"/gu)].map((match) => match[1]);
   assert.deepEqual(svgNodeIds, nodeIds);
   for (const node of scene.nodes) {

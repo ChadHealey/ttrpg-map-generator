@@ -1,6 +1,6 @@
 /** Validated canonical project-package boundaries around project-owned core domain records. */
 
-export { decodedBase64ByteLength } from './base64-bytes.js';
+export { decodedBase64ByteLength, encodeBase64Bytes } from './base64-bytes.js';
 export { decodeMapworld } from './mapworld-decode.js';
 export {
   canonicalAspectBytes,

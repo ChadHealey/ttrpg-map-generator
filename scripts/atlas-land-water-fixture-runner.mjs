@@ -239,7 +239,7 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
     const sceneArtifactPath = `fixed-seeds/${fixtureId}/expected/baseline/atlas-render-scene.scene.canonical`;
     write(outputRoot, sceneArtifactPath, sceneBytes);
     const sceneDigest = sha256(sceneBytes);
-    const svgBytes = Buffer.from(`${scene.svg}\n`, 'utf8');
+    const svgBytes = Buffer.from(scene.svg, 'utf8');
     const svgArtifactPath = `canonical-svg/${fixtureId}/baseline.svg`;
     write(outputRoot, svgArtifactPath, svgBytes);
     const svgDigest = sha256(svgBytes);

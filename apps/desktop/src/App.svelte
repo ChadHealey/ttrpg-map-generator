@@ -38,6 +38,10 @@
     await run(workflow.commitPlannedReroll());
   }
 
+  async function exportSvg(): Promise<void> {
+    await run(workflow.exportSvg());
+  }
+
   function cancel(): void {
     workflow.cancelActiveOperation();
     refresh();
@@ -214,7 +218,11 @@
         onclick={discardPreview}
         type="button">Discard preview</button
       >
-      <button disabled={!atlas.isBusy} onclick={cancel} type="button">Cancel active work</button>
+      <button
+        disabled={!atlas.isBusy || !atlas.isCancellationAllowed}
+        onclick={cancel}
+        type="button">Cancel active work</button
+      >
       <button
         disabled={atlas.isBusy ||
           atlas.accepted === undefined ||
@@ -239,6 +247,11 @@
         disabled={atlas.isBusy || atlas.pendingReroll === undefined || !controlsAreAccepted}
         onclick={() => void commitReroll()}
         type="button">Commit reviewed reroll</button
+      >
+      <button
+        disabled={atlas.isBusy || atlas.accepted === undefined || atlas.preview !== undefined}
+        onclick={() => void exportSvg()}
+        type="button">Export deterministic SVG</button
       >
     </div>
 
@@ -278,6 +291,30 @@
             </ul>
           </div>
         </div>
+      </section>
+    {/if}
+
+    {#if atlas.svgExportReceipt !== undefined}
+      <section aria-labelledby="svg-export-heading" class="workflow-card">
+        <p class="eyebrow">atlas-svg-v1 · verified native export</p>
+        <h2 id="svg-export-heading">SVG export complete</h2>
+        <p>{atlas.svgExportReceipt.targetPath}</p>
+        <dl>
+          <div>
+            <dt>Physical size</dt>
+            <dd>
+              {atlas.svgExportReceipt.widthMillimeters} × {atlas.svgExportReceipt.heightMillimeters} mm
+            </dd>
+          </div>
+          <div>
+            <dt>Bytes</dt>
+            <dd>{atlas.svgExportReceipt.byteLength}</dd>
+          </div>
+          <div>
+            <dt>SHA-256</dt>
+            <dd><code>{atlas.svgExportReceipt.sha256}</code></dd>
+          </div>
+        </dl>
       </section>
     {/if}
 

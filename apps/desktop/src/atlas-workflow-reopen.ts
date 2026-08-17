@@ -5,16 +5,15 @@ import {
   type AtlasAppearanceRecords,
   type AtlasGeographyRecords,
   reconstructAcceptedAtlas,
-  type RenderScene,
   type WorldDocument,
 } from '@ttrpg-map/core';
-import { composeAtlasRenderScene } from '@ttrpg-map/render';
+import { type AtlasRenderScene, composeAtlasRenderScene } from '@ttrpg-map/render';
 
 export interface ReopenedAcceptedAtlas {
   readonly document: WorldDocument;
   readonly geography: AtlasGeographyRecords;
   readonly appearance: AtlasAppearanceRecords;
-  readonly scene: RenderScene;
+  readonly scene: AtlasRenderScene;
 }
 
 export type ReopenAcceptedAtlasResult =

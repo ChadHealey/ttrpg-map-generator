@@ -4,6 +4,7 @@ pub mod mapworld_native;
 pub fn run() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
+            mapworld_native::atlas_svg::atlas_svg_write_base64,
             mapworld_native::service::mapworld_native_snapshot,
             mapworld_native::service::mapworld_native_save_base64,
             mapworld_native::service::mapworld_native_apply,

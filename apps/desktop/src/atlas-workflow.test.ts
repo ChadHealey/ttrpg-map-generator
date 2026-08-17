@@ -1,4 +1,9 @@
 import { DEFAULT_ATLAS_CONTROLS } from '@ttrpg-map/core';
+import {
+  ATLAS_DISPLAY_PROJECTION_METADATA,
+  ATLAS_SCENE_COMPOSITION_VERSION,
+  ATLAS_SCENE_LEVELS_OF_DETAIL,
+} from '@ttrpg-map/render';
 import { describe, expect, it } from 'vitest';
 
 import { AtlasWorkflow, MILESTONE_TWO_ATLAS_PROOF_SEED } from './atlas-workflow.js';
@@ -154,6 +159,91 @@ describe('Milestone 2 atlas desktop orchestration', () => {
     expect(workflow.snapshot.accepted).toBe(appearance);
     expect(operations).toStrictEqual(['initial-atlas', 'geography-reroll', 'appearance-reroll']);
   });
+
+  it('exports accepted scene bytes through the desktop destination without mutating accepted state', async () => {
+    const baseline = exportableAcceptedState();
+    let writtenPath = '';
+    let writtenBytes = 0;
+    const workflow = new AtlasWorkflow(fakePort({ commits: [{ ok: true, accepted: baseline }] }), {
+      defaultTargetPath: () => Promise.resolve('/exports/default.svg'),
+      write(request) {
+        writtenPath = request.targetPath;
+        writtenBytes = request.bytes.byteLength;
+        return Promise.resolve({
+          ok: true,
+          value: {
+            targetPath: request.targetPath,
+            sha256: request.expectedSha256,
+            byteLength: request.bytes.byteLength,
+            platform: 'macos',
+          },
+        });
+      },
+    });
+    await workflow.acceptFull(MILESTONE_TWO_ATLAS_PROOF_SEED, DEFAULT_ATLAS_CONTROLS);
+    const acceptedReference = workflow.snapshot.accepted;
+
+    expect(await workflow.exportSvg('/exports/atlas.svg')).toEqual({ ok: true });
+
+    expect(workflow.snapshot.accepted).toBe(acceptedReference);
+    expect(workflow.snapshot.phase).toBe('accepted');
+    expect(workflow.snapshot.svgExportReceipt).toMatchObject({
+      targetPath: '/exports/atlas.svg',
+      byteLength: writtenBytes,
+      profileId: 'atlas-svg-v1',
+    });
+    expect(writtenPath).toBe('/exports/atlas.svg');
+    expect(writtenBytes).toBeGreaterThan(0);
+  });
+
+  it('exposes and protects the non-cancellable native commit point', async () => {
+    const baseline = exportableAcceptedState();
+    let markWriteStarted: (() => void) | undefined;
+    let finishWrite: (() => void) | undefined;
+    const writeStarted = new Promise<void>((resolve) => {
+      markWriteStarted = resolve;
+    });
+    const workflow = new AtlasWorkflow(fakePort({ commits: [{ ok: true, accepted: baseline }] }), {
+      defaultTargetPath: () => Promise.resolve('/exports/default.svg'),
+      write(request) {
+        markWriteStarted?.();
+        return new Promise((resolve) => {
+          finishWrite = () => {
+            resolve({
+              ok: true,
+              value: {
+                targetPath: request.targetPath,
+                sha256: request.expectedSha256,
+                byteLength: request.bytes.byteLength,
+                platform: 'macos',
+              },
+            });
+          };
+        });
+      },
+    });
+    await workflow.acceptFull(MILESTONE_TWO_ATLAS_PROOF_SEED, DEFAULT_ATLAS_CONTROLS);
+
+    const exporting = workflow.exportSvg('/exports/atlas.svg');
+    await writeStarted;
+
+    expect(workflow.snapshot).toMatchObject({ isBusy: true, isCancellationAllowed: false });
+    expect(workflow.cancelActiveOperation()).toMatchObject({
+      ok: false,
+      code: 'atlas-svg.commit.non-cancellable',
+    });
+    expect(
+      await workflow.acceptFull(MILESTONE_TWO_ATLAS_PROOF_SEED, DEFAULT_ATLAS_CONTROLS),
+    ).toMatchObject({ ok: false, code: 'atlas-svg.commit.non-cancellable' });
+
+    finishWrite?.();
+    expect(await exporting).toEqual({ ok: true });
+    expect(workflow.snapshot).toMatchObject({
+      isBusy: false,
+      isCancellationAllowed: false,
+      svgExportReceipt: { targetPath: '/exports/atlas.svg' },
+    });
+  });
 });
 
 interface FakeOptions {
@@ -219,6 +309,125 @@ function acceptedState(label: string): AcceptedAtlasState {
       waterBodies: [],
     } as unknown as AcceptedAtlasState['geography'],
     appearance: {} as AcceptedAtlasState['appearance'],
-    scene: { widthPx: 1, heightPx: 1, nodes: [] },
+    scene: { widthPx: 1, heightPx: 1, nodes: [] } as unknown as AcceptedAtlasState['scene'],
   };
+}
+
+function exportableAcceptedState(): AcceptedAtlasState {
+  return {
+    ...acceptedState('exportable'),
+    scene: {
+      authority: 'disposable-render-scene',
+      sceneKind: 'whole-world-atlas',
+      sceneCompositionVersion: ATLAS_SCENE_COMPOSITION_VERSION,
+      levelOfDetail: ATLAS_SCENE_LEVELS_OF_DETAIL.normalAtlas,
+      coordinateSpace: 'atlas-display-equirectangular-v1',
+      sourceWorldMapId: 'world-map',
+      projection: ATLAS_DISPLAY_PROJECTION_METADATA,
+      widthPx: 2_048,
+      heightPx: 1_024,
+      nodes: [
+        {
+          id: 'atlas/background/paper',
+          kind: 'rectangle',
+          sourceId: 'paper',
+          sourceAspectId: 'paper-aspect',
+          relatedSourceIds: [],
+          xPx: 0,
+          yPx: 0,
+          widthPx: 2_048,
+          heightPx: 1_024,
+          fillColor: '#eadcba',
+        },
+        {
+          id: 'atlas/background/water',
+          kind: 'rectangle',
+          sourceId: 'water',
+          sourceAspectId: 'water-aspect',
+          relatedSourceIds: [],
+          xPx: 0,
+          yPx: 0,
+          widthPx: 2_048,
+          heightPx: 1_024,
+          fillColor: '#afbec0',
+        },
+        {
+          id: 'atlas/land/land',
+          kind: 'compoundPath',
+          sourceId: 'land',
+          sourceAspectId: 'land-aspect',
+          relatedSourceIds: ['water'],
+          subpaths: [
+            {
+              points: [
+                { xPx: 10, yPx: 10 },
+                { xPx: 20, yPx: 10 },
+                { xPx: 20, yPx: 20 },
+              ],
+            },
+          ],
+          fillColor: '#c9c39a',
+          fillRule: 'evenodd',
+        },
+        ...exportDecorationNodes(),
+      ],
+    },
+  };
+}
+
+function exportDecorationNodes(): AcceptedAtlasState['scene']['nodes'] {
+  return [
+    {
+      id: 'atlas/paper/grain-0000',
+      kind: 'polyline',
+      sourceId: 'paper',
+      sourceAspectId: 'paper-aspect',
+      relatedSourceIds: [],
+      points: [
+        { xPx: 30, yPx: 30 },
+        { xPx: 31, yPx: 31 },
+      ],
+      strokeColor: '#d9c8a3',
+      strokeWidthPx: 0.55,
+    },
+    {
+      id: 'atlas-water/echo/0000',
+      kind: 'polyline',
+      sourceId: 'water',
+      sourceAspectId: 'water-aspect',
+      relatedSourceIds: ['land'],
+      points: [
+        { xPx: 40, yPx: 40 },
+        { xPx: 41, yPx: 41 },
+      ],
+      strokeColor: '#718c8e',
+      strokeWidthPx: 0.75,
+    },
+    {
+      id: 'atlas-water/mark/0000',
+      kind: 'polyline',
+      sourceId: 'water',
+      sourceAspectId: 'water-aspect',
+      relatedSourceIds: [],
+      points: [
+        { xPx: 50, yPx: 50 },
+        { xPx: 51, yPx: 51 },
+      ],
+      strokeColor: '#718c8e',
+      strokeWidthPx: 0.6,
+    },
+    {
+      id: 'atlas/coastline/0000',
+      kind: 'polyline',
+      sourceId: 'land',
+      sourceAspectId: 'land-aspect',
+      relatedSourceIds: ['water'],
+      points: [
+        { xPx: 10, yPx: 10 },
+        { xPx: 20, yPx: 10 },
+      ],
+      strokeColor: '#282a24',
+      strokeWidthPx: 1.25,
+    },
+  ];
 }

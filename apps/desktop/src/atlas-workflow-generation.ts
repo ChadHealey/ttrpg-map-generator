@@ -17,7 +17,6 @@ import {
   deriveAtlasSingletonEntityIds,
   formatWorldSeed,
   parseWorldSeed,
-  type RenderScene,
   type WorldDocument,
   type WorldSeed,
 } from '@ttrpg-map/core';
@@ -34,7 +33,7 @@ import {
   generateAtlasSemanticGeography,
   WORLD_ATLAS_FULL_PROFILE,
 } from '@ttrpg-map/generation';
-import { composeAtlasRenderScene } from '@ttrpg-map/render';
+import { type AtlasRenderScene, composeAtlasRenderScene } from '@ttrpg-map/render';
 
 import {
   appearanceProposal,
@@ -73,7 +72,7 @@ export interface AcceptedAtlasState {
   readonly document: WorldDocument;
   readonly geography: AtlasGeographyRecords;
   readonly appearance: AtlasAppearanceRecords;
-  readonly scene: RenderScene;
+  readonly scene: AtlasRenderScene;
 }
 
 export type AtlasWorkflowPreviewResult =
