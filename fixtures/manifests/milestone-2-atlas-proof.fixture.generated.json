@@ -3,7 +3,7 @@
   "fixtureId": "milestone-2-atlas-proof",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-proof --review-record fixed-seeds/milestone-2-atlas-proof/reviews/0008-restrained-ink-atlas.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-proof --review-record fixed-seeds/milestone-2-atlas-proof/reviews/0009-production-atlas-svg.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-proof/fixture-definition.json",
     "sha256": "4e565a6e674623561d8952140c98522597b483325390676abbc7ccacb854520a"
@@ -100,8 +100,8 @@
   ],
   "reviewPurpose": "Prove the restrained version-1 ink style and appearance isolation over unchanged accepted atlas geography before persistence integration.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-proof/reviews/0008-restrained-ink-atlas.md",
-    "sha256": "ce8a0318f2981affb2dd427940d484c9cfc6065d182e7141ae977a2f6ba9cb89"
+    "path": "fixed-seeds/milestone-2-atlas-proof/reviews/0009-production-atlas-svg.md",
+    "sha256": "98df2833537bb0a7ee4a460bab466a3b7d56aa2a60af093ab3f540c666009c6f"
   },
   "generatedRoots": [
     "canonical-svg/milestone-2-atlas-proof",
@@ -113,9 +113,9 @@
       "path": "canonical-svg/milestone-2-atlas-proof/baseline.svg",
       "kind": "canonical-svg",
       "checkpoint": "baseline",
-      "byteLength": 707595,
-      "canonicalSvgSha256": "a2b0fd2d748350e69c2c759d51e2cc2d1801552395a359104eae0ee31425a012",
-      "fixtureIntegritySha256": "a2b0fd2d748350e69c2c759d51e2cc2d1801552395a359104eae0ee31425a012"
+      "byteLength": 636624,
+      "canonicalSvgSha256": "0e43c0aaff16f2a46adef67441e58d007a1e68c08fc2fc6a25293a089cc17824",
+      "fixtureIntegritySha256": "0e43c0aaff16f2a46adef67441e58d007a1e68c08fc2fc6a25293a089cc17824"
     },
     {
       "path": "fixed-seeds/milestone-2-atlas-proof/expected/baseline/atlas-land-water.kernel.canonical",
