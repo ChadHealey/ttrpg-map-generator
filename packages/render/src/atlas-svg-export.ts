@@ -1,6 +1,12 @@
 /** Canonical, renderer-only SVG export for an accepted whole-world atlas scene. */
 
-import type { AtlasStyleTokens, RenderNode, RenderPoint, RenderScene } from '@ttrpg-map/core';
+import {
+  type AtlasStyleTokens,
+  parseStableId,
+  type RenderNode,
+  type RenderPoint,
+  type RenderScene,
+} from '@ttrpg-map/core';
 
 import {
   ATLAS_DISPLAY_COORDINATE_SPACE,
@@ -114,7 +120,7 @@ interface ValidatedExport {
 
 const UTF8_ENCODER = new TextEncoder();
 const COLOR_PATTERN = /^#[0-9a-f]{6}$/u;
-const SOURCE_ID_PATTERN = /^[\x20-\x7e]+$/u;
+const RENDER_NODE_ID_PATTERN = /^[\x20-\x7e]+$/u;
 const SERIALIZATION_BATCH_SIZE = 128;
 
 /** Serialize the exact accepted atlas scene without consulting geography or generator state. */
@@ -190,6 +196,14 @@ function validateRequest(
       ),
     );
   }
+  if (scene.sourceWorldMapId === undefined || !parseStableId('map', scene.sourceWorldMapId).ok) {
+    diagnostics.push(
+      diagnostic(
+        ATLAS_SVG_DIAGNOSTIC_CODES.sourceLinkInvalid,
+        'The atlas scene sourceWorldMapId must be a canonical lowercase non-nil map UUID.',
+      ),
+    );
+  }
   if (
     request.style.styleId !== ATLAS_SVG_SUPPORTED_STYLE_ID ||
     request.style.styleBehaviorVersion !== 1 ||
@@ -219,11 +233,20 @@ function validateRequest(
       );
     }
     ids.add(node.id);
+    if (!validRenderNodeId(node.id)) {
+      diagnostics.push(
+        diagnostic(
+          ATLAS_SVG_DIAGNOSTIC_CODES.nodeInvalid,
+          'Atlas render-node IDs must use non-empty printable ASCII text.',
+          node.id,
+        ),
+      );
+    }
     if (!validSourceLinks(node)) {
       diagnostics.push(
         diagnostic(
           ATLAS_SVG_DIAGNOSTIC_CODES.sourceLinkInvalid,
-          `Render node ${node.id} must retain one source entity, one source aspect, and sorted unique related source IDs.`,
+          `Render node ${node.id} must retain canonical lowercase non-nil UUID source entity/aspect IDs and sorted unique related source UUIDs.`,
           node.id,
         ),
       );
@@ -351,18 +374,22 @@ function validDimensions(dimensions: AtlasSvgDimensions): boolean {
 function validSourceLinks(node: RenderNode): boolean {
   const related = node.relatedSourceIds ?? [];
   return (
-    validSourceId(node.id) &&
-    validSourceId(node.sourceId) &&
+    parseStableId('entity', node.sourceId).ok &&
     node.sourceAspectId !== undefined &&
-    validSourceId(node.sourceAspectId) &&
-    related.every(validSourceId) &&
+    parseStableId('aspect', node.sourceAspectId).ok &&
+    related.every(validStableUuidReference) &&
     new Set(related).size === related.length &&
     related.every((value, index) => index === 0 || (related[index - 1] ?? '') < value)
   );
 }
 
-function validSourceId(value: string): boolean {
-  return value.length > 0 && SOURCE_ID_PATTERN.test(value);
+function validRenderNodeId(value: string): boolean {
+  return value.length > 0 && RENDER_NODE_ID_PATTERN.test(value);
+}
+
+function validStableUuidReference(value: string): boolean {
+  // Stable UUID kinds share one grammar; related links can point to entities or coastline rings.
+  return parseStableId('entity', value).ok;
 }
 
 function validNode(node: RenderNode, scene: RenderScene): boolean {
@@ -423,8 +450,7 @@ function isSupportedAtlasScene(scene: AtlasSvgSceneInput): scene is AtlasRenderS
     projection.xDirection === supportedProjection.xDirection &&
     projection.yDirection === supportedProjection.yDirection &&
     projection.semanticToleranceTicks === supportedProjection.semanticToleranceTicks &&
-    scene.sourceWorldMapId !== undefined &&
-    validSourceId(scene.sourceWorldMapId)
+    typeof scene.sourceWorldMapId === 'string'
   );
 }
 
@@ -453,7 +479,15 @@ function nodeLayer(node: RenderNode): number {
 }
 
 function validNodeKindForLayer(node: RenderNode, layer: number): boolean {
-  if (layer === 0 || layer === 1) return node.kind === 'rectangle';
+  if (layer === 0 || layer === 1) {
+    return (
+      node.kind === 'rectangle' &&
+      node.xPx === 0 &&
+      node.yPx === 0 &&
+      node.widthPx === ATLAS_SCENE_WIDTH_PX &&
+      node.heightPx === ATLAS_SCENE_HEIGHT_PX
+    );
+  }
   if (layer === 2) return node.kind === 'compoundPath';
   if (layer === 3 || layer === 4 || layer === 5) return node.kind === 'polyline';
   return false;

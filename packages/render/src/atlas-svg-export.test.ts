@@ -1,4 +1,4 @@
-import type { RenderNode } from '@ttrpg-map/core';
+import type { RenderNode, RenderRectangle } from '@ttrpg-map/core';
 import { describe, expect, it } from 'vitest';
 
 import { ATLAS_DISPLAY_PROJECTION_METADATA } from './atlas-display-projection.js';
@@ -24,6 +24,13 @@ const STYLE: AtlasSvgStyleMetadata = {
   styleBehaviorVersion: 1,
   tokenVersion: 1,
 };
+const WORLD_MAP_ID = '11111111-1111-4111-8111-111111111111';
+const PAPER_ENTITY_ID = '22222222-2222-4222-8222-222222222222';
+const WATER_ENTITY_ID = '33333333-3333-4333-8333-333333333333';
+const LAND_ENTITY_ID = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
+const PAPER_ASPECT_ID = '55555555-5555-4555-8555-555555555555';
+const WATER_ASPECT_ID = '66666666-6666-4666-8666-666666666666';
+const LAND_ASPECT_ID = '77777777-7777-4777-8777-777777777777';
 
 describe('atlas-svg-v1 export', () => {
   it('serializes physical units, metadata, stable IDs, definitions, references, and z-order', () => {
@@ -75,8 +82,8 @@ describe('atlas-svg-v1 export', () => {
       {
         id: 'atlas/title',
         kind: 'label',
-        sourceId: 'title',
-        sourceAspectId: 'title-aspect',
+        sourceId: LAND_ENTITY_ID,
+        sourceAspectId: LAND_ASPECT_ID,
         relatedSourceIds: [],
         text: 'Unsupported',
         position: { xPx: Number.NaN, yPx: 0 },
@@ -114,8 +121,8 @@ describe('atlas-svg-v1 export', () => {
     const polygon: RenderNode = {
       id: 'atlas/unsupported/polygon',
       kind: 'polygon',
-      sourceId: 'unsupported',
-      sourceAspectId: 'unsupported-aspect',
+      sourceId: LAND_ENTITY_ID,
+      sourceAspectId: LAND_ASPECT_ID,
       relatedSourceIds: [],
       points: [
         { xPx: 1, yPx: 1 },
@@ -162,6 +169,71 @@ describe('atlas-svg-v1 export', () => {
     );
   });
 
+  it('separates printable render-node IDs from canonical UUID source references', () => {
+    const renderIdNodes = replaceNode(3, {
+      ...required(baseNodes()[3]),
+      id: 'atlas/paper/grain,0000',
+    });
+    const renderIdResult = exportAtlasSceneToSvg({ scene: scene(renderIdNodes), style: STYLE });
+    const symbolicResult = exportAtlasSceneToSvg({
+      scene: { ...scene(), sourceWorldMapId: 'world-map-1' },
+      style: STYLE,
+    });
+    const uppercaseResult = exportAtlasSceneToSvg({
+      scene: scene(
+        replaceNode(2, {
+          ...required(baseNodes()[2]),
+          sourceId: LAND_ENTITY_ID.toUpperCase(),
+        }),
+      ),
+      style: STYLE,
+    });
+    const nilResult = exportAtlasSceneToSvg({
+      scene: scene(
+        replaceNode(2, {
+          ...required(baseNodes()[2]),
+          sourceAspectId: '00000000-0000-0000-0000-000000000000',
+        }),
+      ),
+      style: STYLE,
+    });
+    const commaResult = exportAtlasSceneToSvg({
+      scene: scene(
+        replaceNode(2, {
+          ...required(baseNodes()[2]),
+          relatedSourceIds: [`${WATER_ENTITY_ID},${LAND_ENTITY_ID}`],
+        }),
+      ),
+      style: STYLE,
+    });
+
+    expect(renderIdResult.ok).toBe(true);
+    for (const result of [symbolicResult, uppercaseResult, nilResult, commaResult]) {
+      expect(failureCodes(result)).toContain(ATLAS_SVG_DIAGNOSTIC_CODES.sourceLinkInvalid);
+    }
+  });
+
+  it.each([
+    ['paper x offset', 0, { xPx: 1, widthPx: 2_047 }],
+    ['paper y offset', 0, { yPx: 1, heightPx: 1_023 }],
+    ['paper zero width', 0, { widthPx: 0 }],
+    ['paper partial height', 0, { heightPx: 1_023 }],
+    ['water x offset', 1, { xPx: 1, widthPx: 2_047 }],
+    ['water y offset', 1, { yPx: 1, heightPx: 1_023 }],
+    ['water partial width', 1, { widthPx: 2_047 }],
+    ['water zero height', 1, { heightPx: 0 }],
+  ] satisfies readonly [string, number, Partial<RenderRectangle>][])(
+    'rejects a malformed %s background rectangle',
+    (_description, index, patch) => {
+      const result = exportAtlasSceneToSvg({
+        scene: scene(mutateBackground(index, patch)),
+        style: STYLE,
+      });
+
+      expect(failureCodes(result)).toContain(ATLAS_SVG_DIAGNOSTIC_CODES.nodeInvalid);
+    },
+  );
+
   it('observes cancellation between bounded batches without returning partial bytes', async () => {
     let isCancelled = false;
     const progress: string[] = [];
@@ -170,8 +242,8 @@ describe('atlas-svg-v1 export', () => {
       ...Array.from({ length: 300 }, (_, index): RenderNode => ({
         id: `atlas/paper/grain-${String(index).padStart(4, '0')}`,
         kind: 'polyline',
-        sourceId: 'paper',
-        sourceAspectId: 'paper-aspect',
+        sourceId: PAPER_ENTITY_ID,
+        sourceAspectId: PAPER_ASPECT_ID,
         relatedSourceIds: [],
         points: [
           { xPx: index, yPx: 10 },
@@ -215,7 +287,7 @@ function scene(nodes: readonly RenderNode[] = baseNodes()): AtlasRenderScene {
     sceneCompositionVersion: ATLAS_SCENE_COMPOSITION_VERSION,
     levelOfDetail: ATLAS_SCENE_LEVELS_OF_DETAIL.normalAtlas,
     coordinateSpace: 'atlas-display-equirectangular-v1',
-    sourceWorldMapId: 'world-map-1',
+    sourceWorldMapId: WORLD_MAP_ID,
     projection: ATLAS_DISPLAY_PROJECTION_METADATA,
     widthPx: 2_048,
     heightPx: 1_024,
@@ -228,8 +300,8 @@ function baseNodes(): readonly RenderNode[] {
     {
       id: 'atlas/background/paper',
       kind: 'rectangle',
-      sourceId: 'paper',
-      sourceAspectId: 'paper-aspect',
+      sourceId: PAPER_ENTITY_ID,
+      sourceAspectId: PAPER_ASPECT_ID,
       relatedSourceIds: [],
       xPx: 0,
       yPx: 0,
@@ -240,8 +312,8 @@ function baseNodes(): readonly RenderNode[] {
     {
       id: 'atlas/background/water',
       kind: 'rectangle',
-      sourceId: 'water',
-      sourceAspectId: 'water-aspect',
+      sourceId: WATER_ENTITY_ID,
+      sourceAspectId: WATER_ASPECT_ID,
       relatedSourceIds: [],
       xPx: 0,
       yPx: 0,
@@ -252,9 +324,9 @@ function baseNodes(): readonly RenderNode[] {
     {
       id: 'atlas/land/land-1',
       kind: 'compoundPath',
-      sourceId: 'land-1',
-      sourceAspectId: 'land-aspect',
-      relatedSourceIds: ['water'],
+      sourceId: LAND_ENTITY_ID,
+      sourceAspectId: LAND_ASPECT_ID,
+      relatedSourceIds: [WATER_ENTITY_ID],
       subpaths: [
         {
           points: [
@@ -270,8 +342,8 @@ function baseNodes(): readonly RenderNode[] {
     {
       id: 'atlas/paper/grain-0000',
       kind: 'polyline',
-      sourceId: 'paper',
-      sourceAspectId: 'paper-aspect',
+      sourceId: PAPER_ENTITY_ID,
+      sourceAspectId: PAPER_ASPECT_ID,
       relatedSourceIds: [],
       points: [
         { xPx: 30, yPx: 30 },
@@ -283,9 +355,9 @@ function baseNodes(): readonly RenderNode[] {
     {
       id: 'atlas-water/echo/0000',
       kind: 'polyline',
-      sourceId: 'water',
-      sourceAspectId: 'water-aspect',
-      relatedSourceIds: ['land-1'],
+      sourceId: WATER_ENTITY_ID,
+      sourceAspectId: WATER_ASPECT_ID,
+      relatedSourceIds: [LAND_ENTITY_ID],
       points: [
         { xPx: 40, yPx: 40 },
         { xPx: 41, yPx: 41 },
@@ -296,8 +368,8 @@ function baseNodes(): readonly RenderNode[] {
     {
       id: 'atlas-water/mark/0000',
       kind: 'polyline',
-      sourceId: 'water',
-      sourceAspectId: 'water-aspect',
+      sourceId: WATER_ENTITY_ID,
+      sourceAspectId: WATER_ASPECT_ID,
       relatedSourceIds: [],
       points: [
         { xPx: 50, yPx: 50 },
@@ -309,9 +381,9 @@ function baseNodes(): readonly RenderNode[] {
     {
       id: 'atlas/coastline/0000',
       kind: 'polyline',
-      sourceId: 'land-1',
-      sourceAspectId: 'land-aspect',
-      relatedSourceIds: ['water'],
+      sourceId: LAND_ENTITY_ID,
+      sourceAspectId: LAND_ASPECT_ID,
+      relatedSourceIds: [WATER_ENTITY_ID],
       points: [
         { xPx: 1.123_456_7, yPx: 2.5 },
         { xPx: 3, yPx: 4 },
@@ -320,6 +392,22 @@ function baseNodes(): readonly RenderNode[] {
       strokeWidthPx: 1.25,
     },
   ];
+}
+
+function replaceNode(index: number, node: RenderNode): readonly RenderNode[] {
+  const nodes = [...baseNodes()];
+  nodes[index] = node;
+  return nodes;
+}
+
+function mutateBackground(index: number, patch: Partial<RenderRectangle>): readonly RenderNode[] {
+  const background = required(baseNodes()[index]);
+  if (background.kind !== 'rectangle') throw new Error('Expected a background rectangle.');
+  return replaceNode(index, { ...background, ...patch });
+}
+
+function failureCodes(result: ReturnType<typeof exportAtlasSceneToSvg>): readonly string[] {
+  return result.ok ? [] : result.diagnostics.map(({ code }) => code);
 }
 
 function required<Value>(value: Value | undefined): Value {

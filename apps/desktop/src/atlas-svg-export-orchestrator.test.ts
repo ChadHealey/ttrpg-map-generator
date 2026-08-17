@@ -13,6 +13,15 @@ import {
 } from './atlas-svg-export-orchestrator.js';
 import type { AcceptedAtlasState } from './atlas-workflow-generation.js';
 
+const WORLD_DOCUMENT_ID = '78b2157c-4f2c-5ac7-986b-76dc808f377e';
+const WORLD_MAP_ID = 'a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7';
+const PAPER_ENTITY_ID = '22222222-2222-4222-8222-222222222222';
+const WATER_ENTITY_ID = '33333333-3333-4333-8333-333333333333';
+const LAND_ENTITY_ID = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
+const PAPER_ASPECT_ID = '55555555-5555-4555-8555-555555555555';
+const WATER_ASPECT_ID = '66666666-6666-4666-8666-666666666666';
+const LAND_ASPECT_ID = '77777777-7777-4777-8777-777777777777';
+
 describe('accepted atlas SVG desktop export', () => {
   it('writes the scene bytes once and leaves every accepted reference unchanged', async () => {
     const accepted = acceptedState();
@@ -175,7 +184,7 @@ function acceptedState(landX = 10): AcceptedAtlasState {
     sceneCompositionVersion: ATLAS_SCENE_COMPOSITION_VERSION,
     levelOfDetail: ATLAS_SCENE_LEVELS_OF_DETAIL.normalAtlas,
     coordinateSpace: 'atlas-display-equirectangular-v1',
-    sourceWorldMapId: 'world-map',
+    sourceWorldMapId: WORLD_MAP_ID,
     projection: ATLAS_DISPLAY_PROJECTION_METADATA,
     widthPx: 2_048,
     heightPx: 1_024,
@@ -183,8 +192,8 @@ function acceptedState(landX = 10): AcceptedAtlasState {
       {
         id: 'atlas/background/paper',
         kind: 'rectangle',
-        sourceId: 'paper',
-        sourceAspectId: 'paper-aspect',
+        sourceId: PAPER_ENTITY_ID,
+        sourceAspectId: PAPER_ASPECT_ID,
         relatedSourceIds: [],
         xPx: 0,
         yPx: 0,
@@ -195,8 +204,8 @@ function acceptedState(landX = 10): AcceptedAtlasState {
       {
         id: 'atlas/background/water',
         kind: 'rectangle',
-        sourceId: 'water',
-        sourceAspectId: 'water-aspect',
+        sourceId: WATER_ENTITY_ID,
+        sourceAspectId: WATER_ASPECT_ID,
         relatedSourceIds: [],
         xPx: 0,
         yPx: 0,
@@ -207,9 +216,9 @@ function acceptedState(landX = 10): AcceptedAtlasState {
       {
         id: 'atlas/land/land',
         kind: 'compoundPath',
-        sourceId: 'land',
-        sourceAspectId: 'land-aspect',
-        relatedSourceIds: ['water'],
+        sourceId: LAND_ENTITY_ID,
+        sourceAspectId: LAND_ASPECT_ID,
+        relatedSourceIds: [WATER_ENTITY_ID],
         subpaths: [
           {
             points: [
@@ -227,10 +236,10 @@ function acceptedState(landX = 10): AcceptedAtlasState {
   };
   return {
     document: {
-      worldDocumentId: 'document',
+      worldDocumentId: WORLD_DOCUMENT_ID,
       displayName: 'Atlas',
       worldSeed: '81985529216486895',
-      rootMapId: 'world-map',
+      rootMapId: WORLD_MAP_ID,
       maps: [],
     } as unknown as AcceptedAtlasState['document'],
     geography: {} as AcceptedAtlasState['geography'],
@@ -244,8 +253,8 @@ function decorationNodes(): AcceptedAtlasState['scene']['nodes'] {
     {
       id: 'atlas/paper/grain-0000',
       kind: 'polyline',
-      sourceId: 'paper',
-      sourceAspectId: 'paper-aspect',
+      sourceId: PAPER_ENTITY_ID,
+      sourceAspectId: PAPER_ASPECT_ID,
       relatedSourceIds: [],
       points: [
         { xPx: 30, yPx: 30 },
@@ -257,9 +266,9 @@ function decorationNodes(): AcceptedAtlasState['scene']['nodes'] {
     {
       id: 'atlas-water/echo/0000',
       kind: 'polyline',
-      sourceId: 'water',
-      sourceAspectId: 'water-aspect',
-      relatedSourceIds: ['land'],
+      sourceId: WATER_ENTITY_ID,
+      sourceAspectId: WATER_ASPECT_ID,
+      relatedSourceIds: [LAND_ENTITY_ID],
       points: [
         { xPx: 40, yPx: 40 },
         { xPx: 41, yPx: 41 },
@@ -270,8 +279,8 @@ function decorationNodes(): AcceptedAtlasState['scene']['nodes'] {
     {
       id: 'atlas-water/mark/0000',
       kind: 'polyline',
-      sourceId: 'water',
-      sourceAspectId: 'water-aspect',
+      sourceId: WATER_ENTITY_ID,
+      sourceAspectId: WATER_ASPECT_ID,
       relatedSourceIds: [],
       points: [
         { xPx: 50, yPx: 50 },
@@ -283,9 +292,9 @@ function decorationNodes(): AcceptedAtlasState['scene']['nodes'] {
     {
       id: 'atlas/coastline/0000',
       kind: 'polyline',
-      sourceId: 'land',
-      sourceAspectId: 'land-aspect',
-      relatedSourceIds: ['water'],
+      sourceId: LAND_ENTITY_ID,
+      sourceAspectId: LAND_ASPECT_ID,
+      relatedSourceIds: [WATER_ENTITY_ID],
       points: [
         { xPx: 10, yPx: 10 },
         { xPx: 20, yPx: 10 },
