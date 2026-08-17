@@ -2,6 +2,10 @@
 
 import {
   type AspectId,
+  ATLAS_COASTLINE_APPEARANCE_BEHAVIOR_VERSION,
+  ATLAS_PAPER_TREATMENT_BEHAVIOR_VERSION,
+  ATLAS_STYLE_TOKEN_VERSION,
+  ATLAS_WATER_DECORATION_BEHAVIOR_VERSION,
   type AtlasAppearanceRecords,
   type AtlasCoastlineInkDecision,
   type AtlasGeographyRecords,
@@ -233,9 +237,12 @@ function canonicalizeAppearance(appearance: AtlasAppearanceRecords): AtlasAppear
     waterDecoration: {
       ...appearance.waterDecoration,
       paths: Object.freeze(
-        [...appearance.waterDecoration.paths].sort((left, right) =>
-          compareText(left.decorationId, right.decorationId),
-        ),
+        appearance.waterDecoration.paths
+          .map((path) => ({
+            ...path,
+            relatedSourceIds: Object.freeze([...path.relatedSourceIds].sort(compareText)),
+          }))
+          .sort((left, right) => compareText(left.decorationId, right.decorationId)),
       ),
     },
   };
@@ -467,12 +474,33 @@ function validateAtlasAppearanceSource(
       ),
     );
   }
+  if (
+    !supportsVersion(
+      appearance.coastlineAppearance.appearanceBehaviorVersion,
+      ATLAS_COASTLINE_APPEARANCE_BEHAVIOR_VERSION,
+    ) ||
+    !supportsVersion(
+      appearance.waterDecoration.decorationBehaviorVersion,
+      ATLAS_WATER_DECORATION_BEHAVIOR_VERSION,
+    ) ||
+    !supportsVersion(
+      appearance.paperTreatment.treatmentBehaviorVersion,
+      ATLAS_PAPER_TREATMENT_BEHAVIOR_VERSION,
+    )
+  ) {
+    diagnostics.push(
+      appearanceDiagnostic(
+        appearance.atlasPresentationEntityId,
+        'Atlas appearance contains an unsupported behavior version.',
+      ),
+    );
+  }
   for (const provenance of [
     appearance.coastlineAppearance.style,
     appearance.waterDecoration.style,
     appearance.paperTreatment.style,
   ]) {
-    if (provenance.styleId !== style.styleId) {
+    if (!matchesStyleProvenance(provenance, style)) {
       diagnostics.push(
         appearanceDiagnostic(
           provenance.styleId,
@@ -501,6 +529,20 @@ function validateAtlasAppearanceSource(
         ),
       );
     }
+    if (
+      !validPermille(decision.wobblePhasePermille) ||
+      !validPermille(decision.wobbleStrengthPermille) ||
+      !validPermille(decision.secondaryPhasePermille) ||
+      !validPermille(decision.pressurePhasePermille) ||
+      !validPermille(decision.pressureStrengthPermille)
+    ) {
+      diagnostics.push(
+        appearanceDiagnostic(
+          decision.sourceRingId,
+          'Atlas coastline appearance contains an invalid permille decision.',
+        ),
+      );
+    }
   }
   if (decisions.length !== rings.size) {
     diagnostics.push(
@@ -522,14 +564,22 @@ function validateAtlasAppearanceSource(
   }
   for (const path of appearance.waterDecoration.paths) {
     const ring = path.sourceRingId === undefined ? undefined : rings.get(path.sourceRingId);
+    const expectedRelatedIds =
+      ring === undefined
+        ? Object.freeze([] as string[])
+        : Object.freeze([ring.ringId, ...ring.waterBodyIds].sort(compareText));
     if (
+      !isKnownDecorationKind(path.kind) ||
       path.points.length < 2 ||
       path.weightPermille < 1 ||
       path.weightPermille > 1_000 ||
+      !Number.isInteger(path.weightPermille) ||
+      new Set(path.relatedSourceIds).size !== path.relatedSourceIds.length ||
       (path.kind === 'water-mark' && !waterBodyIds.has(path.sourceEntityId)) ||
       (path.kind === 'coastal-echo' &&
-        (ring === undefined ||
-          ring.sourceBoundaryFingerprint !== path.sourceBoundaryFingerprint)) ||
+        (ring?.landmassId !== path.sourceEntityId ||
+          ring.sourceBoundaryFingerprint !== path.sourceBoundaryFingerprint ||
+          !sameStrings(path.relatedSourceIds, expectedRelatedIds))) ||
       path.points.some((point, index) => {
         const previous = path.points[index - 1];
         return (
@@ -545,6 +595,20 @@ function validateAtlasAppearanceSource(
         ),
       );
     }
+  }
+  if (
+    !validPermille(appearance.paperTreatment.grainPhaseXPermille) ||
+    !validPermille(appearance.paperTreatment.grainPhaseYPermille) ||
+    !validPermille(appearance.paperTreatment.grainAnglePermille) ||
+    !validPermille(appearance.paperTreatment.grainDensityPermille) ||
+    !validPermille(appearance.paperTreatment.grainLengthPermille)
+  ) {
+    diagnostics.push(
+      appearanceDiagnostic(
+        appearance.atlasPresentationEntityId,
+        'Atlas paper treatment contains an invalid permille decision.',
+      ),
+    );
   }
   if (!validStyle(style)) {
     diagnostics.push(
@@ -587,9 +651,37 @@ function validStyle(style: AtlasStyleTokens): boolean {
     style.paper.grainWidthPx,
   ];
   return (
+    supportsVersion(style.tokenVersion, ATLAS_STYLE_TOKEN_VERSION) &&
     colors.every((color) => /^#[0-9a-f]{6}$/u.test(color)) &&
-    measures.every((value) => Number.isFinite(value) && value > 0)
+    measures.every((value) => Number.isFinite(value) && value > 0) &&
+    Number.isInteger(style.paper.grainCount)
   );
+}
+
+function validPermille(value: number): boolean {
+  return Number.isInteger(value) && value >= 0 && value <= 1_000;
+}
+
+function supportsVersion(value: unknown, expected: number): boolean {
+  return value === expected;
+}
+
+function matchesStyleProvenance(
+  provenance: { readonly styleId: string; readonly styleBehaviorVersion: number },
+  style: AtlasStyleTokens,
+): boolean {
+  return (
+    provenance.styleId === style.styleId &&
+    supportsVersion(provenance.styleBehaviorVersion, style.styleBehaviorVersion)
+  );
+}
+
+function isKnownDecorationKind(value: unknown): value is AtlasWaterDecorationPath['kind'] {
+  return value === 'coastal-echo' || value === 'water-mark';
+}
+
+function sameStrings(left: readonly string[], right: readonly string[]): boolean {
+  return left.length === right.length && left.every((value, index) => value === right[index]);
 }
 
 function sourceDiagnostic(sourceId: string, message: string): AtlasSceneDiagnostic {

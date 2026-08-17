@@ -53,6 +53,7 @@ export function appearanceProof(core, assets, definition, input, records) {
   const paths = baseline.appearance.waterDecoration.paths;
   assert.ok(paths.some(({ kind }) => kind === 'coastal-echo'));
   assert.ok(paths.some(({ kind }) => kind === 'water-mark'));
+  assertDecorationSafety(core, records, paths);
 
   return {
     records: baseline.appearance,
@@ -139,6 +140,64 @@ function sourceSnapshotOf(records) {
   };
 }
 
+function assertDecorationSafety(core, records, paths) {
+  const waterBodies = new Map(
+    records.waterBodies.map((waterBody) => [waterBody.entityId, waterBody]),
+  );
+  const chartMarginTicks = (14 * core.PLANET_TICKS_PER_TURN) / 2_048;
+  for (const path of paths) {
+    assert.ok(path.points.length >= 2);
+    for (const [index, point] of path.points.entries()) {
+      assert.equal(
+        records.landWaterClassification.samples[sampleIndexForPoint(core, point)],
+        'water',
+      );
+      assert.ok(point.longitudeTicks > core.PLANET_LONGITUDE_MIN_TICKS + chartMarginTicks);
+      assert.ok(point.longitudeTicks < core.PLANET_LONGITUDE_MAX_TICKS - chartMarginTicks);
+      assert.ok(point.latitudeTicks > core.PLANET_LATITUDE_MIN_TICKS + chartMarginTicks);
+      assert.ok(point.latitudeTicks < core.PLANET_LATITUDE_MAX_TICKS - chartMarginTicks);
+      const previous = path.points[index - 1];
+      if (previous !== undefined) {
+        assert.ok(
+          Math.abs(point.longitudeTicks - previous.longitudeTicks) <=
+            core.PLANET_TICKS_PER_TURN / 2,
+        );
+      }
+      if (path.kind === 'water-mark') {
+        const owner = waterBodies.get(path.sourceEntityId);
+        assert.ok(owner);
+        assert.equal(membershipOwns(owner.membership, sampleIndexForPoint(core, point)), true);
+      }
+    }
+  }
+}
+
+function sampleIndexForPoint(core, point) {
+  const latitudeStep = core.PLANET_TICKS_PER_TURN / 2 / core.ATLAS_FULL_LATITUDE_BAND_COUNT;
+  const longitudeStep = core.PLANET_TICKS_PER_TURN / core.ATLAS_FULL_LONGITUDE_CELL_COUNT;
+  const latitudeIndex = Math.max(
+    0,
+    Math.min(
+      core.ATLAS_FULL_LATITUDE_BAND_COUNT,
+      Math.round((point.latitudeTicks - core.PLANET_LATITUDE_MIN_TICKS) / latitudeStep),
+    ),
+  );
+  if (latitudeIndex === 0 || latitudeIndex === core.ATLAS_FULL_LATITUDE_BAND_COUNT) {
+    return core.atlasStorageIndex(0, latitudeIndex);
+  }
+  const longitudeIndex = modulo(
+    Math.round((point.longitudeTicks - core.PLANET_LONGITUDE_MIN_TICKS) / longitudeStep),
+    core.ATLAS_FULL_LONGITUDE_CELL_COUNT,
+  );
+  return core.atlasStorageIndex(longitudeIndex, latitudeIndex);
+}
+
+function membershipOwns(membership, index) {
+  return membership.sampleRanges.some(
+    ({ startIndex, endIndexExclusive }) => index >= startIndex && index < endIndexExclusive,
+  );
+}
+
 function hashCanonicalPrimitiveTraversal(value) {
   const hash = createHash('sha256');
   hash.update('ttrpg-map/atlas-appearance/v1\0');
@@ -178,4 +237,8 @@ function parsed(result) {
 
 function compareText(left, right) {
   return left < right ? -1 : left > right ? 1 : 0;
+}
+
+function modulo(value, modulus) {
+  return ((value % modulus) + modulus) % modulus;
 }

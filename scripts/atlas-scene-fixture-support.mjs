@@ -20,6 +20,27 @@ export function sceneProof(render, records, appearance, style) {
   const coarseResult = render.composeAtlasRenderScene(records, appearance, style, {
     levelOfDetail: render.ATLAS_SCENE_LEVELS_OF_DETAIL.coarsePreview,
   });
+  const staleVersionResult = render.composeAtlasRenderScene(
+    records,
+    {
+      ...appearance,
+      paperTreatment: {
+        ...appearance.paperTreatment,
+        style: { ...appearance.paperTreatment.style, styleBehaviorVersion: 999 },
+      },
+    },
+    style,
+  );
+  const invalidPermilleResult = render.composeAtlasRenderScene(
+    records,
+    {
+      ...appearance,
+      paperTreatment: { ...appearance.paperTreatment, grainDensityPermille: Number.NaN },
+    },
+    style,
+  );
+  assert.equal(staleVersionResult.ok, false);
+  assert.equal(invalidPermilleResult.ok, false);
   for (const result of [normalResult, rebuiltResult, reorderedResult, coarseResult]) {
     assert.equal(result.ok, true);
     if (!result.ok) throw new Error(JSON.stringify(result.diagnostics));
@@ -240,7 +261,9 @@ function reorderedAppearance(appearance) {
     },
     waterDecoration: {
       ...appearance.waterDecoration,
-      paths: [...appearance.waterDecoration.paths].reverse(),
+      paths: [...appearance.waterDecoration.paths]
+        .reverse()
+        .map((path) => ({ ...path, relatedSourceIds: [...path.relatedSourceIds].reverse() })),
     },
   };
 }
