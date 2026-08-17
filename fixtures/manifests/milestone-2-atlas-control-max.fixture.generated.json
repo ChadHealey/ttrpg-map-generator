@@ -3,13 +3,15 @@
   "fixtureId": "milestone-2-atlas-control-max",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-control-max --review-record fixed-seeds/milestone-2-atlas-control-max/reviews/0005-atlas-scene.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-control-max --review-record fixed-seeds/milestone-2-atlas-control-max/reviews/0006-restrained-ink-atlas.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-control-max/fixture-definition.json",
-    "sha256": "57d36dac119187b617d40bc5e6579d72362f4e3e82dff796febd4d9e19022f39"
+    "sha256": "66c2e0846f38dfe9b2c693c28d90bbe3ec4165c4bc9d2ddad1bf7787e5f28a80"
   },
   "worldSeed": "16045690984503098046",
   "stableIds": {
+    "atlasPresentationEntityId": "66b92789-9a5b-5760-b299-1d82700cf3a0",
+    "coastlineAppearanceAspectId": "a200a1c0-c569-5615-80cd-89b15fbab600",
     "coastlineAspectId": "371a6a8c-9fe8-5cdb-adca-1a46ffa19645",
     "coastlineRingId000": "16a22d73-3be9-5e3b-a314-5dd32bd64de6",
     "coastlineRingId001": "2f97d6aa-66fa-576c-b787-e3f89283e286",
@@ -27,6 +29,7 @@
     "coastlineRingId013": "ee9df39b-a093-517f-a81f-845c697918e9",
     "landWaterClassificationAspectId": "04628f37-6408-5087-a139-bdd2bdff42d3",
     "macroElevationAspectId": "e588eb7f-d585-5c27-9ce5-81c2fb1ebc43",
+    "paperTreatmentAspectId": "f435cc03-cc5f-59aa-9390-8693a9a8fcbd",
     "semanticAspectId000": "01d4ec1a-6a65-5e09-ac26-26e0a3c7844d",
     "semanticAspectId001": "0454a95b-67a6-5c97-a6eb-280b7a94bae0",
     "semanticAspectId002": "0ded74ce-19a6-596f-90e0-b9e09a2a3b31",
@@ -79,11 +82,15 @@
     "surfaceComponentId013": "e72ef167-5b83-5767-8e8a-ad9df7282ffa",
     "surfaceComponentId014": "f0a74388-2c5a-58bc-8ce1-06e5ec5d7c6a",
     "surfaceComponentId015": "f2282aa4-59b1-5045-b4d7-4e35c26f5232",
+    "waterDecorationAspectId": "90916e2f-286a-5722-984e-0981392bcfd8",
     "worldCoastlineEntityId": "8737ec2a-5dd2-5b77-85f3-d8cd683ef073",
     "worldMapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7",
     "worldSurfaceEntityId": "eaa0cecc-8c5d-559f-b18a-bbd0c53248ac"
   },
   "versions": {
+    "atlasAppearanceGeneratorManifestVersion": 1,
+    "atlasAppearanceParameterSchemaVersion": 1,
+    "atlasCoastlineAppearanceBehaviorVersion": 1,
     "atlasCoastlineExtractionAlgorithmVersion": 1,
     "atlasCoastlineGeneratorManifestVersion": 1,
     "atlasCoastlineGeometryBehaviorVersion": 1,
@@ -95,15 +102,19 @@
     "atlasFieldBehaviorVersion": 1,
     "atlasGeneratorManifestVersion": 1,
     "atlasGeographyContractVersion": 1,
+    "atlasPaperTreatmentBehaviorVersion": 1,
     "atlasParameterSchemaVersion": 1,
     "atlasPreviewVersion": 1,
     "atlasRealizationVersion": 1,
     "atlasSamplingPolicyVersion": 1,
-    "atlasSceneCompositionVersion": 1,
+    "atlasSceneCompositionVersion": 2,
     "atlasSemanticClassificationVersion": 1,
     "atlasSemanticGeneratorManifestVersion": 1,
     "atlasSemanticParameterSchemaVersion": 1,
     "atlasSemanticPolicyVersion": 1,
+    "atlasStyleBehaviorVersion": 1,
+    "atlasStyleTokenVersion": 1,
+    "atlasWaterDecorationBehaviorVersion": 1,
     "deterministicStreamVersion": 1,
     "landWaterClassificationBehaviorVersion": 1,
     "landWaterClassificationGeneratorVersion": 1,
@@ -112,6 +123,9 @@
   },
   "checkpointRevisions": {
     "baseline": {
+      "atlas.coastlineAppearance": 0,
+      "atlas.paperTreatment": 0,
+      "atlas.waterDecoration": 0,
       "islandGroup.classification": 0,
       "landmass.classification": 0,
       "waterBody.classification": 0,
@@ -124,42 +138,51 @@
     {
       "assertionId": "runner-validates-full-generator-kernel",
       "operator": "runner-pass",
-      "reviewPurpose": "Prove exact full-profile generation, semantic classification, source-linked canonical coastline geometry, simplification, topology, identity, ordering, deterministic seam-safe display projection, and cache-free atlas scene composition."
+      "reviewPurpose": "Prove exact geography plus independently seeded accepted appearance, bounded ink, masked decoration, paper treatment, and shared-scene backend evidence."
     }
   ],
-  "reviewPurpose": "Prove the version-1 atlas field, partition, semantic geography, canonical coastline generator, disposable display projection, and renderer-neutral atlas scene for one fixed seed/control row before accepted-aspect persistence integration.",
+  "reviewPurpose": "Prove the restrained version-1 ink style and appearance isolation over unchanged accepted atlas geography before persistence integration.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-control-max/reviews/0005-atlas-scene.md",
-    "sha256": "4a39cd892f5c1b0951d7cb77ca8d02aac31ed9a79ec229f26c67a87546f32be5"
+    "path": "fixed-seeds/milestone-2-atlas-control-max/reviews/0006-restrained-ink-atlas.md",
+    "sha256": "289000bab175f16649d768436fc516d314918a8291a56ac40c2d9a9b5221ad30"
   },
   "generatedRoots": [
     "canonical-svg/milestone-2-atlas-control-max",
-    "fixed-seeds/milestone-2-atlas-control-max/expected"
+    "fixed-seeds/milestone-2-atlas-control-max/expected",
+    "visual-gallery/milestone-2-atlas-control-max"
   ],
   "artifacts": [
     {
       "path": "canonical-svg/milestone-2-atlas-control-max/baseline.svg",
       "kind": "canonical-svg",
       "checkpoint": "baseline",
-      "byteLength": 353784,
-      "canonicalSvgSha256": "80ab027eaf472ba6b2ef016b95a7bad96b54ff44e91adecede82898f97248c91",
-      "fixtureIntegritySha256": "80ab027eaf472ba6b2ef016b95a7bad96b54ff44e91adecede82898f97248c91"
+      "byteLength": 878917,
+      "canonicalSvgSha256": "652095349c50852be606892936124471ee2f66abf62e96292e19951ea5a34b64",
+      "fixtureIntegritySha256": "652095349c50852be606892936124471ee2f66abf62e96292e19951ea5a34b64"
     },
     {
       "path": "fixed-seeds/milestone-2-atlas-control-max/expected/baseline/atlas-land-water.kernel.canonical",
       "kind": "canonical-kernel-vector",
       "checkpoint": "baseline",
-      "byteLength": 8955,
-      "canonicalKernelVectorSha256": "64f7fb0447ce8946d048260524e48083a7f645d775afd340ff0239a3a4af012c",
-      "fixtureIntegritySha256": "64f7fb0447ce8946d048260524e48083a7f645d775afd340ff0239a3a4af012c"
+      "byteLength": 10601,
+      "canonicalKernelVectorSha256": "2ea4b6909d7c214ae6113562652d23e695315de751b1ce292d71b85214078ff8",
+      "fixtureIntegritySha256": "2ea4b6909d7c214ae6113562652d23e695315de751b1ce292d71b85214078ff8"
     },
     {
       "path": "fixed-seeds/milestone-2-atlas-control-max/expected/baseline/atlas-render-scene.scene.canonical",
       "kind": "canonical-render-scene",
       "checkpoint": "baseline",
-      "byteLength": 779591,
-      "canonicalSceneSha256": "11f017781560867deb49ed98200c75cdd972f829b50bad142aa3172accb4b655",
-      "fixtureIntegritySha256": "11f017781560867deb49ed98200c75cdd972f829b50bad142aa3172accb4b655"
+      "byteLength": 1371985,
+      "canonicalSceneSha256": "deb939cab8b6ed58e793ff3c8832122a09045de54b8e89a7f5662d52e12358bc",
+      "fixtureIntegritySha256": "deb939cab8b6ed58e793ff3c8832122a09045de54b8e89a7f5662d52e12358bc"
+    },
+    {
+      "path": "visual-gallery/milestone-2-atlas-control-max/baseline.png",
+      "kind": "visual-evidence",
+      "checkpoint": "baseline",
+      "byteLength": 1049775,
+      "visualEvidenceSha256": "21aead59e1c60b2e71dbe4480bfa7ec3384539b2c04afed53b6082bb7a38e450",
+      "fixtureIntegritySha256": "21aead59e1c60b2e71dbe4480bfa7ec3384539b2c04afed53b6082bb7a38e450"
     }
   ]
 }
