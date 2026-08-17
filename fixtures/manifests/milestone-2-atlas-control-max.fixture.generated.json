@@ -3,7 +3,7 @@
   "fixtureId": "milestone-2-atlas-control-max",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-control-max --review-record fixed-seeds/milestone-2-atlas-control-max/reviews/0006-restrained-ink-atlas.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-control-max --review-record fixed-seeds/milestone-2-atlas-control-max/reviews/0007-production-atlas-svg.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-control-max/fixture-definition.json",
     "sha256": "66c2e0846f38dfe9b2c693c28d90bbe3ec4165c4bc9d2ddad1bf7787e5f28a80"
@@ -143,8 +143,8 @@
   ],
   "reviewPurpose": "Prove the restrained version-1 ink style and appearance isolation over unchanged accepted atlas geography before persistence integration.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-control-max/reviews/0006-restrained-ink-atlas.md",
-    "sha256": "289000bab175f16649d768436fc516d314918a8291a56ac40c2d9a9b5221ad30"
+    "path": "fixed-seeds/milestone-2-atlas-control-max/reviews/0007-production-atlas-svg.md",
+    "sha256": "d6dbf45f51f28aaf8b381ec7bcbf8e48f94f801c4b2bb599f28a9729d3409f7c"
   },
   "generatedRoots": [
     "canonical-svg/milestone-2-atlas-control-max",
@@ -156,9 +156,9 @@
       "path": "canonical-svg/milestone-2-atlas-control-max/baseline.svg",
       "kind": "canonical-svg",
       "checkpoint": "baseline",
-      "byteLength": 878917,
-      "canonicalSvgSha256": "652095349c50852be606892936124471ee2f66abf62e96292e19951ea5a34b64",
-      "fixtureIntegritySha256": "652095349c50852be606892936124471ee2f66abf62e96292e19951ea5a34b64"
+      "byteLength": 778564,
+      "canonicalSvgSha256": "b9f3666170cf2ee18e21caf7de97aa129e7accd04da10d6fa0fdb6ba5de8be18",
+      "fixtureIntegritySha256": "b9f3666170cf2ee18e21caf7de97aa129e7accd04da10d6fa0fdb6ba5de8be18"
     },
     {
       "path": "fixed-seeds/milestone-2-atlas-control-max/expected/baseline/atlas-land-water.kernel.canonical",
