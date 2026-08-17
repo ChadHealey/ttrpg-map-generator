@@ -3,7 +3,7 @@
   "fixtureId": "milestone-2-atlas-proof",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-proof --review-record fixed-seeds/milestone-2-atlas-proof/reviews/0009-production-atlas-svg.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-proof --review-record fixed-seeds/milestone-2-atlas-proof/reviews/0010-production-atlas-png.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-proof/fixture-definition.json",
     "sha256": "4e565a6e674623561d8952140c98522597b483325390676abbc7ccacb854520a"
@@ -100,8 +100,8 @@
   ],
   "reviewPurpose": "Prove the restrained version-1 ink style and appearance isolation over unchanged accepted atlas geography before persistence integration.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-proof/reviews/0009-production-atlas-svg.md",
-    "sha256": "98df2833537bb0a7ee4a460bab466a3b7d56aa2a60af093ab3f540c666009c6f"
+    "path": "fixed-seeds/milestone-2-atlas-proof/reviews/0010-production-atlas-png.md",
+    "sha256": "2b225d6a0be62ce473d7872d30616e38a4c1f5e5761488f78035db59262d6794"
   },
   "generatedRoots": [
     "canonical-svg/milestone-2-atlas-proof",
@@ -137,9 +137,19 @@
       "path": "visual-gallery/milestone-2-atlas-proof/baseline.png",
       "kind": "visual-evidence",
       "checkpoint": "baseline",
-      "byteLength": 1049775,
-      "visualEvidenceSha256": "c0ed7687017b78a7d8f5b98404b0dd8eea2a9be1b00f35d5831c2d22e1124109",
-      "fixtureIntegritySha256": "c0ed7687017b78a7d8f5b98404b0dd8eea2a9be1b00f35d5831c2d22e1124109"
+      "byteLength": 92575,
+      "visualEvidenceSha256": "ed825ba77929cc7753ed3e4ad8f1c423de297cba222d069551cbdac7ec17ccb8",
+      "fixtureIntegritySha256": "ed825ba77929cc7753ed3e4ad8f1c423de297cba222d069551cbdac7ec17ccb8",
+      "pngProfileId": "atlas-png-v1",
+      "pngProfileVersion": 1,
+      "widthPx": 1600,
+      "heightPx": 800,
+      "bitDepth": 8,
+      "colorType": 2,
+      "srgbRenderingIntent": 0,
+      "bandCoreHeightPx": 64,
+      "bandHaloPx": 8,
+      "idatChunkBytes": 1048576
     }
   ]
 }
