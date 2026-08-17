@@ -1,125 +1,331 @@
 <script lang="ts">
-  import { MILESTONE_ONE_PROOF_SEED } from '@ttrpg-map/generation';
-  import { renderSceneToSvg } from '@ttrpg-map/render';
+  import { type AtlasControls, DEFAULT_ATLAS_CONTROLS } from '@ttrpg-map/core';
 
-  import { MilestoneOneProofWorkflow } from './milestone-one-proof-workflow.js';
-  import ProofEvidencePanel from './ProofEvidencePanel.svelte';
+  import { AtlasWorkflow, MILESTONE_TWO_ATLAS_PROOF_SEED } from './atlas-workflow.js';
   import ProofViewport from './ProofViewport.svelte';
-  import { tauriMapworldInvoke } from './tauri-mapworld-invoke.js';
 
-  const workflow = new MilestoneOneProofWorkflow();
-  let proof = workflow.snapshot;
-  let seed = MILESTONE_ONE_PROOF_SEED;
-  let targetPath = '/tmp/Milestone-One.mapworld';
-  let isBusy = false;
+  const workflow = new AtlasWorkflow();
+  let atlas = workflow.snapshot;
+  let seed = MILESTONE_TWO_ATLAS_PROOF_SEED;
+  let controls: AtlasControls = { ...DEFAULT_ATLAS_CONTROLS };
+  let selectedEntityId = '';
 
-  $: svgExportHref =
-    proof.scene === undefined
-      ? undefined
-      : `data:image/svg+xml;charset=utf-8,${encodeURIComponent(renderSceneToSvg(proof.scene))}`;
+  $: controlsAreAccepted = sameControls(controls, atlas.controls);
+  $: selectedEntity =
+    atlas.inspectionEntities.find(({ entityId }) => entityId === selectedEntityId) ??
+    atlas.inspectionEntities[0];
 
-  function generate(): void {
-    workflow.generate(seed);
+  async function preview(): Promise<void> {
+    await run(workflow.requestPreview(seed, controls));
+  }
+
+  async function acceptFull(): Promise<void> {
+    await run(workflow.acceptFull(seed, controls));
+  }
+
+  function discardPreview(): void {
+    workflow.discardPreview();
+    refresh();
+    controls = { ...atlas.controls };
+  }
+
+  function planReroll(kind: 'geography' | 'appearance'): void {
+    workflow.planReroll(kind);
     refresh();
   }
 
-  function rerollMarkers(): void {
-    workflow.rerollMarkers();
+  async function commitReroll(): Promise<void> {
+    await run(workflow.commitPlannedReroll());
+  }
+
+  function cancel(): void {
+    workflow.cancelActiveOperation();
     refresh();
   }
 
-  async function save(): Promise<void> {
-    isBusy = true;
-    await workflow.save(tauriMapworldInvoke, targetPath);
-    isBusy = false;
+  async function run(operation: Promise<unknown>): Promise<void> {
     refresh();
-  }
-
-  function closeProof(): void {
-    workflow.close();
-    refresh();
-  }
-
-  async function reopen(): Promise<void> {
-    isBusy = true;
-    await workflow.reopen(tauriMapworldInvoke);
-    isBusy = false;
-    refresh();
+    const timer = globalThis.setInterval(refresh, 100);
+    try {
+      await operation;
+    } finally {
+      globalThis.clearInterval(timer);
+      refresh();
+    }
   }
 
   function refresh(): void {
-    proof = workflow.snapshot;
+    atlas = workflow.snapshot;
+    if (selectedEntityId.length === 0 && atlas.inspectionEntities[0] !== undefined) {
+      selectedEntityId = atlas.inspectionEntities[0].entityId;
+    }
+  }
+
+  function sameControls(left: AtlasControls, right: AtlasControls): boolean {
+    return (
+      left.worldCircumferenceKm === right.worldCircumferenceKm &&
+      left.targetWaterCoveragePercent === right.targetWaterCoveragePercent &&
+      left.continentCountIntent === right.continentCountIntent &&
+      left.continentDistribution === right.continentDistribution &&
+      left.fragmentationPercent === right.fragmentationPercent &&
+      left.islandAbundancePercent === right.islandAbundancePercent &&
+      left.archipelagoAbundancePercent === right.archipelagoAbundancePercent &&
+      left.oceanConnectivity === right.oceanConnectivity &&
+      left.polarCharacter === right.polarCharacter
+    );
   }
 </script>
 
 <svelte:head
-  ><meta name="description" content="Milestone 1 deterministic kernel proof" /></svelte:head
+  ><meta name="description" content="Milestone 2 deterministic whole-world atlas" /></svelte:head
 >
 
 <main>
-  <section aria-labelledby="app-title" class="proof-shell">
+  <section aria-labelledby="app-title" class="proof-shell atlas-shell">
     <header class="hero">
       <div>
-        <p class="eyebrow">Milestone 1 — Deterministic kernel</p>
-        <h1 id="app-title">Selective reroll proof</h1>
+        <p class="eyebrow">Milestone 2 — Whole-world atlas</p>
+        <h1 id="app-title">Atlas workshop</h1>
       </div>
       <p class="summary">
-        Generate the registered composition, reroll only its markers, then save, unload, and reopen
-        authoritative state through the native <code>.mapworld</code> boundary.
+        Configure atlas-scale intent, inspect a disposable coarse preview, then accept one
+        separately generated full-resolution geography transaction. Selective rerolls state their
+        isolation boundary before they can commit.
       </p>
     </header>
 
     <form
-      class="workflow-card"
+      aria-label="Whole-world atlas controls"
+      class="atlas-controls"
       onsubmit={(event) => {
         event.preventDefault();
       }}
     >
       <div class="input-group seed-field">
-        <label class="field-label" for="world-seed">Registered world seed</label>
-        <input bind:value={seed} id="world-seed" inputmode="numeric" spellcheck="false" />
+        <label class="field-label" for="world-seed">World seed · unsigned 64-bit integer</label>
+        <input
+          bind:value={seed}
+          disabled={atlas.accepted !== undefined}
+          id="world-seed"
+          inputmode="numeric"
+          spellcheck="false"
+        />
       </div>
-      <button
-        disabled={isBusy || proof.phase === 'saved' || proof.phase === 'closed'}
-        onclick={generate}
-        type="button">Generate baseline</button
-      >
-      <button disabled={isBusy || proof.phase !== 'baseline'} onclick={rerollMarkers} type="button"
-        >Reroll markers</button
-      >
-      <div class="input-group path-field">
-        <label class="field-label" for="target-path">Fresh native save target</label>
-        <input bind:value={targetPath} id="target-path" spellcheck="false" />
+      <div class="input-group">
+        <label class="field-label" for="circumference">Circumference · km</label><input
+          bind:value={controls.worldCircumferenceKm}
+          id="circumference"
+          max="80000"
+          min="10000"
+          step="1000"
+          type="number"
+        />
       </div>
-      <button
-        disabled={isBusy || proof.phase !== 'rerolled'}
-        onclick={() => void save()}
-        type="button">Save .mapworld</button
-      >
-      <button disabled={isBusy || proof.phase !== 'saved'} onclick={closeProof} type="button"
-        >Close proof</button
-      >
-      <button
-        disabled={isBusy || proof.phase !== 'closed'}
-        onclick={() => void reopen()}
-        type="button">Reopen proof</button
-      >
+      <div class="input-group">
+        <label class="field-label" for="water-coverage">Water coverage · %</label><input
+          bind:value={controls.targetWaterCoveragePercent}
+          id="water-coverage"
+          max="80"
+          min="45"
+          step="1"
+          type="number"
+        />
+      </div>
+      <div class="input-group">
+        <label class="field-label" for="continent-count">Continent-count intent · count</label
+        ><input
+          bind:value={controls.continentCountIntent}
+          id="continent-count"
+          max="8"
+          min="1"
+          step="1"
+          type="number"
+        />
+      </div>
+      <div class="input-group">
+        <label class="field-label" for="continent-distribution">Continent distribution</label
+        ><select bind:value={controls.continentDistribution} id="continent-distribution"
+          ><option value="balanced">Balanced</option><option value="varied">Varied</option><option
+            value="oneDominant">One dominant</option
+          ></select
+        >
+      </div>
+      <div class="input-group">
+        <label class="field-label" for="fragmentation">Fragmentation · %</label><input
+          bind:value={controls.fragmentationPercent}
+          id="fragmentation"
+          max="100"
+          min="0"
+          step="1"
+          type="number"
+        />
+      </div>
+      <div class="input-group">
+        <label class="field-label" for="island-abundance">Island abundance · %</label><input
+          bind:value={controls.islandAbundancePercent}
+          id="island-abundance"
+          max="100"
+          min="0"
+          step="1"
+          type="number"
+        />
+      </div>
+      <div class="input-group">
+        <label class="field-label" for="archipelago-abundance">Archipelago abundance · %</label
+        ><input
+          bind:value={controls.archipelagoAbundancePercent}
+          id="archipelago-abundance"
+          max="100"
+          min="0"
+          step="1"
+          type="number"
+        />
+      </div>
+      <div class="input-group">
+        <label class="field-label" for="ocean-connectivity">Ocean connectivity</label><select
+          bind:value={controls.oceanConnectivity}
+          id="ocean-connectivity"
+          ><option value="singleGlobal">Single global</option><option value="connectedMajority"
+            >Connected majority</option
+          ><option value="multipleBasins">Multiple basins</option></select
+        >
+      </div>
+      <div class="input-group">
+        <label class="field-label" for="polar-character">Polar character</label><select
+          bind:value={controls.polarCharacter}
+          id="polar-character"
+          ><option value="oceanBiased">Ocean biased</option><option value="neutral">Neutral</option
+          ><option value="landBiased">Land biased</option></select
+        >
+      </div>
     </form>
 
-    <p aria-live="polite" class="status-line" data-phase={proof.phase}>
-      <span>{proof.phase}</span>{proof.statusMessage}
-    </p>
+    <div aria-label="Atlas generation operations" class="workflow-card atlas-actions">
+      <button disabled={atlas.isBusy} onclick={() => void preview()} type="button"
+        >Generate coarse preview</button
+      >
+      <button
+        disabled={atlas.isBusy || atlas.preview === undefined}
+        onclick={() => void acceptFull()}
+        type="button">Accept full atlas</button
+      >
+      <button
+        disabled={atlas.isBusy || atlas.preview === undefined}
+        onclick={discardPreview}
+        type="button">Discard preview</button
+      >
+      <button disabled={!atlas.isBusy} onclick={cancel} type="button">Cancel active work</button>
+      <button
+        disabled={atlas.isBusy ||
+          atlas.accepted === undefined ||
+          atlas.preview !== undefined ||
+          !controlsAreAccepted}
+        onclick={() => {
+          planReroll('geography');
+        }}
+        type="button">Preview geography reroll</button
+      >
+      <button
+        disabled={atlas.isBusy ||
+          atlas.accepted === undefined ||
+          atlas.preview !== undefined ||
+          !controlsAreAccepted}
+        onclick={() => {
+          planReroll('appearance');
+        }}
+        type="button">Preview appearance reroll</button
+      >
+      <button
+        disabled={atlas.isBusy || atlas.pendingReroll === undefined || !controlsAreAccepted}
+        onclick={() => void commitReroll()}
+        type="button">Commit reviewed reroll</button
+      >
+    </div>
+
+    <div aria-live="polite" class="status-line" data-phase={atlas.phase}>
+      <span>{atlas.preview === undefined ? atlas.phase : 'preview · disposable'}</span>
+      <p>{atlas.statusMessage}</p>
+    </div>
+    {#if atlas.progress !== undefined}
+      <div class="progress-row">
+        <label class="field-label" for="atlas-progress">{atlas.progress.stage}</label>
+        <progress
+          id="atlas-progress"
+          max={atlas.progress.totalWork}
+          value={atlas.progress.completedWork}
+        ></progress>
+        <output
+          >{Math.round((atlas.progress.completedWork / atlas.progress.totalWork) * 100)}%</output
+        >
+      </div>
+    {/if}
+
+    {#if atlas.pendingReroll !== undefined}
+      <section aria-labelledby="reroll-impact-heading" class="impact-card">
+        <p class="eyebrow">Required change-set preview</p>
+        <h2 id="reroll-impact-heading">{atlas.pendingReroll.kind} reroll impact</h2>
+        <div class="impact-grid">
+          <div>
+            <h3>Remains fixed</h3>
+            <ul>
+              {#each atlas.pendingReroll.remainsFixed as item (item)}<li>{item}</li>{/each}
+            </ul>
+          </div>
+          <div>
+            <h3>Will change</h3>
+            <ul>
+              {#each atlas.pendingReroll.changes as item (item)}<li>{item}</li>{/each}
+            </ul>
+          </div>
+        </div>
+      </section>
+    {/if}
 
     <div class="proof-grid">
-      <div class="map-stack">
-        <ProofViewport scene={proof.scene} />
-        {#if svgExportHref !== undefined}<a
-            class="export-link"
-            download={`milestone-one-${proof.phase}.svg`}
-            href={svgExportHref}>Export current SVG</a
-          >{/if}
-      </div>
-      <ProofEvidencePanel {proof} />
+      <div class="map-stack"><ProofViewport preview={atlas.preview} scene={atlas.scene} /></div>
+      <aside aria-labelledby="semantic-inspector-heading" class="evidence-card semantic-inspector">
+        <p class="eyebrow">Semantic inspection</p>
+        <h2 id="semantic-inspector-heading">Landmass or water body</h2>
+        <label class="field-label" for="semantic-entity">Stable source identity</label>
+        <select
+          bind:value={selectedEntityId}
+          disabled={atlas.inspectionEntities.length === 0 || atlas.preview !== undefined}
+          id="semantic-entity"
+        >
+          {#each atlas.inspectionEntities as entity (entity.entityId)}<option
+              value={entity.entityId}>{entity.kind} · {entity.entityId}</option
+            >{/each}
+        </select>
+        {#if atlas.preview !== undefined}
+          <p>
+            The accepted atlas remains unchanged, but disposable preview state exposes no semantic
+            identities.
+          </p>
+        {:else if selectedEntity !== undefined}
+          <dl>
+            <div>
+              <dt>Entity ID</dt>
+              <dd>{selectedEntity.entityId}</dd>
+            </div>
+            <div>
+              <dt>Semantic kind</dt>
+              <dd>{selectedEntity.kind}</dd>
+            </div>
+            <div>
+              <dt>Relationships</dt>
+              <dd>{selectedEntity.relationshipSummary}</dd>
+            </div>
+          </dl>
+        {:else}
+          <p>Accept a full atlas to inspect stable semantic identities.</p>
+        {/if}
+        {#if atlas.diagnosticCodes.length > 0}
+          <h3>Diagnostics</h3>
+          <ul class="diagnostic-list">
+            {#each atlas.diagnosticCodes as code (code)}<li><code>{code}</code></li>{/each}
+          </ul>
+        {/if}
+      </aside>
     </div>
   </section>
 </main>

@@ -192,6 +192,73 @@ select:disabled {
   background: rgb(232 225 199 / 72%);
 }
 
+.status-line p {
+  margin: 0;
+}
+
+.atlas-controls {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(10rem, 1fr));
+  gap: 0.85rem;
+  margin-top: 2rem;
+  padding: 1rem;
+  border: 1px solid rgb(54 51 39 / 28%);
+  background: rgb(253 249 233 / 72%);
+}
+
+.atlas-controls .seed-field {
+  grid-column: span 2;
+}
+
+.atlas-actions {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  margin-top: 0.75rem;
+}
+
+.progress-row {
+  display: grid;
+  grid-template-columns: minmax(14rem, auto) minmax(12rem, 1fr) 4rem;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgb(54 51 39 / 20%);
+  border-top: 0;
+  background: rgb(232 225 199 / 72%);
+}
+
+.progress-row .field-label {
+  margin: 0;
+}
+
+progress {
+  width: 100%;
+  accent-color: #2d6170;
+}
+
+.impact-card {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid #2d6170;
+  background: rgb(229 237 231 / 75%);
+}
+
+.impact-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.impact-grid ul,
+.diagnostic-list {
+  margin-bottom: 0;
+  padding-left: 1.2rem;
+  line-height: 1.55;
+}
+
+.semantic-inspector select {
+  margin-bottom: 1rem;
+}
+
 .status-line span {
   color: #2d6170;
   font-size: 0.68rem;
@@ -356,6 +423,48 @@ dd {
   font-size: 0.63rem;
   line-height: 1.35;
   overflow-wrap: anywhere;
+}
+
+@media (max-width: 78rem) {
+  .atlas-controls {
+    grid-template-columns: repeat(3, minmax(10rem, 1fr));
+  }
+
+  .atlas-actions {
+    grid-template-columns: repeat(3, minmax(9rem, 1fr));
+  }
+}
+
+@media (max-width: 58rem) {
+  main {
+    padding: 0.75rem;
+  }
+
+  .hero,
+  .proof-grid,
+  .impact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .atlas-controls {
+    grid-template-columns: repeat(2, minmax(9rem, 1fr));
+  }
+
+  .atlas-controls .seed-field {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 38rem) {
+  .atlas-controls,
+  .atlas-actions,
+  .progress-row {
+    grid-template-columns: 1fr;
+  }
+
+  .atlas-controls .seed-field {
+    grid-column: auto;
+  }
 }
 
 .comparison-grid {

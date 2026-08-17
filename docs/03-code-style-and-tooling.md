@@ -30,8 +30,12 @@ pnpm test:cross-platform
 pnpm test:native-recovery
 ```
 
-`pnpm test:e2e` runs the focused desktop orchestration test and the real native Milestone 1
-workflow bridge. That bridge drives the production generate → reroll markers → save → close →
+`pnpm test:e2e` runs the focused Milestone 1 and Milestone 2 desktop orchestration tests plus the
+real native Milestone 1 workflow bridge. The atlas workflow covers preview cancellation/restart,
+full acceptance, semantic inspection, both reviewed rerolls, and the serial production-generation
+chain. That costly chain is excluded from the parallel `pnpm test` pool so it cannot starve the
+independently bounded geometry tests. The native bridge drives the production generate → reroll
+markers → save → close →
 reopen sequence across Node and Rust, writes an actual sibling-directory `.mapworld` package, and
 arms a generator-free reopen tripwire after unload.
 
