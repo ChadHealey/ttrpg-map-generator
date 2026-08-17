@@ -3,7 +3,7 @@
   "fixtureId": "milestone-2-atlas-fragmented-islands",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-fragmented-islands --review-record fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0008-water-mark-seam-clearance.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-fragmented-islands --review-record fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0009-production-atlas-svg.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/fixture-definition.json",
     "sha256": "5a3d25b051129cadc85cc78ca0a422faa63b75bf222318a5350cab52e9baca08"
@@ -116,8 +116,8 @@
   ],
   "reviewPurpose": "Prove the restrained version-1 ink style and appearance isolation over unchanged accepted atlas geography before persistence integration.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0008-water-mark-seam-clearance.md",
-    "sha256": "6d991896302e28a7229ec18e5988aa2c8c5a7e8bc0482c19a9db0e51579192d2"
+    "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0009-production-atlas-svg.md",
+    "sha256": "b4237c53e80569b8eaabc4a1ff634dd916a68313eb562644ea46d488db712ec0"
   },
   "generatedRoots": [
     "canonical-svg/milestone-2-atlas-fragmented-islands",
@@ -129,9 +129,9 @@
       "path": "canonical-svg/milestone-2-atlas-fragmented-islands/baseline.svg",
       "kind": "canonical-svg",
       "checkpoint": "baseline",
-      "byteLength": 966998,
-      "canonicalSvgSha256": "0ed9549842b0ac39aa751ee168ed5a957eff71fd534945d5a09372188fb513cf",
-      "fixtureIntegritySha256": "0ed9549842b0ac39aa751ee168ed5a957eff71fd534945d5a09372188fb513cf"
+      "byteLength": 847240,
+      "canonicalSvgSha256": "f9b52620be799a3662ed150e9b2d5c57b9b297cd78bab89ccfd9da2e68975678",
+      "fixtureIntegritySha256": "f9b52620be799a3662ed150e9b2d5c57b9b297cd78bab89ccfd9da2e68975678"
     },
     {
       "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/expected/baseline/atlas-land-water.kernel.canonical",
