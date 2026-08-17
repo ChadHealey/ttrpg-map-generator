@@ -4,7 +4,7 @@ use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 
 use ttrpg_map_desktop_lib::mapworld_native::service::{
-    NativeSaveRequest, execute_save, mapworld_native_apply, mapworld_native_save,
+    NativeSaveRequest, execute_save, mapworld_native_apply, mapworld_native_save_base64,
     mapworld_native_snapshot, snapshot_target,
 };
 use ttrpg_map_desktop_lib::mapworld_native::{FaultMode, FaultSpec, ObservationKind};
@@ -29,6 +29,7 @@ fn complete_atlas_native_save_interrupted_replacement_recovery_and_generator_fre
         .expect("start Milestone 2 native workflow bridge");
     let mut input = child.stdin.take().expect("bridge stdin");
     let mut output = BufReader::new(child.stdout.take().expect("bridge stdout"));
+    let mut production_base64_save_exercised = false;
     let mut replacement_fault_injected = false;
     let completed = loop {
         let line = read_bridge_line(&mut output);
@@ -47,31 +48,37 @@ fn complete_atlas_native_save_interrupted_replacement_recovery_and_generator_fre
         let response = match command {
             "mapworld_native_save_base64" => {
                 let request = read_save_request(&directory);
-                if request.operation == "replacement-save" {
-                    replacement_fault_injected = true;
-                    execute_save(
-                        &request,
-                        Some(FaultSpec {
-                            point: 9,
-                            occurrence: 1,
-                            mode: FaultMode::TerminateAfter,
-                            hard_terminate: false,
-                            os_error_number: None,
-                        }),
-                    )
-                    .expect_err("replacement must stop after durable candidate preparation")
-                    .to_json()
-                } else {
-                    mapworld_native_save(
-                        request.target_path,
-                        request.operation,
-                        request.expected_previous_manifest_sha256,
-                        request.expected_previous_observation_token,
-                        request.candidate_manifest_sha256,
-                        request.marker_bytes,
-                        request.relative_paths,
-                        request.file_bytes,
-                    )
+                match request {
+                    BridgeSaveRequest::Raw(request) => {
+                        assert_eq!(request.operation, "replacement-save");
+                        replacement_fault_injected = true;
+                        execute_save(
+                            &request,
+                            Some(FaultSpec {
+                                point: 9,
+                                occurrence: 1,
+                                mode: FaultMode::TerminateAfter,
+                                hard_terminate: false,
+                                os_error_number: None,
+                            }),
+                        )
+                        .expect_err("replacement must stop after durable candidate preparation")
+                        .to_json()
+                    }
+                    BridgeSaveRequest::Base64(request) => {
+                        assert_eq!(request.operation, "first-save");
+                        production_base64_save_exercised = true;
+                        mapworld_native_save_base64(
+                            request.target_path,
+                            request.operation,
+                            request.expected_previous_manifest_sha256,
+                            request.expected_previous_observation_token,
+                            request.candidate_manifest_sha256,
+                            request.marker_base64,
+                            request.relative_paths,
+                            request.file_bytes_base64,
+                        )
+                    }
                 }
             }
             "mapworld_native_snapshot" => {
@@ -100,6 +107,7 @@ fn complete_atlas_native_save_interrupted_replacement_recovery_and_generator_fre
     assert_eq!(fields.get(1), Some(&"PASS"), "bridge result: {completed}");
     assert_eq!(fields.get(2), Some(&"0"), "reopen invoked generation");
     assert_eq!(fields.get(3).map(|value| value.len()), Some(64));
+    assert!(production_base64_save_exercised);
     assert!(replacement_fault_injected);
     drop(input);
     let status = child.wait().expect("wait for workflow bridge");
@@ -127,17 +135,48 @@ struct BridgeApplyRequest {
     confirmation_tokens: Vec<String>,
 }
 
-fn read_save_request(directory: &Path) -> NativeSaveRequest {
+struct BridgeBase64SaveRequest {
+    target_path: String,
+    operation: String,
+    expected_previous_manifest_sha256: Option<String>,
+    expected_previous_observation_token: Option<String>,
+    candidate_manifest_sha256: String,
+    marker_base64: String,
+    relative_paths: Vec<String>,
+    file_bytes_base64: Vec<String>,
+}
+
+enum BridgeSaveRequest {
+    Base64(BridgeBase64SaveRequest),
+    Raw(NativeSaveRequest),
+}
+
+fn read_save_request(directory: &Path) -> BridgeSaveRequest {
     assert_eq!(
         read_single_line(&directory.join("command.txt")),
         "mapworld_native_save_base64"
     );
     let metadata = read_lines(&directory.join("metadata.txt"));
     let relative_paths = read_lines(&directory.join("paths.txt"));
+    if metadata[1] == "first-save" {
+        let file_bytes_base64 = (0..relative_paths.len())
+            .map(|index| read_exact_text(&directory.join(format!("files-base64/{index}.txt"))))
+            .collect();
+        return BridgeSaveRequest::Base64(BridgeBase64SaveRequest {
+            target_path: metadata[0].clone(),
+            operation: metadata[1].clone(),
+            expected_previous_manifest_sha256: optional_metadata(&metadata[2]),
+            expected_previous_observation_token: optional_metadata(&metadata[3]),
+            candidate_manifest_sha256: metadata[4].clone(),
+            marker_base64: read_exact_text(&directory.join("marker-base64.txt")),
+            relative_paths,
+            file_bytes_base64,
+        });
+    }
     let file_bytes = (0..relative_paths.len())
         .map(|index| fs::read(directory.join(format!("files/{index}.bin"))).expect("read file"))
         .collect();
-    NativeSaveRequest {
+    BridgeSaveRequest::Raw(NativeSaveRequest {
         target_path: metadata[0].clone(),
         operation: metadata[1].clone(),
         expected_previous_manifest_sha256: optional_metadata(&metadata[2]),
@@ -146,7 +185,7 @@ fn read_save_request(directory: &Path) -> NativeSaveRequest {
         marker_bytes: fs::read(directory.join("marker.bin")).expect("read marker"),
         relative_paths,
         file_bytes,
-    }
+    })
 }
 
 fn read_apply_request(directory: &Path) -> BridgeApplyRequest {
@@ -187,6 +226,10 @@ fn read_single_line(path: &Path) -> String {
         .expect("read single-line bridge file")
         .trim_end_matches(['\r', '\n'])
         .to_owned()
+}
+
+fn read_exact_text(path: &Path) -> String {
+    fs::read_to_string(path).expect("read exact bridge text file")
 }
 
 fn build_bridge() -> PathBuf {

@@ -127,30 +127,43 @@ async function writeNativeRequest(
   await mkdir(directory, { recursive: true });
   await writeFile(resolve(directory, 'command.txt'), `${command}\n`);
   if (command === 'mapworld_native_save_base64') {
+    const operation = stringValue(arguments_.operation, 'operation');
     const relativePaths = stringArray(arguments_.relativePaths, 'relativePaths');
-    const fileBytes = stringArray(arguments_.fileBytesBase64, 'fileBytesBase64').map(
-      canonicalBase64Bytes,
-    );
-    if (relativePaths.length !== fileBytes.length) throw new Error('Native save arrays disagree.');
+    const fileBytesBase64 = stringArray(arguments_.fileBytesBase64, 'fileBytesBase64');
+    if (relativePaths.length !== fileBytesBase64.length)
+      throw new Error('Native save arrays disagree.');
     await writeFile(
       resolve(directory, 'metadata.txt'),
       [
         stringValue(arguments_.targetPath, 'targetPath'),
-        stringValue(arguments_.operation, 'operation'),
+        operation,
         nullableString(arguments_.expectedPreviousManifestSha256),
         nullableString(arguments_.expectedPreviousObservationToken),
         stringValue(arguments_.candidateManifestSha256, 'candidateManifestSha256'),
       ].join('\n') + '\n',
     );
-    await writeFile(
-      resolve(directory, 'marker.bin'),
-      canonicalBase64Bytes(stringValue(arguments_.markerBase64, 'markerBase64')),
-    );
     await writeFile(resolve(directory, 'paths.txt'), relativePaths.join('\n') + '\n');
+    const markerBase64 = stringValue(arguments_.markerBase64, 'markerBase64');
+    if (operation === 'first-save') {
+      await writeFile(resolve(directory, 'marker-base64.txt'), markerBase64);
+      const filesDirectory = resolve(directory, 'files-base64');
+      await mkdir(filesDirectory, { recursive: true });
+      for (const [index, value] of fileBytesBase64.entries()) {
+        await writeFile(
+          resolve(filesDirectory, `${String(index)}.txt`),
+          stringValue(value, 'file base64'),
+        );
+      }
+      return;
+    }
+    if (operation !== 'replacement-save') {
+      throw new Error(`Unexpected native save operation ${operation}.`);
+    }
+    await writeFile(resolve(directory, 'marker.bin'), canonicalBase64Bytes(markerBase64));
     const filesDirectory = resolve(directory, 'files');
     await mkdir(filesDirectory, { recursive: true });
-    for (const [index, bytes] of fileBytes.entries()) {
-      await writeFile(resolve(filesDirectory, `${String(index)}.bin`), bytes);
+    for (const [index, value] of fileBytesBase64.entries()) {
+      await writeFile(resolve(filesDirectory, `${String(index)}.bin`), canonicalBase64Bytes(value));
     }
     return;
   }

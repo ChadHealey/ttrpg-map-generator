@@ -26,6 +26,38 @@ pub(crate) fn encode_base64(bytes: &[u8]) -> String {
 }
 
 pub(crate) fn decode_canonical_base64(value: &str, maximum_bytes: usize) -> Result<Vec<u8>, ()> {
+    let decoded_length = canonical_base64_decoded_length(value)?;
+    if decoded_length > maximum_bytes {
+        return Err(());
+    }
+    let source = value.as_bytes();
+    let mut result = Vec::with_capacity(decoded_length);
+    for group in source.chunks_exact(4) {
+        let first = sextet(group[0]);
+        let second = sextet(group[1]);
+        let third = if group[2] == b'=' {
+            0
+        } else {
+            sextet(group[2])
+        };
+        let fourth = if group[3] == b'=' {
+            0
+        } else {
+            sextet(group[3])
+        };
+        result.push((first << 2) | (second >> 4));
+        if result.len() < decoded_length {
+            result.push(((second & 15) << 4) | (third >> 2));
+        }
+        if result.len() < decoded_length {
+            result.push(((third & 3) << 6) | fourth);
+        }
+    }
+    Ok(result)
+}
+
+/// Validate canonical base64 and return its decoded length without allocating decoded bytes.
+pub(crate) fn canonical_base64_decoded_length(value: &str) -> Result<usize, ()> {
     let source = value.as_bytes();
     if !source.len().is_multiple_of(4) {
         return Err(());
@@ -43,10 +75,6 @@ pub(crate) fn decode_canonical_base64(value: &str, maximum_bytes: usize) -> Resu
         .and_then(|groups| groups.checked_mul(3))
         .and_then(|length| length.checked_sub(padding))
         .ok_or(())?;
-    if decoded_length > maximum_bytes {
-        return Err(());
-    }
-    let mut result = Vec::with_capacity(decoded_length);
     for (group_index, group) in source.chunks_exact(4).enumerate() {
         let is_last = group_index + 1 == source.len() / 4;
         let first = sextet(group[0]);
@@ -66,20 +94,13 @@ pub(crate) fn decode_canonical_base64(value: &str, maximum_bytes: usize) -> Resu
         }
         if (!is_last && (group[2] == b'=' || group[3] == b'='))
             || (group[2] == b'=' && group[3] != b'=')
-            || (padding == 2 && (second & 15) != 0)
-            || (padding == 1 && (third & 3) != 0)
+            || (is_last && padding == 2 && (second & 15) != 0)
+            || (is_last && padding == 1 && (third & 3) != 0)
         {
             return Err(());
         }
-        result.push((first << 2) | (second >> 4));
-        if result.len() < decoded_length {
-            result.push(((second & 15) << 4) | (third >> 2));
-        }
-        if result.len() < decoded_length {
-            result.push(((third & 3) << 6) | fourth);
-        }
     }
-    Ok(result)
+    Ok(decoded_length)
 }
 
 fn sextet(value: u8) -> u8 {
@@ -95,15 +116,21 @@ fn sextet(value: u8) -> u8 {
 
 #[cfg(test)]
 mod tests {
-    use super::{decode_canonical_base64, encode_base64};
+    use super::{canonical_base64_decoded_length, decode_canonical_base64, encode_base64};
 
     #[test]
     fn accepts_canonical_padding_and_rejects_aliases_or_limits() {
         assert_eq!(decode_canonical_base64("AQ==", 1), Ok(vec![1]));
         assert_eq!(decode_canonical_base64("AQI=", 2), Ok(vec![1, 2]));
         assert_eq!(decode_canonical_base64("AQID", 3), Ok(vec![1, 2, 3]));
+        assert_eq!(
+            decode_canonical_base64("AQIDBAU=", 5),
+            Ok(vec![1, 2, 3, 4, 5])
+        );
         assert!(decode_canonical_base64("AR==", 1).is_err());
         assert!(decode_canonical_base64("AQ==", 0).is_err());
+        assert_eq!(canonical_base64_decoded_length("AQID"), Ok(3));
+        assert!(canonical_base64_decoded_length("AR==").is_err());
         assert_eq!(encode_base64(&[1, 2, 3]), "AQID");
     }
 }

@@ -1,8 +1,11 @@
-use super::base64::decode_canonical_base64;
+use super::base64::{canonical_base64_decoded_length, decode_canonical_base64};
 use super::filesystem::ParentSession;
 use super::model::{NativeError, NativeSelectedCandidate, NativeSnapshot};
 use super::sha256::sha256_hex;
-use super::{NATIVE_MAX_FILE_BYTES, NATIVE_MAX_MARKER_BYTES, NATIVE_MAX_PACKAGE_FILES};
+use super::{
+    NATIVE_MAX_FILE_BYTES, NATIVE_MAX_MARKER_BYTES, NATIVE_MAX_PACKAGE_BYTES,
+    NATIVE_MAX_PACKAGE_FILES,
+};
 
 pub use super::recovery::apply_recovery_plan;
 pub use super::save::execute_save;
@@ -67,26 +70,19 @@ pub fn mapworld_native_save_base64(
     relative_paths: Vec<String>,
     file_bytes_base64: Vec<String>,
 ) -> String {
-    if file_bytes_base64.len() > NATIVE_MAX_PACKAGE_FILES {
-        return NativeError::new(
-            "persistence.recovery.artifact-conflict",
-            "decode-save-transport",
-            None,
-            "native save base64 file count exceeds the bounded transport limit",
-        )
-        .to_json();
-    }
     let marker_bytes = match decode_canonical_base64(&marker_base64, NATIVE_MAX_MARKER_BYTES) {
         Ok(bytes) => bytes,
         Err(()) => return invalid_base64_transport(),
     };
-    let mut file_bytes = Vec::with_capacity(file_bytes_base64.len());
-    for value in file_bytes_base64 {
-        match decode_canonical_base64(&value, NATIVE_MAX_FILE_BYTES) {
-            Ok(bytes) => file_bytes.push(bytes),
-            Err(()) => return invalid_base64_transport(),
-        }
-    }
+    let file_bytes = match decode_base64_files_with_limits(
+        file_bytes_base64,
+        NATIVE_MAX_PACKAGE_FILES,
+        NATIVE_MAX_FILE_BYTES,
+        NATIVE_MAX_PACKAGE_BYTES,
+    ) {
+        Ok(bytes) => bytes,
+        Err(()) => return invalid_base64_transport(),
+    };
     mapworld_native_save(
         target_path,
         operation,
@@ -97,6 +93,32 @@ pub fn mapworld_native_save_base64(
         relative_paths,
         file_bytes,
     )
+}
+
+fn decode_base64_files_with_limits(
+    values: Vec<String>,
+    maximum_files: usize,
+    maximum_file_bytes: usize,
+    maximum_package_bytes: usize,
+) -> Result<Vec<Vec<u8>>, ()> {
+    if values.len() > maximum_files {
+        return Err(());
+    }
+    let mut total_bytes = 0_usize;
+    let mut decoded = Vec::with_capacity(values.len());
+    for value in values {
+        let byte_length = canonical_base64_decoded_length(&value)?;
+        if byte_length > maximum_file_bytes {
+            return Err(());
+        }
+        let next_total = total_bytes.checked_add(byte_length).ok_or(())?;
+        if next_total > maximum_package_bytes {
+            return Err(());
+        }
+        decoded.push(decode_canonical_base64(&value, maximum_file_bytes)?);
+        total_bytes = next_total;
+    }
+    Ok(decoded)
 }
 
 fn invalid_base64_transport() -> String {
@@ -161,4 +183,19 @@ pub fn snapshot_target(target_path: &str) -> Result<NativeSnapshot, NativeError>
 
 pub fn manifest_fingerprint_bytes(bytes: &[u8]) -> String {
     sha256_hex(bytes)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::decode_base64_files_with_limits;
+
+    #[test]
+    fn rejects_aggregate_base64_transport_before_retaining_bytes_beyond_the_limit() {
+        let values = vec!["AQID".to_owned(), "BAUG".to_owned()];
+        assert!(decode_base64_files_with_limits(values.clone(), 2, 3, 5).is_err());
+        assert_eq!(
+            decode_base64_files_with_limits(values, 2, 3, 6),
+            Ok(vec![vec![1, 2, 3], vec![4, 5, 6]])
+        );
+    }
 }

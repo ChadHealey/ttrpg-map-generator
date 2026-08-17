@@ -1,4 +1,5 @@
 import {
+  ACCEPTED_ATLAS_DIAGNOSTIC_CODES,
   type AspectReplacementProposal,
   ATLAS_DOCUMENT_COMMAND_KIND,
   ATLAS_DOCUMENT_OPERATION_MODES,
@@ -11,6 +12,7 @@ import {
   type ConstraintId,
   DEFAULT_ATLAS_CONTROLS,
   type LockId,
+  parseGenerationDiagnosticCode,
   parseStableId,
   reconstructAcceptedAtlas,
   type WorldDocument,
@@ -268,6 +270,35 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
     }
   }, 30_000);
 
+  it('rejects accepted error and cross-aspect diagnostics on reconstruction and persistence', () => {
+    const source = requiredGeneratedStates().appearance.document;
+    const root = source.maps[0];
+    const paper = root?.aspects.find(({ aspectName }) => aspectName === 'atlas.paperTreatment');
+    const water = root?.aspects.find(({ aspectName }) => aspectName === 'atlas.waterDecoration');
+    if (root?.mapKind !== 'world' || paper === undefined || water === undefined) {
+      throw new Error('Missing accepted atlas diagnostic test aspects.');
+    }
+    const parsedCode = parseGenerationDiagnosticCode('atlas.persistence.review');
+    if (!parsedCode.ok) throw new Error(parsedCode.diagnostic.message);
+    const mutated = [
+      withAcceptedDiagnostic(source, paper.aspectId, 'error', parsedCode.value),
+      withAcceptedDiagnostic(source, water.aspectId, 'warning', parsedCode.value),
+    ];
+
+    for (const document of mutated) {
+      const reconstructed = reconstructAcceptedAtlas(document);
+      expect(reconstructed.status).toBe('invalid');
+      if (reconstructed.status !== 'invalid') continue;
+      expect(reconstructed.diagnostics.map(({ code }) => code)).toStrictEqual([
+        ACCEPTED_ATLAS_DIAGNOSTIC_CODES.invalid,
+      ]);
+      const encoded = encodeMapworld(document);
+      expect(encoded.ok).toBe(false);
+      if (encoded.ok) continue;
+      expect(encoded.diagnostics.map(({ code }) => code)).toContain('persistence.atlas.invalid');
+    }
+  }, 60_000);
+
   it('rejects corrupted authoritative atlas bytes by checksum before reconstruction', () => {
     const encoded = required(encodeMapworld(requiredGeneratedStates().appearance.document));
     const corrupted: MapworldPackage = {
@@ -443,6 +474,26 @@ async function attempt(
 function revision(accepted: AcceptedAtlasState, name: string): number | undefined {
   return accepted.document.maps[0]?.aspects.find(({ aspectName }) => aspectName === name)
     ?.variantRevision;
+}
+
+function withAcceptedDiagnostic(
+  document: WorldDocument,
+  targetAspectId: WorldDocument['maps'][number]['aspects'][number]['aspectId'],
+  severity: 'error' | 'warning',
+  code: WorldDocument['maps'][number]['aspects'][number]['diagnostics'][number]['code'],
+): WorldDocument {
+  return mutateAspect(document, 'atlas.paperTreatment', (aspect) => ({
+    ...aspect,
+    diagnostics: Object.freeze([
+      Object.freeze({
+        code,
+        severity,
+        target: Object.freeze({ aspectId: targetAspectId }),
+        message: 'Focused accepted atlas diagnostic invariant mutation.',
+        suggestedAction: 'Restore the accepted diagnostic envelope.',
+      }),
+    ]),
+  }));
 }
 
 function protectPaperTreatment(

@@ -155,6 +155,13 @@ export function reconstructAcceptedAtlas(document: WorldDocument): ReconstructAc
       'Restore the exact accepted records from the last package that passed full atlas validation.',
     );
   }
+  if (!hasValidAcceptedDiagnostics(root)) {
+    return invalid(
+      ACCEPTED_ATLAS_DIAGNOSTIC_CODES.invalid,
+      'An accepted atlas aspect contains an error diagnostic or a diagnostic targeting another aspect.',
+      'Restore accepted aspect diagnostics from the atlas transaction that produced their containing aspects.',
+    );
+  }
   if (!hasExactAtlasOwnership(root, geography, appearance)) {
     return invalid(
       ACCEPTED_ATLAS_DIAGNOSTIC_CODES.referenceInvalid,
@@ -166,6 +173,14 @@ export function reconstructAcceptedAtlas(document: WorldDocument): ReconstructAc
     status: 'accepted',
     value: Object.freeze({ geography, appearance }),
   });
+}
+
+function hasValidAcceptedDiagnostics(map: WorldMap): boolean {
+  return map.aspects.every((aspect) =>
+    aspect.diagnostics.every(
+      ({ severity, target }) => severity !== 'error' && target.aspectId === aspect.aspectId,
+    ),
+  );
 }
 
 function appearanceParametersMatchOutputs(...aspects: readonly AcceptedAspectRecord[]): boolean {

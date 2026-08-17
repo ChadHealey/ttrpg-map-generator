@@ -15,6 +15,11 @@ import {
 import modelSource from './mapworld-recovery-model.ts?raw';
 import nativeDtoSource from './mapworld-recovery-native-dto.ts?raw';
 import resultSource from './mapworld-recovery-result.ts?raw';
+import {
+  hasBoundedNativePackageEntryBytes,
+  nativeMapworldMarkerRoleSchema,
+  nativeMapworldPackageRoleSchema,
+} from './mapworld-recovery-schemas.js';
 import schemasSource from './mapworld-recovery-schemas.ts?raw';
 import {
   canonicalBytes,
@@ -41,6 +46,30 @@ import {
 } from './mapworld-recovery-test-support.js';
 
 describe('marker classification and impossible states', () => {
+  it('guards raw aggregate snapshot bytes before decoding and retains legacy arrays', () => {
+    const entries = [
+      { path: 'a', bytes: 'AQID' },
+      { path: 'b', bytes: [4, 5, 6] },
+    ];
+    expect(hasBoundedNativePackageEntryBytes({ entries }, 5)).toBe(false);
+    expect(hasBoundedNativePackageEntryBytes({ entries }, 6)).toBe(true);
+    expect(
+      nativeMapworldPackageRoleSchema.safeParse({
+        kind: 'invalid-directory',
+        observationToken: token('a'),
+        entries,
+        directories: ['nested'],
+      }).success,
+    ).toBe(true);
+    expect(
+      nativeMapworldMarkerRoleSchema.safeParse({
+        kind: 'directory',
+        observationToken: token('b'),
+        entries,
+      }).success,
+    ).toBe(true);
+  });
+
   it.each([
     {
       name: 'canonical malformed current marker',
