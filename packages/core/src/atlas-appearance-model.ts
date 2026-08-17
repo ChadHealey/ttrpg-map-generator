@@ -6,12 +6,13 @@ import type { CoastlineRingId, EntityId, SemanticKey } from './identity.js';
 export const ATLAS_COASTLINE_APPEARANCE_BEHAVIOR_VERSION = 1 as const;
 export const ATLAS_WATER_DECORATION_BEHAVIOR_VERSION = 1 as const;
 export const ATLAS_PAPER_TREATMENT_BEHAVIOR_VERSION = 1 as const;
+export const ATLAS_STYLE_PROVENANCE_BEHAVIOR_VERSION = 1 as const;
 export const ATLAS_STYLE_TOKEN_VERSION = 1 as const;
 
 /** Explicit style identity recorded by every accepted appearance output. */
 export interface AtlasStyleProvenance {
   readonly styleId: SemanticKey;
-  readonly styleBehaviorVersion: 1;
+  readonly styleBehaviorVersion: typeof ATLAS_STYLE_PROVENANCE_BEHAVIOR_VERSION;
 }
 
 /** Renderer-neutral colors for one closed atlas style. */

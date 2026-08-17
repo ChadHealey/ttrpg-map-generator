@@ -1,12 +1,19 @@
 import {
+  type AspectReplacementProposal,
+  ATLAS_DOCUMENT_COMMAND_KIND,
+  ATLAS_DOCUMENT_OPERATION_MODES,
+  ATLAS_DOCUMENT_TRANSACTION_DIAGNOSTIC_CODES,
   type AtlasControls,
+  type AtlasStyleProvenance,
+  type AtlasWaterDecoration,
+  commitAtlasProposal,
   CONSTRAINT_KINDS,
   type ConstraintId,
   DEFAULT_ATLAS_CONTROLS,
   type LockId,
   parseStableId,
 } from '@ttrpg-map/core';
-import { describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 import { MILESTONE_TWO_ATLAS_PROOF_SEED } from './atlas-workflow.js';
 import {
@@ -14,9 +21,21 @@ import {
   type AtlasWorkflowRuntime,
   productionAtlasWorkflowGeneration,
 } from './atlas-workflow-generation.js';
+import { retainedAspectProposal } from './atlas-workflow-generation-support.js';
+
+interface GeneratedAtlasStates {
+  readonly baseline: AcceptedAtlasState;
+  readonly controlled: AcceptedAtlasState;
+  readonly geography: AcceptedAtlasState;
+  readonly appearance: AcceptedAtlasState;
+  readonly changedControls: AtlasControls;
+  readonly appearanceProgress: readonly string[];
+}
+
+let generatedStates: GeneratedAtlasStates | undefined;
 
 describe('complete Milestone 2 atlas proposal transaction', () => {
-  it('accepts control replacement and proves geography/appearance reroll isolation', async () => {
+  beforeAll(async () => {
     const baseline = await commit('initial-atlas');
     const changedControls = Object.freeze({
       ...DEFAULT_ATLAS_CONTROLS,
@@ -30,6 +49,19 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
       reportProgress: ({ stage }) => appearanceProgress.push(stage),
       yieldControl: () => Promise.resolve(),
     });
+    generatedStates = Object.freeze({
+      baseline,
+      controlled,
+      geography,
+      appearance,
+      changedControls,
+      appearanceProgress: Object.freeze(appearanceProgress),
+    });
+  }, 180_000);
+
+  it('accepts control replacement and proves geography/appearance reroll isolation', async () => {
+    const { appearance, appearanceProgress, baseline, changedControls, controlled, geography } =
+      requiredGeneratedStates();
 
     expect(revision(baseline, 'worldTerrain.macroElevation')).toBe(0);
     expect(revision(controlled, 'worldTerrain.macroElevation')).toBe(0);
@@ -66,8 +98,141 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
       diagnosticCodes: ['atlas-transaction.constraint.conflict'],
     });
     expect(constrained.document.maps[0]?.constraints).toHaveLength(1);
-  }, 180_000);
+  }, 30_000);
+
+  it('accepts a valid unchanged complete proposal through the exported core boundary', () => {
+    const { appearance } = requiredGeneratedStates();
+    expect(recommitAppearance(appearance, (proposal) => proposal).ok).toBe(true);
+  }, 15_000);
+
+  it.each([
+    ['an unknown water-decoration kind', addUnknownDecorationKind],
+    ['an invalid style semantic key', invalidStyleId],
+    ['an unsupported style behavior version', unsupportedStyleVersion],
+    ['a seam-jumping decoration segment', addSeamJump],
+  ] as const)(
+    'rejects %s at commitAtlasProposal',
+    (_label, mutate) => {
+      const { appearance } = requiredGeneratedStates();
+      const result = recommitAppearance(appearance, mutate);
+
+      expect(result.ok).toBe(false);
+      expect(result.document).toBe(appearance.document);
+      if (result.ok) throw new Error('Invalid runtime appearance unexpectedly committed.');
+      expect(result.diagnostics.map(({ code }) => code)).toContain(
+        ATLAS_DOCUMENT_TRANSACTION_DIAGNOSTIC_CODES.invalidProposal,
+      );
+    },
+    15_000,
+  );
 });
+
+function requiredGeneratedStates(): GeneratedAtlasStates {
+  if (generatedStates === undefined) throw new Error('Atlas integration setup did not complete.');
+  return generatedStates;
+}
+
+function recommitAppearance(
+  accepted: AcceptedAtlasState,
+  mutate: (proposal: AspectReplacementProposal) => AspectReplacementProposal,
+) {
+  const root = accepted.document.maps[0];
+  if (root?.mapKind !== 'world') throw new Error('Accepted atlas root map is missing.');
+  const proposedAspects = Object.freeze(root.aspects.map(retainedAspectProposal).map(mutate));
+  return commitAtlasProposal(accepted.document, {
+    kind: ATLAS_DOCUMENT_COMMAND_KIND,
+    operationMode: ATLAS_DOCUMENT_OPERATION_MODES.controls,
+    targetMapId: root.mapId,
+    expectedWorldSeed: accepted.document.worldSeed,
+    expectedAspectRevisions: Object.freeze(
+      root.aspects.map(({ aspectId, variantRevision }) =>
+        Object.freeze({ aspectId, variantRevision }),
+      ),
+    ),
+    controls: accepted.geography.controls,
+    proposedCoordinateSystem: root.coordinateSystem,
+    proposedEntities: root.entities,
+    proposedAspects,
+    explicitlyIncrementedAspectIds: Object.freeze([]),
+  });
+}
+
+function addUnknownDecorationKind(proposal: AspectReplacementProposal): AspectReplacementProposal {
+  if (proposal.target.aspectName !== 'atlas.waterDecoration') return proposal;
+  const output = proposal.output as AtlasWaterDecoration;
+  const echo = output.paths.find(({ kind }) => kind === 'coastal-echo');
+  if (echo === undefined) throw new Error('Expected a coastal echo test source.');
+  const unknownPath = Object.freeze({
+    ...echo,
+    decorationId: `${echo.decorationId}/unknown`,
+    kind: 'shoal-hatching',
+  });
+  return withOutput(proposal, {
+    ...output,
+    paths: Object.freeze([...output.paths, unknownPath]),
+  });
+}
+
+function invalidStyleId(proposal: AspectReplacementProposal): AspectReplacementProposal {
+  return withInvalidStyle(
+    proposal,
+    Object.freeze({
+      styleId: ' Invalid Style ',
+      styleBehaviorVersion: 1,
+    }),
+  );
+}
+
+function unsupportedStyleVersion(proposal: AspectReplacementProposal): AspectReplacementProposal {
+  return withInvalidStyle(
+    proposal,
+    Object.freeze({
+      styleId: 'future-atlas-style',
+      styleBehaviorVersion: 2,
+    }),
+  );
+}
+
+function withInvalidStyle(
+  proposal: AspectReplacementProposal,
+  style: Readonly<{ readonly styleId: string; readonly styleBehaviorVersion: number }>,
+): AspectReplacementProposal {
+  if (!proposal.target.aspectName.startsWith('atlas.')) return proposal;
+  return withOutput(proposal, {
+    ...(proposal.output as object),
+    style: style as unknown as AtlasStyleProvenance,
+  });
+}
+
+function addSeamJump(proposal: AspectReplacementProposal): AspectReplacementProposal {
+  if (proposal.target.aspectName !== 'atlas.waterDecoration') return proposal;
+  const output = proposal.output as AtlasWaterDecoration;
+  const source = output.paths[0];
+  const first = source?.points[0];
+  const second = source?.points[1];
+  if (source === undefined || first === undefined || second === undefined) {
+    throw new Error('Expected a water-decoration path test source.');
+  }
+  const mutatedPath = Object.freeze({
+    ...source,
+    points: Object.freeze([
+      Object.freeze({ ...first, longitudeTicks: -(2 ** 31) }),
+      Object.freeze({ ...second, longitudeTicks: 2 ** 31 - 1 }),
+      ...source.points.slice(2),
+    ]),
+  });
+  return withOutput(proposal, {
+    ...output,
+    paths: Object.freeze([mutatedPath, ...output.paths.slice(1)]),
+  });
+}
+
+function withOutput(
+  proposal: AspectReplacementProposal,
+  output: unknown,
+): AspectReplacementProposal {
+  return Object.freeze({ ...proposal, output });
+}
 
 async function commit(
   operation:

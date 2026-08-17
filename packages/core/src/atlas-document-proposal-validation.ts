@@ -3,6 +3,7 @@
 import {
   ATLAS_COASTLINE_APPEARANCE_BEHAVIOR_VERSION,
   ATLAS_PAPER_TREATMENT_BEHAVIOR_VERSION,
+  ATLAS_STYLE_PROVENANCE_BEHAVIOR_VERSION,
   ATLAS_WATER_DECORATION_BEHAVIOR_VERSION,
   type AtlasAppearanceRecords,
   type AtlasCoastlineAppearance,
@@ -38,7 +39,7 @@ import {
   type AspectReplacementProposal,
   orderGenerationDiagnostics,
 } from './generated-aspects.js';
-import { compareStableReferences, type EntityId } from './identity.js';
+import { compareStableReferences, type EntityId, parseSemanticKey } from './identity.js';
 import { createImmutableDomainSnapshot } from './immutable-domain-snapshot.js';
 import { MAP_COORDINATE_SYSTEM_KINDS, type WorldMap } from './world-document.js';
 import { deepEqual } from './world-document-transaction-support.js';
@@ -326,6 +327,7 @@ function appearanceMatchesGeography(
     coastlineBehaviorVersion === ATLAS_COASTLINE_APPEARANCE_BEHAVIOR_VERSION &&
     waterBehaviorVersion === ATLAS_WATER_DECORATION_BEHAVIOR_VERSION &&
     paperBehaviorVersion === ATLAS_PAPER_TREATMENT_BEHAVIOR_VERSION &&
+    styles.every(isValidStyleProvenance) &&
     new Set(paths.map(({ decorationId }) => decorationId)).size === paths.length &&
     paths.some(({ kind }) => kind === 'coastal-echo') &&
     paths.some(({ kind }) => kind === 'water-mark') &&
@@ -334,8 +336,16 @@ function appearanceMatchesGeography(
       const expectedRelatedIds =
         ring === undefined ? [] : [ring.ringId, ...ring.waterBodyIds].sort();
       return (
+        isKnownDecorationKind(path.kind) &&
         path.points.length >= 2 &&
         path.points.every((point) => parsePlanetPoint(point).ok) &&
+        path.points.every((point, index) => {
+          const previous = path.points[index - 1];
+          return (
+            previous === undefined ||
+            Math.abs(point.longitudeTicks - previous.longitudeTicks) <= 2 ** 31
+          );
+        }) &&
         Number.isInteger(path.weightPermille) &&
         path.weightPermille >= 1 &&
         path.weightPermille <= 1_000 &&
@@ -355,6 +365,20 @@ function appearanceMatchesGeography(
     validPermille(appearance.paperTreatment.grainDensityPermille) &&
     validPermille(appearance.paperTreatment.grainLengthPermille) &&
     styles.every((style) => deepEqual(style, styles[0]))
+  );
+}
+
+function isKnownDecorationKind(value: unknown): value is 'coastal-echo' | 'water-mark' {
+  return value === 'coastal-echo' || value === 'water-mark';
+}
+
+function isValidStyleProvenance(style: {
+  readonly styleId: unknown;
+  readonly styleBehaviorVersion: unknown;
+}): boolean {
+  return (
+    parseSemanticKey(style.styleId).ok &&
+    style.styleBehaviorVersion === ATLAS_STYLE_PROVENANCE_BEHAVIOR_VERSION
   );
 }
 
