@@ -1,17 +1,23 @@
 import assert from 'node:assert/strict';
 
-export function sceneProof(render, records) {
+export function sceneProof(render, records, appearance, style) {
   const sourceSnapshot = sourceSnapshotOf(records);
-  const normalResult = render.composeAtlasRenderScene(records, {
+  const appearanceSnapshot = appearanceSnapshotOf(appearance);
+  const normalResult = render.composeAtlasRenderScene(records, appearance, style, {
     levelOfDetail: render.ATLAS_SCENE_LEVELS_OF_DETAIL.normalAtlas,
   });
-  const rebuiltResult = render.composeAtlasRenderScene(records, {
+  const rebuiltResult = render.composeAtlasRenderScene(records, appearance, style, {
     levelOfDetail: render.ATLAS_SCENE_LEVELS_OF_DETAIL.normalAtlas,
   });
-  const reorderedResult = render.composeAtlasRenderScene(reordered(records), {
-    levelOfDetail: render.ATLAS_SCENE_LEVELS_OF_DETAIL.normalAtlas,
-  });
-  const coarseResult = render.composeAtlasRenderScene(records, {
+  const reorderedResult = render.composeAtlasRenderScene(
+    reordered(records),
+    reorderedAppearance(appearance),
+    style,
+    {
+      levelOfDetail: render.ATLAS_SCENE_LEVELS_OF_DETAIL.normalAtlas,
+    },
+  );
+  const coarseResult = render.composeAtlasRenderScene(records, appearance, style, {
     levelOfDetail: render.ATLAS_SCENE_LEVELS_OF_DETAIL.coarsePreview,
   });
   for (const result of [normalResult, rebuiltResult, reorderedResult, coarseResult]) {
@@ -27,6 +33,7 @@ export function sceneProof(render, records) {
   assert.deepEqual(rebuiltResult.value, scene);
   assert.deepEqual(reorderedResult.value, scene);
   assert.deepEqual(sourceSnapshotOf(records), sourceSnapshot);
+  assert.deepEqual(appearanceSnapshotOf(appearance), appearanceSnapshot);
   assert.equal(scene.authority, 'disposable-render-scene');
   assert.equal(scene.sceneKind, 'whole-world-atlas');
   assert.equal(scene.sceneCompositionVersion, render.ATLAS_SCENE_COMPOSITION_VERSION);
@@ -37,10 +44,16 @@ export function sceneProof(render, records) {
 
   const nodeIds = scene.nodes.map(({ id }) => id);
   const landNodes = scene.nodes.filter(({ kind }) => kind === 'compoundPath');
-  const coastNodes = scene.nodes.filter(({ kind }) => kind === 'polyline');
+  const coastNodes = scene.nodes.filter(({ id }) => id.startsWith('atlas/coastline/'));
+  const echoNodes = scene.nodes.filter(({ id }) => id.startsWith('atlas-water/echo/'));
+  const waterMarkNodes = scene.nodes.filter(({ id }) => id.startsWith('atlas-water/mark/'));
+  const grainNodes = scene.nodes.filter(({ id }) => id.startsWith('atlas/paper/grain-'));
   assert.equal(new Set(nodeIds).size, nodeIds.length);
   assert.equal(isStrictlyOrderedOrEmpty(landNodes.map(({ id }) => id)), true);
   assert.equal(isStrictlyOrderedOrEmpty(coastNodes.map(({ id }) => id)), true);
+  assert.equal(isStrictlyOrderedOrEmpty(echoNodes.map(({ id }) => id)), true);
+  assert.equal(isStrictlyOrderedOrEmpty(waterMarkNodes.map(({ id }) => id)), true);
+  assert.equal(isStrictlyOrderedOrEmpty(grainNodes.map(({ id }) => id)), true);
   assert.equal(
     scene.nodes.every(({ sourceId, sourceAspectId }) => sourceId && sourceAspectId),
     true,
@@ -62,6 +75,9 @@ export function sceneProof(render, records) {
   assert.deepEqual(nodeIds.slice(0, 2), ['atlas/background/paper', 'atlas/background/water']);
   assert.equal(landNodes.length, records.landmasses.length);
   assert.ok(coastNodes.length >= records.coastline.rings.length);
+  assert.ok(echoNodes.length > 0);
+  assert.ok(waterMarkNodes.length > 0);
+  assert.ok(grainNodes.length > 0);
   assert.equal(
     landNodes.every(({ subpaths }) =>
       subpaths.every(({ points }) =>
@@ -91,7 +107,10 @@ export function sceneProof(render, records) {
   render.renderSceneToCanvas(canvas, scene);
   assert.equal(canvas.rectangleCount, 2);
   assert.equal(canvas.fillCount, landNodes.length);
-  assert.equal(canvas.strokeCount, coastNodes.length);
+  assert.equal(
+    canvas.strokeCount,
+    coastNodes.length + echoNodes.length + waterMarkNodes.length + grainNodes.length,
+  );
 
   const seamClosureCount = landNodes.reduce(
     (count, { subpaths }) =>
@@ -116,6 +135,9 @@ export function sceneProof(render, records) {
       nodeCount: scene.nodes.length,
       landFillNodeCount: landNodes.length,
       coastlineNodeCount: coastNodes.length,
+      coastalEchoNodeCount: echoNodes.length,
+      waterMarkNodeCount: waterMarkNodes.length,
+      paperGrainNodeCount: grainNodes.length,
       seamClosureCount,
       sourceLinkedNodeCount: scene.nodes.filter(({ sourceAspectId }) => sourceAspectId).length,
       coarseNodeCount: coarse.nodes.length,
@@ -130,6 +152,8 @@ export function sceneProof(render, records) {
       coarseLodPreservesFillGeometry: true,
       canvasSvgSharedSceneParity: true,
       projectedPointsWithinScene: true,
+      acceptedAppearanceUnchanged: true,
+      restrainedLimitedColorStyle: true,
     },
   };
 }
@@ -207,6 +231,20 @@ function reordered(records) {
   };
 }
 
+function reorderedAppearance(appearance) {
+  return {
+    ...appearance,
+    coastlineAppearance: {
+      ...appearance.coastlineAppearance,
+      ringDecisions: [...appearance.coastlineAppearance.ringDecisions].reverse(),
+    },
+    waterDecoration: {
+      ...appearance.waterDecoration,
+      paths: [...appearance.waterDecoration.paths].reverse(),
+    },
+  };
+}
+
 function sourceSnapshotOf(records) {
   return {
     landmassIds: records.landmasses.map(({ entityId }) => entityId),
@@ -215,6 +253,15 @@ function sourceSnapshotOf(records) {
     coastline: records.coastline,
     macroElevation: records.macroElevation,
     landWaterClassification: records.landWaterClassification,
+  };
+}
+
+function appearanceSnapshotOf(appearance) {
+  return {
+    atlasPresentationEntityId: appearance.atlasPresentationEntityId,
+    coastlineAppearance: appearance.coastlineAppearance,
+    waterDecoration: appearance.waterDecoration,
+    paperTreatment: appearance.paperTreatment,
   };
 }
 

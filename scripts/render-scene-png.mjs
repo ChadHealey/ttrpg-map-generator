@@ -52,7 +52,7 @@ export function renderSceneToDeterministicPng(scene) {
   const header = new Uint8Array(13);
   writeUint32(header, 0, width);
   writeUint32(header, 4, height);
-  header.set([2, 3, 0, 0, 0], 8);
+  header.set([indexed.bitDepth, 3, 0, 0, 0], 8);
   return Buffer.concat([
     PNG_SIGNATURE,
     pngChunk('IHDR', header),
@@ -65,34 +65,40 @@ export function renderSceneToDeterministicPng(scene) {
 function indexedScanlines(pixels, width, height) {
   const paletteEntries = [];
   const paletteIndexes = new Map();
-  const packedRowLength = Math.ceil(width / 4);
+  for (let offset = 0; offset < pixels.length; offset += 4) {
+    if (pixels[offset + 3] !== 255) {
+      throw new Error('Deterministic proof PNGs require an opaque scene background.');
+    }
+    const key = `${String(pixels[offset])},${String(pixels[offset + 1])},${String(pixels[offset + 2])}`;
+    if (!paletteIndexes.has(key)) {
+      const paletteIndex = paletteEntries.length / 3;
+      if (paletteIndex >= 16) {
+        throw new Error('Deterministic proof PNGs support at most sixteen opaque colors.');
+      }
+      paletteEntries.push(pixels[offset], pixels[offset + 1], pixels[offset + 2]);
+      paletteIndexes.set(key, paletteIndex);
+    }
+  }
+  const bitDepth = paletteEntries.length / 3 <= 4 ? 2 : 4;
+  const pixelsPerByte = 8 / bitDepth;
+  const packedRowLength = Math.ceil(width / pixelsPerByte);
   const scanlines = new Uint8Array(height * (1 + packedRowLength));
   for (let y = 0; y < height; y += 1) {
     const rowOffset = y * (1 + packedRowLength);
     scanlines[rowOffset] = 0;
     for (let x = 0; x < width; x += 1) {
       const pixelOffset = (y * width + x) * 4;
-      if (pixels[pixelOffset + 3] !== 255) {
-        throw new Error('Deterministic proof PNGs require an opaque scene background.');
-      }
       const red = pixels[pixelOffset];
       const green = pixels[pixelOffset + 1];
       const blue = pixels[pixelOffset + 2];
       const key = `${String(red)},${String(green)},${String(blue)}`;
-      let paletteIndex = paletteIndexes.get(key);
-      if (paletteIndex === undefined) {
-        paletteIndex = paletteEntries.length / 3;
-        if (paletteIndex >= 4) {
-          throw new Error('Deterministic proof PNGs support at most four opaque colors.');
-        }
-        paletteEntries.push(red, green, blue);
-        paletteIndexes.set(key, paletteIndex);
-      }
-      const packedOffset = rowOffset + 1 + Math.floor(x / 4);
-      scanlines[packedOffset] |= paletteIndex << (6 - (x % 4) * 2);
+      const paletteIndex = paletteIndexes.get(key);
+      if (paletteIndex === undefined) throw new Error('Deterministic PNG palette lost a color.');
+      const packedOffset = rowOffset + 1 + Math.floor(x / pixelsPerByte);
+      scanlines[packedOffset] |= paletteIndex << (8 - bitDepth - (x % pixelsPerByte) * bitDepth);
     }
   }
-  return { palette: Uint8Array.from(paletteEntries), scanlines };
+  return { bitDepth, palette: Uint8Array.from(paletteEntries), scanlines };
 }
 
 function requireDimension(value, label) {

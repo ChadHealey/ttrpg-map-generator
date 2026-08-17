@@ -7,8 +7,12 @@
   "fixtureId": "milestone-2-atlas-proof",
   "worldSeed": "81985529216486895",
   "stableIds": {
+    "atlasPresentationEntityId": "66b92789-9a5b-5760-b299-1d82700cf3a0",
+    "coastlineAppearanceAspectId": "a200a1c0-c569-5615-80cd-89b15fbab600",
     "landWaterClassificationAspectId": "04628f37-6408-5087-a139-bdd2bdff42d3",
     "macroElevationAspectId": "e588eb7f-d585-5c27-9ce5-81c2fb1ebc43",
+    "paperTreatmentAspectId": "f435cc03-cc5f-59aa-9390-8693a9a8fcbd",
+    "waterDecorationAspectId": "90916e2f-286a-5722-984e-0981392bcfd8",
     "worldMapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7",
     "worldSurfaceEntityId": "eaa0cecc-8c5d-559f-b18a-bbd0c53248ac"
   },
@@ -24,6 +28,9 @@
     "polarCharacter": "neutral"
   },
   "versions": {
+    "atlasAppearanceGeneratorManifestVersion": 1,
+    "atlasAppearanceParameterSchemaVersion": 1,
+    "atlasCoastlineAppearanceBehaviorVersion": 1,
     "atlasCoastlineExtractionAlgorithmVersion": 1,
     "atlasCoastlineGeneratorManifestVersion": 1,
     "atlasCoastlineGeometryBehaviorVersion": 1,
@@ -35,15 +42,19 @@
     "atlasFieldBehaviorVersion": 1,
     "atlasGeneratorManifestVersion": 1,
     "atlasGeographyContractVersion": 1,
+    "atlasPaperTreatmentBehaviorVersion": 1,
     "atlasParameterSchemaVersion": 1,
     "atlasPreviewVersion": 1,
     "atlasRealizationVersion": 1,
     "atlasSamplingPolicyVersion": 1,
-    "atlasSceneCompositionVersion": 1,
+    "atlasSceneCompositionVersion": 2,
     "atlasSemanticClassificationVersion": 1,
     "atlasSemanticGeneratorManifestVersion": 1,
     "atlasSemanticParameterSchemaVersion": 1,
     "atlasSemanticPolicyVersion": 1,
+    "atlasStyleBehaviorVersion": 1,
+    "atlasStyleTokenVersion": 1,
+    "atlasWaterDecorationBehaviorVersion": 1,
     "deterministicStreamVersion": 1,
     "landWaterClassificationBehaviorVersion": 1,
     "landWaterClassificationGeneratorVersion": 1,
@@ -73,7 +84,7 @@
     "seaLevelContourDoubledTicks": -13854891,
     "macroFieldTicksSha256": "513f3352f26f7711400daf38e76d27fa9489e5f1112cbfec04e211926ea2bce9",
     "landWaterPackedBitsSha256": "4e7718c22a9034a77cf1a005bb5ca6db1c438f77c4a77a35ded1bf32e156e419",
-    "primitiveTraversalSha256": "e994767ddaee5c5ad4f3ab90b82fcd68a6d5c7cc8ffee509e60109d549488cc6",
+    "primitiveTraversalSha256": "c6d234e8cb33593b96ceb90aa4bcdc480af8205b9622ec25c8d68a65fb0feab5",
     "sampleCounts": { "land": 617614, "water": 1477492 },
     "realization": {
       "realizationVersion": 1,
@@ -154,17 +165,33 @@
       "seamEndpointCount": 12,
       "projectedPrimitiveTraversalSha256": "68a1509bf0451ae0447c05eccf45c480a46af22b4e81061967a1ce2856aacbc4"
     },
+    "appearance": {
+      "generatorManifestVersion": 1,
+      "parameterSchemaVersion": 1,
+      "styleId": "atlas-style.restrained-ink",
+      "styleBehaviorVersion": 1,
+      "styleTokenVersion": 1,
+      "ringDecisionCount": 5,
+      "coastalEchoCount": 64,
+      "waterMarkCount": 22,
+      "paperGrainDensityPermille": 766,
+      "appearancePrimitiveTraversalSha256": "1c112515a62a96d4759d3aea3c69d21fb22a54eb4857e01f5ffff486550fd371",
+      "rerolledAppearancePrimitiveTraversalSha256": "56db1666ee9d3dafbc761fa530566f004f3c24eb4d9271c95fef9335a140122e"
+    },
     "scene": {
-      "sceneCompositionVersion": 1,
+      "sceneCompositionVersion": 2,
       "sceneKind": "whole-world-atlas",
       "levelOfDetail": "normal-atlas",
       "widthPx": 2048,
       "heightPx": 1024,
-      "nodeCount": 13,
+      "nodeCount": 792,
       "landFillNodeCount": 3,
-      "coastlineNodeCount": 8,
+      "coastlineNodeCount": 380,
+      "coastalEchoNodeCount": 64,
+      "waterMarkNodeCount": 22,
+      "paperGrainNodeCount": 321,
       "seamClosureCount": 6,
-      "sourceLinkedNodeCount": 13,
+      "sourceLinkedNodeCount": 792,
       "coarseNodeCount": 5
     }
   },
@@ -204,6 +231,14 @@
       "previewFullSemanticToleranceTicks": 0,
       "canvasSvgSharedSceneCoveredByIntegrationTest": true
     },
+    "appearance": {
+      "acceptedSourceUnchanged": true,
+      "deterministicRebuildEqual": true,
+      "independentAspectSeeds": true,
+      "appearanceRerollChangesAllThreeOutputs": true,
+      "appearanceRerollPreservesGeography": true,
+      "planetNativeDecorationPaths": true
+    },
     "scene": {
       "acceptedSourceUnchanged": true,
       "cacheFreeRebuildEqual": true,
@@ -213,7 +248,9 @@
       "sourceEntityAndAspectLinks": true,
       "coarseLodPreservesFillGeometry": true,
       "canvasSvgSharedSceneParity": true,
-      "projectedPointsWithinScene": true
+      "projectedPointsWithinScene": true,
+      "acceptedAppearanceUnchanged": true,
+      "restrainedLimitedColorStyle": true
     }
   }
 }

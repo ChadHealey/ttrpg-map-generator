@@ -91,4 +91,27 @@ describe('deterministic visual evidence rasterizer', () => {
     expect(png.readUInt32BE(20)).toBe(4);
     expect(png).toEqual(renderSceneToDeterministicPng(compound));
   });
+
+  it('uses a deterministic four-bit palette for the restrained atlas colors', () => {
+    const colors = ['#282a24', '#afbec0', '#71888b', '#c9c39a', '#eadcba', '#d9c8a3'];
+    const limitedColorScene = {
+      widthPx: colors.length,
+      heightPx: 1,
+      nodes: colors.map((fillColor, index) => ({
+        id: `color-${String(index)}`,
+        kind: 'rectangle',
+        sourceId: 'style',
+        xPx: index,
+        yPx: 0,
+        widthPx: 1,
+        heightPx: 1,
+        fillColor,
+      })),
+    };
+
+    const png = renderSceneToDeterministicPng(limitedColorScene);
+    expect(png[24]).toBe(4);
+    expect(png[25]).toBe(3);
+    expect(png).toEqual(renderSceneToDeterministicPng(limitedColorScene));
+  });
 });

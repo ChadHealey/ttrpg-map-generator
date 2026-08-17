@@ -28,6 +28,24 @@ export {
   getTransitiveAspectInvalidation,
 } from './aspect-invalidation.js';
 export {
+  ATLAS_COASTLINE_APPEARANCE_BEHAVIOR_VERSION,
+  ATLAS_PAPER_TREATMENT_BEHAVIOR_VERSION,
+  ATLAS_STYLE_TOKEN_VERSION,
+  ATLAS_WATER_DECORATION_BEHAVIOR_VERSION,
+  type AtlasAppearanceRecords,
+  type AtlasCoastlineAppearance,
+  type AtlasCoastlineInkDecision,
+  type AtlasPaperTreatment,
+  type AtlasStyleCoastlineTokens,
+  type AtlasStyleColorTokens,
+  type AtlasStylePaperTokens,
+  type AtlasStyleProvenance,
+  type AtlasStyleTokens,
+  type AtlasStyleWaterDecorationTokens,
+  type AtlasWaterDecoration,
+  type AtlasWaterDecorationPath,
+} from './atlas-appearance-model.js';
+export {
   ATLAS_ASPECT_DEFINITIONS,
   ATLAS_CONTROL_DEFINITIONS,
   ATLAS_CONTROL_INVALIDATION_ROOTS,
@@ -36,7 +54,6 @@ export {
   atlasControlsMatchWorldRadius,
   type AtlasEnumControlDefinition,
   type AtlasNumericControlDefinition,
-  type AtlasStyleProvenance,
   compareAtlasEntityIds,
   deriveAtlasAspectId,
   deriveAtlasCoastlineRingId,

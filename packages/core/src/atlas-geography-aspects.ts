@@ -197,11 +197,6 @@ export const ATLAS_CONTROL_DEFINITIONS = Object.freeze({
   ),
 });
 
-export interface AtlasStyleProvenance {
-  readonly styleId: SemanticKey;
-  readonly styleBehaviorVersion: 1;
-}
-
 export function deriveAtlasSingletonEntityIds(worldMapId: MapId): Readonly<{
   worldSurfaceEntityId: EntityId;
   worldCoastlineEntityId: EntityId;

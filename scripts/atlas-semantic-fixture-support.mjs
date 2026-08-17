@@ -4,10 +4,12 @@ import { createHash } from 'node:crypto';
 export function expectedVersions(
   core,
   generation,
+  assets,
   render,
   includesSemantic,
   includesCoastline = false,
   includesProjection = false,
+  includesAppearance = false,
 ) {
   return {
     atlasFieldBehaviorVersion: generation.ATLAS_FIELD_ALGORITHM_VERSION,
@@ -49,6 +51,18 @@ export function expectedVersions(
           atlasDisplayProjectionVersion: render.ATLAS_DISPLAY_PROJECTION_VERSION,
           atlasDisplaySeamPolicyVersion: render.ATLAS_DISPLAY_SEAM_POLICY_VERSION,
           atlasSceneCompositionVersion: render.ATLAS_SCENE_COMPOSITION_VERSION,
+        }
+      : {}),
+    ...(includesAppearance
+      ? {
+          atlasAppearanceGeneratorManifestVersion:
+            assets.ATLAS_APPEARANCE_GENERATOR_MANIFEST_VERSION,
+          atlasAppearanceParameterSchemaVersion: assets.ATLAS_APPEARANCE_PARAMETER_SCHEMA_VERSION,
+          atlasCoastlineAppearanceBehaviorVersion: core.ATLAS_COASTLINE_APPEARANCE_BEHAVIOR_VERSION,
+          atlasPaperTreatmentBehaviorVersion: core.ATLAS_PAPER_TREATMENT_BEHAVIOR_VERSION,
+          atlasStyleBehaviorVersion: assets.RESTRAINED_INK_ATLAS_STYLE_BEHAVIOR_VERSION,
+          atlasStyleTokenVersion: core.ATLAS_STYLE_TOKEN_VERSION,
+          atlasWaterDecorationBehaviorVersion: core.ATLAS_WATER_DECORATION_BEHAVIOR_VERSION,
         }
       : {}),
   };
