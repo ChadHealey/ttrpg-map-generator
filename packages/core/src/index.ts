@@ -46,6 +46,17 @@ export {
   type AtlasWaterDecorationPath,
 } from './atlas-appearance-model.js';
 export {
+  ATLAS_DOCUMENT_COMMAND_KIND,
+  ATLAS_DOCUMENT_OPERATION_MODES,
+  ATLAS_DOCUMENT_TRANSACTION_DIAGNOSTIC_CODES,
+  type AtlasDocumentOperationMode,
+  type AtlasDocumentTransactionDiagnostic,
+  type CommitAtlasProposalCommand,
+  type CommitAtlasProposalResult,
+  type ExpectedAtlasAspectRevision,
+} from './atlas-document-transaction-model.js';
+export { commitAtlasProposal } from './atlas-document-transactions.js';
+export {
   ATLAS_ASPECT_DEFINITIONS,
   ATLAS_CONTROL_DEFINITIONS,
   ATLAS_CONTROL_INVALIDATION_ROOTS,
