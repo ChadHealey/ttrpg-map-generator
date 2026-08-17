@@ -3,7 +3,7 @@
   "fixtureId": "milestone-2-atlas-control-min",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-control-min --review-record fixed-seeds/milestone-2-atlas-control-min/reviews/0007-restrained-ink-atlas.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-control-min --review-record fixed-seeds/milestone-2-atlas-control-min/reviews/0008-production-atlas-svg.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-control-min/fixture-definition.json",
     "sha256": "7b296bf0545682bcb206e9d14cd4b3d604c86fe2f2048a9991818c615efef354"
@@ -84,8 +84,8 @@
   ],
   "reviewPurpose": "Prove the restrained version-1 ink style and appearance isolation over unchanged accepted atlas geography before persistence integration.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-control-min/reviews/0007-restrained-ink-atlas.md",
-    "sha256": "8b70cf06380c183268575ccad035f11ddd1b77037c6e8ae0ade1cfed31b0d8b7"
+    "path": "fixed-seeds/milestone-2-atlas-control-min/reviews/0008-production-atlas-svg.md",
+    "sha256": "8c906c48daa32f585e2a953e3fe684e6429f69988e4a3cc1187204871eba663b"
   },
   "generatedRoots": [
     "canonical-svg/milestone-2-atlas-control-min",
@@ -97,9 +97,9 @@
       "path": "canonical-svg/milestone-2-atlas-control-min/baseline.svg",
       "kind": "canonical-svg",
       "checkpoint": "baseline",
-      "byteLength": 409403,
-      "canonicalSvgSha256": "482651c603c5235f9b98ee340d4a166bdc1ca1ff11640263a49197517f462a75",
-      "fixtureIntegritySha256": "482651c603c5235f9b98ee340d4a166bdc1ca1ff11640263a49197517f462a75"
+      "byteLength": 394942,
+      "canonicalSvgSha256": "494c326fa6afc8fe632ca69e6ad0cef5cccd8461ef0508cbd9cd90bfdaef59de",
+      "fixtureIntegritySha256": "494c326fa6afc8fe632ca69e6ad0cef5cccd8461ef0508cbd9cd90bfdaef59de"
     },
     {
       "path": "fixed-seeds/milestone-2-atlas-control-min/expected/baseline/atlas-land-water.kernel.canonical",
