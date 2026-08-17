@@ -1,5 +1,6 @@
 /** Validated canonical project-package boundaries around project-owned core domain records. */
 
+export { decodedBase64ByteLength } from './base64-bytes.js';
 export { decodeMapworld } from './mapworld-decode.js';
 export {
   canonicalAspectBytes,
@@ -52,6 +53,7 @@ export {
   parseMapworldNativeSaveRequestDto,
   parseMapworldNativeSnapshotResponse,
   validateMapworldNativeSaveRequestDto,
+  validateParsedMapworldNativeSaveRequestDto,
 } from './mapworld-recovery-native-dto.js';
 export {
   ACCEPTED_ASPECT_SCHEMA_VERSION,

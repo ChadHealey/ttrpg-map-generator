@@ -30,7 +30,7 @@ fn desktop_generate_reroll_native_save_close_and_generator_free_reopen() {
     let mut output = BufReader::new(child.stdout.take().expect("bridge stdout"));
 
     let save_call = read_bridge_line(&mut output);
-    assert_eq!(save_call, "CALL\t0\tmapworld_native_save");
+    assert_eq!(save_call, "CALL\t0\tmapworld_native_save_base64");
     let save_request = read_save_request(&requests.join("0"));
     let save_response = mapworld_native_save(
         save_request.target_path,
@@ -89,7 +89,7 @@ struct BridgeSaveRequest {
 fn read_save_request(directory: &Path) -> BridgeSaveRequest {
     assert_eq!(
         read_single_line(&directory.join("command.txt")),
-        "mapworld_native_save"
+        "mapworld_native_save_base64"
     );
     let metadata = fs::read_to_string(directory.join("metadata.txt"))
         .expect("read save metadata")

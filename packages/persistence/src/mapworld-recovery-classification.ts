@@ -69,10 +69,7 @@ function classifyPackageRole(
       return classifyDirectory(base, observed.entries);
     case 'invalid-directory': {
       const decoded = decodeMapworld({
-        files: observed.entries.map(({ path, bytes }) => ({
-          path,
-          bytes: Uint8Array.from(bytes),
-        })),
+        files: observed.entries.map(({ path, bytes }) => ({ path, bytes })),
       });
       return Object.freeze({
         ...base,
@@ -105,10 +102,10 @@ function classifyPackageRole(
 
 function classifyDirectory(
   base: Pick<ClassifiedMapworldPackageCandidate, 'role' | 'observationToken' | 'observedKind'>,
-  entries: readonly { readonly path: string; readonly bytes: readonly number[] }[],
+  entries: readonly { readonly path: string; readonly bytes: Uint8Array }[],
 ): ClassifiedMapworldPackageCandidate {
   const pkg: MapworldPackage = {
-    files: entries.map(({ path, bytes }) => ({ path, bytes: Uint8Array.from(bytes) })),
+    files: entries.map(({ path, bytes }) => ({ path, bytes })),
   };
   const decoded = decodeMapworld(pkg);
   if (!decoded.ok) {

@@ -8,6 +8,8 @@ mod error_injection;
 mod fault_matrix;
 #[path = "mapworld_native_recovery/milestone_one_workflow.rs"]
 mod milestone_one_workflow;
+#[path = "mapworld_native_recovery/milestone_two_workflow.rs"]
+mod milestone_two_workflow;
 #[path = "mapworld_native_recovery/policy_bridge.rs"]
 mod policy_bridge;
 #[path = "mapworld_native_recovery/recognized_rows.rs"]

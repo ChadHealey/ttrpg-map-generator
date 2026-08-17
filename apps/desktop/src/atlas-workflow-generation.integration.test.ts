@@ -12,9 +12,28 @@ import {
   DEFAULT_ATLAS_CONTROLS,
   type LockId,
   parseStableId,
+  reconstructAcceptedAtlas,
+  type WorldDocument,
 } from '@ttrpg-map/core';
+import {
+  canonicalAspectBytes,
+  createMapworldSavePlan,
+  decodeMapworld,
+  encodeMapworld,
+  MAPWORLD_NATIVE_LIMITS,
+  type MapworldPackage,
+} from '@ttrpg-map/persistence';
 import { beforeAll, describe, expect, it } from 'vitest';
 
+import {
+  aspectBytes,
+  equalBytes,
+  equalPackages,
+  mutateAspect,
+  required,
+  reverseOrderInsensitiveAtlasOutput,
+  reverseOrderInsensitiveCollections,
+} from './atlas-persistence-integration-support.js';
 import { MILESTONE_TWO_ATLAS_PROOF_SEED } from './atlas-workflow.js';
 import {
   type AcceptedAtlasState,
@@ -22,6 +41,7 @@ import {
   productionAtlasWorkflowGeneration,
 } from './atlas-workflow-generation.js';
 import { retainedAspectProposal } from './atlas-workflow-generation-support.js';
+import { reopenAcceptedAtlas } from './atlas-workflow-reopen.js';
 
 interface GeneratedAtlasStates {
   readonly baseline: AcceptedAtlasState;
@@ -125,6 +145,157 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
     },
     15_000,
   );
+
+  it('round-trips every accepted atlas aspect and rebuilds the scene without generation', () => {
+    const accepted = requiredGeneratedStates().appearance;
+    const encoded = required(encodeMapworld(accepted.document));
+    expect(encoded.files.map(({ path }) => path)).toStrictEqual([
+      'manifest.json',
+      'world.json',
+      `maps/${accepted.document.rootMapId}.json`,
+    ]);
+    expect(
+      encoded.files.some(({ path }) => /cache|preview|scene|raster|hit-test/u.test(path)),
+    ).toBe(false);
+    expect(Math.max(...encoded.files.map(({ bytes }) => bytes.byteLength))).toBeLessThanOrEqual(
+      MAPWORLD_NATIVE_LIMITS.maximumFileBytes,
+    );
+    expect(
+      encoded.files.reduce((total, { bytes }) => total + bytes.byteLength, 0),
+    ).toBeLessThanOrEqual(MAPWORLD_NATIVE_LIMITS.maximumPackageBytes);
+
+    const decoded = required(decodeMapworld(encoded));
+    const reopened = reopenAcceptedAtlas(decoded);
+    expect(reopened.ok, reopened.ok ? undefined : JSON.stringify(reopened)).toBe(true);
+    if (!reopened.ok) return;
+    expect(reopened.accepted.scene).toStrictEqual(accepted.scene);
+    expect(reopened.accepted.geography).toStrictEqual(accepted.geography);
+    expect(reopened.accepted.appearance).toStrictEqual(accepted.appearance);
+    const originalMap = accepted.document.maps[0];
+    const reopenedMap = decoded.maps[0];
+    if (originalMap === undefined || reopenedMap === undefined)
+      throw new Error('Missing root map.');
+    expect(reopenedMap.aspects).toHaveLength(originalMap.aspects.length);
+    for (const aspect of originalMap.aspects) {
+      const restored = reopenedMap.aspects.find(({ aspectId }) => aspectId === aspect.aspectId);
+      if (restored === undefined) throw new Error(`Missing reopened aspect ${aspect.aspectId}.`);
+      expect(
+        equalBytes(
+          aspectBytes(canonicalAspectBytes(restored)),
+          aspectBytes(canonicalAspectBytes(aspect)),
+        ),
+      ).toBe(true);
+    }
+  }, 90_000);
+
+  it('produces identical authoritative bytes for repeated and insertion-varied snapshots', () => {
+    const accepted = requiredGeneratedStates().appearance;
+    const first = required(encodeMapworld(accepted.document));
+    const repeated = required(encodeMapworld(accepted.document));
+    const reordered = required(
+      encodeMapworld(reverseOrderInsensitiveCollections(accepted.document)),
+    );
+
+    expect(equalPackages(repeated, first)).toBe(true);
+    expect(equalPackages(reordered, first)).toBe(true);
+    for (const aspect of accepted.document.maps[0]?.aspects ?? []) {
+      const reorderedAspect = {
+        ...aspect,
+        acceptedOutput: reverseOrderInsensitiveAtlasOutput(
+          aspect.aspectName,
+          aspect.acceptedOutput,
+        ),
+      };
+      expect(
+        equalBytes(
+          aspectBytes(canonicalAspectBytes(reorderedAspect)),
+          aspectBytes(canonicalAspectBytes(aspect)),
+        ),
+      ).toBe(true);
+    }
+  }, 90_000);
+
+  it('rebuilds identical disposable state after scene/cache deletion', () => {
+    const accepted = requiredGeneratedStates().appearance;
+    const decoded = required(decodeMapworld(required(encodeMapworld(accepted.document))));
+    const first = reopenAcceptedAtlas(decoded);
+    const rebuilt = reopenAcceptedAtlas(decoded);
+    expect(first.ok).toBe(true);
+    expect(rebuilt.ok).toBe(true);
+    if (!first.ok || !rebuilt.ok) return;
+    expect(rebuilt.accepted.scene).toStrictEqual(first.accepted.scene);
+    expect(rebuilt.accepted.document).toBe(decoded);
+  }, 90_000);
+
+  it('rejects incomplete accepted atlas content before save', () => {
+    const accepted = requiredGeneratedStates().appearance;
+    const root = accepted.document.maps[0];
+    if (root?.mapKind !== 'world') throw new Error('Missing root map.');
+    const incomplete: WorldDocument = {
+      ...accepted.document,
+      maps: [
+        {
+          ...root,
+          aspects: root.aspects.filter(({ aspectName }) => aspectName !== 'atlas.paperTreatment'),
+        },
+      ],
+    };
+    const encoded = encodeMapworld(incomplete);
+    expect(encoded.ok).toBe(false);
+    if (encoded.ok) return;
+    expect(encoded.diagnostics.map(({ code }) => code)).toContain('persistence.atlas.invalid');
+  }, 30_000);
+
+  it('rejects incompatible versions, broken dependencies, and style provenance on reconstruction', () => {
+    const source = requiredGeneratedStates().appearance.document;
+    const broken = [
+      mutateAspect(source, 'atlas.waterDecoration', (aspect) => ({
+        ...aspect,
+        dependencyAspects: aspect.dependencyAspects.slice(1),
+      })),
+      mutateAspect(source, 'worldCoastline.geometry', (aspect) => ({
+        ...aspect,
+        generatorVersion: (aspect.generatorVersion + 1) as typeof aspect.generatorVersion,
+      })),
+      mutateAspect(source, 'atlas.paperTreatment', (aspect) => ({
+        ...aspect,
+        parameters: { ...(aspect.parameters as object), styleId: 'incompatible-style' },
+      })),
+    ];
+    for (const document of broken) {
+      const reconstructed = reconstructAcceptedAtlas(document);
+      expect(reconstructed.status).toBe('invalid');
+    }
+  }, 30_000);
+
+  it('rejects corrupted authoritative atlas bytes by checksum before reconstruction', () => {
+    const encoded = required(encodeMapworld(requiredGeneratedStates().appearance.document));
+    const corrupted: MapworldPackage = {
+      files: encoded.files.map((file) => {
+        if (!file.path.startsWith('maps/')) return file;
+        const changed = file.bytes.slice();
+        const index = Math.floor(changed.length / 2);
+        changed[index] = (changed[index] ?? 0) ^ 1;
+        return { path: file.path, bytes: changed };
+      }),
+    };
+    const decoded = decodeMapworld(corrupted);
+    expect(decoded.ok).toBe(false);
+    if (decoded.ok) return;
+    expect(decoded.diagnostics.map(({ code }) => code)).toContain('persistence.checksum.mismatch');
+  }, 30_000);
+
+  it('creates one bounded immutable native save plan for the complete atlas', () => {
+    const planned = createMapworldSavePlan(requiredGeneratedStates().appearance.document, {
+      operation: 'first-save',
+      targetName: 'Atlas.mapworld',
+      previousManifestSha256: null,
+    });
+    expect(planned.ok, planned.ok ? undefined : JSON.stringify(planned.error)).toBe(true);
+    if (!planned.ok) return;
+    expect(planned.value.files).toHaveLength(3);
+    expect(planned.value.candidateManifestSha256).toMatch(/^[a-f0-9]{64}$/u);
+  }, 90_000);
 });
 
 function requiredGeneratedStates(): GeneratedAtlasStates {

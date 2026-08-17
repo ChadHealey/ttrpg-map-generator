@@ -5,7 +5,7 @@ pub fn run() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             mapworld_native::service::mapworld_native_snapshot,
-            mapworld_native::service::mapworld_native_save,
+            mapworld_native::service::mapworld_native_save_base64,
             mapworld_native::service::mapworld_native_apply,
         ])
         .run(tauri::generate_context!())

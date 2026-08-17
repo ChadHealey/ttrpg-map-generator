@@ -111,6 +111,35 @@ versions, parameter values, seed scope, dependencies, output shape, point counts
 Domain validation additionally checks the closed simple counterclockwise outline, exact derived
 marker IDs and order, and strict marker containment.
 
+The nine Milestone 2 atlas aspect kinds also use exact strict v1 arms. Their DTOs preserve the
+accepted full-profile macro-elevation ticks and land/water samples; semantic component memberships,
+classification, containment, adjacency, and marine connectivity; canonical planet-native coastline
+rings and source fingerprints; canonical controls and generator parameters; and the three
+projection-neutral appearance outputs with explicit style provenance. Nested entity, aspect,
+surface-component, and coastline-ring IDs are parsed through `core`, as are every persisted
+`PlanetPoint` and style semantic key. Persistence then asks the core-owned accepted-atlas
+reconstructor to validate the complete aspect graph, exact singleton/feature ownership, required
+dependencies, controls, semantic partition, coastline, and appearance provenance before exposing
+the document.
+
+Milestone 2 does not change the released package, map-document, or accepted-aspect schema version.
+Version 1 already reserved strict known-domain aspect arms beside its generic arm, and no released
+Milestone 2 save predates these records. The generic arm now explicitly rejects all nine atlas names
+so a malformed atlas cannot bypass their strict DTOs. Milestone 1 v1 packages remain byte-compatible
+and require no migration.
+
+Atlas order-insensitive collections have these additional canonical rules:
+
+- component sample ranges sort by their half-open start/end indexes;
+- land/water adjacency, enclosure, connectivity, and coastline water-body references sort by stable
+  ID;
+- landmass, water-body, coastline-ring, ink-decision, and decoration-path records sort by their
+  stable entity, ring, source-ring, or decoration ID;
+- archipelago members sort by stable landmass ID, while island-chain members retain semantic chain
+  order; and
+- macro samples, classification samples, coastline points, and decoration-path points retain their
+  declared canonical geographic traversal.
+
 `canonicalAspectBytes` returns the canonical bytes of the complete accepted-aspect DTO, including its
 record version and metadata. `canonicalAspectOutputBytes` returns only canonical `acceptedOutput`
 bytes. Neither is a containing-map checksum or an authoritative-file checksum.
@@ -126,6 +155,21 @@ Decode constructs new arrays and records, then deep-freezes the result. It does 
 generator registry, import a generator package, advance a stream, migrate, upgrade, or repair an
 accepted record. Disposable rendering and caches may be rebuilt by later orchestration only after a
 valid document has been exposed.
+
+For a complete accepted atlas, desktop orchestration reconstructs the disposable `RenderScene`
+from the decoded geography and appearance records through the renderer-neutral scene composer. The
+reopen path imports no generator package and accepts no generator registry. Deleting the prior
+scene, preview, projected paths, hit-test indexes, or raster intermediates therefore cannot change
+accepted bytes or the rebuilt scene semantics.
+
+The bounded native transport permits at most 128 MiB for one authoritative package file and
+192 MiB for a complete package. TypeScript and Rust enforce the same values. These are adapter
+safety bounds sized for the full-profile Milestone 2 sample arrays, not persisted schema fields, so
+their increase from the kernel-proof limits does not change a v1 compatibility identifier.
+The injected desktop/native command carries those already-validated immutable bytes as strict
+canonical base64 strings; Rust decodes them under the same limits before applying the unchanged
+atomic directory-commit protocol. Base64 is transport framing only and never appears inside a
+`.mapworld` package.
 
 ## Deliberate exclusions
 

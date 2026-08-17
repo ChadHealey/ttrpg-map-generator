@@ -28,6 +28,14 @@ export {
   getTransitiveAspectInvalidation,
 } from './aspect-invalidation.js';
 export {
+  ACCEPTED_ATLAS_DIAGNOSTIC_CODES,
+  type AcceptedAtlasDiagnostic,
+  type AcceptedAtlasDiagnosticCode,
+  reconstructAcceptedAtlas,
+  type ReconstructAcceptedAtlasResult,
+  type ReconstructedAcceptedAtlas,
+} from './atlas-accepted-state.js';
+export {
   ATLAS_COASTLINE_APPEARANCE_BEHAVIOR_VERSION,
   ATLAS_PAPER_TREATMENT_BEHAVIOR_VERSION,
   ATLAS_STYLE_PROVENANCE_BEHAVIOR_VERSION,

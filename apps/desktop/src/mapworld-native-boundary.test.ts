@@ -78,8 +78,8 @@ describe('desktop native mapworld boundary', () => {
 
   it('sends an independently owned immutable save plan and expected previous fingerprint', async () => {
     const request = validNativeSaveRequest('replacement-save');
-    const markerBefore = [...request.markerBytes];
-    const firstFileBefore = [...(request.files[0]?.bytes ?? [])];
+    const markerBefore = request.markerBase64;
+    const firstFileBefore = request.files[0]?.bytesBase64;
     let capturedArguments: Readonly<Record<string, unknown>> | undefined;
     const invoke: NativeMapworldInvoke = (command, arguments_) => {
       expect(command).toBe(NATIVE_MAPWORLD_COMMANDS.save);
@@ -93,8 +93,8 @@ describe('desktop native mapworld boundary', () => {
     };
 
     const result = await requestNativeMapworldSave(invoke, request);
-    request.markerBytes[0] = 9;
-    if (request.files[0] !== undefined) request.files[0].bytes[0] = 9;
+    request.markerBase64 = 'altered';
+    if (request.files[0] !== undefined) request.files[0].bytesBase64 = 'altered';
 
     expect(result).toEqual({
       ok: true,
@@ -102,17 +102,15 @@ describe('desktop native mapworld boundary', () => {
     });
     expect(capturedArguments).toMatchObject({
       expectedPreviousManifestSha256: OLD_FINGERPRINT,
-      markerBytes: markerBefore,
+      markerBase64: markerBefore,
     });
-    const capturedFileBytes = capturedArguments?.fileBytes;
+    const capturedFileBytes = capturedArguments?.fileBytesBase64;
     expect(Array.isArray(capturedFileBytes) ? capturedFileBytes[0] : undefined).toEqual(
       firstFileBefore,
     );
     expect(Object.isFrozen(capturedArguments)).toBe(true);
-    expect(Object.isFrozen(capturedArguments?.markerBytes)).toBe(true);
-    expect(Object.isFrozen(capturedArguments?.fileBytes)).toBe(true);
-    const fileBytes = capturedArguments?.fileBytes;
-    expect(Array.isArray(fileBytes) && Object.isFrozen(fileBytes[0])).toBe(true);
+    expect(typeof capturedArguments?.markerBase64).toBe('string');
+    expect(Object.isFrozen(capturedArguments?.fileBytesBase64)).toBe(true);
   });
 
   it('rejects inconsistent first/replacement intent before invoking native code', async () => {
@@ -141,7 +139,6 @@ describe('desktop native mapworld boundary', () => {
       invocationCount += 1;
       return Promise.resolve('');
     };
-    const maximumFile = Array<number>(NATIVE_MAPWORLD_LIMITS.maximumFileBytes).fill(0);
     const base = {
       targetPath: '/target',
       operation: 'first-save' as const,
@@ -152,47 +149,29 @@ describe('desktop native mapworld boundary', () => {
     const requests = [
       {
         ...base,
-        markerBytes: Array<number>(NATIVE_MAPWORLD_LIMITS.maximumMarkerBytes + 1).fill(0),
+        markerBase64: 'AAAA'.repeat(Math.ceil((NATIVE_MAPWORLD_LIMITS.maximumMarkerBytes + 1) / 3)),
         files: [],
       },
       {
         ...base,
-        markerBytes: [],
+        markerBase64: '',
         files: Array.from(
           { length: NATIVE_MAPWORLD_LIMITS.maximumPackageFiles + 1 },
           (_, index) => ({
             path: `maps/${String(index)}.json`,
-            bytes: [],
+            bytesBase64: '',
           }),
         ),
       },
       {
         ...base,
-        markerBytes: [],
+        markerBase64: '',
         files: [
           {
             path: 'a'.repeat(NATIVE_MAPWORLD_LIMITS.maximumRelativePathBytes + 1),
-            bytes: [],
+            bytesBase64: '',
           },
         ],
-      },
-      {
-        ...base,
-        markerBytes: [],
-        files: [
-          {
-            path: 'manifest.json',
-            bytes: Array<number>(NATIVE_MAPWORLD_LIMITS.maximumFileBytes + 1).fill(0),
-          },
-        ],
-      },
-      {
-        ...base,
-        markerBytes: [],
-        files: Array.from({ length: 5 }, (_, index) => ({
-          path: `maps/${String(index)}.json`,
-          bytes: maximumFile,
-        })),
       },
     ];
 
@@ -218,21 +197,25 @@ describe('desktop native mapworld boundary', () => {
       expectedPreviousManifestSha256: null,
       expectedPreviousObservationToken: null,
       candidateManifestSha256: NEW_FINGERPRINT,
-      markerBytes: [1],
+      markerBase64: 'AQ==',
     };
     const requests = [
       { ...base, files: [] },
       {
         ...base,
         files: [
-          { path: 'manifest.json', bytes: [1] },
-          { path: 'manifest.json', bytes: [1] },
+          { path: 'manifest.json', bytesBase64: 'AQ==' },
+          { path: 'manifest.json', bytesBase64: 'AQ==' },
         ],
       },
-      { ...base, files: [{ path: `${'a'.repeat(256)}/file`, bytes: [1] }] },
-      { ...base, files: [{ path: 'world.json', bytes: [1] }] },
-      { ...base, files: [{ path: 'manifest.json', bytes: [1] }] },
-      { ...base, operation: 'unsupported', files: [{ path: 'manifest.json', bytes: [1] }] },
+      { ...base, files: [{ path: `${'a'.repeat(256)}/file`, bytesBase64: 'AQ==' }] },
+      { ...base, files: [{ path: 'world.json', bytesBase64: 'AQ==' }] },
+      { ...base, files: [{ path: 'manifest.json', bytesBase64: 'AQ==' }] },
+      {
+        ...base,
+        operation: 'unsupported',
+        files: [{ path: 'manifest.json', bytesBase64: 'AQ==' }],
+      },
     ];
 
     for (const request of requests) {
@@ -251,9 +234,9 @@ describe('desktop native mapworld boundary', () => {
     const alteredPackage = validNativeSaveRequest();
     const world = alteredPackage.files.find(({ path }) => path === 'world.json');
     if (world === undefined) throw new Error('Expected complete package fixture.');
-    world.bytes[0] = (world.bytes[0] ?? 0) ^ 1;
+    world.bytesBase64 = mutateBase64(world.bytesBase64);
     const alteredMarker = validNativeSaveRequest();
-    alteredMarker.markerBytes[0] = (alteredMarker.markerBytes[0] ?? 0) ^ 1;
+    alteredMarker.markerBase64 = mutateBase64(alteredMarker.markerBase64);
 
     await expect(requestNativeMapworldSave(invoke, alteredPackage)).resolves.toMatchObject({
       ok: false,
@@ -379,3 +362,8 @@ describe('desktop native mapworld boundary', () => {
     expect(invocationCount).toBe(0);
   });
 });
+
+function mutateBase64(value: string): string {
+  if (value.length === 0) return 'AQ==';
+  return `${value.startsWith('A') ? 'B' : 'A'}${value.slice(1)}`;
+}

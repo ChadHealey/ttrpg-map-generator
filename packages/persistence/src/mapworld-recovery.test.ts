@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { decodeBase64Bytes } from './base64-bytes.js';
 import { canonicalJsonBytes } from './canonical-json.js';
 import { classifyMapworldRecoverySnapshot } from './mapworld-recovery-classification.js';
 import { planConfirmedMapworldRecovery } from './mapworld-recovery-confirmation.js';
@@ -60,7 +61,7 @@ describe('mapworld recovery names, marker, and save plan', () => {
       targetName: TARGET_NAME,
       previousManifestSha256: oldPlan.candidateManifestSha256,
     });
-    const markerText = new TextDecoder().decode(Uint8Array.from(plan.markerBytes));
+    const markerText = new TextDecoder().decode(requiredBase64(plan.markerBase64));
 
     expect(markerText).toBe(`{
   "backupName": ".World.mapworld.commit-v1.backup",
@@ -75,17 +76,10 @@ describe('mapworld recovery names, marker, and save plan', () => {
 }
 `);
     expect(Object.isFrozen(plan)).toBe(true);
-    expect(Object.isFrozen(plan.markerBytes)).toBe(true);
+    expect(typeof plan.markerBase64).toBe('string');
     expect(Object.isFrozen(plan.files)).toBe(true);
-    expect(plan.files.every((file) => Object.isFrozen(file) && Object.isFrozen(file.bytes))).toBe(
-      true,
-    );
-    const firstByte = plan.files[0]?.bytes[0];
-    expect(() => {
-      const bytes = plan.files[0]?.bytes as number[] | undefined;
-      if (bytes !== undefined) bytes[0] = 255;
-    }).toThrow();
-    expect(plan.files[0]?.bytes[0]).toBe(firstByte);
+    expect(plan.files.every((file) => Object.isFrozen(file))).toBe(true);
+    expect(plan.files.every(({ bytesBase64 }) => typeof bytesBase64 === 'string')).toBe(true);
   });
 
   it('classifies canonical unknown marker versions separately from noncanonical bytes', () => {
@@ -95,7 +89,7 @@ describe('mapworld recovery names, marker, and save plan', () => {
       previousManifestSha256: null,
     });
     const marker = JSON.parse(
-      new TextDecoder().decode(Uint8Array.from(plan.markerBytes)),
+      new TextDecoder().decode(requiredBase64(plan.markerBase64)),
     ) as Record<string, unknown>;
     marker.protocolVersion = 2;
     const canonical = canonicalJsonBytes(marker, 'marker');
@@ -134,8 +128,8 @@ describe('pure mapworld recovery decision', () => {
   });
   const oldPackage = directory('a', oldPlan);
   const newPackage = directory('b', replacementPlan);
-  const firstMarker = regular('c', firstPlan.markerBytes);
-  const replacementMarker = regular('d', replacementPlan.markerBytes);
+  const firstMarker = regular('c', Array.from(requiredBase64(firstPlan.markerBase64)));
+  const replacementMarker = regular('d', Array.from(requiredBase64(replacementPlan.markerBase64)));
 
   it.each([
     {
@@ -315,7 +309,10 @@ function regular(character: string, bytes: readonly number[]) {
 function directory(character: string, plan: MapworldSavePlan) {
   return directoryEntries(
     character,
-    plan.files.map(({ path, bytes }) => ({ path, bytes: [...bytes] })),
+    plan.files.map(({ path, bytesBase64 }) => ({
+      path,
+      bytes: Array.from(requiredBase64(bytesBase64)),
+    })),
   );
 }
 
@@ -352,4 +349,10 @@ function value<Value>(
 ): Value {
   if (!result.ok) throw new Error(`Expected successful recovery result: ${JSON.stringify(result)}`);
   return result.value;
+}
+
+function requiredBase64(value: string): Uint8Array {
+  const bytes = decodeBase64Bytes(value, Number.MAX_SAFE_INTEGER);
+  if (bytes === null) throw new Error('Test save plan contains invalid canonical base64.');
+  return bytes;
 }

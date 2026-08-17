@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { decodeBase64Bytes } from './base64-bytes.js';
 import {
   MAPWORLD_NATIVE_LIMITS,
   MAPWORLD_RECOVERY_PROTOCOL_VERSION,
@@ -7,6 +8,16 @@ import {
 
 const sha256Schema = z.string().regex(/^[a-f0-9]{64}$/u);
 const byteSchema = z.number().int().min(0).max(255);
+const nativeBytesSchema = (maximumBytes: number) =>
+  z
+    .union([z.array(byteSchema).max(maximumBytes), z.string()])
+    .transform((value, context): Uint8Array => {
+      if (Array.isArray(value)) return Uint8Array.from(value);
+      const decoded = decodeBase64Bytes(value, maximumBytes);
+      if (decoded !== null) return decoded;
+      context.addIssue({ code: 'custom', message: 'Invalid bounded canonical base64 bytes.' });
+      return new Uint8Array();
+    });
 const observationSchema = z.strictObject({ observationToken: sha256Schema });
 const osContextSchema = z.strictObject({
   primitive: z.string().min(1),
@@ -30,7 +41,7 @@ const packageEntrySchema = z.strictObject({
       context.addIssue({ code: 'custom', message: 'Invalid bounded package-relative path.' });
     }
   }),
-  bytes: z.array(byteSchema).max(MAPWORLD_NATIVE_LIMITS.maximumFileBytes),
+  bytes: nativeBytesSchema(MAPWORLD_NATIVE_LIMITS.maximumFileBytes),
 });
 
 const packageDirectorySchema = observationSchema
@@ -51,7 +62,7 @@ const packageDirectorySchema = observationSchema
         });
       }
       previousPath = entry.path;
-      totalBytes += entry.bytes.length;
+      totalBytes += entry.bytes.byteLength;
     }
     if (totalBytes > MAPWORLD_NATIVE_LIMITS.maximumPackageBytes) {
       context.addIssue({
@@ -90,7 +101,7 @@ const invalidPackageDirectorySchema = observationSchema
         });
       }
       previousEntryPath = entry.path;
-      totalBytes += entry.bytes.length;
+      totalBytes += entry.bytes.byteLength;
     }
     if (totalBytes > MAPWORLD_NATIVE_LIMITS.maximumPackageBytes) {
       context.addIssue({
@@ -114,7 +125,7 @@ const invalidPackageDirectorySchema = observationSchema
 const wrongKindRegularFileSchema = observationSchema
   .extend({
     kind: z.literal('regular-file'),
-    bytes: z.array(byteSchema).max(MAPWORLD_NATIVE_LIMITS.maximumFileBytes),
+    bytes: nativeBytesSchema(MAPWORLD_NATIVE_LIMITS.maximumFileBytes),
   })
   .strict();
 
@@ -132,7 +143,7 @@ export const nativeMapworldPackageRoleSchema = z.union([
 const markerRegularFileSchema = observationSchema
   .extend({
     kind: z.literal('regular-file'),
-    bytes: z.array(byteSchema).max(MAPWORLD_NATIVE_LIMITS.maximumMarkerBytes),
+    bytes: nativeBytesSchema(MAPWORLD_NATIVE_LIMITS.maximumMarkerBytes),
   })
   .strict();
 
@@ -143,7 +154,7 @@ const wrongKindMarkerDirectorySchema = observationSchema
   })
   .strict()
   .superRefine(({ entries }, context) => {
-    const totalBytes = entries.reduce((total, entry) => total + entry.bytes.length, 0);
+    const totalBytes = entries.reduce((total, entry) => total + entry.bytes.byteLength, 0);
     if (totalBytes > MAPWORLD_NATIVE_LIMITS.maximumPackageBytes) {
       context.addIssue({
         code: 'custom',

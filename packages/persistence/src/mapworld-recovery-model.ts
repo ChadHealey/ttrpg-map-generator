@@ -24,9 +24,9 @@ export type MapworldRecoveryCode =
 export const MAPWORLD_NATIVE_LIMITS = Object.freeze({
   maximumBasenameBytes: 255,
   maximumDirectoryDepth: 8,
-  maximumFileBytes: 16_777_216,
+  maximumFileBytes: 134_217_728,
   maximumMarkerBytes: 65_536,
-  maximumPackageBytes: 67_108_864,
+  maximumPackageBytes: 201_326_592,
   maximumPackageFiles: 256,
   maximumRecoverySteps: 64,
   maximumRelativePathBytes: 1_024,
@@ -76,13 +76,13 @@ export interface MapworldSavePlan {
   readonly artifactNames: MapworldRecoveryArtifactNames;
   readonly expectedPreviousManifestSha256: string | null;
   readonly candidateManifestSha256: string;
-  readonly markerBytes: readonly number[];
+  readonly markerBase64: string;
   readonly files: readonly MapworldSavePlanFile[];
 }
 
 export interface MapworldSavePlanFile {
   readonly path: string;
-  readonly bytes: readonly number[];
+  readonly bytesBase64: string;
 }
 
 export type MapworldSaveIntent =

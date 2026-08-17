@@ -167,7 +167,7 @@ export function validateCompleteAtlasProposal(
     if (
       !validateAtlasGeographyRecords(geography).ok ||
       appearance.atlasPresentationEntityId !== singletonIds.atlasPresentationEntityId ||
-      !appearanceMatchesGeography(geography, appearance) ||
+      !validateAtlasAppearanceRecords(geography, appearance) ||
       !hasValidAcceptedEnvelopes(aspects, command, geography)
     ) {
       throw new Error('invalid complete atlas');
@@ -294,7 +294,7 @@ function isValidMapEntityProposal(
   );
 }
 
-function appearanceMatchesGeography(
+export function validateAtlasAppearanceRecords(
   geography: AtlasGeographyRecords,
   appearance: AtlasAppearanceRecords,
 ): boolean {
