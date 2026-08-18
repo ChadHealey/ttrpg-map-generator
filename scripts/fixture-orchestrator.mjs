@@ -27,6 +27,35 @@ function compareCodePoints(left, right) {
   return left < right ? -1 : left > right ? 1 : 0;
 }
 
+function firstJsonDifference(left, right, path = '$') {
+  if (Object.is(left, right)) return undefined;
+  if (Array.isArray(left) && Array.isArray(right)) {
+    if (left.length !== right.length) {
+      return `${path}.length: checked-in=${left.length}, regenerated=${right.length}`;
+    }
+    for (let index = 0; index < left.length; index += 1) {
+      const difference = firstJsonDifference(left[index], right[index], `${path}[${index}]`);
+      if (difference !== undefined) return difference;
+    }
+    return undefined;
+  } else if (
+    typeof left === 'object' &&
+    left !== null &&
+    typeof right === 'object' &&
+    right !== null
+  ) {
+    const keys = [...new Set([...Object.keys(left), ...Object.keys(right)])].sort(
+      compareCodePoints,
+    );
+    for (const key of keys) {
+      const difference = firstJsonDifference(left[key], right[key], `${path}.${key}`);
+      if (difference !== undefined) return difference;
+    }
+    return undefined;
+  }
+  return `${path}: checked-in=${JSON.stringify(left)}, regenerated=${JSON.stringify(right)}`;
+}
+
 function getReadPermissionArguments(paths) {
   const allowed = new Set();
   for (const path of paths) {
@@ -162,6 +191,12 @@ export function compareCandidateWithStored(
       'Regenerated fixture evidence',
     );
     if (!checkedIn.equals(regenerated)) {
+      if (path === entry.manifestPath) {
+        const difference = firstJsonDifference(stored, candidate);
+        throw new Error(
+          `Regenerated fixture evidence differs: ${path}${difference === undefined ? '' : ` (${difference})`}`,
+        );
+      }
       throw new Error(`Regenerated fixture evidence differs: ${path}`);
     }
   }
