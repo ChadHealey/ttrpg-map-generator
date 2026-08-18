@@ -23,6 +23,16 @@ import {
   sortedRecord,
   write,
 } from './atlas-land-water-fixture-runner-support.mjs';
+import {
+  assertAppearanceRerollIsolation,
+  assertGeographyRerollIsolation,
+  createCanonicalAspectDigestIndex,
+  createInitialAcceptedAtlas,
+  createRenderCheckpointEvidence,
+  decodeAcceptedPackage,
+  encodeAcceptedPackage,
+  makeReopenComparison,
+} from './atlas-persistence-fixture-support.mjs';
 import { projectionProof } from './atlas-projection-fixture-support.mjs';
 import { sceneProof } from './atlas-scene-fixture-support.mjs';
 import { expectedVersions, semanticProof } from './atlas-semantic-fixture-support.mjs';
@@ -37,33 +47,68 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
   const definitionBytes = readFileSync(sourceDefinitionPath);
   const definition = JSON.parse(definitionBytes.toString('utf8'));
   const reviewBytes = readFileSync(reviewRecordPath);
-  const { assets, core, generation, render } = await loadProjectModules(outputRoot);
+  const {
+    assets,
+    core,
+    desktopGeneration,
+    desktopReopen,
+    desktopSupport,
+    generation,
+    persistence,
+    render,
+  } = await loadProjectModules(outputRoot);
   const includesSemantic = definition.versions.atlasSemanticPolicyVersion !== undefined;
   const includesCoastline = definition.versions.atlasCoastlineGeometryBehaviorVersion !== undefined;
   const includesProjection = definition.versions.atlasDisplayProjectionVersion !== undefined;
   const includesAppearance = definition.versions.atlasStyleBehaviorVersion !== undefined;
+  const usesPersistenceEvidence = definition.fixtureDefinitionVersion === 2;
   assert.equal(includesProjection && !includesCoastline, false);
   assert.equal(includesAppearance && !includesProjection, false);
 
   assert.equal(fixtureId, expectedFixtureId);
   assert.equal(definition.fixtureId, fixtureId);
-  assert.equal(definition.fixtureDefinitionVersion, 1);
-  assert.equal(definition.evidenceBoundary, 'pre-persistence-atlas-generator-kernel-v1');
-  assert.equal(definition.notCanonicalAspectBytes, true);
+  assert.ok(definition.fixtureDefinitionVersion === 1 || usesPersistenceEvidence);
+  assert.equal(
+    definition.evidenceBoundary,
+    usesPersistenceEvidence
+      ? 'persistence-canonical-accepted-aspects-v1'
+      : 'pre-persistence-atlas-generator-kernel-v1',
+  );
+  assert.equal(Object.hasOwn(definition, 'notCanonicalAspectBytes'), !usesPersistenceEvidence);
+  if (!usesPersistenceEvidence) assert.equal(definition.notCanonicalAspectBytes, true);
   assert.deepEqual(
     definition.versions,
-    expectedVersions(
-      core,
-      generation,
-      assets,
-      render,
-      includesSemantic,
-      includesCoastline,
-      includesProjection,
-      includesAppearance,
-    ),
+    usesPersistenceEvidence
+      ? expectedVersions(
+          core,
+          generation,
+          assets,
+          render,
+          persistence,
+          includesSemantic,
+          includesCoastline,
+          includesProjection,
+          includesAppearance,
+        )
+      : expectedVersions(
+          core,
+          generation,
+          assets,
+          render,
+          undefined,
+          includesSemantic,
+          includesCoastline,
+          includesProjection,
+          includesAppearance,
+        ),
   );
   assert.deepEqual(definition.stableIds, expectedStableIds(core, definition));
+  const legacyVersions = withoutPersistenceVersions(definition.versions);
+  const legacyDefinition = {
+    ...definition,
+    evidenceBoundary: 'pre-persistence-atlas-generator-kernel-v1',
+    versions: legacyVersions,
+  };
 
   const input = parsed(
     generation.createAtlasLandWaterGenerationInput({
@@ -127,7 +172,7 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
   const macroSha256 = sha256(macroBytes);
   const classificationSha256 = sha256(classificationBytes);
   const primitiveTraversalSha256 = hashPrimitiveTraversal(
-    definition,
+    legacyDefinition,
     records.landWaterClassification.seaLevelContourDoubledTicks,
     macroBytes,
     classificationBytes,
@@ -166,18 +211,73 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
           appearance.records,
           appearance.style,
         );
+  assert.ok(semantic);
+  assert.ok(coastline);
+  assert.ok(appearance);
+  assert.ok(scene);
+  const baselineAccepted = createInitialAcceptedAtlas({
+    appearance,
+    coastline,
+    core,
+    desktopSupport,
+    full: fullResult,
+    input,
+    scene,
+    semantic,
+  });
+  let geographyRerolledAccepted;
+  let appearanceRerolledAccepted;
+  if (fixtureId === 'milestone-2-atlas-proof') {
+    const geographyRerolled = await desktopGeneration.productionAtlasWorkflowGeneration.commit(
+      {
+        operationId: `${fixtureId}:geography-rerolled`,
+        operation: 'geography-reroll',
+        worldSeed: definition.worldSeed,
+        controls: input.controls,
+        accepted: baselineAccepted,
+      },
+      workflowRuntime(),
+    );
+    assert.equal(
+      geographyRerolled.ok,
+      true,
+      geographyRerolled.ok ? undefined : JSON.stringify(geographyRerolled),
+    );
+    if (!geographyRerolled.ok) throw new Error(JSON.stringify(geographyRerolled));
+    geographyRerolledAccepted = geographyRerolled.accepted;
+    assertGeographyRerollIsolation(baselineAccepted, geographyRerolledAccepted);
+
+    const appearanceRerolled = await desktopGeneration.productionAtlasWorkflowGeneration.commit(
+      {
+        operationId: `${fixtureId}:appearance-rerolled`,
+        operation: 'appearance-reroll',
+        worldSeed: definition.worldSeed,
+        controls: input.controls,
+        accepted: geographyRerolledAccepted,
+      },
+      workflowRuntime(),
+    );
+    assert.equal(
+      appearanceRerolled.ok,
+      true,
+      appearanceRerolled.ok ? undefined : JSON.stringify(appearanceRerolled),
+    );
+    if (!appearanceRerolled.ok) throw new Error(JSON.stringify(appearanceRerolled));
+    appearanceRerolledAccepted = appearanceRerolled.accepted;
+    assertAppearanceRerollIsolation(geographyRerolledAccepted, appearanceRerolledAccepted);
+  }
 
   const vector = {
     kernelVectorVersion: 1,
     canonicalJsonFormatting: 'prettier-json-print-width-100-v1',
-    evidenceBoundary: definition.evidenceBoundary,
+    evidenceBoundary: legacyDefinition.evidenceBoundary,
     notCanonicalAspectBytes: true,
     notCanonicalAspectOutputBytes: true,
     fixtureId,
     worldSeed: definition.worldSeed,
     stableIds: definition.stableIds,
     controls: input.controls,
-    versions: definition.versions,
+    versions: legacyVersions,
     profiles: {
       full: {
         profileId: generation.WORLD_ATLAS_FULL_PROFILE.profileId,
@@ -244,91 +344,171 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
     canonicalKernelVectorSha256: kernelDigest,
     fixtureIntegritySha256: kernelDigest,
   };
-  const sceneArtifacts = [];
-  if (scene !== undefined) {
-    const sceneBytes = Buffer.from(await formatJson(scene.scene), 'utf8');
-    const sceneArtifactPath = `fixed-seeds/${fixtureId}/expected/baseline/atlas-render-scene.scene.canonical`;
-    write(outputRoot, sceneArtifactPath, sceneBytes);
-    const sceneDigest = sha256(sceneBytes);
-    const svgBytes = Buffer.from(scene.svg, 'utf8');
-    const svgArtifactPath = `canonical-svg/${fixtureId}/baseline.svg`;
-    write(outputRoot, svgArtifactPath, svgBytes);
-    const svgDigest = sha256(svgBytes);
-    sceneArtifacts.push(
-      {
-        path: svgArtifactPath,
-        kind: 'canonical-svg',
-        checkpoint: 'baseline',
-        byteLength: svgBytes.byteLength,
-        canonicalSvgSha256: svgDigest,
-        fixtureIntegritySha256: svgDigest,
-      },
-      {
-        path: sceneArtifactPath,
-        kind: 'canonical-render-scene',
-        checkpoint: 'baseline',
-        byteLength: sceneBytes.byteLength,
-        canonicalSceneSha256: sceneDigest,
-        fixtureIntegritySha256: sceneDigest,
-      },
+  const artifacts = [kernelArtifact];
+  if (!usesPersistenceEvidence) {
+    await writeRenderCheckpoint(
+      outputRoot,
+      fixtureId,
+      'baseline',
+      baselineAccepted.scene,
+      appearance.style,
+      render,
+      artifacts,
+      true,
     );
-    const pngProgress = [];
-    const png = await render.exportAtlasSceneToPngAsync(
-      {
-        scene: scene.scene,
-        style: appearance.style,
-        dimensions: { widthPx: 1_600, heightPx: 800 },
-      },
-      {
-        isCancellationRequested: () => false,
-        reportProgress: (value) => pngProgress.push(value),
-        yieldControl: () => Promise.resolve(),
-      },
+    const manifest = legacyFixtureManifest({
+      artifacts,
+      definition,
+      definitionBytes,
+      fixtureId,
+      reviewBytes,
+      fixtureReviewRecordPath,
+      semantic,
+      coastline,
+      appearance,
+    });
+    write(outputRoot, `manifests/${fixtureId}.fixture.generated.json`, await formatJson(manifest));
+    return;
+  }
+  const acceptedIndexes = new Map();
+  acceptedIndexes.set(
+    'baseline',
+    await writeAcceptedAspectIndex(
+      outputRoot,
+      fixtureId,
+      'baseline',
+      baselineAccepted,
+      persistence,
+      artifacts,
+    ),
+  );
+  await writeRenderCheckpoint(
+    outputRoot,
+    fixtureId,
+    'baseline',
+    baselineAccepted.scene,
+    appearance.style,
+    render,
+    artifacts,
+    true,
+  );
+
+  let appearanceRender;
+  let reopenedRender;
+  if (geographyRerolledAccepted !== undefined && appearanceRerolledAccepted !== undefined) {
+    acceptedIndexes.set(
+      'geography-rerolled',
+      await writeAcceptedAspectIndex(
+        outputRoot,
+        fixtureId,
+        'geography-rerolled',
+        geographyRerolledAccepted,
+        persistence,
+        artifacts,
+      ),
     );
-    assert.equal(png.ok, true, png.ok ? undefined : JSON.stringify(png.diagnostics));
-    if (!png.ok) throw new Error(JSON.stringify(png.diagnostics));
-    assertPngProgress(render, pngProgress);
-    assert.deepEqual(
-      {
-        profileId: png.value.profileId,
-        profileVersion: png.value.profileVersion,
-        widthPx: png.value.widthPx,
-        heightPx: png.value.heightPx,
-        hasFullSizeRasterSurface: png.value.resources.hasFullSizeRasterSurface,
-        maximumLiveBands: png.value.resources.maximumLiveBands,
-      },
-      {
-        profileId: 'atlas-png-v1',
-        profileVersion: 1,
-        widthPx: 1_600,
-        heightPx: 800,
-        hasFullSizeRasterSurface: false,
-        maximumLiveBands: 1,
-      },
+    await writeRenderCheckpoint(
+      outputRoot,
+      fixtureId,
+      'geography-rerolled',
+      geographyRerolledAccepted.scene,
+      appearance.style,
+      render,
+      artifacts,
+      true,
     );
-    const pngBytes = png.value.bytes;
-    const pngArtifactPath = `visual-gallery/${fixtureId}/baseline.png`;
-    write(outputRoot, pngArtifactPath, pngBytes);
-    const pngDigest = sha256(pngBytes);
-    sceneArtifacts.push({
-      path: pngArtifactPath,
-      kind: 'visual-evidence',
-      checkpoint: 'baseline',
-      byteLength: pngBytes.byteLength,
-      visualEvidenceSha256: pngDigest,
-      fixtureIntegritySha256: pngDigest,
-      pngProfileId: png.value.profileId,
-      pngProfileVersion: png.value.profileVersion,
-      widthPx: png.value.widthPx,
-      heightPx: png.value.heightPx,
-      bitDepth: render.ATLAS_PNG_COLOR_PROFILE.bitDepth,
-      colorType: render.ATLAS_PNG_COLOR_PROFILE.colorType,
-      srgbRenderingIntent: render.ATLAS_PNG_COLOR_PROFILE.renderingIntent,
-      bandCoreHeightPx: render.ATLAS_PNG_TILE_POLICY.coreHeightPx,
-      bandHaloPx: render.ATLAS_PNG_TILE_POLICY.haloPx,
-      idatChunkBytes: render.ATLAS_PNG_ENCODING_POLICY.idatChunkBytes,
+    const appearanceIndex = await writeAcceptedAspectIndex(
+      outputRoot,
+      fixtureId,
+      'appearance-rerolled',
+      appearanceRerolledAccepted,
+      persistence,
+      artifacts,
+    );
+    acceptedIndexes.set('appearance-rerolled', appearanceIndex);
+    appearanceRender = await writeRenderCheckpoint(
+      outputRoot,
+      fixtureId,
+      'appearance-rerolled',
+      appearanceRerolledAccepted.scene,
+      appearance.style,
+      render,
+      artifacts,
+      true,
+    );
+
+    const encodedPackage = encodeAcceptedPackage(persistence, appearanceRerolledAccepted.document);
+    for (const file of encodedPackage.files) {
+      const artifactPath = `saved-projects/v1/${fixtureId}/appearance-rerolled.mapworld/${file.path}`;
+      write(outputRoot, artifactPath, file.bytes);
+      const digest = sha256(file.bytes);
+      artifacts.push({
+        path: artifactPath,
+        kind:
+          file.path === 'manifest.json'
+            ? 'saved-project-manifest'
+            : 'saved-project-authoritative-file',
+        checkpoint: 'appearance-rerolled',
+        byteLength: file.bytes.byteLength,
+        fixtureIntegritySha256: digest,
+      });
+    }
+    const decodedDocument = decodeAcceptedPackage(persistence, encodedPackage);
+    assert.deepEqual(decodedDocument, appearanceRerolledAccepted.document);
+    const reopened = desktopReopen.reopenAcceptedAtlas(decodedDocument);
+    assert.equal(reopened.ok, true, reopened.ok ? undefined : JSON.stringify(reopened));
+    if (!reopened.ok) throw new Error(JSON.stringify(reopened));
+    assert.deepEqual(reopened.accepted.document, appearanceRerolledAccepted.document);
+    assert.deepEqual(reopened.accepted.geography, appearanceRerolledAccepted.geography);
+    assert.deepEqual(reopened.accepted.appearance, appearanceRerolledAccepted.appearance);
+    assert.deepEqual(reopened.accepted.scene, appearanceRerolledAccepted.scene);
+    const reopenedIndex = createCanonicalAspectDigestIndex(
+      persistence,
+      reopened.accepted.document,
+      'reopened',
+    );
+    reopenedRender = await writeRenderCheckpoint(
+      outputRoot,
+      fixtureId,
+      'reopened',
+      reopened.accepted.scene,
+      appearance.style,
+      render,
+      artifacts,
+      false,
+    );
+    const reopenComparison = makeReopenComparison({
+      appearanceIndex,
+      appearanceRender,
+      reopenedIndex,
+      reopenedRender,
+    });
+    const reopenBytes = Buffer.from(await formatJson(reopenComparison), 'utf8');
+    const reopenPath = `fixed-seeds/${fixtureId}/expected/reopened/accepted-atlas.reopen.canonical`;
+    write(outputRoot, reopenPath, reopenBytes);
+    const reopenDigest = sha256(reopenBytes);
+    artifacts.push({
+      path: reopenPath,
+      kind: 'reopen-comparison-report',
+      checkpoint: 'reopened',
+      byteLength: reopenBytes.byteLength,
+      reopenComparisonSha256: reopenDigest,
+      fixtureIntegritySha256: reopenDigest,
     });
   }
+  const expectedAssertions = [
+    {
+      assertionId: 'runner-validates-accepted-atlas-evidence',
+      operator: 'runner-pass',
+      reviewPurpose:
+        fixtureId === 'milestone-2-atlas-proof'
+          ? 'Prove exact generation, transactional reroll isolation, persistence-owned canonical evidence, checksum-validated save, generator-free reopen, and deterministic exports.'
+          : 'Prove exact generation plus persistence-owned canonical accepted aspect/output evidence for this fixed matrix row.',
+    },
+    ...(fixtureId === 'milestone-2-atlas-proof' ? mainWorkflowAssertions(fixtureId) : []),
+  ].sort((left, right) =>
+    left.assertionId < right.assertionId ? -1 : left.assertionId > right.assertionId ? 1 : 0,
+  );
   const manifest = {
     fixtureManifestVersion: 1,
     fixtureId,
@@ -340,15 +520,179 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
       sha256: sha256(definitionBytes),
     },
     worldSeed: definition.worldSeed,
-    stableIds:
-      semantic === undefined
-        ? definition.stableIds
-        : sortedRecord({
-            ...definition.stableIds,
-            ...semantic.stableIds,
-            ...(coastline === undefined ? {} : coastline.stableIds),
-            ...(appearance === undefined ? {} : appearance.stableIds),
-          }),
+    stableIds: sortedRecord({
+      ...definition.stableIds,
+      ...semantic.stableIds,
+      ...coastline.stableIds,
+      ...appearance.stableIds,
+      ...(geographyRerolledAccepted === undefined
+        ? {}
+        : checkpointStableIds('geographyRerolled', geographyRerolledAccepted.document)),
+    }),
+    versions: definition.versions,
+    checkpointRevisions: definition.checkpoints,
+    expectedAssertions,
+    reviewPurpose:
+      fixtureId === 'milestone-2-atlas-proof'
+        ? 'Prove the complete accepted Milestone 2 atlas lifecycle across isolated rerolls, persistence-owned canonical state, authoritative save, generator-free reopen, scenes, SVG, and PNG.'
+        : 'Prove one Milestone 2 matrix row at the persistence-owned canonical accepted aspect/output boundary while retaining its separate geometry and visual evidence.',
+    reviewRecord: { path: fixtureReviewRecordPath, sha256: sha256(reviewBytes) },
+    generatedRoots: [
+      `canonical-svg/${fixtureId}`,
+      `fixed-seeds/${fixtureId}/expected`,
+      ...(fixtureId === 'milestone-2-atlas-proof' ? [`saved-projects/v1/${fixtureId}`] : []),
+      `visual-gallery/${fixtureId}`,
+    ],
+    artifacts: artifacts.sort((left, right) =>
+      left.path < right.path ? -1 : left.path > right.path ? 1 : 0,
+    ),
+  };
+  write(outputRoot, `manifests/${fixtureId}.fixture.generated.json`, await formatJson(manifest));
+}
+
+async function writeAcceptedAspectIndex(
+  outputRoot,
+  fixtureId,
+  checkpoint,
+  accepted,
+  persistence,
+  artifacts,
+) {
+  const index = createCanonicalAspectDigestIndex(persistence, accepted.document, checkpoint);
+  const bytes = Buffer.from(await formatJson(index), 'utf8');
+  const path = `fixed-seeds/${fixtureId}/expected/${checkpoint}/accepted-aspects.aspects.index.canonical`;
+  write(outputRoot, path, bytes);
+  const digest = sha256(bytes);
+  artifacts.push({
+    path,
+    kind: 'canonical-aspect-digest-index',
+    checkpoint,
+    byteLength: bytes.byteLength,
+    canonicalAspectDigestIndexSha256: digest,
+    fixtureIntegritySha256: digest,
+  });
+  return index;
+}
+
+async function writeRenderCheckpoint(
+  outputRoot,
+  fixtureId,
+  checkpoint,
+  scene,
+  style,
+  render,
+  artifacts,
+  includeScene,
+) {
+  const evidence = await createRenderCheckpointEvidence({
+    assertPngProgress,
+    formatJson,
+    includeScene,
+    render,
+    scene,
+    style,
+  });
+  if (evidence.sceneBytes !== undefined) {
+    const scenePath = `fixed-seeds/${fixtureId}/expected/${checkpoint}/atlas-render-scene.scene.canonical`;
+    write(outputRoot, scenePath, evidence.sceneBytes);
+    artifacts.push({
+      path: scenePath,
+      kind: 'canonical-render-scene',
+      checkpoint,
+      byteLength: evidence.sceneBytes.byteLength,
+      canonicalSceneSha256: evidence.sceneSha256,
+      fixtureIntegritySha256: evidence.sceneSha256,
+    });
+  }
+  const svgPath = `canonical-svg/${fixtureId}/${checkpoint}.svg`;
+  write(outputRoot, svgPath, evidence.svgBytes);
+  artifacts.push({
+    path: svgPath,
+    kind: 'canonical-svg',
+    checkpoint,
+    byteLength: evidence.svgBytes.byteLength,
+    canonicalSvgSha256: evidence.svgSha256,
+    fixtureIntegritySha256: evidence.svgSha256,
+  });
+  const pngPath = `visual-gallery/${fixtureId}/${checkpoint}.png`;
+  write(outputRoot, pngPath, evidence.pngBytes);
+  artifacts.push({
+    path: pngPath,
+    kind: 'visual-evidence',
+    checkpoint,
+    byteLength: evidence.pngBytes.byteLength,
+    visualEvidenceSha256: evidence.pngSha256,
+    fixtureIntegritySha256: evidence.pngSha256,
+    ...evidence.pngMetadata,
+  });
+  return evidence;
+}
+
+function workflowRuntime() {
+  return Object.freeze({
+    isCancellationRequested: () => false,
+    reportProgress: () => {},
+    yieldControl: () => Promise.resolve(),
+  });
+}
+
+function withoutPersistenceVersions(versions) {
+  const legacy = { ...versions };
+  for (const field of [
+    'acceptedAspectSchemaVersion',
+    'mapDocumentSchemaVersion',
+    'mapworldPackageVersion',
+    'mapworldSchemaVersion',
+    'worldIndexSchemaVersion',
+  ]) {
+    delete legacy[field];
+  }
+  return legacy;
+}
+
+function checkpointStableIds(prefix, document) {
+  const map = document.maps[0];
+  assert.ok(map);
+  const entities = [...map.entities]
+    .map(({ entityId }) => entityId)
+    .sort()
+    .map((entityId, index) => [`${prefix}EntityId${String(index).padStart(3, '0')}`, entityId]);
+  const aspects = [...map.aspects]
+    .map(({ aspectId }) => aspectId)
+    .sort()
+    .map((aspectId, index) => [`${prefix}AspectId${String(index).padStart(3, '0')}`, aspectId]);
+  return Object.fromEntries([...aspects, ...entities]);
+}
+
+/** Keep already reviewed v1 rows reproducible while fixtures migrate independently to v2. */
+function legacyFixtureManifest({
+  artifacts,
+  appearance,
+  coastline,
+  definition,
+  definitionBytes,
+  fixtureId,
+  fixtureReviewRecordPath,
+  reviewBytes,
+  semantic,
+}) {
+  return {
+    fixtureManifestVersion: 1,
+    fixtureId,
+    generated: true,
+    editPolicy: 'regenerate-only',
+    generatingCommand: `pnpm fixtures:update --fixture ${fixtureId} --review-record ${fixtureReviewRecordPath}`,
+    sourceDefinition: {
+      path: `fixed-seeds/${fixtureId}/fixture-definition.json`,
+      sha256: sha256(definitionBytes),
+    },
+    worldSeed: definition.worldSeed,
+    stableIds: sortedRecord({
+      ...definition.stableIds,
+      ...semantic.stableIds,
+      ...coastline.stableIds,
+      ...appearance.stableIds,
+    }),
     versions: definition.versions,
     checkpointRevisions: definition.checkpoints,
     expectedAssertions: [
@@ -356,35 +700,70 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
         assertionId: 'runner-validates-full-generator-kernel',
         operator: 'runner-pass',
         reviewPurpose:
-          semantic === undefined
-            ? 'Prove exact full-profile generation, output validation, nesting, seam/pole behavior, progress, and declared realization tolerances.'
-            : coastline === undefined
-              ? 'Prove exact full-profile generation plus stable semantic classification, ownership, connectivity, containment, identity, and ordering.'
-              : appearance === undefined
-                ? 'Prove exact full-profile generation, semantic classification, source-linked canonical coastline geometry, simplification, topology, identity, ordering, deterministic seam-safe display projection, and cache-free atlas scene composition.'
-                : 'Prove exact geography plus independently seeded accepted appearance, bounded ink, masked decoration, paper treatment, and shared-scene backend evidence.',
+          'Prove exact geography plus independently seeded accepted appearance, bounded ink, masked decoration, paper treatment, and shared-scene backend evidence.',
       },
     ],
     reviewPurpose:
-      semantic === undefined
-        ? 'Prove the version-1 atlas macro-elevation and land/water generator for one fixed seed/control row before accepted-aspect persistence integration.'
-        : coastline === undefined
-          ? 'Prove the version-1 atlas field, partition, and semantic geography generator for one fixed seed/control row before accepted-aspect persistence integration.'
-          : appearance === undefined
-            ? 'Prove the version-1 atlas field, partition, semantic geography, canonical coastline generator, disposable display projection, and renderer-neutral atlas scene for one fixed seed/control row before accepted-aspect persistence integration.'
-            : 'Prove the restrained version-1 ink style and appearance isolation over unchanged accepted atlas geography before persistence integration.',
+      'Prove the restrained version-1 ink style and appearance isolation over unchanged accepted atlas geography before persistence integration.',
     reviewRecord: { path: fixtureReviewRecordPath, sha256: sha256(reviewBytes) },
-    generatedRoots:
-      scene === undefined
-        ? [`fixed-seeds/${fixtureId}/expected`]
-        : [
-            `canonical-svg/${fixtureId}`,
-            `fixed-seeds/${fixtureId}/expected`,
-            `visual-gallery/${fixtureId}`,
-          ],
-    artifacts: [...sceneArtifacts, kernelArtifact].sort((left, right) =>
+    generatedRoots: [
+      `canonical-svg/${fixtureId}`,
+      `fixed-seeds/${fixtureId}/expected`,
+      `visual-gallery/${fixtureId}`,
+    ],
+    artifacts: artifacts.sort((left, right) =>
       left.path < right.path ? -1 : left.path > right.path ? 1 : 0,
     ),
   };
-  write(outputRoot, `manifests/${fixtureId}.fixture.generated.json`, await formatJson(manifest));
+}
+
+function mainWorkflowAssertions(fixtureId) {
+  const expected = (checkpoint) =>
+    `fixed-seeds/${fixtureId}/expected/${checkpoint}/accepted-aspects.aspects.index.canonical`;
+  const svg = (checkpoint) => `canonical-svg/${fixtureId}/${checkpoint}.svg`;
+  const png = (checkpoint) => `visual-gallery/${fixtureId}/${checkpoint}.png`;
+  return [
+    {
+      assertionId: 'appearance-reroll-changes-accepted-set',
+      operator: 'bytes-not-equal',
+      leftArtifactPath: expected('geography-rerolled'),
+      rightArtifactPath: expected('appearance-rerolled'),
+      reviewPurpose: 'Prove the appearance transaction changes complete accepted aspect bytes.',
+    },
+    {
+      assertionId: 'appearance-reroll-changes-png',
+      operator: 'bytes-not-equal',
+      leftArtifactPath: png('geography-rerolled'),
+      rightArtifactPath: png('appearance-rerolled'),
+      reviewPurpose: 'Prove the appearance reroll is visible in deterministic raster output.',
+    },
+    {
+      assertionId: 'appearance-reroll-changes-svg',
+      operator: 'bytes-not-equal',
+      leftArtifactPath: svg('geography-rerolled'),
+      rightArtifactPath: svg('appearance-rerolled'),
+      reviewPurpose: 'Prove the appearance reroll is visible in canonical vector output.',
+    },
+    {
+      assertionId: 'geography-reroll-changes-accepted-set',
+      operator: 'bytes-not-equal',
+      leftArtifactPath: expected('baseline'),
+      rightArtifactPath: expected('geography-rerolled'),
+      reviewPurpose: 'Prove the geography transaction changes complete accepted aspect bytes.',
+    },
+    {
+      assertionId: 'reopen-preserves-png',
+      operator: 'bytes-equal',
+      leftArtifactPath: png('appearance-rerolled'),
+      rightArtifactPath: png('reopened'),
+      reviewPurpose: 'Prove checksum-validated generator-free reopen has no PNG drift.',
+    },
+    {
+      assertionId: 'reopen-preserves-svg',
+      operator: 'bytes-equal',
+      leftArtifactPath: svg('appearance-rerolled'),
+      rightArtifactPath: svg('reopened'),
+      reviewPurpose: 'Prove checksum-validated generator-free reopen has no SVG drift.',
+    },
+  ];
 }

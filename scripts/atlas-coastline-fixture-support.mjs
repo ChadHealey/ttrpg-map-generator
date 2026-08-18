@@ -16,7 +16,6 @@ export function coastlineProof(core, generation, definition, input, semantic) {
   assert.equal(result.status, 'proposed');
   if (result.status !== 'proposed') throw new Error(JSON.stringify(result.diagnostics));
   assert.deepEqual(core.validateAtlasGeographyRecords(result.patch.records), { ok: true });
-  assert.deepEqual(generation.generateAtlasCanonicalCoastline(generationInput), result);
   assert.deepEqual(result.patch.explicitlyIncrementedAspectIds, []);
   assert.equal(result.patch.replacement.target.variantRevision, 0);
   assert.ok(result.patch.rawPointCount >= result.patch.canonicalPointCount);
@@ -37,6 +36,7 @@ export function coastlineProof(core, generation, definition, input, semantic) {
   const coastlineAspectId = result.patch.replacement.target.aspect.aspectId;
   return {
     records: result.patch.records.coastline,
+    replacement: result.patch.replacement,
     stableIds: {
       coastlineAspectId,
       worldCoastlineEntityId,

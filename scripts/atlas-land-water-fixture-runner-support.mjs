@@ -3,6 +3,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -254,12 +255,50 @@ export async function loadProjectModules(outputRoot) {
   const assetsDirectory = transpilePackage('assets', runtimeRoot, {
     '@ttrpg-map/core': '../core/index.js',
   });
+  const persistenceDirectory = transpilePackage('persistence', runtimeRoot, {
+    '@ttrpg-map/core': '../core/index.js',
+    zod: pathToFileURL(
+      createRequire(resolve(repositoryRoot, 'packages', 'persistence', 'package.json')).resolve(
+        'zod',
+      ),
+    ).href,
+  });
+  const desktopDirectory = transpileDesktopFiles(runtimeRoot, {
+    '@ttrpg-map/assets': '../assets/index.js',
+    '@ttrpg-map/core': '../core/index.js',
+    '@ttrpg-map/generation': '../generation/index.js',
+    '@ttrpg-map/render': '../render/index.js',
+  });
   return {
     assets: await import(pathToFileURL(resolve(assetsDirectory, 'index.js')).href),
     core: await import(pathToFileURL(resolve(coreDirectory, 'index.js')).href),
+    desktopGeneration: await import(
+      pathToFileURL(resolve(desktopDirectory, 'atlas-workflow-generation.js')).href
+    ),
+    desktopReopen: await import(
+      pathToFileURL(resolve(desktopDirectory, 'atlas-workflow-reopen.js')).href
+    ),
+    desktopSupport: await import(
+      pathToFileURL(resolve(desktopDirectory, 'atlas-workflow-generation-support.js')).href
+    ),
     generation: await import(pathToFileURL(resolve(generationDirectory, 'index.js')).href),
+    persistence: await import(pathToFileURL(resolve(persistenceDirectory, 'index.js')).href),
     render: await import(pathToFileURL(resolve(renderDirectory, 'index.js')).href),
   };
+}
+
+function transpileDesktopFiles(runtimeRoot, replacements) {
+  const sourceDirectory = resolve(repositoryRoot, 'apps', 'desktop', 'src');
+  const runtimeDirectory = resolve(runtimeRoot, 'desktop');
+  mkdirSync(runtimeDirectory, { recursive: true });
+  for (const sourceName of [
+    'atlas-workflow-generation-support.ts',
+    'atlas-workflow-generation.ts',
+    'atlas-workflow-reopen.ts',
+  ]) {
+    transpileSourceFile(sourceDirectory, runtimeDirectory, sourceName, replacements);
+  }
+  return runtimeDirectory;
 }
 
 function transpilePackage(packageName, runtimeRoot, replacements) {
@@ -276,19 +315,23 @@ function transpilePackage(packageName, runtimeRoot, replacements) {
     )
     .sort(compareText);
   for (const sourceName of sourceNames) {
-    const source = readFileSync(resolve(sourceDirectory, sourceName), 'utf8');
-    let output = ts.transpileModule(source, {
-      compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2023 },
-      fileName: sourceName,
-    }).outputText;
-    for (const [specifier, replacement] of Object.entries(replacements)) {
-      output = output
-        .replaceAll(`'${specifier}'`, `'${replacement}'`)
-        .replaceAll(`"${specifier}"`, `"${replacement}"`);
-    }
-    writeFileSync(resolve(runtimeDirectory, sourceName.replace(/\.ts$/u, '.js')), output);
+    transpileSourceFile(sourceDirectory, runtimeDirectory, sourceName, replacements);
   }
   return runtimeDirectory;
+}
+
+function transpileSourceFile(sourceDirectory, runtimeDirectory, sourceName, replacements) {
+  const source = readFileSync(resolve(sourceDirectory, sourceName), 'utf8');
+  let output = ts.transpileModule(source, {
+    compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2023 },
+    fileName: sourceName,
+  }).outputText;
+  for (const [specifier, replacement] of Object.entries(replacements)) {
+    output = output
+      .replaceAll(`'${specifier}'`, `'${replacement}'`)
+      .replaceAll(`"${specifier}"`, `"${replacement}"`);
+  }
+  writeFileSync(resolve(runtimeDirectory, sourceName.replace(/\.ts$/u, '.js')), output);
 }
 
 export function argument(args, name) {
