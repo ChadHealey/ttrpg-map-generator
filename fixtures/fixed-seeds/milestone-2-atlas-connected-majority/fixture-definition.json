@@ -1,8 +1,7 @@
 {
-  "fixtureDefinitionVersion": 1,
+  "fixtureDefinitionVersion": 2,
   "fixtureId": "milestone-2-atlas-connected-majority",
-  "evidenceBoundary": "pre-persistence-atlas-generator-kernel-v1",
-  "notCanonicalAspectBytes": true,
+  "evidenceBoundary": "persistence-canonical-accepted-aspects-v1",
   "worldSeed": "1085102592571150095",
   "stableIds": {
     "atlasPresentationEntityId": "66b92789-9a5b-5760-b299-1d82700cf3a0",
@@ -26,6 +25,7 @@
     "polarCharacter": "neutral"
   },
   "versions": {
+    "acceptedAspectSchemaVersion": 1,
     "atlasAppearanceGeneratorManifestVersion": 1,
     "atlasAppearanceParameterSchemaVersion": 1,
     "atlasCoastlineAppearanceBehaviorVersion": 1,
@@ -57,7 +57,11 @@
     "landWaterClassificationBehaviorVersion": 1,
     "landWaterClassificationGeneratorVersion": 1,
     "macroElevationGeneratorVersion": 1,
-    "seedDerivationVersion": 1
+    "mapDocumentSchemaVersion": 1,
+    "mapworldPackageVersion": 1,
+    "mapworldSchemaVersion": 1,
+    "seedDerivationVersion": 1,
+    "worldIndexSchemaVersion": 1
   },
   "checkpoints": {
     "baseline": {
