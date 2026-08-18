@@ -15,8 +15,8 @@ rerolling its `forest.motifShapes` while preserving that boundary and every othe
 > **Release status (2026-08-17):** The implementation candidate is release-pending. The
 > [Milestone 2 release-evidence report](milestone-2-release-evidence.md) records local, packaged,
 > visual, reference-hardware, CI, and issue-closeout status. That report does not alter this
-> contract: the base Apple M1/8-GB protocol and every other acceptance requirement below remain in
-> force until their evidence is complete.
+> contract: the designated Apple M5/24-GB reference protocol and every other acceptance requirement
+> below remain in force until their evidence is complete.
 
 ## Fixed proof composition
 
@@ -501,8 +501,8 @@ discontinuity. A favorable screenshot cannot substitute for the registered galle
 
 ## Performance, progress, cancellation, and resource budgets
 
-Wall-clock release budgets are measured on a base Apple M1 with 8 GB unified memory, an idle
-release build, packaged local assets, power connected, Low Power Mode off, and no debugger,
+Wall-clock release budgets are measured on the designated Apple M5 MacBook Pro with 24 GB unified
+memory, an idle release build, packaged local assets, power connected, Low Power Mode off, and no debugger,
 developer tools, or network dependency. The report records application and operating-system
 versions. After one untimed warm-up, five fresh-process runs are measured; all five must meet the
 limit and the median and worst run are reported. Aggregate resident memory for the application
@@ -521,10 +521,9 @@ enforce shared-runner wall-clock or cancellation-acknowledgement latency.
 
 `pnpm test:png-export` enforces deterministic bytes, dimensions, the file-size ceiling, bounded
 band/surface allocation, progress/cancellation state semantics, native replacement behavior, and
-deterministic aftermath. It is not the release benchmark. The base Apple M1/8-GB five-fresh-process
-time, aggregate-memory, and 500-ms cancellation-acknowledgement proof remains outstanding to issue
-#68. A result from this or any newer development machine does not substitute for that formal
-reference-hardware evidence.
+deterministic aftermath. It is not the release benchmark. The designated Apple M5/24-GB
+five-fresh-process time, aggregate-memory, and 500-ms cancellation-acknowledgement proof remains
+outstanding to issue #68 until rerun under the protocol below.
 
 Wall-clock and memory gates run for `milestone-2-atlas-proof`,
 `milestone-2-atlas-fragmented-islands`, and `milestone-2-atlas-control-max`; all six rows must meet

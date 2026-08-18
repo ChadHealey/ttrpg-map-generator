@@ -91,7 +91,7 @@ Environment: Apple M5 MacBook Pro, 24 GB memory, macOS 26.5.1 arm64, Node 24.11.
 pnpm 11.19.0, Vitest 4.1.10. Each row below was observed twice at the full 2048 by 1024 profile in
 a reused process. This is not the Milestone 2 release protocol: it has no packaged app, paint,
 worker, progress, cancellation, semantic classification, save, or render work and does not
-substitute for #68's Apple M1 five-fresh-process measurements.
+substitute for #68's designated Apple M5/24-GB five-fresh-process measurements.
 
 | Fixed row                              | Observed time (ms) | Field fingerprint  | Land / water components | Rings / segments | Seam rings | Pole land (S/N) |
 | -------------------------------------- | -----------------: | ------------------ | ----------------------: | ---------------: | ---------: | --------------- |

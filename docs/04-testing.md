@@ -179,7 +179,7 @@ Milestone 2 production PNG verification parses chunk order and CRCs independentl
 checks Adler-32/filter rows, and reconstructs selected large-output rows with bounded test memory.
 It byte-compares the production 1600 by 800 gallery and generates each 8192 by 4096 row twice in a
 disposable directory. These deterministic gates do not substitute for the separately recorded base
-Apple M1/8-GB release measurements.
+Apple M5/24-GB release measurements.
 
 Milestone 1's relevant gallery is intentionally only the fixed `baseline`, `rerolled`, and
 `reopened` synthetic checkpoints: the normative composition contains one world map and no regional

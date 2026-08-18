@@ -13,11 +13,12 @@ coarse preview and a separately generated accepted atlas; geography and appearan
 with different isolation boundaries; accepted state can be saved, unloaded, reopened without
 generation, and exported as deterministic SVG and 8192 by 4096 PNG.
 
-Milestone 2 is **release-pending**, not complete. The formal base Apple M1/8-GB five-process timing,
-aggregate-memory, and cancellation-latency protocol is still outstanding; this development Mac is
-not a substitute. Local implementation, fixture, packaged-workflow, export, and visual evidence is
-recorded, but the exact branch tip still needs a fresh macOS/Linux CI matrix and every included
-GitHub issue must be closed or explicitly moved out. The [Milestone 2 release-evidence
+Milestone 2 is **release-pending**, not complete. The formal five-process timing, aggregate-memory,
+and cancellation-latency protocol must be rerun on the designated Apple M5/24-GB reference Mac;
+the current evidence is not yet a passing reference run. Local implementation, fixture,
+packaged-workflow, export, and visual evidence is recorded, but the exact branch tip still needs a
+fresh macOS/Linux CI matrix and every included GitHub issue must be closed or explicitly moved out.
+The [Milestone 2 release-evidence
 report](docs/milestone-2-release-evidence.md) is the auditable status record and lists the exact
 remaining closeout actions.
 
