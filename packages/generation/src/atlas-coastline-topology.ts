@@ -134,17 +134,25 @@ function validateOneRing(
     }
     seenVertices.add(key);
   }
+  const segmentBounds = points.slice(0, -1).map((start, index) => {
+    const end = points[index + 1];
+    return end === undefined ? undefined : boundsForSegment(start, end);
+  });
   for (let firstIndex = 0; firstIndex < points.length - 1; firstIndex += 1) {
     const firstStart = points[firstIndex];
     const firstEnd = points[firstIndex + 1];
-    if (firstStart === undefined || firstEnd === undefined) continue;
+    const firstBounds = segmentBounds[firstIndex];
+    if (firstStart === undefined || firstEnd === undefined || firstBounds === undefined) continue;
     for (let secondIndex = firstIndex + 2; secondIndex < points.length - 1; secondIndex += 1) {
       if (firstIndex === 0 && secondIndex === points.length - 2) continue;
       const secondStart = points[secondIndex];
       const secondEnd = points[secondIndex + 1];
+      const secondBounds = segmentBounds[secondIndex];
       if (
         secondStart !== undefined &&
         secondEnd !== undefined &&
+        secondBounds !== undefined &&
+        boundsOverlap(firstBounds, secondBounds) &&
         exactSegmentsIntersect(firstStart, firstEnd, secondStart, secondEnd)
       ) {
         diagnostics.push(
@@ -193,6 +201,12 @@ function ringsIntersect(
   first: readonly UnwrappedTickPoint[],
   second: readonly UnwrappedTickPoint[],
 ): boolean {
+  const firstBounds = first
+    .slice(0, -1)
+    .map((start, index) => boundsForSegment(start, first[index + 1] ?? start));
+  const secondBounds = second
+    .slice(0, -1)
+    .map((start, index) => boundsForSegment(start, second[index + 1] ?? start));
   for (let firstIndex = 0; firstIndex < first.length - 1; firstIndex += 1) {
     const firstStart = first[firstIndex];
     const firstEnd = first[firstIndex + 1];
@@ -203,6 +217,10 @@ function ringsIntersect(
       if (
         secondStart !== undefined &&
         secondEnd !== undefined &&
+        boundsOverlap(
+          firstBounds[firstIndex] ?? boundsForSegment(firstStart, firstEnd),
+          secondBounds[secondIndex] ?? boundsForSegment(secondStart, secondEnd),
+        ) &&
         exactSegmentsIntersect(firstStart, firstEnd, secondStart, secondEnd)
       ) {
         return true;
@@ -217,6 +235,15 @@ interface TickBounds {
   readonly maxLongitude: number;
   readonly minLatitude: number;
   readonly maxLatitude: number;
+}
+
+function boundsForSegment(first: UnwrappedTickPoint, second: UnwrappedTickPoint): TickBounds {
+  return Object.freeze({
+    minLongitude: Math.min(first.longitudeTicks, second.longitudeTicks),
+    maxLongitude: Math.max(first.longitudeTicks, second.longitudeTicks),
+    minLatitude: Math.min(first.latitudeTicks, second.latitudeTicks),
+    maxLatitude: Math.max(first.latitudeTicks, second.latitudeTicks),
+  });
 }
 
 function bounds(points: readonly UnwrappedTickPoint[]): TickBounds {

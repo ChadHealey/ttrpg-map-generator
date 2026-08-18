@@ -5,6 +5,8 @@ import type { DeepReadonly } from './generated-aspects.js';
 export type ImmutableDomainSnapshotResult<Value> =
   { readonly ok: true; readonly value: DeepReadonly<Value> } | { readonly ok: false };
 
+const immutableDomainSnapshots = new WeakSet<object>();
+
 /**
  * Clone and recursively freeze a plain-data value without freezing or retaining its source.
  * Accessors, symbols, sparse arrays, exotic prototypes, functions, and cyclic graphs are not
@@ -16,6 +18,39 @@ export function createImmutableDomainSnapshot<Value>(
 ): ImmutableDomainSnapshotResult<Value> {
   const result = snapshotValue(value, new Set<object>());
   return result.ok ? { ok: true, value: result.value as DeepReadonly<Value> } : { ok: false };
+}
+
+/** Copy an array-like value into an owned immutable array later snapshot boundaries can reuse. */
+export function createImmutableDomainArray<Value>(
+  values: ArrayLike<Value>,
+): ImmutableDomainSnapshotResult<readonly Value[]> {
+  if (!Number.isSafeInteger(values.length) || values.length < 0) return { ok: false };
+  const snapshot = Array.from(values) as unknown[];
+  const ancestors = new Set<object>();
+  for (let index = 0; index < snapshot.length; index += 1) {
+    const value = snapshot[index];
+    if (
+      value === null ||
+      value === undefined ||
+      typeof value === 'string' ||
+      typeof value === 'boolean' ||
+      typeof value === 'bigint'
+    ) {
+      snapshot[index] = value;
+      continue;
+    }
+    if (typeof value === 'number') {
+      if (!Number.isFinite(value)) return { ok: false };
+      snapshot[index] = value;
+      continue;
+    }
+    const item = snapshotValue(value, ancestors);
+    if (!item.ok) return item;
+    snapshot[index] = item.value;
+  }
+  const frozen = Object.freeze(snapshot);
+  immutableDomainSnapshots.add(frozen);
+  return { ok: true, value: frozen as DeepReadonly<readonly Value[]> };
 }
 
 type SnapshotResult = { readonly ok: true; readonly value: unknown } | { readonly ok: false };
@@ -34,6 +69,7 @@ function snapshotValue(value: unknown, ancestors: Set<object>): SnapshotResult {
     return Number.isFinite(value) ? { ok: true, value } : { ok: false };
   }
   if (typeof value !== 'object' || ancestors.has(value)) return { ok: false };
+  if (immutableDomainSnapshots.has(value)) return { ok: true, value };
 
   ancestors.add(value);
   const result = Array.isArray(value)
@@ -61,7 +97,9 @@ function snapshotArray(value: readonly unknown[], ancestors: Set<object>): Snaps
     if (!item.ok) return item;
     snapshot.push(item.value);
   }
-  return { ok: true, value: Object.freeze(snapshot) };
+  const frozen = Object.freeze(snapshot);
+  immutableDomainSnapshots.add(frozen);
+  return { ok: true, value: frozen };
 }
 
 function snapshotRecord(value: object, ancestors: Set<object>): SnapshotResult {
@@ -84,7 +122,14 @@ function snapshotRecord(value: object, ancestors: Set<object>): SnapshotResult {
       writable: false,
     });
   }
-  return { ok: true, value: Object.freeze(snapshot) };
+  const frozen = Object.freeze(snapshot);
+  immutableDomainSnapshots.add(frozen);
+  return { ok: true, value: frozen };
+}
+
+/** True only for an object graph node created and owned by this snapshot boundary. */
+export function isImmutableDomainSnapshot(value: object): boolean {
+  return immutableDomainSnapshots.has(value);
 }
 
 function compareAscii(left: string, right: string): -1 | 0 | 1 {
