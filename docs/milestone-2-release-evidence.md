@@ -196,7 +196,7 @@ replacing a failed result with a narrower command.
 
 Issue #76 attributes the full-generation failure in the
 [Apple M5 / JavaScriptCore RSS investigation](milestone-2-javascriptcore-rss-investigation.md).
-The clean packaged proof remains over budget at 1,341.6 MiB additional RSS. Diagnostic phase and
+The exact committed clean packaged proof remains over budget at 1,694.8 MiB additional RSS. Production-scheduling phase and
 unload observations show both a large transient WebContent high-water mark and a substantial live
 accepted representation; no production behavior or release limit changed.
 

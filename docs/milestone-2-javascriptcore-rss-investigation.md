@@ -2,199 +2,208 @@
 
 - **Issue:** [#76 — Attribute Apple M5/WebKit RSS and bound the next mitigation](https://github.com/ChadHealey/ttrpg-map-generator/issues/76)
 - **Status:** Investigation complete; no production behavior, schema, worker, persistence, or render contract changed
-- **Candidate:** `b75a584640842cfe33fb1235b69ddbc5716ca4ba`
+- **Exact clean candidate:** `60285e2385a9ee50ff9c2a1997d25f68e20a1c73`
 - **Measured:** 2026-08-18
 - **Host:** MacBook Pro `Mac17,2`, Apple M5, 24 GB unified memory, macOS 26.5.1 (`25F80`), AC power, Low Power Mode off
 - **Toolchain:** Node 24.11.0, pnpm 11.19.0, rustc 1.97.1
+- **Durable evidence:** [raw results](investigations/issue-76/raw-results.json) and [sampler source](investigations/issue-76/rss-timeline.c)
 
-This investigation separates the clean packaged release-candidate observation from a temporary
-diagnostic bundle used to place phase markers and unload accepted state. All diagnostic source was
-removed, the clean application was rebuilt, and only this report plus its release-evidence link
-remain in the repository.
+This investigation uses two deliberately separate observations. A clean bundle built from the
+exact committed candidate owns the release timing and peak result. A temporary marker build owns
+phase attribution and unload observations. The marker build retained the production cooperative
+`setTimeout` scheduling; an external Accessibility harness pressed the real packaged controls.
+All diagnostic source was then removed and the clean application rebuilt.
 
 ## Conclusion
 
-The failed full-generation RSS budget is not explained by one permanently live object graph.
-Both of these effects are material:
+The proof fixture still fails the fixed full-generation memory budget. The exact clean candidate
+completed full acceptance in **8.248 seconds** but reached **1,694.8 MiB additional aggregate RSS**
+against the 768 MiB limit. WebContent alone reached a **1,854.1 MiB per-process peak**.
 
-1. Generation creates a large transient JavaScriptCore high-water mark. The qualifying diagnostic
-   trace peaked at **1,417.5 MiB aggregate RSS**, with **1,297.4 MiB** in WebContent. The peak occurs
-   after the two 2,095,106-element field/partition arrays exist and during semantic/coastline work.
-2. Accepted state is also substantial. Ten seconds after presentation, aggregate RSS was
-   **926.5 MiB**, or **713.4 MiB above** the settled pre-operation baseline. Fourteen seconds after
-   explicitly dropping the accepted document, geography, appearance, scene, preview, and UI
-   references, aggregate RSS was still **693.2 MiB**, or **480.2 MiB above** baseline.
+Production-scheduling phase attribution reached its high-water mark after semantic classification
+and during coastline/transaction/scene work:
 
-The unload experiment and `vmmap` snapshots show why RSS alone overstates live retained data.
-WebContent's reported physical footprint fell from **1.1 GiB accepted** to **340.9 MiB immediately
-after unload**, and the WebKit malloc zone's allocated bytes fell from **679.4 MiB** to
-**300.9 MiB**. At the same time, raw resident pages stayed high: unloaded WebKit Malloc still had
-**683.5 MiB resident**, mostly clean/reusable pages. Therefore roughly **378.5 MiB** of allocator
-payload was logically released in this observation, while WebKit/JSC retained a large resident
-high-water pool. This is evidence of both live-model cost and allocator retention, not proof of a
-leak.
+- field/partition complete: **950.7 MiB above** the pre-operation baseline;
+- semantic classification complete: **1,498.9 MiB above** baseline;
+- coastline complete: **1,756.5 MiB above** baseline;
+- accepted scene presented: **1,763.9 MiB above** baseline.
 
-## Clean packaged baseline
+RSS did not materially fall after references to the accepted document, geography, appearance,
+scene, and preview were cleared. It was 1,977.3 MiB after ten seconds of accepted quiescence,
+1,977.4 MiB at unload, and 1,977.0 MiB after fifteen more seconds. `vmmap` explains part of this
+high-water behavior but does not establish a leak:
 
-The clean source content later committed as `b75a584...` was measured by the issue-70 packaged
-harness, then rebuilt from that exact commit for this investigation with:
+- Between presentation and accepted quiescence, WebKit malloc fragmentation fell from 290.4 MiB
+  to 0.7 MiB and physical footprint fell from about 1.2 GiB to 862.1 MiB, while allocator payload
+  remained high at 829.2 MiB.
+- Immediately after accepted references were cleared, physical footprint was 873.5 MiB and
+  allocator payload was 830.7 MiB. No collection attributable to unload had occurred yet.
+
+The evidence therefore distinguishes three costs: transient generation/fragmentation, a large
+accepted-or-uncollected JavaScript graph, and WebKit/JSC resident high-water pages. It cannot claim
+how much of the post-unload graph would eventually be collected beyond the observed fifteen-second
+window.
+
+## Exact clean packaged reproduction
+
+The exact candidate was identified before this repaired run. The final source commit and executable
+identity were:
+
+```text
+commit: 60285e2385a9ee50ff9c2a1997d25f68e20a1c73
+executable SHA-256: 98c2ab50f670b7ab8213a5cfcfb67c086c23df98b0ad6c90241bf1d45c0dd282
+```
+
+Build and sampler commands:
 
 ```text
 corepack pnpm --filter @ttrpg-map/desktop tauri build --bundles app
+clang -O2 -Wall -Wextra -o /private/tmp/issue76_rss_timeline_qos \
+  docs/investigations/issue-76/rss-timeline.c
 ```
 
-The final clean rebuild transformed 328 modules and produced a 9.6 MiB unsigned application. Its
-arm64 executable SHA-256 is
-`98c2ab50f670b7ab8213a5cfcfb67c086c23df98b0ad6c90241bf1d45c0dd282`.
+The sampler requested 5 ms observations and used `proc_pidinfo` for the app, GPU, networking, and
+WebContent processes. The external harness recorded operation start/completion from named packaged
+UI controls.
 
-The clean packaged proof fixture (`milestone-2-atlas-proof`, run 1) recorded:
+| Operation       |    Elapsed | Baseline RSS |    Peak RSS |  Additional RSS | Samples | Maximum interval |
+| --------------- | ---------: | -----------: | ----------: | --------------: | ------: | ---------------: |
+| Preview         |   628.4 ms |    212.3 MiB |   322.1 MiB |       109.8 MiB |     813 |         6.371 ms |
+| Full acceptance | 8,248.5 ms |    322.0 MiB | 2,016.8 MiB | **1,694.8 MiB** |   3,247 |         6.359 ms |
 
-| Operation       |    Elapsed | Baseline RSS |    Peak RSS |  Additional RSS | Maximum sample interval |
-| --------------- | ---------: | -----------: | ----------: | --------------: | ----------------------: |
-| Preview         |   646.3 ms |    212.4 MiB |   324.5 MiB |       112.1 MiB |               15.086 ms |
-| Full acceptance | 4,823.4 ms |    324.5 MiB | 1,666.1 MiB | **1,341.6 MiB** |               16.092 ms |
+Per-process peaks during full acceptance were:
 
-The four sampled PIDs were the app, GPU, networking, and WebContent processes. WebContent accounted
-for 1,505.0 MiB at the full-operation peak. The raw record is
-`/private/tmp/issue70-generation-results.json`, SHA-256
-`e9af27d054628508802615185c0f2d7a971f5abf4b9c8fe9004e83c63103cd95`.
+| Process           |        Peak RSS |
+| ----------------- | --------------: |
+| App               |       103.9 MiB |
+| WebKit GPU        |        43.6 MiB |
+| WebKit networking |        15.4 MiB |
+| WebKit WebContent | **1,854.1 MiB** |
 
-## Diagnostic method and limitations
+The complete numeric summary, epoch timestamps, process IDs, artifact hashes, and compile command
+are retained in [raw results](investigations/issue-76/raw-results.json). The raw RSS traces, cadence
+records, marker log, and `vmmap` summaries are checked in beside that summary as non-canonical
+investigation evidence.
 
-Temporary diagnostics added synchronous epoch markers after full dispatch, field/partition
-generation, semantic classification, coastline derivation, appearance generation, transaction
-validation, scene composition, accepted presentation, accepted quiescence, accepted-state unload,
-and unload quiescence. Markers also recorded structural counts. A `proc_pidinfo` sampler observed
-the app plus the three new WebKit helper processes.
+## Production-scheduling phase attribution
 
-The qualifying command requested 5 ms samples for 70 seconds:
+Temporary diagnostics added synchronous epoch/count markers only. They did not replace, bypass,
+or reorder the workflow's production cooperative yields. The same external packaged UI harness
+ran preview and full acceptance. The qualifying attribution trace requested 5 ms samples, produced
+8,110 samples, and observed a **12.665 ms maximum interval**.
+
+Instrumentation overhead was measured against the exact clean run:
+
+| Measure             |       Clean | Marker build |        Difference |
+| ------------------- | ----------: | -----------: | ----------------: |
+| Full elapsed        |  8,248.5 ms |   8,314.0 ms |  +65.5 ms (+0.8%) |
+| Additional peak RSS | 1,694.8 MiB |  1,766.5 MiB | +71.7 MiB (+4.2%) |
+
+Use the clean run for the release budget. Use the marker run to locate transitions and measure
+post-operation state; the recorded overhead bounds its perturbation.
+
+RSS below is the complete four-process aggregate. Delta uses a settled pre-operation sample of
+211.7 MiB taken after the baseline marker and before preview.
+
+| Checkpoint                       | Aggregate RSS |        Delta | Structural observation                                   |
+| -------------------------------- | ------------: | -----------: | -------------------------------------------------------- |
+| Preview presented                |     320.3 MiB |   +108.6 MiB | Disposable preview retained                              |
+| Full dispatch                    |     320.8 MiB |   +109.1 MiB | Preview still resident                                   |
+| Field/partition complete         |   1,162.4 MiB |   +950.7 MiB | 2,095,106 elevation values and 2,095,106 classifications |
+| Semantic classification complete |   1,710.6 MiB | +1,498.9 MiB | 3 landmasses, 3 water bodies, 3,283 membership ranges    |
+| Coastline complete               |   1,968.2 MiB | +1,756.5 MiB | 5 rings, 6,381 points                                    |
+| Transaction validated            |   1,969.8 MiB | +1,758.1 MiB | 12 accepted aspects, 9 entities                          |
+| Scene composed                   |   1,975.5 MiB | +1,763.9 MiB | 792 nodes, 14,056 points                                 |
+| Accepted scene presented         |   1,975.5 MiB | +1,763.9 MiB | Accepted model and scene live                            |
+| Accepted +10 s                   |   1,977.3 MiB | +1,765.7 MiB | Quiescent accepted state                                 |
+| Accepted references cleared      |   1,977.4 MiB | +1,765.7 MiB | Unload did not trigger immediate collection              |
+| Unloaded +15 s                   |   1,977.0 MiB | +1,765.3 MiB | No material raw-RSS reduction                            |
+
+The two field/partition arrays contain 4,190,212 JavaScript elements. Even an optimistic
+8-byte-per-element reference floor is about 32 MiB before backing stores, boxed values, strings,
+semantic ranges, generator work arrays, and accepted representations. The observed transition is
+far larger, so compaction must target the complete live representation and intermediates rather
+than only the top-level arrays.
+
+## Accepted versus allocator residency
+
+The separate `vmmap -summary` trial inserted a five-second diagnostic observation gap between the
+accepted-quiescent marker and clearing references. This gap occurs after full acceptance and does
+not affect the operation trace.
+
+| WebContent snapshot                            | Physical footprint | WebKit malloc allocated | Fragmentation |
+| ---------------------------------------------- | -----------------: | ----------------------: | ------------: |
+| Accepted scene presented                       |      about 1.2 GiB |               863.9 MiB |     290.4 MiB |
+| Accepted quiescent, references still live      |          862.1 MiB |               829.2 MiB |       0.7 MiB |
+| Immediately after clearing accepted references |          873.5 MiB |               830.7 MiB |         0 MiB |
+
+Presentation-to-quiescence removes transient fragmentation without materially shrinking allocator
+payload. Clearing the instrumented top-level references does not immediately reduce payload or
+RSS. This observation cannot distinguish unreachable objects awaiting collection from an
+unobserved retained reference. A worker-termination trial is the appropriate way to test whether a
+hard runtime boundary returns these pages promptly.
+
+## Canonical-output verification with diagnostics active
+
+The marker module was explicitly enabled while running:
 
 ```text
-/private/tmp/issue76_rss_timeline_qos 70 5 \
-  /private/tmp/issue76-diagnostic-rss-qualifying.csv \
-  91337 91339 91340 91341
+ISSUE76_MEMORY_DIAGNOSTICS=1 corepack pnpm test:cross-platform
 ```
 
-It produced 11,477 samples with a **12.577 ms maximum interval**, satisfying the issue's 20 ms
-maximum. The CSV SHA-256 is
-`fc6945edfa8f09f1e2222640f104d452aa1e50f694bb47b7e93695fba1716799`;
-the marker log SHA-256 is
-`a318b7242abb8c21598d926a19ebd1a1c27f8bd9cf72e29f0e77494160cd9284`.
-
-macOS exposed the launched WebKit window on a different Space, which throttled the production
-zero-delay cooperative timers. For the diagnostic bundle only, cooperative yields used resolved
-microtasks. This preserved the same deterministic generators, accepted transaction, scene
-composition, object counts, and unload behavior, but it changed scheduling and made the diagnostic
-full operation much slower. Consequently, use the clean packaged run above for release timing and
-peak-budget status; use the diagnostic run only for phase attribution and retained-versus-released
-memory. A separate pair of `vmmap -summary` snapshots introduced sampler contention and is not the
-qualifying cadence trace. Their hashes are
-`c19fe91d47ddf076cc88c29d58920055365ae67ee080404bb975f475152c0d54` (accepted) and
-`a5434ca79a257a0c6b97ce6230d162a6a1ecec570358d4cecb58acc5a1297066` (unloaded).
-
-## Phase attribution
-
-RSS below is the complete four-process aggregate. Delta uses the settled pre-operation baseline
-of 213.1 MiB. The last qualifying sample is fourteen seconds after unload; the marker log confirms
-the requested fifteen-second quiescence completed one second after sampling ended.
-
-| Checkpoint                       | Aggregate RSS | Delta from baseline | WebContent RSS | Structural observation                                    |
-| -------------------------------- | ------------: | ------------------: | -------------: | --------------------------------------------------------- |
-| Settled pre-operation            |     213.1 MiB |                   — |       56.0 MiB | No preview or accepted atlas                              |
-| Preview presented                |     539.2 MiB |          +326.1 MiB |      382.1 MiB | Disposable preview retained                               |
-| Full dispatch                    |     541.0 MiB |          +327.9 MiB |      382.2 MiB | Preview still resident                                    |
-| Field/partition complete         |     880.7 MiB |          +667.7 MiB |      757.9 MiB | 2,095,106 elevation values and 2,095,106 classifications  |
-| Semantic classification complete |   1,325.6 MiB |        +1,112.5 MiB |    1,205.5 MiB | 3 landmasses, 3 water bodies, 3,283 membership ranges     |
-| Coastline complete               |   1,022.2 MiB |          +809.1 MiB |      902.1 MiB | 5 rings, 6,381 points                                     |
-| Transaction validated            |   1,026.6 MiB |          +813.5 MiB |      906.5 MiB | 12 accepted aspects, 9 entities                           |
-| Scene composed                   |   1,009.0 MiB |          +795.9 MiB |      888.9 MiB | 792 nodes, 14,056 points                                  |
-| Accepted scene presented         |   1,017.6 MiB |          +804.5 MiB |      893.6 MiB | Accepted model and scene live                             |
-| Accepted +10 s                   |     926.5 MiB |          +713.4 MiB |      800.6 MiB | Quiescent accepted state                                  |
-| Accepted state dropped           |     928.1 MiB |          +715.0 MiB |      802.2 MiB | References cleared; collection not immediate              |
-| Unloaded +14 s                   |     693.2 MiB |          +480.2 MiB |      570.7 MiB | Logical release observed; allocator pages remain resident |
-
-Interval peaks further localize the high-water mark:
-
-| Interval                                    | Peak aggregate RSS |
-| ------------------------------------------- | -----------------: |
-| Full dispatch → field/partition complete    |          966.8 MiB |
-| Field/partition → semantic complete         |        1,377.8 MiB |
-| Semantic complete → coastline complete      |    **1,417.5 MiB** |
-| Coastline → accepted presentation           |        1,039.6 MiB |
-| Accepted presentation → accepted quiescence |        1,021.6 MiB |
-
-The two field/partition arrays alone contain 4,190,212 JavaScript elements. Even an optimistic
-8-byte-per-element reference floor is about 32 MiB before array backing stores, boxed values,
-strings, semantic range objects, generator work arrays, and duplicate accepted representations.
-The much larger observed changes confirm that structural compaction must target the complete live
-representation and intermediates, not just the top-level arrays.
+All 6/6 production PNG fixture tests passed and all eight registered deterministic fixture sets
+verified. This compares the registered canonical semantic, scene, SVG, and PNG evidence while the
+generation markers are active, rather than only after instrumentation is removed.
 
 ## Candidate mitigation boundaries
 
-These are bounded hypotheses for a follow-up implementation issue, not changes authorized by #76.
+These are hypotheses for a follow-up implementation issue, not changes authorized by #76.
 
-### 1. Worker boundary — viable for transient high-water isolation
+### Worker boundary — viable, but unlikely to be sufficient alone
 
-Run full generation, semantic derivation, coastline, and transaction validation in a dedicated
-worker, transfer a compact validated result, then terminate the worker after acceptance. This is
-the strongest first lever because the operation peak is about 491 MiB above accepted quiescence,
-and worker termination gives the runtime a hard reclamation boundary.
+A dedicated worker can contain transient generation/semantic/coastline allocations and gives the
+runtime a hard reclamation boundary at termination. It also avoids relying on JSC's WebContent
+collection timing.
 
-**Falsifier:** reject this as sufficient if a prototype that terminates the worker still leaves
-additional process-tree RSS above 768 MiB, or if the transferred accepted graph recreates most of
-the worker peak in WebContent. Worker protocol and deterministic error/cancellation semantics must
-remain explicit; no ambient randomness or silent repair is allowed.
+**Falsifier:** reject a worker-only design if worker termination plus transfer still leaves the
+accepted process-tree delta above 640 MiB, preserving less than 128 MiB headroom below the fixed
+768 MiB limit, or if reconstructing the transferred graph recreates the peak in WebContent.
 
-### 2. Compact in-memory representation — viable and likely needed with the worker
+### Compact in-memory representation — viable and likely required
 
-Replace per-sample boxed/string-heavy live structures with project-owned packed numeric buffers,
-indexes, or run-length/range encodings at the generator/accepted-state boundary. The accepted
-quiescent delta of 713.4 MiB leaves only about 54.6 MiB of headroom, so the current accepted model
-is too close to the 768 MiB limit even if worker termination eliminates transient allocations.
+Use project-owned packed numeric buffers, indexes, or range encodings at the generator/accepted
+boundary. The accepted-quiescent allocator payload of roughly 829 MiB in WebContent alone leaves
+no credible process-tree headroom.
 
-**Falsifier:** reject a proposed representation if an isolated accepted-state measurement cannot
-save at least 128 MiB process-tree RSS without changing canonical hashes, stable IDs, coordinate
-semantics, inspection behavior, or render output. Hide any third-party buffer type behind a
-project-owned adapter.
+**Falsifier:** reject a proposed representation if an isolated accepted-state trial cannot save at
+least 256 MiB physical footprint without changing canonical hashes, stable IDs, coordinate
+semantics, inspection behavior, cancellation, or render output.
 
-### 3. Persisted encoding — not a direct peak fix by itself
+### Persisted encoding — not a direct operation-peak fix
 
-A compact persisted encoding is useful only if reopen can map or decode lazily into a compact live
-model. Persistence is not on the measured full-generation path, so changing bytes on disk alone
-cannot reduce the operation peak.
+A compact persisted encoding helps only if reopen maps or decodes lazily into a compact live model.
+Persistence is not on the measured full-generation path.
 
-**Falsifier:** reject persisted-format work for this budget if the same accepted JavaScript object
-graph is eagerly reconstructed, or if the size reduction exists only on disk. Any format change
-would require a separate compatibility issue, versioning decision, migrations, and ADR.
+**Falsifier:** reject persisted-format work for this budget if it eagerly reconstructs the same
+JavaScript graph or reduces only disk bytes. Any format change requires a separate compatibility
+issue, migration/version decision, and ADR.
 
 ### Recommended bounded sequence
 
-Prototype a **worker plus compact transfer object** first, retaining the current canonical
-document/scene/output bytes as acceptance oracles. Measure worker-exit RSS and accepted quiescence
-separately. Add compact accepted storage only if the worker prototype does not preserve at least
-128 MiB of headroom below the fixed 768 MiB process-tree budget. Do not combine this with a
-persistence-format migration.
+Prototype a **worker plus compact transfer/accepted representation**, keeping canonical document,
+scene, SVG, and PNG bytes as acceptance oracles. Measure worker termination and accepted quiescence
+separately. Do not combine the prototype with a persisted-format migration.
 
-## Verification and publication gate
+## Final verification
 
-The temporary diagnostic tree passed the desktop Svelte/TypeScript check and packaged build. The
-PNG export test portion of `corepack pnpm test:cross-platform` passed 6/6; the fixture convention
-stage correctly rejected the temporary diagnostic import because diagnostic files were not part
-of the fixture runtime copy. After removing every diagnostic source file and restoring production
-code byte-for-byte, the clean bundle rebuilt successfully. The required final commands were:
+After evidence capture, all diagnostic source was removed and production code restored. The final
+documentation/evidence tree passed:
 
 ```text
 corepack pnpm format:check
 corepack pnpm test:cross-platform
 ```
 
-The final documentation-only tree passed `corepack pnpm format:check`. It also passed
-`corepack pnpm test:cross-platform`: 6/6 production PNG fixture tests and all eight registered
-deterministic fixture sets, covering the canonical semantic, scene, SVG, and PNG evidence. The
-temporary diagnostics therefore did not change accepted canonical outputs.
-
-Issue #76 is C3. Before publishing or closing it, obtain a dedicated read-only review with:
-
-```text
-/review Review the branch diff against GitHub issue 76 and its acceptance criteria, reporting only actionable correctness, regression, security, or test findings.
-```
+The final diff retains only documentation, the durable raw summary, and the standalone macOS
+sampler source. No production schema, worker, scheduling, persistence, fixture, or contract change
+is included.

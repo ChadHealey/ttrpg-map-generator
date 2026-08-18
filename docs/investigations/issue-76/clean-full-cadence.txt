@@ -1,0 +1,1 @@
+samples=3247 max_interval_ms=6.359
