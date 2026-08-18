@@ -3,10 +3,10 @@
   "fixtureId": "milestone-2-atlas-control-min",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-control-min --review-record fixed-seeds/milestone-2-atlas-control-min/reviews/0009-production-atlas-png.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-control-min --review-record fixed-seeds/milestone-2-atlas-control-min/reviews/0010-accepted-aspect-persistence.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-control-min/fixture-definition.json",
-    "sha256": "7b296bf0545682bcb206e9d14cd4b3d604c86fe2f2048a9991818c615efef354"
+    "sha256": "393aa74359e924e9bb66a8fcf55d2a309ce0b2d9863641eb24443ddabfe3b20b"
   },
   "worldSeed": "6148914691236517205",
   "stableIds": {
@@ -29,6 +29,7 @@
     "worldSurfaceEntityId": "eaa0cecc-8c5d-559f-b18a-bbd0c53248ac"
   },
   "versions": {
+    "acceptedAspectSchemaVersion": 1,
     "atlasAppearanceGeneratorManifestVersion": 1,
     "atlasAppearanceParameterSchemaVersion": 1,
     "atlasCoastlineAppearanceBehaviorVersion": 1,
@@ -60,7 +61,11 @@
     "landWaterClassificationBehaviorVersion": 1,
     "landWaterClassificationGeneratorVersion": 1,
     "macroElevationGeneratorVersion": 1,
-    "seedDerivationVersion": 1
+    "mapDocumentSchemaVersion": 1,
+    "mapworldPackageVersion": 1,
+    "mapworldSchemaVersion": 1,
+    "seedDerivationVersion": 1,
+    "worldIndexSchemaVersion": 1
   },
   "checkpointRevisions": {
     "baseline": {
@@ -77,15 +82,15 @@
   },
   "expectedAssertions": [
     {
-      "assertionId": "runner-validates-full-generator-kernel",
+      "assertionId": "runner-validates-accepted-atlas-evidence",
       "operator": "runner-pass",
-      "reviewPurpose": "Prove exact geography plus independently seeded accepted appearance, bounded ink, masked decoration, paper treatment, and shared-scene backend evidence."
+      "reviewPurpose": "Prove exact generation plus persistence-owned canonical accepted aspect/output evidence for this fixed matrix row."
     }
   ],
-  "reviewPurpose": "Prove the restrained version-1 ink style and appearance isolation over unchanged accepted atlas geography before persistence integration.",
+  "reviewPurpose": "Prove one Milestone 2 matrix row at the persistence-owned canonical accepted aspect/output boundary while retaining its separate geometry and visual evidence.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-control-min/reviews/0009-production-atlas-png.md",
-    "sha256": "724d816e96129085b1a0d151eebd27e7523c8ae4ea4843fb78345d840fd0d749"
+    "path": "fixed-seeds/milestone-2-atlas-control-min/reviews/0010-accepted-aspect-persistence.md",
+    "sha256": "73cdb53cfdf4e5dfe7d15c35857218d7d13f83f941d3667dec50f7cdfc27de0c"
   },
   "generatedRoots": [
     "canonical-svg/milestone-2-atlas-control-min",
@@ -100,6 +105,14 @@
       "byteLength": 394942,
       "canonicalSvgSha256": "494c326fa6afc8fe632ca69e6ad0cef5cccd8461ef0508cbd9cd90bfdaef59de",
       "fixtureIntegritySha256": "494c326fa6afc8fe632ca69e6ad0cef5cccd8461ef0508cbd9cd90bfdaef59de"
+    },
+    {
+      "path": "fixed-seeds/milestone-2-atlas-control-min/expected/baseline/accepted-aspects.aspects.index.canonical",
+      "kind": "canonical-aspect-digest-index",
+      "checkpoint": "baseline",
+      "byteLength": 3899,
+      "canonicalAspectDigestIndexSha256": "808c2830e3c657886337eb40f886c7bbba81af91260793db3ac9c5ab2964bb4c",
+      "fixtureIntegritySha256": "808c2830e3c657886337eb40f886c7bbba81af91260793db3ac9c5ab2964bb4c"
     },
     {
       "path": "fixed-seeds/milestone-2-atlas-control-min/expected/baseline/atlas-land-water.kernel.canonical",
