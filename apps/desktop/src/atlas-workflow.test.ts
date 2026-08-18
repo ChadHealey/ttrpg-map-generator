@@ -6,13 +6,25 @@ import {
 } from '@ttrpg-map/render';
 import { describe, expect, it } from 'vitest';
 
-import { AtlasWorkflow, MILESTONE_TWO_ATLAS_PROOF_SEED } from './atlas-workflow.js';
+import {
+  atlasEditingPhaseDiagnostic,
+  AtlasWorkflow,
+  isAtlasEditingPhase,
+  MILESTONE_TWO_ATLAS_PROOF_SEED,
+} from './atlas-workflow.js';
 import type {
   AcceptedAtlasState,
   AtlasWorkflowCommitResult,
   AtlasWorkflowGenerationPort,
   AtlasWorkflowPreviewResult,
 } from './atlas-workflow-generation.js';
+import {
+  acceptedEvidence,
+  advanceAcceptedWorkflowToReopened,
+  passingReopenComparison,
+  successfulAtlasPersistence,
+} from './atlas-workflow-lifecycle-test-support.js';
+import type { AtlasWorkflowPersistencePort } from './atlas-workflow-persistence.js';
 
 const WORLD_MAP_ID = 'a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7';
 const PAPER_ENTITY_ID = '22222222-2222-4222-8222-222222222222';
@@ -23,6 +35,178 @@ const WATER_ASPECT_ID = '66666666-6666-4666-8666-666666666666';
 const LAND_ASPECT_ID = '77777777-7777-4777-8777-777777777777';
 
 describe('Milestone 2 atlas desktop orchestration', () => {
+  it('defines saved, closed, and reopened as non-editable lifecycle phases', () => {
+    expect((['empty', 'preview', 'accepted'] as const).map(isAtlasEditingPhase)).toStrictEqual([
+      true,
+      true,
+      true,
+    ]);
+    expect((['saved', 'closed', 'reopened'] as const).map(isAtlasEditingPhase)).toStrictEqual([
+      false,
+      false,
+      false,
+    ]);
+    expect(
+      (['saved', 'closed', 'reopened'] as const).map(atlasEditingPhaseDiagnostic),
+    ).toMatchObject([
+      { code: 'atlas.workflow.saved-unload-required' },
+      { code: 'atlas.workflow.closed-reopen-required' },
+      { code: 'atlas.workflow.reopened-read-only' },
+    ]);
+  });
+
+  it('rejects invalid persistence targets and out-of-order unload or reopen actions', async () => {
+    let nativeCalls = 0;
+    const workflow = new AtlasWorkflow(fakePort({}), undefined, undefined, () => {
+      nativeCalls += 1;
+      return Promise.reject(new Error('unexpected native call'));
+    });
+
+    expect(await workflow.save('relative.mapworld')).toMatchObject({
+      ok: false,
+      code: 'atlas.save.target-invalid',
+    });
+    expect(workflow.close()).toMatchObject({ ok: false, code: 'atlas.close.save-required' });
+    expect(await workflow.reopen()).toMatchObject({
+      ok: false,
+      code: 'atlas.reopen.closed-state-required',
+    });
+    expect(nativeCalls).toBe(0);
+  });
+
+  it('keeps native failures atomic and guards the complete persisted lifecycle', async () => {
+    const accepted = exportableAcceptedState();
+    let saveCalls = 0;
+    let reopenCalls = 0;
+    let markSaveStarted: (() => void) | undefined;
+    let finishSave: (() => void) | undefined;
+    let markReopenStarted: (() => void) | undefined;
+    let finishReopen: (() => void) | undefined;
+    const saveStarted = new Promise<void>((resolve) => {
+      markSaveStarted = resolve;
+    });
+    const reopenStarted = new Promise<void>((resolve) => {
+      markReopenStarted = resolve;
+    });
+    const persistence: AtlasWorkflowPersistencePort = {
+      save(invoke, targetPath, targetName, acceptedState, checkpoint) {
+        void invoke;
+        void targetPath;
+        void targetName;
+        void acceptedState;
+        saveCalls += 1;
+        if (saveCalls === 1) {
+          return Promise.resolve({
+            ok: false,
+            code: 'atlas.test.save-failed',
+            message: 'Injected save failure.',
+          });
+        }
+        markSaveStarted?.();
+        return new Promise((resolve) => {
+          finishSave = () => {
+            resolve({
+              ok: true,
+              value: {
+                evidence: acceptedEvidence(checkpoint),
+                manifestSha256: 'a'.repeat(64),
+                platform: 'macos',
+              },
+            });
+          };
+        });
+      },
+      reopen(invoke, targetPath, savedEvidence, savedManifestSha256) {
+        void invoke;
+        void targetPath;
+        void savedEvidence;
+        void savedManifestSha256;
+        reopenCalls += 1;
+        if (reopenCalls === 1) {
+          return Promise.resolve({
+            ok: false,
+            code: 'atlas.test.reopen-failed',
+            message: 'Injected reopen failure.',
+          });
+        }
+        markReopenStarted?.();
+        return new Promise((resolve) => {
+          finishReopen = () => {
+            resolve({
+              ok: true,
+              value: {
+                accepted,
+                evidence: acceptedEvidence('reopened'),
+                comparison: passingReopenComparison(),
+                manifestSha256: 'a'.repeat(64),
+              },
+            });
+          };
+        });
+      },
+    };
+    const workflow = new AtlasWorkflow(
+      fakePort({ commits: [{ ok: true, accepted }] }),
+      undefined,
+      undefined,
+      undefined,
+      persistence,
+    );
+    await workflow.acceptFull(MILESTONE_TWO_ATLAS_PROOF_SEED, DEFAULT_ATLAS_CONTROLS);
+    const acceptedBeforeSave = workflow.snapshot.accepted;
+
+    expect(await workflow.save('/proofs/focused-atlas.mapworld')).toMatchObject({
+      ok: false,
+      code: 'atlas.test.save-failed',
+    });
+    expect(workflow.snapshot).toMatchObject({ phase: 'accepted', targetPath: '' });
+    expect(workflow.snapshot.accepted).toBe(acceptedBeforeSave);
+    expect(workflow.snapshot.savedEvidence).toBeUndefined();
+
+    const saving = workflow.save('/proofs/focused-atlas.mapworld');
+    await saveStarted;
+    expect(
+      await workflow.requestPreview(MILESTONE_TWO_ATLAS_PROOF_SEED, DEFAULT_ATLAS_CONTROLS),
+    ).toMatchObject({ ok: false, code: 'atlas.save.native-operation-non-cancellable' });
+    finishSave?.();
+    expect(await saving).toEqual({ ok: true });
+    expect(workflow.snapshot).toMatchObject({
+      phase: 'saved',
+      diagnosticCodes: [],
+      targetPath: '/proofs/focused-atlas.mapworld',
+    });
+    await expectEditingBlocked(workflow, 'atlas.workflow.saved-unload-required');
+
+    expect(workflow.close()).toEqual({ ok: true });
+    expect(workflow.snapshot).toMatchObject({ phase: 'closed', diagnosticCodes: [] });
+    expect(workflow.snapshot.accepted).toBeUndefined();
+    expect(workflow.snapshot.scene).toBeUndefined();
+    await expectEditingBlocked(workflow, 'atlas.workflow.closed-reopen-required');
+
+    expect(await workflow.reopen()).toMatchObject({
+      ok: false,
+      code: 'atlas.test.reopen-failed',
+    });
+    expect(workflow.snapshot).toMatchObject({ phase: 'closed' });
+    expect(workflow.snapshot.accepted).toBeUndefined();
+    const reopening = workflow.reopen();
+    await reopenStarted;
+    expect(
+      await workflow.acceptFull(MILESTONE_TWO_ATLAS_PROOF_SEED, DEFAULT_ATLAS_CONTROLS),
+    ).toMatchObject({ ok: false, code: 'atlas.reopen.native-operation-non-cancellable' });
+    finishReopen?.();
+    expect(await reopening).toEqual({ ok: true });
+    expect(workflow.snapshot).toMatchObject({
+      phase: 'reopened',
+      diagnosticCodes: [],
+      reopenGenerationInvocationCount: 0,
+      reopenComparison: { passed: true },
+    });
+    await expectEditingBlocked(workflow, 'atlas.workflow.reopened-read-only');
+    expect(saveCalls).toBe(2);
+    expect(reopenCalls).toBe(2);
+  });
+
   it('rejects invalid control values before dispatching preview or full work', async () => {
     let dispatchCount = 0;
     const workflow = new AtlasWorkflow({
@@ -168,33 +352,45 @@ describe('Milestone 2 atlas desktop orchestration', () => {
     expect(operations).toStrictEqual(['initial-atlas', 'geography-reroll', 'appearance-reroll']);
   });
 
-  it('exports accepted scene bytes through the desktop destination without mutating accepted state', async () => {
+  it('exports reopened accepted scene bytes without mutating accepted state', async () => {
     const baseline = exportableAcceptedState();
     let writtenPath = '';
     let writtenBytes = 0;
-    const workflow = new AtlasWorkflow(fakePort({ commits: [{ ok: true, accepted: baseline }] }), {
-      defaultTargetPath: () => Promise.resolve('/exports/default.svg'),
-      write(request) {
-        writtenPath = request.targetPath;
-        writtenBytes = request.bytes.byteLength;
-        return Promise.resolve({
-          ok: true,
-          value: {
-            targetPath: request.targetPath,
-            sha256: request.expectedSha256,
-            byteLength: request.bytes.byteLength,
-            platform: 'macos',
-          },
-        });
+    const workflow = new AtlasWorkflow(
+      fakePort({ commits: [{ ok: true, accepted: baseline }] }),
+      {
+        defaultTargetPath: () => Promise.resolve('/exports/default.svg'),
+        write(request) {
+          writtenPath = request.targetPath;
+          writtenBytes = request.bytes.byteLength;
+          return Promise.resolve({
+            ok: true,
+            value: {
+              targetPath: request.targetPath,
+              sha256: request.expectedSha256,
+              byteLength: request.bytes.byteLength,
+              platform: 'macos',
+            },
+          });
+        },
       },
-    });
+      undefined,
+      undefined,
+      successfulAtlasPersistence(baseline),
+    );
     await workflow.acceptFull(MILESTONE_TWO_ATLAS_PROOF_SEED, DEFAULT_ATLAS_CONTROLS);
+    expect(await workflow.exportSvg('/exports/too-early.svg')).toMatchObject({
+      ok: false,
+      code: 'atlas-svg.accepted-clean-state-required',
+    });
+    expect(writtenBytes).toBe(0);
+    await advanceAcceptedWorkflowToReopened(workflow);
     const acceptedReference = workflow.snapshot.accepted;
 
     expect(await workflow.exportSvg('/exports/atlas.svg')).toEqual({ ok: true });
 
     expect(workflow.snapshot.accepted).toBe(acceptedReference);
-    expect(workflow.snapshot.phase).toBe('accepted');
+    expect(workflow.snapshot.phase).toBe('reopened');
     expect(workflow.snapshot.svgExportReceipt).toMatchObject({
       targetPath: '/exports/atlas.svg',
       byteLength: writtenBytes,
@@ -211,26 +407,33 @@ describe('Milestone 2 atlas desktop orchestration', () => {
     const writeStarted = new Promise<void>((resolve) => {
       markWriteStarted = resolve;
     });
-    const workflow = new AtlasWorkflow(fakePort({ commits: [{ ok: true, accepted: baseline }] }), {
-      defaultTargetPath: () => Promise.resolve('/exports/default.svg'),
-      write(request) {
-        markWriteStarted?.();
-        return new Promise((resolve) => {
-          finishWrite = () => {
-            resolve({
-              ok: true,
-              value: {
-                targetPath: request.targetPath,
-                sha256: request.expectedSha256,
-                byteLength: request.bytes.byteLength,
-                platform: 'macos',
-              },
-            });
-          };
-        });
+    const workflow = new AtlasWorkflow(
+      fakePort({ commits: [{ ok: true, accepted: baseline }] }),
+      {
+        defaultTargetPath: () => Promise.resolve('/exports/default.svg'),
+        write(request) {
+          markWriteStarted?.();
+          return new Promise((resolve) => {
+            finishWrite = () => {
+              resolve({
+                ok: true,
+                value: {
+                  targetPath: request.targetPath,
+                  sha256: request.expectedSha256,
+                  byteLength: request.bytes.byteLength,
+                  platform: 'macos',
+                },
+              });
+            };
+          });
+        },
       },
-    });
+      undefined,
+      undefined,
+      successfulAtlasPersistence(baseline),
+    );
     await workflow.acceptFull(MILESTONE_TWO_ATLAS_PROOF_SEED, DEFAULT_ATLAS_CONTROLS);
+    await advanceAcceptedWorkflowToReopened(workflow);
 
     const exporting = workflow.exportSvg('/exports/atlas.svg');
     await writeStarted;
@@ -253,6 +456,29 @@ describe('Milestone 2 atlas desktop orchestration', () => {
     });
   });
 });
+
+async function expectEditingBlocked(
+  workflow: AtlasWorkflow,
+  code:
+    | 'atlas.workflow.saved-unload-required'
+    | 'atlas.workflow.closed-reopen-required'
+    | 'atlas.workflow.reopened-read-only',
+): Promise<void> {
+  const before = workflow.snapshot;
+  expect(
+    await workflow.requestPreview(MILESTONE_TWO_ATLAS_PROOF_SEED, DEFAULT_ATLAS_CONTROLS),
+  ).toMatchObject({ ok: false, code });
+  expect(
+    await workflow.acceptFull(MILESTONE_TWO_ATLAS_PROOF_SEED, DEFAULT_ATLAS_CONTROLS),
+  ).toMatchObject({ ok: false, code });
+  expect(workflow.planReroll('geography')).toMatchObject({ ok: false, code });
+  expect(await workflow.commitPlannedReroll()).toMatchObject({ ok: false, code });
+  expect(workflow.snapshot.phase).toBe(before.phase);
+  expect(workflow.snapshot.accepted).toBe(before.accepted);
+  expect(workflow.snapshot.savedEvidence).toBe(before.savedEvidence);
+  expect(workflow.snapshot.reopenedEvidence).toBe(before.reopenedEvidence);
+  expect(workflow.snapshot.generationInvocationCount).toBe(before.generationInvocationCount);
+}
 
 interface FakeOptions {
   readonly commits?: AtlasWorkflowCommitResult[];

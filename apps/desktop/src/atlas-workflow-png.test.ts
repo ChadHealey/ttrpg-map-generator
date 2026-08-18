@@ -13,6 +13,10 @@ import type {
   AcceptedAtlasState,
   AtlasWorkflowGenerationPort,
 } from './atlas-workflow-generation.js';
+import {
+  advanceAcceptedWorkflowToReopened,
+  successfulAtlasPersistence,
+} from './atlas-workflow-lifecycle-test-support.js';
 
 describe('Milestone 2 atlas PNG workflow', () => {
   it('exports the exact accepted scene at the production dimensions without mutating state', async () => {
@@ -22,8 +26,16 @@ describe('Milestone 2 atlas PNG workflow', () => {
       generationPort([accepted]),
       unusedSvgDestination(),
       pngDestination(writes),
+      undefined,
+      successfulAtlasPersistence(accepted),
     );
     await workflow.acceptFull(MILESTONE_TWO_ATLAS_PROOF_SEED, DEFAULT_ATLAS_CONTROLS);
+    expect(await workflow.exportPng('/exports/too-early.png')).toMatchObject({
+      ok: false,
+      code: 'atlas-png.accepted-clean-state-required',
+    });
+    expect(writes).toHaveLength(0);
+    await advanceAcceptedWorkflowToReopened(workflow);
     const acceptedReference = workflow.snapshot.accepted;
     const sceneReference = workflow.snapshot.scene;
 
@@ -73,8 +85,11 @@ describe('Milestone 2 atlas PNG workflow', () => {
       generationPort([accepted]),
       unusedSvgDestination(),
       destination,
+      undefined,
+      successfulAtlasPersistence(accepted),
     );
     await workflow.acceptFull(MILESTONE_TWO_ATLAS_PROOF_SEED, DEFAULT_ATLAS_CONTROLS);
+    await advanceAcceptedWorkflowToReopened(workflow);
 
     const exporting = workflow.exportPng('/exports/atlas.png');
     await writeStarted;

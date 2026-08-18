@@ -47,6 +47,11 @@ import {
   withAcceptedDiagnostic,
 } from './atlas-workflow-generation-integration-test-support.js';
 import { reopenAcceptedAtlas } from './atlas-workflow-reopen.js';
+import {
+  exerciseVisibleAtlasWorkflow,
+  type VisibleAtlasWorkflowExercise,
+} from './atlas-workflow-visible-proof-test-support.js';
+import { NATIVE_MAPWORLD_COMMANDS } from './mapworld-native-boundary.js';
 
 const PNG_INTEGRATION_DIMENSIONS = Object.freeze({ widthPx: 1_600, heightPx: 800 });
 
@@ -60,6 +65,8 @@ interface GeneratedAtlasStates {
 }
 
 let generatedStates: GeneratedAtlasStates | undefined;
+let visibleWorkflowSnapshot: VisibleAtlasWorkflowExercise['snapshot'] | undefined;
+let visibleWorkflowNativeCommands: readonly string[] | undefined;
 
 describe('complete Milestone 2 atlas proposal transaction', () => {
   beforeAll(async () => {
@@ -73,13 +80,18 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
       baseline,
       changedControls,
     );
-    const geography = await commitGeneratedAtlas('geography-reroll', controlled, changedControls);
+    const geography = await commitGeneratedAtlas('geography-reroll', baseline);
     const appearanceProgress: string[] = [];
-    const appearance = await commitGeneratedAtlas('appearance-reroll', geography, changedControls, {
-      isCancellationRequested: () => false,
-      reportProgress: ({ stage }) => appearanceProgress.push(stage),
-      yieldControl: () => Promise.resolve(),
-    });
+    const appearance = await commitGeneratedAtlas(
+      'appearance-reroll',
+      geography,
+      DEFAULT_ATLAS_CONTROLS,
+      {
+        isCancellationRequested: () => false,
+        reportProgress: ({ stage }) => appearanceProgress.push(stage),
+        yieldControl: () => Promise.resolve(),
+      },
+    );
     generatedStates = Object.freeze({
       baseline,
       controlled,
@@ -88,10 +100,13 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
       changedControls,
       appearanceProgress: Object.freeze(appearanceProgress),
     });
-  }, 180_000);
+    const visible = await exerciseVisibleAtlasWorkflow({ baseline, geography, appearance });
+    visibleWorkflowSnapshot = visible.snapshot;
+    visibleWorkflowNativeCommands = visible.nativeCommands;
+  }, 300_000);
 
   it('accepts control replacement and proves geography/appearance reroll isolation', async () => {
-    const { appearance, appearanceProgress, baseline, changedControls, controlled, geography } =
+    const { appearance, appearanceProgress, baseline, controlled, geography } =
       requiredGeneratedStates();
 
     expect(acceptedAspectRevision(baseline, 'worldTerrain.macroElevation')).toBe(0);
@@ -109,13 +124,17 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
       expect(acceptedAspectRevision(appearance, name)).toBe(1);
     }
     expect(appearance.geography).toEqual(geography.geography);
-    expect(geography.appearance.paperTreatment).toEqual(controlled.appearance.paperTreatment);
+    expect(geography.appearance.paperTreatment).toEqual(baseline.appearance.paperTreatment);
     expect(controlled.geography.controls.targetWaterCoveragePercent).toBe(66);
     expect(controlled.document.maps[0]?.coordinateSystem.radius).not.toBeUndefined();
     expect(appearanceProgress).toStrictEqual(['validating-proposal', 'completed']);
 
     const locked = protectPaperTreatment(appearance, 'lock');
-    const lockedResult = await attemptAtlasGeneration('appearance-reroll', locked, changedControls);
+    const lockedResult = await attemptAtlasGeneration(
+      'appearance-reroll',
+      locked,
+      DEFAULT_ATLAS_CONTROLS,
+    );
     expect(lockedResult).toMatchObject({
       ok: false,
       diagnosticCodes: ['atlas-transaction.lock.conflict'],
@@ -126,7 +145,7 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
     const constrainedResult = await attemptAtlasGeneration(
       'appearance-reroll',
       constrained,
-      changedControls,
+      DEFAULT_ATLAS_CONTROLS,
     );
     expect(constrainedResult).toMatchObject({
       ok: false,
@@ -134,6 +153,37 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
     });
     expect(constrained.document.maps[0]?.constraints).toHaveLength(1);
   }, 30_000);
+
+  it('drives the exact visible proof through native save, true unload, generator-free reopen, and exports', () => {
+    const snapshot = requiredVisibleWorkflowSnapshot();
+    expect(snapshot).toMatchObject({
+      phase: 'reopened',
+      acceptedCheckpoint: 'reopened',
+      reopenComparison: {
+        passed: true,
+        canonicalAspectsRestored: true,
+        canonicalOutputsRestored: true,
+        canonicalCoastlineRestored: true,
+        renderSceneRestored: true,
+        manifestFingerprintRestored: true,
+      },
+      reopenGenerationInvocationCount: 0,
+      pngExportReceipt: {
+        profileId: 'atlas-png-v1',
+        widthPx: 8_192,
+        heightPx: 4_096,
+      },
+      svgExportReceipt: { profileId: 'atlas-svg-v1' },
+    });
+    expect(snapshot.savedEvidence?.checkpoint).toBe('appearance-rerolled');
+    expect(snapshot.reopenedEvidence?.checkpoint).toBe('reopened');
+    expect(snapshot.savedEvidence?.aspects.length).toBeGreaterThan(9);
+    expect(snapshot.targetPath).toBe('/proofs/Milestone-Two.mapworld');
+    expect(visibleWorkflowNativeCommands).toStrictEqual([
+      NATIVE_MAPWORLD_COMMANDS.save,
+      NATIVE_MAPWORLD_COMMANDS.snapshot,
+    ]);
+  });
 
   it('accepts a valid unchanged complete proposal through the exported core boundary', () => {
     const { appearance } = requiredGeneratedStates();
@@ -204,14 +254,14 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
   }, 90_000);
 
   it('keeps semantic and canonical SVG evidence separate across both rerolls and reopen', () => {
-    const { appearance, controlled, geography } = requiredGeneratedStates();
-    const controlledSvg = canonicalSvg(controlled);
+    const { appearance, baseline, geography } = requiredGeneratedStates();
+    const baselineSvg = canonicalSvg(baseline);
     const geographySvg = canonicalSvg(geography);
     const appearanceSvg = canonicalSvg(appearance);
     const repeatedAppearanceSvg = canonicalSvg(appearance);
 
-    expect(geography.geography).not.toEqual(controlled.geography);
-    expect(geographySvg).not.toEqual(controlledSvg);
+    expect(geography.geography).not.toEqual(baseline.geography);
+    expect(geographySvg).not.toEqual(baselineSvg);
     expect(appearance.geography).toEqual(geography.geography);
     expect(appearanceSvg).not.toEqual(geographySvg);
     expect(repeatedAppearanceSvg).toEqual(appearanceSvg);
@@ -245,7 +295,7 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
     const repeatedAppearancePng = await canonicalPng(appearance);
 
     expect(equalBytes(controlledPng, baselinePng)).toBe(false);
-    expect(equalBytes(geographyPng, controlledPng)).toBe(false);
+    expect(equalBytes(geographyPng, baselinePng)).toBe(false);
     expect(equalBytes(appearancePng, geographyPng)).toBe(false);
     expect(appearance.geography).toBe(geography.geography);
     expect(appearance.geography.coastline).toBe(geography.geography.coastline);
@@ -421,6 +471,13 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
 function requiredGeneratedStates(): GeneratedAtlasStates {
   if (generatedStates === undefined) throw new Error('Atlas integration setup did not complete.');
   return generatedStates;
+}
+
+function requiredVisibleWorkflowSnapshot(): VisibleAtlasWorkflowExercise['snapshot'] {
+  if (visibleWorkflowSnapshot === undefined) {
+    throw new Error('Visible atlas workflow setup did not complete.');
+  }
+  return visibleWorkflowSnapshot;
 }
 
 function canonicalSvg(accepted: Pick<AcceptedAtlasState, 'scene'>): Uint8Array {

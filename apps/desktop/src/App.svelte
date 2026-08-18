@@ -1,7 +1,12 @@
 <script lang="ts">
   import { type AtlasControls, DEFAULT_ATLAS_CONTROLS } from '@ttrpg-map/core';
 
-  import { AtlasWorkflow, MILESTONE_TWO_ATLAS_PROOF_SEED } from './atlas-workflow.js';
+  import {
+    AtlasWorkflow,
+    isAtlasEditingPhase,
+    MILESTONE_TWO_ATLAS_PROOF_SEED,
+  } from './atlas-workflow.js';
+  import AtlasWorkflowEvidencePanel from './AtlasWorkflowEvidencePanel.svelte';
   import ProofViewport from './ProofViewport.svelte';
 
   const workflow = new AtlasWorkflow();
@@ -9,8 +14,10 @@
   let seed = MILESTONE_TWO_ATLAS_PROOF_SEED;
   let controls: AtlasControls = { ...DEFAULT_ATLAS_CONTROLS };
   let selectedEntityId = '';
+  let targetPath = '';
 
   $: controlsAreAccepted = sameControls(controls, atlas.controls);
+  $: editingIsEnabled = isAtlasEditingPhase(atlas.phase) && !atlas.isBusy;
   $: selectedEntity =
     atlas.inspectionEntities.find(({ entityId }) => entityId === selectedEntityId) ??
     atlas.inspectionEntities[0];
@@ -44,6 +51,19 @@
 
   async function exportPng(): Promise<void> {
     await run(workflow.exportPng());
+  }
+
+  async function save(): Promise<void> {
+    await run(workflow.save(targetPath));
+  }
+
+  function close(): void {
+    workflow.close();
+    refresh();
+  }
+
+  async function reopen(): Promise<void> {
+    await run(workflow.reopen());
   }
 
   function cancel(): void {
@@ -113,7 +133,7 @@
         <label class="field-label" for="world-seed">World seed · unsigned 64-bit integer</label>
         <input
           bind:value={seed}
-          disabled={atlas.accepted !== undefined}
+          disabled={!editingIsEnabled || atlas.accepted !== undefined}
           id="world-seed"
           inputmode="numeric"
           spellcheck="false"
@@ -122,6 +142,7 @@
       <div class="input-group">
         <label class="field-label" for="circumference">Circumference · km</label><input
           bind:value={controls.worldCircumferenceKm}
+          disabled={!editingIsEnabled}
           id="circumference"
           max="80000"
           min="10000"
@@ -132,6 +153,7 @@
       <div class="input-group">
         <label class="field-label" for="water-coverage">Water coverage · %</label><input
           bind:value={controls.targetWaterCoveragePercent}
+          disabled={!editingIsEnabled}
           id="water-coverage"
           max="80"
           min="45"
@@ -143,6 +165,7 @@
         <label class="field-label" for="continent-count">Continent-count intent · count</label
         ><input
           bind:value={controls.continentCountIntent}
+          disabled={!editingIsEnabled}
           id="continent-count"
           max="8"
           min="1"
@@ -152,7 +175,10 @@
       </div>
       <div class="input-group">
         <label class="field-label" for="continent-distribution">Continent distribution</label
-        ><select bind:value={controls.continentDistribution} id="continent-distribution"
+        ><select
+          bind:value={controls.continentDistribution}
+          disabled={!editingIsEnabled}
+          id="continent-distribution"
           ><option value="balanced">Balanced</option><option value="varied">Varied</option><option
             value="oneDominant">One dominant</option
           ></select
@@ -161,6 +187,7 @@
       <div class="input-group">
         <label class="field-label" for="fragmentation">Fragmentation · %</label><input
           bind:value={controls.fragmentationPercent}
+          disabled={!editingIsEnabled}
           id="fragmentation"
           max="100"
           min="0"
@@ -171,6 +198,7 @@
       <div class="input-group">
         <label class="field-label" for="island-abundance">Island abundance · %</label><input
           bind:value={controls.islandAbundancePercent}
+          disabled={!editingIsEnabled}
           id="island-abundance"
           max="100"
           min="0"
@@ -182,6 +210,7 @@
         <label class="field-label" for="archipelago-abundance">Archipelago abundance · %</label
         ><input
           bind:value={controls.archipelagoAbundancePercent}
+          disabled={!editingIsEnabled}
           id="archipelago-abundance"
           max="100"
           min="0"
@@ -192,6 +221,7 @@
       <div class="input-group">
         <label class="field-label" for="ocean-connectivity">Ocean connectivity</label><select
           bind:value={controls.oceanConnectivity}
+          disabled={!editingIsEnabled}
           id="ocean-connectivity"
           ><option value="singleGlobal">Single global</option><option value="connectedMajority"
             >Connected majority</option
@@ -201,6 +231,7 @@
       <div class="input-group">
         <label class="field-label" for="polar-character">Polar character</label><select
           bind:value={controls.polarCharacter}
+          disabled={!editingIsEnabled}
           id="polar-character"
           ><option value="oceanBiased">Ocean biased</option><option value="neutral">Neutral</option
           ><option value="landBiased">Land biased</option></select
@@ -209,11 +240,13 @@
     </form>
 
     <div aria-label="Atlas generation operations" class="workflow-card atlas-actions">
-      <button disabled={atlas.isBusy} onclick={() => void preview()} type="button"
-        >Generate coarse preview</button
+      <button
+        disabled={atlas.isBusy || !editingIsEnabled}
+        onclick={() => void preview()}
+        type="button">Generate coarse preview</button
       >
       <button
-        disabled={atlas.isBusy || atlas.preview === undefined}
+        disabled={atlas.isBusy || !editingIsEnabled || atlas.preview === undefined}
         onclick={() => void acceptFull()}
         type="button">Accept full atlas</button
       >
@@ -229,6 +262,7 @@
       >
       <button
         disabled={atlas.isBusy ||
+          atlas.phase !== 'accepted' ||
           atlas.accepted === undefined ||
           atlas.preview !== undefined ||
           !controlsAreAccepted}
@@ -239,6 +273,7 @@
       >
       <button
         disabled={atlas.isBusy ||
+          atlas.phase !== 'accepted' ||
           atlas.accepted === undefined ||
           atlas.preview !== undefined ||
           !controlsAreAccepted}
@@ -248,20 +283,56 @@
         type="button">Preview appearance reroll</button
       >
       <button
-        disabled={atlas.isBusy || atlas.pendingReroll === undefined || !controlsAreAccepted}
+        disabled={atlas.isBusy ||
+          atlas.phase !== 'accepted' ||
+          atlas.pendingReroll === undefined ||
+          !controlsAreAccepted}
         onclick={() => void commitReroll()}
         type="button">Commit reviewed reroll</button
       >
       <button
-        disabled={atlas.isBusy || atlas.accepted === undefined || atlas.preview !== undefined}
+        disabled={atlas.isBusy ||
+          atlas.phase !== 'accepted' ||
+          atlas.preview !== undefined ||
+          atlas.acceptedCheckpoint !== 'appearance-rerolled' ||
+          !controlsAreAccepted}
+        onclick={() => void save()}
+        type="button">Save accepted .mapworld</button
+      >
+      <button disabled={atlas.isBusy || atlas.phase !== 'saved'} onclick={close} type="button"
+        >Unload accepted atlas</button
+      >
+      <button
+        disabled={atlas.isBusy || atlas.phase !== 'closed'}
+        onclick={() => void reopen()}
+        type="button">Reopen saved atlas</button
+      >
+      <button
+        disabled={atlas.isBusy || atlas.phase !== 'reopened' || atlas.preview !== undefined}
         onclick={() => void exportPng()}
         type="button">Export 8192 × 4096 PNG</button
       >
       <button
-        disabled={atlas.isBusy || atlas.accepted === undefined || atlas.preview !== undefined}
+        disabled={atlas.isBusy || atlas.phase !== 'reopened' || atlas.preview !== undefined}
         onclick={() => void exportSvg()}
         type="button">Export deterministic SVG</button
       >
+    </div>
+
+    <div class="input-group save-field">
+      <label class="field-label" for="mapworld-target"
+        >Save target · fresh absolute .mapworld path</label
+      >
+      <input
+        bind:value={targetPath}
+        disabled={atlas.isBusy ||
+          atlas.phase === 'saved' ||
+          atlas.phase === 'closed' ||
+          atlas.phase === 'reopened'}
+        id="mapworld-target"
+        placeholder="/existing-parent/My-Atlas.mapworld"
+        spellcheck="false"
+      />
     </div>
 
     <div aria-live="polite" class="status-line" data-phase={atlas.phase}>
@@ -348,6 +419,8 @@
         </dl>
       </section>
     {/if}
+
+    <AtlasWorkflowEvidencePanel {atlas} />
 
     <div class="proof-grid">
       <div class="map-stack"><ProofViewport preview={atlas.preview} scene={atlas.scene} /></div>
