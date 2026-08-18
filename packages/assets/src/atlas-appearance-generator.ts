@@ -301,8 +301,8 @@ function waterDependencies(records: AtlasGeographyRecords, mapId: MapId): readon
     [
       records.landWaterClassificationAspectId,
       deriveAtlasAspectId(singletonIds.worldCoastlineEntityId, 'worldCoastline.geometry'),
-      ...records.waterBodies.map(
-        ({ sourceClassificationAspectId }) => sourceClassificationAspectId,
+      ...records.waterBodies.map(({ entityId }) =>
+        deriveAtlasAspectId(entityId, 'waterBody.classification'),
       ),
     ].sort(compareText),
   );

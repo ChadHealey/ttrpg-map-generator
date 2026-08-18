@@ -112,7 +112,7 @@ export async function saveMapworldDocument(
     expectedPreviousManifestSha256: planned.value.expectedPreviousManifestSha256,
     expectedPreviousObservationToken: intent.expectedPreviousObservationToken,
     candidateManifestSha256: planned.value.candidateManifestSha256,
-    markerBytes: planned.value.markerBytes,
+    markerBase64: planned.value.markerBase64,
     files: planned.value.files,
   });
   if (!saved.ok) return nativeFailure(saved.error);

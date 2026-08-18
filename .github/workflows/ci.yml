@@ -62,6 +62,18 @@ jobs:
       - name: Verify deterministic fixtures
         run: pnpm test:cross-platform
 
+      - name: Verify focused desktop workflows
+        run: pnpm test:e2e
+
+      - name: Verify reviewed visual evidence
+        run: pnpm test:visual
+
+      - name: Verify deterministic atlas PNG export
+        run: pnpm test:png-export
+
+      - name: Build production desktop frontend
+        run: pnpm build
+
       - name: Record native recovery filesystem
         shell: bash
         run: |

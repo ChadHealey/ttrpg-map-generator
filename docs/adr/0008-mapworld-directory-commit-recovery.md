@@ -214,6 +214,20 @@ barrier failure after a rename returns `persistence.recovery.durability-failed`,
 requires the normal recovery path because the durable phase is uncertain. No success is reported
 until the commit barrier completes.
 
+### Bounded native byte transport
+
+The desktop/native command boundary frames already validated package and marker bytes as canonical
+base64 strings in both save requests and recovery snapshots. TypeScript and Rust reject malformed,
+noncanonical, or over-limit encodings before policy or filesystem mutation. Rust decodes save
+payloads before the unchanged exact-byte readback checks; TypeScript decodes snapshot payloads
+before the unchanged `.mapworld` validation and recovery decision. This framing prevents large
+Milestone 2 packages from becoming impractically large JavaScript arrays of boxed byte numbers.
+
+The transport permits 128 MiB for one file and 192 MiB for one package. These bounded adapter
+limits and base64 framing do not alter package bytes, marker bytes, artifact names, fingerprint
+meaning, recovery transitions, or the v1 package/marker schemas. Changing those semantic protocol
+elements still requires the version change described above.
+
 ### Isolated native FFI safety boundary
 
 Rust's safe standard library does not expose every descriptor-relative and platform-specific

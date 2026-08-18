@@ -1,6 +1,7 @@
 use std::io;
 use std::{error, fmt};
 
+use super::base64::encode_base64;
 use super::platform_ffi;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -148,7 +149,7 @@ impl ArtifactObservation {
             }
             ObservationKind::RegularFile(bytes) => format!(
                 "{{{common},\"kind\":\"regular-file\",\"bytes\":{}}}",
-                byte_array(bytes)
+                quoted(&encode_base64(bytes))
             ),
             ObservationKind::Symlink => {
                 format!("{{{common},\"kind\":\"symlink\"}}")
@@ -169,7 +170,7 @@ impl NativeFileEntry {
         format!(
             "{{\"path\":{},\"bytes\":{}}}",
             quoted(&self.path),
-            byte_array(&self.bytes)
+            quoted(&encode_base64(&self.bytes))
         )
     }
 }
@@ -305,20 +306,6 @@ pub(crate) fn quoted(value: &str) -> String {
         }
     }
     output.push('"');
-    output
-}
-
-fn byte_array(bytes: &[u8]) -> String {
-    let mut output = String::with_capacity(bytes.len().saturating_mul(4).saturating_add(2));
-    output.push('[');
-    for (index, byte) in bytes.iter().enumerate() {
-        if index > 0 {
-            output.push(',');
-        }
-        use std::fmt::Write as _;
-        write!(&mut output, "{byte}").expect("writing to String cannot fail");
-    }
-    output.push(']');
     output
 }
 

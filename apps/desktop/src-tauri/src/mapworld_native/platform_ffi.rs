@@ -218,6 +218,35 @@ pub fn rename_no_replace(parent: &File, from: &OsStr, to: &OsStr) -> io::Result<
     cvt(result)
 }
 
+/// Atomically replace one same-directory destination name with a prepared regular file.
+pub fn rename_replace(parent: &File, from: &OsStr, to: &OsStr) -> io::Result<()> {
+    let from = c_string(from)?;
+    let to = c_string(to)?;
+    #[cfg(target_os = "macos")]
+    // SAFETY: both names and the shared parent descriptor obey the module invariants.
+    let result = unsafe {
+        renameatx_np(
+            parent.as_raw_fd(),
+            from.as_ptr(),
+            parent.as_raw_fd(),
+            to.as_ptr(),
+            RENAME_NOFOLLOW_ANY,
+        )
+    };
+    #[cfg(target_os = "linux")]
+    // SAFETY: both names and the shared parent descriptor obey the module invariants.
+    let result = unsafe {
+        renameat2(
+            parent.as_raw_fd(),
+            from.as_ptr(),
+            parent.as_raw_fd(),
+            to.as_ptr(),
+            0,
+        )
+    };
+    cvt(result)
+}
+
 /// Probe availability of the exact no-replace primitive without changing a namespace entry.
 ///
 /// Renaming a pathname to itself is a no-op even when it exists. An absent pathname yields

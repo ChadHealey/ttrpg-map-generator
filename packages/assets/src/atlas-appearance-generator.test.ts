@@ -65,6 +65,21 @@ describe('restrained atlas appearance generation', () => {
         ({ seedMetadata }) => seedMetadata.entityId === first.appearance.atlasPresentationEntityId,
       ),
     ).toBe(true);
+    const waterProposal = first.replacements.find(
+      ({ target }) => target.aspectName === 'atlas.waterDecoration',
+    );
+    expect(waterProposal?.dependencyAspectIds).toEqual(
+      [
+        records.landWaterClassificationAspectId,
+        deriveAtlasAspectId(
+          deriveAtlasSingletonEntityIds(records.worldMapId).worldCoastlineEntityId,
+          'worldCoastline.geometry',
+        ),
+        ...records.waterBodies.map(({ entityId }) =>
+          deriveAtlasAspectId(entityId, 'waterBody.classification'),
+        ),
+      ].sort(),
+    );
   });
 
   it('rerolls all appearance outputs without changing source geography or style provenance', () => {

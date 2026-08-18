@@ -57,6 +57,7 @@ export function appearanceProof(core, assets, definition, input, records) {
 
   return {
     records: baseline.appearance,
+    replacements: baseline.replacements,
     style: assets.RESTRAINED_INK_ATLAS_STYLE,
     stableIds: {
       atlasPresentationEntityId: baseline.appearance.atlasPresentationEntityId,

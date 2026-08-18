@@ -1,0 +1,18 @@
+{
+  "reopenComparisonVersion": 1,
+  "sourceCheckpoint": "appearance-rerolled",
+  "checkpoint": "reopened",
+  "generatorInvocationCount": 0,
+  "packageChecksumsValidated": true,
+  "acceptedRecordsEqual": true,
+  "canonicalAspectSetsEqual": true,
+  "canonicalAspectOutputSetsEqual": true,
+  "sceneSemanticsEqual": true,
+  "canonicalSvgEqual": true,
+  "deterministicPngEqual": true,
+  "canonicalAspectSetSha256": "cbbec1d45c92bf6acee067ce38235a70f25a77e6cea9a1041f298536cbee77dd",
+  "canonicalAspectOutputSetSha256": "7dd62d2ca9702a6761cfbee124a80065622de5fc356d76893af8ae1f9b4a650c",
+  "sceneSha256": "0630d040976a02a74d4074ef51b31eb81a0c5fd372c546bee0a1750fb41b5343",
+  "canonicalSvgSha256": "d1907f45b173d3d008b72de320d845541316549b2e8f52dbeaa30883e2c0d7d5",
+  "deterministicPngSha256": "875b15f71e962c8b2c811bf8b79e1f8ef30d2c58fe789069a2ec84bcc928e6cb"
+}

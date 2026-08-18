@@ -95,9 +95,11 @@ async function writeNativeRequest(
   const directory = resolve(requestDirectory, String(sequence));
   await mkdir(directory, { recursive: true });
   await writeFile(resolve(directory, 'command.txt'), `${command}\n`);
-  if (command === 'mapworld_native_save') {
+  if (command === 'mapworld_native_save_base64') {
     const relativePaths = stringArray(arguments_.relativePaths, 'relativePaths');
-    const fileBytes = numberArrays(arguments_.fileBytes, 'fileBytes');
+    const fileBytes = stringArray(arguments_.fileBytesBase64, 'fileBytesBase64').map(
+      canonicalBase64Bytes,
+    );
     if (relativePaths.length !== fileBytes.length) throw new Error('Native save arrays disagree.');
     await writeFile(
       resolve(directory, 'metadata.txt'),
@@ -111,7 +113,7 @@ async function writeNativeRequest(
     );
     await writeFile(
       resolve(directory, 'marker.bin'),
-      Uint8Array.from(numberArray(arguments_.markerBytes, 'markerBytes')),
+      canonicalBase64Bytes(stringValue(arguments_.markerBase64, 'markerBase64')),
     );
     await writeFile(resolve(directory, 'paths.txt'), relativePaths.join('\n') + '\n');
     const filesDirectory = resolve(directory, 'files');
@@ -168,19 +170,8 @@ function stringArray(value: unknown, label: string): readonly string[] {
   return value;
 }
 
-function numberArray(value: unknown, label: string): readonly number[] {
-  if (!Array.isArray(value)) throw new Error(`Invalid ${label}.`);
-  const numbers: number[] = [];
-  for (const item of value) {
-    if (typeof item !== 'number' || !Number.isInteger(item) || item < 0 || item > 255) {
-      throw new Error(`Invalid ${label}.`);
-    }
-    numbers.push(item);
-  }
-  return numbers;
-}
-
-function numberArrays(value: unknown, label: string): readonly (readonly number[])[] {
-  if (!Array.isArray(value)) throw new Error(`Invalid ${label}.`);
-  return value.map((item, index) => numberArray(item, `${label}[${String(index)}]`));
+function canonicalBase64Bytes(value: string): Uint8Array {
+  const bytes = Buffer.from(value, 'base64');
+  if (bytes.toString('base64') !== value) throw new Error('Invalid canonical base64 bytes.');
+  return bytes;
 }

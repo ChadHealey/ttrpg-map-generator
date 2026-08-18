@@ -1,5 +1,6 @@
 import type { WorldDocument } from '@ttrpg-map/core';
 
+import { encodeBase64Bytes } from './base64-bytes.js';
 import {
   bytesEqual,
   canonicalJsonBytes,
@@ -129,10 +130,10 @@ export function createMapworldSavePlan(
       artifactNames: names.value,
       expectedPreviousManifestSha256: previousManifestSha256,
       candidateManifestSha256,
-      markerBytes: Object.freeze(Array.from(markerBytes.value)),
+      markerBase64: encodeBase64Bytes(markerBytes.value),
       files: Object.freeze(
         encoded.value.files.map((file) =>
-          Object.freeze({ path: file.path, bytes: Object.freeze(Array.from(file.bytes)) }),
+          Object.freeze({ path: file.path, bytesBase64: encodeBase64Bytes(file.bytes) }),
         ),
       ),
     }),
@@ -140,7 +141,7 @@ export function createMapworldSavePlan(
 }
 
 export function parseMapworldRecoveryMarker(
-  bytes: readonly number[],
+  bytes: ArrayLike<number>,
   expectedTargetName: string,
 ): MapworldRecoveryResult<MapworldRecoveryMarker> {
   const byteArray = Uint8Array.from(bytes);

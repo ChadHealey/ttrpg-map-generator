@@ -2,6 +2,7 @@ import {
   createAspectDependencyGraph,
   createPlanetRegionalTransform,
   type MapDocument,
+  reconstructAcceptedAtlas,
   validateRoundTripSafeRegionalExtent,
   validateWorldDocumentOwnership,
   type WorldDocument,
@@ -77,6 +78,20 @@ export function validateDocumentForPersistence(
   }
 
   diagnostics.push(...validateProofRecords(document));
+  const atlas = reconstructAcceptedAtlas(document);
+  if (atlas.status === 'invalid') {
+    diagnostics.push(
+      ...atlas.diagnostics.map((finding) =>
+        persistenceDiagnostic(
+          PERSISTENCE_DIAGNOSTIC_CODES.atlasInvalid,
+          'world.json',
+          '$.mapFiles',
+          `${finding.code}: ${finding.message}`,
+          finding.suggestedAction,
+        ),
+      ),
+    );
+  }
   return Object.freeze(diagnostics.sort(comparePersistenceDiagnostics));
 }
 

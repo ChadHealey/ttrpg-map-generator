@@ -8,3 +8,4 @@ playwright-report/
 test-results/
 docs/archive/
 apps/desktop/src-tauri/icons/
+fixtures/saved-projects/

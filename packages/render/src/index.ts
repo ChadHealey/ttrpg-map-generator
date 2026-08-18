@@ -24,6 +24,33 @@ export {
   projectAtlasCanonicalCoastline,
 } from './atlas-display-projection.js';
 export {
+  ATLAS_PNG_COLOR_PROFILE,
+  ATLAS_PNG_DEFAULT_DIMENSIONS,
+  ATLAS_PNG_DIAGNOSTIC_CODES,
+  ATLAS_PNG_ENCODING_POLICY,
+  ATLAS_PNG_EXPORT_PROFILE_ID,
+  ATLAS_PNG_EXPORT_VERSION,
+  ATLAS_PNG_FONT_POLICY,
+  ATLAS_PNG_MAXIMUM_BYTES,
+  ATLAS_PNG_MAXIMUM_COMPRESSED_ASSEMBLY_BYTES,
+  ATLAS_PNG_MAXIMUM_CONCURRENT_ENCODED_BYTES,
+  ATLAS_PNG_SUPPORTED_DIMENSIONS,
+  ATLAS_PNG_SUPPORTED_STYLE_ID,
+  ATLAS_PNG_TILE_POLICY,
+  type AtlasPngDiagnostic,
+  type AtlasPngDiagnosticCode,
+  type AtlasPngDimensions,
+  type AtlasPngExport,
+  type AtlasPngExportProgress,
+  type AtlasPngExportRequest,
+  type AtlasPngExportResources,
+  type AtlasPngExportResult,
+  type AtlasPngExportRuntime,
+  type AtlasPngSceneInput,
+  type AtlasPngStyleMetadata,
+  exportAtlasSceneToPngAsync,
+} from './atlas-png-export.js';
+export {
   ATLAS_SCENE_COMPOSITION_VERSION,
   ATLAS_SCENE_DIAGNOSTIC_CODES,
   ATLAS_SCENE_HEIGHT_PX,
@@ -37,6 +64,28 @@ export {
   type AtlasSceneLevelOfDetail,
   composeAtlasRenderScene,
 } from './atlas-scene.js';
+export {
+  ATLAS_SVG_DEFAULT_DIMENSIONS,
+  ATLAS_SVG_DIAGNOSTIC_CODES,
+  ATLAS_SVG_DIMENSION_LIMITS,
+  ATLAS_SVG_EXPORT_PROFILE_ID,
+  ATLAS_SVG_EXPORT_VERSION,
+  ATLAS_SVG_FONT_POLICY,
+  ATLAS_SVG_MAXIMUM_BYTES,
+  ATLAS_SVG_SUPPORTED_STYLE_ID,
+  type AtlasSvgDiagnostic,
+  type AtlasSvgDiagnosticCode,
+  type AtlasSvgDimensions,
+  type AtlasSvgExport,
+  type AtlasSvgExportProgress,
+  type AtlasSvgExportRequest,
+  type AtlasSvgExportResult,
+  type AtlasSvgExportRuntime,
+  type AtlasSvgSceneInput,
+  type AtlasSvgStyleMetadata,
+  exportAtlasSceneToSvg,
+  exportAtlasSceneToSvgAsync,
+} from './atlas-svg-export.js';
 
 /** Draws a render scene into a Canvas 2D context without changing its semantic interpretation. */
 export function renderSceneToCanvas(context: CanvasRenderingContext2D, scene: RenderScene): void {

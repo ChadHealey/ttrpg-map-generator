@@ -15,6 +15,11 @@ import {
 import modelSource from './mapworld-recovery-model.ts?raw';
 import nativeDtoSource from './mapworld-recovery-native-dto.ts?raw';
 import resultSource from './mapworld-recovery-result.ts?raw';
+import {
+  hasBoundedNativePackageEntryBytes,
+  nativeMapworldMarkerRoleSchema,
+  nativeMapworldPackageRoleSchema,
+} from './mapworld-recovery-schemas.js';
 import schemasSource from './mapworld-recovery-schemas.ts?raw';
 import {
   canonicalBytes,
@@ -29,6 +34,7 @@ import {
   NEW_PACKAGE,
   OLD_PACKAGE,
   OLD_PLAN,
+  planMarkerBytes,
   rawSnapshot,
   regular,
   REPLACEMENT_PLAN,
@@ -40,6 +46,30 @@ import {
 } from './mapworld-recovery-test-support.js';
 
 describe('marker classification and impossible states', () => {
+  it('guards raw aggregate snapshot bytes before decoding and retains legacy arrays', () => {
+    const entries = [
+      { path: 'a', bytes: 'AQID' },
+      { path: 'b', bytes: [4, 5, 6] },
+    ];
+    expect(hasBoundedNativePackageEntryBytes({ entries }, 5)).toBe(false);
+    expect(hasBoundedNativePackageEntryBytes({ entries }, 6)).toBe(true);
+    expect(
+      nativeMapworldPackageRoleSchema.safeParse({
+        kind: 'invalid-directory',
+        observationToken: token('a'),
+        entries,
+        directories: ['nested'],
+      }).success,
+    ).toBe(true);
+    expect(
+      nativeMapworldMarkerRoleSchema.safeParse({
+        kind: 'directory',
+        observationToken: token('b'),
+        entries,
+      }).success,
+    ).toBe(true);
+  });
+
   it.each([
     {
       name: 'canonical malformed current marker',
@@ -55,7 +85,7 @@ describe('marker classification and impossible states', () => {
     },
     {
       name: 'target-name mismatch',
-      marker: regular('e', savePlan(1, 'first-save', null, 'Other.mapworld').markerBytes),
+      marker: regular('e', planMarkerBytes(savePlan(1, 'first-save', null, 'Other.mapworld'))),
       classification: 'invalid',
       code: MAPWORLD_RECOVERY_CODES.markerInvalid,
     },
@@ -402,7 +432,7 @@ describe('candidate-specific confirmation and immutable inputs', () => {
       rawSnapshot({
         target: OLD_PACKAGE,
         temporary: NEW_PACKAGE,
-        marker: regular('e', REPLACEMENT_PLAN.markerBytes),
+        marker: regular('e', planMarkerBytes(REPLACEMENT_PLAN)),
       }),
     );
     expect(
@@ -474,11 +504,11 @@ describe('candidate-specific confirmation and immutable inputs', () => {
   });
 
   it('post-plan source mutation cannot alter immutable save bytes', () => {
-    const markerBefore = [...FIRST_PLAN.markerBytes];
-    const fileBefore = [...(FIRST_PLAN.files[0]?.bytes ?? [])];
-    expect(Object.isFrozen(FIRST_PLAN.markerBytes)).toBe(true);
-    expect(Object.isFrozen(FIRST_PLAN.files[0]?.bytes)).toBe(true);
-    expect(FIRST_PLAN.markerBytes).toEqual(markerBefore);
-    expect(FIRST_PLAN.files[0]?.bytes).toEqual(fileBefore);
+    const markerBefore = FIRST_PLAN.markerBase64;
+    const fileBefore = FIRST_PLAN.files[0]?.bytesBase64;
+    expect(typeof markerBefore).toBe('string');
+    expect(typeof fileBefore).toBe('string');
+    expect(FIRST_PLAN.markerBase64).toBe(markerBefore);
+    expect(FIRST_PLAN.files[0]?.bytesBase64).toBe(fileBefore);
   });
 });
