@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { decodeBase64Bytes, decodedBase64ByteLength } from './base64-bytes.js';
 import { sha256Hex } from './canonical-json.js';
 import { decodeMapworld } from './mapworld-decode.js';
 import { parseMapworldRecoveryMarker } from './mapworld-recovery-marker.js';
@@ -19,7 +20,7 @@ const RECOVERY_CODE_VALUES: ReadonlySet<string> = new Set(Object.values(MAPWORLD
 const recoveryCodeSchema = z.custom<MapworldRecoveryCode>(
   (value) => typeof value === 'string' && RECOVERY_CODE_VALUES.has(value),
 );
-const byteSchema = z.number().int().min(0).max(255);
+const base64Schema = z.string().refine((value) => decodedBase64ByteLength(value) !== null);
 const sha256Schema = z.string().regex(SHA256_PATTERN);
 const platformSchema = z.enum(['linux', 'macos']);
 const roleSchema = z.enum(['backup', 'marker', 'target', 'temporary']);
@@ -84,12 +85,20 @@ const nativeSaveRequestShapeSchema = z.strictObject({
   files: z
     .array(
       z.strictObject({
-        bytes: z.array(byteSchema).max(MAPWORLD_NATIVE_LIMITS.maximumFileBytes),
+        bytesBase64: base64Schema.refine(
+          (value) =>
+            (decodedBase64ByteLength(value) ?? Number.POSITIVE_INFINITY) <=
+            MAPWORLD_NATIVE_LIMITS.maximumFileBytes,
+        ),
         path: z.string(),
       }),
     )
     .max(MAPWORLD_NATIVE_LIMITS.maximumPackageFiles),
-  markerBytes: z.array(byteSchema).max(MAPWORLD_NATIVE_LIMITS.maximumMarkerBytes),
+  markerBase64: base64Schema.refine(
+    (value) =>
+      (decodedBase64ByteLength(value) ?? Number.POSITIVE_INFINITY) <=
+      MAPWORLD_NATIVE_LIMITS.maximumMarkerBytes,
+  ),
   operation: z.enum(['first-save', 'replacement-save']),
   targetPath: z.string().min(1),
 });
@@ -136,12 +145,8 @@ export interface MapworldNativeMutationDto {
   readonly snapshotId: string;
 }
 export type MapworldNativeSaveRequestDto = Readonly<
-  Omit<z.infer<typeof nativeSaveRequestSchema>, 'files' | 'markerBytes'> & {
-    readonly files: readonly {
-      readonly bytes: readonly number[];
-      readonly path: string;
-    }[];
-    readonly markerBytes: readonly number[];
+  Omit<z.infer<typeof nativeSaveRequestSchema>, 'files'> & {
+    readonly files: readonly Readonly<{ readonly bytesBase64: string; readonly path: string }>[];
   }
 >;
 export interface MapworldNativeApplyRequestDto {
@@ -177,11 +182,19 @@ export function validateMapworldNativeSaveRequestDto(
       'Create the native request only from a validated immutable mapworld save plan.',
     );
   }
+  return validateParsedMapworldNativeSaveRequestDto(request);
+}
+
+/** Complete validation after the strict structural parser has already produced an owned DTO. */
+export function validateParsedMapworldNativeSaveRequestDto(
+  request: MapworldNativeSaveRequestDto,
+): MapworldRecoveryResult<MapworldNativeSaveRequestDto> {
   const package_ = Object.freeze({
     files: Object.freeze(
-      request.files.map(({ bytes, path }) =>
-        Object.freeze({ bytes: Uint8Array.from(bytes), path }),
-      ),
+      request.files.map(({ bytesBase64, path }) => ({
+        bytes: requiredDecodedBytes(bytesBase64, MAPWORLD_NATIVE_LIMITS.maximumFileBytes),
+        path,
+      })),
     ),
   });
   const decoded = decodeMapworld(package_);
@@ -202,7 +215,12 @@ export function validateMapworldNativeSaveRequestDto(
     );
   }
   const targetName = unixBasename(request.targetPath);
-  const marker = parseMapworldRecoveryMarker(request.markerBytes, targetName);
+  const marker = parseMapworldRecoveryMarker(
+    Array.from(
+      requiredDecodedBytes(request.markerBase64, MAPWORLD_NATIVE_LIMITS.maximumMarkerBytes),
+    ),
+    targetName,
+  );
   if (!marker.ok) return marker;
   if (
     marker.value.operation !== request.operation ||
@@ -278,13 +296,21 @@ function hasBoundedAggregateFileBytes(input: unknown): boolean {
   if (!isUnknownArray(files)) return true;
   let total = 0;
   for (const file of files) {
-    if (!isObjectRecord(file) || !Object.hasOwn(file, 'bytes')) return true;
-    const bytes = file.bytes;
-    if (!isUnknownArray(bytes)) return true;
-    total += bytes.length;
+    if (!isObjectRecord(file) || !Object.hasOwn(file, 'bytesBase64')) return true;
+    const bytesBase64 = file.bytesBase64;
+    if (typeof bytesBase64 !== 'string') return true;
+    const length = decodedBase64ByteLength(bytesBase64);
+    if (length === null) return true;
+    total += length;
     if (total > MAPWORLD_NATIVE_LIMITS.maximumPackageBytes) return false;
   }
   return true;
+}
+
+function requiredDecodedBytes(value: string, maximumBytes: number): Uint8Array {
+  const decoded = decodeBase64Bytes(value, maximumBytes);
+  if (decoded === null) throw new Error('Validated canonical base64 failed to decode.');
+  return decoded;
 }
 
 function isObjectRecord(value: unknown): value is Readonly<Record<string, unknown>> {

@@ -1,5 +1,6 @@
 import { posix } from 'node:path';
 
+import { validateAtlasPngArtifactMetadata } from './atlas-png-fixture-schema.mjs';
 import { readRequiredFile, sha256, verifyArtifacts, verifyFile } from './fixture-files.mjs';
 
 const FIXTURE_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
@@ -10,10 +11,12 @@ const REVIEW_RECORD_PATTERN =
 const UUID_PATTERN = /^[a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/u;
 const ARTIFACT_KINDS = new Set([
   'canonical-aspect-bytes',
+  'canonical-aspect-digest-index',
   'canonical-aspect-output-bytes',
   'canonical-kernel-vector',
   'canonical-render-scene',
   'canonical-svg',
+  'reopen-comparison-report',
   'saved-project-authoritative-file',
   'saved-project-manifest',
   'visual-evidence',
@@ -187,6 +190,8 @@ function validateArtifact(candidate, index, fixtureId) {
   const artifact = requireRecord(candidate, `Artifact ${index}`);
   const artifactPath = requireFixtureRelativePath(artifact.path, `Artifact ${index} path`);
   const kind = requireNonEmptyString(artifact.kind, `Artifact ${index} kind`);
+  const isMilestoneTwoAtlasVisual =
+    kind === 'visual-evidence' && fixtureId.startsWith('milestone-2-atlas-');
   if (!ARTIFACT_KINDS.has(kind)) {
     fail(`Artifact ${artifactPath} has an unknown evidence kind.`);
   }
@@ -206,6 +211,9 @@ function validateArtifact(candidate, index, fixtureId) {
     (kind === 'canonical-aspect-bytes' &&
       isWithin(artifactPath, expectedRoot) &&
       artifactPath.endsWith('.aspect.canonical')) ||
+    (kind === 'canonical-aspect-digest-index' &&
+      isWithin(artifactPath, expectedRoot) &&
+      artifactPath.endsWith('.aspects.index.canonical')) ||
     (kind === 'canonical-aspect-output-bytes' &&
       isWithin(artifactPath, expectedRoot) &&
       artifactPath.endsWith('.output.canonical')) ||
@@ -216,6 +224,9 @@ function validateArtifact(candidate, index, fixtureId) {
       isWithin(artifactPath, expectedRoot) &&
       artifactPath.endsWith('.scene.canonical')) ||
     (kind === 'canonical-svg' && artifactPath === `canonical-svg/${fixtureId}/${checkpoint}.svg`) ||
+    (kind === 'reopen-comparison-report' &&
+      isWithin(artifactPath, expectedRoot) &&
+      artifactPath.endsWith('.reopen.canonical')) ||
     (kind === 'visual-evidence' &&
       artifactPath === `visual-gallery/${fixtureId}/${checkpoint}.png`) ||
     (kind === 'saved-project-manifest' && artifactPath === `${savedProjectRoot}/manifest.json`) ||
@@ -228,7 +239,7 @@ function validateArtifact(candidate, index, fixtureId) {
     fail(`Artifact ${artifactPath} does not match its fixture, checkpoint, and evidence kind.`);
   }
   const aspectId = artifact.aspectId;
-  if (kind.startsWith('canonical-aspect-')) {
+  if (kind === 'canonical-aspect-bytes' || kind === 'canonical-aspect-output-bytes') {
     if (typeof aspectId !== 'string' || !UUID_PATTERN.test(aspectId)) {
       fail(`Artifact ${artifactPath} requires a canonical aspectId.`);
     }
@@ -242,15 +253,22 @@ function validateArtifact(candidate, index, fixtureId) {
   const evidenceDigestField =
     kind === 'canonical-aspect-bytes'
       ? 'canonicalAspectSha256'
-      : kind === 'canonical-aspect-output-bytes'
-        ? 'canonicalAspectOutputSha256'
-        : kind === 'canonical-kernel-vector'
-          ? 'canonicalKernelVectorSha256'
-          : kind === 'canonical-render-scene'
-            ? 'canonicalSceneSha256'
-            : kind === 'canonical-svg'
-              ? 'canonicalSvgSha256'
-              : undefined;
+      : kind === 'canonical-aspect-digest-index'
+        ? 'canonicalAspectDigestIndexSha256'
+        : kind === 'canonical-aspect-output-bytes'
+          ? 'canonicalAspectOutputSha256'
+          : kind === 'canonical-kernel-vector'
+            ? 'canonicalKernelVectorSha256'
+            : kind === 'canonical-render-scene'
+              ? 'canonicalSceneSha256'
+              : kind === 'canonical-svg'
+                ? 'canonicalSvgSha256'
+                : kind === 'reopen-comparison-report'
+                  ? 'reopenComparisonSha256'
+                  : kind === 'visual-evidence' &&
+                      (artifact.visualEvidenceSha256 !== undefined || isMilestoneTwoAtlasVisual)
+                    ? 'visualEvidenceSha256'
+                    : undefined;
   const evidenceDigest =
     evidenceDigestField === undefined
       ? undefined
@@ -260,18 +278,25 @@ function validateArtifact(candidate, index, fixtureId) {
         );
   for (const field of [
     'canonicalAspectSha256',
+    'canonicalAspectDigestIndexSha256',
     'canonicalAspectOutputSha256',
     'canonicalKernelVectorSha256',
     'canonicalSceneSha256',
     'canonicalSvgSha256',
+    'reopenComparisonSha256',
+    'visualEvidenceSha256',
   ]) {
     if (field !== evidenceDigestField && artifact[field] !== undefined) {
       fail(`Artifact ${artifactPath} cannot declare ${field} for evidence kind ${kind}.`);
     }
   }
   if (evidenceDigest !== undefined && evidenceDigest !== fixtureIntegritySha256) {
-    fail(`Artifact ${artifactPath} canonical evidence hash must match its exact artifact bytes.`);
+    fail(`Artifact ${artifactPath} evidence hash must match its exact artifact bytes.`);
   }
+  const isProductionAtlasPng = isMilestoneTwoAtlasVisual;
+  const pngMetadata = isProductionAtlasPng
+    ? validateAtlasPngArtifactMetadata(artifact, artifactPath)
+    : {};
   return {
     path: artifactPath,
     kind,
@@ -280,6 +305,7 @@ function validateArtifact(candidate, index, fixtureId) {
     byteLength: artifact.byteLength,
     fixtureIntegritySha256,
     ...(evidenceDigestField === undefined ? {} : { [evidenceDigestField]: evidenceDigest }),
+    ...pngMetadata,
   };
 }
 
@@ -336,6 +362,118 @@ function validateExpectedAssertions(value, fixtureId, artifacts) {
     `${fixtureId} expected assertion IDs`,
   );
   return assertions;
+}
+
+function requireNonNegativeSafeInteger(value, label) {
+  if (!Number.isSafeInteger(value) || value < 0) {
+    fail(`${label} must be a non-negative safe integer.`);
+  }
+  return value;
+}
+
+function parseCanonicalJsonArtifact(repositoryRoot, artifact) {
+  const bytes = readRequiredFile(repositoryRoot, artifact.path, 'Structured fixture artifact');
+  let value;
+  try {
+    value = JSON.parse(bytes.toString('utf8'));
+  } catch {
+    fail(`Artifact ${artifact.path} must contain valid JSON.`);
+  }
+  return requireRecord(value, `Artifact ${artifact.path} contents`);
+}
+
+function validateCanonicalAspectDigestIndex(repositoryRoot, artifact) {
+  const value = parseCanonicalJsonArtifact(repositoryRoot, artifact);
+  if (value.canonicalAspectDigestIndexVersion !== 1) {
+    fail(`Artifact ${artifact.path} canonicalAspectDigestIndexVersion must be 1.`);
+  }
+  if (value.canonicalByteOwner !== '@ttrpg-map/persistence') {
+    fail(`Artifact ${artifact.path} must identify the persistence canonical-byte owner.`);
+  }
+  if (value.checkpoint !== artifact.checkpoint) {
+    fail(`Artifact ${artifact.path} checkpoint must match its manifest metadata.`);
+  }
+  requireSha256(value.canonicalAspectSetSha256, `${artifact.path} canonicalAspectSetSha256`);
+  requireSha256(
+    value.canonicalAspectOutputSetSha256,
+    `${artifact.path} canonicalAspectOutputSetSha256`,
+  );
+  if (!Array.isArray(value.aspects) || value.aspects.length === 0) {
+    fail(`Artifact ${artifact.path} aspects must be a non-empty array.`);
+  }
+  if (value.aspectCount !== value.aspects.length) {
+    fail(`Artifact ${artifact.path} aspectCount must match its aspects array.`);
+  }
+  const aspectIds = value.aspects.map((candidate, index) => {
+    const entry = requireRecord(candidate, `${artifact.path} aspects[${index}]`);
+    const aspectId = requireNonEmptyString(entry.aspectId, `${artifact.path} aspectId`);
+    if (!UUID_PATTERN.test(aspectId)) {
+      fail(`Artifact ${artifact.path} contains an invalid aspectId.`);
+    }
+    requireNonEmptyString(entry.aspectName, `${artifact.path} aspectName`);
+    requireNonNegativeSafeInteger(entry.variantRevision, `${artifact.path} variantRevision`);
+    requireNonNegativeSafeInteger(
+      entry.canonicalAspectByteLength,
+      `${artifact.path} canonicalAspectByteLength`,
+    );
+    requireSha256(entry.canonicalAspectSha256, `${artifact.path} canonicalAspectSha256`);
+    requireNonNegativeSafeInteger(
+      entry.canonicalAspectOutputByteLength,
+      `${artifact.path} canonicalAspectOutputByteLength`,
+    );
+    requireSha256(
+      entry.canonicalAspectOutputSha256,
+      `${artifact.path} canonicalAspectOutputSha256`,
+    );
+    return aspectId;
+  });
+  requireSortedUnique(aspectIds, `${artifact.path} aspect IDs`);
+}
+
+function validateReopenComparisonReport(repositoryRoot, artifact) {
+  const value = parseCanonicalJsonArtifact(repositoryRoot, artifact);
+  if (value.reopenComparisonVersion !== 1) {
+    fail(`Artifact ${artifact.path} reopenComparisonVersion must be 1.`);
+  }
+  if (value.sourceCheckpoint !== 'appearance-rerolled' || value.checkpoint !== 'reopened') {
+    fail(`Artifact ${artifact.path} must compare appearance-rerolled with reopened.`);
+  }
+  if (value.generatorInvocationCount !== 0) {
+    fail(`Artifact ${artifact.path} must record generator-free reopen.`);
+  }
+  for (const field of [
+    'packageChecksumsValidated',
+    'acceptedRecordsEqual',
+    'canonicalAspectSetsEqual',
+    'canonicalAspectOutputSetsEqual',
+    'sceneSemanticsEqual',
+    'canonicalSvgEqual',
+    'deterministicPngEqual',
+  ]) {
+    if (value[field] !== true) {
+      fail(`Artifact ${artifact.path} ${field} must be true.`);
+    }
+  }
+  for (const field of [
+    'canonicalAspectSetSha256',
+    'canonicalAspectOutputSetSha256',
+    'sceneSha256',
+    'canonicalSvgSha256',
+    'deterministicPngSha256',
+  ]) {
+    requireSha256(value[field], `${artifact.path} ${field}`);
+  }
+}
+
+function validateStructuredArtifacts(repositoryRoot, artifacts) {
+  for (const artifact of artifacts) {
+    if (artifact.kind === 'canonical-aspect-digest-index') {
+      validateCanonicalAspectDigestIndex(repositoryRoot, artifact);
+    }
+    if (artifact.kind === 'reopen-comparison-report') {
+      validateReopenComparisonReport(repositoryRoot, artifact);
+    }
+  }
 }
 
 function evaluateExpectedAssertions(repositoryRoot, assertions) {
@@ -474,6 +612,7 @@ export function validateManifest(
     artifacts,
   );
   verifyArtifacts(artifactsRepositoryRoot, generatedRoots, artifacts);
+  validateStructuredArtifacts(artifactsRepositoryRoot, artifacts);
   evaluateExpectedAssertions(artifactsRepositoryRoot, expectedAssertions);
   return {
     artifacts,

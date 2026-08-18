@@ -1,35 +1,19 @@
 import { z } from 'zod';
 
-import { ACCEPTED_ASPECT_SCHEMA_VERSION } from './persistence-model.js';
+import { commonAcceptedAspectFields } from './accepted-aspect-common-dto-schema.js';
 import {
-  aspectDependencyReferenceDtoSchema,
+  ATLAS_ACCEPTED_ASPECT_NAMES,
+  atlasAcceptedAspectDtoSchemas,
+} from './atlas-accepted-aspect-dto-schema.js';
+import {
   canonicalJsonValueDtoSchema,
-  diagnosticDtoSchema,
-  nonnegativeIntegerDtoSchema,
   planetPointDtoSchema,
-  positiveIntegerDtoSchema,
-  seedInputDtoSchema,
   stableIdDtoSchema,
   symbolicTextDtoSchema,
 } from './primitive-dto-schemas.js';
 
 export const PROOF_OUTLINE_ASPECT_ID_TEXT = '54b92092-3d5f-4bca-a12c-353185de1557';
 export const PROOF_MARKER_ASPECT_ID_TEXT = '42928679-db9b-4de2-a8d4-0baecd709cc9';
-
-const commonAcceptedAspectFields = {
-  acceptedAspectSchemaVersion: z.literal(ACCEPTED_ASPECT_SCHEMA_VERSION),
-  mapId: stableIdDtoSchema,
-  entityId: stableIdDtoSchema,
-  aspectId: stableIdDtoSchema,
-  generatorVersion: positiveIntegerDtoSchema,
-  parameterSchemaVersion: positiveIntegerDtoSchema,
-  seedScope: z.enum(['map/entity', 'root-coordinate', 'shared-boundary']),
-  seedMetadata: seedInputDtoSchema,
-  variantRevision: nonnegativeIntegerDtoSchema,
-  dependencyAspects: z.array(aspectDependencyReferenceDtoSchema),
-  generationStatus: z.literal('accepted'),
-  diagnostics: z.array(diagnosticDtoSchema),
-} as const;
 
 const proofOutlineParametersDtoSchema = z.strictObject({
   pointCount: z.literal(8),
@@ -66,7 +50,7 @@ const proofOutlineAcceptedAspectDtoSchema = z.strictObject({
   parameterSchemaVersion: z.literal(1),
   parameters: proofOutlineParametersDtoSchema,
   seedScope: z.literal('map/entity'),
-  dependencyAspects: z.array(aspectDependencyReferenceDtoSchema).length(0),
+  dependencyAspects: z.array(commonAcceptedAspectFields.dependencyAspects.element).length(0),
   acceptedOutput: proofOutlineOutputDtoSchema,
 });
 
@@ -79,7 +63,7 @@ const proofMarkerAcceptedAspectDtoSchema = z.strictObject({
   parameterSchemaVersion: z.literal(1),
   parameters: proofMarkerParametersDtoSchema,
   seedScope: z.literal('map/entity'),
-  dependencyAspects: z.array(aspectDependencyReferenceDtoSchema).length(1),
+  dependencyAspects: z.array(commonAcceptedAspectFields.dependencyAspects.element).length(1),
   acceptedOutput: proofMarkerOutputDtoSchema,
 });
 
@@ -95,6 +79,7 @@ const otherAcceptedAspectDtoSchema = z
     if (
       record.aspectName === 'proof.outline' ||
       record.aspectName === 'proof.markers' ||
+      ATLAS_ACCEPTED_ASPECT_NAMES.has(record.aspectName) ||
       record.aspectId === PROOF_OUTLINE_ASPECT_ID_TEXT ||
       record.aspectId === PROOF_MARKER_ASPECT_ID_TEXT
     ) {
@@ -109,6 +94,7 @@ const otherAcceptedAspectDtoSchema = z
 export const acceptedAspectDtoSchema = z.union([
   proofOutlineAcceptedAspectDtoSchema,
   proofMarkerAcceptedAspectDtoSchema,
+  ...atlasAcceptedAspectDtoSchemas,
   otherAcceptedAspectDtoSchema,
 ]);
 

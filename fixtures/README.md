@@ -32,11 +32,13 @@ the targeted `pnpm fixtures:update` command documented there.
   pnpm fixtures:update --fixture milestone-1-kernel-proof --review-record fixed-seeds/milestone-1-kernel-proof/reviews/0002-rendered-workflow-proof.md
   ```
 
-## Milestone 2 plan
+## Milestone 2
 
 The [Milestone 2 whole-world atlas-proof contract](../docs/milestone-2-atlas-proof.md) fixes six
-future registered fixture IDs, their seeds and controls, and semantic/geometry/visual assertions.
-The main fixture owns `baseline`, `geography-rerolled`, `appearance-rerolled`, and `reopened`; the
-other five are baseline-only. Each fixture is registered only when its runner and initial
-append-only review record can produce complete evidence; this planning change intentionally adds
-no placeholder manifest or golden file.
+registered fixture IDs, their seeds and controls, and semantic/geometry/visual assertions. Every
+row records a persistence-owned digest index over the complete canonical accepted aspect and
+output bytes at `baseline`; the retained kernel vector is historical generator evidence and no
+longer substitutes for accepted state. The main fixture additionally owns
+`geography-rerolled`, `appearance-rerolled`, and `reopened`, the authoritative
+appearance-rerolled `.mapworld` package, explicit SVG/PNG checkpoints, and a generator-free reopen
+comparison report instead of duplicate reopened semantic goldens.

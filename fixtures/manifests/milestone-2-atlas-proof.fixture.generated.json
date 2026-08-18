@@ -3,10 +3,10 @@
   "fixtureId": "milestone-2-atlas-proof",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-proof --review-record fixed-seeds/milestone-2-atlas-proof/reviews/0008-restrained-ink-atlas.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-proof --review-record fixed-seeds/milestone-2-atlas-proof/reviews/0011-accepted-atlas-lifecycle.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-proof/fixture-definition.json",
-    "sha256": "4e565a6e674623561d8952140c98522597b483325390676abbc7ccacb854520a"
+    "sha256": "071f70d70e9e4d8318b278af63c6366467ee9fa13faac1a59c75f2a0ccff5fa1"
   },
   "worldSeed": "81985529216486895",
   "stableIds": {
@@ -18,6 +18,35 @@
     "coastlineRingId002": "913f4095-2126-5e29-8be2-e2c9212a1a94",
     "coastlineRingId003": "c3cc6cb4-3d75-5b81-bdb2-f7f3fbac9023",
     "coastlineRingId004": "ec475bdf-5b9c-53a8-8a84-4e5bc0ee874d",
+    "geographyRerolledAspectId000": "03ba25d9-70d5-59e6-9803-3380514c067c",
+    "geographyRerolledAspectId001": "04628f37-6408-5087-a139-bdd2bdff42d3",
+    "geographyRerolledAspectId002": "21c5b99e-143c-5c0e-b649-68a520d67b48",
+    "geographyRerolledAspectId003": "2ac5f143-7d7d-5636-989b-d86e17ea0e22",
+    "geographyRerolledAspectId004": "3149296c-ad4f-5fa6-b009-6cd7d11b4c74",
+    "geographyRerolledAspectId005": "31c22a27-e791-5ba9-9813-501c3909c3a1",
+    "geographyRerolledAspectId006": "371a6a8c-9fe8-5cdb-adca-1a46ffa19645",
+    "geographyRerolledAspectId007": "539c228b-e64c-5afe-9f88-0011eba5217d",
+    "geographyRerolledAspectId008": "59f10ef4-1c76-5470-a79a-7dcb6a3db1aa",
+    "geographyRerolledAspectId009": "84e9bf65-d9fa-56cc-8a35-8931a52e362a",
+    "geographyRerolledAspectId010": "90916e2f-286a-5722-984e-0981392bcfd8",
+    "geographyRerolledAspectId011": "a200a1c0-c569-5615-80cd-89b15fbab600",
+    "geographyRerolledAspectId012": "aee4a9e9-af56-5c2b-bfc6-4f3cddffcc13",
+    "geographyRerolledAspectId013": "e50fd847-5ff0-524e-a345-f9a64a0fa470",
+    "geographyRerolledAspectId014": "e588eb7f-d585-5c27-9ce5-81c2fb1ebc43",
+    "geographyRerolledAspectId015": "f435cc03-cc5f-59aa-9390-8693a9a8fcbd",
+    "geographyRerolledEntityId000": "08ed3e28-7b39-54f7-b14a-1df89ab1455a",
+    "geographyRerolledEntityId001": "66b92789-9a5b-5760-b299-1d82700cf3a0",
+    "geographyRerolledEntityId002": "7896617e-cb74-5460-b8b3-c11bdcfeee71",
+    "geographyRerolledEntityId003": "8737ec2a-5dd2-5b77-85f3-d8cd683ef073",
+    "geographyRerolledEntityId004": "9ae79f81-089c-5619-817f-5f4c0e0f0b4b",
+    "geographyRerolledEntityId005": "a2d5bfc2-600d-50a9-bf4d-844b35d9da00",
+    "geographyRerolledEntityId006": "ba89dee3-180d-5413-9fe5-7fac5fc98343",
+    "geographyRerolledEntityId007": "c5f54e20-adfc-5e0f-8bb6-c5ce24093196",
+    "geographyRerolledEntityId008": "da8c5653-83b8-5ea7-9915-ecebde7db849",
+    "geographyRerolledEntityId009": "df68f417-3354-54cc-9f48-2b68c20c1d8a",
+    "geographyRerolledEntityId010": "eaa0cecc-8c5d-559f-b18a-bbd0c53248ac",
+    "geographyRerolledEntityId011": "edbd523f-7273-5b6f-9329-07d5a4120238",
+    "geographyRerolledEntityId012": "fb26d705-113a-5fd4-80c1-8c5b0ec63205",
     "landWaterClassificationAspectId": "04628f37-6408-5087-a139-bdd2bdff42d3",
     "macroElevationAspectId": "e588eb7f-d585-5c27-9ce5-81c2fb1ebc43",
     "paperTreatmentAspectId": "f435cc03-cc5f-59aa-9390-8693a9a8fcbd",
@@ -45,6 +74,7 @@
     "worldSurfaceEntityId": "eaa0cecc-8c5d-559f-b18a-bbd0c53248ac"
   },
   "versions": {
+    "acceptedAspectSchemaVersion": 1,
     "atlasAppearanceGeneratorManifestVersion": 1,
     "atlasAppearanceParameterSchemaVersion": 1,
     "atlasCoastlineAppearanceBehaviorVersion": 1,
@@ -76,9 +106,24 @@
     "landWaterClassificationBehaviorVersion": 1,
     "landWaterClassificationGeneratorVersion": 1,
     "macroElevationGeneratorVersion": 1,
-    "seedDerivationVersion": 1
+    "mapDocumentSchemaVersion": 1,
+    "mapworldPackageVersion": 1,
+    "mapworldSchemaVersion": 1,
+    "seedDerivationVersion": 1,
+    "worldIndexSchemaVersion": 1
   },
   "checkpointRevisions": {
+    "appearance-rerolled": {
+      "atlas.coastlineAppearance": 1,
+      "atlas.paperTreatment": 1,
+      "atlas.waterDecoration": 1,
+      "islandGroup.classification": 0,
+      "landmass.classification": 0,
+      "waterBody.classification": 0,
+      "worldCoastline.geometry": 0,
+      "worldSurface.landWaterClassification": 0,
+      "worldTerrain.macroElevation": 1
+    },
     "baseline": {
       "atlas.coastlineAppearance": 0,
       "atlas.paperTreatment": 0,
@@ -89,33 +134,146 @@
       "worldCoastline.geometry": 0,
       "worldSurface.landWaterClassification": 0,
       "worldTerrain.macroElevation": 0
+    },
+    "geography-rerolled": {
+      "atlas.coastlineAppearance": 0,
+      "atlas.paperTreatment": 0,
+      "atlas.waterDecoration": 0,
+      "islandGroup.classification": 0,
+      "landmass.classification": 0,
+      "waterBody.classification": 0,
+      "worldCoastline.geometry": 0,
+      "worldSurface.landWaterClassification": 0,
+      "worldTerrain.macroElevation": 1
+    },
+    "reopened": {
+      "atlas.coastlineAppearance": 1,
+      "atlas.paperTreatment": 1,
+      "atlas.waterDecoration": 1,
+      "islandGroup.classification": 0,
+      "landmass.classification": 0,
+      "waterBody.classification": 0,
+      "worldCoastline.geometry": 0,
+      "worldSurface.landWaterClassification": 0,
+      "worldTerrain.macroElevation": 1
     }
   },
   "expectedAssertions": [
     {
-      "assertionId": "runner-validates-full-generator-kernel",
+      "assertionId": "appearance-reroll-changes-accepted-set",
+      "operator": "bytes-not-equal",
+      "leftArtifactPath": "fixed-seeds/milestone-2-atlas-proof/expected/geography-rerolled/accepted-aspects.aspects.index.canonical",
+      "rightArtifactPath": "fixed-seeds/milestone-2-atlas-proof/expected/appearance-rerolled/accepted-aspects.aspects.index.canonical",
+      "reviewPurpose": "Prove the appearance transaction changes complete accepted aspect bytes."
+    },
+    {
+      "assertionId": "appearance-reroll-changes-png",
+      "operator": "bytes-not-equal",
+      "leftArtifactPath": "visual-gallery/milestone-2-atlas-proof/geography-rerolled.png",
+      "rightArtifactPath": "visual-gallery/milestone-2-atlas-proof/appearance-rerolled.png",
+      "reviewPurpose": "Prove the appearance reroll is visible in deterministic raster output."
+    },
+    {
+      "assertionId": "appearance-reroll-changes-svg",
+      "operator": "bytes-not-equal",
+      "leftArtifactPath": "canonical-svg/milestone-2-atlas-proof/geography-rerolled.svg",
+      "rightArtifactPath": "canonical-svg/milestone-2-atlas-proof/appearance-rerolled.svg",
+      "reviewPurpose": "Prove the appearance reroll is visible in canonical vector output."
+    },
+    {
+      "assertionId": "geography-reroll-changes-accepted-set",
+      "operator": "bytes-not-equal",
+      "leftArtifactPath": "fixed-seeds/milestone-2-atlas-proof/expected/baseline/accepted-aspects.aspects.index.canonical",
+      "rightArtifactPath": "fixed-seeds/milestone-2-atlas-proof/expected/geography-rerolled/accepted-aspects.aspects.index.canonical",
+      "reviewPurpose": "Prove the geography transaction changes complete accepted aspect bytes."
+    },
+    {
+      "assertionId": "reopen-preserves-png",
+      "operator": "bytes-equal",
+      "leftArtifactPath": "visual-gallery/milestone-2-atlas-proof/appearance-rerolled.png",
+      "rightArtifactPath": "visual-gallery/milestone-2-atlas-proof/reopened.png",
+      "reviewPurpose": "Prove checksum-validated generator-free reopen has no PNG drift."
+    },
+    {
+      "assertionId": "reopen-preserves-svg",
+      "operator": "bytes-equal",
+      "leftArtifactPath": "canonical-svg/milestone-2-atlas-proof/appearance-rerolled.svg",
+      "rightArtifactPath": "canonical-svg/milestone-2-atlas-proof/reopened.svg",
+      "reviewPurpose": "Prove checksum-validated generator-free reopen has no SVG drift."
+    },
+    {
+      "assertionId": "runner-validates-accepted-atlas-evidence",
       "operator": "runner-pass",
-      "reviewPurpose": "Prove exact geography plus independently seeded accepted appearance, bounded ink, masked decoration, paper treatment, and shared-scene backend evidence."
+      "reviewPurpose": "Prove exact generation, transactional reroll isolation, persistence-owned canonical evidence, checksum-validated save, generator-free reopen, and deterministic exports."
     }
   ],
-  "reviewPurpose": "Prove the restrained version-1 ink style and appearance isolation over unchanged accepted atlas geography before persistence integration.",
+  "reviewPurpose": "Prove the complete accepted Milestone 2 atlas lifecycle across isolated rerolls, persistence-owned canonical state, authoritative save, generator-free reopen, scenes, SVG, and PNG.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-proof/reviews/0008-restrained-ink-atlas.md",
-    "sha256": "ce8a0318f2981affb2dd427940d484c9cfc6065d182e7141ae977a2f6ba9cb89"
+    "path": "fixed-seeds/milestone-2-atlas-proof/reviews/0011-accepted-atlas-lifecycle.md",
+    "sha256": "8ed5b729e79ca276d6f800567d6c97aebdceec4b252871b2ec894bced5fd79cf"
   },
   "generatedRoots": [
     "canonical-svg/milestone-2-atlas-proof",
     "fixed-seeds/milestone-2-atlas-proof/expected",
+    "saved-projects/v1/milestone-2-atlas-proof",
     "visual-gallery/milestone-2-atlas-proof"
   ],
   "artifacts": [
     {
+      "path": "canonical-svg/milestone-2-atlas-proof/appearance-rerolled.svg",
+      "kind": "canonical-svg",
+      "checkpoint": "appearance-rerolled",
+      "byteLength": 852650,
+      "canonicalSvgSha256": "d1907f45b173d3d008b72de320d845541316549b2e8f52dbeaa30883e2c0d7d5",
+      "fixtureIntegritySha256": "d1907f45b173d3d008b72de320d845541316549b2e8f52dbeaa30883e2c0d7d5"
+    },
+    {
       "path": "canonical-svg/milestone-2-atlas-proof/baseline.svg",
       "kind": "canonical-svg",
       "checkpoint": "baseline",
-      "byteLength": 707595,
-      "canonicalSvgSha256": "a2b0fd2d748350e69c2c759d51e2cc2d1801552395a359104eae0ee31425a012",
-      "fixtureIntegritySha256": "a2b0fd2d748350e69c2c759d51e2cc2d1801552395a359104eae0ee31425a012"
+      "byteLength": 636624,
+      "canonicalSvgSha256": "0e43c0aaff16f2a46adef67441e58d007a1e68c08fc2fc6a25293a089cc17824",
+      "fixtureIntegritySha256": "0e43c0aaff16f2a46adef67441e58d007a1e68c08fc2fc6a25293a089cc17824"
+    },
+    {
+      "path": "canonical-svg/milestone-2-atlas-proof/geography-rerolled.svg",
+      "kind": "canonical-svg",
+      "checkpoint": "geography-rerolled",
+      "byteLength": 828651,
+      "canonicalSvgSha256": "9a78e1a1e4af5f6808fd606ffa02a1f8761f140bc3688c0f31e30c65982d315a",
+      "fixtureIntegritySha256": "9a78e1a1e4af5f6808fd606ffa02a1f8761f140bc3688c0f31e30c65982d315a"
+    },
+    {
+      "path": "canonical-svg/milestone-2-atlas-proof/reopened.svg",
+      "kind": "canonical-svg",
+      "checkpoint": "reopened",
+      "byteLength": 852650,
+      "canonicalSvgSha256": "d1907f45b173d3d008b72de320d845541316549b2e8f52dbeaa30883e2c0d7d5",
+      "fixtureIntegritySha256": "d1907f45b173d3d008b72de320d845541316549b2e8f52dbeaa30883e2c0d7d5"
+    },
+    {
+      "path": "fixed-seeds/milestone-2-atlas-proof/expected/appearance-rerolled/accepted-aspects.aspects.index.canonical",
+      "kind": "canonical-aspect-digest-index",
+      "checkpoint": "appearance-rerolled",
+      "byteLength": 7422,
+      "canonicalAspectDigestIndexSha256": "d93eb3ec6009525fc96605f934a18f2d2ef42a9cd6858c7fccfa05b9af267647",
+      "fixtureIntegritySha256": "d93eb3ec6009525fc96605f934a18f2d2ef42a9cd6858c7fccfa05b9af267647"
+    },
+    {
+      "path": "fixed-seeds/milestone-2-atlas-proof/expected/appearance-rerolled/atlas-render-scene.scene.canonical",
+      "kind": "canonical-render-scene",
+      "checkpoint": "appearance-rerolled",
+      "byteLength": 1547512,
+      "canonicalSceneSha256": "0630d040976a02a74d4074ef51b31eb81a0c5fd372c546bee0a1750fb41b5343",
+      "fixtureIntegritySha256": "0630d040976a02a74d4074ef51b31eb81a0c5fd372c546bee0a1750fb41b5343"
+    },
+    {
+      "path": "fixed-seeds/milestone-2-atlas-proof/expected/baseline/accepted-aspects.aspects.index.canonical",
+      "kind": "canonical-aspect-digest-index",
+      "checkpoint": "baseline",
+      "byteLength": 5654,
+      "canonicalAspectDigestIndexSha256": "d45fbc78002653016caec1b15fed5d7ae971e265e917983a3883418679338771",
+      "fixtureIntegritySha256": "d45fbc78002653016caec1b15fed5d7ae971e265e917983a3883418679338771"
     },
     {
       "path": "fixed-seeds/milestone-2-atlas-proof/expected/baseline/atlas-land-water.kernel.canonical",
@@ -134,12 +292,121 @@
       "fixtureIntegritySha256": "e00ab2a086ede3c55f7a2039895da04e27fa65275f52caea7f346cab429e35de"
     },
     {
+      "path": "fixed-seeds/milestone-2-atlas-proof/expected/geography-rerolled/accepted-aspects.aspects.index.canonical",
+      "kind": "canonical-aspect-digest-index",
+      "checkpoint": "geography-rerolled",
+      "byteLength": 7421,
+      "canonicalAspectDigestIndexSha256": "3a007fc481c6c63764e4f2f645928e6af3ffd39886b54b84b46a385342bd8fff",
+      "fixtureIntegritySha256": "3a007fc481c6c63764e4f2f645928e6af3ffd39886b54b84b46a385342bd8fff"
+    },
+    {
+      "path": "fixed-seeds/milestone-2-atlas-proof/expected/geography-rerolled/atlas-render-scene.scene.canonical",
+      "kind": "canonical-render-scene",
+      "checkpoint": "geography-rerolled",
+      "byteLength": 1501335,
+      "canonicalSceneSha256": "89942ab394bed7fd79d79e2211af7da7dd372c41d7633e03e3832db98dc1a800",
+      "fixtureIntegritySha256": "89942ab394bed7fd79d79e2211af7da7dd372c41d7633e03e3832db98dc1a800"
+    },
+    {
+      "path": "fixed-seeds/milestone-2-atlas-proof/expected/reopened/accepted-atlas.reopen.canonical",
+      "kind": "reopen-comparison-report",
+      "checkpoint": "reopened",
+      "byteLength": 856,
+      "reopenComparisonSha256": "c6dc45bfd3b50b9770fd5be9c875493c38e5dc9e437629c00074a9c03c38b338",
+      "fixtureIntegritySha256": "c6dc45bfd3b50b9770fd5be9c875493c38e5dc9e437629c00074a9c03c38b338"
+    },
+    {
+      "path": "saved-projects/v1/milestone-2-atlas-proof/appearance-rerolled.mapworld/manifest.json",
+      "kind": "saved-project-manifest",
+      "checkpoint": "appearance-rerolled",
+      "byteLength": 683,
+      "fixtureIntegritySha256": "98f0689bb0ed066483edc7f0de778a32c4dbf23f73469fcf46dbf451a562aaee"
+    },
+    {
+      "path": "saved-projects/v1/milestone-2-atlas-proof/appearance-rerolled.mapworld/maps/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7.json",
+      "kind": "saved-project-authoritative-file",
+      "checkpoint": "appearance-rerolled",
+      "byteLength": 82482435,
+      "fixtureIntegritySha256": "f7cfdce090d98974da55ef06d5acf3471ba3826bb3b8faf6023785cd836a1667"
+    },
+    {
+      "path": "saved-projects/v1/milestone-2-atlas-proof/appearance-rerolled.mapworld/world.json",
+      "kind": "saved-project-authoritative-file",
+      "checkpoint": "appearance-rerolled",
+      "byteLength": 414,
+      "fixtureIntegritySha256": "a573cd7d55d414ae247a252f2b4427ac10891b5c7b7ca3ebf912d8bb7f96257b"
+    },
+    {
+      "path": "visual-gallery/milestone-2-atlas-proof/appearance-rerolled.png",
+      "kind": "visual-evidence",
+      "checkpoint": "appearance-rerolled",
+      "byteLength": 113426,
+      "visualEvidenceSha256": "875b15f71e962c8b2c811bf8b79e1f8ef30d2c58fe789069a2ec84bcc928e6cb",
+      "fixtureIntegritySha256": "875b15f71e962c8b2c811bf8b79e1f8ef30d2c58fe789069a2ec84bcc928e6cb",
+      "pngProfileId": "atlas-png-v1",
+      "pngProfileVersion": 1,
+      "widthPx": 1600,
+      "heightPx": 800,
+      "bitDepth": 8,
+      "colorType": 2,
+      "srgbRenderingIntent": 0,
+      "bandCoreHeightPx": 64,
+      "bandHaloPx": 8,
+      "idatChunkBytes": 1048576
+    },
+    {
       "path": "visual-gallery/milestone-2-atlas-proof/baseline.png",
       "kind": "visual-evidence",
       "checkpoint": "baseline",
-      "byteLength": 1049775,
-      "visualEvidenceSha256": "c0ed7687017b78a7d8f5b98404b0dd8eea2a9be1b00f35d5831c2d22e1124109",
-      "fixtureIntegritySha256": "c0ed7687017b78a7d8f5b98404b0dd8eea2a9be1b00f35d5831c2d22e1124109"
+      "byteLength": 92575,
+      "visualEvidenceSha256": "ed825ba77929cc7753ed3e4ad8f1c423de297cba222d069551cbdac7ec17ccb8",
+      "fixtureIntegritySha256": "ed825ba77929cc7753ed3e4ad8f1c423de297cba222d069551cbdac7ec17ccb8",
+      "pngProfileId": "atlas-png-v1",
+      "pngProfileVersion": 1,
+      "widthPx": 1600,
+      "heightPx": 800,
+      "bitDepth": 8,
+      "colorType": 2,
+      "srgbRenderingIntent": 0,
+      "bandCoreHeightPx": 64,
+      "bandHaloPx": 8,
+      "idatChunkBytes": 1048576
+    },
+    {
+      "path": "visual-gallery/milestone-2-atlas-proof/geography-rerolled.png",
+      "kind": "visual-evidence",
+      "checkpoint": "geography-rerolled",
+      "byteLength": 113167,
+      "visualEvidenceSha256": "b3a387f8bb4bfe7d1394efccd32bd3a8a4ff6cc39ed6fcf729977c90d5d3319f",
+      "fixtureIntegritySha256": "b3a387f8bb4bfe7d1394efccd32bd3a8a4ff6cc39ed6fcf729977c90d5d3319f",
+      "pngProfileId": "atlas-png-v1",
+      "pngProfileVersion": 1,
+      "widthPx": 1600,
+      "heightPx": 800,
+      "bitDepth": 8,
+      "colorType": 2,
+      "srgbRenderingIntent": 0,
+      "bandCoreHeightPx": 64,
+      "bandHaloPx": 8,
+      "idatChunkBytes": 1048576
+    },
+    {
+      "path": "visual-gallery/milestone-2-atlas-proof/reopened.png",
+      "kind": "visual-evidence",
+      "checkpoint": "reopened",
+      "byteLength": 113426,
+      "visualEvidenceSha256": "875b15f71e962c8b2c811bf8b79e1f8ef30d2c58fe789069a2ec84bcc928e6cb",
+      "fixtureIntegritySha256": "875b15f71e962c8b2c811bf8b79e1f8ef30d2c58fe789069a2ec84bcc928e6cb",
+      "pngProfileId": "atlas-png-v1",
+      "pngProfileVersion": 1,
+      "widthPx": 1600,
+      "heightPx": 800,
+      "bitDepth": 8,
+      "colorType": 2,
+      "srgbRenderingIntent": 0,
+      "bandCoreHeightPx": 64,
+      "bandHaloPx": 8,
+      "idatChunkBytes": 1048576
     }
   ]
 }

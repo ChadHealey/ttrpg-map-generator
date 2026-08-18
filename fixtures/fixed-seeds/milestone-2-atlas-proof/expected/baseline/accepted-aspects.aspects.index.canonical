@@ -1,0 +1,118 @@
+{
+  "canonicalAspectDigestIndexVersion": 1,
+  "canonicalByteOwner": "@ttrpg-map/persistence",
+  "checkpoint": "baseline",
+  "aspectCount": 12,
+  "canonicalAspectSetSha256": "24ea927af4355fc5d44c1bba2cf49d7a4b47c27404d4c352267ed33ccecd90e2",
+  "canonicalAspectOutputSetSha256": "6b972a97afdb6e3284745596cf78edf834d6dc32d8bb99d6eac95cddd7438743",
+  "aspects": [
+    {
+      "aspectId": "04628f37-6408-5087-a139-bdd2bdff42d3",
+      "aspectName": "worldSurface.landWaterClassification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 30811373,
+      "canonicalAspectSha256": "2168d3e8c2ed9b3afe689bc982f9a81afcc07ce2c65737281bae2f622352f4ae",
+      "canonicalAspectOutputByteLength": 26618868,
+      "canonicalAspectOutputSha256": "711da0ede01f88d9f5a1505527bf5a79e8b136e51cd0c279ba516093212beaa7"
+    },
+    {
+      "aspectId": "371a6a8c-9fe8-5cdb-adca-1a46ffa19645",
+      "aspectName": "worldCoastline.geometry",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 682963,
+      "canonicalAspectSha256": "c6e78005e08de9772ed55e69afc052280d50132394bdcc08d2a34bf81de92fde",
+      "canonicalAspectOutputByteLength": 630095,
+      "canonicalAspectOutputSha256": "641bcc8a9a962a2a7e9de14512e6bdfb70bdf98b5c87dda382aa8422b9c9d66c"
+    },
+    {
+      "aspectId": "65c5113e-fd17-5f39-a65a-1bba5f21f0fe",
+      "aspectName": "landmass.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 7860,
+      "canonicalAspectSha256": "61ca0d706a7917a34f6a0d003c350bd5babde27131b1857f802dd1fe76527dd5",
+      "canonicalAspectOutputByteLength": 5855,
+      "canonicalAspectOutputSha256": "c1290cb16ab7a7c4034c2da2f04069f7ff34897fbd6e1ef288be38dacb6d8e63"
+    },
+    {
+      "aspectId": "8c312953-f749-52b5-83f3-717bde6901e5",
+      "aspectName": "waterBody.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 78375,
+      "canonicalAspectSha256": "5be42ab5f97f854ff8ca73e6c6666a79263137b003db943f4d5dc4514ecf2fcc",
+      "canonicalAspectOutputByteLength": 70134,
+      "canonicalAspectOutputSha256": "1ce500ba57fd57aef1c5d0e93246b39b9efc181200d4d5f8a28b18f0a524710e"
+    },
+    {
+      "aspectId": "90916e2f-286a-5722-984e-0981392bcfd8",
+      "aspectName": "atlas.waterDecoration",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 71893,
+      "canonicalAspectSha256": "aa430d78391d9ae4ef4d1020633337c20d005a17561ccf7993ace981005edb2d",
+      "canonicalAspectOutputByteLength": 66238,
+      "canonicalAspectOutputSha256": "bb4b26512e0e0475222d04062697b6a1833d342b3b2ab8d83b5521713545031d"
+    },
+    {
+      "aspectId": "99b0095c-d97a-5891-8296-718774d0cf60",
+      "aspectName": "waterBody.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 2317,
+      "canonicalAspectSha256": "b218b502d126cbee6e7cc00818bfd28a22d2e62b3b9aa818e8ee4bafcd3da46d",
+      "canonicalAspectOutputByteLength": 718,
+      "canonicalAspectOutputSha256": "10a942278ff495a4d7fce0d38231ff7550c57072d4296e7d0cd72f5dee799fc3"
+    },
+    {
+      "aspectId": "a200a1c0-c569-5615-80cd-89b15fbab600",
+      "aspectName": "atlas.coastlineAppearance",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 3183,
+      "canonicalAspectSha256": "848d8ea019731ccf703c9d30a8ece00253dbe892f451218edb3f52f050d4a6f3",
+      "canonicalAspectOutputByteLength": 1954,
+      "canonicalAspectOutputSha256": "33892557f5a35da756f5baf25cbba30bb9fa70062e12051eaf07c4dd29b536a8"
+    },
+    {
+      "aspectId": "a9ee8c7a-5b07-5745-bb22-5d22c5cdaa45",
+      "aspectName": "landmass.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 142160,
+      "canonicalAspectSha256": "0acbaa54007d8f45fa05ff98fbef633995b47bbcd95f92f69fdf8cf87ff5cabf",
+      "canonicalAspectOutputByteLength": 128481,
+      "canonicalAspectOutputSha256": "67e0cd84ebd53687837a9dad92014012b6b8d8614d734fd3d1a4eec3361a8168"
+    },
+    {
+      "aspectId": "e588eb7f-d585-5c27-9ce5-81c2fb1ebc43",
+      "aspectName": "worldTerrain.macroElevation",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 33462201,
+      "canonicalAspectSha256": "785f80b58f49b70f26d985c6c89c7fe6824f60e1283b8c609b666e888bc05166",
+      "canonicalAspectOutputByteLength": 29270626,
+      "canonicalAspectOutputSha256": "1891445a1cba70d1d5915b01a1dc324f268f7007552410040058b0aa4e431b17"
+    },
+    {
+      "aspectId": "edbe82c3-3e77-5e74-8bba-a1598b105b2f",
+      "aspectName": "landmass.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 7389,
+      "canonicalAspectSha256": "f54207aca2b3aee82a4a54f108662a58d13732c5751ffd4fa0376752d692015a",
+      "canonicalAspectOutputByteLength": 5416,
+      "canonicalAspectOutputSha256": "a1adce0a63e1c2532455591e3eed5a9d73c794ffc1e459544e50ceb09ee460a8"
+    },
+    {
+      "aspectId": "f3c00774-0182-5fca-83e6-454c70efc745",
+      "aspectName": "waterBody.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 77424,
+      "canonicalAspectSha256": "97f5abe8f7572d7009695da2621c7671792a46a8268bfed42b45d91539831063",
+      "canonicalAspectOutputByteLength": 69213,
+      "canonicalAspectOutputSha256": "3def021a3ea3fa46939113b8ef93e9f620ee0bef64c32dbef5b79e6f3f2ae771"
+    },
+    {
+      "aspectId": "f435cc03-cc5f-59aa-9390-8693a9a8fcbd",
+      "aspectName": "atlas.paperTreatment",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 1332,
+      "canonicalAspectSha256": "c96b0679ff7969a00e7e4dfa0412fbde29ed46bcce42cb70c64f38d633349363",
+      "canonicalAspectOutputByteLength": 279,
+      "canonicalAspectOutputSha256": "b026ac7327dc96b0f9486d9835db936e98d73e10cc8b07471d0594bd139ca855"
+    }
+  ]
+}

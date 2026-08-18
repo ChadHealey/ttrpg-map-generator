@@ -28,37 +28,57 @@ pnpm test:visual
 pnpm test:e2e
 pnpm test:cross-platform
 pnpm test:native-recovery
+pnpm test:png-export
 ```
 
-`pnpm test:e2e` runs the focused Milestone 1 and Milestone 2 desktop orchestration tests plus the
-real native Milestone 1 workflow bridge. The atlas workflow covers preview cancellation/restart,
-full acceptance, semantic inspection, both reviewed rerolls, and the serial production-generation
-chain. That costly chain is excluded from the parallel `pnpm test` pool so it cannot starve the
-independently bounded geometry tests. The native bridge drives the production generate → reroll
-markers → save → close →
-reopen sequence across Node and Rust, writes an actual sibling-directory `.mapworld` package, and
-arms a generator-free reopen tripwire after unload.
+`pnpm test:e2e` runs the focused Milestone 1 and Milestone 2 desktop orchestration tests plus both
+real native workflow bridges. The atlas workflow covers preview cancellation/restart, full
+acceptance, semantic inspection, both reviewed rerolls, native save, true unload, generator-free
+reopen, and SVG and 8192-by-4096 PNG export from the reopened accepted state. That costly serial
+production chain is excluded from the parallel `pnpm test` pool so it cannot starve the
+independently bounded geometry tests. The native bridges write actual sibling-directory
+`.mapworld` packages across Node and Rust, exercise recovery, and arm generator-free reopen
+tripwires after unload. Milestone 1 remains in the command as the legacy compatibility lane.
 
-`pnpm test:visual` runs the scene-adapter, semantic/render comparison, and deterministic PNG
-rasterizer tests before regenerating every registered fixture into a disposable directory and
-byte-comparing the reviewed semantic, SVG, PNG, and authoritative evidence. The PNG rasterizer is
-test-only evidence tooling; production Canvas and SVG remain the application render backends.
+The visible atlas state machine has one explicit edit boundary. `empty`, `preview`, and `accepted`
+may start generation; only clean `accepted` state may plan or commit rerolls. Once saved, the next
+action is unload; once unloaded, the next action is native reopen. The `reopened` proof checkpoint
+is read-only except for SVG/PNG export. Starting another atlas after reopen requires a new app
+session, so authoritative package evidence cannot become stale behind newly generated state.
 
-`pnpm test:cross-platform` is the read-only deterministic fixture command defined by
-[07 — Deterministic Fixture Conventions](07-fixture-conventions.md). The existing Linux and
-macOS CI matrix runs this exact command. One spelling for each operation prevents README
+`pnpm test:visual` runs the scene-adapter, semantic/render comparison, legacy Milestone 1 evidence
+rasterizer, and production `atlas-png-v1` gallery tests before regenerating every registered fixture
+into a disposable directory and byte-comparing the reviewed semantic, SVG, PNG, and authoritative
+evidence. The Milestone 1 helper remains test-only; Milestone 2 gallery PNGs use the production
+bounded rasterizer and canonical encoder.
+
+`pnpm test:cross-platform` reconstructs the six production Milestone 2 gallery PNGs from their
+canonical scenes, byte-compares them, then runs the read-only deterministic fixture command defined
+by [07 — Deterministic Fixture Conventions](07-fixture-conventions.md). The Linux and macOS CI matrix
+runs this exact command as well as `pnpm test:e2e`, `pnpm test:visual`, `pnpm test:png-export`,
+`pnpm test:native-recovery`, and `pnpm build`. One spelling for each operation prevents README
 snippets, CI, hooks, and local workflows from drifting apart.
 
-`pnpm test:native-recovery` runs the real-filesystem `.mapworld` commit/recovery contract and
-prints its native platform evidence. CI runs it separately on macOS and Linux and records the
-filesystem containing the checked-out workspace where the integration tests create their parents.
+`pnpm test:native-recovery` runs the real-filesystem `.mapworld` commit/recovery contract and the
+PNG atomic replacement/interrupted-temporary cases, then prints its native platform evidence. CI
+runs it separately on macOS and Linux and records the filesystem containing the checked-out
+workspace where the integration tests create their parents.
 The suite is also covered by `pnpm check`, then deliberately repeated under this named CI step so its
 filesystem/platform output is easy to audit. The gate is serialized because its hard-exit child
 processes and deterministic fault controller share one test filesystem contract. A local run proves
 only the platform and filesystem it reports; it does not substitute for the other CI matrix leg.
 
-No `pnpm benchmark` command exists yet. Benchmarks remain deferred until a costly generator or
-large-output render path makes that specialized suite applicable.
+`pnpm test:png-export` runs the production `atlas-png-v1` encoder/profile tests, deterministic
+repeat and fixed-format vectors, bounded raster-band/resource assertions, representative
+1600-by-800 and 8192-by-4096 exports, progress/cancellation aftermath, and the native atomic PNG
+replacement boundary. It is a deterministic evidence gate and may run outside the default parallel
+`pnpm test` pool so its fixed large outputs do not starve unrelated unit tests. It does not claim the
+formal base Apple M1/8-GB wall-clock, aggregate-memory, or cancellation-latency release proof owned
+by issue #68; measurements from another machine are not a substitute.
+
+No general `pnpm benchmark` command exists yet. The PNG gate owns one bounded output-specific
+evidence harness; broader benchmark infrastructure remains deferred until another measured workload
+requires it.
 
 ## TypeScript is strict
 

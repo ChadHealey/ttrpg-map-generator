@@ -151,7 +151,7 @@ contract.
 
 ### Renderer split-brain
 
-Canvas and SVG independently reconstruct geography and slowly disagree. The
+Canvas, SVG, and PNG independently reconstruct geography and slowly disagree. The
 defense is one renderer-neutral scene and backend comparison fixtures.
 
 ### Cache promotion

@@ -6,12 +6,16 @@ export function expectedVersions(
   generation,
   assets,
   render,
+  persistence,
   includesSemantic,
   includesCoastline = false,
   includesProjection = false,
   includesAppearance = false,
 ) {
   return {
+    ...(persistence === undefined
+      ? {}
+      : { acceptedAspectSchemaVersion: persistence.ACCEPTED_ASPECT_SCHEMA_VERSION }),
     atlasFieldBehaviorVersion: generation.ATLAS_FIELD_ALGORITHM_VERSION,
     atlasGeneratorManifestVersion: generation.ATLAS_LAND_WATER_GENERATOR_MANIFEST_VERSION,
     atlasGeographyContractVersion: core.ATLAS_GEOGRAPHY_CONTRACT_VERSION,
@@ -23,6 +27,14 @@ export function expectedVersions(
     landWaterClassificationBehaviorVersion: generation.ATLAS_LAND_WATER_CLASSIFICATION_VERSION,
     landWaterClassificationGeneratorVersion: 1,
     macroElevationGeneratorVersion: 1,
+    ...(persistence === undefined
+      ? {}
+      : {
+          mapDocumentSchemaVersion: persistence.MAP_DOCUMENT_SCHEMA_VERSION,
+          mapworldPackageVersion: persistence.MAPWORLD_PACKAGE_VERSION,
+          mapworldSchemaVersion: persistence.MAPWORLD_SCHEMA_VERSION,
+          worldIndexSchemaVersion: persistence.WORLD_INDEX_SCHEMA_VERSION,
+        }),
     seedDerivationVersion: core.SEED_DERIVATION_VERSION,
     ...(includesSemantic
       ? {

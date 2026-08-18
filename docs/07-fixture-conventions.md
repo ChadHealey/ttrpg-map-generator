@@ -54,6 +54,8 @@ fixtures/
           <scene-name>.scene.canonical
           <aspect-name>.aspect.canonical
           <aspect-name>.output.canonical
+          accepted-aspects.aspects.index.canonical
+          accepted-atlas.reopen.canonical
       reviews/
         0001-initial-acceptance.md
   manifests/
@@ -76,10 +78,25 @@ visual evidence enters scope. The Milestone 1 runner rasterizes its fixed geomet
 with a dependency-free, platform-independent evidence helper. That helper is not a production PNG
 backend, font renderer, perceptual comparison framework, or substitute for inspecting the images.
 
+Each registered Milestone 2 atlas row instead owns one reviewed 1600 by 800 `atlas-png-v1` visual
+artifact generated from its exact canonical `AtlasRenderScene` through the production exporter.
+Its generated manifest records the PNG profile/version, dimensions, RGB/sRGB fields, band core and
+halo, IDAT partition, exact length, and digest without adding those values to the semantic fixture
+definition/version kernel. The same production path creates two byte-compared 8192 by 4096 outputs
+per row in a disposable verification directory; those large files are inspected but not checked
+into `visual-gallery/`.
+
 The Milestone 1 fixture ID is `milestone-1-kernel-proof`. Its checkpoint names are `baseline`,
 `rerolled`, and `reopened`. Persist the `rerolled` project as the v1 saved-project fixture;
 reopen assertions compare the decoded records with `rerolled` evidence rather than duplicating
 an identical set of `reopened` golden files.
+
+The complete Milestone 2 atlas row uses the same reopen comparison rule at larger scale. Its
+schema-validated `reopen-comparison-report` records checksum validation, zero generator
+invocations, equal canonical aspect and output set digests, equal rebuilt scene semantics, and
+equal SVG/PNG digests. It does not duplicate the appearance-rerolled semantic index under the
+`reopened` checkpoint; reopened SVG and PNG remain explicit artifacts because visual/export drift
+is a distinct evidence class.
 
 `fixture-definition.json` and review records are human-reviewed source. Files below
 `expected/`, `manifests/*.fixture.generated.json`, saved-project packages, and canonical SVG or
@@ -166,18 +183,34 @@ z-order without becoming accepted geography or an authoritative package file. Ca
 PNG remain separate evidence classes.
 
 The v1 persistence serializer supplies `canonicalAspectBytes` for one complete accepted aspect
-record and `canonicalAspectOutputBytes` for only its accepted output. Fixture tooling writes
-the returned bytes unchanged and hashes those exact bytes. It does not prescribe their media
-type, encoding, or newline policy, extract an aspect by parsing a containing map file, or
-reserialize the value itself. Those canonical encoding decisions remain with issue #8.
+record and `canonicalAspectOutputBytes` for only its accepted output. Fixture tooling either writes
+the returned bytes unchanged or, for a large accepted set, streams those exact returned bytes into
+SHA-256 and records a compact `canonical-aspect-digest-index`. The index contains every aspect's
+stable ID, name, revision, canonical aspect byte length and digest, and canonical output byte length
+and digest. Its entries are sorted by stable aspect ID, its JSON shape is fixture-schema validated,
+and independent runner regeneration must call both persistence functions again for every entry.
+The index never parses, extracts, truncates, samples, or reserializes an accepted value and is not a
+substitute for calling the persistence serializer over the complete records. This keeps multi-
+megabyte field and partition bytes out of Git while preserving exact-byte compatibility evidence.
 
-Record aspect and output evidence separately for each required checkpoint. An output hash
+The manifest kind for that compact artifact is `canonical-aspect-digest-index`; its filename ends
+in `.aspects.index.canonical`, and its exact artifact digest is
+`canonicalAspectDigestIndexSha256`. Small fixtures may continue to store one
+`canonical-aspect-bytes` and one `canonical-aspect-output-bytes` artifact per aspect. Both layouts
+have the same persistence-owned comparison boundary. Fixture tooling does not prescribe the
+canonical bytes' media type, encoding, or newline policy, extract an aspect by parsing a containing
+map file, or reserialize the value itself. Those canonical encoding decisions remain with the
+persistence package.
+
+Record aspect and output evidence separately for each required checkpoint, including separate
+per-aspect fields in a digest index when the compact layout is used. An output hash
 proves that a reroll changed accepted output rather than only its revision metadata. An aspect
 hash proves the complete accepted record. Neither hash is an authoritative-file checksum.
-The generated manifest names these hashes `canonicalAspectSha256` and
-`canonicalAspectOutputSha256`; canonical SVG uses `canonicalSvgSha256`. Their values equal the
-fixture-integrity hash when both cover the same exact artifact, but the distinct field names
-preserve their different review meanings.
+Per-aspect artifacts name these hashes `canonicalAspectSha256` and
+`canonicalAspectOutputSha256`; a compact index records those names on every entry and the manifest
+names the complete artifact `canonicalAspectDigestIndexSha256`. Canonical SVG uses
+`canonicalSvgSha256`. Evidence and fixture-integrity hashes are kept as distinct named fields even
+when they cover the same exact artifact, preserving their different review meanings.
 
 ### Authoritative `.mapworld` checksums
 
@@ -185,6 +218,10 @@ The saved package's `manifest.json` owns checksums for canonical authoritative f
 `world.json`, sorted `maps/...`, and later `data/...`. Cache and preview paths are excluded.
 Their exact coverage, path normalization, recursion handling, and compatibility behavior are a
 v1 persistence decision owned by issue #8 and its ADR, not by fixture tooling.
+
+Checked-in saved-project packages are excluded from repository-wide source formatting. Their JSON
+is the persistence serializer's exact canonical output; running Prettier over it would invalidate
+the package manifest and replace the evidence under review.
 
 Fixture verification asks the persistence implementation to validate these checksums. It does
 not infer them from aspect hashes or invent a whole-package checksum.

@@ -91,6 +91,54 @@ describe('fixture manifests', () => {
     );
   });
 
+  it('schema-validates every entry in a canonical aspect digest index', () => {
+    const { entry, manifest, repositoryRoot } = makeFixtureRepository();
+    const path =
+      'fixed-seeds/deterministic-proof/expected/baseline/accepted-aspects.aspects.index.canonical';
+    const invalidIndex = `${JSON.stringify({
+      canonicalAspectDigestIndexVersion: 1,
+      canonicalByteOwner: '@ttrpg-map/persistence',
+      checkpoint: 'baseline',
+      aspectCount: 1,
+      canonicalAspectSetSha256: '0'.repeat(64),
+      canonicalAspectOutputSetSha256: '1'.repeat(64),
+      aspects: [
+        {
+          aspectId: '54b92092-3d5f-4bca-a12c-353185de1557',
+          aspectName: 'proof.outline',
+          variantRevision: 0,
+          canonicalAspectByteLength: -1,
+          canonicalAspectSha256: '2'.repeat(64),
+          canonicalAspectOutputByteLength: 1,
+          canonicalAspectOutputSha256: '3'.repeat(64),
+        },
+      ],
+    })}\n`;
+    write(repositoryRoot, `fixtures/${path}`, invalidIndex);
+    const changedManifest = structuredClone(manifest);
+    const artifactDigest = digest(invalidIndex);
+    changedManifest.artifacts.push({
+      path,
+      kind: 'canonical-aspect-digest-index',
+      checkpoint: 'baseline',
+      byteLength: Buffer.byteLength(invalidIndex),
+      canonicalAspectDigestIndexSha256: artifactDigest,
+      fixtureIntegritySha256: artifactDigest,
+    });
+    changedManifest.artifacts.sort((left, right) =>
+      left.path < right.path ? -1 : left.path > right.path ? 1 : 0,
+    );
+    write(
+      repositoryRoot,
+      `fixtures/${entry.manifestPath}`,
+      `${JSON.stringify(changedManifest, null, 2)}\n`,
+    );
+
+    expect(() => verifyFixtureEntry(repositoryRoot, entry, { runRunner: false })).toThrow(
+      /canonicalAspectByteLength must be a non-negative safe integer/u,
+    );
+  });
+
   it('rejects a runner whose regenerated artifact diverges', () => {
     const { baselinePath, entry, repositoryRoot, rerolledPath } = makeFixtureRepository();
     write(

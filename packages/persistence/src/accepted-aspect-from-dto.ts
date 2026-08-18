@@ -14,6 +14,10 @@ import {
 } from '@ttrpg-map/core';
 
 import { type AcceptedAspectDto } from './accepted-aspect-dto-schema.js';
+import {
+  atlasAcceptedOutputFromDto,
+  atlasAcceptedParametersFromDto,
+} from './atlas-accepted-aspect-from-dto.js';
 import { parseCoreValue } from './core-parsing.js';
 import {
   persistenceDiagnostic,
@@ -114,6 +118,8 @@ export function acceptedAspectFromDto(
   if (!diagnostics.ok) return diagnostics;
   const output = acceptedOutput(dto, filePath, rootPath);
   if (!output.ok) return output;
+  const parameters = atlasAcceptedParametersFromDto(dto, filePath, rootPath);
+  if (!parameters.ok) return parameters;
 
   return persistenceSuccess({
     mapId: mapId.value,
@@ -123,7 +129,7 @@ export function acceptedAspectFromDto(
     generatorId: generatorId.value,
     generatorVersion: generatorVersion.value,
     parameterSchemaVersion: parameterSchemaVersion.value,
-    parameters: dto.parameters,
+    parameters: parameters.value,
     seedScope: dto.seedScope,
     seedMetadata: seedMetadata.value,
     variantRevision: variantRevision.value,
@@ -210,6 +216,8 @@ function acceptedOutput(
   filePath: string,
   rootPath: string,
 ): PersistenceResult<unknown> {
+  const atlasOutput = atlasAcceptedOutputFromDto(dto, filePath, rootPath);
+  if (atlasOutput !== undefined) return atlasOutput;
   if (dto.aspectName === 'proof.outline') {
     const output = dto.acceptedOutput as ProofOutlineDtoOutput;
     const points = [];

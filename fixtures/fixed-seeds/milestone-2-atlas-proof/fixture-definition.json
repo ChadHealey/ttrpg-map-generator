@@ -1,8 +1,7 @@
 {
-  "fixtureDefinitionVersion": 1,
+  "fixtureDefinitionVersion": 2,
   "fixtureId": "milestone-2-atlas-proof",
-  "evidenceBoundary": "pre-persistence-atlas-generator-kernel-v1",
-  "notCanonicalAspectBytes": true,
+  "evidenceBoundary": "persistence-canonical-accepted-aspects-v1",
   "worldSeed": "81985529216486895",
   "stableIds": {
     "atlasPresentationEntityId": "66b92789-9a5b-5760-b299-1d82700cf3a0",
@@ -26,6 +25,7 @@
     "polarCharacter": "neutral"
   },
   "versions": {
+    "acceptedAspectSchemaVersion": 1,
     "atlasAppearanceGeneratorManifestVersion": 1,
     "atlasAppearanceParameterSchemaVersion": 1,
     "atlasCoastlineAppearanceBehaviorVersion": 1,
@@ -57,9 +57,24 @@
     "landWaterClassificationBehaviorVersion": 1,
     "landWaterClassificationGeneratorVersion": 1,
     "macroElevationGeneratorVersion": 1,
-    "seedDerivationVersion": 1
+    "mapDocumentSchemaVersion": 1,
+    "mapworldPackageVersion": 1,
+    "mapworldSchemaVersion": 1,
+    "seedDerivationVersion": 1,
+    "worldIndexSchemaVersion": 1
   },
   "checkpoints": {
+    "appearance-rerolled": {
+      "atlas.coastlineAppearance": 1,
+      "atlas.paperTreatment": 1,
+      "atlas.waterDecoration": 1,
+      "islandGroup.classification": 0,
+      "landmass.classification": 0,
+      "waterBody.classification": 0,
+      "worldCoastline.geometry": 0,
+      "worldSurface.landWaterClassification": 0,
+      "worldTerrain.macroElevation": 1
+    },
     "baseline": {
       "atlas.coastlineAppearance": 0,
       "atlas.paperTreatment": 0,
@@ -70,6 +85,28 @@
       "worldCoastline.geometry": 0,
       "worldSurface.landWaterClassification": 0,
       "worldTerrain.macroElevation": 0
+    },
+    "geography-rerolled": {
+      "atlas.coastlineAppearance": 0,
+      "atlas.paperTreatment": 0,
+      "atlas.waterDecoration": 0,
+      "islandGroup.classification": 0,
+      "landmass.classification": 0,
+      "waterBody.classification": 0,
+      "worldCoastline.geometry": 0,
+      "worldSurface.landWaterClassification": 0,
+      "worldTerrain.macroElevation": 1
+    },
+    "reopened": {
+      "atlas.coastlineAppearance": 1,
+      "atlas.paperTreatment": 1,
+      "atlas.waterDecoration": 1,
+      "islandGroup.classification": 0,
+      "landmass.classification": 0,
+      "waterBody.classification": 0,
+      "worldCoastline.geometry": 0,
+      "worldSurface.landWaterClassification": 0,
+      "worldTerrain.macroElevation": 1
     }
   }
 }

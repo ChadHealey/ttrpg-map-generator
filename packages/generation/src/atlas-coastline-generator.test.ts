@@ -70,7 +70,6 @@ describe('canonical atlas coastline generator', () => {
     const generated = generateAtlasCanonicalCoastline(input);
     expect(generated).toMatchObject({ status: 'proposed' });
     if (generated.status !== 'proposed') return;
-    expect(generateAtlasCanonicalCoastline(input)).toStrictEqual(generated);
     expect(validateAtlasGeographyRecords(generated.patch.records)).toStrictEqual({ ok: true });
     expect(generated.patch.records.landWaterClassification).toBe(
       semantic.patch.records.landWaterClassification,
@@ -108,6 +107,7 @@ describe('canonical atlas coastline generator', () => {
     });
     expect(repeated.status).toBe('proposed');
     if (repeated.status !== 'proposed') return;
+    expect(repeated).toStrictEqual(generated);
     expect(repeated.patch.replacement.target.variantRevision).toBe(0);
     expect(repeated.patch.explicitlyIncrementedAspectIds).toStrictEqual([]);
   }, 60_000);

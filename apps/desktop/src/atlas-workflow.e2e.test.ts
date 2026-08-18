@@ -115,6 +115,6 @@ function state(label: string): AcceptedAtlasState {
       waterBodies: [],
     } as unknown as AcceptedAtlasState['geography'],
     appearance: {} as AcceptedAtlasState['appearance'],
-    scene: { widthPx: 1, heightPx: 1, nodes: [] },
+    scene: { widthPx: 1, heightPx: 1, nodes: [] } as unknown as AcceptedAtlasState['scene'],
   };
 }

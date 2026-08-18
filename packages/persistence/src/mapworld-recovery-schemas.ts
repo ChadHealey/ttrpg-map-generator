@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { decodeBase64Bytes, decodedBase64ByteLength } from './base64-bytes.js';
 import {
   MAPWORLD_NATIVE_LIMITS,
   MAPWORLD_RECOVERY_PROTOCOL_VERSION,
@@ -7,6 +8,20 @@ import {
 
 const sha256Schema = z.string().regex(/^[a-f0-9]{64}$/u);
 const byteSchema = z.number().int().min(0).max(255);
+const nativeBytesSchema = (maximumBytes: number) =>
+  z
+    .union([z.array(byteSchema).max(maximumBytes), z.string()])
+    .transform((value, context): Uint8Array => {
+      if (Array.isArray(value)) return Uint8Array.from(value);
+      const decoded = decodeBase64Bytes(value, maximumBytes);
+      if (decoded !== null) return decoded;
+      context.addIssue({ code: 'custom', message: 'Invalid bounded canonical base64 bytes.' });
+      return new Uint8Array();
+    });
+const boundedAggregateEntriesSchema = z.custom<unknown>(
+  (input) => hasBoundedNativePackageEntryBytes(input),
+  { message: 'Native package entries exceed the aggregate byte limit.' },
+);
 const observationSchema = z.strictObject({ observationToken: sha256Schema });
 const osContextSchema = z.strictObject({
   primitive: z.string().min(1),
@@ -30,37 +45,39 @@ const packageEntrySchema = z.strictObject({
       context.addIssue({ code: 'custom', message: 'Invalid bounded package-relative path.' });
     }
   }),
-  bytes: z.array(byteSchema).max(MAPWORLD_NATIVE_LIMITS.maximumFileBytes),
+  bytes: nativeBytesSchema(MAPWORLD_NATIVE_LIMITS.maximumFileBytes),
 });
 
-const packageDirectorySchema = observationSchema
-  .extend({
-    kind: z.literal('directory'),
-    entries: z.array(packageEntrySchema).min(1).max(MAPWORLD_NATIVE_LIMITS.maximumPackageFiles),
-  })
-  .strict()
-  .superRefine(({ entries }, context) => {
-    let previousPath: string | undefined;
-    let totalBytes = 0;
-    for (const [index, entry] of entries.entries()) {
-      if (previousPath !== undefined && compareUnicodeScalar(previousPath, entry.path) >= 0) {
+const packageDirectorySchema = boundedAggregateEntriesSchema.pipe(
+  observationSchema
+    .extend({
+      kind: z.literal('directory'),
+      entries: z.array(packageEntrySchema).min(1).max(MAPWORLD_NATIVE_LIMITS.maximumPackageFiles),
+    })
+    .strict()
+    .superRefine(({ entries }, context) => {
+      let previousPath: string | undefined;
+      let totalBytes = 0;
+      for (const [index, entry] of entries.entries()) {
+        if (previousPath !== undefined && compareUnicodeScalar(previousPath, entry.path) >= 0) {
+          context.addIssue({
+            code: 'custom',
+            path: ['entries', index, 'path'],
+            message: 'Package entries must be unique and sorted by code point.',
+          });
+        }
+        previousPath = entry.path;
+        totalBytes += entry.bytes.byteLength;
+      }
+      if (totalBytes > MAPWORLD_NATIVE_LIMITS.maximumPackageBytes) {
         context.addIssue({
           code: 'custom',
-          path: ['entries', index, 'path'],
-          message: 'Package entries must be unique and sorted by code point.',
+          path: ['entries'],
+          message: 'Package snapshot exceeds the aggregate native byte limit.',
         });
       }
-      previousPath = entry.path;
-      totalBytes += entry.bytes.length;
-    }
-    if (totalBytes > MAPWORLD_NATIVE_LIMITS.maximumPackageBytes) {
-      context.addIssue({
-        code: 'custom',
-        path: ['entries'],
-        message: 'Package snapshot exceeds the aggregate native byte limit.',
-      });
-    }
-  });
+    }),
+);
 
 const directoryPathSchema = z.string().superRefine((path, context) => {
   if (!isSafeRelativePackagePath(path)) {
@@ -68,53 +85,55 @@ const directoryPathSchema = z.string().superRefine((path, context) => {
   }
 });
 
-const invalidPackageDirectorySchema = observationSchema
-  .extend({
-    kind: z.literal('invalid-directory'),
-    entries: z.array(packageEntrySchema).max(MAPWORLD_NATIVE_LIMITS.maximumPackageFiles),
-    directories: z.array(directoryPathSchema).min(1).max(512),
-  })
-  .strict()
-  .superRefine(({ directories, entries }, context) => {
-    let totalBytes = 0;
-    let previousEntryPath: string | undefined;
-    for (const [index, entry] of entries.entries()) {
-      if (
-        previousEntryPath !== undefined &&
-        compareUnicodeScalar(previousEntryPath, entry.path) >= 0
-      ) {
+const invalidPackageDirectorySchema = boundedAggregateEntriesSchema.pipe(
+  observationSchema
+    .extend({
+      kind: z.literal('invalid-directory'),
+      entries: z.array(packageEntrySchema).max(MAPWORLD_NATIVE_LIMITS.maximumPackageFiles),
+      directories: z.array(directoryPathSchema).min(1).max(512),
+    })
+    .strict()
+    .superRefine(({ directories, entries }, context) => {
+      let totalBytes = 0;
+      let previousEntryPath: string | undefined;
+      for (const [index, entry] of entries.entries()) {
+        if (
+          previousEntryPath !== undefined &&
+          compareUnicodeScalar(previousEntryPath, entry.path) >= 0
+        ) {
+          context.addIssue({
+            code: 'custom',
+            path: ['entries', index, 'path'],
+            message: 'Invalid-package entries must be unique and sorted by Unicode scalar value.',
+          });
+        }
+        previousEntryPath = entry.path;
+        totalBytes += entry.bytes.byteLength;
+      }
+      if (totalBytes > MAPWORLD_NATIVE_LIMITS.maximumPackageBytes) {
         context.addIssue({
           code: 'custom',
-          path: ['entries', index, 'path'],
-          message: 'Invalid-package entries must be unique and sorted by Unicode scalar value.',
+          path: ['entries'],
+          message: 'Invalid package tree exceeds the aggregate native byte limit.',
         });
       }
-      previousEntryPath = entry.path;
-      totalBytes += entry.bytes.length;
-    }
-    if (totalBytes > MAPWORLD_NATIVE_LIMITS.maximumPackageBytes) {
-      context.addIssue({
-        code: 'custom',
-        path: ['entries'],
-        message: 'Invalid package tree exceeds the aggregate native byte limit.',
-      });
-    }
-    for (const [index, path] of directories.entries()) {
-      const previous = directories[index - 1];
-      if (previous !== undefined && compareUnicodeScalar(previous, path) >= 0) {
-        context.addIssue({
-          code: 'custom',
-          path: ['directories', index],
-          message: 'Directory paths must be unique and sorted by Unicode scalar value.',
-        });
+      for (const [index, path] of directories.entries()) {
+        const previous = directories[index - 1];
+        if (previous !== undefined && compareUnicodeScalar(previous, path) >= 0) {
+          context.addIssue({
+            code: 'custom',
+            path: ['directories', index],
+            message: 'Directory paths must be unique and sorted by Unicode scalar value.',
+          });
+        }
       }
-    }
-  });
+    }),
+);
 
 const wrongKindRegularFileSchema = observationSchema
   .extend({
     kind: z.literal('regular-file'),
-    bytes: z.array(byteSchema).max(MAPWORLD_NATIVE_LIMITS.maximumFileBytes),
+    bytes: nativeBytesSchema(MAPWORLD_NATIVE_LIMITS.maximumFileBytes),
   })
   .strict();
 
@@ -132,26 +151,28 @@ export const nativeMapworldPackageRoleSchema = z.union([
 const markerRegularFileSchema = observationSchema
   .extend({
     kind: z.literal('regular-file'),
-    bytes: z.array(byteSchema).max(MAPWORLD_NATIVE_LIMITS.maximumMarkerBytes),
+    bytes: nativeBytesSchema(MAPWORLD_NATIVE_LIMITS.maximumMarkerBytes),
   })
   .strict();
 
-const wrongKindMarkerDirectorySchema = observationSchema
-  .extend({
-    kind: z.literal('directory'),
-    entries: z.array(packageEntrySchema).max(MAPWORLD_NATIVE_LIMITS.maximumPackageFiles),
-  })
-  .strict()
-  .superRefine(({ entries }, context) => {
-    const totalBytes = entries.reduce((total, entry) => total + entry.bytes.length, 0);
-    if (totalBytes > MAPWORLD_NATIVE_LIMITS.maximumPackageBytes) {
-      context.addIssue({
-        code: 'custom',
-        path: ['entries'],
-        message: 'Marker-directory snapshot exceeds the aggregate native byte limit.',
-      });
-    }
-  });
+const wrongKindMarkerDirectorySchema = boundedAggregateEntriesSchema.pipe(
+  observationSchema
+    .extend({
+      kind: z.literal('directory'),
+      entries: z.array(packageEntrySchema).max(MAPWORLD_NATIVE_LIMITS.maximumPackageFiles),
+    })
+    .strict()
+    .superRefine(({ entries }, context) => {
+      const totalBytes = entries.reduce((total, entry) => total + entry.bytes.byteLength, 0);
+      if (totalBytes > MAPWORLD_NATIVE_LIMITS.maximumPackageBytes) {
+        context.addIssue({
+          code: 'custom',
+          path: ['entries'],
+          message: 'Marker-directory snapshot exceeds the aggregate native byte limit.',
+        });
+      }
+    }),
+);
 
 export const nativeMapworldMarkerRoleSchema = z.union([
   absentSchema,
@@ -181,6 +202,34 @@ export type NativeMapworldRecoverySnapshotDto = z.infer<
 >;
 export type NativeMapworldPackageRoleDto = z.infer<typeof nativeMapworldPackageRoleSchema>;
 export type NativeMapworldMarkerRoleDto = z.infer<typeof nativeMapworldMarkerRoleSchema>;
+
+/** Count raw base64 or legacy number-array entries before any Uint8Array transformation. */
+export function hasBoundedNativePackageEntryBytes(
+  input: unknown,
+  maximumPackageBytes: number = MAPWORLD_NATIVE_LIMITS.maximumPackageBytes,
+): boolean {
+  if (!Number.isSafeInteger(maximumPackageBytes) || maximumPackageBytes < 0) return false;
+  if (!isObjectRecord(input) || !Object.hasOwn(input, 'entries')) return true;
+  const entries = input.entries;
+  if (!Array.isArray(entries)) return false;
+  let totalBytes = 0;
+  for (const entry of entries) {
+    if (!isObjectRecord(entry) || !Object.hasOwn(entry, 'bytes')) return false;
+    const length = rawNativeByteLength(entry.bytes);
+    if (length === null || length > maximumPackageBytes - totalBytes) return false;
+    totalBytes += length;
+  }
+  return true;
+}
+
+function rawNativeByteLength(value: unknown): number | null {
+  if (typeof value === 'string') return decodedBase64ByteLength(value);
+  return Array.isArray(value) ? value.length : null;
+}
+
+function isObjectRecord(value: unknown): value is Readonly<Record<string, unknown>> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
 
 const markerBaseSchema = z.strictObject({
   backupName: z.string(),

@@ -3,10 +3,10 @@
   "fixtureId": "milestone-2-atlas-seam-crossing",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-seam-crossing --review-record fixed-seeds/milestone-2-atlas-seam-crossing/reviews/0007-restrained-ink-atlas.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-seam-crossing --review-record fixed-seeds/milestone-2-atlas-seam-crossing/reviews/0010-accepted-aspect-persistence.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-seam-crossing/fixture-definition.json",
-    "sha256": "43b1a1db857774d97b0bc268ae8d291135c7b918ee91b0d3a19f255f0cf0bb15"
+    "sha256": "1e89036d392c928d2d6647f185d4433cb23370bbe6ad7ba903ceeee578f60e01"
   },
   "worldSeed": "12297829382473034410",
   "stableIds": {
@@ -49,6 +49,7 @@
     "worldSurfaceEntityId": "eaa0cecc-8c5d-559f-b18a-bbd0c53248ac"
   },
   "versions": {
+    "acceptedAspectSchemaVersion": 1,
     "atlasAppearanceGeneratorManifestVersion": 1,
     "atlasAppearanceParameterSchemaVersion": 1,
     "atlasCoastlineAppearanceBehaviorVersion": 1,
@@ -80,7 +81,11 @@
     "landWaterClassificationBehaviorVersion": 1,
     "landWaterClassificationGeneratorVersion": 1,
     "macroElevationGeneratorVersion": 1,
-    "seedDerivationVersion": 1
+    "mapDocumentSchemaVersion": 1,
+    "mapworldPackageVersion": 1,
+    "mapworldSchemaVersion": 1,
+    "seedDerivationVersion": 1,
+    "worldIndexSchemaVersion": 1
   },
   "checkpointRevisions": {
     "baseline": {
@@ -97,15 +102,15 @@
   },
   "expectedAssertions": [
     {
-      "assertionId": "runner-validates-full-generator-kernel",
+      "assertionId": "runner-validates-accepted-atlas-evidence",
       "operator": "runner-pass",
-      "reviewPurpose": "Prove exact geography plus independently seeded accepted appearance, bounded ink, masked decoration, paper treatment, and shared-scene backend evidence."
+      "reviewPurpose": "Prove exact generation plus persistence-owned canonical accepted aspect/output evidence for this fixed matrix row."
     }
   ],
-  "reviewPurpose": "Prove the restrained version-1 ink style and appearance isolation over unchanged accepted atlas geography before persistence integration.",
+  "reviewPurpose": "Prove one Milestone 2 matrix row at the persistence-owned canonical accepted aspect/output boundary while retaining its separate geometry and visual evidence.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-seam-crossing/reviews/0007-restrained-ink-atlas.md",
-    "sha256": "bb494cce11454cf925bcd277f97d851f04671ac33311f4ba27bffabb59dd8eee"
+    "path": "fixed-seeds/milestone-2-atlas-seam-crossing/reviews/0010-accepted-aspect-persistence.md",
+    "sha256": "caf5b53490034ccffa561d17efc20f36d871b7a2b52a00825933b0bca83f7283"
   },
   "generatedRoots": [
     "canonical-svg/milestone-2-atlas-seam-crossing",
@@ -117,9 +122,17 @@
       "path": "canonical-svg/milestone-2-atlas-seam-crossing/baseline.svg",
       "kind": "canonical-svg",
       "checkpoint": "baseline",
-      "byteLength": 807469,
-      "canonicalSvgSha256": "5e7e89e592a574f7cc67b7db66828768d92a04b7c9fd8d3a2dd6a78ca3034167",
-      "fixtureIntegritySha256": "5e7e89e592a574f7cc67b7db66828768d92a04b7c9fd8d3a2dd6a78ca3034167"
+      "byteLength": 712010,
+      "canonicalSvgSha256": "be8a9d17237652658c048efdd02c4b791b08648fa9ae0d432523dbd5bd14dd61",
+      "fixtureIntegritySha256": "be8a9d17237652658c048efdd02c4b791b08648fa9ae0d432523dbd5bd14dd61"
+    },
+    {
+      "path": "fixed-seeds/milestone-2-atlas-seam-crossing/expected/baseline/accepted-aspects.aspects.index.canonical",
+      "kind": "canonical-aspect-digest-index",
+      "checkpoint": "baseline",
+      "byteLength": 6097,
+      "canonicalAspectDigestIndexSha256": "e2be6a871ad46bac3a8287bd1ffa25896b2975e20912267d98b25f1b9e4bec68",
+      "fixtureIntegritySha256": "e2be6a871ad46bac3a8287bd1ffa25896b2975e20912267d98b25f1b9e4bec68"
     },
     {
       "path": "fixed-seeds/milestone-2-atlas-seam-crossing/expected/baseline/atlas-land-water.kernel.canonical",
@@ -141,9 +154,19 @@
       "path": "visual-gallery/milestone-2-atlas-seam-crossing/baseline.png",
       "kind": "visual-evidence",
       "checkpoint": "baseline",
-      "byteLength": 1049775,
-      "visualEvidenceSha256": "99c153dffb25ac4a7b388ea15594339bc80f5eb7c96fdf043371345c7d08ec51",
-      "fixtureIntegritySha256": "99c153dffb25ac4a7b388ea15594339bc80f5eb7c96fdf043371345c7d08ec51"
+      "byteLength": 97161,
+      "visualEvidenceSha256": "b569d12144671332814da2ea57b244c1876f83f123e2cead87635d6dfbc6a7c8",
+      "fixtureIntegritySha256": "b569d12144671332814da2ea57b244c1876f83f123e2cead87635d6dfbc6a7c8",
+      "pngProfileId": "atlas-png-v1",
+      "pngProfileVersion": 1,
+      "widthPx": 1600,
+      "heightPx": 800,
+      "bitDepth": 8,
+      "colorType": 2,
+      "srgbRenderingIntent": 0,
+      "bandCoreHeightPx": 64,
+      "bandHaloPx": 8,
+      "idatChunkBytes": 1048576
     }
   ]
 }

@@ -1,6 +1,7 @@
 /** Validated, injected Tauri boundary for native `.mapworld` filesystem operations. */
 
 import {
+  decodedBase64ByteLength,
   MAPWORLD_NATIVE_LIMITS,
   MAPWORLD_RECOVERY_CODES,
   type MapworldNativeApplyRequestDto,
@@ -14,7 +15,7 @@ import {
   parseMapworldNativeMutationResponse,
   parseMapworldNativeSaveRequestDto,
   parseMapworldNativeSnapshotResponse,
-  validateMapworldNativeSaveRequestDto,
+  validateParsedMapworldNativeSaveRequestDto,
 } from '@ttrpg-map/persistence';
 
 /** The desktop and persistence boundaries intentionally share one public native-limit contract. */
@@ -22,7 +23,7 @@ export const NATIVE_MAPWORLD_LIMITS = MAPWORLD_NATIVE_LIMITS;
 
 export const NATIVE_MAPWORLD_COMMANDS = Object.freeze({
   apply: 'mapworld_native_apply',
-  save: 'mapworld_native_save',
+  save: 'mapworld_native_save_base64',
   snapshot: 'mapworld_native_snapshot',
 });
 
@@ -85,7 +86,7 @@ export async function requestNativeMapworldSave(
     const snapshot = immutableSaveRequest(parsed);
     const limitError = validateSaveRequestLimits(snapshot);
     if (limitError !== undefined) return limitError;
-    const validated = validateMapworldNativeSaveRequestDto(snapshot);
+    const validated = validateParsedMapworldNativeSaveRequestDto(snapshot);
     if (!validated.ok) {
       return invalidBoundaryResult(
         'validate-native-save-request',
@@ -101,9 +102,9 @@ export async function requestNativeMapworldSave(
         expectedPreviousManifestSha256: snapshot.expectedPreviousManifestSha256,
         expectedPreviousObservationToken: snapshot.expectedPreviousObservationToken,
         candidateManifestSha256: snapshot.candidateManifestSha256,
-        markerBytes: snapshot.markerBytes,
+        markerBase64: snapshot.markerBase64,
         relativePaths: Object.freeze(snapshot.files.map(({ path }) => path)),
-        fileBytes: Object.freeze(snapshot.files.map(({ bytes }) => bytes)),
+        fileBytesBase64: Object.freeze(snapshot.files.map(({ bytesBase64 }) => bytesBase64)),
       }),
     );
     return parseMutationResponse(response, 'saved');
@@ -200,9 +201,9 @@ function validateSaveRequestLimits(
     );
   }
   if (
-    request.markerBytes.length === 0 ||
-    request.markerBytes.length > NATIVE_MAPWORLD_LIMITS.maximumMarkerBytes ||
-    !request.markerBytes.every(isByte)
+    request.markerBase64.length === 0 ||
+    (decodedBase64ByteLength(request.markerBase64) ?? Number.POSITIVE_INFINITY) >
+      NATIVE_MAPWORLD_LIMITS.maximumMarkerBytes
   ) {
     return invalidBoundaryResult(
       'validate-save-marker-limit',
@@ -238,14 +239,15 @@ function validateSaveRequestLimits(
       );
     }
     paths.add(file.path);
-    if (file.bytes.length > NATIVE_MAPWORLD_LIMITS.maximumFileBytes || !file.bytes.every(isByte)) {
+    const byteLength = decodedBase64ByteLength(file.bytesBase64);
+    if (byteLength === null || byteLength > NATIVE_MAPWORLD_LIMITS.maximumFileBytes) {
       return invalidBoundaryResult(
         'validate-save-file-byte-limit',
         'A package file exceeds the native byte limit.',
         MAPWORLD_RECOVERY_CODES.artifactConflict,
       );
     }
-    totalBytes += file.bytes.length;
+    totalBytes += byteLength;
     if (totalBytes > NATIVE_MAPWORLD_LIMITS.maximumPackageBytes) {
       return invalidBoundaryResult(
         'validate-save-package-byte-limit',
@@ -317,15 +319,9 @@ function immutableSaveRequest(request: NativeMapworldSaveRequest): NativeMapworl
     expectedPreviousManifestSha256: request.expectedPreviousManifestSha256,
     expectedPreviousObservationToken: request.expectedPreviousObservationToken,
     candidateManifestSha256: request.candidateManifestSha256,
-    markerBytes: Object.freeze([...request.markerBytes]),
+    markerBase64: request.markerBase64,
     files: Object.freeze(
-      request.files.map(({ path, bytes }) =>
-        Object.freeze({ path, bytes: Object.freeze([...bytes]) }),
-      ),
+      request.files.map(({ path, bytesBase64 }) => Object.freeze({ path, bytesBase64 })),
     ),
   });
-}
-
-function isByte(value: number): boolean {
-  return Number.isInteger(value) && value >= 0 && value <= 255;
 }

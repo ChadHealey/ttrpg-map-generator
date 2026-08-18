@@ -88,12 +88,12 @@ function statefulNativeInvoke(): {
 } {
   const commands: string[] = [];
   let relativePaths: readonly string[] = [];
-  let fileBytes: readonly (readonly number[])[] = [];
+  let fileBytesBase64: readonly string[] = [];
   const invoke: NativeMapworldInvoke = (command, arguments_) => {
     commands.push(command);
     if (command === NATIVE_MAPWORLD_COMMANDS.save) {
       relativePaths = asStringArray(arguments_.relativePaths);
-      fileBytes = asNumberArrays(arguments_.fileBytes);
+      fileBytesBase64 = asStringArray(arguments_.fileBytesBase64);
       return Promise.resolve(
         JSON.stringify({
           ok: true,
@@ -112,7 +112,7 @@ function statefulNativeInvoke(): {
               kind: 'directory',
               observationToken: 'b'.repeat(64),
               entries: relativePaths
-                .map((path, index) => ({ path, bytes: [...(fileBytes[index] ?? [])] }))
+                .map((path, index) => ({ path, bytes: fileBytesBase64[index] ?? '' }))
                 .sort(({ path: left }, { path: right }) =>
                   left < right ? -1 : left > right ? 1 : 0,
                 ),
@@ -136,16 +136,6 @@ function absent(character: string) {
 function asStringArray(value: unknown): readonly string[] {
   if (!Array.isArray(value) || !value.every((item) => typeof item === 'string')) {
     throw new Error('Expected native relativePaths array.');
-  }
-  return value;
-}
-
-function asNumberArrays(value: unknown): readonly (readonly number[])[] {
-  if (
-    !Array.isArray(value) ||
-    !value.every((item) => Array.isArray(item) && item.every((byte) => typeof byte === 'number'))
-  ) {
-    throw new Error('Expected native fileBytes arrays.');
   }
   return value;
 }

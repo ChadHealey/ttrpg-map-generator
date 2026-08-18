@@ -88,8 +88,9 @@ for critical workflows and for failures that pure tests cannot represent.
   and platform contract in [ADR-0008](adr/0008-mapworld-directory-commit-recovery.md).
 - Worker request validation, progress, cancellation, failure, and scheduling.
 - Tauri file-dialog and native atomic-save adapters.
-- Canvas and SVG interpretation of the same `RenderScene`.
-- PNG tiling and memory limits at representative large sizes.
+- Canvas, SVG, and PNG interpretation of the same `RenderScene`.
+- PNG tiling, halo boundaries, independently decoded chunks/pixels, deterministic repeat bytes,
+  cancellation aftermath, and memory limits at representative small and large sizes.
 - World footprint selection through accepted regional creation.
 - Save, close, reopen, and navigate between linked world and regional maps.
 - Parent-context change, stale notification, preview, keep/reconcile/regenerate.
@@ -173,6 +174,12 @@ one passing hash as proof for another.
 
 Visual comparisons use an explicit tolerance and deterministic fonts/assets.
 Intentional style changes may update PNGs without changing semantic fixtures.
+
+Milestone 2 production PNG verification parses chunk order and CRCs independently, inflates and
+checks Adler-32/filter rows, and reconstructs selected large-output rows with bounded test memory.
+It byte-compares the production 1600 by 800 gallery and generates each 8192 by 4096 row twice in a
+disposable directory. These deterministic gates do not substitute for the separately recorded base
+Apple M1/8-GB release measurements.
 
 Milestone 1's relevant gallery is intentionally only the fixed `baseline`, `rerolled`, and
 `reopened` synthetic checkpoints: the normative composition contains one world map and no regional

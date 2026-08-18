@@ -14,6 +14,7 @@ export const MAPWORLD_APPLICATION_COMPATIBILITY = Object.freeze({
 export const MAPWORLD_CHECKSUM_ALGORITHM = 'sha256' as const;
 
 export const PERSISTENCE_DIAGNOSTIC_CODES = {
+  atlasInvalid: 'persistence.atlas.invalid',
   checksumMismatch: 'persistence.checksum.mismatch',
   dependencyInvalid: 'persistence.dependency.invalid',
   fileDuplicate: 'persistence.file.duplicate',

@@ -52,8 +52,8 @@ function requestFromPlan(plan: MapworldSavePlan, operation: 'first-save' | 'repl
     expectedPreviousObservationToken:
       operation === 'replacement-save' ? PREVIOUS_OBSERVATION : null,
     candidateManifestSha256: plan.candidateManifestSha256,
-    markerBytes: [...plan.markerBytes],
-    files: plan.files.map(({ bytes, path }) => ({ bytes: [...bytes], path })),
+    markerBase64: plan.markerBase64,
+    files: plan.files.map(({ bytesBase64, path }) => ({ bytesBase64, path })),
   };
 }
 

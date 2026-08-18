@@ -1,3 +1,4 @@
+import { decodeBase64Bytes } from './base64-bytes.js';
 import { canonicalJsonBytes } from './canonical-json.js';
 import { classifyMapworldRecoverySnapshot } from './mapworld-recovery-classification.js';
 import { createMapworldSavePlan } from './mapworld-recovery-marker.js';
@@ -18,8 +19,8 @@ export const OLD_PACKAGE = directory('a', OLD_PLAN);
 export const NEW_PACKAGE = directory('b', REPLACEMENT_PLAN);
 export const NEW_DUPLICATE = directory('c', REPLACEMENT_PLAN);
 export const THIRD_PACKAGE = directory('d', THIRD_PLAN);
-export const FIRST_MARKER = regular('e', FIRST_PLAN.markerBytes);
-export const REPLACEMENT_MARKER = regular('f', REPLACEMENT_PLAN.markerBytes);
+export const FIRST_MARKER = regular('e', planMarkerBytes(FIRST_PLAN));
+export const REPLACEMENT_MARKER = regular('f', planMarkerBytes(REPLACEMENT_PLAN));
 
 export function rawSnapshot(overrides: Readonly<Record<string, unknown>> = {}) {
   return {
@@ -69,7 +70,10 @@ export function invalidDirectory(character: string) {
 export function directory(character: string, plan: MapworldSavePlan) {
   return directoryEntries(
     character,
-    plan.files.map(({ path, bytes }) => ({ path, bytes: [...bytes] })),
+    plan.files.map(({ path, bytesBase64 }) => ({
+      path,
+      bytes: Array.from(requiredBase64(bytesBase64)),
+    })),
   );
 }
 
@@ -88,9 +92,19 @@ export function directoryEntries(
 
 export function markerBytesWith(overrides: Readonly<Record<string, unknown>>): readonly number[] {
   const marker = JSON.parse(
-    new TextDecoder().decode(Uint8Array.from(FIRST_PLAN.markerBytes)),
+    new TextDecoder().decode(requiredBase64(FIRST_PLAN.markerBase64)),
   ) as Record<string, unknown>;
   return canonicalBytes({ ...marker, ...overrides });
+}
+
+export function planMarkerBytes(plan: MapworldSavePlan): readonly number[] {
+  return Array.from(requiredBase64(plan.markerBase64));
+}
+
+function requiredBase64(value: string): Uint8Array {
+  const bytes = decodeBase64Bytes(value, Number.MAX_SAFE_INTEGER);
+  if (bytes === null) throw new Error('Test save plan contains invalid canonical base64.');
+  return bytes;
 }
 
 export function canonicalBytes(value: unknown): readonly number[] {

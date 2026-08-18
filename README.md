@@ -7,18 +7,19 @@ style.
 
 ## Status
 
-Milestones 0 and 1 are implemented. The desktop app now exposes the fixed deterministic-kernel
-proof: seed `81985529216486895` produces one accepted outline and nine markers, **Reroll markers**
-changes only the marker aspect, and a native `.mapworld` save can be unloaded and reopened without
-calling either generator.
+Milestones 0 and 1 are complete. The current Milestone 2 candidate implements the first geographic
+whole-world atlas workflow: a registered seed and validated atlas controls produce a disposable
+coarse preview and a separately generated accepted atlas; geography and appearance can be rerolled
+with different isolation boundaries; accepted state can be saved, unloaded, reopened without
+generation, and exported as deterministic SVG and 8192 by 4096 PNG.
 
-The Milestone 1 visible exit is:
-
-> A seed produces a small repeatable composition; rerolling one test aspect leaves every unrelated
-> aspect byte-for-byte unchanged after save/reopen.
-
-This is deliberately a synthetic one-world-map proof with no `RegionalMap`; Milestone 2 owns the
-first geographic whole-world atlas.
+Milestone 2 is **release-pending**, not complete. The formal base Apple M1/8-GB five-process timing,
+aggregate-memory, and cancellation-latency protocol is still outstanding; this development Mac is
+not a substitute. Local implementation, fixture, packaged-workflow, export, and visual evidence is
+recorded, but the exact branch tip still needs a fresh macOS/Linux CI matrix and every included
+GitHub issue must be closed or explicitly moved out. The [Milestone 2 release-evidence
+report](docs/milestone-2-release-evidence.md) is the auditable status record and lists the exact
+remaining closeout actions.
 
 ## Planned Stack
 
@@ -36,6 +37,7 @@ not currently grant an open-source license.
 
 - [Consolidated project plan](docs/PROJECT_PLAN.md)
 - [Milestone 2 whole-world atlas-proof contract](docs/milestone-2-atlas-proof.md)
+- [Milestone 2 release evidence and remaining actions](docs/milestone-2-release-evidence.md)
 - [Engineering rules and document ownership](docs/README.md)
 - [Architecture](docs/01-architecture.md)
 - [Naming and vocabulary](docs/02-naming-and-vocabulary.md)
@@ -70,15 +72,22 @@ corepack pnpm dev
 
 In the proof window:
 
-1. Leave the registered seed in place and select **Generate baseline**.
-2. Inspect outline revision 0, marker revision 0, and their canonical SHA-256 evidence.
-3. Select **Reroll markers** and confirm the outline stays fixed while the nine markers move and
-   the marker-only isolation result is `PASS`.
-4. Enter an absolute, previously unused `.mapworld` path whose parent exists, then select **Save
-   .mapworld**. The proof uses first-save semantics and will not overwrite an existing target.
-5. Select **Close proof** to unload the accepted document and `RenderScene`, then **Reopen proof**.
-6. Confirm native reopen equality is `PASS`, generator calls on reopen is `0`, and the restored
-   scene matches the rerolled checkpoint.
+1. Leave registered seed `81985529216486895` and the default controls in place.
+2. Select **Generate coarse preview**, cancel the first request, and restart it. The labelled
+   preview is disposable and cannot be saved as accepted geography.
+3. Select **Accept full atlas**. Inspect stable landmass and water-body identities after the
+   separate full-resolution transaction finishes.
+4. Select **Preview geography reroll**, review the stated fixed/change set, then **Commit reviewed
+   reroll**. Paper treatment, controls, seed, style versions, and singleton identities stay fixed.
+5. Select **Preview appearance reroll**, review it, then **Commit reviewed reroll**. Semantic
+   geography and the canonical coastline stay fixed while all three appearance aspects change.
+6. Enter an absolute, previously unused `.mapworld` path whose parent already exists, then select
+   **Save accepted .mapworld**. Save uses first-save semantics and does not overwrite a project.
+7. Select **Unload accepted atlas**, then **Reopen saved atlas**. Confirm reopen evidence is `PASS`
+   and generator calls during reopen is `0`.
+8. Export deterministic SVG and 8192 by 4096 PNG from the reopened checkpoint. With no explicit
+   destination picker, the files are `atlas-81985529216486895.svg` and `.png` in Downloads; move or
+   remove any previous exports before exercising a fresh proof.
 
 Run the focused workflow and visual evidence gates with:
 
