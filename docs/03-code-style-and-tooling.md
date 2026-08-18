@@ -73,8 +73,8 @@ repeat and fixed-format vectors, bounded raster-band/resource assertions, repres
 1600-by-800 and 8192-by-4096 exports, progress/cancellation aftermath, and the native atomic PNG
 replacement boundary. It is a deterministic evidence gate and may run outside the default parallel
 `pnpm test` pool so its fixed large outputs do not starve unrelated unit tests. It does not claim the
-formal base Apple M1/8-GB wall-clock, aggregate-memory, or cancellation-latency release proof owned
-by issue #68; measurements from another machine are not a substitute.
+formal Apple M5/24-GB wall-clock, aggregate-memory, or cancellation-latency release proof owned
+by issue #68; measurements outside the designated reference configuration are not a substitute.
 
 No general `pnpm benchmark` command exists yet. The PNG gate owns one bounded output-specific
 evidence harness; broader benchmark infrastructure remains deferred until another measured workload

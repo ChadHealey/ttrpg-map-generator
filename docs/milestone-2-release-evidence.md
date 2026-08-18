@@ -9,12 +9,12 @@
 This report keeps functional, semantic, package, render, visual, resource, and release-hardware
 evidence separate. A `PASS` may be recorded only beside reproduced evidence whose exact tested
 tree is named. `PENDING` means the final command or review has not yet been recorded. `OUTSTANDING` means
-the required environment is unavailable. `EXTERNAL` means completion requires a remote action that
-was deliberately prohibited while preparing issue #68.
+the required reference protocol has not yet passed. `EXTERNAL` means completion requires a remote
+action that was deliberately prohibited while preparing issue #68.
 
 Milestone 2 cannot be called complete while any contract row is `PENDING`, `OUTSTANDING`, or
-`EXTERNAL`. In particular, results from the current Apple M5/24-GB development machine must never
-be reported as the prescribed base Apple M1/8-GB release-budget evidence.
+`EXTERNAL`. The current Apple M5/24-GB development machine is now the designated reference
+environment; the recorded observations are not yet a passing five-process release-budget result.
 
 ## Candidate and environment
 
@@ -28,7 +28,7 @@ be reported as the prescribed base Apple M1/8-GB release-budget evidence.
 | Operating system             | macOS 26.5.1, build `25F80`                                                        |
 | Node / pnpm / Rust           | Node 24.11.0 / pnpm 11.19.0 / rustc 1.97.1                                         |
 | Package form                 | Unsigned local v0.1.0 arm64 `.app`; 9.6 MiB bundle, ad-hoc linker signature        |
-| Reference-hardware claim     | None; this host is explicitly not the base Apple M1/8-GB reference environment     |
+| Reference-hardware claim     | Designated reference environment for Milestone 2 release measurements              |
 
 The starting HEAD identifies the already reviewed #65–#67 chain before #68 changes. The evidence
 implementation HEAD is the exact code/fixture/CI tree used by every heavy release gate and the
@@ -54,7 +54,7 @@ and clean status are recorded in the issue handoff because a commit cannot conta
 | Visual gallery               | Six registered 1600 × 800 gallery rows plus full-size seam, pole, channel, island, echo, fine-ink, and raster-boundary crops inspected         | **PASS**        | Visual review table below                                              |
 | Deterministic resource gates | PNG dimensions, file ceiling, bounded band/surface allocation, progress/cancellation semantics, and deterministic aftermath pass               | **PASS**        | `pnpm test:png-export`; this is not the release benchmark              |
 | Packaged macOS app           | Unsigned `.app` builds and the complete visible workflow is exercised through that bundle                                                      | **PASS**        | Package and workflow records below                                     |
-| Base Apple M1/8-GB budgets   | Prescribed warm-up/five-process timing, process-tree RSS, and cancellation acknowledgement protocol passes                                     | **OUTSTANDING** | Reference-hardware section below; no suitable machine is available     |
+| Apple M5/24-GB budgets       | Prescribed warm-up/five-process timing, process-tree RSS, and cancellation acknowledgement protocol passes                                     | **OUTSTANDING** | Reference-hardware section below; protocol must be rerun               |
 | macOS/Linux release matrix   | Exact final commit passes required CI on both platforms with filesystem evidence                                                               | **EXTERNAL**    | Branch is intentionally unpushed; fresh remote matrix remains required |
 | Milestone issue state        | Every included issue is closed or explicitly moved out                                                                                         | **EXTERNAL**    | Eight milestone issues remain open; remote mutation was prohibited     |
 
@@ -188,22 +188,24 @@ independent, append-only review record under [fixture conventions](07-fixture-co
 
 ### Current development Mac
 
-Results from this Apple M5/24-GB host may diagnose regressions and establish deterministic output,
-file ceilings, allocation bounds, and progress/cancellation state semantics. They are report-only
-for wall-clock and process-tree memory. Record them without a `PASS` against the release budgets.
+Results from this Apple M5/24-GB host establish the designated reference environment for release
+measurements as well as deterministic output, file ceilings, allocation bounds, and
+progress/cancellation state semantics. The formal protocol remains required; record it without
+replacing a failed result with a narrower command.
 
 | Workload                     | Elapsed observation                                                                             | Memory observation | Interpretation                                                  |
 | ---------------------------- | ----------------------------------------------------------------------------------------------- | ------------------ | --------------------------------------------------------------- |
-| Preview / full generation    | Preview 573 ms; full 31.045 s; geography reroll 47.313 s                                        | Not sampled        | Report-only; not reference hardware                             |
+| Preview / full generation    | Preview 573 ms; full 31.045 s; geography reroll 47.313 s                                        | Not sampled        | Existing observation; full generation exceeds the 10 s budget   |
 | Save / reopen                | Save 97.973 s; unload 37 ms; reopen 46.943 s                                                    | Not sampled        | Report-only by contract on every host                           |
 | SVG export                   | Not instrumented; verified atomic receipt                                                       | Not sampled        | Deterministic 852,650-byte result; not a budget claim           |
 | 8192 × 4096 PNG export       | 10.766 s                                                                                        | Not sampled        | Report-only; bounded-band test is not aggregate RSS             |
 | Cancellation acknowledgement | Cancel control became available and was pressed after 36 ms; visible cancelled receipt followed | Not sampled        | Accessibility observation, not protocol acknowledgement latency |
 
-### Required base Apple M1/8-GB protocol — outstanding
+### Required Apple M5/24-GB protocol — outstanding
 
-No base Apple M1/8-GB machine is available for this task. Therefore all rows below remain
-`OUTSTANDING`; the Apple M5 results above cannot substitute, scale, extrapolate, or redefine them.
+The Apple M5/24-GB MacBook Pro recorded above is the designated reference environment. Therefore
+all rows below remain `OUTSTANDING` until the prescribed five fresh-process runs are captured on
+this host. The existing packaged-workflow timings are not a substitute for the formal protocol.
 
 The required environment is an idle release build with packaged local assets, power connected, Low
 Power Mode off, no debugger/developer tools, and no network dependency. After one untimed warm-up,
@@ -235,7 +237,7 @@ satisfy the definition-of-done rule that every included issue be closed or expli
 
 The final release owner must perform these actions in order:
 
-1. Complete and append the base Apple M1/8-GB protocol above without changing its limits.
+1. Complete and append the Apple M5/24-GB protocol above without changing its limits.
 2. Confirm this report names the exact tested implementation commit and the handoff names the
    documentation-only commit, with complete command results, packaged receipts, artifact hashes,
    and human visual review. Do not attribute costly gates to the documentation commit unless they
