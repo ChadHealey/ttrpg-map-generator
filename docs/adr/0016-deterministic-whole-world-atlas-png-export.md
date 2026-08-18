@@ -255,12 +255,12 @@ The automated PNG and selected boundary-row tolerance is zero: canonical bytes a
 RGB values must match exactly. Human crop review likewise accepts no visible seam, clipped ink,
 repeated texture, or decoration discontinuity at native pixels or normal whole-atlas scale.
 
-The base Apple M1/8-GB five-fresh-process proof remains explicitly outstanding to issue #68. For
+The designated Apple M5/24-GB five-fresh-process proof remains explicitly outstanding to issue #68. For
 each gated atlas fixture, it must still establish that all five 8192 by 4096 runs finish within 15
 seconds and 1 GiB peak additional aggregate process-tree memory. Export cancellation must meet its
 500 ms acknowledgement limit under the same five-run maximum rule, with the required five early,
-middle, and late cancellations. Measurements on a newer development machine do not substitute for
-that normative environment and sampling protocol.
+middle, and late cancellations. Measurements outside the designated Apple M5/24-GB environment do
+not substitute for that normative environment and sampling protocol.
 
 ## Revisit conditions
 

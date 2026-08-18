@@ -7,7 +7,7 @@
 - **Release evidence:** [Milestone 2 release-evidence report](../milestone-2-release-evidence.md)
 
 The implementation candidate reaches the visible product flow, but the milestone is not closed.
-The base Apple M1/8-GB reference protocol, fresh remote macOS/Linux evidence, and milestone issue
+The Apple M5/24-GB reference protocol, fresh remote macOS/Linux evidence, and milestone issue
 closeout remain required. This retrospective is therefore a provisional closeout record; its status
 must not change to complete until the release-evidence report has no pending rows.
 
@@ -56,9 +56,9 @@ must not change to complete until the release-evidence report has no pending row
   are deferred rather than broadening the accepted schema for one postcard.
 - Signing and notarization, Linux/Windows packaging, and distribution automation are not required
   for the local unsigned macOS proof.
-- The contract's base Apple M1/8-GB budgets were not reduced or reinterpreted to match the available
-  Apple M5/24-GB development machine. Formal release measurements remain outstanding work, not a
-  cut from scope.
+- The contract now designates the available Apple M5/24-GB MacBook Pro as the reference machine.
+  The existing 31.045-second full-generation observation exceeds the 10-second budget, so the
+  formal five-process measurements remain outstanding and the budget has not been silently relaxed.
 
 ## Next milestone proof
 
