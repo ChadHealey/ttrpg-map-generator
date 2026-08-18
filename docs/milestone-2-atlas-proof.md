@@ -12,6 +12,12 @@ entity/aspect, one feature with its declared dependents, or a selected region. T
 boundaries below must not prevent operations such as rerolling one future `forest.boundary` or
 rerolling its `forest.motifShapes` while preserving that boundary and every other forest.
 
+> **Release status (2026-08-17):** The implementation candidate is release-pending. The
+> [Milestone 2 release-evidence report](milestone-2-release-evidence.md) records local, packaged,
+> visual, reference-hardware, CI, and issue-closeout status. That report does not alter this
+> contract: the base Apple M1/8-GB protocol and every other acceptance requirement below remain in
+> force until their evidence is complete.
+
 ## Fixed proof composition
 
 The proof contains one `WorldDocument`, its one root `WorldMap`, stable world-surface,
