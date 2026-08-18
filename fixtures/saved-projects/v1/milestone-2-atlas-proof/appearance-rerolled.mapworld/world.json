@@ -1,0 +1,14 @@
+{
+  "displayName": "Milestone 2 whole-world atlas",
+  "mapFiles": [
+    {
+      "mapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7",
+      "mapKind": "world",
+      "path": "maps/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7.json"
+    }
+  ],
+  "rootMapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7",
+  "worldDocumentId": "78b2157c-4f2c-5ac7-986b-76dc808f377e",
+  "worldIndexSchemaVersion": 1,
+  "worldSeed": "81985529216486895"
+}

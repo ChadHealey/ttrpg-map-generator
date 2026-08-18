@@ -1,0 +1,28 @@
+{
+  "applicationCompatibility": {
+    "maximumVersionExclusive": "0.2.0",
+    "minimumVersion": "0.1.0"
+  },
+  "authoritativeFiles": [
+    {
+      "checksumAlgorithm": "sha256",
+      "path": "world.json",
+      "sha256": "a573cd7d55d414ae247a252f2b4427ac10891b5c7b7ca3ebf912d8bb7f96257b"
+    },
+    {
+      "checksumAlgorithm": "sha256",
+      "path": "maps/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7.json",
+      "sha256": "f7cfdce090d98974da55ef06d5acf3471ba3826bb3b8faf6023785cd836a1667"
+    }
+  ],
+  "packageVersion": 1,
+  "recordSchemaVersions": {
+    "acceptedAspect": 1,
+    "mapDocument": 1,
+    "worldIndex": 1
+  },
+  "recovery": {
+    "mode": "none"
+  },
+  "schemaVersion": 1
+}
