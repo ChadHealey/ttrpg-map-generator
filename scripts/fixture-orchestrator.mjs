@@ -56,6 +56,14 @@ function firstJsonDifference(left, right, path = '$') {
   return `${path}: checked-in=${JSON.stringify(left)}, regenerated=${JSON.stringify(right)}`;
 }
 
+function jsonByteDifference(checkedIn, regenerated) {
+  try {
+    return firstJsonDifference(JSON.parse(checkedIn), JSON.parse(regenerated));
+  } catch {
+    return undefined;
+  }
+}
+
 function getReadPermissionArguments(paths) {
   const allowed = new Set();
   for (const path of paths) {
@@ -177,7 +185,7 @@ export function compareCandidateWithStored(
   candidateRepositoryRoot,
   candidate,
 ) {
-  const paths = [entry.manifestPath, ...candidate.artifacts.map(({ path }) => path)];
+  const paths = [...candidate.artifacts.map(({ path }) => path), entry.manifestPath];
   if (stored.artifacts.length !== candidate.artifacts.length) {
     throw new Error(
       `${entry.fixtureId} regenerated artifact list differs from checked-in evidence.`,
@@ -197,7 +205,10 @@ export function compareCandidateWithStored(
           `Regenerated fixture evidence differs: ${path}${difference === undefined ? '' : ` (${difference})`}`,
         );
       }
-      throw new Error(`Regenerated fixture evidence differs: ${path}`);
+      const difference = jsonByteDifference(checkedIn, regenerated);
+      throw new Error(
+        `Regenerated fixture evidence differs: ${path}${difference === undefined ? '' : ` (${difference})`}`,
+      );
     }
   }
 }
