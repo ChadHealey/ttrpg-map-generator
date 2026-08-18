@@ -19,6 +19,9 @@ fn complete_atlas_native_save_interrupted_replacement_recovery_and_generator_fre
     fs::create_dir(&requests).expect("create bridge request directory");
     let bridge = build_bridge();
     let mut child = Command::new("node")
+        // Hosted arm64 runners default to a 2 GiB V8 heap, below this full-atlas test fixture's
+        // measured requirement. Keep the larger allowance scoped to the disposable test bridge.
+        .arg("--max-old-space-size=4096")
         .arg(bridge)
         .arg(target.to_str().expect("UTF-8 target path"))
         .arg(requests.to_str().expect("UTF-8 request path"))
