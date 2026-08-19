@@ -6,20 +6,44 @@ function source(path) {
   return readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
 }
 
+function sourceBetween(path, startMarker, endMarker) {
+  const fileSource = source(path);
+  const start = fileSource.indexOf(startMarker);
+  const end = fileSource.indexOf(endMarker, start + startMarker.length);
+  expect(start, `${path}: missing start marker ${startMarker}`).toBeGreaterThanOrEqual(0);
+  expect(end, `${path}: missing or reordered end marker ${endMarker}`).toBeGreaterThan(start);
+  return fileSource.slice(start, end);
+}
+
 describe('compact full-profile generation source boundary', () => {
   it('keeps full proposal assembly free of JavaScript sample-array conversion', () => {
-    const generatorSource = source('packages/generation/src/atlas-land-water-generator.ts');
-    const fullPath = generatorSource.slice(
-      generatorSource.indexOf('export async function generateAtlasLandWaterFull'),
-      generatorSource.indexOf('export async function generateAtlasLandWaterPreview'),
+    const fullPath = sourceBetween(
+      'packages/generation/src/atlas-land-water-generator.ts',
+      'export async function generateAtlasLandWaterFull',
+      'export async function generateAtlasLandWaterPreview',
     );
-    expect(fullPath).not.toMatch(
-      /atlasSampleReaderToArray|copyValues\(|createImmutableDomainArray/u,
+    const classificationPath = sourceBetween(
+      'packages/generation/src/atlas-land-water-classification.ts',
+      'export async function classifyAtlasLandWater',
+      'function immutablePreviewSamples',
     );
-
     const proposalSource = source('packages/generation/src/atlas-land-water-proposal.ts');
-    expect(proposalSource).not.toMatch(
+    const compactFieldPath = sourceBetween(
+      'packages/generation/src/atlas-macro-elevation-field.ts',
+      '  public compactValues(): MacroElevationSampleReader {',
+      '\n  }\n}',
+    );
+    const fullProfileBoundary = [
+      fullPath,
+      classificationPath,
+      proposalSource,
+      compactFieldPath,
+    ].join('\n');
+    expect(fullProfileBoundary).not.toMatch(
       /atlasSampleReaderToArray|copyValues\(|createImmutableDomainArray/u,
+    );
+    expect(compactFieldPath).toContain(
+      'return createCompactMacroElevationSampleReader(this.#values)',
     );
 
     const classificationSource = source(
@@ -32,6 +56,8 @@ describe('compact full-profile generation source boundary', () => {
   it('keeps the checked simultaneously-live packed-buffer peak below 128 MiB', () => {
     const sampleCount = 2_095_106;
     const peak = [
+      { owner: 'prior accepted compact macro elevation', bytes: sampleCount * 4 },
+      { owner: 'prior accepted compact classification', bytes: Math.ceil(sampleCount / 8) },
       { owner: 'accepted compact macro elevation', bytes: sampleCount * 4 },
       { owner: 'accepted compact classification', bytes: Math.ceil(sampleCount / 8) },
       { owner: 'surface partition labels', bytes: sampleCount * 4 },
@@ -44,7 +70,7 @@ describe('compact full-profile generation source boundary', () => {
     expect(peak.map(({ owner }) => owner)).toHaveLength(
       new Set(peak.map(({ owner }) => owner)).size,
     );
-    expect(peak.reduce((total, { bytes }) => total + bytes, 0)).toBe(44_263_215);
+    expect(peak.reduce((total, { bytes }) => total + bytes, 0)).toBe(52_905_528);
     expect(peak.reduce((total, { bytes }) => total + bytes, 0)).toBeLessThan(128 * 1_024 * 1_024);
   });
 });

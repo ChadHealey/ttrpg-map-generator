@@ -2,7 +2,7 @@
 
 - **Profile:** `world-atlas-full-v1`
 - **Canonical sample count:** 2,095,106
-- **Checked peak:** 44,263,215 bytes (42.213 MiB)
+- **Checked peak:** 52,905,528 bytes (50.455 MiB)
 - **Limit:** less than 134,217,728 bytes (128 MiB)
 - **Automated arithmetic:** `scripts/atlas-compact-generation-source.test.mjs`
 
@@ -15,6 +15,8 @@ generation path.
 
 | Owner and purpose                |                 Width |     Count |     Bytes | Lifetime and release point                                                                                                        |
 | -------------------------------- | --------------------: | --------: | --------: | --------------------------------------------------------------------------------------------------------------------------------- |
+| Prior accepted macro elevation   | 4-byte signed integer | 2,095,106 | 8,380,424 | Retained until an atomic geography reroll accepts its replacement; absent during initial generation.                              |
+| Prior accepted classification    |                 1 bit | 2,095,106 |   261,889 | Retained until an atomic geography reroll accepts its replacement; absent during initial generation.                              |
 | Full macro field sampler         | 4-byte signed integer | 2,095,106 | 8,380,424 | Created by full-profile sampling; released when `generateAtlasLandWaterFull` returns after the compact proposal copy is complete. |
 | Accepted compact macro elevation | 4-byte signed integer | 2,095,106 | 8,380,424 | Owned by the proposal, accepted document, and presentation; replaced only by an accepted geography transaction or unload.         |
 | Classification producer bits     |                 1 bit | 2,095,106 |   261,889 | Created during full classification; released after the compact reader owns its copy or immediately on cancellation.               |
@@ -35,11 +37,13 @@ generation path.
 
 ## Simultaneously-live peak
 
-The conservative peak occurs while assigning primary marine regions. It includes the accepted
-compact macro field (8,380,424), accepted compact classification (261,889), surface partition labels
+The conservative peak occurs while assigning primary marine regions during a geography reroll.
+Transaction atomicity retains the prior accepted compact macro field (8,380,424) and classification
+(261,889) while the proposal owns their replacements. The peak also includes the replacement compact
+macro field (8,380,424), replacement compact classification (261,889), surface partition labels
 (8,380,424), marine clearance (2,095,106), marine core labels (8,380,424), new marine region labels
 (8,380,424), the assignment queue (8,380,424), and spherical row weights (4,100). Their exact sum is
-44,263,215 bytes (42.213 MiB), leaving 89,954,513 bytes of packed-buffer headroom below 128 MiB.
+52,905,528 bytes (50.455 MiB), leaving 81,312,200 bytes of packed-buffer headroom below 128 MiB.
 
 The semantic-proof peak substitutes owner labels, connectedness visits, and the connectedness queue
 for clearance, core labels, and assignment buffers and has the same byte total. Coastline source
