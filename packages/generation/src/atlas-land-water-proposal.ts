@@ -9,6 +9,7 @@ import {
   ATLAS_FULL_PROFILE_ID,
   ATLAS_GEOGRAPHY_CONTRACT_VERSION,
   type AtlasLandWaterRecords,
+  createImmutableDomainSnapshot,
   type GenerationDiagnostic,
   type LandWaterClassification,
   type MacroElevationField,
@@ -60,11 +61,14 @@ export function createAtlasLandWaterRecords(
     seaLevelContourDoubledTicks: contourLevel,
     samples: classification.samples,
   });
-  return Object.freeze({
+  const records: AtlasLandWaterRecords = Object.freeze({
     controls: input.controls,
     macroElevation,
     landWaterClassification,
   });
+  const snapshot = createImmutableDomainSnapshot(records);
+  if (!snapshot.ok) throw new Error('Atlas land/water records must be immutable plain data.');
+  return snapshot.value;
 }
 
 export function createAtlasLandWaterProposedPatch(

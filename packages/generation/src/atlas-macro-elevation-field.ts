@@ -1,6 +1,7 @@
 /** Production version-1 analytic spherical macro-elevation field and profile sampler. */
 
 import {
+  createImmutableDomainArray,
   type DeepReadonly,
   type DeterministicRandomStream,
   PLANET_ANGULAR_STEP_RAD,
@@ -89,7 +90,9 @@ class SampledMacroElevationField implements SampledAtlasMacroElevationField {
   }
 
   public copyValues(): readonly AtlasFieldValueTicks[] {
-    return Object.freeze(Array.from(this.#values, (value) => value as AtlasFieldValueTicks));
+    const snapshot = createImmutableDomainArray(this.#values);
+    if (!snapshot.ok) throw new Error('Macro elevation samples must be immutable finite values.');
+    return snapshot.value as readonly AtlasFieldValueTicks[];
   }
 }
 

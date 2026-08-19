@@ -1,6 +1,10 @@
 /** Version-1 shared-preview threshold selection and full-profile land/water classification. */
 
-import { planetPointToAngles, roundTiesAwayFromZero } from '@ttrpg-map/core';
+import {
+  createImmutableDomainArray,
+  planetPointToAngles,
+  roundTiesAwayFromZero,
+} from '@ttrpg-map/core';
 
 import type { AtlasLandWaterClassificationParameters } from './atlas-land-water-generator-contract.js';
 import {
@@ -176,10 +180,12 @@ export async function classifyAtlasLandWater(
     return Object.freeze({ status: 'cancelled' });
   }
   const realizedWaterCoveragePercent = stableRatioPercent(waterWeight, totalWeight);
+  const immutableSamples = createImmutableDomainArray(samples);
+  if (!immutableSamples.ok) throw new Error('Land/water samples must be immutable plain values.');
   return Object.freeze({
     status: 'completed',
     output: Object.freeze({
-      samples: Object.freeze(samples),
+      samples: immutableSamples.value,
       realizedWaterCoveragePercent,
       absoluteWaterCoverageErrorBasisPoints: stableDecimal(
         Math.abs(realizedWaterCoveragePercent - targetWaterCoveragePercent) * 100,

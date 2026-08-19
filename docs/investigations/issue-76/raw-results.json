@@ -1,0 +1,178 @@
+{
+  "schema": "issue-76-rss-evidence-v1",
+  "candidate": {
+    "commit": "60285e2385a9ee50ff9c2a1997d25f68e20a1c73",
+    "executableSha256": "98c2ab50f670b7ab8213a5cfcfb67c086c23df98b0ad6c90241bf1d45c0dd282"
+  },
+  "host": {
+    "model": "Mac17,2",
+    "processor": "Apple M5",
+    "unifiedMemoryGiB": 24,
+    "operatingSystem": "macOS 26.5.1 (25F80)",
+    "power": "AC",
+    "lowPowerMode": false
+  },
+  "sampler": {
+    "source": "docs/investigations/issue-76/rss-timeline.c",
+    "compileCommand": "clang -O2 -Wall -Wextra -o /private/tmp/issue76_rss_timeline_qos docs/investigations/issue-76/rss-timeline.c",
+    "requestedIntervalMilliseconds": 5
+  },
+  "cleanExactCommit": {
+    "processRoles": {
+      "95419": "app",
+      "95421": "WebKit GPU",
+      "95422": "WebKit networking",
+      "95423": "WebKit WebContent"
+    },
+    "preview": {
+      "startedAtEpochMilliseconds": 1787071020901.474,
+      "completedAtEpochMilliseconds": 1787071021529.856,
+      "elapsedMilliseconds": 628.3818359375,
+      "samples": 813,
+      "maximumIntervalMilliseconds": 6.371,
+      "baselineRssBytes": 222658560,
+      "peakRssBytes": 337788928,
+      "additionalRssBytes": 115130368,
+      "additionalRssMiB": 109.796875,
+      "perProcessPeakRssBytes": {
+        "95419": 109133824,
+        "95421": 40681472,
+        "95422": 16154624,
+        "95423": 171835392
+      }
+    },
+    "full": {
+      "startedAtEpochMilliseconds": 1787071025863.763,
+      "completedAtEpochMilliseconds": 1787071034112.227,
+      "elapsedMilliseconds": 8248.464111328125,
+      "samples": 3247,
+      "maximumIntervalMilliseconds": 6.359,
+      "baselineRssBytes": 337608704,
+      "peakRssBytes": 2114748416,
+      "additionalRssBytes": 1777139712,
+      "additionalRssMiB": 1694.8125,
+      "perProcessPeakRssBytes": {
+        "95419": 108953600,
+        "95421": 45678592,
+        "95422": 16154624,
+        "95423": 1944207360
+      }
+    }
+  },
+  "productionSchedulingAttribution": {
+    "processRoles": {
+      "95982": "app",
+      "95984": "WebKit GPU",
+      "95985": "WebKit networking",
+      "95986": "WebKit WebContent"
+    },
+    "samples": 8110,
+    "maximumIntervalMilliseconds": 12.665,
+    "previewElapsedMilliseconds": 665.745,
+    "fullElapsedMilliseconds": 8313.984,
+    "baselineRssMiB": 211.656,
+    "peakRssMiB": 1978.125,
+    "additionalPeakRssMiB": 1766.469,
+    "perProcessPeakRssMiB": {
+      "95982": 104.375,
+      "95984": 47.90625,
+      "95985": 15.140625,
+      "95986": 1817.046875
+    },
+    "checkpoints": [
+      { "phase": "preview-presented", "rssMiB": 320.297, "deltaMiB": 108.641 },
+      { "phase": "full-dispatch", "rssMiB": 320.766, "deltaMiB": 109.109 },
+      { "phase": "field-partition-complete", "rssMiB": 1162.391, "deltaMiB": 950.734 },
+      { "phase": "semantic-classification-complete", "rssMiB": 1710.594, "deltaMiB": 1498.938 },
+      { "phase": "coastline-complete", "rssMiB": 1968.172, "deltaMiB": 1756.516 },
+      { "phase": "appearance-complete", "rssMiB": 1968.531, "deltaMiB": 1756.875 },
+      { "phase": "transaction-validation-complete", "rssMiB": 1969.75, "deltaMiB": 1758.094 },
+      { "phase": "scene-composition-complete", "rssMiB": 1975.547, "deltaMiB": 1763.891 },
+      { "phase": "accepted-scene-presented", "rssMiB": 1975.547, "deltaMiB": 1763.891 },
+      { "phase": "accepted-quiescent", "rssMiB": 1977.312, "deltaMiB": 1765.656 },
+      { "phase": "accepted-state-unloaded", "rssMiB": 1977.375, "deltaMiB": 1765.719 },
+      { "phase": "unloaded-quiescent", "rssMiB": 1976.953, "deltaMiB": 1765.297 }
+    ],
+    "structuralCounts": {
+      "macroElevationValues": 2095106,
+      "landWaterSamples": 2095106,
+      "landmasses": 3,
+      "waterBodies": 3,
+      "membershipRanges": 3283,
+      "coastlineRings": 5,
+      "coastlinePoints": 6381,
+      "acceptedAspects": 12,
+      "acceptedEntities": 9,
+      "sceneNodes": 792,
+      "scenePoints": 14056
+    },
+    "instrumentationOverheadVersusClean": {
+      "fullElapsedMilliseconds": 65.519888671875,
+      "additionalPeakRssMiB": 71.6565
+    }
+  },
+  "acceptedUnloadVmmap": {
+    "presented": {
+      "physicalFootprint": "1.2G",
+      "webKitMallocAllocatedMiB": 863.9,
+      "webKitMallocFragmentationMiB": 290.4
+    },
+    "acceptedQuiescent": {
+      "physicalFootprintMiB": 862.1,
+      "webKitMallocAllocatedMiB": 829.2,
+      "webKitMallocFragmentationMiB": 0.674
+    },
+    "unloaded": {
+      "physicalFootprintMiB": 873.5,
+      "webKitMallocAllocatedMiB": 830.7,
+      "webKitMallocFragmentationMiB": 0
+    }
+  },
+  "activeInstrumentationHashVerification": {
+    "command": "ISSUE76_MEMORY_DIAGNOSTICS=1 corepack pnpm test:cross-platform",
+    "pngFixtureTests": "6/6 passed",
+    "registeredDeterministicFixtureSets": "8/8 verified"
+  },
+  "rawArtifacts": [
+    {
+      "path": "docs/investigations/issue-76/clean-preview-rss.csv",
+      "sha256": "f5f59b4a0da54fd6fb0efc4ace89c20ea8d57dc85cfbea684bafa145e4a87bb6"
+    },
+    {
+      "path": "docs/investigations/issue-76/clean-preview-cadence.txt",
+      "sha256": "be1cd733c2a9d65aaec21b1773d9cf561530b51b17a2dbe6d024ff5dc228e869"
+    },
+    {
+      "path": "docs/investigations/issue-76/clean-full-rss.csv",
+      "sha256": "26c1e4c575f422ded9eecc99372e323439b151fc3326dd275fbdd88db5a498fd"
+    },
+    {
+      "path": "docs/investigations/issue-76/clean-full-cadence.txt",
+      "sha256": "f9e0027f43d2aeca394772be5ab534251d7b48a712e4bb83d323687ab5dfc6fa"
+    },
+    {
+      "path": "docs/investigations/issue-76/production-scheduling-rss.csv",
+      "sha256": "8d11d88296709be3683d9f03aa9d4ec49d8221d9b742f75af4488cfa57b0012c"
+    },
+    {
+      "path": "docs/investigations/issue-76/production-scheduling-cadence.txt",
+      "sha256": "6221dec52830324ba15f7268b812d3ae6afac28966b9fa88926dcd21a0991ddd"
+    },
+    {
+      "path": "docs/investigations/issue-76/production-scheduling-markers.txt",
+      "sha256": "11c449062b105d2ff99f9918ea37a06332017fa1f8e92c2aa8010d9d11c54ba7"
+    },
+    {
+      "path": "docs/investigations/issue-76/presented-vmmap.txt",
+      "sha256": "64a5dccd70a86a90b91938d159597555ebcb48a9fe16309f40e4d9f4877d1129"
+    },
+    {
+      "path": "docs/investigations/issue-76/accepted-quiescent-vmmap.txt",
+      "sha256": "0d553fb999787a14a5382ea637c8167fce47ea0cb5d256ae5ec8d05011abb2a4"
+    },
+    {
+      "path": "docs/investigations/issue-76/unloaded-vmmap.txt",
+      "sha256": "cca3e0c9f3c9f71deb8bfc2d290da8188c2d9e081313642fd5fe30de1f71ffc7"
+    }
+  ]
+}

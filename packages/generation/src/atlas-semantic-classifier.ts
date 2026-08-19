@@ -9,17 +9,18 @@ import {
   type AtlasSemanticGeographyRecords,
   type AtlasSurfaceComponentMembership,
   classifyAtlasLandmassKind,
+  createImmutableDomainSnapshot,
   deriveAtlasSemanticComponentIdentity,
   deriveAtlasSingletonEntityIds,
   type EntityId,
   type Landmass,
   type MapId,
   validateAtlasLandWaterRecords,
-  validateAtlasSemanticGeographyRecords,
   type WaterBody,
 } from '@ttrpg-map/core';
 
 import { classifyAtlasIslandGroups } from './atlas-semantic-island-groups.js';
+import { validateProvenAtlasSemanticGeographyRecords } from './atlas-semantic-validation-proof.js';
 import { segmentAtlasWaterBodies } from './atlas-semantic-water.js';
 import {
   analyzeAtlasSurfacePartition,
@@ -217,9 +218,21 @@ export function classifyAtlasSemanticGeography(
     islandGroups: Object.freeze(islandGroups),
     waterBodies: Object.freeze(waterBodies),
   });
-  const validation = validateAtlasSemanticGeographyRecords(records);
+  const snapshot = createImmutableDomainSnapshot(records);
+  if (!snapshot.ok) {
+    return failure(
+      'atlas.semantic.output-invalid',
+      'Semantic classification did not produce an immutable plain-data record graph.',
+      'Reject the proposal and retain the previous accepted geography.',
+    );
+  }
+  const acceptedRecords = snapshot.value;
+  const validation = validateProvenAtlasSemanticGeographyRecords(acceptedRecords, {
+    partition,
+    water,
+  });
   if (!validation.ok) return validationFailure(validation.diagnostics);
-  return Object.freeze({ ok: true, records });
+  return Object.freeze({ ok: true, records: acceptedRecords });
 }
 
 function membership(

@@ -5,6 +5,7 @@
 - **Issue:** [#68 — Prove the Milestone 2 whole-world atlas workflow end to end](https://github.com/ChadHealey/ttrpg-map-generator/issues/68)
 - **Normative contract:** [Milestone 2 whole-world atlas proof](milestone-2-atlas-proof.md)
 - **Retrospective:** [Milestone 2 release-pending retrospective](retrospectives/milestone-2.md)
+- **RSS attribution:** [Apple M5 / JavaScriptCore RSS investigation](milestone-2-javascriptcore-rss-investigation.md)
 
 This report keeps functional, semantic, package, render, visual, resource, and release-hardware
 evidence separate. A `PASS` may be recorded only beside reproduced evidence whose exact tested
@@ -192,6 +193,12 @@ Results from this Apple M5/24-GB host establish the designated reference environ
 measurements as well as deterministic output, file ceilings, allocation bounds, and
 progress/cancellation state semantics. The formal protocol remains required; record it without
 replacing a failed result with a narrower command.
+
+Issue #76 attributes the full-generation failure in the
+[Apple M5 / JavaScriptCore RSS investigation](milestone-2-javascriptcore-rss-investigation.md).
+The exact committed clean packaged proof remains over budget at 1,694.8 MiB additional RSS. Production-scheduling phase and
+unload observations show both a large transient WebContent high-water mark and a substantial live
+accepted representation; no production behavior or release limit changed.
 
 | Workload                     | Elapsed observation                                                                             | Memory observation | Interpretation                                                  |
 | ---------------------------- | ----------------------------------------------------------------------------------------------- | ------------------ | --------------------------------------------------------------- |

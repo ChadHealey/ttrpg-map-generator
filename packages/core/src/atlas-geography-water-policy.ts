@@ -25,6 +25,14 @@ export type AtlasWaterSegmentationResult =
     }
   | { readonly ok: false; readonly reason: string };
 
+interface WaterSegmentationSource {
+  readonly samples: readonly ('land' | 'water')[];
+  readonly partition: AtlasSurfacePartitionAnalysis;
+  readonly oceanConnectivity: AtlasOceanConnectivity;
+}
+
+const waterSegmentationSources = new WeakMap<object, WaterSegmentationSource>();
+
 /** Segment raw water connectivity through the explicit v1 clearance graph. */
 export function segmentAtlasWaterBodies(
   samples: readonly ('land' | 'water')[],
@@ -94,7 +102,27 @@ export function segmentAtlasWaterBodies(
       connectedRegionIndices: Object.freeze([...(connections.get(summary.analysisIndex) ?? [])]),
     });
   });
-  return Object.freeze({ ok: true, regions: Object.freeze(regions), regionIndexBySample });
+  const result = Object.freeze({
+    ok: true as const,
+    regions: Object.freeze(regions),
+    regionIndexBySample,
+  });
+  waterSegmentationSources.set(result, Object.freeze({ samples, partition, oceanConnectivity }));
+  return result;
+}
+
+export function isAtlasWaterSegmentationFor(
+  result: Extract<AtlasWaterSegmentationResult, { readonly ok: true }>,
+  samples: readonly ('land' | 'water')[],
+  partition: AtlasSurfacePartitionAnalysis,
+  oceanConnectivity: AtlasOceanConnectivity,
+): boolean {
+  const source = waterSegmentationSources.get(result);
+  return (
+    source?.samples === samples &&
+    source.partition === partition &&
+    source.oceanConnectivity === oceanConnectivity
+  );
 }
 
 function distanceFromLand(samples: readonly ('land' | 'water')[]): Uint8Array {

@@ -34,6 +34,11 @@ export interface AtlasSurfacePartitionAnalysis {
   readonly rowWeights: Int32Array;
 }
 
+const partitionSources = new WeakMap<
+  AtlasSurfacePartitionAnalysis,
+  readonly ('land' | 'water')[]
+>();
+
 interface MutableComponent {
   readonly analysisIndex: number;
   readonly kind: 'land' | 'water';
@@ -110,11 +115,20 @@ export function analyzeAtlasSurfacePartition(
     }
   }
   accumulateCanonicalRanges(components, componentIndexBySample);
-  return Object.freeze({
+  const analysis = Object.freeze({
     components: Object.freeze(components.map(freezeComponent)),
     componentIndexBySample,
     rowWeights,
   });
+  partitionSources.set(analysis, samples);
+  return analysis;
+}
+
+export function isAtlasSurfacePartitionAnalysisFor(
+  analysis: AtlasSurfacePartitionAnalysis,
+  samples: readonly ('land' | 'water')[],
+): boolean {
+  return partitionSources.get(analysis) === samples;
 }
 
 /** Recompute the exact normalized centroid recorded implicitly by canonical membership. */

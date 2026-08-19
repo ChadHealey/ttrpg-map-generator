@@ -42,10 +42,14 @@ import {
   type Landmass,
   type WaterBody,
 } from './atlas-geography-model.js';
-import { validateAtlasSemanticPolicyConformance } from './atlas-geography-semantic-policy-validation.js';
+import {
+  type AtlasSemanticPolicyAnalysis,
+  validateAtlasSemanticPolicyConformance,
+} from './atlas-geography-semantic-policy-validation.js';
 import { validateAtlasSemanticMembership } from './atlas-geography-semantic-validation.js';
 import { parsePlanetPoint, PLANET_TICKS_PER_TURN, type PlanetPoint } from './coordinates.js';
 import { type EntityId, type SurfaceComponentId } from './identity.js';
+import { isImmutableDomainSnapshot } from './immutable-domain-snapshot.js';
 
 export {
   ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES,
@@ -60,6 +64,23 @@ export type AtlasControlsParseResult =
 export type AtlasGeographyValidationResult =
   | { readonly ok: true }
   | { readonly ok: false; readonly diagnostics: readonly AtlasGeographyDiagnostic[] };
+
+interface SemanticValidationCacheEntry {
+  readonly controls: AtlasControls;
+  readonly macroElevation: AtlasSemanticGeographyRecords['macroElevation'];
+  readonly semanticClassificationVersion: number;
+  readonly worldMapId: AtlasSemanticGeographyRecords['worldMapId'];
+  readonly worldSurfaceEntityId: AtlasSemanticGeographyRecords['worldSurfaceEntityId'];
+  readonly landWaterClassificationAspectId: AtlasSemanticGeographyRecords['landWaterClassificationAspectId'];
+  readonly landmasses: readonly Landmass[];
+  readonly islandGroups: readonly IslandGroup[];
+  readonly waterBodies: readonly WaterBody[];
+}
+
+const semanticValidationCache = new WeakMap<
+  AtlasSemanticGeographyRecords['landWaterClassification'],
+  readonly SemanticValidationCacheEntry[]
+>();
 
 /** Parse all accepted controls without coercion, defaults, or UI-local state. */
 export function parseAtlasControls(input: unknown): AtlasControlsParseResult {
@@ -146,10 +167,21 @@ export function validateAtlasSemanticGeographyRecords(
   return diagnostics.length === 0 ? { ok: true } : { ok: false, diagnostics };
 }
 
+/** Validate generated records while safely reusing analysis certified for their exact samples. */
+export function validateAtlasSemanticGeographyRecordsWithAnalysis(
+  records: AtlasSemanticGeographyRecords,
+  analysis: AtlasSemanticPolicyAnalysis,
+): AtlasGeographyValidationResult {
+  const diagnostics = orderedDiagnostics(semanticDiagnostics(records, true, analysis));
+  return diagnostics.length === 0 ? { ok: true } : { ok: false, diagnostics };
+}
+
 function semanticDiagnostics(
   records: AtlasSemanticGeographyRecords,
   validatePolicy = true,
+  analysis?: AtlasSemanticPolicyAnalysis,
 ): readonly AtlasGeographyDiagnostic[] {
+  if (validatePolicy && hasCachedSemanticValidation(records)) return Object.freeze([]);
   const upstreamDiagnostics = validateAtlasLandWaterRecords(records);
   const structuralDiagnostics = [
     ...upstreamDiagnostics,
@@ -157,9 +189,65 @@ function semanticDiagnostics(
     ...validateClassification(records),
     ...validateAtlasSemanticMembership(records),
   ];
-  return structuralDiagnostics.length === 0 && validatePolicy
-    ? validateAtlasSemanticPolicyConformance(records)
-    : structuralDiagnostics;
+  const diagnostics =
+    structuralDiagnostics.length === 0 && validatePolicy
+      ? validateAtlasSemanticPolicyConformance(records, analysis)
+      : structuralDiagnostics;
+  if (validatePolicy && diagnostics.length === 0) rememberSemanticValidation(records);
+  return diagnostics;
+}
+
+function hasCachedSemanticValidation(records: AtlasSemanticGeographyRecords): boolean {
+  return (
+    semanticValidationCache
+      .get(records.landWaterClassification)
+      ?.some(
+        (entry) =>
+          sameAtlasControls(entry.controls, records.controls) &&
+          entry.macroElevation === records.macroElevation &&
+          entry.semanticClassificationVersion === records.semanticClassificationVersion &&
+          entry.worldMapId === records.worldMapId &&
+          entry.worldSurfaceEntityId === records.worldSurfaceEntityId &&
+          entry.landWaterClassificationAspectId === records.landWaterClassificationAspectId &&
+          sameObjectReferences(entry.landmasses, records.landmasses) &&
+          sameObjectReferences(entry.islandGroups, records.islandGroups) &&
+          sameObjectReferences(entry.waterBodies, records.waterBodies),
+      ) ?? false
+  );
+}
+
+function rememberSemanticValidation(records: AtlasSemanticGeographyRecords): void {
+  const immutableValues: readonly object[] = [
+    records,
+    records.controls,
+    records.macroElevation,
+    records.landWaterClassification,
+    ...records.landmasses,
+    ...records.islandGroups,
+    ...records.waterBodies,
+  ];
+  if (!immutableValues.every(isImmutableDomainSnapshot)) return;
+  const entry: SemanticValidationCacheEntry = Object.freeze({
+    controls: records.controls,
+    macroElevation: records.macroElevation,
+    semanticClassificationVersion: records.semanticClassificationVersion,
+    worldMapId: records.worldMapId,
+    worldSurfaceEntityId: records.worldSurfaceEntityId,
+    landWaterClassificationAspectId: records.landWaterClassificationAspectId,
+    landmasses: records.landmasses,
+    islandGroups: records.islandGroups,
+    waterBodies: records.waterBodies,
+  });
+  const existing = semanticValidationCache.get(records.landWaterClassification) ?? [];
+  semanticValidationCache.set(records.landWaterClassification, Object.freeze([...existing, entry]));
+}
+
+function sameObjectReferences(left: readonly object[], right: readonly object[]): boolean {
+  return left.length === right.length && left.every((value, index) => value === right[index]);
+}
+
+function sameAtlasControls(left: AtlasControls, right: AtlasControls): boolean {
+  return ATLAS_CONTROL_FIELDS.every((field) => left[field] === right[field]);
 }
 
 /** Validate the complete upstream #58 field/partition output independently of #59 entities. */
@@ -863,6 +951,9 @@ function unwrapCoastlinePoints(points: readonly PlanetPoint[]): readonly Coastli
 }
 
 function coastlineSelfIntersects(points: readonly CoastlineTickPoint[]): boolean {
+  const segmentBounds = points
+    .slice(0, -1)
+    .map((start, index) => coastlineSegmentBounds(start, points[index + 1] ?? start));
   for (let firstIndex = 0; firstIndex < points.length - 1; firstIndex += 1) {
     const firstStart = points[firstIndex];
     const firstEnd = points[firstIndex + 1];
@@ -874,6 +965,10 @@ function coastlineSelfIntersects(points: readonly CoastlineTickPoint[]): boolean
       if (
         secondStart !== undefined &&
         secondEnd !== undefined &&
+        coastlineBoundsOverlap(
+          segmentBounds[firstIndex] ?? coastlineSegmentBounds(firstStart, firstEnd),
+          segmentBounds[secondIndex] ?? coastlineSegmentBounds(secondStart, secondEnd),
+        ) &&
         coastlineSegmentsIntersect(firstStart, firstEnd, secondStart, secondEnd)
       ) {
         return true;
@@ -887,6 +982,12 @@ function coastlineRingsIntersect(
   first: readonly CoastlineTickPoint[],
   second: readonly CoastlineTickPoint[],
 ): boolean {
+  const firstBounds = first
+    .slice(0, -1)
+    .map((start, index) => coastlineSegmentBounds(start, first[index + 1] ?? start));
+  const secondBounds = second
+    .slice(0, -1)
+    .map((start, index) => coastlineSegmentBounds(start, second[index + 1] ?? start));
   for (let firstIndex = 0; firstIndex < first.length - 1; firstIndex += 1) {
     const firstStart = first[firstIndex];
     const firstEnd = first[firstIndex + 1];
@@ -897,6 +998,10 @@ function coastlineRingsIntersect(
       if (
         secondStart !== undefined &&
         secondEnd !== undefined &&
+        coastlineBoundsOverlap(
+          firstBounds[firstIndex] ?? coastlineSegmentBounds(firstStart, firstEnd),
+          secondBounds[secondIndex] ?? coastlineSegmentBounds(secondStart, secondEnd),
+        ) &&
         coastlineSegmentsIntersect(firstStart, firstEnd, secondStart, secondEnd)
       ) {
         return true;
@@ -957,6 +1062,18 @@ interface CoastlineBounds {
   readonly maxLongitude: number;
   readonly minLatitude: number;
   readonly maxLatitude: number;
+}
+
+function coastlineSegmentBounds(
+  first: CoastlineTickPoint,
+  second: CoastlineTickPoint,
+): CoastlineBounds {
+  return Object.freeze({
+    minLongitude: Math.min(first.longitudeTicks, second.longitudeTicks),
+    maxLongitude: Math.max(first.longitudeTicks, second.longitudeTicks),
+    minLatitude: Math.min(first.latitudeTicks, second.latitudeTicks),
+    maxLatitude: Math.max(first.latitudeTicks, second.latitudeTicks),
+  });
 }
 
 function coastlineBounds(points: readonly CoastlineTickPoint[]): CoastlineBounds {

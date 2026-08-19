@@ -176,6 +176,7 @@ export {
   validateAtlasGeographyRecords,
   validateAtlasLandWaterRecords,
   validateAtlasSemanticGeographyRecords,
+  validateAtlasSemanticGeographyRecordsWithAnalysis,
 } from './atlas-geography-validation.js';
 export {
   type AtlasWaterRegionAnalysis,
@@ -326,6 +327,7 @@ export {
   type WorldDocumentId,
 } from './identity.js';
 export {
+  createImmutableDomainArray,
   createImmutableDomainSnapshot,
   type ImmutableDomainSnapshotResult,
 } from './immutable-domain-snapshot.js';

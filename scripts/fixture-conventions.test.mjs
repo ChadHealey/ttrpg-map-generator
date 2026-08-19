@@ -82,6 +82,49 @@ describe('fixture manifests', () => {
     expect(checkFixtures(repositoryRoot)).toBe(1);
   });
 
+  it('reports the first manifest field that differs after regeneration', () => {
+    const { baselinePath, entry, manifest, repositoryRoot, rerolledPath } = makeFixtureRepository();
+    const candidateManifest = structuredClone(manifest);
+    candidateManifest.reviewPurpose = 'Platform-specific divergent purpose.';
+    write(
+      repositoryRoot,
+      `fixtures/${entry.runnerPath}`,
+      createConstantFixtureRunner({
+        [entry.manifestPath]: `${JSON.stringify(candidateManifest, null, 2)}\n`,
+        [baselinePath]: '{"accepted":true}\n',
+        [rerolledPath]: '{"accepted":true}\n',
+      }),
+    );
+
+    expect(() => checkFixtures(repositoryRoot)).toThrow(
+      /\$\.manifest\.reviewPurpose: checked-in="Prove deterministic canonical aspect evidence\.", regenerated="Platform-specific divergent purpose\."/u,
+    );
+  });
+
+  it('reports the first JSON field that differs in regenerated evidence', () => {
+    const { baselinePath, entry, manifest, repositoryRoot, rerolledPath } = makeFixtureRepository();
+    const candidateArtifact = '{"accepted":false}\n';
+    const candidateManifest = structuredClone(manifest);
+    for (const artifact of candidateManifest.artifacts) {
+      artifact.byteLength = Buffer.byteLength(candidateArtifact);
+      artifact.canonicalAspectSha256 = digest(candidateArtifact);
+      artifact.fixtureIntegritySha256 = digest(candidateArtifact);
+    }
+    write(
+      repositoryRoot,
+      `fixtures/${entry.runnerPath}`,
+      createConstantFixtureRunner({
+        [entry.manifestPath]: `${JSON.stringify(candidateManifest, null, 2)}\n`,
+        [baselinePath]: candidateArtifact,
+        [rerolledPath]: candidateArtifact,
+      }),
+    );
+
+    expect(() => checkFixtures(repositoryRoot)).toThrow(
+      /proof-outline\.aspect\.canonical \(\$\.accepted: checked-in=true, regenerated=false\)/u,
+    );
+  });
+
   it('rejects hand-edited generated evidence even when its byte length is unchanged', () => {
     const { baselinePath, entry, repositoryRoot } = makeFixtureRepository();
     write(repositoryRoot, `fixtures/${baselinePath}`, '{"accepted":fals}\n');

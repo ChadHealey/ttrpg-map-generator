@@ -25,7 +25,6 @@ import {
   type MapId,
   parseSeedInput,
   SEED_DERIVATION_VERSION,
-  validateAtlasSemanticGeographyRecords,
   type VariantRevision,
   type WorldSeed,
 } from '@ttrpg-map/core';
@@ -43,6 +42,7 @@ import {
   parseAtlasFieldValueTicks,
   WORLD_ATLAS_FULL_PROFILE,
 } from './atlas-sampling-profiles.js';
+import { validateProvenAtlasSemanticGeographyRecords } from './atlas-semantic-validation-proof.js';
 import type { GenerationProposal } from './generator-contracts.js';
 import type {
   GeographyAdapterDiagnostic,
@@ -143,7 +143,7 @@ export type AtlasCoastlineGenerationResult =
 export function generateAtlasCanonicalCoastline(
   input: AtlasCoastlineGenerationInput,
 ): AtlasCoastlineGenerationResult {
-  const sourceValidation = validateAtlasSemanticGeographyRecords(input.records);
+  const sourceValidation = validateProvenAtlasSemanticGeographyRecords(input.records);
   if (!sourceValidation.ok) {
     return invalid({
       code: ATLAS_COASTLINE_DIAGNOSTIC_CODES.inputInvalid,

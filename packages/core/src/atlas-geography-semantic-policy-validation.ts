@@ -19,13 +19,25 @@ import {
 import {
   analyzeAtlasSurfacePartition,
   atlasMembershipCentroid,
+  type AtlasSurfacePartitionAnalysis,
+  isAtlasSurfacePartitionAnalysisFor,
 } from './atlas-geography-surface-topology.js';
-import { segmentAtlasWaterBodies } from './atlas-geography-water-policy.js';
+import {
+  type AtlasWaterSegmentationResult,
+  isAtlasWaterSegmentationFor,
+  segmentAtlasWaterBodies,
+} from './atlas-geography-water-policy.js';
 import type { EntityId } from './identity.js';
+
+export interface AtlasSemanticPolicyAnalysis {
+  readonly partition: AtlasSurfacePartitionAnalysis;
+  readonly water: Extract<AtlasWaterSegmentationResult, { readonly ok: true }>;
+}
 
 /** Validate every deterministic v1 threshold, grouping, enclosure, and basin-root rule. */
 export function validateAtlasSemanticPolicyConformance(
   records: AtlasSemanticGeographyRecords,
+  precomputed?: AtlasSemanticPolicyAnalysis,
 ): readonly AtlasGeographyDiagnostic[] {
   const diagnostics: AtlasGeographyDiagnostic[] = [];
   validateBasinRoots(records, diagnostics);
@@ -70,7 +82,11 @@ export function validateAtlasSemanticPolicyConformance(
   }
   if (diagnostics.length > 0) return diagnostics;
 
-  const partition = analyzeAtlasSurfacePartition(records.landWaterClassification.samples);
+  const samples = records.landWaterClassification.samples;
+  const partition =
+    precomputed !== undefined && isAtlasSurfacePartitionAnalysisFor(precomputed.partition, samples)
+      ? precomputed.partition
+      : analyzeAtlasSurfacePartition(samples);
   const landAnalyses = partition.components.filter(({ kind }) => kind === 'land');
   const expectedLandIds = new Set(
     landAnalyses.map(
@@ -95,11 +111,16 @@ export function validateAtlasSemanticPolicyConformance(
     return diagnostics;
   }
 
-  const water = segmentAtlasWaterBodies(
-    records.landWaterClassification.samples,
-    partition,
-    records.controls.oceanConnectivity,
-  );
+  const water =
+    precomputed?.partition === partition &&
+    isAtlasWaterSegmentationFor(
+      precomputed.water,
+      samples,
+      partition,
+      records.controls.oceanConnectivity,
+    )
+      ? precomputed.water
+      : segmentAtlasWaterBodies(samples, partition, records.controls.oceanConnectivity);
   if (!water.ok) {
     diagnostics.push(policyDiagnostic(water.reason));
     return diagnostics;
