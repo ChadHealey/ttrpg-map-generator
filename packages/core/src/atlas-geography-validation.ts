@@ -282,7 +282,9 @@ function validateField(records: AtlasLandWaterRecords): readonly AtlasGeographyD
       ),
     );
   }
-  for (const value of records.macroElevation.values) {
+  let invalidFieldValueFound = false;
+  records.macroElevation.values.forEach((value) => {
+    if (invalidFieldValueFound) return;
     if (
       !Number.isSafeInteger(value) ||
       Object.is(value, -0) ||
@@ -295,9 +297,9 @@ function validateField(records: AtlasLandWaterRecords): readonly AtlasGeographyD
           'Macro elevation values must be canonical signed integer ticks in [-2^24, 2^24].',
         ),
       );
-      break;
+      invalidFieldValueFound = true;
     }
-  }
+  });
   if (records.macroElevation.values.length !== ATLAS_FULL_SAMPLE_COUNT) {
     diagnostics.push(
       diagnostic(
@@ -325,7 +327,9 @@ function validateField(records: AtlasLandWaterRecords): readonly AtlasGeographyD
       ),
     );
   }
-  for (const [index, sample] of records.landWaterClassification.samples.entries()) {
+  let invalidSampleFound = false;
+  records.landWaterClassification.samples.forEach((sample, index) => {
+    if (invalidSampleFound) return;
     const sampleValue = sample as unknown;
     if (sampleValue !== 'land' && sampleValue !== 'water') {
       diagnostics.push(
@@ -334,9 +338,10 @@ function validateField(records: AtlasLandWaterRecords): readonly AtlasGeographyD
           `Land/water sample ${String(index)} must be land or water.`,
         ),
       );
-      break;
+      invalidSampleFound = true;
+      return;
     }
-    const fieldValue = records.macroElevation.values[index];
+    const fieldValue = records.macroElevation.values.at(index);
     if (
       fieldValue !== undefined &&
       (sample === 'land') !==
@@ -348,9 +353,9 @@ function validateField(records: AtlasLandWaterRecords): readonly AtlasGeographyD
           `Land/water sample ${String(index)} contradicts the quantized macro-elevation threshold.`,
         ),
       );
-      break;
+      invalidSampleFound = true;
     }
-  }
+  });
   const contour = records.landWaterClassification.seaLevelContourDoubledTicks;
   if (
     !Number.isSafeInteger(contour) ||

@@ -9,6 +9,7 @@ import {
   forEachAtlasSurfaceNeighbor,
   summarizeAtlasLabeledRegions,
 } from './atlas-geography-surface-topology.js';
+import type { LandWaterSampleReader } from './atlas-sample-reader.js';
 
 export interface AtlasWaterRegionAnalysis extends AtlasSurfaceComponentAnalysis {
   readonly kind: 'water';
@@ -26,7 +27,7 @@ export type AtlasWaterSegmentationResult =
   | { readonly ok: false; readonly reason: string };
 
 interface WaterSegmentationSource {
-  readonly samples: readonly ('land' | 'water')[];
+  readonly samples: LandWaterSampleReader;
   readonly partition: AtlasSurfacePartitionAnalysis;
   readonly oceanConnectivity: AtlasOceanConnectivity;
 }
@@ -35,7 +36,7 @@ const waterSegmentationSources = new WeakMap<object, WaterSegmentationSource>();
 
 /** Segment raw water connectivity through the explicit v1 clearance graph. */
 export function segmentAtlasWaterBodies(
-  samples: readonly ('land' | 'water')[],
+  samples: LandWaterSampleReader,
   partition: AtlasSurfacePartitionAnalysis,
   oceanConnectivity: AtlasOceanConnectivity,
 ): AtlasWaterSegmentationResult {
@@ -113,7 +114,7 @@ export function segmentAtlasWaterBodies(
 
 export function isAtlasWaterSegmentationFor(
   result: Extract<AtlasWaterSegmentationResult, { readonly ok: true }>,
-  samples: readonly ('land' | 'water')[],
+  samples: LandWaterSampleReader,
   partition: AtlasSurfacePartitionAnalysis,
   oceanConnectivity: AtlasOceanConnectivity,
 ): boolean {
@@ -125,14 +126,14 @@ export function isAtlasWaterSegmentationFor(
   );
 }
 
-function distanceFromLand(samples: readonly ('land' | 'water')[]): Uint8Array {
+function distanceFromLand(samples: LandWaterSampleReader): Uint8Array {
   const distance = new Uint8Array(samples.length);
   distance.fill(255);
   const queue = new Int32Array(samples.length);
   let head = 0;
   let tail = 0;
   for (let index = 0; index < samples.length; index += 1) {
-    if (samples[index] === 'land') {
+    if (samples.at(index) === 'land') {
       distance[index] = 0;
       queue[tail] = index;
       tail += 1;

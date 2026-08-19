@@ -132,6 +132,12 @@ export function isImmutableDomainSnapshot(value: object): boolean {
   return immutableDomainSnapshots.has(value);
 }
 
+/** Mark a project-owned immutable value that intentionally is not plain persistence data. */
+export function registerImmutableDomainSnapshot<Value extends object>(value: Value): Value {
+  immutableDomainSnapshots.add(value);
+  return value;
+}
+
 function compareAscii(left: string, right: string): -1 | 0 | 1 {
   if (left < right) return -1;
   if (left > right) return 1;

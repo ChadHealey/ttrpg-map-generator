@@ -69,11 +69,10 @@ export function coastlineProof(core, generation, definition, input, semantic) {
       exactSourceLinks: true,
       stableRingOrder: true,
       seamCrossingRingCount: rings.filter(({ points }) => ringCrossesSeam(core, points)).length,
-      southPoleClassification: result.patch.records.landWaterClassification.samples[0],
-      northPoleClassification:
-        result.patch.records.landWaterClassification.samples[
-          result.patch.records.landWaterClassification.samples.length - 1
-        ],
+      southPoleClassification: result.patch.records.landWaterClassification.samples.at(0),
+      northPoleClassification: result.patch.records.landWaterClassification.samples.at(
+        result.patch.records.landWaterClassification.samples.length - 1,
+      ),
     },
   };
 }

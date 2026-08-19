@@ -9,6 +9,7 @@ import {
   type AtlasSurfaceSampleRange,
 } from './atlas-geography-model.js';
 import type { AtlasSemanticCentroid } from './atlas-geography-semantic-policy.js';
+import type { LandWaterSampleReader } from './atlas-sample-reader.js';
 import {
   PLANET_ANGULAR_STEP_RAD,
   PLANET_LATITUDE_MIN_TICKS,
@@ -34,10 +35,7 @@ export interface AtlasSurfacePartitionAnalysis {
   readonly rowWeights: Int32Array;
 }
 
-const partitionSources = new WeakMap<
-  AtlasSurfacePartitionAnalysis,
-  readonly ('land' | 'water')[]
->();
+const partitionSources = new WeakMap<AtlasSurfacePartitionAnalysis, LandWaterSampleReader>();
 
 interface MutableComponent {
   readonly analysisIndex: number;
@@ -78,7 +76,7 @@ export function summarizeAtlasLabeledRegions(
 
 /** Discover every land and water component in canonical traversal and fixed neighbor order. */
 export function analyzeAtlasSurfacePartition(
-  samples: readonly ('land' | 'water')[],
+  samples: LandWaterSampleReader,
 ): AtlasSurfacePartitionAnalysis {
   if (samples.length !== ATLAS_FULL_SAMPLE_COUNT) {
     throw new RangeError('Semantic classification requires the accepted full-profile partition.');
@@ -90,7 +88,7 @@ export function analyzeAtlasSurfacePartition(
   const components: MutableComponent[] = [];
   for (let start = 0; start < ATLAS_FULL_SAMPLE_COUNT; start += 1) {
     if (componentIndexBySample[start] !== -1) continue;
-    const kind = samples[start];
+    const kind = samples.at(start);
     if (kind === undefined) throw new Error('Accepted surface partition lost a sample.');
     const component = mutableComponent(components.length, kind);
     components.push(component);
@@ -106,7 +104,7 @@ export function analyzeAtlasSurfacePartition(
       component.sampleCount += 1;
       accumulateAreaAndCentroid(component, current, rowWeights);
       forEachAtlasSurfaceNeighbor(current, (neighbor) => {
-        if (componentIndexBySample[neighbor] === -1 && samples[neighbor] === kind) {
+        if (componentIndexBySample[neighbor] === -1 && samples.at(neighbor) === kind) {
           componentIndexBySample[neighbor] = component.analysisIndex;
           queue[tail] = neighbor;
           tail += 1;
@@ -126,7 +124,7 @@ export function analyzeAtlasSurfacePartition(
 
 export function isAtlasSurfacePartitionAnalysisFor(
   analysis: AtlasSurfacePartitionAnalysis,
-  samples: readonly ('land' | 'water')[],
+  samples: LandWaterSampleReader,
 ): boolean {
   return partitionSources.get(analysis) === samples;
 }

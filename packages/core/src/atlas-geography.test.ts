@@ -15,6 +15,9 @@ import {
   ATLAS_WATER_BODY_KINDS,
   atlasControlsMatchWorldRadius,
   type AtlasGeographyRecords,
+  atlasSampleReaderToArray,
+  createLandWaterSampleReader,
+  createMacroElevationSampleReader,
   DEFAULT_ATLAS_CONTROLS,
   deriveAtlasAspectId,
   deriveAtlasCoastlineRingId,
@@ -188,12 +191,15 @@ describe('Milestone 2 atlas geography contracts', () => {
       const records = validRecords();
       const invalid = {
         ...records,
-        macroElevation: { ...records.macroElevation, values: [0 as MacroElevationValueTicks] },
+        macroElevation: {
+          ...records.macroElevation,
+          values: createMacroElevationSampleReader(Object.freeze([0 as MacroElevationValueTicks])),
+        },
         landWaterClassification: {
           ...records.landWaterClassification,
           classificationBehaviorVersion: 2 as 1,
           seaLevelContourDoubledTicks: 2 * 2 ** 24 + 1,
-          samples: ['water'] as const,
+          samples: createLandWaterSampleReader(Object.freeze(['water'] as const)),
         },
         coastline: { ...records.coastline, geometryBehaviorVersion: 2 as 1 },
       };
@@ -211,19 +217,24 @@ describe('Milestone 2 atlas geography contracts', () => {
       ...records,
       landWaterClassification: {
         ...records.landWaterClassification,
-        samples: [
-          'bogus',
-          ...records.landWaterClassification.samples.slice(1),
-        ] as unknown as readonly ('land' | 'water')[],
+        samples: createLandWaterSampleReader(
+          Object.freeze([
+            'bogus',
+            ...atlasSampleReaderToArray(records.landWaterClassification.samples).slice(1),
+          ]) as readonly ('land' | 'water')[],
+        ),
       },
     };
     const mismatch = {
       ...records,
       landWaterClassification: {
         ...records.landWaterClassification,
-        samples: ['water', ...records.landWaterClassification.samples.slice(1)] as readonly (
-          'land' | 'water'
-        )[],
+        samples: createLandWaterSampleReader(
+          Object.freeze([
+            'water',
+            ...atlasSampleReaderToArray(records.landWaterClassification.samples).slice(1),
+          ]),
+        ),
       },
     };
     expect(validateAtlasLandWaterRecords(invalidLiteral).map((finding) => finding.code)).toContain(

@@ -1,4 +1,5 @@
 import {
+  type AtlasSampleReader,
   createDeterministicRandomStream,
   DEFAULT_ATLAS_CONTROLS,
   type DeterministicRandomStream,
@@ -12,6 +13,7 @@ import {
 } from './atlas-land-water-generator.js';
 import {
   type AtlasGenerationProgress,
+  type AtlasLandWaterProposedPatch,
   createAtlasLandWaterGenerationInput,
 } from './atlas-land-water-generator-contract.js';
 import {
@@ -57,7 +59,7 @@ describe('atlas land/water determinism and isolation', () => {
     expect(first.patch.records.landWaterClassification.seaLevelContourDoubledTicks).toBe(
       second.patch.records.landWaterClassification.seaLevelContourDoubledTicks,
     );
-    expect(first.patch).toStrictEqual(second.patch);
+    expectEquivalentPatches(first.patch, second.patch);
   }, 30_000);
 
   it('keeps macro proposal bytes and ticks fixed when only water target changes', async () => {
@@ -78,7 +80,7 @@ describe('atlas land/water determinism and isolation', () => {
       baseline.patch.records.macroElevation.values,
       changed.patch.records.macroElevation.values,
     );
-    expect(baseline.patch.replacements[0]).toStrictEqual(changed.patch.replacements[0]);
+    expectEquivalentMacroProposals(baseline.patch.replacements[0], changed.patch.replacements[0]);
     expect(baseline.patch.replacements[1].parameters.targetWaterCoveragePercent).toBe(65);
     expect(changed.patch.replacements[1].parameters.targetWaterCoveragePercent).toBe(66);
     expect(baseline.patch.records.landWaterClassification.seaLevelContourDoubledTicks).not.toBe(
@@ -104,7 +106,7 @@ describe('atlas land/water determinism and isolation', () => {
       baseline.patch.records.macroElevation.values,
       changed.patch.records.macroElevation.values,
     );
-    expect(baseline.patch.replacements[0]).toStrictEqual(changed.patch.replacements[0]);
+    expectEquivalentMacroProposals(baseline.patch.replacements[0], changed.patch.replacements[0]);
     expect(baseline.patch.replacements[1].parameters.oceanConnectivity).toBe('singleGlobal');
     expect(changed.patch.replacements[1].parameters.oceanConnectivity).toBe('multipleBasins');
   }, 30_000);
@@ -183,7 +185,7 @@ describe('atlas land/water determinism and isolation', () => {
       );
       expect(actual.status).toBe('proposed-full');
       if (actual.status !== 'proposed-full') return;
-      expect(actual.patch).toStrictEqual(expected.patch);
+      expectEquivalentPatches(actual.patch, expected.patch);
     } finally {
       Math.random = originalRandom;
       globalThis.Date.now = originalNow;
@@ -266,7 +268,7 @@ describe('atlas land/water progress and cancellation', () => {
     const completed = await generateAtlasLandWaterFull(input, fixedAtlasRuntime(input));
     expect(completed.status).toBe('proposed-full');
     if (completed.status !== 'proposed-full') return;
-    expect(completed.patch).toStrictEqual(expected.patch);
+    expectEquivalentPatches(completed.patch, expected.patch);
   }, 30_000);
 
   it('rejects a shared sequential stream with a stable diagnostic and no proposal', async () => {
@@ -361,13 +363,72 @@ function macroFingerprint(values: readonly number[]): string {
   return fingerprint.toString(16).padStart(16, '0');
 }
 
-function expectExactArrays<Value>(left: readonly Value[], right: readonly Value[]): void {
+function expectExactArrays<Value>(
+  left: AtlasSampleReader<Value>,
+  right: AtlasSampleReader<Value>,
+): void {
   expect(left).toHaveLength(right.length);
   for (let index = 0; index < left.length; index += 1) {
-    if (left[index] !== right[index]) {
+    if (left.at(index) !== right.at(index)) {
       throw new Error(`Canonical atlas arrays differ at index ${String(index)}.`);
     }
   }
+}
+
+function expectEquivalentPatches(
+  left: AtlasLandWaterProposedPatch,
+  right: AtlasLandWaterProposedPatch,
+): void {
+  expectExactArrays(left.records.macroElevation.values, right.records.macroElevation.values);
+  expectExactArrays(
+    left.records.landWaterClassification.samples,
+    right.records.landWaterClassification.samples,
+  );
+  expect(comparablePatch(left)).toStrictEqual(comparablePatch(right));
+}
+
+function comparablePatch(patch: AtlasLandWaterProposedPatch) {
+  return {
+    ...patch,
+    records: {
+      ...patch.records,
+      macroElevation: {
+        ...patch.records.macroElevation,
+        values: patch.records.macroElevation.values.length,
+      },
+      landWaterClassification: {
+        ...patch.records.landWaterClassification,
+        samples: patch.records.landWaterClassification.samples.length,
+      },
+    },
+    replacements: [
+      {
+        ...patch.replacements[0],
+        output: {
+          ...patch.replacements[0].output,
+          values: patch.replacements[0].output.values.length,
+        },
+      },
+      {
+        ...patch.replacements[1],
+        output: {
+          ...patch.replacements[1].output,
+          samples: patch.replacements[1].output.samples.length,
+        },
+      },
+    ],
+  };
+}
+
+function expectEquivalentMacroProposals(
+  left: AtlasLandWaterProposedPatch['replacements'][0],
+  right: AtlasLandWaterProposedPatch['replacements'][0],
+): void {
+  expectExactArrays(left.output.values, right.output.values);
+  expect({ ...left, output: { ...left.output, values: left.output.values.length } }).toStrictEqual({
+    ...right,
+    output: { ...right.output, values: right.output.values.length },
+  });
 }
 
 function required<Value>(

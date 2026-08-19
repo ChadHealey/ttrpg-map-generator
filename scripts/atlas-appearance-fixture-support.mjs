@@ -150,7 +150,7 @@ function assertDecorationSafety(core, records, paths) {
     assert.ok(path.points.length >= 2);
     for (const [index, point] of path.points.entries()) {
       assert.equal(
-        records.landWaterClassification.samples[sampleIndexForPoint(core, point)],
+        records.landWaterClassification.samples.at(sampleIndexForPoint(core, point)),
         'water',
       );
       assert.ok(point.longitudeTicks > core.PLANET_LONGITUDE_MIN_TICKS + chartMarginTicks);

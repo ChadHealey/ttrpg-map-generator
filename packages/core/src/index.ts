@@ -184,6 +184,17 @@ export {
   segmentAtlasWaterBodies,
 } from './atlas-geography-water-policy.js';
 export {
+  type AtlasLandWaterSample,
+  type AtlasSampleReader,
+  atlasSampleReaderToArray,
+  createAtlasSampleReader,
+  createLandWaterSampleReader,
+  createMacroElevationSampleReader,
+  isAtlasSampleReader,
+  type LandWaterSampleReader,
+  type MacroElevationSampleReader,
+} from './atlas-sample-reader.js';
+export {
   type BehaviorVersion,
   COMPATIBILITY_DIAGNOSTIC_CODES,
   type CompatibilityDiagnostic,

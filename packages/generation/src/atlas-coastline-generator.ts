@@ -271,7 +271,7 @@ function acceptedField(records: AtlasSemanticGeographyRecords): QuantizedSpheric
     sampleCount: records.macroElevation.values.length,
     valueAt: (longitudeIndex: number, latitudeIndex: number) => {
       const index = storageIndex(longitudeIndex, latitudeIndex);
-      const value = records.macroElevation.values[index];
+      const value = records.macroElevation.values.at(index);
       const parsed = parseAtlasFieldValueTicks(value);
       if (!parsed.ok) throw new Error(parsed.diagnostic.message);
       return parsed.value;

@@ -143,12 +143,14 @@ export function assertSharedAnchors(generation, preview, records) {
         fullAddress.latitudeIndex,
       );
       anchorCount += 1;
-      if (preview.macroElevationValues[previewIndex] !== records.macroElevation.values[fullIndex]) {
+      if (
+        preview.macroElevationValues[previewIndex] !== records.macroElevation.values.at(fullIndex)
+      ) {
         fieldDifferences += 1;
       }
       if (
         preview.landWaterSamples[previewIndex] !==
-        records.landWaterClassification.samples[fullIndex]
+        records.landWaterClassification.samples.at(fullIndex)
       ) {
         classificationDifferences += 1;
       }
@@ -188,13 +190,13 @@ export function assertSeamAndPoleBehavior(core, generation, input, records) {
   return {
     southPole: {
       sampleCount: 1,
-      fieldTicks: records.macroElevation.values[0],
-      classification: records.landWaterClassification.samples[0],
+      fieldTicks: records.macroElevation.values.at(0),
+      classification: records.landWaterClassification.samples.at(0),
     },
     northPole: {
       sampleCount: 1,
-      fieldTicks: records.macroElevation.values[lastIndex],
-      classification: records.landWaterClassification.samples[lastIndex],
+      fieldTicks: records.macroElevation.values.at(lastIndex),
+      classification: records.landWaterClassification.samples.at(lastIndex),
     },
     canonicalIdentityTicks,
     adjacentDeltaTicks,
@@ -204,7 +206,7 @@ export function assertSeamAndPoleBehavior(core, generation, input, records) {
 export function macroTickBytes(values) {
   const bytes = Buffer.allocUnsafe(values.length * 4);
   for (let index = 0; index < values.length; index += 1) {
-    bytes.writeInt32BE(values[index], index * 4);
+    bytes.writeInt32BE(values.at(index), index * 4);
   }
   return bytes;
 }
@@ -212,14 +214,16 @@ export function macroTickBytes(values) {
 export function packedClassificationBytes(samples) {
   const bytes = Buffer.alloc(Math.ceil(samples.length / 8));
   for (let index = 0; index < samples.length; index += 1) {
-    if (samples[index] === 'land') bytes[index >>> 3] |= 1 << (7 - (index & 7));
+    if (samples.at(index) === 'land') bytes[index >>> 3] |= 1 << (7 - (index & 7));
   }
   return bytes;
 }
 
 export function classificationCounts(samples) {
   let land = 0;
-  for (const sample of samples) if (sample === 'land') land += 1;
+  samples.forEach((sample) => {
+    if (sample === 'land') land += 1;
+  });
   return { land, water: samples.length - land };
 }
 

@@ -1,5 +1,7 @@
+import type { AcceptedAspectRecord } from '@ttrpg-map/core';
 import { describe, expect, it } from 'vitest';
 
+import { acceptedAspectToDto } from './domain-to-dto.js';
 import {
   canonicalAspectBytes,
   canonicalAspectOutputBytes,
@@ -115,6 +117,22 @@ describe('canonical mapworld v1 encoding', () => {
         },
       ],
     });
+  });
+
+  it('returns a persistence diagnostic when an atlas output lacks a project-owned reader', () => {
+    const aspect: AcceptedAspectRecord = {
+      ...proofAspect(createProofDocument(), TEST_OUTLINE_ASPECT_ID),
+      aspectName: 'worldTerrain.macroElevation' as AcceptedAspectRecord['aspectName'],
+      acceptedOutput: Object.freeze({ provenance: {}, values: Object.freeze([0]) }),
+    };
+
+    const result = acceptedAspectToDto(aspect, '$aspect');
+
+    expect(result.ok).toBe(false);
+    if (result.ok) throw new Error('Expected malformed atlas output to be rejected.');
+    expect(result.diagnostics.map(({ code }) => code)).toContain(
+      PERSISTENCE_DIAGNOSTIC_CODES.schemaInvalid,
+    );
   });
 });
 

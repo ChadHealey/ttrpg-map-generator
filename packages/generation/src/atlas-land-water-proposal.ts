@@ -10,6 +10,8 @@ import {
   ATLAS_GEOGRAPHY_CONTRACT_VERSION,
   type AtlasLandWaterRecords,
   createImmutableDomainSnapshot,
+  createLandWaterSampleReader,
+  createMacroElevationSampleReader,
   type GenerationDiagnostic,
   type LandWaterClassification,
   type MacroElevationField,
@@ -54,12 +56,14 @@ export function createAtlasLandWaterRecords(
       fieldBehaviorVersion: ATLAS_FIELD_ALGORITHM_VERSION,
       quantizationScale: ATLAS_FIELD_QUANTIZATION_SCALE,
     }),
-    values: field.copyValues() as unknown as readonly MacroElevationValueTicks[],
+    values: createMacroElevationSampleReader(
+      field.copyValues() as unknown as readonly MacroElevationValueTicks[],
+    ),
   });
   const landWaterClassification: LandWaterClassification = Object.freeze({
     classificationBehaviorVersion: ATLAS_LAND_WATER_CLASSIFICATION_VERSION,
     seaLevelContourDoubledTicks: contourLevel,
-    samples: classification.samples,
+    samples: createLandWaterSampleReader(classification.samples),
   });
   const records: AtlasLandWaterRecords = Object.freeze({
     controls: input.controls,

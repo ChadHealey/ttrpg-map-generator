@@ -6,6 +6,7 @@
  * caches. Coastline extraction remains future work.
  */
 
+import type { LandWaterSampleReader, MacroElevationSampleReader } from './atlas-sample-reader.js';
 import type { PlanetPoint } from './coordinates.js';
 import {
   type AspectId,
@@ -125,7 +126,7 @@ export type MacroElevationValueTicks = number & {
 /** Accepted field values in ADR-0009 canonical sample traversal order. */
 export interface MacroElevationField {
   readonly provenance: MacroElevationFieldProvenance;
-  readonly values: readonly MacroElevationValueTicks[];
+  readonly values: MacroElevationSampleReader;
 }
 
 /** The accepted partition threshold is an odd doubled field tick. */
@@ -133,7 +134,7 @@ export interface LandWaterClassification {
   readonly classificationBehaviorVersion: 1;
   readonly seaLevelContourDoubledTicks: number;
   /** Full-profile land/water values in the field's canonical anchor traversal order. */
-  readonly samples: readonly ('land' | 'water')[];
+  readonly samples: LandWaterSampleReader;
 }
 
 /** Complete accepted #58 output, before #59 derives connected components or semantic entities. */

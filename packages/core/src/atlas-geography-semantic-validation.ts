@@ -291,7 +291,7 @@ function assignMembership(
       sphericalAreaWeight += rowWeights[latitudeIndexForStorageIndex(index)] ?? 0;
       if (ownerBySample[index] !== -1) hasOverlap = true;
       else ownerBySample[index] = ownerIndex;
-      if (records.landWaterClassification.samples[index] !== owner.kind) {
+      if (records.landWaterClassification.samples.at(index) !== owner.kind) {
         hasClassificationMismatch = true;
       }
     }

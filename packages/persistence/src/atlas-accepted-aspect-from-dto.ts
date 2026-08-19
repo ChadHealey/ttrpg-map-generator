@@ -1,4 +1,8 @@
 import {
+  createImmutableDomainArray,
+  createLandWaterSampleReader,
+  createMacroElevationSampleReader,
+  type MacroElevationValueTicks,
   parsePlanetPoint,
   parseSemanticKey,
   parseStableId,
@@ -9,8 +13,12 @@ import {
 import { type AcceptedAspectDto } from './accepted-aspect-dto-schema.js';
 import { ATLAS_ACCEPTED_ASPECT_NAMES } from './atlas-accepted-aspect-dto-schema.js';
 import { parseCoreValue } from './core-parsing.js';
-import { persistenceSuccess } from './persistence-diagnostics.js';
-import type { PersistenceResult } from './persistence-model.js';
+import {
+  persistenceDiagnostic,
+  persistenceFailure,
+  persistenceSuccess,
+} from './persistence-diagnostics.js';
+import { PERSISTENCE_DIAGNOSTIC_CODES, type PersistenceResult } from './persistence-model.js';
 
 export function atlasAcceptedParametersFromDto(
   dto: AcceptedAspectDto,
@@ -35,9 +43,41 @@ export function atlasAcceptedOutputFromDto(
   if (!ATLAS_ACCEPTED_ASPECT_NAMES.has(dto.aspectName)) return undefined;
   const outputPath = `${rootPath}.acceptedOutput`;
   switch (dto.aspectName) {
-    case 'worldTerrain.macroElevation':
-    case 'worldSurface.landWaterClassification':
-      return persistenceSuccess(dto.acceptedOutput);
+    case 'worldTerrain.macroElevation': {
+      const output = dto.acceptedOutput as unknown as MacroElevationOutputDto;
+      const values = createImmutableDomainArray(output.values);
+      return values.ok
+        ? persistenceSuccess({
+            ...output,
+            values: createMacroElevationSampleReader(
+              values.value as readonly MacroElevationValueTicks[],
+            ),
+          })
+        : persistenceFailure(
+            persistenceDiagnostic(
+              PERSISTENCE_DIAGNOSTIC_CODES.schemaInvalid,
+              filePath,
+              `${outputPath}.values`,
+              'Macro elevation samples could not be made immutable.',
+              'Restore the canonical accepted macro-elevation values.',
+            ),
+          );
+    }
+    case 'worldSurface.landWaterClassification': {
+      const output = dto.acceptedOutput as unknown as LandWaterOutputDto;
+      const samples = createImmutableDomainArray(output.samples);
+      return samples.ok
+        ? persistenceSuccess({ ...output, samples: createLandWaterSampleReader(samples.value) })
+        : persistenceFailure(
+            persistenceDiagnostic(
+              PERSISTENCE_DIAGNOSTIC_CODES.schemaInvalid,
+              filePath,
+              `${outputPath}.samples`,
+              'Land/water samples could not be made immutable.',
+              'Restore the canonical accepted land/water samples.',
+            ),
+          );
+    }
     case 'landmass.classification':
       return landmassFromDto(
         dto.acceptedOutput as unknown as LandmassOutputDto,
@@ -82,6 +122,17 @@ export function atlasAcceptedOutputFromDto(
       );
   }
   return undefined;
+}
+
+interface MacroElevationOutputDto {
+  readonly provenance: unknown;
+  readonly values: readonly number[];
+}
+
+interface LandWaterOutputDto {
+  readonly classificationBehaviorVersion: 1;
+  readonly seaLevelContourDoubledTicks: number;
+  readonly samples: readonly ('land' | 'water')[];
 }
 
 function landmassFromDto(

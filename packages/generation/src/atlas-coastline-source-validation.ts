@@ -3,6 +3,7 @@
 import {
   type AtlasSemanticGeographyRecords,
   forEachAtlasSurfaceNeighbor,
+  type LandWaterSampleReader,
   PLANET_LATITUDE_MAX_TICKS,
   PLANET_LATITUDE_MIN_TICKS,
   PLANET_TICKS_PER_TURN,
@@ -35,14 +36,14 @@ export function buildAtlasCoastlineSourceMaps(
 }
 
 export function validateAtlasCoastlineSourceCoverage(
-  samples: readonly ('land' | 'water')[],
+  samples: LandWaterSampleReader,
   rings: readonly ProposedPlanetRing[],
 ): boolean {
   const expected = new Set<string>();
   for (let index = 0; index < samples.length; index += 1) {
-    if (samples[index] !== 'land') continue;
+    if (samples.at(index) !== 'land') continue;
     forEachAtlasSurfaceNeighbor(index, (neighborIndex) => {
-      if (samples[neighborIndex] === 'water') expected.add(transitionKey(index, neighborIndex));
+      if (samples.at(neighborIndex) === 'water') expected.add(transitionKey(index, neighborIndex));
     });
   }
   const actual = new Set<string>();

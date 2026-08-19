@@ -201,7 +201,7 @@ function pointForSample(index: number): PlanetPoint | undefined {
 }
 
 function isWater(records: AtlasGeographyRecords, point: PlanetPoint): boolean {
-  return records.landWaterClassification.samples[sampleIndexForPoint(point)] === 'water';
+  return records.landWaterClassification.samples.at(sampleIndexForPoint(point)) === 'water';
 }
 
 function membershipOwnsPoint(

@@ -1,4 +1,5 @@
 import {
+  atlasSampleReaderToArray,
   createDeterministicRandomStream,
   createPlanetPoint,
   PLANET_ANGULAR_STEP_RAD,
@@ -39,9 +40,9 @@ describe('whole-world atlas land/water generation invariants', () => {
       expect(result.realization.absoluteWaterCoverageErrorBasisPoints).toBeLessThanOrEqual(
         ATLAS_WATER_COVERAGE_TOLERANCE_BASIS_POINTS,
       );
-      expect(new Set(result.patch.records.landWaterClassification.samples)).toEqual(
-        new Set(['land', 'water']),
-      );
+      expect(
+        new Set(atlasSampleReaderToArray(result.patch.records.landWaterClassification.samples)),
+      ).toEqual(new Set(['land', 'water']));
     }
   }, 120_000);
 
@@ -79,10 +80,12 @@ describe('whole-world atlas land/water generation invariants', () => {
           fullAddress.longitudeIndex,
           fullAddress.latitudeIndex,
         );
-        expect(fullValues[fullIndex]).toBe(
+        expect(fullValues.at(fullIndex)).toBe(
           previewResult.preview.macroElevationValues[previewIndex],
         );
-        expect(fullSamples[fullIndex]).toBe(previewResult.preview.landWaterSamples[previewIndex]);
+        expect(fullSamples.at(fullIndex)).toBe(
+          previewResult.preview.landWaterSamples[previewIndex],
+        );
       }
     }
   }, 30_000);

@@ -1,6 +1,8 @@
 import {
   type AcceptedAspectRecord,
+  atlasSampleReaderToArray,
   formatWorldSeed,
+  isAtlasSampleReader,
   type MapDocument,
   type SeedInput,
   type WorldDocument,
@@ -48,10 +50,30 @@ export function acceptedAspectToDto(
       message: diagnostic.message,
       suggestedAction: diagnostic.suggestedAction,
     })),
-    acceptedOutput: aspect.acceptedOutput,
+    acceptedOutput: acceptedOutputToDto(aspect),
   };
   const validated = validateDto(acceptedAspectDtoSchema, raw, filePath);
   return validated.ok ? { ok: true, value: orderAcceptedAspectDto(validated.value) } : validated;
+}
+
+function acceptedOutputToDto(aspect: AcceptedAspectRecord): unknown {
+  if (aspect.aspectName === 'worldTerrain.macroElevation') {
+    const output = asRecord(aspect.acceptedOutput);
+    if (output === undefined || !isAtlasSampleReader(output.values)) return aspect.acceptedOutput;
+    return { ...output, values: atlasSampleReaderToArray(output.values) };
+  }
+  if (aspect.aspectName === 'worldSurface.landWaterClassification') {
+    const output = asRecord(aspect.acceptedOutput);
+    if (output === undefined || !isAtlasSampleReader(output.samples)) return aspect.acceptedOutput;
+    return { ...output, samples: atlasSampleReaderToArray(output.samples) };
+  }
+  return aspect.acceptedOutput;
+}
+
+function asRecord(value: unknown): Readonly<Record<string, unknown>> | undefined {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+    ? (value as Readonly<Record<string, unknown>>)
+    : undefined;
 }
 
 export function mapDocumentToDto(map: MapDocument): PersistenceResult<MapDocumentDto> {
