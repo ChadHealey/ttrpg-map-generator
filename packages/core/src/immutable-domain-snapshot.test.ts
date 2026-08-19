@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
+import { ATLAS_FULL_SAMPLE_COUNT } from './atlas-geography-model.js';
+import { createCompactLandWaterSampleReaderFromBits } from './atlas-sample-reader.js';
 import {
   createImmutableDomainArray,
   createImmutableDomainSnapshot,
@@ -47,5 +49,16 @@ describe('immutable domain snapshots', () => {
     const repeated = createImmutableDomainSnapshot(result.value);
     expect(repeated.ok).toBe(true);
     if (repeated.ok) expect(repeated.value).toBe(result.value);
+  });
+
+  it('reuses nominal compact atlas values without traversing or converting them', () => {
+    const samples = createCompactLandWaterSampleReaderFromBits(
+      new Uint8Array(Math.ceil(ATLAS_FULL_SAMPLE_COUNT / 8)),
+      ATLAS_FULL_SAMPLE_COUNT,
+    );
+    const result = createImmutableDomainSnapshot({ samples });
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.value.samples).toBe(samples);
   });
 });

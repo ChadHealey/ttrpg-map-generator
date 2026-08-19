@@ -1,7 +1,8 @@
 import {
-  atlasSampleReaderToArray,
   createDeterministicRandomStream,
   createPlanetPoint,
+  isCompactLandWaterSampleReader,
+  isCompactMacroElevationSampleReader,
   PLANET_ANGULAR_STEP_RAD,
   validateAtlasLandWaterRecords,
 } from '@ttrpg-map/core';
@@ -37,12 +38,20 @@ describe('whole-world atlas land/water generation invariants', () => {
       expect(validateAtlasLandWaterRecords(result.patch.records)).toEqual([]);
       expect(result.patch.records.macroElevation.values).toHaveLength(2_095_106);
       expect(result.patch.records.landWaterClassification.samples).toHaveLength(2_095_106);
+      expect(isCompactMacroElevationSampleReader(result.patch.records.macroElevation.values)).toBe(
+        true,
+      );
+      expect(
+        isCompactLandWaterSampleReader(result.patch.records.landWaterClassification.samples),
+      ).toBe(true);
       expect(result.realization.absoluteWaterCoverageErrorBasisPoints).toBeLessThanOrEqual(
         ATLAS_WATER_COVERAGE_TOLERANCE_BASIS_POINTS,
       );
-      expect(
-        new Set(atlasSampleReaderToArray(result.patch.records.landWaterClassification.samples)),
-      ).toEqual(new Set(['land', 'water']));
+      const classifications = new Set<string>();
+      result.patch.records.landWaterClassification.samples.forEach((sample) =>
+        classifications.add(sample),
+      );
+      expect(classifications).toEqual(new Set(['land', 'water']));
     }
   }, 120_000);
 

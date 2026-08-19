@@ -25,6 +25,7 @@ import {
 } from './atlas-land-water-fixture-runner-support.mjs';
 import {
   assertAppearanceRerollIsolation,
+  assertEquivalentAtlasGeography,
   assertGeographyRerollIsolation,
   createCanonicalAspectDigestIndex,
   createInitialAcceptedAtlas,
@@ -245,7 +246,7 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
     );
     if (!geographyRerolled.ok) throw new Error(JSON.stringify(geographyRerolled));
     geographyRerolledAccepted = geographyRerolled.accepted;
-    assertGeographyRerollIsolation(baselineAccepted, geographyRerolledAccepted);
+    assertGeographyRerollIsolation(core, baselineAccepted, geographyRerolledAccepted);
 
     const appearanceRerolled = await desktopGeneration.productionAtlasWorkflowGeneration.commit(
       {
@@ -454,12 +455,31 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
       });
     }
     const decodedDocument = decodeAcceptedPackage(persistence, encodedPackage);
-    assert.deepEqual(decodedDocument, appearanceRerolledAccepted.document);
+    const reencodedPackage = encodeAcceptedPackage(persistence, decodedDocument);
+    assert.deepEqual(reencodedPackage, encodedPackage);
+    const decodedMacro = decodedDocument.maps[0]?.aspects.find(
+      ({ aspectName }) => aspectName === 'worldTerrain.macroElevation',
+    );
+    const decodedClassification = decodedDocument.maps[0]?.aspects.find(
+      ({ aspectName }) => aspectName === 'worldSurface.landWaterClassification',
+    );
+    assert.equal(
+      core.isCompactMacroElevationSampleReader(decodedMacro?.acceptedOutput.values),
+      true,
+    );
+    assert.equal(
+      core.isCompactLandWaterSampleReader(decodedClassification?.acceptedOutput.samples),
+      true,
+    );
     const reopened = desktopReopen.reopenAcceptedAtlas(decodedDocument);
     assert.equal(reopened.ok, true, reopened.ok ? undefined : JSON.stringify(reopened));
     if (!reopened.ok) throw new Error(JSON.stringify(reopened));
-    assert.deepEqual(reopened.accepted.document, appearanceRerolledAccepted.document);
-    assert.deepEqual(reopened.accepted.geography, appearanceRerolledAccepted.geography);
+    assert.equal(reopened.accepted.document, decodedDocument);
+    assertEquivalentAtlasGeography(
+      core,
+      reopened.accepted.geography,
+      appearanceRerolledAccepted.geography,
+    );
     assert.deepEqual(reopened.accepted.appearance, appearanceRerolledAccepted.appearance);
     assert.deepEqual(reopened.accepted.scene, appearanceRerolledAccepted.scene);
     const reopenedIndex = createCanonicalAspectDigestIndex(

@@ -3,6 +3,7 @@
 import {
   ATLAS_CANONICAL_FIELD_TRAVERSAL,
   ATLAS_FIELD_QUANTIZATION_SCALE,
+  atlasSampleReaderToArray,
   validateAtlasLandWaterRecords,
 } from '@ttrpg-map/core';
 
@@ -248,7 +249,7 @@ export async function generateAtlasLandWaterPreview(
       controls: input.controls,
       macroElevationValues: sampled.field.copyValues(),
       seaLevelContourDoubledTicks: threshold.selection.contourLevel,
-      landWaterSamples: classification.output.samples,
+      landWaterSamples: atlasSampleReaderToArray(classification.output.samples),
     });
     progress.complete();
     return Object.freeze({

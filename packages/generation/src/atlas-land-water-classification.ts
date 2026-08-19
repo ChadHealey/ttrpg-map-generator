@@ -1,7 +1,9 @@
 /** Version-1 shared-preview threshold selection and full-profile land/water classification. */
 
 import {
+  createCompactLandWaterSampleReaderFromBits,
   createImmutableDomainArray,
+  type LandWaterSampleReader,
   planetPointToAngles,
   roundTiesAwayFromZero,
 } from '@ttrpg-map/core';
@@ -20,6 +22,7 @@ import {
   getAtlasGridVertex,
   isAtlasLand,
   parseAtlasFieldValueTicks,
+  WORLD_ATLAS_FULL_PROFILE,
   WORLD_ATLAS_PREVIEW_PROFILE,
 } from './atlas-sampling-profiles.js';
 import type { QuantizedSphericalField } from './geography-algorithm-adapters.js';
@@ -65,7 +68,7 @@ export interface AtlasClassificationCooperation {
 }
 
 export interface AtlasClassificationOutput {
-  readonly samples: readonly ('land' | 'water')[];
+  readonly samples: LandWaterSampleReader;
   readonly realizedWaterCoveragePercent: number;
   readonly absoluteWaterCoverageErrorBasisPoints: number;
 }
@@ -134,14 +137,27 @@ export async function classifyAtlasLandWater(
   targetWaterCoveragePercent: number,
   cooperation: AtlasClassificationCooperation,
 ): Promise<AtlasClassificationResult> {
-  const samples = new Array<'land' | 'water'>(field.sampleCount);
-  samples[0] = isAtlasLand(field.valueAt(0, 0), contourLevel) ? 'land' : 'water';
-  samples[field.sampleCount - 1] = isAtlasLand(
+  const packedSamples =
+    field.profile.profileId === WORLD_ATLAS_FULL_PROFILE.profileId
+      ? new Uint8Array(Math.ceil(field.sampleCount / 8))
+      : undefined;
+  const previewSamples =
+    packedSamples === undefined ? new Array<'land' | 'water'>(field.sampleCount) : undefined;
+  const southPoleSample = isAtlasLand(field.valueAt(0, 0), contourLevel) ? 'land' : 'water';
+  const northPoleSample = isAtlasLand(
     field.valueAt(0, field.profile.latitudeBandCount),
     contourLevel,
   )
     ? 'land'
     : 'water';
+  if (packedSamples === undefined) {
+    if (previewSamples === undefined) throw new Error('Missing preview classification storage.');
+    previewSamples[0] = southPoleSample;
+    previewSamples[field.sampleCount - 1] = northPoleSample;
+  } else {
+    if (southPoleSample === 'land') setLandBit(packedSamples, 0);
+    if (northPoleSample === 'land') setLandBit(packedSamples, field.sampleCount - 1);
+  }
 
   let totalWeight = 0;
   let waterWeight = 0;
@@ -165,7 +181,13 @@ export async function classifyAtlasLandWater(
         const sample = isAtlasLand(field.valueAt(longitudeIndex, latitudeIndex), contourLevel)
           ? 'land'
           : 'water';
-        samples[index] = sample;
+        if (packedSamples === undefined) {
+          if (previewSamples === undefined)
+            throw new Error('Missing preview classification storage.');
+          previewSamples[index] = sample;
+        } else if (sample === 'land') {
+          setLandBit(packedSamples, index);
+        }
         totalWeight += rowWeight;
         if (sample === 'water') waterWeight += rowWeight;
       }
@@ -180,18 +202,36 @@ export async function classifyAtlasLandWater(
     return Object.freeze({ status: 'cancelled' });
   }
   const realizedWaterCoveragePercent = stableRatioPercent(waterWeight, totalWeight);
-  const immutableSamples = createImmutableDomainArray(samples);
-  if (!immutableSamples.ok) throw new Error('Land/water samples must be immutable plain values.');
+  const samples: LandWaterSampleReader =
+    packedSamples === undefined
+      ? immutablePreviewSamples(previewSamples)
+      : createCompactLandWaterSampleReaderFromBits(packedSamples, field.sampleCount);
   return Object.freeze({
     status: 'completed',
     output: Object.freeze({
-      samples: immutableSamples.value,
+      samples,
       realizedWaterCoveragePercent,
       absoluteWaterCoverageErrorBasisPoints: stableDecimal(
         Math.abs(realizedWaterCoveragePercent - targetWaterCoveragePercent) * 100,
       ),
     }),
   });
+}
+
+function immutablePreviewSamples(
+  samples: readonly ('land' | 'water')[] | undefined,
+): LandWaterSampleReader {
+  if (samples === undefined) throw new Error('Missing preview classification samples.');
+  const immutable = createImmutableDomainArray(samples);
+  if (!immutable.ok) throw new Error('Land/water samples must be immutable plain values.');
+  return immutable.value;
+}
+
+function setLandBit(storage: Uint8Array, index: number): void {
+  const byteIndex = index >> 3;
+  const byte = storage[byteIndex];
+  if (byte === undefined) throw new RangeError('Classification sample index is out of range.');
+  storage[byteIndex] = byte | (1 << (index & 7));
 }
 
 function sortedWeightedTicks(

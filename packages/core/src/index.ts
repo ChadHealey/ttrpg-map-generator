@@ -186,11 +186,18 @@ export {
 export {
   type AtlasLandWaterSample,
   type AtlasSampleReader,
+  atlasSampleReadersEqual,
   atlasSampleReaderToArray,
   createAtlasSampleReader,
+  createCompactLandWaterSampleReader,
+  createCompactLandWaterSampleReaderFromBits,
+  createCompactMacroElevationSampleReader,
   createLandWaterSampleReader,
   createMacroElevationSampleReader,
+  getCompactAtlasSampleReaderStorageByteLength,
   isAtlasSampleReader,
+  isCompactLandWaterSampleReader,
+  isCompactMacroElevationSampleReader,
   type LandWaterSampleReader,
   type MacroElevationSampleReader,
 } from './atlas-sample-reader.js';

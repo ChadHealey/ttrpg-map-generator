@@ -1,8 +1,6 @@
 import {
-  createImmutableDomainArray,
-  createLandWaterSampleReader,
-  createMacroElevationSampleReader,
-  type MacroElevationValueTicks,
+  createCompactLandWaterSampleReader,
+  createCompactMacroElevationSampleReader,
   parsePlanetPoint,
   parseSemanticKey,
   parseStableId,
@@ -13,12 +11,8 @@ import {
 import { type AcceptedAspectDto } from './accepted-aspect-dto-schema.js';
 import { ATLAS_ACCEPTED_ASPECT_NAMES } from './atlas-accepted-aspect-dto-schema.js';
 import { parseCoreValue } from './core-parsing.js';
-import {
-  persistenceDiagnostic,
-  persistenceFailure,
-  persistenceSuccess,
-} from './persistence-diagnostics.js';
-import { PERSISTENCE_DIAGNOSTIC_CODES, type PersistenceResult } from './persistence-model.js';
+import { persistenceSuccess } from './persistence-diagnostics.js';
+import { type PersistenceResult } from './persistence-model.js';
 
 export function atlasAcceptedParametersFromDto(
   dto: AcceptedAspectDto,
@@ -45,38 +39,17 @@ export function atlasAcceptedOutputFromDto(
   switch (dto.aspectName) {
     case 'worldTerrain.macroElevation': {
       const output = dto.acceptedOutput as unknown as MacroElevationOutputDto;
-      const values = createImmutableDomainArray(output.values);
-      return values.ok
-        ? persistenceSuccess({
-            ...output,
-            values: createMacroElevationSampleReader(
-              values.value as readonly MacroElevationValueTicks[],
-            ),
-          })
-        : persistenceFailure(
-            persistenceDiagnostic(
-              PERSISTENCE_DIAGNOSTIC_CODES.schemaInvalid,
-              filePath,
-              `${outputPath}.values`,
-              'Macro elevation samples could not be made immutable.',
-              'Restore the canonical accepted macro-elevation values.',
-            ),
-          );
+      return persistenceSuccess({
+        ...output,
+        values: createCompactMacroElevationSampleReader(output.values),
+      });
     }
     case 'worldSurface.landWaterClassification': {
       const output = dto.acceptedOutput as unknown as LandWaterOutputDto;
-      const samples = createImmutableDomainArray(output.samples);
-      return samples.ok
-        ? persistenceSuccess({ ...output, samples: createLandWaterSampleReader(samples.value) })
-        : persistenceFailure(
-            persistenceDiagnostic(
-              PERSISTENCE_DIAGNOSTIC_CODES.schemaInvalid,
-              filePath,
-              `${outputPath}.samples`,
-              'Land/water samples could not be made immutable.',
-              'Restore the canonical accepted land/water samples.',
-            ),
-          );
+      return persistenceSuccess({
+        ...output,
+        samples: createCompactLandWaterSampleReader(output.samples),
+      });
     }
     case 'landmass.classification':
       return landmassFromDto(

@@ -1,11 +1,20 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  ATLAS_FIELD_QUANTIZATION_SCALE,
+  ATLAS_FULL_SAMPLE_COUNT,
   atlasSampleReaderToArray,
+  createCompactLandWaterSampleReader,
+  createCompactLandWaterSampleReaderFromBits,
+  createCompactMacroElevationSampleReader,
   createLandWaterSampleReader,
   createMacroElevationSampleReader,
+  getCompactAtlasSampleReaderStorageByteLength,
+  isCompactLandWaterSampleReader,
+  isCompactMacroElevationSampleReader,
   type MacroElevationValueTicks,
 } from './index.js';
+import { deepEqual } from './world-document-transaction-support.js';
 
 describe('atlas sample readers', () => {
   it('provides deterministic indexed and traversal access without exposing an array', () => {
@@ -45,5 +54,93 @@ describe('atlas sample readers', () => {
     expect(() => createLandWaterSampleReader(Object.freeze(sparse))).toThrow(
       'immutable dense sample array',
     );
+  });
+
+  it('owns exact full-profile signed and one-bit compact storage without exposing buffers', () => {
+    const macroSource = new Int32Array(ATLAS_FULL_SAMPLE_COUNT);
+    macroSource[0] = -ATLAS_FIELD_QUANTIZATION_SCALE;
+    macroSource[macroSource.length - 1] = ATLAS_FIELD_QUANTIZATION_SCALE;
+    const macro = createCompactMacroElevationSampleReader(macroSource);
+
+    const classificationBits = new Uint8Array(Math.ceil(ATLAS_FULL_SAMPLE_COUNT / 8));
+    classificationBits[0] = 1;
+    classificationBits[classificationBits.length - 1] = 2;
+    const classification = createCompactLandWaterSampleReaderFromBits(
+      classificationBits,
+      ATLAS_FULL_SAMPLE_COUNT,
+    );
+
+    macroSource.fill(0);
+    classificationBits.fill(0);
+    expect(macro.at(0)).toBe(-ATLAS_FIELD_QUANTIZATION_SCALE);
+    expect(macro.at(macro.length - 1)).toBe(ATLAS_FIELD_QUANTIZATION_SCALE);
+    expect(classification.at(0)).toBe('land');
+    expect(classification.at(1)).toBe('water');
+    expect(classification.at(classification.length - 1)).toBe('land');
+    expect(getCompactAtlasSampleReaderStorageByteLength(macro)).toBe(
+      ATLAS_FULL_SAMPLE_COUNT * Int32Array.BYTES_PER_ELEMENT,
+    );
+    expect(getCompactAtlasSampleReaderStorageByteLength(classification)).toBe(
+      Math.ceil(ATLAS_FULL_SAMPLE_COUNT / 8),
+    );
+    expect(isCompactMacroElevationSampleReader(macro)).toBe(true);
+    expect(isCompactLandWaterSampleReader(classification)).toBe(true);
+    expect('buffer' in macro).toBe(false);
+    expect('values' in macro).toBe(false);
+    expect('buffer' in classification).toBe(false);
+    expect('bits' in classification).toBe(false);
+  });
+
+  it('rejects malformed compact constructor inputs before they become domain values', () => {
+    expect(() => createCompactMacroElevationSampleReader(new Int32Array(1))).toThrow(
+      'exactly 2095106 samples',
+    );
+    expect(() => createCompactLandWaterSampleReader(['water'])).toThrow('exactly 2095106 samples');
+    const sparseMacro = new Array<number>(ATLAS_FULL_SAMPLE_COUNT);
+    sparseMacro[0] = 0;
+    expect(() => createCompactMacroElevationSampleReader(sparseMacro)).toThrow('dense array');
+
+    const invalidMacro = new Array<number>(ATLAS_FULL_SAMPLE_COUNT).fill(0);
+    invalidMacro[1] = Number.NaN;
+    expect(() => createCompactMacroElevationSampleReader(invalidMacro)).toThrow(
+      'canonical signed integer tick',
+    );
+    invalidMacro[1] = ATLAS_FIELD_QUANTIZATION_SCALE + 1;
+    expect(() => createCompactMacroElevationSampleReader(invalidMacro)).toThrow(
+      'canonical signed integer tick',
+    );
+
+    const invalidClassification = new Array<unknown>(ATLAS_FULL_SAMPLE_COUNT).fill('water');
+    invalidClassification[1] = 'coast';
+    expect(() => createCompactLandWaterSampleReader(invalidClassification)).toThrow(
+      'either land or water',
+    );
+    const sparseClassification = new Array<'land' | 'water'>(ATLAS_FULL_SAMPLE_COUNT);
+    sparseClassification[0] = 'water';
+    expect(() => createCompactLandWaterSampleReader(sparseClassification)).toThrow('dense sample');
+
+    const bits = new Uint8Array(Math.ceil(ATLAS_FULL_SAMPLE_COUNT / 8));
+    bits[bits.length - 1] = 0x80;
+    expect(() => createCompactLandWaterSampleReaderFromBits(bits, ATLAS_FULL_SAMPLE_COUNT)).toThrow(
+      'padding bits',
+    );
+    expect(() =>
+      createCompactLandWaterSampleReaderFromBits(
+        new Uint8Array(bits.length - 1),
+        ATLAS_FULL_SAMPLE_COUNT,
+      ),
+    ).toThrow('exactly 261889 bytes');
+  });
+
+  it('compares independently owned compact values by canonical samples', () => {
+    const source = new Int32Array(ATLAS_FULL_SAMPLE_COUNT);
+    source[0] = 17;
+    const first = createCompactMacroElevationSampleReader(source);
+    const same = createCompactMacroElevationSampleReader(source);
+    source[source.length - 1] = 1;
+    const changed = createCompactMacroElevationSampleReader(source);
+
+    expect(deepEqual(first, same)).toBe(true);
+    expect(deepEqual(first, changed)).toBe(false);
   });
 });

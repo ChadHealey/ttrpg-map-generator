@@ -1,6 +1,7 @@
 /** Package-private deterministic helpers shared by the document transaction implementation. */
 
 import { compareAspectIds } from './aspect-dependency-model.js';
+import { atlasSampleReadersEqual, isAtlasSampleReader } from './atlas-sample-reader.js';
 import type { AcceptedAspectRecord } from './generated-aspects.js';
 import { type AspectId, compareStableReferences, type LockId } from './identity.js';
 import {
@@ -153,6 +154,13 @@ function projectDependencyEffect(effect: DocumentDependencyEffect): DocumentDepe
 
 export function deepEqual(left: unknown, right: unknown): boolean {
   if (Object.is(left, right)) return true;
+  if (isAtlasSampleReader(left) || isAtlasSampleReader(right)) {
+    return (
+      isAtlasSampleReader(left) &&
+      isAtlasSampleReader(right) &&
+      atlasSampleReadersEqual(left, right)
+    );
+  }
   if (typeof left !== 'object' || left === null || typeof right !== 'object' || right === null) {
     return false;
   }

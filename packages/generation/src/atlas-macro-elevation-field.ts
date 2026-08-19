@@ -1,9 +1,11 @@
 /** Production version-1 analytic spherical macro-elevation field and profile sampler. */
 
 import {
+  createCompactMacroElevationSampleReader,
   createImmutableDomainArray,
   type DeepReadonly,
   type DeterministicRandomStream,
+  type MacroElevationSampleReader,
   PLANET_ANGULAR_STEP_RAD,
   PLANET_LATITUDE_MIN_TICKS,
   PLANET_LONGITUDE_MIN_TICKS,
@@ -45,6 +47,8 @@ interface CartesianMacroElevationAdapter extends QuantizedPlanetFieldAdapter {
 export interface SampledAtlasMacroElevationField extends QuantizedSphericalField {
   /** Return an independently owned canonical traversal copy suitable for a proposal record. */
   readonly copyValues: () => readonly AtlasFieldValueTicks[];
+  /** Return an independently owned compact full-profile proposal value. */
+  readonly compactValues: () => MacroElevationSampleReader;
 }
 
 export interface AtlasFieldSamplingCooperation {
@@ -93,6 +97,10 @@ class SampledMacroElevationField implements SampledAtlasMacroElevationField {
     const snapshot = createImmutableDomainArray(this.#values);
     if (!snapshot.ok) throw new Error('Macro elevation samples must be immutable finite values.');
     return snapshot.value as readonly AtlasFieldValueTicks[];
+  }
+
+  public compactValues(): MacroElevationSampleReader {
+    return createCompactMacroElevationSampleReader(this.#values);
   }
 }
 

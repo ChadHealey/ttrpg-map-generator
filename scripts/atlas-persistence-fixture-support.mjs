@@ -161,7 +161,7 @@ export function decodeAcceptedPackage(persistence, packageValue) {
   return requiredPersistenceValue(persistence.decodeMapworld(packageValue));
 }
 
-export function assertGeographyRerollIsolation(baseline, geographyRerolled) {
+export function assertGeographyRerollIsolation(core, baseline, geographyRerolled) {
   const baselineById = aspectsById(baseline.document);
   const rerolledById = aspectsById(geographyRerolled.document);
   assertDocumentEnvelopeUnchanged(baseline.document, geographyRerolled.document, false);
@@ -186,9 +186,12 @@ export function assertGeographyRerollIsolation(baseline, geographyRerolled) {
     aspectByName(geographyRerolled.document, 'worldTerrain.macroElevation').variantRevision,
     1,
   );
-  assert.notDeepEqual(
-    aspectByName(geographyRerolled.document, 'worldTerrain.macroElevation').acceptedOutput,
-    aspectByName(baseline.document, 'worldTerrain.macroElevation').acceptedOutput,
+  assert.equal(
+    core.atlasSampleReadersEqual(
+      aspectByName(geographyRerolled.document, 'worldTerrain.macroElevation').acceptedOutput.values,
+      aspectByName(baseline.document, 'worldTerrain.macroElevation').acceptedOutput.values,
+    ),
+    false,
   );
   assert.equal(baseline.document.worldSeed, geographyRerolled.document.worldSeed);
   assert.deepEqual(
@@ -244,7 +247,39 @@ export function assertAppearanceRerollIsolation(geographyRerolled, appearanceRer
     assert.equal(after.variantRevision, 1);
     assert.notDeepEqual(after.acceptedOutput, before.acceptedOutput);
   }
-  assert.deepEqual(appearanceRerolled.geography, geographyRerolled.geography);
+  assert.equal(appearanceRerolled.geography, geographyRerolled.geography);
+}
+
+export function assertEquivalentAtlasGeography(core, actual, expected) {
+  assert.equal(
+    core.atlasSampleReadersEqual(actual.macroElevation.values, expected.macroElevation.values),
+    true,
+  );
+  assert.equal(
+    core.atlasSampleReadersEqual(
+      actual.landWaterClassification.samples,
+      expected.landWaterClassification.samples,
+    ),
+    true,
+  );
+  assert.deepEqual(
+    {
+      ...actual,
+      macroElevation: { ...actual.macroElevation, values: '<compact>' },
+      landWaterClassification: {
+        ...actual.landWaterClassification,
+        samples: '<compact>',
+      },
+    },
+    {
+      ...expected,
+      macroElevation: { ...expected.macroElevation, values: '<compact>' },
+      landWaterClassification: {
+        ...expected.landWaterClassification,
+        samples: '<compact>',
+      },
+    },
+  );
 }
 
 function assertDocumentEnvelopeUnchanged(beforeDocument, afterDocument, includeEntities) {

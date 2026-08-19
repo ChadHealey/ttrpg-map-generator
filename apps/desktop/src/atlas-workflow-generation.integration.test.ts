@@ -3,7 +3,11 @@ import {
   ACCEPTED_ATLAS_DIAGNOSTIC_CODES,
   ATLAS_DOCUMENT_TRANSACTION_DIAGNOSTIC_CODES,
   type AtlasControls,
+  type AtlasGeographyRecords,
+  atlasSampleReadersEqual,
   DEFAULT_ATLAS_CONTROLS,
+  isCompactLandWaterSampleReader,
+  isCompactMacroElevationSampleReader,
   parseGenerationDiagnosticCode,
   reconstructAcceptedAtlas,
   type WorldDocument,
@@ -234,7 +238,13 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
     expect(reopened.ok, reopened.ok ? undefined : JSON.stringify(reopened)).toBe(true);
     if (!reopened.ok) return;
     expect(reopened.accepted.scene).toStrictEqual(accepted.scene);
-    expect(reopened.accepted.geography).toStrictEqual(accepted.geography);
+    expectEquivalentCompactGeography(reopened.accepted.geography, accepted.geography);
+    expect(
+      isCompactMacroElevationSampleReader(reopened.accepted.geography.macroElevation.values),
+    ).toBe(true);
+    expect(
+      isCompactLandWaterSampleReader(reopened.accepted.geography.landWaterClassification.samples),
+    ).toBe(true);
     expect(reopened.accepted.appearance).toStrictEqual(accepted.appearance);
     const originalMap = accepted.document.maps[0];
     const reopenedMap = decoded.maps[0];
@@ -467,6 +477,36 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
     expect(planned.value.candidateManifestSha256).toMatch(/^[a-f0-9]{64}$/u);
   }, 90_000);
 });
+
+function expectEquivalentCompactGeography(
+  actual: AtlasGeographyRecords,
+  expected: AtlasGeographyRecords,
+): void {
+  expect(
+    atlasSampleReadersEqual(actual.macroElevation.values, expected.macroElevation.values),
+  ).toBe(true);
+  expect(
+    atlasSampleReadersEqual(
+      actual.landWaterClassification.samples,
+      expected.landWaterClassification.samples,
+    ),
+  ).toBe(true);
+  expect({
+    ...actual,
+    macroElevation: { ...actual.macroElevation, values: '<compact>' },
+    landWaterClassification: {
+      ...actual.landWaterClassification,
+      samples: '<compact>',
+    },
+  }).toStrictEqual({
+    ...expected,
+    macroElevation: { ...expected.macroElevation, values: '<compact>' },
+    landWaterClassification: {
+      ...expected.landWaterClassification,
+      samples: '<compact>',
+    },
+  });
+}
 
 function requiredGeneratedStates(): GeneratedAtlasStates {
   if (generatedStates === undefined) throw new Error('Atlas integration setup did not complete.');

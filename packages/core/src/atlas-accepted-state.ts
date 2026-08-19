@@ -26,6 +26,7 @@ import {
 import { parseAtlasControls, validateAtlasGeographyRecords } from './atlas-geography-validation.js';
 import type { AcceptedAspectRecord } from './generated-aspects.js';
 import type { AspectId, EntityId } from './identity.js';
+import { createImmutableDomainSnapshot } from './immutable-domain-snapshot.js';
 import type { WorldDocument, WorldMap } from './world-document.js';
 
 const ATLAS_ASPECT_NAMES: ReadonlySet<string> = new Set<AtlasAspectKind>([
@@ -122,7 +123,7 @@ export function reconstructAcceptedAtlas(document: WorldDocument): ReconstructAc
     );
   }
 
-  const geography: AtlasGeographyRecords = {
+  const geographySnapshot = createImmutableDomainSnapshot<AtlasGeographyRecords>({
     controls,
     macroElevation: macro.acceptedOutput as MacroElevationField,
     landWaterClassification: partition.acceptedOutput as LandWaterClassification,
@@ -134,13 +135,22 @@ export function reconstructAcceptedAtlas(document: WorldDocument): ReconstructAc
     islandGroups: outputs(root, 'islandGroup.classification') as readonly IslandGroup[],
     waterBodies: outputs(root, 'waterBody.classification') as readonly WaterBody[],
     coastline: coastline.acceptedOutput as CanonicalWorldCoastline,
-  };
-  const appearance: AtlasAppearanceRecords = {
+  });
+  const appearanceSnapshot = createImmutableDomainSnapshot<AtlasAppearanceRecords>({
     atlasPresentationEntityId: singletonIds.atlasPresentationEntityId,
     coastlineAppearance: coastlineAppearance.acceptedOutput as AtlasCoastlineAppearance,
     waterDecoration: waterDecoration.acceptedOutput as AtlasWaterDecoration,
     paperTreatment: paperTreatment.acceptedOutput as AtlasPaperTreatment,
-  };
+  });
+  if (!geographySnapshot.ok || !appearanceSnapshot.ok) {
+    return invalid(
+      ACCEPTED_ATLAS_DIAGNOSTIC_CODES.invalid,
+      'Accepted atlas records could not be reconstructed as immutable domain values.',
+      'Restore the exact accepted records from the last package that passed full atlas validation.',
+    );
+  }
+  const geography = geographySnapshot.value;
+  const appearance = appearanceSnapshot.value;
 
   const geographyValidation = validateAtlasGeographyRecords(geography);
   if (
