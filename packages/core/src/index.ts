@@ -348,6 +348,7 @@ export {
   createImmutableDomainArray,
   createImmutableDomainSnapshot,
   type ImmutableDomainSnapshotResult,
+  isImmutableDomainSnapshot,
 } from './immutable-domain-snapshot.js';
 export {
   type DerivedSeed,
