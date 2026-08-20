@@ -3,10 +3,10 @@
   "fixtureId": "milestone-2-atlas-proof",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-proof --review-record fixed-seeds/milestone-2-atlas-proof/reviews/0011-accepted-atlas-lifecycle.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-proof --review-record fixed-seeds/milestone-2-atlas-proof/reviews/0012-canonical-pressure-widths.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-proof/fixture-definition.json",
-    "sha256": "071f70d70e9e4d8318b278af63c6366467ee9fa13faac1a59c75f2a0ccff5fa1"
+    "sha256": "20ea56e30d263f974f7a60f012eb6920ca073cba6a8949b62f05fbcbe4e86977"
   },
   "worldSeed": "81985529216486895",
   "stableIds": {
@@ -94,7 +94,7 @@
     "atlasPreviewVersion": 1,
     "atlasRealizationVersion": 1,
     "atlasSamplingPolicyVersion": 1,
-    "atlasSceneCompositionVersion": 2,
+    "atlasSceneCompositionVersion": 3,
     "atlasSemanticClassificationVersion": 1,
     "atlasSemanticGeneratorManifestVersion": 1,
     "atlasSemanticParameterSchemaVersion": 1,
@@ -209,8 +209,8 @@
   ],
   "reviewPurpose": "Prove the complete accepted Milestone 2 atlas lifecycle across isolated rerolls, persistence-owned canonical state, authoritative save, generator-free reopen, scenes, SVG, and PNG.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-proof/reviews/0011-accepted-atlas-lifecycle.md",
-    "sha256": "8ed5b729e79ca276d6f800567d6c97aebdceec4b252871b2ec894bced5fd79cf"
+    "path": "fixed-seeds/milestone-2-atlas-proof/reviews/0012-canonical-pressure-widths.md",
+    "sha256": "8fbfee5df10d68cba593037552aecb6e802c393708234c147aedf2f3ebad7544"
   },
   "generatedRoots": [
     "canonical-svg/milestone-2-atlas-proof",
@@ -224,32 +224,32 @@
       "kind": "canonical-svg",
       "checkpoint": "appearance-rerolled",
       "byteLength": 852650,
-      "canonicalSvgSha256": "d1907f45b173d3d008b72de320d845541316549b2e8f52dbeaa30883e2c0d7d5",
-      "fixtureIntegritySha256": "d1907f45b173d3d008b72de320d845541316549b2e8f52dbeaa30883e2c0d7d5"
+      "canonicalSvgSha256": "c72f6261534171e7c7048f1cccc304b6a148296ba22090c11e7a1c132e8318db",
+      "fixtureIntegritySha256": "c72f6261534171e7c7048f1cccc304b6a148296ba22090c11e7a1c132e8318db"
     },
     {
       "path": "canonical-svg/milestone-2-atlas-proof/baseline.svg",
       "kind": "canonical-svg",
       "checkpoint": "baseline",
       "byteLength": 636624,
-      "canonicalSvgSha256": "0e43c0aaff16f2a46adef67441e58d007a1e68c08fc2fc6a25293a089cc17824",
-      "fixtureIntegritySha256": "0e43c0aaff16f2a46adef67441e58d007a1e68c08fc2fc6a25293a089cc17824"
+      "canonicalSvgSha256": "b094387b373b3283feaf87e73f4005e9078a8b6c4a607c2a8e40e5d47e42ecae",
+      "fixtureIntegritySha256": "b094387b373b3283feaf87e73f4005e9078a8b6c4a607c2a8e40e5d47e42ecae"
     },
     {
       "path": "canonical-svg/milestone-2-atlas-proof/geography-rerolled.svg",
       "kind": "canonical-svg",
       "checkpoint": "geography-rerolled",
       "byteLength": 828651,
-      "canonicalSvgSha256": "9a78e1a1e4af5f6808fd606ffa02a1f8761f140bc3688c0f31e30c65982d315a",
-      "fixtureIntegritySha256": "9a78e1a1e4af5f6808fd606ffa02a1f8761f140bc3688c0f31e30c65982d315a"
+      "canonicalSvgSha256": "118a4bc7c8d30050c8ff874bc12e5eea04812877ee2fbaf146936bd04d3825bd",
+      "fixtureIntegritySha256": "118a4bc7c8d30050c8ff874bc12e5eea04812877ee2fbaf146936bd04d3825bd"
     },
     {
       "path": "canonical-svg/milestone-2-atlas-proof/reopened.svg",
       "kind": "canonical-svg",
       "checkpoint": "reopened",
       "byteLength": 852650,
-      "canonicalSvgSha256": "d1907f45b173d3d008b72de320d845541316549b2e8f52dbeaa30883e2c0d7d5",
-      "fixtureIntegritySha256": "d1907f45b173d3d008b72de320d845541316549b2e8f52dbeaa30883e2c0d7d5"
+      "canonicalSvgSha256": "c72f6261534171e7c7048f1cccc304b6a148296ba22090c11e7a1c132e8318db",
+      "fixtureIntegritySha256": "c72f6261534171e7c7048f1cccc304b6a148296ba22090c11e7a1c132e8318db"
     },
     {
       "path": "fixed-seeds/milestone-2-atlas-proof/expected/appearance-rerolled/accepted-aspects.aspects.index.canonical",
@@ -263,9 +263,9 @@
       "path": "fixed-seeds/milestone-2-atlas-proof/expected/appearance-rerolled/atlas-render-scene.scene.canonical",
       "kind": "canonical-render-scene",
       "checkpoint": "appearance-rerolled",
-      "byteLength": 1547512,
-      "canonicalSceneSha256": "0630d040976a02a74d4074ef51b31eb81a0c5fd372c546bee0a1750fb41b5343",
-      "fixtureIntegritySha256": "0630d040976a02a74d4074ef51b31eb81a0c5fd372c546bee0a1750fb41b5343"
+      "byteLength": 1542414,
+      "canonicalSceneSha256": "78907b91083a333276cc1b76cc89901c06f03d112d1917acfa8b2884b5135fac",
+      "fixtureIntegritySha256": "78907b91083a333276cc1b76cc89901c06f03d112d1917acfa8b2884b5135fac"
     },
     {
       "path": "fixed-seeds/milestone-2-atlas-proof/expected/baseline/accepted-aspects.aspects.index.canonical",
@@ -280,16 +280,16 @@
       "kind": "canonical-kernel-vector",
       "checkpoint": "baseline",
       "byteLength": 9671,
-      "canonicalKernelVectorSha256": "4b9c636ad566225936135b09aac15cb6eb67e0b1f9110ae70754d9fd248ead45",
-      "fixtureIntegritySha256": "4b9c636ad566225936135b09aac15cb6eb67e0b1f9110ae70754d9fd248ead45"
+      "canonicalKernelVectorSha256": "0f8cbd5d3e985ef9737ed76101bb019eee7d9e42bca1e539dee4ba200aba8113",
+      "fixtureIntegritySha256": "0f8cbd5d3e985ef9737ed76101bb019eee7d9e42bca1e539dee4ba200aba8113"
     },
     {
       "path": "fixed-seeds/milestone-2-atlas-proof/expected/baseline/atlas-render-scene.scene.canonical",
       "kind": "canonical-render-scene",
       "checkpoint": "baseline",
-      "byteLength": 1135608,
-      "canonicalSceneSha256": "e00ab2a086ede3c55f7a2039895da04e27fa65275f52caea7f346cab429e35de",
-      "fixtureIntegritySha256": "e00ab2a086ede3c55f7a2039895da04e27fa65275f52caea7f346cab429e35de"
+      "byteLength": 1131868,
+      "canonicalSceneSha256": "55b3bdcc6abc81cc67b912b267bff0b2662cc054cb2a747a01bfd574a28de4e7",
+      "fixtureIntegritySha256": "55b3bdcc6abc81cc67b912b267bff0b2662cc054cb2a747a01bfd574a28de4e7"
     },
     {
       "path": "fixed-seeds/milestone-2-atlas-proof/expected/geography-rerolled/accepted-aspects.aspects.index.canonical",
@@ -303,17 +303,17 @@
       "path": "fixed-seeds/milestone-2-atlas-proof/expected/geography-rerolled/atlas-render-scene.scene.canonical",
       "kind": "canonical-render-scene",
       "checkpoint": "geography-rerolled",
-      "byteLength": 1501335,
-      "canonicalSceneSha256": "89942ab394bed7fd79d79e2211af7da7dd372c41d7633e03e3832db98dc1a800",
-      "fixtureIntegritySha256": "89942ab394bed7fd79d79e2211af7da7dd372c41d7633e03e3832db98dc1a800"
+      "byteLength": 1496209,
+      "canonicalSceneSha256": "27f0f17958ae6446bfbbfa1d0ef97a211c0b471a46373b569d4155aa16df1467",
+      "fixtureIntegritySha256": "27f0f17958ae6446bfbbfa1d0ef97a211c0b471a46373b569d4155aa16df1467"
     },
     {
       "path": "fixed-seeds/milestone-2-atlas-proof/expected/reopened/accepted-atlas.reopen.canonical",
       "kind": "reopen-comparison-report",
       "checkpoint": "reopened",
       "byteLength": 856,
-      "reopenComparisonSha256": "c6dc45bfd3b50b9770fd5be9c875493c38e5dc9e437629c00074a9c03c38b338",
-      "fixtureIntegritySha256": "c6dc45bfd3b50b9770fd5be9c875493c38e5dc9e437629c00074a9c03c38b338"
+      "reopenComparisonSha256": "c05e7d126e0e8558e7a9d0c546f12fc859b67da29e4334fab2aaef4b52970fe8",
+      "fixtureIntegritySha256": "c05e7d126e0e8558e7a9d0c546f12fc859b67da29e4334fab2aaef4b52970fe8"
     },
     {
       "path": "saved-projects/v1/milestone-2-atlas-proof/appearance-rerolled.mapworld/manifest.json",
