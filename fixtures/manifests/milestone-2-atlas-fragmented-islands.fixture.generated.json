@@ -3,10 +3,10 @@
   "fixtureId": "milestone-2-atlas-fragmented-islands",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-fragmented-islands --review-record fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0011-accepted-aspect-persistence.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-fragmented-islands --review-record fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0012-canonical-pressure-widths.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/fixture-definition.json",
-    "sha256": "509bdd02b11b882e169a4e7eb5b38c79284a173eb4eec435e47973f34b0df56a"
+    "sha256": "d8ae2385f7aa4ca59716adb5a116b52888d310c382116b6d8801e60d8e10b363"
   },
   "worldSeed": "18364758544493064720",
   "stableIds": {
@@ -81,7 +81,7 @@
     "atlasPreviewVersion": 1,
     "atlasRealizationVersion": 1,
     "atlasSamplingPolicyVersion": 1,
-    "atlasSceneCompositionVersion": 2,
+    "atlasSceneCompositionVersion": 3,
     "atlasSemanticClassificationVersion": 1,
     "atlasSemanticGeneratorManifestVersion": 1,
     "atlasSemanticParameterSchemaVersion": 1,
@@ -121,8 +121,8 @@
   ],
   "reviewPurpose": "Prove one Milestone 2 matrix row at the persistence-owned canonical accepted aspect/output boundary while retaining its separate geometry and visual evidence.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0011-accepted-aspect-persistence.md",
-    "sha256": "6e9152e5bf4a03ffe78d38bc8848c0fad439c69d49621bb2b5b972870cc6a425"
+    "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/reviews/0012-canonical-pressure-widths.md",
+    "sha256": "e2c54d3555c3e660c48c6427707f2a9fe4c250e5c2c59bdc73893462708e0580"
   },
   "generatedRoots": [
     "canonical-svg/milestone-2-atlas-fragmented-islands",
@@ -135,8 +135,8 @@
       "kind": "canonical-svg",
       "checkpoint": "baseline",
       "byteLength": 847240,
-      "canonicalSvgSha256": "f9b52620be799a3662ed150e9b2d5c57b9b297cd78bab89ccfd9da2e68975678",
-      "fixtureIntegritySha256": "f9b52620be799a3662ed150e9b2d5c57b9b297cd78bab89ccfd9da2e68975678"
+      "canonicalSvgSha256": "f564acd0fac541c52401d28632b6a5ce21356f169c4f45ba64fd53929de9a5a6",
+      "fixtureIntegritySha256": "f564acd0fac541c52401d28632b6a5ce21356f169c4f45ba64fd53929de9a5a6"
     },
     {
       "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/expected/baseline/accepted-aspects.aspects.index.canonical",
@@ -151,16 +151,16 @@
       "kind": "canonical-kernel-vector",
       "checkpoint": "baseline",
       "byteLength": 10015,
-      "canonicalKernelVectorSha256": "f27894e23fee03d298efece9cab535d2d776d5ec84cd77e70131729ff4c7fbab",
-      "fixtureIntegritySha256": "f27894e23fee03d298efece9cab535d2d776d5ec84cd77e70131729ff4c7fbab"
+      "canonicalKernelVectorSha256": "fc5b8957d052c214c55b8b2b37c6731373ab868e1e5425ac47abda48be2d5103",
+      "fixtureIntegritySha256": "fc5b8957d052c214c55b8b2b37c6731373ab868e1e5425ac47abda48be2d5103"
     },
     {
       "path": "fixed-seeds/milestone-2-atlas-fragmented-islands/expected/baseline/atlas-render-scene.scene.canonical",
       "kind": "canonical-render-scene",
       "checkpoint": "baseline",
-      "byteLength": 1526122,
-      "canonicalSceneSha256": "99fd7212d6048e916171c5d112b3065f9f047f3be88051156657109fc1d7c7a3",
-      "fixtureIntegritySha256": "99fd7212d6048e916171c5d112b3065f9f047f3be88051156657109fc1d7c7a3"
+      "byteLength": 1521232,
+      "canonicalSceneSha256": "49fa6f953462b7aae974e95696dcd7f6811871e3ccc5c154f66d9c6f77fbfc3c",
+      "fixtureIntegritySha256": "49fa6f953462b7aae974e95696dcd7f6811871e3ccc5c154f66d9c6f77fbfc3c"
     },
     {
       "path": "visual-gallery/milestone-2-atlas-fragmented-islands/baseline.png",
