@@ -15,6 +15,20 @@ export interface AtlasInkStrokeSegment {
   readonly strokeWidthPx: number;
 }
 
+/** Canonical scene stroke widths retain six fractional pixel places. */
+export const ATLAS_INK_STROKE_WIDTH_QUANTIZATION = 1_000_000 as const;
+
+/**
+ * Collapse transient floating-point differences before pressure-derived ink widths cross into a
+ * canonical render scene. This matches the precision used by atlas SVG serialization.
+ */
+export function canonicalizeAtlasInkStrokeWidth(strokeWidthPx: number): number {
+  const rounded =
+    Math.round(strokeWidthPx * ATLAS_INK_STROKE_WIDTH_QUANTIZATION) /
+    ATLAS_INK_STROKE_WIDTH_QUANTIZATION;
+  return rounded === 0 ? 0 : rounded;
+}
+
 /**
  * Derive a low-frequency two-band wobble once, then split the resulting path only for pressure.
  * Unsafe candidates retry at lower amplitude and finally fall back to canonical projected points.
@@ -160,7 +174,7 @@ function splitForPressure(
         Object.freeze({
           segmentIndex: segments.length,
           points: Object.freeze(active),
-          strokeWidthPx,
+          strokeWidthPx: canonicalizeAtlasInkStrokeWidth(strokeWidthPx),
         }),
       );
       traversedLength += activeLength;
