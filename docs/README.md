@@ -68,6 +68,7 @@ These are the promises most likely to cause permanent damage if broken:
 7. Every output-changing behavior and persisted schema is versioned.
 8. Tests, diagnostics, and visual review are part of a generator, not follow-up
    polish.
+9. The public repository never contains private data, including in its history.
 
 ## Changing a rule
 

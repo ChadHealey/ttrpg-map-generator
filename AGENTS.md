@@ -28,6 +28,9 @@
   domain boundaries.
 - Do not add a production dependency without the review required by
   `docs/05-git-workflow.md`. Hide third-party geometry types behind project-owned adapters.
+- Treat this as a public repository. Never commit private data, including personal contact
+  information, local paths, credentials, signing material, user content, or machine-specific
+  configuration.
 
 ## Implementation and Verification
 

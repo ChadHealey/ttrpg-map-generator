@@ -6,9 +6,8 @@ history and recoverable changes, not process for its own sake.
 ## Branches
 
 - `main` is releasable and must never be force-pushed or deleted. Enforce this with
-  GitHub branch protection when the repository plan supports rules for private
-  repositories; until then it remains a mandatory project rule rather than a
-  server-side control.
+  GitHub branch protection appropriate for a public repository; until then it remains a
+  mandatory project rule rather than a server-side control.
 - Use short-lived branches for changes that need more than one safe commit or CI
   cycle.
 - Prefer one active change at a time for a solo project; unfinished work multiplies
@@ -20,8 +19,7 @@ history and recoverable changes, not process for its own sake.
   policy; never rewrite published `main` history.
 
 Direct commits to `main` may be acceptable for tiny documentation or tooling
-changes while the repository is private, but they follow the same checks and commit
-rules.
+changes, but they follow the same checks and commit rules.
 
 ## Conventional Commits
 
@@ -163,6 +161,25 @@ Commit the pnpm lockfile with dependency changes. Do not bundle unrelated upgrad
 with feature work. Output-sensitive upgrades run fixed-seed and cross-platform
 fixtures.
 
+## Public-repository privacy
+
+This is a public repository. Treat its files, commit metadata, and complete
+published history as permanently public and searchable.
+
+Never commit private data, including:
+
+- personal contact information, home addresses, phone numbers, or personal email
+  addresses; use the configured GitHub noreply address for commit metadata;
+- credentials, tokens, signing material, or private service endpoints;
+- local paths, machine-specific configuration, diagnostics, or unreviewed system
+  exports;
+- personal or user-provided content, including saved projects, maps, screenshots,
+  and recordings, unless it is explicitly approved as a reviewed public fixture.
+
+Review staged changes and commit metadata before each commit. If private data is
+committed, revoke any exposed credential immediately and stop publication until the
+data is removed from every affected published ref and history.
+
 ## What is committed
 
 Commit:
@@ -178,7 +195,8 @@ Do not commit:
 - `node_modules`, build directories, coverage output, local caches, editor state,
   logs, or temporary save packages;
 - exported maps and ad hoc screenshots that are not reviewed fixtures;
-- secrets, signing material, local paths, or machine-specific configuration;
+- private data, including secrets, signing material, local paths, or machine-specific
+  configuration;
 - `.mapworld` packages containing personal/user content;
 - large binaries outside the repository's chosen large-file policy.
 
