@@ -47,7 +47,7 @@
     "atlasPreviewVersion": 1,
     "atlasRealizationVersion": 1,
     "atlasSamplingPolicyVersion": 1,
-    "atlasSceneCompositionVersion": 2,
+    "atlasSceneCompositionVersion": 3,
     "atlasSemanticClassificationVersion": 1,
     "atlasSemanticGeneratorManifestVersion": 1,
     "atlasSemanticParameterSchemaVersion": 1,
@@ -84,7 +84,7 @@
     "seaLevelContourDoubledTicks": -13720417,
     "macroFieldTicksSha256": "5bcec88203a11b78d732f3484b2ad0c95b1b75251a3f1e74750bbf45e92d20d5",
     "landWaterPackedBitsSha256": "69767d8ecd913199b3a0f97ef74bf7ec2c13913f7aee3ee55cf3674221e79309",
-    "primitiveTraversalSha256": "e0515a484e99ec7920876a3cdf78d272f6cbef33fbc5686c109da96686e59b15",
+    "primitiveTraversalSha256": "a6881a82c38f86a1d0a073aabea19a6494ceaf5d957c2e7385031f98fa627e31",
     "sampleCounts": { "land": 702650, "water": 1392456 },
     "realization": {
       "realizationVersion": 1,
@@ -190,7 +190,7 @@
       "rerolledAppearancePrimitiveTraversalSha256": "4a3c0d91e4b290f754fdf1ae0916c02591cd6eb15b105f023231ad07b020207b"
     },
     "scene": {
-      "sceneCompositionVersion": 2,
+      "sceneCompositionVersion": 3,
       "sceneKind": "whole-world-atlas",
       "levelOfDetail": "normal-atlas",
       "widthPx": 2048,

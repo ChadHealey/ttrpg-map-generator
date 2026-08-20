@@ -13,7 +13,12 @@ import {
   type AtlasProjectedCoastlinePath,
   type AtlasProjectedPathId,
 } from './atlas-display-projection.js';
-import { deriveAtlasInkStrokeSegments, hasAtlasPathSelfIntersection } from './atlas-ink-path.js';
+import {
+  ATLAS_INK_STROKE_WIDTH_QUANTIZATION,
+  canonicalizeAtlasInkStrokeWidth,
+  deriveAtlasInkStrokeSegments,
+  hasAtlasPathSelfIntersection,
+} from './atlas-ink-path.js';
 
 describe('atlas ink path derivation', () => {
   it('keeps seam endpoints fixed while applying bounded wobble and pressure variation once', () => {
@@ -28,6 +33,19 @@ describe('atlas ink path derivation', () => {
     expect(points.every(({ yPx }) => Math.abs(yPx - 512) <= tokens.maximumWobblePx)).toBe(true);
     expect(new Set(first.map(({ strokeWidthPx }) => strokeWidthPx)).size).toBeGreaterThan(2);
     expect(hasAtlasPathSelfIntersection(points, false)).toBe(false);
+  });
+
+  it('canonicalizes pressure widths before they enter a render scene', () => {
+    const widths = [1.7263754188038676, 1.7263754188038678].map(canonicalizeAtlasInkStrokeWidth);
+
+    expect(widths).toEqual([1.726375, 1.726375]);
+    expect(
+      deriveAtlasInkStrokeSegments(projectedPath(), decision(), tokens, 2_048, 1_024).every(
+        ({ strokeWidthPx }) =>
+          strokeWidthPx * ATLAS_INK_STROKE_WIDTH_QUANTIZATION ===
+          Math.round(strokeWidthPx * ATLAS_INK_STROKE_WIDTH_QUANTIZATION),
+      ),
+    ).toBe(true);
   });
 });
 
