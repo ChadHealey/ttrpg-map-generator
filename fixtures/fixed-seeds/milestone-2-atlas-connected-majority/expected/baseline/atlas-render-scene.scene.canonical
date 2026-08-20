@@ -1,7 +1,7 @@
 {
   "authority": "disposable-render-scene",
   "sceneKind": "whole-world-atlas",
-  "sceneCompositionVersion": 2,
+  "sceneCompositionVersion": 3,
   "levelOfDetail": "normal-atlas",
   "coordinateSpace": "atlas-display-equirectangular-v1",
   "sourceWorldMapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7",
@@ -14721,7 +14721,7 @@
         { "xPx": 15.024420290318071, "yPx": 388.5752730584174 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8356523695010543
+      "strokeWidthPx": 1.835652
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0001",
@@ -14755,7 +14755,7 @@
         { "xPx": 30.09933639903672, "yPx": 400.33621978377926 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5713494738517568
+      "strokeWidthPx": 1.571349
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0002",
@@ -14789,7 +14789,7 @@
         { "xPx": 43.78996231021021, "yPx": 412.6534941700575 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2380758390463187
+      "strokeWidthPx": 1.238076
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0003",
@@ -14823,7 +14823,7 @@
         { "xPx": 58.09225997246803, "yPx": 425.1833787488678 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8876455875202214
+      "strokeWidthPx": 1.887646
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0004",
@@ -14856,7 +14856,7 @@
         { "xPx": 70.93121264552151, "yPx": 438.00929841219374 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4817644492362798
+      "strokeWidthPx": 1.481764
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0005",
@@ -14889,7 +14889,7 @@
         { "xPx": 83.55570679986985, "yPx": 450.84218126062717 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2738177542619205
+      "strokeWidthPx": 1.273818
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0006",
@@ -14923,7 +14923,7 @@
         { "xPx": 95.73570208148517, "yPx": 465.2693160705064 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.9037443217441246
+      "strokeWidthPx": 1.903744
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0007",
@@ -14956,7 +14956,7 @@
         { "xPx": 108.26074448471694, "yPx": 478.8186582933323 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4316101316555072
+      "strokeWidthPx": 1.43161
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0008",
@@ -14989,7 +14989,7 @@
         { "xPx": 119.40135421594586, "yPx": 493.07240926414164 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3169749325995646
+      "strokeWidthPx": 1.316975
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0009",
@@ -15023,7 +15023,7 @@
         { "xPx": 131.19893020809388, "yPx": 507.53847757904833 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.9148811430771078
+      "strokeWidthPx": 1.914881
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0010",
@@ -15057,7 +15057,7 @@
         { "xPx": 142.17207660137439, "yPx": 523.2686150463622 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.36953279533162
+      "strokeWidthPx": 1.369533
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0011",
@@ -15091,7 +15091,7 @@
         { "xPx": 153.7697449968078, "yPx": 537.7786733479812 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.396478634266742
+      "strokeWidthPx": 1.396479
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0012",
@@ -15125,7 +15125,7 @@
         { "xPx": 163.86325179448374, "yPx": 552.9759671998594 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.9138278848405985
+      "strokeWidthPx": 1.913828
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0013",
@@ -15157,7 +15157,7 @@
         { "xPx": 179.7180217769545, "yPx": 561.8015556413478 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3088996287552304
+      "strokeWidthPx": 1.3089
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0014",
@@ -15192,7 +15192,7 @@
         { "xPx": 194.6882083997654, "yPx": 573.6107181107529 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.46637403571846
+      "strokeWidthPx": 1.466374
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0015",
@@ -15226,7 +15226,7 @@
         { "xPx": 207.36850157796692, "yPx": 586.8404933892532 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.891101607656334
+      "strokeWidthPx": 1.891102
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0016",
@@ -15259,7 +15259,7 @@
         { "xPx": 215.4926390634787, "yPx": 603.0742280652428 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2532990456332542
+      "strokeWidthPx": 1.253299
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0017",
@@ -15291,7 +15291,7 @@
         { "xPx": 220.91159805688292, "yPx": 620.9759446737031 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.53178252875766
+      "strokeWidthPx": 1.531783
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0018",
@@ -15319,7 +15319,7 @@
         { "xPx": 221.59128207925815, "yPx": 639.0942784017014 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8674162749463226
+      "strokeWidthPx": 1.867416
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0019",
@@ -15353,7 +15353,7 @@
         { "xPx": 232.376016817181, "yPx": 653.5811306502856 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2286385865527674
+      "strokeWidthPx": 1.228639
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0020",
@@ -15388,7 +15388,7 @@
         { "xPx": 242.1435308127037, "yPx": 669.1150400331102 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5653217035158447
+      "strokeWidthPx": 1.565322
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0021",
@@ -15421,7 +15421,7 @@
         { "xPx": 253.11836636097183, "yPx": 684.3342092290135 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.846752316508592
+      "strokeWidthPx": 1.846752
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0022",
@@ -15455,7 +15455,7 @@
         { "xPx": 263.7056354248691, "yPx": 700.0795951791494 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.200600924512962
+      "strokeWidthPx": 1.200601
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0023",
@@ -15488,7 +15488,7 @@
         { "xPx": 275.35660405122144, "yPx": 714.541133037598 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6583060789252086
+      "strokeWidthPx": 1.658306
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0024",
@@ -15522,7 +15522,7 @@
         { "xPx": 285.843153916013, "yPx": 729.294534060382 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7890148188158639
+      "strokeWidthPx": 1.789015
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0025",
@@ -15558,7 +15558,7 @@
         { "xPx": 298.06692201252, "yPx": 744.0605845637787 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.1847410056090986
+      "strokeWidthPx": 1.184741
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0026",
@@ -15591,7 +15591,7 @@
         { "xPx": 309.58912650396826, "yPx": 758.1647826596866 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7246996005034199
+      "strokeWidthPx": 1.7247
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0027",
@@ -15625,7 +15625,7 @@
         { "xPx": 322.2683621849503, "yPx": 771.306266770737 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7336506678097607
+      "strokeWidthPx": 1.733651
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0028",
@@ -15658,7 +15658,7 @@
         { "xPx": 334.85974082335764, "yPx": 785.1260747426954 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.1831382279648697
+      "strokeWidthPx": 1.183138
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0029",
@@ -15691,7 +15691,7 @@
         { "xPx": 347.97259129755366, "yPx": 797.5177851057716 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7650975047096862
+      "strokeWidthPx": 1.765098
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0030",
@@ -15725,7 +15725,7 @@
         { "xPx": 361.9356327349823, "yPx": 809.9326456047662 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.685657070426243
+      "strokeWidthPx": 1.685657
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0031",
@@ -15759,7 +15759,7 @@
         { "xPx": 376.14361729255813, "yPx": 820.9828394242221 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.188911392491789
+      "strokeWidthPx": 1.188911
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0032",
@@ -15792,7 +15792,7 @@
         { "xPx": 390.6963239987856, "yPx": 832.0426483435331 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7944269821840184
+      "strokeWidthPx": 1.794427
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0033",
@@ -15826,7 +15826,7 @@
         { "xPx": 405.9027303249669, "yPx": 842.3138166236703 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.651782667811239
+      "strokeWidthPx": 1.651783
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0034",
@@ -15860,7 +15860,7 @@
         { "xPx": 422.0411869404601, "yPx": 851.6603609709887 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.199295462872072
+      "strokeWidthPx": 1.199295
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0035",
@@ -15893,7 +15893,7 @@
         { "xPx": 438.0384360801806, "yPx": 860.2362759247604 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8319592885999023
+      "strokeWidthPx": 1.831959
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0036",
@@ -15927,7 +15927,7 @@
         { "xPx": 455.00592120630625, "yPx": 868.4367623338252 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.591470420914323
+      "strokeWidthPx": 1.59147
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0037",
@@ -15959,7 +15959,7 @@
         { "xPx": 471.9004426066707, "yPx": 875.9360350336073 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.225765930264912
+      "strokeWidthPx": 1.225766
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0038",
@@ -15992,7 +15992,7 @@
         { "xPx": 490.06811020486055, "yPx": 882.2877592276232 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8801416006680827
+      "strokeWidthPx": 1.880142
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0039",
@@ -16024,7 +16024,7 @@
         { "xPx": 508.0074865809341, "yPx": 888.4517928246122 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4772950174944224
+      "strokeWidthPx": 1.477295
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0040",
@@ -16056,7 +16056,7 @@
         { "xPx": 525.9969373159025, "yPx": 893.7758873186667 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3005922953289093
+      "strokeWidthPx": 1.300592
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0041",
@@ -16088,7 +16088,7 @@
         { "xPx": 543.9423468872342, "yPx": 898.6632598056516 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.9137896297311991
+      "strokeWidthPx": 1.91379
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0042",
@@ -16119,7 +16119,7 @@
         { "xPx": 562.0639558346153, "yPx": 902.224839664368 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3914459153810437
+      "strokeWidthPx": 1.391446
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0043",
@@ -16150,7 +16150,7 @@
         { "xPx": 580.9876783367788, "yPx": 906.3708379243744 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3761760578683595
+      "strokeWidthPx": 1.376176
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0044",
@@ -16181,7 +16181,7 @@
         { "xPx": 599.9947566618637, "yPx": 909.6108476150512 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.911092281312448
+      "strokeWidthPx": 1.911092
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0045",
@@ -16212,7 +16212,7 @@
         { "xPx": 617.970068577331, "yPx": 912.4743167716827 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2869403816245655
+      "strokeWidthPx": 1.28694
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0046",
@@ -16241,7 +16241,7 @@
         { "xPx": 636.0442828759857, "yPx": 914.1826677880036 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4673393023550187
+      "strokeWidthPx": 1.467339
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0047",
@@ -16271,7 +16271,7 @@
         { "xPx": 653.9795244148855, "yPx": 916.7177192605768 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8995744949660647
+      "strokeWidthPx": 1.899574
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0048",
@@ -16300,7 +16300,7 @@
         { "xPx": 672.0087481097358, "yPx": 918.0311368445109 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.274268360632479
+      "strokeWidthPx": 1.274268
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0049",
@@ -16328,7 +16328,7 @@
         { "xPx": 689.9781850460621, "yPx": 919.7933922062282 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4805500938199625
+      "strokeWidthPx": 1.48055
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0050",
@@ -16357,7 +16357,7 @@
         { "xPx": 708.0244948970915, "yPx": 919.9979517852053 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.896401300790912
+      "strokeWidthPx": 1.896401
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0051",
@@ -16386,7 +16386,7 @@
         { "xPx": 725.98921873051, "yPx": 921.5595169274263 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.269422719227641
+      "strokeWidthPx": 1.269423
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0052",
@@ -16414,7 +16414,7 @@
         { "xPx": 744.0031211398375, "yPx": 921.5655262446159 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.485876195078245
+      "strokeWidthPx": 1.485876
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0053",
@@ -16442,7 +16442,7 @@
         { "xPx": 761.9984509402353, "yPx": 922.2897874415128 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8952031665061762
+      "strokeWidthPx": 1.895203
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0054",
@@ -16471,7 +16471,7 @@
         { "xPx": 780.9948251770356, "yPx": 921.3924861859826 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.254663747339407
+      "strokeWidthPx": 1.254664
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0055",
@@ -16499,7 +16499,7 @@
         { "xPx": 799.0080532775158, "yPx": 921.8954249026452 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5305733216962412
+      "strokeWidthPx": 1.530573
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0056",
@@ -16528,7 +16528,7 @@
         { "xPx": 817.9941724048201, "yPx": 920.8035238817641 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8667263490454578
+      "strokeWidthPx": 1.866726
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0057",
@@ -16557,7 +16557,7 @@
         { "xPx": 836.0143961715273, "yPx": 920.3246398365604 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.219789109103306
+      "strokeWidthPx": 1.219789
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0058",
@@ -16586,7 +16586,7 @@
         { "xPx": 853.9688560364351, "yPx": 918.4845744004732 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5772632689893265
+      "strokeWidthPx": 1.577263
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0059",
@@ -16615,7 +16615,7 @@
         { "xPx": 872.0236068990071, "yPx": 917.7162705794498 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8521188997175657
+      "strokeWidthPx": 1.852119
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0060",
@@ -16644,7 +16644,7 @@
         { "xPx": 889.9984977641753, "yPx": 915.6703554741628 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.21612133955822
+      "strokeWidthPx": 1.216121
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0061",
@@ -16674,7 +16674,7 @@
         { "xPx": 909.0150825611794, "yPx": 913.5703858601482 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6104339531430762
+      "strokeWidthPx": 1.610434
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0062",
@@ -16704,7 +16704,7 @@
         { "xPx": 926.9552638432048, "yPx": 910.6668956048379 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8148873000909476
+      "strokeWidthPx": 1.814887
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0063",
@@ -16734,7 +16734,7 @@
         { "xPx": 945.0315332169642, "yPx": 908.2718589428086 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.1945669377028185
+      "strokeWidthPx": 1.194567
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0064",
@@ -16765,7 +16765,7 @@
         { "xPx": 963.015438158235, "yPx": 904.8560119213714 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6587167070365834
+      "strokeWidthPx": 1.658717
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0065",
@@ -16795,7 +16795,7 @@
         { "xPx": 980.9611778292467, "yPx": 900.9410233342694 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.788367243079508
+      "strokeWidthPx": 1.788367
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0066",
@@ -16826,7 +16826,7 @@
         { "xPx": 998.9636570028003, "yPx": 896.5414007036649 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.1855728158158563
+      "strokeWidthPx": 1.185573
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0067",
@@ -16858,7 +16858,7 @@
         { "xPx": 1017.0294826012235, "yPx": 891.8887393405043 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7149426035456359
+      "strokeWidthPx": 1.714943
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0068",
@@ -16890,7 +16890,7 @@
         { "xPx": 1035.0423613631415, "yPx": 886.36172887796 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7237061011355963
+      "strokeWidthPx": 1.723706
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0069",
@@ -16922,7 +16922,7 @@
         { "xPx": 1051.9293489979354, "yPx": 880.1174047567506 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.1837922661491453
+      "strokeWidthPx": 1.183792
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0070",
@@ -16954,7 +16954,7 @@
         { "xPx": 1069.0019593080642, "yPx": 873.6516145338488 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7643070391503743
+      "strokeWidthPx": 1.764307
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0071",
@@ -16986,7 +16986,7 @@
         { "xPx": 1086.0033407481733, "yPx": 866.1621038124152 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.684514441610961
+      "strokeWidthPx": 1.684514
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0072",
@@ -17020,7 +17020,7 @@
         { "xPx": 1102.606793227159, "yPx": 858.2255696050036 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.1904417650463124
+      "strokeWidthPx": 1.190442
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0073",
@@ -17053,7 +17053,7 @@
         { "xPx": 1118.5770514752146, "yPx": 848.7072371908399 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8113100517059677
+      "strokeWidthPx": 1.81131
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0074",
@@ -17088,7 +17088,7 @@
         { "xPx": 1135.0657390576093, "yPx": 839.0490853160892 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6070456044192476
+      "strokeWidthPx": 1.607046
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0075",
@@ -17122,7 +17122,7 @@
         { "xPx": 1149.9705273127677, "yPx": 828.5975795503666 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2183662803789113
+      "strokeWidthPx": 1.218366
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0076",
@@ -17155,7 +17155,7 @@
         { "xPx": 1165.1611768432463, "yPx": 817.4491270137646 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8652637325244785
+      "strokeWidthPx": 1.865264
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0077",
@@ -17190,7 +17190,7 @@
         { "xPx": 1179.3869036426838, "yPx": 804.7055881737754 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5137768784964332
+      "strokeWidthPx": 1.513777
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0078",
@@ -17224,7 +17224,7 @@
         { "xPx": 1193.1678882326576, "yPx": 792.9817798515112 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2672277794538311
+      "strokeWidthPx": 1.267228
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0079",
@@ -17257,7 +17257,7 @@
         { "xPx": 1205.9244534551099, "yPx": 779.8820648309053 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8974250194566167
+      "strokeWidthPx": 1.897425
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0080",
@@ -17290,7 +17290,7 @@
         { "xPx": 1219.194993296457, "yPx": 766.293992754148 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4529944737138885
+      "strokeWidthPx": 1.452994
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0081",
@@ -17324,7 +17324,7 @@
         { "xPx": 1230.639322719889, "yPx": 752.1559939009019 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.310434063059579
+      "strokeWidthPx": 1.310434
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0082",
@@ -17358,7 +17358,7 @@
         { "xPx": 1243.2562653751404, "yPx": 738.2170067370739 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.9144391900685882
+      "strokeWidthPx": 1.914439
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0083",
@@ -17394,7 +17394,7 @@
         { "xPx": 1254.6717980620988, "yPx": 722.9135977189393 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3719199392468244
+      "strokeWidthPx": 1.37192
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0084",
@@ -17428,7 +17428,7 @@
         { "xPx": 1266.1946851085181, "yPx": 708.2281442756663 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.394011179839708
+      "strokeWidthPx": 1.394011
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0085",
@@ -17461,7 +17461,7 @@
         { "xPx": 1276.5458456470371, "yPx": 692.7258201984321 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.9126553855806063
+      "strokeWidthPx": 1.912655
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0086",
@@ -17495,7 +17495,7 @@
         { "xPx": 1288.342730607614, "yPx": 677.48830233562 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2871120937158134
+      "strokeWidthPx": 1.287112
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0087",
@@ -17530,7 +17530,7 @@
         { "xPx": 1298.3112120986787, "yPx": 661.8926788994079 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4965409299010513
+      "strokeWidthPx": 1.496541
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0088",
@@ -17563,7 +17563,7 @@
         { "xPx": 1308.7799070910305, "yPx": 647.1216753895076 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8864764574602426
+      "strokeWidthPx": 1.886476
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0089",
@@ -17598,7 +17598,7 @@
         { "xPx": 1318.2386039377557, "yPx": 631.7436103899978 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2518011558870004
+      "strokeWidthPx": 1.251801
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0090",
@@ -17633,7 +17633,7 @@
         { "xPx": 1328.9785487386366, "yPx": 617.2500216902663 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5152463704194576
+      "strokeWidthPx": 1.515246
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0091",
@@ -17667,7 +17667,7 @@
         { "xPx": 1338.426363360209, "yPx": 601.8919089049544 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8834852476806447
+      "strokeWidthPx": 1.883485
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0092",
@@ -17701,7 +17701,7 @@
         { "xPx": 1348.77298992384, "yPx": 587.0924166160008 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2484146358972117
+      "strokeWidthPx": 1.248415
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0093",
@@ -17734,7 +17734,7 @@
         { "xPx": 1358.4839002826432, "yPx": 571.7864238115127 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5230624740093035
+      "strokeWidthPx": 1.523062
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0094",
@@ -17768,7 +17768,7 @@
         { "xPx": 1369.4319581870902, "yPx": 557.2130717505722 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8773669961098698
+      "strokeWidthPx": 1.877367
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0095",
@@ -17801,7 +17801,7 @@
         { "xPx": 1379.589981590817, "yPx": 541.936488528223 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.235065237198269
+      "strokeWidthPx": 1.235065
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0096",
@@ -17835,7 +17835,7 @@
         { "xPx": 1390.5494239078935, "yPx": 527.0235665672913 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5622338741558128
+      "strokeWidthPx": 1.562234
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0097",
@@ -17869,7 +17869,7 @@
         { "xPx": 1401.5081199883155, "yPx": 511.84774734262595 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8470771473292267
+      "strokeWidthPx": 1.847077
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0098",
@@ -17903,7 +17903,7 @@
         { "xPx": 1413.2407340776876, "yPx": 497.6048020382873 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2046515294291615
+      "strokeWidthPx": 1.204652
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0099",
@@ -17937,7 +17937,7 @@
         { "xPx": 1424.9200628028132, "yPx": 482.48976584857587 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.646905033054076
+      "strokeWidthPx": 1.646905
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0100",
@@ -17971,7 +17971,7 @@
         { "xPx": 1437.3229434138989, "yPx": 467.990242057752 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7728088431010873
+      "strokeWidthPx": 1.772809
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0101",
@@ -18005,7 +18005,7 @@
         { "xPx": 1449.725027449628, "yPx": 453.8932085121528 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.1826020763847445
+      "strokeWidthPx": 1.182602
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0102",
@@ -18039,7 +18039,7 @@
         { "xPx": 1463.33358990973, "yPx": 440.23177079993644 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7653527303386525
+      "strokeWidthPx": 1.765353
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0103",
@@ -18072,7 +18072,7 @@
         { "xPx": 1475.906893363137, "yPx": 427.0969028031442 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6705752080057708
+      "strokeWidthPx": 1.670575
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0104",
@@ -18107,7 +18107,7 @@
         { "xPx": 1487.4092080747503, "yPx": 414.0351189194238 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.191682407038173
+      "strokeWidthPx": 1.191682
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0105",
@@ -18140,7 +18140,7 @@
         { "xPx": 1479.389857074031, "yPx": 397.01234478335374 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8203294889872157
+      "strokeWidthPx": 1.820329
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0106",
@@ -18170,7 +18170,7 @@
         { "xPx": 1478.3112286270614, "yPx": 379.0189498822347 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.605412008468608
+      "strokeWidthPx": 1.605412
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0107",
@@ -18202,7 +18202,7 @@
         { "xPx": 1483.925422126731, "yPx": 361.63079191555727 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2123685451255648
+      "strokeWidthPx": 1.212369
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0108",
@@ -18236,7 +18236,7 @@
         { "xPx": 1495.8836441529152, "yPx": 348.17730300500085 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8516546736226487
+      "strokeWidthPx": 1.851655
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0109",
@@ -18269,7 +18269,7 @@
         { "xPx": 1512.560723451635, "yPx": 340.12688059243783 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5636492887247824
+      "strokeWidthPx": 1.563649
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0110",
@@ -18299,7 +18299,7 @@
         { "xPx": 1530.9995586077987, "yPx": 337.38447852454937 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2400793414367346
+      "strokeWidthPx": 1.240079
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0111",
@@ -18329,7 +18329,7 @@
         { "xPx": 1549.000849127305, "yPx": 340.32119752184536 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.885983532856626
+      "strokeWidthPx": 1.885984
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0112",
@@ -18362,7 +18362,7 @@
         { "xPx": 1565.158233619435, "yPx": 348.4422119109902 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.498870768696216
+      "strokeWidthPx": 1.498871
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0113",
@@ -18396,7 +18396,7 @@
         { "xPx": 1580.1371295247689, "yPx": 351.03286594208214 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2735152225772879
+      "strokeWidthPx": 1.273515
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0114",
@@ -18428,7 +18428,7 @@
         { "xPx": 1596.9745932692213, "yPx": 342.1450878463691 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.9079967795760666
+      "strokeWidthPx": 1.907997
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0115",
@@ -18460,7 +18460,7 @@
         { "xPx": 1614.0218013618583, "yPx": 334.5963091100929 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.408525501658624
+      "strokeWidthPx": 1.408526
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0116",
@@ -18492,7 +18492,7 @@
         { "xPx": 1630.8868189861987, "yPx": 327.45809662310626 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3441213765531266
+      "strokeWidthPx": 1.344121
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0117",
@@ -18524,7 +18524,7 @@
         { "xPx": 1648.126273237701, "yPx": 322.17740634788635 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.9170083966499274
+      "strokeWidthPx": 1.917008
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0118",
@@ -18557,7 +18557,7 @@
         { "xPx": 1665.9500793007119, "yPx": 316.1375649450298 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3660673414435858
+      "strokeWidthPx": 1.366067
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0119",
@@ -18590,7 +18590,7 @@
         { "xPx": 1684.0281064725652, "yPx": 311.7775445983259 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3935198715120938
+      "strokeWidthPx": 1.39352
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0120",
@@ -18621,7 +18621,7 @@
         { "xPx": 1701.9320004510978, "yPx": 307.4321992711378 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.9136557158460605
+      "strokeWidthPx": 1.913656
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0121",
@@ -18651,7 +18651,7 @@
         { "xPx": 1720.0721542621363, "yPx": 305.12887424530925 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3105024285728952
+      "strokeWidthPx": 1.310502
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0122",
@@ -18680,7 +18680,7 @@
         { "xPx": 1737.968068520929, "yPx": 301.9727022138054 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4378282445634645
+      "strokeWidthPx": 1.437828
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0123",
@@ -18710,7 +18710,7 @@
         { "xPx": 1757.0115389811922, "yPx": 300.6272987887727 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.9024000155186815
+      "strokeWidthPx": 1.9024
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0124",
@@ -18739,7 +18739,7 @@
         { "xPx": 1774.9868911910128, "yPx": 299.1354735453211 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2674792035763114
+      "strokeWidthPx": 1.267479
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0125",
@@ -18767,7 +18767,7 @@
         { "xPx": 1792.9988936277932, "yPx": 299.70161144090423 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4891919129320554
+      "strokeWidthPx": 1.489192
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0126",
@@ -18795,7 +18795,7 @@
         { "xPx": 1811.0119464115269, "yPx": 299.2586081067905 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8939119448533959
+      "strokeWidthPx": 1.893912
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0127",
@@ -18824,7 +18824,7 @@
         { "xPx": 1828.9895864860885, "yPx": 300.7591984657592 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2650184590321047
+      "strokeWidthPx": 1.265018
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0128",
@@ -18854,7 +18854,7 @@
         { "xPx": 1848.0351665824373, "yPx": 302.1829541735161 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5159654929509934
+      "strokeWidthPx": 1.515965
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0129",
@@ -18884,7 +18884,7 @@
         { "xPx": 1865.9277825260292, "yPx": 305.4257245858636 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.871414397759677
+      "strokeWidthPx": 1.871414
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0130",
@@ -18914,7 +18914,7 @@
         { "xPx": 1884.0569463404108, "yPx": 307.88981063884137 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2297809343372719
+      "strokeWidthPx": 1.229781
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0131",
@@ -18945,7 +18945,7 @@
         { "xPx": 1901.9815659228532, "yPx": 312.21377109294804 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5701608925896415
+      "strokeWidthPx": 1.570161
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0132",
@@ -18978,7 +18978,7 @@
         { "xPx": 1920.0514505004162, "yPx": 316.7034038545774 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8444765660674514
+      "strokeWidthPx": 1.844477
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0133",
@@ -19011,7 +19011,7 @@
         { "xPx": 1937.8771469712349, "yPx": 322.82236721112247 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2011762023729093
+      "strokeWidthPx": 1.201176
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0134",
@@ -19043,7 +19043,7 @@
         { "xPx": 1955.0899069753552, "yPx": 328.2784731909277 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6435231373634929
+      "strokeWidthPx": 1.643523
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0135",
@@ -19075,7 +19075,7 @@
         { "xPx": 1972.0007154644043, "yPx": 335.397745909884 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8043564669231444
+      "strokeWidthPx": 1.804356
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0136",
@@ -19107,7 +19107,7 @@
         { "xPx": 1989.0219775635917, "yPx": 343.1130191102332 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.1884062648861444
+      "strokeWidthPx": 1.188406
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0137",
@@ -19139,7 +19139,7 @@
         { "xPx": 2005.866458585267, "yPx": 352.0955940202198 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7096237218988224
+      "strokeWidthPx": 1.709624
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0138",
@@ -19172,7 +19172,7 @@
         { "xPx": 2022.1154428382092, "yPx": 360.7378280091633 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7292436306849652
+      "strokeWidthPx": 1.729244
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0139",
@@ -19206,7 +19206,7 @@
         { "xPx": 2038.0807212669904, "yPx": 370.9946281515751 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.1842484530230664
+      "strokeWidthPx": 1.184248
     },
     {
       "id": "atlas/coastline/57b1c106-cbe3-5cc0-ad73-2276758854cc/atlas-equirectangular-v1/path-0000/stroke-0140",
@@ -19233,7 +19233,7 @@
         { "xPx": 2048, "yPx": 377.70880699157715 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6685138291680863
+      "strokeWidthPx": 1.668514
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0000",
@@ -19262,7 +19262,7 @@
         { "xPx": 1022.1124591734186, "yPx": 351.937449402964 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2421487412334216
+      "strokeWidthPx": 1.242149
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0001",
@@ -19295,7 +19295,7 @@
         { "xPx": 1027.4693123973605, "yPx": 370.0330523075479 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.904379699533405
+      "strokeWidthPx": 1.90438
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0002",
@@ -19328,7 +19328,7 @@
         { "xPx": 1036.988193158002, "yPx": 386.86929618428655 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4397408872215676
+      "strokeWidthPx": 1.439741
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0003",
@@ -19362,7 +19362,7 @@
         { "xPx": 1047.59355468606, "yPx": 401.4853605830657 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3159553840414997
+      "strokeWidthPx": 1.315955
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0004",
@@ -19396,7 +19396,7 @@
         { "xPx": 1062.2584706643177, "yPx": 413.40139371768356 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.9275881034120999
+      "strokeWidthPx": 1.927588
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0005",
@@ -19431,7 +19431,7 @@
         { "xPx": 1078.1641732607127, "yPx": 424.1177646396801 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3467829780914051
+      "strokeWidthPx": 1.346783
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0006",
@@ -19462,7 +19462,7 @@
         { "xPx": 1095.2180344392166, "yPx": 428.79489487345427 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4038699515395208
+      "strokeWidthPx": 1.40387
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0007",
@@ -19497,7 +19497,7 @@
         { "xPx": 1111.2223051100545, "yPx": 418.7231721656881 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.9217057446879706
+      "strokeWidthPx": 1.921706
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0008",
@@ -19529,7 +19529,7 @@
         { "xPx": 1128.910475506211, "yPx": 412.70457246528946 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.27348115770471
+      "strokeWidthPx": 1.273481
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0009",
@@ -19559,7 +19559,7 @@
         { "xPx": 1147.0553228491813, "yPx": 410.0719466512013 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4887359423331954
+      "strokeWidthPx": 1.488736
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0010",
@@ -19592,7 +19592,7 @@
         { "xPx": 1164.9177706605428, "yPx": 403.45581234877653 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8922078733145298
+      "strokeWidthPx": 1.892208
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0011",
@@ -19624,7 +19624,7 @@
         { "xPx": 1182.191195248794, "yPx": 396.45280290019343 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2183541183805533
+      "strokeWidthPx": 1.218354
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0012",
@@ -19655,7 +19655,7 @@
         { "xPx": 1199.9830915807022, "yPx": 391.35702731930445 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5859134678268607
+      "strokeWidthPx": 1.585913
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0013",
@@ -19685,7 +19685,7 @@
         { "xPx": 1218.2007610193284, "yPx": 393.4196975509811 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.839596064058467
+      "strokeWidthPx": 1.839596
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0014",
@@ -19719,7 +19719,7 @@
         { "xPx": 1227.8052425218698, "yPx": 377.48757715678965 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.1843801669008587
+      "strokeWidthPx": 1.18438
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0015",
@@ -19751,7 +19751,7 @@
         { "xPx": 1235.4866328693868, "yPx": 360.8122330451315 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6697922891675376
+      "strokeWidthPx": 1.669792
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0016",
@@ -19782,7 +19782,7 @@
         { "xPx": 1238.1240043537823, "yPx": 341.9431232909758 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7750158312152968
+      "strokeWidthPx": 1.775016
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0017",
@@ -19812,7 +19812,7 @@
         { "xPx": 1238.8067967166737, "yPx": 322.9427859171491 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.1711715424739841
+      "strokeWidthPx": 1.171172
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0018",
@@ -19843,7 +19843,7 @@
         { "xPx": 1233.4032478180072, "yPx": 305.07751848346527 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7761504013928326
+      "strokeWidthPx": 1.77615
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0019",
@@ -19877,7 +19877,7 @@
         { "xPx": 1225.1088960020263, "yPx": 288.74608711565565 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.677720280563591
+      "strokeWidthPx": 1.67772
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0020",
@@ -19911,7 +19911,7 @@
         { "xPx": 1211.5610607194876, "yPx": 275.5642657415964 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.18354340863673
+      "strokeWidthPx": 1.183543
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0021",
@@ -19945,7 +19945,7 @@
         { "xPx": 1197.245928869687, "yPx": 263.9490438983575 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8375659297095943
+      "strokeWidthPx": 1.837566
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0022",
@@ -19978,7 +19978,7 @@
         { "xPx": 1179.9252229438337, "yPx": 256.5727197907693 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.590890938538615
+      "strokeWidthPx": 1.590891
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0023",
@@ -20011,7 +20011,7 @@
         { "xPx": 1161.7045249130529, "yPx": 250.66889551515862 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2239491678488483
+      "strokeWidthPx": 1.223949
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0024",
@@ -20040,7 +20040,7 @@
         { "xPx": 1142.9461698078908, "yPx": 248.78432565359762 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.899861237810946
+      "strokeWidthPx": 1.899861
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0025",
@@ -20068,7 +20068,7 @@
         { "xPx": 1124.986338442963, "yPx": 247.07338257542028 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4808988236521534
+      "strokeWidthPx": 1.480899
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0026",
@@ -20097,7 +20097,7 @@
         { "xPx": 1107.0270644420475, "yPx": 249.38200066907177 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.264745343980957
+      "strokeWidthPx": 1.264745
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0027",
@@ -20127,7 +20127,7 @@
         { "xPx": 1089.0543993938827, "yPx": 252.78310030967506 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.91158010145767
+      "strokeWidthPx": 1.91158
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0028",
@@ -20160,7 +20160,7 @@
         { "xPx": 1071.222258861908, "yPx": 260.0954623886993 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4328315991713645
+      "strokeWidthPx": 1.432832
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0029",
@@ -20193,7 +20193,7 @@
         { "xPx": 1054.707729983781, "yPx": 268.2487579508757 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3264194008844492
+      "strokeWidthPx": 1.326419
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0030",
@@ -20227,7 +20227,7 @@
         { "xPx": 1041.131430929628, "yPx": 280.75575981545705 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.9283767093756818
+      "strokeWidthPx": 1.928377
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0031",
@@ -20261,7 +20261,7 @@
         { "xPx": 1029.9083502889418, "yPx": 295.28898574913904 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3594253743019724
+      "strokeWidthPx": 1.359425
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0032",
@@ -20294,7 +20294,7 @@
         { "xPx": 1023.0173145543237, "yPx": 313.1109983989585 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3928088471975577
+      "strokeWidthPx": 1.392809
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0033",
@@ -20324,7 +20324,7 @@
         { "xPx": 1019.4624432108212, "yPx": 330.98606458387076 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.922733533677534
+      "strokeWidthPx": 1.922734
     },
     {
       "id": "atlas/coastline/5fc17f52-d3ab-5023-bb39-25ab774c634b/atlas-equirectangular-v1/path-0000/stroke-0034",
@@ -20341,7 +20341,7 @@
         { "xPx": 1019.3922759094137, "yPx": 334.0041540457205 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6079420567784604
+      "strokeWidthPx": 1.607942
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0000",
@@ -20372,7 +20372,7 @@
         { "xPx": 1517.4200563808643, "yPx": 587.0118203116276 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3969753015028858
+      "strokeWidthPx": 1.396975
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0001",
@@ -20407,7 +20407,7 @@
         { "xPx": 1523.1992685065636, "yPx": 605.0499445079136 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8390400767293176
+      "strokeWidthPx": 1.83904
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0002",
@@ -20442,7 +20442,7 @@
         { "xPx": 1532.5267220281366, "yPx": 621.040067199691 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3759681178509635
+      "strokeWidthPx": 1.375968
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0003",
@@ -20478,7 +20478,7 @@
         { "xPx": 1545.2074983955606, "yPx": 634.461893766345 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4540073173492702
+      "strokeWidthPx": 1.454007
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0004",
@@ -20514,7 +20514,7 @@
         { "xPx": 1559.8988552769179, "yPx": 645.7361409262141 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8303764985350024
+      "strokeWidthPx": 1.830376
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0005",
@@ -20549,7 +20549,7 @@
         { "xPx": 1576.995524844861, "yPx": 653.3157912580718 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.333288848618079
+      "strokeWidthPx": 1.333289
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0006",
@@ -20582,7 +20582,7 @@
         { "xPx": 1594.9852122701648, "yPx": 657.7726622862328 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5144808705037613
+      "strokeWidthPx": 1.514481
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0007",
@@ -20612,7 +20612,7 @@
         { "xPx": 1613.988536977312, "yPx": 658.335357197593 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.804452387542502
+      "strokeWidthPx": 1.804452
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0008",
@@ -20643,7 +20643,7 @@
         { "xPx": 1633.0657945351631, "yPx": 656.4426520318311 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.285997512366181
+      "strokeWidthPx": 1.285998
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0009",
@@ -20678,7 +20678,7 @@
         { "xPx": 1651.3223394956299, "yPx": 649.9766935218072 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.623231087744928
+      "strokeWidthPx": 1.623231
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0010",
@@ -20713,7 +20713,7 @@
         { "xPx": 1667.0356512325, "yPx": 641.111656819083 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7372048202758
+      "strokeWidthPx": 1.737205
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0011",
@@ -20749,7 +20749,7 @@
         { "xPx": 1680.5481571560456, "yPx": 628.7590847975389 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2643033818775944
+      "strokeWidthPx": 1.264303
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0012",
@@ -20785,7 +20785,7 @@
         { "xPx": 1692.3509995259665, "yPx": 614.2409955795947 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6712990803728638
+      "strokeWidthPx": 1.671299
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0013",
@@ -20820,7 +20820,7 @@
         { "xPx": 1699.628648152156, "yPx": 596.9472680538682 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6943327110324873
+      "strokeWidthPx": 1.694333
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0014",
@@ -20853,7 +20853,7 @@
         { "xPx": 1703.9269257083226, "yPx": 579.0129329830362 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2616561587630615
+      "strokeWidthPx": 1.261656
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0015",
@@ -20884,7 +20884,7 @@
         { "xPx": 1703.8178054129887, "yPx": 560.029485817821 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7334112744326144
+      "strokeWidthPx": 1.733411
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0016",
@@ -20916,7 +20916,7 @@
         { "xPx": 1701.4812256889932, "yPx": 542.2294797403932 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6358856124383077
+      "strokeWidthPx": 1.635886
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0017",
@@ -20950,7 +20950,7 @@
         { "xPx": 1694.1134671245409, "yPx": 525.1271083506122 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2705683965621581
+      "strokeWidthPx": 1.270568
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0018",
@@ -20986,7 +20986,7 @@
         { "xPx": 1684.4556030117824, "yPx": 508.9138626838923 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7719594741962852
+      "strokeWidthPx": 1.771959
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0019",
@@ -21022,7 +21022,7 @@
         { "xPx": 1671.7585301275117, "yPx": 496.1198851417965 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5835847514508825
+      "strokeWidthPx": 1.583585
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0020",
@@ -21057,7 +21057,7 @@
         { "xPx": 1657.1931072697976, "yPx": 484.52496159042397 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2894201558562226
+      "strokeWidthPx": 1.28942
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0021",
@@ -21092,7 +21092,7 @@
         { "xPx": 1639.8832374279189, "yPx": 477.6758864995709 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.800697384426345
+      "strokeWidthPx": 1.800697
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0022",
@@ -21127,7 +21127,7 @@
         { "xPx": 1629.880537384839, "yPx": 462.9121347152762 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5194161706604554
+      "strokeWidthPx": 1.519416
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0023",
@@ -21162,7 +21162,7 @@
         { "xPx": 1616.8350603861502, "yPx": 450.5428009314292 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.329998004228779
+      "strokeWidthPx": 1.329998
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0024",
@@ -21195,7 +21195,7 @@
         { "xPx": 1598.990375362478, "yPx": 445.24799872093683 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.827921186686351
+      "strokeWidthPx": 1.827921
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0025",
@@ -21229,7 +21229,7 @@
         { "xPx": 1582.0537533878392, "yPx": 451.36493375088503 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4621405342040283
+      "strokeWidthPx": 1.462141
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0026",
@@ -21265,7 +21265,7 @@
         { "xPx": 1569.0983164812199, "yPx": 464.9164386261807 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.370949177919468
+      "strokeWidthPx": 1.370949
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0027",
@@ -21297,7 +21297,7 @@
         { "xPx": 1565.5074683294536, "yPx": 483.08999337984653 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.838871072360366
+      "strokeWidthPx": 1.838871
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0028",
@@ -21333,7 +21333,7 @@
         { "xPx": 1549.6689130054647, "yPx": 493.68909766604935 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.389507781349272
+      "strokeWidthPx": 1.389508
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0029",
@@ -21368,7 +21368,7 @@
         { "xPx": 1537.5587580370013, "yPx": 507.29866473075515 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4443553729174496
+      "strokeWidthPx": 1.444355
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0030",
@@ -21405,7 +21405,7 @@
         { "xPx": 1526.8302341432989, "yPx": 522.2073000549613 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8341276554685764
+      "strokeWidthPx": 1.834128
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0031",
@@ -21439,7 +21439,7 @@
         { "xPx": 1520.167067928197, "yPx": 538.9507690008318 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3555289668197477
+      "strokeWidthPx": 1.355529
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0032",
@@ -21472,7 +21472,7 @@
         { "xPx": 1515.7062399407778, "yPx": 556.9569418427432 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4723155469342488
+      "strokeWidthPx": 1.472316
     },
     {
       "id": "atlas/coastline/6b2fdc05-0234-508d-9c9d-9b071109d550/atlas-equirectangular-v1/path-0000/stroke-0033",
@@ -21498,7 +21498,7 @@
         { "xPx": 1515.6943707940686, "yPx": 568.9985589537387 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8386875748301499
+      "strokeWidthPx": 1.838688
     },
     {
       "id": "atlas/coastline/7c2fca62-f373-5f76-9210-18ae23f7a0b5/atlas-equirectangular-v1/path-0000/stroke-0000",
@@ -21531,7 +21531,7 @@
         { "xPx": 1475.1875189800146, "yPx": 691.3792761915366 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.195228793275796
+      "strokeWidthPx": 1.195229
     },
     {
       "id": "atlas/coastline/7c2fca62-f373-5f76-9210-18ae23f7a0b5/atlas-equirectangular-v1/path-0000/stroke-0001",
@@ -21567,7 +21567,7 @@
         { "xPx": 1490.1657252165, "yPx": 701.9694509185581 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8383735507062196
+      "strokeWidthPx": 1.838374
     },
     {
       "id": "atlas/coastline/7c2fca62-f373-5f76-9210-18ae23f7a0b5/atlas-equirectangular-v1/path-0000/stroke-0002",
@@ -21600,7 +21600,7 @@
         { "xPx": 1508.0010390718533, "yPx": 706.2541568862208 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5876240913853372
+      "strokeWidthPx": 1.587624
     },
     {
       "id": "atlas/coastline/7c2fca62-f373-5f76-9210-18ae23f7a0b5/atlas-equirectangular-v1/path-0000/stroke-0003",
@@ -21633,7 +21633,7 @@
         { "xPx": 1525.8054924471116, "yPx": 701.7285845633031 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2196184679611166
+      "strokeWidthPx": 1.219618
     },
     {
       "id": "atlas/coastline/7c2fca62-f373-5f76-9210-18ae23f7a0b5/atlas-equirectangular-v1/path-0000/stroke-0004",
@@ -21668,7 +21668,7 @@
         { "xPx": 1540.4349302858461, "yPx": 691.4104522996029 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8709526142381465
+      "strokeWidthPx": 1.870953
     },
     {
       "id": "atlas/coastline/7c2fca62-f373-5f76-9210-18ae23f7a0b5/atlas-equirectangular-v1/path-0000/stroke-0005",
@@ -21702,7 +21702,7 @@
         { "xPx": 1545.0867808519342, "yPx": 674.0037722364191 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5425220042288281
+      "strokeWidthPx": 1.542522
     },
     {
       "id": "atlas/coastline/7c2fca62-f373-5f76-9210-18ae23f7a0b5/atlas-equirectangular-v1/path-0000/stroke-0006",
@@ -21737,7 +21737,7 @@
         { "xPx": 1540.0675441557635, "yPx": 655.8750646111956 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2482140251344056
+      "strokeWidthPx": 1.248214
     },
     {
       "id": "atlas/coastline/7c2fca62-f373-5f76-9210-18ae23f7a0b5/atlas-equirectangular-v1/path-0000/stroke-0007",
@@ -21774,7 +21774,7 @@
         { "xPx": 1525.8214563533747, "yPx": 644.2950869641421 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.9027363283573515
+      "strokeWidthPx": 1.902736
     },
     {
       "id": "atlas/coastline/7c2fca62-f373-5f76-9210-18ae23f7a0b5/atlas-equirectangular-v1/path-0000/stroke-0008",
@@ -21808,7 +21808,7 @@
         { "xPx": 1506.9948755706794, "yPx": 638.9289629440092 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.427918515925728
+      "strokeWidthPx": 1.427919
     },
     {
       "id": "atlas/coastline/7c2fca62-f373-5f76-9210-18ae23f7a0b5/atlas-equirectangular-v1/path-0000/stroke-0009",
@@ -21841,7 +21841,7 @@
         { "xPx": 1489.2661797017213, "yPx": 644.7454210488107 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.352266548623323
+      "strokeWidthPx": 1.352267
     },
     {
       "id": "atlas/coastline/7c2fca62-f373-5f76-9210-18ae23f7a0b5/atlas-equirectangular-v1/path-0000/stroke-0010",
@@ -21876,7 +21876,7 @@
         { "xPx": 1474.8474862732285, "yPx": 656.8594796594512 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.921424954999423
+      "strokeWidthPx": 1.921425
     },
     {
       "id": "atlas/coastline/7c2fca62-f373-5f76-9210-18ae23f7a0b5/atlas-equirectangular-v1/path-0000/stroke-0011",
@@ -21909,7 +21909,7 @@
         { "xPx": 1470.5459308358902, "yPx": 674.0035116595675 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3231545097049726
+      "strokeWidthPx": 1.323155
     },
     {
       "id": "atlas/coastline/9940a104-ce70-5bba-a855-c9eef27372ba/atlas-equirectangular-v1/path-0000/stroke-0000",
@@ -21939,7 +21939,7 @@
         { "xPx": 98.0353937229193, "yPx": 708.9897317332264 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3988423420726859
+      "strokeWidthPx": 1.398842
     },
     {
       "id": "atlas/coastline/9940a104-ce70-5bba-a855-c9eef27372ba/atlas-equirectangular-v1/path-0000/stroke-0001",
@@ -21970,7 +21970,7 @@
         { "xPx": 104.67302184225449, "yPx": 724.8745624780264 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4501791913467388
+      "strokeWidthPx": 1.450179
     },
     {
       "id": "atlas/coastline/9940a104-ce70-5bba-a855-c9eef27372ba/atlas-equirectangular-v1/path-0000/stroke-0002",
@@ -22002,7 +22002,7 @@
         { "xPx": 120.94680563883237, "yPx": 732.5418352599545 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.813325474255255
+      "strokeWidthPx": 1.813325
     },
     {
       "id": "atlas/coastline/9940a104-ce70-5bba-a855-c9eef27372ba/atlas-equirectangular-v1/path-0000/stroke-0003",
@@ -22032,7 +22032,7 @@
         { "xPx": 138.89806539880036, "yPx": 729.1147225146908 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.373327123955747
+      "strokeWidthPx": 1.373327
     },
     {
       "id": "atlas/coastline/9940a104-ce70-5bba-a855-c9eef27372ba/atlas-equirectangular-v1/path-0000/stroke-0004",
@@ -22065,7 +22065,7 @@
         { "xPx": 154.05434637287712, "yPx": 731.4731016070422 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4871191069012935
+      "strokeWidthPx": 1.487119
     },
     {
       "id": "atlas/coastline/9940a104-ce70-5bba-a855-c9eef27372ba/atlas-equirectangular-v1/path-0000/stroke-0005",
@@ -22096,7 +22096,7 @@
         { "xPx": 170.99760344654243, "yPx": 737.9798141035706 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7989110317225552
+      "strokeWidthPx": 1.798911
     },
     {
       "id": "atlas/coastline/9940a104-ce70-5bba-a855-c9eef27372ba/atlas-equirectangular-v1/path-0000/stroke-0006",
@@ -22129,7 +22129,7 @@
         { "xPx": 189.09426339095896, "yPx": 734.8385782058027 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3331197391603216
+      "strokeWidthPx": 1.33312
     },
     {
       "id": "atlas/coastline/9940a104-ce70-5bba-a855-c9eef27372ba/atlas-equirectangular-v1/path-0000/stroke-0007",
@@ -22163,7 +22163,7 @@
         { "xPx": 200.8477474745859, "yPx": 720.682647431387 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5514149152250822
+      "strokeWidthPx": 1.551415
     },
     {
       "id": "atlas/coastline/9940a104-ce70-5bba-a855-c9eef27372ba/atlas-equirectangular-v1/path-0000/stroke-0008",
@@ -22193,7 +22193,7 @@
         { "xPx": 200.61888657984767, "yPx": 702.9182280721932 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7630433142664124
+      "strokeWidthPx": 1.763043
     },
     {
       "id": "atlas/coastline/9940a104-ce70-5bba-a855-c9eef27372ba/atlas-equirectangular-v1/path-0000/stroke-0009",
@@ -22226,7 +22226,7 @@
         { "xPx": 208.16067570561407, "yPx": 686.0942108649654 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.296960206788182
+      "strokeWidthPx": 1.29696
     },
     {
       "id": "atlas/coastline/9940a104-ce70-5bba-a855-c9eef27372ba/atlas-equirectangular-v1/path-0000/stroke-0010",
@@ -22256,7 +22256,7 @@
         { "xPx": 205.9355707364943, "yPx": 668.9458965081894 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6169261444186
+      "strokeWidthPx": 1.616926
     },
     {
       "id": "atlas/coastline/9940a104-ce70-5bba-a855-c9eef27372ba/atlas-equirectangular-v1/path-0000/stroke-0011",
@@ -22288,7 +22288,7 @@
         { "xPx": 188.98810167177527, "yPx": 662.1400774306235 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7340809484348205
+      "strokeWidthPx": 1.734081
     },
     {
       "id": "atlas/coastline/9940a104-ce70-5bba-a855-c9eef27372ba/atlas-equirectangular-v1/path-0000/stroke-0012",
@@ -22316,7 +22316,7 @@
         { "xPx": 171.01070825759817, "yPx": 660.4556855649788 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2895434918313886
+      "strokeWidthPx": 1.289543
     },
     {
       "id": "atlas/coastline/9940a104-ce70-5bba-a855-c9eef27372ba/atlas-equirectangular-v1/path-0000/stroke-0013",
@@ -22346,7 +22346,7 @@
         { "xPx": 152.92175443244756, "yPx": 662.8624507791907 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6376743795388617
+      "strokeWidthPx": 1.637674
     },
     {
       "id": "atlas/coastline/9940a104-ce70-5bba-a855-c9eef27372ba/atlas-equirectangular-v1/path-0000/stroke-0014",
@@ -22375,7 +22375,7 @@
         { "xPx": 135.02001981550012, "yPx": 666.1309299531482 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7173904100089494
+      "strokeWidthPx": 1.71739
     },
     {
       "id": "atlas/coastline/9940a104-ce70-5bba-a855-c9eef27372ba/atlas-equirectangular-v1/path-0000/stroke-0015",
@@ -22407,7 +22407,7 @@
         { "xPx": 116.96915350116119, "yPx": 671.0229528558449 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2847914521349058
+      "strokeWidthPx": 1.284791
     },
     {
       "id": "atlas/coastline/9940a104-ce70-5bba-a855-c9eef27372ba/atlas-equirectangular-v1/path-0000/stroke-0016",
@@ -22440,7 +22440,7 @@
         { "xPx": 101.38444336323224, "yPx": 682.2130403868914 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6891259783010732
+      "strokeWidthPx": 1.689126
     },
     {
       "id": "atlas/coastline/9940a104-ce70-5bba-a855-c9eef27372ba/atlas-equirectangular-v1/path-0000/stroke-0017",
@@ -22465,7 +22465,7 @@
         { "xPx": 97.03131599355193, "yPx": 690.971215084139 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7507911821665014
+      "strokeWidthPx": 1.750791
     },
     {
       "id": "atlas/coastline/d5a4f217-6cc8-5788-830b-ddc7a49607ea/atlas-equirectangular-v1/path-0000/stroke-0000",
@@ -22497,7 +22497,7 @@
         { "xPx": 1824.2321319603673, "yPx": 720.6311712242099 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3132773250447574
+      "strokeWidthPx": 1.313277
     },
     {
       "id": "atlas/coastline/d5a4f217-6cc8-5788-830b-ddc7a49607ea/atlas-equirectangular-v1/path-0000/stroke-0001",
@@ -22531,7 +22531,7 @@
         { "xPx": 1838.8538226192097, "yPx": 732.0618564801488 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8912028632582065
+      "strokeWidthPx": 1.891203
     },
     {
       "id": "atlas/coastline/d5a4f217-6cc8-5788-830b-ddc7a49607ea/atlas-equirectangular-v1/path-0000/stroke-0002",
@@ -22561,7 +22561,7 @@
         { "xPx": 1856.9974099761318, "yPx": 734.5105944342214 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4055339562944758
+      "strokeWidthPx": 1.405534
     },
     {
       "id": "atlas/coastline/d5a4f217-6cc8-5788-830b-ddc7a49607ea/atlas-equirectangular-v1/path-0000/stroke-0003",
@@ -22592,7 +22592,7 @@
         { "xPx": 1875.1419764308748, "yPx": 730.9992594566932 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3677667862644982
+      "strokeWidthPx": 1.367767
     },
     {
       "id": "atlas/coastline/d5a4f217-6cc8-5788-830b-ddc7a49607ea/atlas-equirectangular-v1/path-0000/stroke-0004",
@@ -22626,7 +22626,7 @@
         { "xPx": 1888.8636655824796, "yPx": 718.668085963495 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8954805124792145
+      "strokeWidthPx": 1.895481
     },
     {
       "id": "atlas/coastline/d5a4f217-6cc8-5788-830b-ddc7a49607ea/atlas-equirectangular-v1/path-0000/stroke-0005",
@@ -22659,7 +22659,7 @@
         { "xPx": 1894.4143638641249, "yPx": 700.9493517975019 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3378053060404373
+      "strokeWidthPx": 1.337805
     },
     {
       "id": "atlas/coastline/d5a4f217-6cc8-5788-830b-ddc7a49607ea/atlas-equirectangular-v1/path-0000/stroke-0006",
@@ -22692,7 +22692,7 @@
         { "xPx": 1885.936159153329, "yPx": 684.1500804717286 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4600409051109975
+      "strokeWidthPx": 1.460041
     },
     {
       "id": "atlas/coastline/d5a4f217-6cc8-5788-830b-ddc7a49607ea/atlas-equirectangular-v1/path-0000/stroke-0007",
@@ -22725,7 +22725,7 @@
         { "xPx": 1871.099581440656, "yPx": 673.4758952147089 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8743561371732251
+      "strokeWidthPx": 1.874356
     },
     {
       "id": "atlas/coastline/d5a4f217-6cc8-5788-830b-ddc7a49607ea/atlas-equirectangular-v1/path-0000/stroke-0008",
@@ -22756,7 +22756,7 @@
         { "xPx": 1853.0407366098525, "yPx": 671.612681612214 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2746482839824926
+      "strokeWidthPx": 1.274648
     },
     {
       "id": "atlas/coastline/d5a4f217-6cc8-5788-830b-ddc7a49607ea/atlas-equirectangular-v1/path-0000/stroke-0009",
@@ -22787,7 +22787,7 @@
         { "xPx": 1834.7317027662293, "yPx": 675.9210795242866 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.531517029484104
+      "strokeWidthPx": 1.531517
     },
     {
       "id": "atlas/coastline/d5a4f217-6cc8-5788-830b-ddc7a49607ea/atlas-equirectangular-v1/path-0000/stroke-0010",
@@ -22820,7 +22820,7 @@
         { "xPx": 1822.2037886726068, "yPx": 688.8588547287145 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8465189675671014
+      "strokeWidthPx": 1.846519
     },
     {
       "id": "atlas/coastline/d5a4f217-6cc8-5788-830b-ddc7a49607ea/atlas-equirectangular-v1/path-0000/stroke-0011",
@@ -22850,7 +22850,7 @@
         { "xPx": 1817.1720339534495, "yPx": 703.9947497781243 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2655068466493913
+      "strokeWidthPx": 1.265507
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0000",
@@ -22878,7 +22878,7 @@
         { "xPx": 17.96939616729716, "yPx": 926.3834601067533 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8104224927657309
+      "strokeWidthPx": 1.810422
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0001",
@@ -22906,7 +22906,7 @@
         { "xPx": 36.0088791732735, "yPx": 926.1680177762928 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5130405965239373
+      "strokeWidthPx": 1.513041
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0002",
@@ -22933,7 +22933,7 @@
         { "xPx": 54.00093147863493, "yPx": 926.7897967396038 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.326317203289882
+      "strokeWidthPx": 1.326317
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0003",
@@ -22960,7 +22960,7 @@
         { "xPx": 71.9894551927936, "yPx": 925.96725408762 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8117416114734337
+      "strokeWidthPx": 1.811742
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0004",
@@ -22989,7 +22989,7 @@
         { "xPx": 90.03458458665811, "yPx": 925.597335035822 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5105187495462298
+      "strokeWidthPx": 1.510519
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0005",
@@ -23018,7 +23018,7 @@
         { "xPx": 108.96547414776826, "yPx": 923.072955359889 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3397473811628255
+      "strokeWidthPx": 1.339747
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0006",
@@ -23048,7 +23048,7 @@
         { "xPx": 127.00159622246282, "yPx": 920.8720978148258 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8246784880573927
+      "strokeWidthPx": 1.824678
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0007",
@@ -23077,7 +23077,7 @@
         { "xPx": 144.98224913844234, "yPx": 917.3649580375635 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4623955429785394
+      "strokeWidthPx": 1.462396
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0008",
@@ -23109,7 +23109,7 @@
         { "xPx": 163.08968337190242, "yPx": 913.0791706760177 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3729955646702623
+      "strokeWidthPx": 1.372996
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0009",
@@ -23140,7 +23140,7 @@
         { "xPx": 179.9350193563054, "yPx": 906.597328151425 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8309606416170725
+      "strokeWidthPx": 1.830961
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0010",
@@ -23173,7 +23173,7 @@
         { "xPx": 196.95853281504628, "yPx": 898.0324755681223 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4196212544679856
+      "strokeWidthPx": 1.419621
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0011",
@@ -23207,7 +23207,7 @@
         { "xPx": 211.0714172668051, "yPx": 887.0001260713456 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4133040256498333
+      "strokeWidthPx": 1.413304
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0012",
@@ -23240,7 +23240,7 @@
         { "xPx": 221.04949676411766, "yPx": 872.0434543998871 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8326499258314124
+      "strokeWidthPx": 1.83265
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0013",
@@ -23271,7 +23271,7 @@
         { "xPx": 224.01874497065734, "yPx": 853.0050167818033 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.38154145771829
+      "strokeWidthPx": 1.381541
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0014",
@@ -23302,7 +23302,7 @@
         { "xPx": 220.07834655375302, "yPx": 835.0620694622188 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4676193979495862
+      "strokeWidthPx": 1.467619
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0015",
@@ -23334,7 +23334,7 @@
         { "xPx": 212.21197120278393, "yPx": 818.632848640672 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8225818823574613
+      "strokeWidthPx": 1.822582
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0016",
@@ -23367,7 +23367,7 @@
         { "xPx": 200.98211011856193, "yPx": 804.1772516974282 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3416818547780074
+      "strokeWidthPx": 1.341682
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0017",
@@ -23401,7 +23401,7 @@
         { "xPx": 187.99862020454754, "yPx": 791.0377966572008 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.502039091366676
+      "strokeWidthPx": 1.502039
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0018",
@@ -23436,7 +23436,7 @@
         { "xPx": 172.86138315917367, "yPx": 779.1879043384972 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8039543416294932
+      "strokeWidthPx": 1.803954
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0019",
@@ -23470,7 +23470,7 @@
         { "xPx": 157.78527385159407, "yPx": 768.6791026365736 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.301355232239376
+      "strokeWidthPx": 1.301355
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0020",
@@ -23503,7 +23503,7 @@
         { "xPx": 140.93763157248327, "yPx": 760.4118244874028 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5774078376257437
+      "strokeWidthPx": 1.577408
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0021",
@@ -23536,7 +23536,7 @@
         { "xPx": 124.01306716752858, "yPx": 753.1590216594258 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7677851836815084
+      "strokeWidthPx": 1.767785
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0022",
@@ -23568,7 +23568,7 @@
         { "xPx": 104.95320798302268, "yPx": 747.37798436025 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2739645591278153
+      "strokeWidthPx": 1.273965
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0023",
@@ -23600,7 +23600,7 @@
         { "xPx": 87.06693630074633, "yPx": 742.8204220010725 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6721662130730428
+      "strokeWidthPx": 1.672166
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0024",
@@ -23630,7 +23630,7 @@
         { "xPx": 68.97369728845133, "yPx": 741.0804304530118 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7003580362972288
+      "strokeWidthPx": 1.700358
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0025",
@@ -23658,7 +23658,7 @@
         { "xPx": 51.00122830726721, "yPx": 739.8121133111975 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2673647407474813
+      "strokeWidthPx": 1.267365
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0026",
@@ -23686,7 +23686,7 @@
         { "xPx": 33.023307835937445, "yPx": 740.7854209042376 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6859767693147238
+      "strokeWidthPx": 1.685977
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0027",
@@ -23715,7 +23715,7 @@
         { "xPx": 14.910656869545388, "yPx": 742.022154504361 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.694073287669507
+      "strokeWidthPx": 1.694073
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0000/stroke-0028",
@@ -23742,7 +23742,7 @@
         { "xPx": 0, "yPx": 745.4801411628723 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.270769987979356
+      "strokeWidthPx": 1.27077
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0001/stroke-0000",
@@ -23773,7 +23773,7 @@
         { "xPx": 2029.8261299550356, "yPx": 749.9179853323271 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8143318789996445
+      "strokeWidthPx": 1.814332
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0001/stroke-0001",
@@ -23805,7 +23805,7 @@
         { "xPx": 2012.6572403308105, "yPx": 757.3863021729551 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4812702001800357
+      "strokeWidthPx": 1.48127
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0001/stroke-0002",
@@ -23837,7 +23837,7 @@
         { "xPx": 1995.6079065883619, "yPx": 764.840023265282 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.362941388721818
+      "strokeWidthPx": 1.362941
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0001/stroke-0003",
@@ -23871,7 +23871,7 @@
         { "xPx": 1980.1575289915486, "yPx": 774.5123784996817 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8295606175317298
+      "strokeWidthPx": 1.829561
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0001/stroke-0004",
@@ -23904,7 +23904,7 @@
         { "xPx": 1964.9099538270011, "yPx": 784.5990756904597 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.438639841759265
+      "strokeWidthPx": 1.43864
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0001/stroke-0005",
@@ -23938,7 +23938,7 @@
         { "xPx": 1952.1050006252017, "yPx": 797.2659554379663 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3850325600909124
+      "strokeWidthPx": 1.385033
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0001/stroke-0006",
@@ -23972,7 +23972,7 @@
         { "xPx": 1939.4750071871445, "yPx": 810.9347321208171 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.832190724655568
+      "strokeWidthPx": 1.832191
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0001/stroke-0007",
@@ -24006,7 +24006,7 @@
         { "xPx": 1929.5928972475863, "yPx": 827.0761795308698 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.400895003914193
+      "strokeWidthPx": 1.400895
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0001/stroke-0008",
@@ -24038,7 +24038,7 @@
         { "xPx": 1922.8397156841131, "yPx": 843.9118179428965 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4335053571889158
+      "strokeWidthPx": 1.433505
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0001/stroke-0009",
@@ -24068,7 +24068,7 @@
         { "xPx": 1922.7485318393692, "yPx": 861.9495698273116 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8306487636177073
+      "strokeWidthPx": 1.830649
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0001/stroke-0010",
@@ -24099,7 +24099,7 @@
         { "xPx": 1928.8497621147953, "yPx": 879.0037302740174 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3750816742834633
+      "strokeWidthPx": 1.375082
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0001/stroke-0011",
@@ -24134,7 +24134,7 @@
         { "xPx": 1940.9799431416482, "yPx": 892.3403147420787 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4505172001311064
+      "strokeWidthPx": 1.450517
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0001/stroke-0012",
@@ -24168,7 +24168,7 @@
         { "xPx": 1956.8944275831711, "yPx": 902.7496996238631 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8249857263239748
+      "strokeWidthPx": 1.824986
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0001/stroke-0013",
@@ -24200,7 +24200,7 @@
         { "xPx": 1974.0758940993594, "yPx": 909.5667509796203 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3377613055775321
+      "strokeWidthPx": 1.337761
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0001/stroke-0014",
@@ -24233,7 +24233,7 @@
         { "xPx": 1992.0108545289659, "yPx": 915.2147419659642 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.516337764579933
+      "strokeWidthPx": 1.516338
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0001/stroke-0015",
@@ -24264,7 +24264,7 @@
         { "xPx": 2009.9711178879234, "yPx": 919.4046457165473 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8008548840956478
+      "strokeWidthPx": 1.800855
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0001/stroke-0016",
@@ -24294,7 +24294,7 @@
         { "xPx": 2027.99085879728, "yPx": 922.2597652550162 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3054068209801541
+      "strokeWidthPx": 1.305407
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0001/stroke-0017",
@@ -24324,7 +24324,7 @@
         { "xPx": 2047.0012096636153, "yPx": 924.3922473968571 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.572424608813715
+      "strokeWidthPx": 1.572425
     },
     {
       "id": "atlas/coastline/d6a75391-46ce-501f-bde0-5c210a8ec1d9/atlas-equirectangular-v1/path-0001/stroke-0018",
@@ -24340,7 +24340,7 @@
         { "xPx": 2048, "yPx": 924.4985694885254 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8184461072554174
+      "strokeWidthPx": 1.818446
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0000",
@@ -24371,7 +24371,7 @@
         { "xPx": 2031.0141154527014, "yPx": 109.16606089335957 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6841048433659112
+      "strokeWidthPx": 1.684105
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0001",
@@ -24402,7 +24402,7 @@
         { "xPx": 2013.0248015026377, "yPx": 104.2865209324084 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7462121647348745
+      "strokeWidthPx": 1.746212
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0002",
@@ -24434,7 +24434,7 @@
         { "xPx": 1994.9861988292093, "yPx": 100.90672168496504 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2046478658736088
+      "strokeWidthPx": 1.204648
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0003",
@@ -24464,7 +24464,7 @@
         { "xPx": 1975.9909021920655, "yPx": 98.17223094698859 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7438126609971212
+      "strokeWidthPx": 1.743813
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0004",
@@ -24493,7 +24493,7 @@
         { "xPx": 1958.0012543323073, "yPx": 96.1520819398684 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6763563601974618
+      "strokeWidthPx": 1.676356
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0005",
@@ -24522,7 +24522,7 @@
         { "xPx": 1940.015357831418, "yPx": 94.77611530822823 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2089336314459311
+      "strokeWidthPx": 1.208934
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0006",
@@ -24549,7 +24549,7 @@
         { "xPx": 1921.9965204529174, "yPx": 94.39180689201515 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7691797973564682
+      "strokeWidthPx": 1.76918
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0007",
@@ -24577,7 +24577,7 @@
         { "xPx": 1902.9998910104532, "yPx": 94.07210827068288 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.652037433049844
+      "strokeWidthPx": 1.652037
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0008",
@@ -24604,7 +24604,7 @@
         { "xPx": 1885.0020240018973, "yPx": 94.46666232996022 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2182704806836353
+      "strokeWidthPx": 1.21827
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0009",
@@ -24632,7 +24632,7 @@
         { "xPx": 1866.986436567114, "yPx": 95.07370082917488 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7997735252829665
+      "strokeWidthPx": 1.799774
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0010",
@@ -24660,7 +24660,7 @@
         { "xPx": 1849.0469527519217, "yPx": 97.20743776786881 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6296130319601734
+      "strokeWidthPx": 1.629613
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0011",
@@ -24690,7 +24690,7 @@
         { "xPx": 1829.9906763206038, "yPx": 99.02213406114768 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2272538217686275
+      "strokeWidthPx": 1.227254
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0012",
@@ -24720,7 +24720,7 @@
         { "xPx": 1812.0530441011667, "yPx": 102.10360644313214 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8358832509047327
+      "strokeWidthPx": 1.835883
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0013",
@@ -24749,7 +24749,7 @@
         { "xPx": 1794.0004345757413, "yPx": 101.75434537264135 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5675429183893166
+      "strokeWidthPx": 1.567543
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0014",
@@ -24778,7 +24778,7 @@
         { "xPx": 1776.004402572201, "yPx": 102.47041440852868 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.243125727595558
+      "strokeWidthPx": 1.243126
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0015",
@@ -24805,7 +24805,7 @@
         { "xPx": 1757.995362235212, "yPx": 102.33636462167236 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8409989112962082
+      "strokeWidthPx": 1.840999
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0016",
@@ -24834,7 +24834,7 @@
         { "xPx": 1740.005323248487, "yPx": 103.26316017318567 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5651519378987304
+      "strokeWidthPx": 1.565152
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0017",
@@ -24863,7 +24863,7 @@
         { "xPx": 1721.9839834980985, "yPx": 103.7694104960798 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2439849680926247
+      "strokeWidthPx": 1.243985
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0018",
@@ -24891,7 +24891,7 @@
         { "xPx": 1704.0230809652528, "yPx": 105.54805257059198 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.842626527493598
+      "strokeWidthPx": 1.842627
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0019",
@@ -24920,7 +24920,7 @@
         { "xPx": 1685.987739302891, "yPx": 106.59166253131879 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5602352717735
+      "strokeWidthPx": 1.560235
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0020",
@@ -24949,7 +24949,7 @@
         { "xPx": 1668.00587023251, "yPx": 108.58675179355983 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2474650242497773
+      "strokeWidthPx": 1.247465
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0021",
@@ -24979,7 +24979,7 @@
         { "xPx": 1649.976700948082, "yPx": 110.495666311439 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.847986014569932
+      "strokeWidthPx": 1.847986
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0022",
@@ -25009,7 +25009,7 @@
         { "xPx": 1632.0333991811247, "yPx": 113.40476595833039 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.545958608810679
+      "strokeWidthPx": 1.545959
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0023",
@@ -25040,7 +25040,7 @@
         { "xPx": 1612.9835406802363, "yPx": 116.1639490535082 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.26865581709167
+      "strokeWidthPx": 1.268656
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0024",
@@ -25071,7 +25071,7 @@
         { "xPx": 1594.0022846066113, "yPx": 119.83026601735902 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8822322467895207
+      "strokeWidthPx": 1.882232
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0025",
@@ -25102,7 +25102,7 @@
         { "xPx": 1575.9749277451806, "yPx": 123.5772047009579 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4320064703740099
+      "strokeWidthPx": 1.432006
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0026",
@@ -25133,7 +25133,7 @@
         { "xPx": 1558.3954705066094, "yPx": 128.19563369295798 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3371832454123869
+      "strokeWidthPx": 1.337183
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0027",
@@ -25165,7 +25165,7 @@
         { "xPx": 1540.2827151626504, "yPx": 132.91679067981423 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8940979023840012
+      "strokeWidthPx": 1.894098
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0028",
@@ -25196,7 +25196,7 @@
         { "xPx": 1522.9756535587835, "yPx": 138.3555877303419 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3883221137644557
+      "strokeWidthPx": 1.388322
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0029",
@@ -25228,7 +25228,7 @@
         { "xPx": 1506.0060180704902, "yPx": 144.45053226983669 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3696981731983269
+      "strokeWidthPx": 1.369698
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0030",
@@ -25260,7 +25260,7 @@
         { "xPx": 1489.0362782737527, "yPx": 151.27499879229015 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8954134647551908
+      "strokeWidthPx": 1.895413
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0031",
@@ -25292,7 +25292,7 @@
         { "xPx": 1472.000820726242, "yPx": 158.78729919463584 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3632826660870698
+      "strokeWidthPx": 1.363283
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0032",
@@ -25326,7 +25326,7 @@
         { "xPx": 1455.5307926823364, "yPx": 166.8460891645782 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.409323718844167
+      "strokeWidthPx": 1.409324
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0033",
@@ -25359,7 +25359,7 @@
         { "xPx": 1439.6184521097757, "yPx": 176.11322851767943 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8916009578137627
+      "strokeWidthPx": 1.891601
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0034",
@@ -25393,7 +25393,7 @@
         { "xPx": 1423.9998394736738, "yPx": 185.70616103404532 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.323180182014536
+      "strokeWidthPx": 1.32318
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0035",
@@ -25427,7 +25427,7 @@
         { "xPx": 1409.0433961255376, "yPx": 196.14626550108238 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.448898840187969
+      "strokeWidthPx": 1.448899
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0036",
@@ -25460,7 +25460,7 @@
         { "xPx": 1394.5263344042767, "yPx": 206.7935980093998 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8853933759118822
+      "strokeWidthPx": 1.885393
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0037",
@@ -25494,7 +25494,7 @@
         { "xPx": 1380.512651448511, "yPx": 219.1794465944774 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.300526806240506
+      "strokeWidthPx": 1.300527
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0038",
@@ -25528,7 +25528,7 @@
         { "xPx": 1366.93380807386, "yPx": 231.12485369673377 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4834285107806642
+      "strokeWidthPx": 1.483429
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0039",
@@ -25561,7 +25561,7 @@
         { "xPx": 1354.0927944055643, "yPx": 244.134737920523 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8743275399181383
+      "strokeWidthPx": 1.874328
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0040",
@@ -25594,7 +25594,7 @@
         { "xPx": 1340.785964929866, "yPx": 257.68874266876355 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2691296268201073
+      "strokeWidthPx": 1.26913
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0041",
@@ -25628,7 +25628,7 @@
         { "xPx": 1329.233638554507, "yPx": 271.73575575747753 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5401853060683126
+      "strokeWidthPx": 1.540185
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0042",
@@ -25662,7 +25662,7 @@
         { "xPx": 1316.8959005830902, "yPx": 285.90602053221465 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.844087604066535
+      "strokeWidthPx": 1.844088
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0043",
@@ -25698,7 +25698,7 @@
         { "xPx": 1305.308242017247, "yPx": 301.07104953999476 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.229969651465978
+      "strokeWidthPx": 1.22997
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0044",
@@ -25732,7 +25732,7 @@
         { "xPx": 1293.7788313144567, "yPx": 315.75233715157225 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6321239986294327
+      "strokeWidthPx": 1.632124
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0045",
@@ -25765,7 +25765,7 @@
         { "xPx": 1283.3455089345243, "yPx": 331.1966181619027 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7805787083550821
+      "strokeWidthPx": 1.780579
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0046",
@@ -25799,7 +25799,7 @@
         { "xPx": 1271.8379020451782, "yPx": 346.63710121856565 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2061988380393667
+      "strokeWidthPx": 1.206199
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0047",
@@ -25834,7 +25834,7 @@
         { "xPx": 1261.6227478350327, "yPx": 362.0624021298797 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.724376897593865
+      "strokeWidthPx": 1.724377
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0048",
@@ -25867,7 +25867,7 @@
         { "xPx": 1251.195756068118, "yPx": 376.8619965607946 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.710329267553662
+      "strokeWidthPx": 1.710329
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0049",
@@ -25902,7 +25902,7 @@
         { "xPx": 1241.6658318130771, "yPx": 392.19276336175966 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2050134387122449
+      "strokeWidthPx": 1.205013
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0050",
@@ -25937,7 +25937,7 @@
         { "xPx": 1231.222336870458, "yPx": 406.8834859581697 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7388048381281171
+      "strokeWidthPx": 1.738805
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0051",
@@ -25971,7 +25971,7 @@
         { "xPx": 1221.484285290823, "yPx": 422.04847654965295 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.705184398868045
+      "strokeWidthPx": 1.705184
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0052",
@@ -26005,7 +26005,7 @@
         { "xPx": 1211.2052890938442, "yPx": 436.89296742924796 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2052533189640653
+      "strokeWidthPx": 1.205253
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0053",
@@ -26038,7 +26038,7 @@
         { "xPx": 1201.438466432437, "yPx": 452.16064263187747 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7441145688322344
+      "strokeWidthPx": 1.744115
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0054",
@@ -26072,7 +26072,7 @@
         { "xPx": 1190.75281282121, "yPx": 466.9154742199547 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6940068558227293
+      "strokeWidthPx": 1.694007
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0055",
@@ -26105,7 +26105,7 @@
         { "xPx": 1180.3239768313374, "yPx": 482.0022625757814 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.20734828844828
+      "strokeWidthPx": 1.207348
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0056",
@@ -26139,7 +26139,7 @@
         { "xPx": 1169.4121098947935, "yPx": 496.9482231685556 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7725525403613684
+      "strokeWidthPx": 1.772553
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0057",
@@ -26173,7 +26173,7 @@
         { "xPx": 1158.4603489455417, "yPx": 512.1283313842868 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6439376837879027
+      "strokeWidthPx": 1.643938
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0058",
@@ -26207,7 +26207,7 @@
         { "xPx": 1146.9115797538398, "yPx": 526.515321519184 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2217697190893846
+      "strokeWidthPx": 1.22177
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0059",
@@ -26241,7 +26241,7 @@
         { "xPx": 1134.9781314186139, "yPx": 541.4261944667087 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.82716288511253
+      "strokeWidthPx": 1.827163
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0060",
@@ -26275,7 +26275,7 @@
         { "xPx": 1122.6494546977779, "yPx": 555.9857635416736 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5460034478817726
+      "strokeWidthPx": 1.546003
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0061",
@@ -26309,7 +26309,7 @@
         { "xPx": 1110.2849227086936, "yPx": 570.1159332916744 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2737035098899638
+      "strokeWidthPx": 1.273704
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0062",
@@ -26343,7 +26343,7 @@
         { "xPx": 1096.7834911623054, "yPx": 583.8825758924635 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8816843801572745
+      "strokeWidthPx": 1.881684
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0063",
@@ -26376,7 +26376,7 @@
         { "xPx": 1083.981029503952, "yPx": 596.7867803676112 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4392120963079256
+      "strokeWidthPx": 1.439212
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0064",
@@ -26410,7 +26410,7 @@
         { "xPx": 1070.0242159051184, "yPx": 609.8285293364922 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.342258076408447
+      "strokeWidthPx": 1.342258
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0065",
@@ -26444,7 +26444,7 @@
         { "xPx": 1056.067625954864, "yPx": 621.9693572189361 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8952869002857575
+      "strokeWidthPx": 1.895287
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0066",
@@ -26478,7 +26478,7 @@
         { "xPx": 1040.9055231058296, "yPx": 633.7451376507044 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.356289111748289
+      "strokeWidthPx": 1.356289
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0067",
@@ -26513,7 +26513,7 @@
         { "xPx": 1025.8435742558631, "yPx": 644.9989125416125 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4365862480980376
+      "strokeWidthPx": 1.436586
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0068",
@@ -26547,7 +26547,7 @@
         { "xPx": 1010.0389442814022, "yPx": 655.7072427954505 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8799608937897234
+      "strokeWidthPx": 1.879961
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0069",
@@ -26581,7 +26581,7 @@
         { "xPx": 994.0263018863534, "yPx": 665.4705597679165 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2726399014389562
+      "strokeWidthPx": 1.27264
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0070",
@@ -26613,7 +26613,7 @@
         { "xPx": 977.9412512185492, "yPx": 674.1719970370525 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.531505193271812
+      "strokeWidthPx": 1.531505
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0071",
@@ -26645,7 +26645,7 @@
         { "xPx": 961.0034373804225, "yPx": 682.756241798728 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8453482996088963
+      "strokeWidthPx": 1.845348
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0072",
@@ -26677,7 +26677,7 @@
         { "xPx": 944.0489980824299, "yPx": 690.4139982120308 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2329633013567138
+      "strokeWidthPx": 1.232963
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0073",
@@ -26707,7 +26707,7 @@
         { "xPx": 939.5319714395342, "yPx": 674.9874907312766 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6047504532324266
+      "strokeWidthPx": 1.60475
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0074",
@@ -26740,7 +26740,7 @@
         { "xPx": 933.5912301224416, "yPx": 656.9713569365182 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8031576327848893
+      "strokeWidthPx": 1.803158
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0075",
@@ -26772,7 +26772,7 @@
         { "xPx": 925.0436991702712, "yPx": 641.1073494155893 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2142025780717516
+      "strokeWidthPx": 1.214203
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0076",
@@ -26806,7 +26806,7 @@
         { "xPx": 913.2046845769014, "yPx": 626.1262810980433 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6702840712594604
+      "strokeWidthPx": 1.670284
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0077",
@@ -26841,7 +26841,7 @@
         { "xPx": 900.0929426841286, "yPx": 613.4410402455392 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7481251436059686
+      "strokeWidthPx": 1.748125
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0078",
@@ -26875,7 +26875,7 @@
         { "xPx": 884.9882679643662, "yPx": 603.4688105352888 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.205296696947151
+      "strokeWidthPx": 1.205297
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0079",
@@ -26908,7 +26908,7 @@
         { "xPx": 868.0278395287231, "yPx": 595.5194174406937 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7188259188726627
+      "strokeWidthPx": 1.718826
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0080",
@@ -26940,7 +26940,7 @@
         { "xPx": 849.9529045162435, "yPx": 590.8795389500016 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7010084007931774
+      "strokeWidthPx": 1.701008
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0081",
@@ -26970,7 +26970,7 @@
         { "xPx": 831.0050630783312, "yPx": 588.476405268524 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2099497012981262
+      "strokeWidthPx": 1.20995
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0082",
@@ -26999,7 +26999,7 @@
         { "xPx": 813.0131033543526, "yPx": 589.931820291975 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.790522056046106
+      "strokeWidthPx": 1.790522
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0083",
@@ -27031,7 +27031,7 @@
         { "xPx": 794.8973329281582, "yPx": 593.9107020369576 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6318035590104256
+      "strokeWidthPx": 1.631804
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0084",
@@ -27063,7 +27063,7 @@
         { "xPx": 777.9193559041105, "yPx": 601.2380803639189 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2252946976813601
+      "strokeWidthPx": 1.225295
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0085",
@@ -27097,7 +27097,7 @@
         { "xPx": 761.824344356428, "yPx": 610.42417857447 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8277286696456005
+      "strokeWidthPx": 1.827729
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0086",
@@ -27131,7 +27131,7 @@
         { "xPx": 748.1064921507781, "yPx": 622.8324435824379 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.567348777663985
+      "strokeWidthPx": 1.567349
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0087",
@@ -27165,7 +27165,7 @@
         { "xPx": 735.9125609445011, "yPx": 637.0045851767379 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.254715065009317
+      "strokeWidthPx": 1.254715
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0088",
@@ -27199,7 +27199,7 @@
         { "xPx": 726.8667538074637, "yPx": 653.1132342824321 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8638790090236461
+      "strokeWidthPx": 1.863879
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0089",
@@ -27230,7 +27230,7 @@
         { "xPx": 719.9566741899147, "yPx": 669.916782876676 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5040312697466225
+      "strokeWidthPx": 1.504031
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0090",
@@ -27260,7 +27260,7 @@
         { "xPx": 717.3900882485854, "yPx": 688.0111941082149 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2829412612348983
+      "strokeWidthPx": 1.282941
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0091",
@@ -27287,7 +27287,7 @@
         { "xPx": 717.6281112011894, "yPx": 706.0191761882207 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8756468210765391
+      "strokeWidthPx": 1.875647
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0092",
@@ -27318,7 +27318,7 @@
         { "xPx": 718.9746614207339, "yPx": 722.5403499575584 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4598343570306458
+      "strokeWidthPx": 1.459834
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0093",
@@ -27348,7 +27348,7 @@
         { "xPx": 701.0482980800967, "yPx": 719.743955813265 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3284536332891927
+      "strokeWidthPx": 1.328454
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0094",
@@ -27378,7 +27378,7 @@
         { "xPx": 682.9631963718945, "yPx": 717.3597867789534 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8915365294893443
+      "strokeWidthPx": 1.891537
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0095",
@@ -27409,7 +27409,7 @@
         { "xPx": 664.0221522992496, "yPx": 713.1704844314285 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3937424353435246
+      "strokeWidthPx": 1.393742
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0096",
@@ -27442,7 +27442,7 @@
         { "xPx": 645.9483506775896, "yPx": 708.9794694890045 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.395501603817214
+      "strokeWidthPx": 1.395502
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0097",
@@ -27475,7 +27475,7 @@
         { "xPx": 628.0986092762607, "yPx": 703.1874848891947 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8921847854043028
+      "strokeWidthPx": 1.892185
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0098",
@@ -27508,7 +27508,7 @@
         { "xPx": 609.9142583078662, "yPx": 697.5852190919709 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3107162504500172
+      "strokeWidthPx": 1.310716
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0099",
@@ -27540,7 +27540,7 @@
         { "xPx": 593.0327852054008, "yPx": 690.6346556703511 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4791258675902315
+      "strokeWidthPx": 1.479126
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0100",
@@ -27572,7 +27572,7 @@
         { "xPx": 575.9426804005483, "yPx": 683.3400617737356 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8725116510741286
+      "strokeWidthPx": 1.872512
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0101",
@@ -27604,7 +27604,7 @@
         { "xPx": 559.1333626707802, "yPx": 674.5530010615456 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2630547336133504
+      "strokeWidthPx": 1.263055
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0102",
@@ -27636,7 +27636,7 @@
         { "xPx": 542.8815808831278, "yPx": 666.2088080158237 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5519175808326153
+      "strokeWidthPx": 1.551918
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0103",
@@ -27670,7 +27670,7 @@
         { "xPx": 527.0371897065639, "yPx": 656.2271386627997 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8374362244792406
+      "strokeWidthPx": 1.837436
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0104",
@@ -27703,7 +27703,7 @@
         { "xPx": 511.96905679323686, "yPx": 646.3356771566204 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2338805288312662
+      "strokeWidthPx": 1.233881
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0105",
@@ -27737,7 +27737,7 @@
         { "xPx": 497.1220809462648, "yPx": 635.2314519679062 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5989343389292214
+      "strokeWidthPx": 1.598934
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0106",
@@ -27771,7 +27771,7 @@
         { "xPx": 481.86315567078435, "yPx": 623.7094013099301 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7996716416612517
+      "strokeWidthPx": 1.799672
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0107",
@@ -27805,7 +27805,7 @@
         { "xPx": 468.0225145747894, "yPx": 611.5578705891244 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.211049390635584
+      "strokeWidthPx": 1.211049
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0108",
@@ -27839,7 +27839,7 @@
         { "xPx": 454.00187864668237, "yPx": 598.7176664493875 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.688915628578621
+      "strokeWidthPx": 1.688916
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0109",
@@ -27872,7 +27872,7 @@
         { "xPx": 441.1483254402203, "yPx": 585.9122670229181 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.735089546769913
+      "strokeWidthPx": 1.73509
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0110",
@@ -27905,7 +27905,7 @@
         { "xPx": 428.50924038962364, "yPx": 573.0973589072942 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2047681192168802
+      "strokeWidthPx": 1.204768
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0111",
@@ -27939,7 +27939,7 @@
         { "xPx": 415.9508390092243, "yPx": 559.0063308803246 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.72831262559001
+      "strokeWidthPx": 1.728313
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0112",
@@ -27972,7 +27972,7 @@
         { "xPx": 404.0375260003522, "yPx": 544.931871961286 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6931131076430341
+      "strokeWidthPx": 1.693113
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0113",
@@ -28006,7 +28006,7 @@
         { "xPx": 408.02097266433515, "yPx": 531.471555447923 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2111286461241326
+      "strokeWidthPx": 1.211129
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0114",
@@ -28041,7 +28041,7 @@
         { "xPx": 420.25830078317875, "yPx": 517.9385450801822 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7998128657577204
+      "strokeWidthPx": 1.799813
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0115",
@@ -28075,7 +28075,7 @@
         { "xPx": 430.4519238534555, "yPx": 501.99199387252133 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6075129969826032
+      "strokeWidthPx": 1.607513
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0116",
@@ -28107,7 +28107,7 @@
         { "xPx": 437.4246755739221, "yPx": 485.0464465604774 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2365162392345708
+      "strokeWidthPx": 1.236516
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0117",
@@ -28137,7 +28137,7 @@
         { "xPx": 440.8244756159285, "yPx": 466.9925572630448 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8410061077866593
+      "strokeWidthPx": 1.841006
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0118",
@@ -28165,7 +28165,7 @@
         { "xPx": 441.21732161108486, "yPx": 449.00138567377405 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5570316112379279
+      "strokeWidthPx": 1.557032
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0119",
@@ -28196,7 +28196,7 @@
         { "xPx": 438.05360103427927, "yPx": 431.02848824341066 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2504154116729174
+      "strokeWidthPx": 1.250415
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0120",
@@ -28229,7 +28229,7 @@
         { "xPx": 431.9199979119629, "yPx": 413.88116624172835 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8539458037528695
+      "strokeWidthPx": 1.853946
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0121",
@@ -28262,7 +28262,7 @@
         { "xPx": 421.84147245396014, "yPx": 398.80833695978754 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5316162599423966
+      "strokeWidthPx": 1.531616
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0122",
@@ -28296,7 +28296,7 @@
         { "xPx": 428.7276048737663, "yPx": 386.03995332284865 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.273838090747682
+      "strokeWidthPx": 1.273838
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0123",
@@ -28327,7 +28327,7 @@
         { "xPx": 433.3223137186507, "yPx": 368.0206536758732 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8822781177820092
+      "strokeWidthPx": 1.882278
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0124",
@@ -28359,7 +28359,7 @@
         { "xPx": 423.26593470181155, "yPx": 353.75632126201157 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.442905226190238
+      "strokeWidthPx": 1.442905
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0125",
@@ -28393,7 +28393,7 @@
         { "xPx": 428.4522824384097, "yPx": 336.93023613380336 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.331106191825479
+      "strokeWidthPx": 1.331106
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0126",
@@ -28422,7 +28422,7 @@
         { "xPx": 430.1774252282494, "yPx": 318.9839409679 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8934370264654972
+      "strokeWidthPx": 1.893437
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0127",
@@ -28455,7 +28455,7 @@
         { "xPx": 423.4898720490127, "yPx": 302.0766391510208 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4011808349311887
+      "strokeWidthPx": 1.401181
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0128",
@@ -28488,7 +28488,7 @@
         { "xPx": 411.19957725185105, "yPx": 288.95244687491197 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3614076185927764
+      "strokeWidthPx": 1.361408
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0129",
@@ -28520,7 +28520,7 @@
         { "xPx": 410.33098490411703, "yPx": 271.1366279308226 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8952754961608846
+      "strokeWidthPx": 1.895275
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0130",
@@ -28553,7 +28553,7 @@
         { "xPx": 397.05437002365426, "yPx": 259.2557957232419 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.376470271421476
+      "strokeWidthPx": 1.37647
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0131",
@@ -28583,7 +28583,7 @@
         { "xPx": 379.01347190755627, "yPx": 257.25094856351626 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3875640695205214
+      "strokeWidthPx": 1.387564
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0132",
@@ -28615,7 +28615,7 @@
         { "xPx": 361.8190272079742, "yPx": 263.1384918716943 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.894408820329705
+      "strokeWidthPx": 1.894409
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0133",
@@ -28648,7 +28648,7 @@
         { "xPx": 353.27099211554537, "yPx": 279.64985618979426 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3297276033087044
+      "strokeWidthPx": 1.329728
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0134",
@@ -28680,7 +28680,7 @@
         { "xPx": 335.91140672064085, "yPx": 286.6056779233783 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4671644131409916
+      "strokeWidthPx": 1.467164
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0135",
@@ -28716,7 +28716,7 @@
         { "xPx": 321.81549183911807, "yPx": 299.0674111247127 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8704758630013125
+      "strokeWidthPx": 1.870476
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0136",
@@ -28749,7 +28749,7 @@
         { "xPx": 313.59244164521743, "yPx": 314.9360401152344 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2668427647390488
+      "strokeWidthPx": 1.266843
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0137",
@@ -28779,7 +28779,7 @@
         { "xPx": 313.7177158038323, "yPx": 332.9478177187551 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5239209037961747
+      "strokeWidthPx": 1.523921
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0138",
@@ -28812,7 +28812,7 @@
         { "xPx": 320.220040643464, "yPx": 350.0895193912125 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8559609885875339
+      "strokeWidthPx": 1.855961
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0139",
@@ -28845,7 +28845,7 @@
         { "xPx": 327.4822663836818, "yPx": 363.05360701014195 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2484198316111037
+      "strokeWidthPx": 1.24842
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0140",
@@ -28877,7 +28877,7 @@
         { "xPx": 308.95045423669984, "yPx": 367.1450240336626 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5857344744315283
+      "strokeWidthPx": 1.585734
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0141",
@@ -28909,7 +28909,7 @@
         { "xPx": 292.1283552803053, "yPx": 374.78399895402896 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8103526205382205
+      "strokeWidthPx": 1.810353
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0142",
@@ -28942,7 +28942,7 @@
         { "xPx": 279.1365646372587, "yPx": 368.59142990638867 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2144985662652754
+      "strokeWidthPx": 1.214499
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0143",
@@ -28977,7 +28977,7 @@
         { "xPx": 268.2890826661495, "yPx": 353.0179953236895 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.6842475058778865
+      "strokeWidthPx": 1.684248
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0144",
@@ -29010,7 +29010,7 @@
         { "xPx": 258.0700316923487, "yPx": 338.11014401884955 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7410819225072534
+      "strokeWidthPx": 1.741082
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0145",
@@ -29044,7 +29044,7 @@
         { "xPx": 246.8164212908965, "yPx": 322.8860851099162 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2045822283410743
+      "strokeWidthPx": 1.204582
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0146",
@@ -29077,7 +29077,7 @@
         { "xPx": 236.12111264419434, "yPx": 307.76957637028914 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7464298497613826
+      "strokeWidthPx": 1.74643
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0147",
@@ -29111,7 +29111,7 @@
         { "xPx": 225.03176010274316, "yPx": 293.5280935312387 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.687188047703332
+      "strokeWidthPx": 1.687188
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0148",
@@ -29146,7 +29146,7 @@
         { "xPx": 213.2623113817802, "yPx": 279.0058316142485 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2089468212304957
+      "strokeWidthPx": 1.208947
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0149",
@@ -29180,7 +29180,7 @@
         { "xPx": 200.89097279010264, "yPx": 264.701498418333 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.7921406947567702
+      "strokeWidthPx": 1.792141
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0150",
@@ -29214,7 +29214,7 @@
         { "xPx": 188.72736800775624, "yPx": 250.92736681352957 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.616859674033708
+      "strokeWidthPx": 1.61686
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0151",
@@ -29247,7 +29247,7 @@
         { "xPx": 176.0648720701029, "yPx": 237.92580594130945 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2267719052232464
+      "strokeWidthPx": 1.226772
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0152",
@@ -29281,7 +29281,7 @@
         { "xPx": 161.9422017192044, "yPx": 224.74167045391758 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.835030059470187
+      "strokeWidthPx": 1.83503
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0153",
@@ -29315,7 +29315,7 @@
         { "xPx": 147.9622729667258, "yPx": 212.5094285562893 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.5381186663062558
+      "strokeWidthPx": 1.538119
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0154",
@@ -29349,7 +29349,7 @@
         { "xPx": 133.65141647860582, "yPx": 200.94410026633582 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.2679717370917494
+      "strokeWidthPx": 1.267972
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0155",
@@ -29382,7 +29382,7 @@
         { "xPx": 119.07211237903724, "yPx": 190.31637670106167 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8674874555064198
+      "strokeWidthPx": 1.867487
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0156",
@@ -29417,7 +29417,7 @@
         { "xPx": 102.90881013815213, "yPx": 180.1119231953986 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4857560393353277
+      "strokeWidthPx": 1.485756
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0157",
@@ -29451,7 +29451,7 @@
         { "xPx": 87.01998575316168, "yPx": 170.55055721446988 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3113233055818665
+      "strokeWidthPx": 1.311323
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0158",
@@ -29483,7 +29483,7 @@
         { "xPx": 71.00083178956558, "yPx": 162.17970642263555 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.8883581242060103
+      "strokeWidthPx": 1.888358
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0159",
@@ -29517,7 +29517,7 @@
         { "xPx": 54.05851827073702, "yPx": 154.07777704540953 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.4245457248909477
+      "strokeWidthPx": 1.424546
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0160",
@@ -29549,7 +29549,7 @@
         { "xPx": 39.131707677681135, "yPx": 145.14744232616601 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3489966866129466
+      "strokeWidthPx": 1.348997
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0161",
@@ -29584,7 +29584,7 @@
         { "xPx": 27.098624949313372, "yPx": 131.1716741358998 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.894830019001448
+      "strokeWidthPx": 1.89483
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0162",
@@ -29618,7 +29618,7 @@
         { "xPx": 11.70007732045912, "yPx": 121.04926253398312 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3776654683682243
+      "strokeWidthPx": 1.377665
     },
     {
       "id": "atlas/coastline/e7649447-c5b6-5013-9e19-8e1cd57d2410/atlas-equirectangular-v1/path-0000/stroke-0163",
@@ -29645,7 +29645,7 @@
         { "xPx": 0, "yPx": 115.33753204345703 }
       ],
       "strokeColor": "#282a24",
-      "strokeWidthPx": 1.3054003424031488
+      "strokeWidthPx": 1.3054
     }
   ]
 }

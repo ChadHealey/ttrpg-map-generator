@@ -32,7 +32,7 @@ import {
 import { deriveAtlasInkStrokeSegments } from './atlas-ink-path.js';
 import { createAtlasLandFillSubpaths } from './atlas-scene-fill.js';
 
-export const ATLAS_SCENE_COMPOSITION_VERSION = 2 as const;
+export const ATLAS_SCENE_COMPOSITION_VERSION = 3 as const;
 export const ATLAS_SCENE_WIDTH_PX = 2_048 as const;
 export const ATLAS_SCENE_HEIGHT_PX = 1_024 as const;
 

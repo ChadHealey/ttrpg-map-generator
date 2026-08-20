@@ -3,10 +3,10 @@
   "fixtureId": "milestone-2-atlas-control-min",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-control-min --review-record fixed-seeds/milestone-2-atlas-control-min/reviews/0010-accepted-aspect-persistence.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-control-min --review-record fixed-seeds/milestone-2-atlas-control-min/reviews/0011-canonical-pressure-widths.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-control-min/fixture-definition.json",
-    "sha256": "393aa74359e924e9bb66a8fcf55d2a309ce0b2d9863641eb24443ddabfe3b20b"
+    "sha256": "9e5924ae16718859658d4bbbfac91d356aea9d2460c95d41f2a6e7b7b6cb5d5a"
   },
   "worldSeed": "6148914691236517205",
   "stableIds": {
@@ -49,7 +49,7 @@
     "atlasPreviewVersion": 1,
     "atlasRealizationVersion": 1,
     "atlasSamplingPolicyVersion": 1,
-    "atlasSceneCompositionVersion": 2,
+    "atlasSceneCompositionVersion": 3,
     "atlasSemanticClassificationVersion": 1,
     "atlasSemanticGeneratorManifestVersion": 1,
     "atlasSemanticParameterSchemaVersion": 1,
@@ -89,8 +89,8 @@
   ],
   "reviewPurpose": "Prove one Milestone 2 matrix row at the persistence-owned canonical accepted aspect/output boundary while retaining its separate geometry and visual evidence.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-control-min/reviews/0010-accepted-aspect-persistence.md",
-    "sha256": "73cdb53cfdf4e5dfe7d15c35857218d7d13f83f941d3667dec50f7cdfc27de0c"
+    "path": "fixed-seeds/milestone-2-atlas-control-min/reviews/0011-canonical-pressure-widths.md",
+    "sha256": "aa055b606744f18034389b4d1760e4e2203a81aab8764a8b62c8cbffdb014bb7"
   },
   "generatedRoots": [
     "canonical-svg/milestone-2-atlas-control-min",
@@ -103,8 +103,8 @@
       "kind": "canonical-svg",
       "checkpoint": "baseline",
       "byteLength": 394942,
-      "canonicalSvgSha256": "494c326fa6afc8fe632ca69e6ad0cef5cccd8461ef0508cbd9cd90bfdaef59de",
-      "fixtureIntegritySha256": "494c326fa6afc8fe632ca69e6ad0cef5cccd8461ef0508cbd9cd90bfdaef59de"
+      "canonicalSvgSha256": "75678f3575eb25d91ee09da1604830db2f05131c63021f4f1fb426e896fddd5a",
+      "fixtureIntegritySha256": "75678f3575eb25d91ee09da1604830db2f05131c63021f4f1fb426e896fddd5a"
     },
     {
       "path": "fixed-seeds/milestone-2-atlas-control-min/expected/baseline/accepted-aspects.aspects.index.canonical",
@@ -119,16 +119,16 @@
       "kind": "canonical-kernel-vector",
       "checkpoint": "baseline",
       "byteLength": 9242,
-      "canonicalKernelVectorSha256": "a702771d336486d2f777c9a212d123a7dd7f3357b7006fbcd9e2bd212d6c3b85",
-      "fixtureIntegritySha256": "a702771d336486d2f777c9a212d123a7dd7f3357b7006fbcd9e2bd212d6c3b85"
+      "canonicalKernelVectorSha256": "d058bcf0f9c0d60fe4a4377168b9dd506fed292fcef7de88ee4a489e5f750fd7",
+      "fixtureIntegritySha256": "d058bcf0f9c0d60fe4a4377168b9dd506fed292fcef7de88ee4a489e5f750fd7"
     },
     {
       "path": "fixed-seeds/milestone-2-atlas-control-min/expected/baseline/atlas-render-scene.scene.canonical",
       "kind": "canonical-render-scene",
       "checkpoint": "baseline",
-      "byteLength": 622131,
-      "canonicalSceneSha256": "6dd8d0ac1b2f4a52803bb7b2c7cec98a94b1fa93af5e05befbd04f2263cc4d41",
-      "fixtureIntegritySha256": "6dd8d0ac1b2f4a52803bb7b2c7cec98a94b1fa93af5e05befbd04f2263cc4d41"
+      "byteLength": 619873,
+      "canonicalSceneSha256": "47a497165be0b129e692d8a9a79871f55c0de3a4df6a484fe26775e5698bb482",
+      "fixtureIntegritySha256": "47a497165be0b129e692d8a9a79871f55c0de3a4df6a484fe26775e5698bb482"
     },
     {
       "path": "visual-gallery/milestone-2-atlas-control-min/baseline.png",
