@@ -20,12 +20,12 @@ import {
   analyzeAtlasSurfacePartition,
   atlasMembershipCentroid,
   type AtlasSurfacePartitionAnalysis,
-  isAtlasSurfacePartitionAnalysisFor,
+  trustedAtlasSurfacePartitionAnalysisFor,
 } from './atlas-geography-surface-topology.js';
 import {
   type AtlasWaterSegmentationResult,
-  isAtlasWaterSegmentationFor,
   segmentAtlasWaterBodies,
+  trustedAtlasWaterSegmentationFor,
 } from './atlas-geography-water-policy.js';
 import type { EntityId } from './identity.js';
 
@@ -84,9 +84,10 @@ export function validateAtlasSemanticPolicyConformance(
 
   const samples = records.landWaterClassification.samples;
   const partition =
-    precomputed !== undefined && isAtlasSurfacePartitionAnalysisFor(precomputed.partition, samples)
-      ? precomputed.partition
-      : analyzeAtlasSurfacePartition(samples);
+    precomputed === undefined
+      ? analyzeAtlasSurfacePartition(samples)
+      : (trustedAtlasSurfacePartitionAnalysisFor(precomputed.partition, samples) ??
+        analyzeAtlasSurfacePartition(samples));
   const landAnalyses = partition.components.filter(({ kind }) => kind === 'land');
   const expectedLandIds = new Set(
     landAnalyses.map(
@@ -112,15 +113,14 @@ export function validateAtlasSemanticPolicyConformance(
   }
 
   const water =
-    precomputed?.partition === partition &&
-    isAtlasWaterSegmentationFor(
-      precomputed.water,
-      samples,
-      partition,
-      records.controls.oceanConnectivity,
-    )
-      ? precomputed.water
-      : segmentAtlasWaterBodies(samples, partition, records.controls.oceanConnectivity);
+    precomputed === undefined
+      ? segmentAtlasWaterBodies(samples, partition, records.controls.oceanConnectivity)
+      : (trustedAtlasWaterSegmentationFor(
+          precomputed.water,
+          samples,
+          partition,
+          records.controls.oceanConnectivity,
+        ) ?? segmentAtlasWaterBodies(samples, partition, records.controls.oceanConnectivity));
   if (!water.ok) {
     diagnostics.push(policyDiagnostic(water.reason));
     return diagnostics;

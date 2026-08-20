@@ -8,6 +8,7 @@ import {
   type AtlasSurfacePartitionAnalysis,
   forEachAtlasSurfaceNeighbor,
   summarizeAtlasLabeledRegions,
+  trustedAtlasSurfacePartitionAnalysisFor,
 } from './atlas-geography-surface-topology.js';
 import type { LandWaterSampleReader } from './atlas-sample-reader.js';
 
@@ -30,6 +31,7 @@ interface WaterSegmentationSource {
   readonly samples: LandWaterSampleReader;
   readonly partition: AtlasSurfacePartitionAnalysis;
   readonly oceanConnectivity: AtlasOceanConnectivity;
+  readonly result: Extract<AtlasWaterSegmentationResult, { readonly ok: true }>;
 }
 
 const waterSegmentationSources = new WeakMap<object, WaterSegmentationSource>();
@@ -108,22 +110,39 @@ export function segmentAtlasWaterBodies(
     regions: Object.freeze(regions),
     regionIndexBySample,
   });
-  waterSegmentationSources.set(result, Object.freeze({ samples, partition, oceanConnectivity }));
+  const certifiedPartition = trustedAtlasSurfacePartitionAnalysisFor(partition, samples);
+  if (certifiedPartition !== undefined) {
+    waterSegmentationSources.set(
+      result,
+      Object.freeze({
+        samples,
+        partition: certifiedPartition,
+        oceanConnectivity,
+        result: Object.freeze({
+          ok: true as const,
+          regions: result.regions,
+          regionIndexBySample: new Int32Array(regionIndexBySample),
+        }),
+      }),
+    );
+  }
   return result;
 }
 
-export function isAtlasWaterSegmentationFor(
+/** @internal Return the owned segmentation only for its exact certified inputs. */
+export function trustedAtlasWaterSegmentationFor(
   result: Extract<AtlasWaterSegmentationResult, { readonly ok: true }>,
   samples: LandWaterSampleReader,
   partition: AtlasSurfacePartitionAnalysis,
   oceanConnectivity: AtlasOceanConnectivity,
-): boolean {
+): Extract<AtlasWaterSegmentationResult, { readonly ok: true }> | undefined {
   const source = waterSegmentationSources.get(result);
-  return (
-    source?.samples === samples &&
+  if (source === undefined) return undefined;
+  return source.samples === samples &&
     source.partition === partition &&
     source.oceanConnectivity === oceanConnectivity
-  );
+    ? source.result
+    : undefined;
 }
 
 function distanceFromLand(samples: LandWaterSampleReader): Uint8Array {

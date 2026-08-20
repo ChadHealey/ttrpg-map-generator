@@ -9,7 +9,7 @@ import {
   type AtlasSurfaceSampleRange,
 } from './atlas-geography-model.js';
 import type { AtlasSemanticCentroid } from './atlas-geography-semantic-policy.js';
-import type { LandWaterSampleReader } from './atlas-sample-reader.js';
+import { isAtlasSampleReader, type LandWaterSampleReader } from './atlas-sample-reader.js';
 import {
   PLANET_ANGULAR_STEP_RAD,
   PLANET_LATITUDE_MIN_TICKS,
@@ -17,6 +17,7 @@ import {
   PLANET_TICKS_PER_TURN,
   roundTiesAwayFromZero,
 } from './coordinates.js';
+import { isImmutableDomainSnapshot } from './immutable-domain-snapshot.js';
 
 export type AtlasSurfaceCentroid = AtlasSemanticCentroid;
 
@@ -35,7 +36,16 @@ export interface AtlasSurfacePartitionAnalysis {
   readonly rowWeights: Int32Array;
 }
 
-const partitionSources = new WeakMap<AtlasSurfacePartitionAnalysis, LandWaterSampleReader>();
+interface CertifiedPartitionSource {
+  readonly samples: LandWaterSampleReader;
+  readonly analysis: AtlasSurfacePartitionAnalysis;
+}
+
+/**
+ * Maps the public, mutable-transport result to an unexposed owned copy.  Typed arrays cannot be
+ * frozen, so object freezing alone is not a proof that the caller has not altered analysis data.
+ */
+const partitionSources = new WeakMap<AtlasSurfacePartitionAnalysis, CertifiedPartitionSource>();
 
 interface MutableComponent {
   readonly analysisIndex: number;
@@ -118,15 +128,33 @@ export function analyzeAtlasSurfacePartition(
     componentIndexBySample,
     rowWeights,
   });
-  partitionSources.set(analysis, samples);
+  if (isTrustedAtlasSampleReader(samples)) {
+    partitionSources.set(
+      analysis,
+      Object.freeze({
+        samples,
+        analysis: Object.freeze({
+          components: analysis.components,
+          componentIndexBySample: new Int32Array(componentIndexBySample),
+          rowWeights: new Int32Array(rowWeights),
+        }),
+      }),
+    );
+  }
   return analysis;
 }
 
-export function isAtlasSurfacePartitionAnalysisFor(
+/** @internal Return the owned analysis only for its exact project-owned immutable source reader. */
+export function trustedAtlasSurfacePartitionAnalysisFor(
   analysis: AtlasSurfacePartitionAnalysis,
   samples: LandWaterSampleReader,
-): boolean {
-  return partitionSources.get(analysis) === samples;
+): AtlasSurfacePartitionAnalysis | undefined {
+  const source = partitionSources.get(analysis);
+  return source?.samples === samples ? source.analysis : undefined;
+}
+
+function isTrustedAtlasSampleReader(samples: LandWaterSampleReader): boolean {
+  return isAtlasSampleReader(samples) && isImmutableDomainSnapshot(samples);
 }
 
 /** Recompute the exact normalized centroid recorded implicitly by canonical membership. */

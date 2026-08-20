@@ -167,7 +167,10 @@ export function validateAtlasSemanticGeographyRecords(
   return diagnostics.length === 0 ? { ok: true } : { ok: false, diagnostics };
 }
 
-/** Validate generated records while safely reusing analysis certified for their exact samples. */
+/**
+ * Validate records with an optional disposable analysis transport. Only core-owned analysis bound
+ * to the exact immutable sample reader is reused; every other value recomputes policy truth.
+ */
 export function validateAtlasSemanticGeographyRecordsWithAnalysis(
   records: AtlasSemanticGeographyRecords,
   analysis: AtlasSemanticPolicyAnalysis,
