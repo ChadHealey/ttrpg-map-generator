@@ -18,7 +18,7 @@ pnpm format:check    # verify formatting without changing files
 pnpm lint            # ESLint and dependency-boundary checks
 pnpm typecheck       # TypeScript project references and svelte-check
 pnpm test            # default unit/property/integration suite
-pnpm check           # format:check + lint + typecheck + test + Rust checks
+pnpm check           # format:check + lint + typecheck + tests, including semantic retention + Rust checks
 ```
 
 Specialized suites have focused commands for direct iteration and named evidence gates:
@@ -29,7 +29,13 @@ pnpm test:e2e
 pnpm test:cross-platform
 pnpm test:native-recovery
 pnpm test:png-export
+pnpm test:semantic-validation-retention
 ```
+
+`pnpm test:semantic-validation-retention` runs the semantic-validation cache retention proof in
+an isolated `node --expose-gc` process. It keeps one land/water classification live while
+validating distinct immutable semantic graphs, then proves their roots, arrays, and entities can
+be collected.
 
 `pnpm test:e2e` runs the focused Milestone 1 and Milestone 2 desktop orchestration tests plus both
 real native workflow bridges. The atlas workflow covers preview cancellation/restart, full

@@ -3,6 +3,7 @@ import {
   type AtlasSampleReader,
   atlasSampleReaderToArray,
   type AtlasSemanticGeographyRecords,
+  createImmutableDomainSnapshot,
   validateAtlasSemanticGeographyRecords,
   validateAtlasSemanticGeographyRecordsWithAnalysis,
 } from '@ttrpg-map/core';
@@ -19,7 +20,43 @@ import { validateProvenAtlasSemanticGeographyRecords } from './atlas-semantic-va
 import { segmentAtlasWaterBodies } from './atlas-semantic-water.js';
 import { analyzeAtlasSurfacePartition } from './atlas-surface-topology.js';
 
+const garbageCollector = (globalThis as { readonly gc?: () => void }).gc;
+
 describe('atlas semantic validation proof', () => {
+  it('reuses policy validation for an exact immutable semantic graph', async () => {
+    const records = await classifiedRecords();
+    expect(validateAtlasSemanticGeographyRecords(records)).toStrictEqual({ ok: true });
+
+    const reusedWithPoisonedAnalysis = validateAtlasSemanticGeographyRecordsWithAnalysis(
+      records,
+      poisonedAnalysis(),
+    );
+    expect(reusedWithPoisonedAnalysis).toStrictEqual({ ok: true });
+  }, 30_000);
+
+  it('never grants a cached success after a semantic input identity changes', async () => {
+    const records = await classifiedRecords();
+    expect(validateAtlasSemanticGeographyRecords(records)).toStrictEqual({ ok: true });
+    const firstLandmass = records.landmasses[0];
+    expect(firstLandmass).toBeDefined();
+    if (firstLandmass === undefined) return;
+
+    const changedInputs: readonly AtlasSemanticGeographyRecords[] = [
+      { ...records, controls: { ...records.controls } },
+      { ...records, macroElevation: { ...records.macroElevation } },
+      { ...records, landWaterClassification: { ...records.landWaterClassification } },
+      { ...records, landmasses: [...records.landmasses] },
+      { ...records, landmasses: [{ ...firstLandmass }, ...records.landmasses.slice(1)] },
+      { ...records, islandGroups: [...records.islandGroups] },
+      { ...records, waterBodies: [...records.waterBodies] },
+    ];
+    for (const changedRecords of changedInputs) {
+      expect(() =>
+        validateAtlasSemanticGeographyRecordsWithAnalysis(changedRecords, poisonedAnalysis()),
+      ).toThrow('Exact semantic validation should not read a redundant policy analysis.');
+    }
+  }, 30_000);
+
   it('never reuses validation for a fully frozen graph with accessor-backed fields', async () => {
     const generated = await generateFixedAtlasFull();
     const classified = classifyAtlasSemanticGeography({
@@ -165,6 +202,15 @@ describe('atlas semantic validation proof', () => {
       }),
     ).toStrictEqual(expectedMutatedSource);
   }, 60_000);
+
+  const retentionIt = garbageCollector === undefined ? it.skip : it;
+  retentionIt(
+    'does not retain obsolete derived semantic graphs behind a live classification',
+    async () => {
+      await proveObsoleteSemanticGraphsCollect(garbageCollector);
+    },
+    60_000,
+  );
 });
 
 async function classifiedRecords(): Promise<AtlasSemanticGeographyRecords> {
@@ -190,4 +236,87 @@ function mutableReader<Value>(values: Value[]): AtlasSampleReader<Value> {
       values.forEach(visit);
     },
   };
+}
+
+function poisonedAnalysis(): Parameters<
+  typeof validateAtlasSemanticGeographyRecordsWithAnalysis
+>[1] {
+  return {
+    get partition(): never {
+      throw new Error('Exact semantic validation should not read a redundant policy analysis.');
+    },
+    get water(): never {
+      throw new Error('Exact semantic validation should not read a redundant policy analysis.');
+    },
+  };
+}
+
+async function proveObsoleteSemanticGraphsCollect(
+  collectGarbage: (() => void) | undefined,
+): Promise<void> {
+  if (collectGarbage === undefined)
+    throw new Error('The retention proof requires node --expose-gc.');
+  const records = await classifiedRecords();
+  const partition = analyzeAtlasSurfacePartition(records.landWaterClassification.samples);
+  const water = segmentAtlasWaterBodies(
+    records.landWaterClassification.samples,
+    partition,
+    records.controls.oceanConnectivity,
+  );
+  expect(water.ok).toBe(true);
+  if (!water.ok) return;
+
+  const obsoleteReferences = Array.from({ length: 6 }, () =>
+    validateTransientSemanticGraph(records, { partition, water }),
+  ).flat();
+  await collectWeakReferences(collectGarbage, obsoleteReferences);
+
+  expect(records.landWaterClassification).toBeDefined();
+  expect(obsoleteReferences.every((reference) => reference.deref() === undefined)).toBe(true);
+}
+
+function validateTransientSemanticGraph(
+  records: AtlasSemanticGeographyRecords,
+  analysis: Parameters<typeof validateAtlasSemanticGeographyRecordsWithAnalysis>[1],
+): readonly WeakRef<object>[] {
+  const snapshot = createImmutableDomainSnapshot({
+    ...records,
+    landmasses: records.landmasses.map((landmass) => ({ ...landmass })),
+    islandGroups: records.islandGroups.map((islandGroup) => ({ ...islandGroup })),
+    waterBodies: records.waterBodies.map((waterBody) => ({ ...waterBody })),
+  });
+  expect(snapshot.ok).toBe(true);
+  if (!snapshot.ok) throw new Error('Expected a snapshot-owned derived semantic graph.');
+  const derived = snapshot.value;
+  expect(validateAtlasSemanticGeographyRecordsWithAnalysis(derived, analysis)).toStrictEqual({
+    ok: true,
+  });
+
+  const firstLandmass = derived.landmasses[0];
+  expect(firstLandmass).toBeDefined();
+  if (firstLandmass === undefined) throw new Error('Expected a derived landmass.');
+  return [new WeakRef(derived), new WeakRef(derived.landmasses), new WeakRef(firstLandmass)];
+}
+
+async function collectWeakReferences(
+  collectGarbage: () => void,
+  references: readonly WeakRef<object>[],
+): Promise<void> {
+  for (let attempt = 0; attempt < 20; attempt += 1) {
+    await nextTask();
+    collectGarbage();
+    await nextTask();
+    if (references.every((reference) => reference.deref() === undefined)) return;
+  }
+}
+
+function nextTask(): Promise<void> {
+  return new Promise<void>((resolve) => {
+    const schedule = (
+      globalThis as unknown as {
+        readonly setTimeout: (callback: () => void, delay: number) => void;
+      }
+    ).setTimeout;
+    schedule(resolve, 0);
+  });
 }

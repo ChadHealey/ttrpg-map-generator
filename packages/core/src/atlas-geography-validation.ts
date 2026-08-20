@@ -65,21 +65,21 @@ export type AtlasGeographyValidationResult =
   | { readonly ok: true }
   | { readonly ok: false; readonly diagnostics: readonly AtlasGeographyDiagnostic[] };
 
-interface SemanticValidationCacheEntry {
-  readonly controls: AtlasControls;
-  readonly macroElevation: AtlasSemanticGeographyRecords['macroElevation'];
-  readonly semanticClassificationVersion: number;
-  readonly worldMapId: AtlasSemanticGeographyRecords['worldMapId'];
-  readonly worldSurfaceEntityId: AtlasSemanticGeographyRecords['worldSurfaceEntityId'];
-  readonly landWaterClassificationAspectId: AtlasSemanticGeographyRecords['landWaterClassificationAspectId'];
-  readonly landmasses: readonly Landmass[];
-  readonly islandGroups: readonly IslandGroup[];
-  readonly waterBodies: readonly WaterBody[];
+interface SemanticValidationCacheLeaf {
+  readonly identitiesByVersion: Map<number, Map<string, Map<string, Set<string>>>>;
 }
 
+/**
+ * Exact validation certificates. Every semantic object is a weak key; cache values contain only
+ * further weak maps or scalar identities, so a still-live classification cannot retain obsolete
+ * derived semantic graphs.
+ */
 const semanticValidationCache = new WeakMap<
-  AtlasSemanticGeographyRecords['landWaterClassification'],
-  readonly SemanticValidationCacheEntry[]
+  object,
+  WeakMap<
+    object,
+    WeakMap<object, WeakMap<object, WeakMap<object, WeakMap<object, SemanticValidationCacheLeaf>>>>
+  >
 >();
 
 /** Parse all accepted controls without coercion, defaults, or UI-local state. */
@@ -203,19 +203,16 @@ function semanticDiagnostics(
 function hasCachedSemanticValidation(records: AtlasSemanticGeographyRecords): boolean {
   return (
     semanticValidationCache
-      .get(records.landWaterClassification)
-      ?.some(
-        (entry) =>
-          sameAtlasControls(entry.controls, records.controls) &&
-          entry.macroElevation === records.macroElevation &&
-          entry.semanticClassificationVersion === records.semanticClassificationVersion &&
-          entry.worldMapId === records.worldMapId &&
-          entry.worldSurfaceEntityId === records.worldSurfaceEntityId &&
-          entry.landWaterClassificationAspectId === records.landWaterClassificationAspectId &&
-          sameObjectReferences(entry.landmasses, records.landmasses) &&
-          sameObjectReferences(entry.islandGroups, records.islandGroups) &&
-          sameObjectReferences(entry.waterBodies, records.waterBodies),
-      ) ?? false
+      .get(records.controls)
+      ?.get(records.macroElevation)
+      ?.get(records.landWaterClassification)
+      ?.get(records.landmasses)
+      ?.get(records.islandGroups)
+      ?.get(records.waterBodies)
+      ?.identitiesByVersion.get(records.semanticClassificationVersion)
+      ?.get(records.worldMapId)
+      ?.get(records.worldSurfaceEntityId)
+      ?.has(records.landWaterClassificationAspectId) ?? false
   );
 }
 
@@ -225,32 +222,58 @@ function rememberSemanticValidation(records: AtlasSemanticGeographyRecords): voi
     records.controls,
     records.macroElevation,
     records.landWaterClassification,
+    records.landmasses,
+    records.islandGroups,
+    records.waterBodies,
     ...records.landmasses,
     ...records.islandGroups,
     ...records.waterBodies,
   ];
   if (!immutableValues.every(isImmutableDomainSnapshot)) return;
-  const entry: SemanticValidationCacheEntry = Object.freeze({
-    controls: records.controls,
-    macroElevation: records.macroElevation,
-    semanticClassificationVersion: records.semanticClassificationVersion,
-    worldMapId: records.worldMapId,
-    worldSurfaceEntityId: records.worldSurfaceEntityId,
-    landWaterClassificationAspectId: records.landWaterClassificationAspectId,
-    landmasses: records.landmasses,
-    islandGroups: records.islandGroups,
-    waterBodies: records.waterBodies,
-  });
-  const existing = semanticValidationCache.get(records.landWaterClassification) ?? [];
-  semanticValidationCache.set(records.landWaterClassification, Object.freeze([...existing, entry]));
+  const macroElevationCache = weakCacheValue(semanticValidationCache, records.controls);
+  const classificationCache = weakCacheValue(macroElevationCache, records.macroElevation);
+  const landmassCache = weakCacheValue(classificationCache, records.landWaterClassification);
+  const islandGroupCache = weakCacheValue(landmassCache, records.landmasses);
+  const waterBodyCache = weakCacheValue(islandGroupCache, records.islandGroups);
+  const leaf = weakCacheValue(waterBodyCache, records.waterBodies, () => ({
+    identitiesByVersion: new Map<number, Map<string, Map<string, Set<string>>>>(),
+  }));
+  const worldMapIdentities = mapCacheValue(
+    leaf.identitiesByVersion,
+    records.semanticClassificationVersion,
+    () => new Map<string, Map<string, Set<string>>>(),
+  );
+  const worldSurfaceIdentities = mapCacheValue(
+    worldMapIdentities,
+    records.worldMapId,
+    () => new Map<string, Set<string>>(),
+  );
+  const aspectIdentities = mapCacheValue(
+    worldSurfaceIdentities,
+    records.worldSurfaceEntityId,
+    () => new Set<string>(),
+  );
+  aspectIdentities.add(records.landWaterClassificationAspectId);
 }
 
-function sameObjectReferences(left: readonly object[], right: readonly object[]): boolean {
-  return left.length === right.length && left.every((value, index) => value === right[index]);
+function weakCacheValue<Value>(
+  cache: WeakMap<object, Value>,
+  key: object,
+  create: () => Value = () => new WeakMap<object, unknown>() as Value,
+): Value {
+  const existing = cache.get(key);
+  if (existing !== undefined) return existing;
+  const value = create();
+  cache.set(key, value);
+  return value;
 }
 
-function sameAtlasControls(left: AtlasControls, right: AtlasControls): boolean {
-  return ATLAS_CONTROL_FIELDS.every((field) => left[field] === right[field]);
+function mapCacheValue<Key, Value>(cache: Map<Key, Value>, key: Key, create: () => Value): Value {
+  const existing = cache.get(key);
+  if (existing !== undefined) return existing;
+  const value = create();
+  cache.set(key, value);
+  return value;
 }
 
 /** Validate the complete upstream #58 field/partition output independently of #59 entities. */

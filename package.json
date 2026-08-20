@@ -19,6 +19,7 @@
     "typecheck": "tsc -b --pretty false && corepack pnpm --filter @ttrpg-map/desktop check",
     "test": "vitest run --passWithNoTests --exclude '**/dist/**' --exclude 'apps/desktop/src/atlas-workflow-generation.integration.test.ts' --exclude 'scripts/atlas-png-large-export.test.mjs'",
     "test:cross-platform": "vitest run scripts/atlas-png-export-fixtures.test.mjs && node scripts/fixture-conventions.mjs check",
+    "test:semantic-validation-retention": "vitest run packages/generation/src/atlas-semantic-validation-proof.test.ts --execArgv=--expose-gc --testNamePattern 'does not retain obsolete derived semantic graphs behind a live classification'",
     "test:e2e": "node scripts/run-vitest-with-heap.mjs run apps/desktop/src/milestone-one-proof-workflow.test.ts apps/desktop/src/atlas-workflow.e2e.test.ts apps/desktop/src/atlas-workflow-png.test.ts apps/desktop/src/atlas-workflow-generation.integration.test.ts && cargo test --manifest-path apps/desktop/src-tauri/Cargo.toml --test mapworld_native_recovery workflow -- --nocapture --test-threads=1",
     "test:native-recovery": "cargo test --manifest-path apps/desktop/src-tauri/Cargo.toml --test mapworld_native_recovery -- --nocapture --test-threads=1",
     "test:visual": "vitest run scripts/render-scene-png.test.mjs scripts/atlas-png-export-fixtures.test.mjs apps/desktop/src/milestone-one-proof-scene.test.ts apps/desktop/src/milestone-one-proof-evidence.test.ts && node scripts/fixture-conventions.mjs check",
@@ -29,7 +30,7 @@
     "rust:test": "cargo test --manifest-path apps/desktop/src-tauri/Cargo.toml --all-targets --all-features -- --test-threads=1",
     "precommit": "node scripts/check-staged-files.mjs && corepack pnpm format:check && corepack pnpm lint",
     "prepare": "simple-git-hooks",
-    "check": "corepack pnpm format:check && corepack pnpm lint && corepack pnpm typecheck && corepack pnpm test && corepack pnpm rust:fmt && corepack pnpm rust:clippy && corepack pnpm rust:test"
+    "check": "corepack pnpm format:check && corepack pnpm lint && corepack pnpm typecheck && corepack pnpm test && corepack pnpm test:semantic-validation-retention && corepack pnpm rust:fmt && corepack pnpm rust:clippy && corepack pnpm rust:test"
   },
   "simple-git-hooks": {
     "pre-commit": "corepack pnpm precommit"
