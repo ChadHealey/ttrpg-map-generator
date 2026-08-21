@@ -1,0 +1,254 @@
+{
+  "schema": "issue-87-packaged-preview-profile-v2",
+  "issue": 87,
+  "status": "decision-ready",
+  "measurementWindow": {
+    "startedAfter": "2026-08-20T20:08:32-06:00",
+    "environmentRecapturedAt": "2026-08-20T20:21:48-06:00",
+    "timezone": "America/Edmonton"
+  },
+  "candidate": {
+    "commit": "fdda1c91f7f68b8b5072f2b7b376381e762a29f5",
+    "packageForm": "unsigned local arm64 app",
+    "executablePath": "apps/desktop/src-tauri/target/release/bundle/macos/TTRPG Map Generator.app/Contents/MacOS/ttrpg-map-desktop",
+    "cleanExecutableSha256": "333faea6f4403f94836de40b1cdf087c0202c7a42ddf6758bb11473eff5156d2",
+    "cleanExecutableBytes": 10000528,
+    "cleanExecutableRole": "reproduced issue-84 reference; rebuilt and hashed but not stage-profiled",
+    "instrumentedExecutableSha256": "8384bc3ad9c5369363055a879b3cf5c0804af7408a7d8ef11a6b50a336be88ba",
+    "profiledExecutableSha256": "8384bc3ad9c5369363055a879b3cf5c0804af7408a7d8ef11a6b50a336be88ba",
+    "instrumentation": {
+      "status": "temporary-uncommitted-and-removed-from-production-sources; exact patch retained",
+      "method": "performance.now timestamps around existing stages, an accessibility-readable receipt, and a double-requestAnimationFrame first-paint receipt",
+      "patchPath": "docs/investigations/issue-87/instrumentation.patch",
+      "patchSha256": "5259149990eb7ba0f50e5f8a2a4da15aa6582dacc71698f9fd33357c8f324938",
+      "sourceSha256": {
+        "packages/generation/src/issue-87-preview-probe.ts": "b6839ea462aa142d50dbb8cb16f614b9c019d7ce215c526b480ad5bb9fa853fe",
+        "packages/generation/src/atlas-land-water-generator.ts": "35e3732191652e6b240c891bccf281051af25ca52e845779970bdd7cdde84021",
+        "packages/generation/src/atlas-land-water-classification.ts": "c063a68aa2344f56cc1591f3264898769823e9eed6663a606670784464c0e29f",
+        "apps/desktop/src/ProofViewport.svelte": "f4da5538afa4171f725c62e152cdf32f97c8115029f66d266f46108d3b7ea93a",
+        "apps/desktop/src/App.svelte": "93cfcce3657712ca134828f115373b7bf75cf2ab69d504be263127fbcd5f9f72"
+      }
+    }
+  },
+  "host": {
+    "model": "MacBook Pro",
+    "modelIdentifier": "Mac17,2",
+    "chip": "Apple M5",
+    "memory": "24 GB",
+    "macosVersion": "26.5.1",
+    "macosBuild": "25F80",
+    "powerConnected": true,
+    "lowPowerMode": false,
+    "debuggerOrDeveloperToolsAttached": false,
+    "networkDependency": false
+  },
+  "toolchain": {
+    "node": "24.11.0",
+    "pnpm": "11.19.0",
+    "rustc": "1.97.1"
+  },
+  "buildCommands": [
+    "corepack pnpm install --frozen-lockfile",
+    "corepack pnpm --filter @ttrpg-map/desktop tauri build --bundles app"
+  ],
+  "measurementMethod": {
+    "clock": "one WebContent performance.now clock for dispatch, generation stages, value materialization, canvas work, and post-paint receipt",
+    "processPolicy": "terminate only prior ttrpg-map-desktop profiling processes, launch one packaged app, settle for three seconds, and keep that one app frontmost",
+    "dispatchBoundary": "the temporary fixture control assigned the registered seed and controls, awaited one Svelte tick, then called the unchanged AtlasWorkflow.requestPreview path; dispatchStartMs was captured immediately before that call",
+    "paintBoundary": "drawDisposablePreview returned after createImageData, pixel fill, offscreen canvas putImageData, and destination drawImage; the terminal receipt was recorded after two requestAnimationFrame callbacks",
+    "observationPolicy": "one uninterrupted Accessibility command set the app frontmost, clicked once, waited ten seconds without polling, and read one receipt",
+    "commandTranscriptPath": "docs/investigations/issue-87/measurement-commands.md",
+    "commandTranscriptSha256": "caed7752d38481b50771d0ce493e0b727442e947046839195488ba23646e857f",
+    "visibleReceipt": {
+      "canvasAccessibilityName": "Disposable coarse atlas preview",
+      "caption": "DISPOSABLE COARSE PREVIEW — not accepted, saveable, or promotable.",
+      "acceptFullEnabled": true
+    }
+  },
+  "fixtures": {
+    "milestone-2-atlas-proof": {
+      "worldSeed": "81985529216486895",
+      "controlsSource": "fixtures/fixed-seeds/milestone-2-atlas-proof/fixture-definition.json"
+    },
+    "milestone-2-atlas-fragmented-islands": {
+      "worldSeed": "18364758544493064720",
+      "controlsSource": "fixtures/fixed-seeds/milestone-2-atlas-fragmented-islands/fixture-definition.json"
+    },
+    "milestone-2-atlas-control-max": {
+      "worldSeed": "16045690984503098046",
+      "controlsSource": "fixtures/fixed-seeds/milestone-2-atlas-control-max/fixture-definition.json"
+    }
+  },
+  "validObservations": [
+    {
+      "id": "warmup-proof-frontmost",
+      "kind": "untimed-warmup",
+      "fixture": "milestone-2-atlas-proof",
+      "executableSha256": "8384bc3ad9c5369363055a879b3cf5c0804af7408a7d8ef11a6b50a336be88ba",
+      "commandId": "frontmost-proof",
+      "result": "not-used-for-gate",
+      "dispatchStartMs": 2925,
+      "firstPaintReceiptMs": 3553,
+      "elapsedThroughFirstPaintMs": 628,
+      "stagesMs": {
+        "sampling": 66,
+        "thresholdSelection": 316,
+        "classification": 171,
+        "validation": 8,
+        "previewValueMaterialization": 52,
+        "canvasPaint": 3,
+        "postCanvasToPaintReceipt": 9
+      },
+      "threshold": {
+        "candidateCount": 17,
+        "contourLevel": -13854891,
+        "previewWaterCoveragePercent": 65.00073,
+        "previewCoverageErrorBasisPoints": 0.073,
+        "componentCount": 3,
+        "largestComponentPercent": 50.276133,
+        "connectivitySupported": false
+      }
+    },
+    {
+      "id": "fresh-proof-1",
+      "kind": "fresh-process-profile",
+      "fixture": "milestone-2-atlas-proof",
+      "executableSha256": "8384bc3ad9c5369363055a879b3cf5c0804af7408a7d8ef11a6b50a336be88ba",
+      "commandId": "frontmost-proof",
+      "result": "diagnostic-pass",
+      "requiredMaximumElapsedMs": 750,
+      "dispatchStartMs": 2940,
+      "firstPaintReceiptMs": 3552,
+      "elapsedThroughFirstPaintMs": 612,
+      "stagesMs": {
+        "sampling": 62,
+        "thresholdSelection": 304,
+        "classification": 173,
+        "validation": 7,
+        "previewValueMaterialization": 50,
+        "canvasPaint": 3,
+        "postCanvasToPaintReceipt": 8
+      },
+      "threshold": {
+        "candidateCount": 17,
+        "contourLevel": -13854891,
+        "previewWaterCoveragePercent": 65.00073,
+        "previewCoverageErrorBasisPoints": 0.073,
+        "componentCount": 3,
+        "largestComponentPercent": 50.276133,
+        "connectivitySupported": false
+      }
+    },
+    {
+      "id": "fresh-fragmented-islands-1",
+      "kind": "fresh-process-profile",
+      "fixture": "milestone-2-atlas-fragmented-islands",
+      "executableSha256": "8384bc3ad9c5369363055a879b3cf5c0804af7408a7d8ef11a6b50a336be88ba",
+      "commandId": "frontmost-fragmented-islands",
+      "result": "diagnostic-pass",
+      "requiredMaximumElapsedMs": 750,
+      "dispatchStartMs": 2921,
+      "firstPaintReceiptMs": 3571,
+      "elapsedThroughFirstPaintMs": 650,
+      "stagesMs": {
+        "sampling": 68,
+        "thresholdSelection": 339,
+        "classification": 169,
+        "validation": 7,
+        "previewValueMaterialization": 50,
+        "canvasPaint": 3,
+        "postCanvasToPaintReceipt": 10
+      },
+      "threshold": {
+        "candidateCount": 18,
+        "contourLevel": -13386485,
+        "previewWaterCoveragePercent": 70.000065,
+        "previewCoverageErrorBasisPoints": 0.0065,
+        "componentCount": 7,
+        "largestComponentPercent": 54.385296,
+        "connectivitySupported": false
+      }
+    },
+    {
+      "id": "fresh-control-max-1",
+      "kind": "fresh-process-profile",
+      "fixture": "milestone-2-atlas-control-max",
+      "executableSha256": "8384bc3ad9c5369363055a879b3cf5c0804af7408a7d8ef11a6b50a336be88ba",
+      "commandId": "frontmost-control-max",
+      "result": "diagnostic-pass",
+      "requiredMaximumElapsedMs": 750,
+      "dispatchStartMs": 2988,
+      "firstPaintReceiptMs": 3634,
+      "elapsedThroughFirstPaintMs": 646,
+      "stagesMs": {
+        "sampling": 69,
+        "thresholdSelection": 332,
+        "classification": 172,
+        "validation": 8,
+        "previewValueMaterialization": 51,
+        "canvasPaint": 3,
+        "postCanvasToPaintReceipt": 8
+      },
+      "threshold": {
+        "candidateCount": 18,
+        "contourLevel": -13340379,
+        "previewWaterCoveragePercent": 80.00054,
+        "previewCoverageErrorBasisPoints": 0.054,
+        "componentCount": 1,
+        "largestComponentPercent": 100,
+        "connectivitySupported": false
+      }
+    }
+  ],
+  "invalidObservationsRetained": [
+    {
+      "id": "pilot-proof-foreground-lost",
+      "status": "invalid-measurement",
+      "fixture": "milestone-2-atlas-proof",
+      "executableSha256": "8384bc3ad9c5369363055a879b3cf5c0804af7408a7d8ef11a6b50a336be88ba",
+      "commandId": "pilot-foreground-lost",
+      "reason": "The click and later receipt reads used separate shell/Accessibility commands. The app lost foreground scheduling between them, stretching cooperative yields to roughly one second and preventing a timely post-paint frame receipt.",
+      "dispatchStartMs": 64562,
+      "lastReceiptMs": 106781,
+      "elapsedThroughCanvasMs": 42219,
+      "stagesMs": {
+        "sampling": 6868,
+        "thresholdSelection": 16963,
+        "classification": 17158,
+        "validation": 877,
+        "previewValueMaterialization": 307,
+        "canvasPaint": 34
+      },
+      "threshold": {
+        "candidateCount": 17,
+        "contourLevel": -13854891,
+        "componentCount": 3,
+        "largestComponentPercent": 50.276133
+      }
+    },
+    {
+      "id": "pilot-proof-process-ambiguous",
+      "status": "invalid-measurement",
+      "fixture": "milestone-2-atlas-proof",
+      "executableSha256": "8384bc3ad9c5369363055a879b3cf5c0804af7408a7d8ef11a6b50a336be88ba",
+      "commandId": "pilot-process-ambiguous",
+      "reason": "A second open -n launch did not first terminate the prior profiling process. System Events targeted a process retaining an earlier preview, so probe-state updates caused repeated redraw receipts before the new preview completed.",
+      "dispatchStartMs": 205946,
+      "lastReceiptMs": 206568,
+      "reportedElapsedMs": 622,
+      "repeatedPrecompletionCanvasPaintReceipts": 6
+    }
+  ],
+  "summary": {
+    "freshProcessElapsedMs": [612, 650, 646],
+    "freshProcessWorstMs": 650,
+    "freshProcessHeadroomMs": 100,
+    "profiledExecutableSha256": "8384bc3ad9c5369363055a879b3cf5c0804af7408a7d8ef11a6b50a336be88ba",
+    "dominantStage": "threshold-selection",
+    "dominantStageRangeMs": [304, 339],
+    "canvasPaintRangeMs": [3, 3],
+    "releaseGateClaim": "not-made-single-diagnostic-observation-per-fixture",
+    "productionBehaviorChanged": false,
+    "canonicalFixtureChanged": false
+  }
+}

@@ -1,0 +1,375 @@
+diff --git a/apps/desktop/src/App.svelte b/apps/desktop/src/App.svelte
+index d5cdcc1..a9be776 100644
+--- a/apps/desktop/src/App.svelte
++++ b/apps/desktop/src/App.svelte
+@@ -1,5 +1,6 @@
+ <script lang="ts">
+   import { type AtlasControls, DEFAULT_ATLAS_CONTROLS } from '@ttrpg-map/core';
++  import { tick } from 'svelte';
+ 
+   import {
+     AtlasWorkflow,
+@@ -11,10 +12,42 @@
+ 
+   const workflow = new AtlasWorkflow();
+   let atlas = workflow.snapshot;
+-  let seed = MILESTONE_TWO_ATLAS_PROOF_SEED;
++  let seed: string = MILESTONE_TWO_ATLAS_PROOF_SEED;
+   let controls: AtlasControls = { ...DEFAULT_ATLAS_CONTROLS };
+   let selectedEntityId = '';
+   let targetPath = '';
++  let issue87Events: Issue87PreviewEvent[] = [];
++  let issue87DispatchStartMs = 0;
++  let issue87Receipt = 'idle';
++
++  interface Issue87PreviewEvent {
++    readonly stage: string;
++    readonly startMs: number;
++    readonly endMs: number;
++    readonly details?: Readonly<Record<string, unknown>>;
++  }
++
++  interface Issue87PreviewProbe {
++    readonly now: () => number;
++    readonly record: (event: Issue87PreviewEvent) => void;
++  }
++
++  const issue87Probe: Issue87PreviewProbe = {
++    now: () => performance.now(),
++    record(event): void {
++      issue87Events = [...issue87Events, event];
++      issue87Receipt = JSON.stringify({
++        dispatchStartMs: issue87DispatchStartMs,
++        receiptMs: performance.now(),
++        events: issue87Events,
++      });
++    },
++  };
++  (
++    globalThis as typeof globalThis & {
++      __issue87PreviewProbe?: Issue87PreviewProbe;
++    }
++  ).__issue87PreviewProbe = issue87Probe;
+ 
+   $: controlsAreAccepted = sameControls(controls, atlas.controls);
+   $: editingIsEnabled = isAtlasEditingPhase(atlas.phase) && !atlas.isBusy;
+@@ -23,9 +56,46 @@
+     atlas.inspectionEntities[0];
+ 
+   async function preview(): Promise<void> {
++    issue87Events = [];
++    issue87DispatchStartMs = performance.now();
++    issue87Receipt = 'running';
+     await run(workflow.requestPreview(seed, controls));
+   }
+ 
++  async function issue87Profile(
++    fixtureId: 'milestone-2-atlas-proof' | 'milestone-2-atlas-fragmented-islands' | 'milestone-2-atlas-control-max',
++  ): Promise<void> {
++    if (fixtureId === 'milestone-2-atlas-proof') {
++      seed = '81985529216486895';
++      controls = { ...DEFAULT_ATLAS_CONTROLS };
++    } else if (fixtureId === 'milestone-2-atlas-fragmented-islands') {
++      seed = '18364758544493064720';
++      controls = {
++        ...DEFAULT_ATLAS_CONTROLS,
++        targetWaterCoveragePercent: 70,
++        continentCountIntent: 5,
++        fragmentationPercent: 90,
++        islandAbundancePercent: 95,
++        archipelagoAbundancePercent: 95,
++      };
++    } else {
++      seed = '16045690984503098046';
++      controls = {
++        worldCircumferenceKm: 80_000,
++        targetWaterCoveragePercent: 80,
++        continentCountIntent: 8,
++        continentDistribution: 'oneDominant',
++        fragmentationPercent: 100,
++        islandAbundancePercent: 100,
++        archipelagoAbundancePercent: 100,
++        oceanConnectivity: 'multipleBasins',
++        polarCharacter: 'oceanBiased',
++      };
++    }
++    await tick();
++    await preview();
++  }
++
+   async function acceptFull(): Promise<void> {
+     await run(workflow.acceptFull(seed, controls));
+   }
+@@ -319,6 +389,25 @@
+       >
+     </div>
+ 
++    <div aria-label="Issue 87 temporary profiling controls" class="workflow-card atlas-actions">
++      <button
++        disabled={atlas.isBusy || !editingIsEnabled}
++        onclick={() => void issue87Profile('milestone-2-atlas-proof')}
++        type="button">Profile milestone-2-atlas-proof</button
++      >
++      <button
++        disabled={atlas.isBusy || !editingIsEnabled}
++        onclick={() => void issue87Profile('milestone-2-atlas-fragmented-islands')}
++        type="button">Profile milestone-2-atlas-fragmented-islands</button
++      >
++      <button
++        disabled={atlas.isBusy || !editingIsEnabled}
++        onclick={() => void issue87Profile('milestone-2-atlas-control-max')}
++        type="button">Profile milestone-2-atlas-control-max</button
++      >
++      <output aria-label="Issue 87 profile receipt">{issue87Receipt}</output>
++    </div>
++
+     <div class="input-group save-field">
+       <label class="field-label" for="mapworld-target"
+         >Save target · fresh absolute .mapworld path</label
+diff --git a/apps/desktop/src/ProofViewport.svelte b/apps/desktop/src/ProofViewport.svelte
+index 12f7030..4db52d0 100644
+--- a/apps/desktop/src/ProofViewport.svelte
++++ b/apps/desktop/src/ProofViewport.svelte
+@@ -17,6 +17,16 @@
+   export let scene: RenderScene | undefined;
+   export let preview: AtlasLandWaterPreview | undefined = undefined;
+ 
++  interface Issue87PreviewProbe {
++    readonly now: () => number;
++    readonly record: (event: {
++      readonly stage: string;
++      readonly startMs: number;
++      readonly endMs: number;
++      readonly details?: Readonly<Record<string, unknown>>;
++    }) => void;
++  }
++
+   const PAN_STEP_PX = 64;
+   const ZOOM_FACTOR = 1.2;
+   const MIN_ZOOM_RATIO = 0.5;
+@@ -204,6 +214,12 @@
+     context: CanvasRenderingContext2D,
+     value: AtlasLandWaterPreview,
+   ): void {
++    const probe = (
++      globalThis as typeof globalThis & {
++        readonly __issue87PreviewProbe?: Issue87PreviewProbe;
++      }
++    ).__issue87PreviewProbe;
++    const paintStartMs = probe?.now();
+     const image = context.createImageData(value.longitudeCellCount, value.latitudeBandCount);
+     for (let y = 0; y < value.latitudeBandCount; y += 1) {
+       const latitudeIndex = Math.round(
+@@ -230,6 +246,28 @@
+     buffer.getContext('2d')?.putImageData(image, 0, 0);
+     context.imageSmoothingEnabled = false;
+     context.drawImage(buffer, 0, 0, canvasElement.width, canvasElement.height);
++    if (paintStartMs !== undefined) {
++      probe?.record({
++        stage: 'canvas-image-paint',
++        startMs: paintStartMs,
++        endMs: probe.now(),
++        details: {
++          sourceWidth: value.longitudeCellCount,
++          sourceHeight: value.latitudeBandCount,
++          destinationWidth: canvasElement.width,
++          destinationHeight: canvasElement.height,
++        },
++      });
++      requestAnimationFrame(() => {
++        requestAnimationFrame(() => {
++          probe?.record({
++            stage: 'first-preview-paint',
++            startMs: paintStartMs,
++            endMs: probe.now(),
++          });
++        });
++      });
++    }
+   }
+ </script>
+ 
+diff --git a/packages/generation/src/atlas-land-water-classification.ts b/packages/generation/src/atlas-land-water-classification.ts
+index dad597b..724a06d 100644
+--- a/packages/generation/src/atlas-land-water-classification.ts
++++ b/packages/generation/src/atlas-land-water-classification.ts
+@@ -26,6 +26,7 @@ import {
+   WORLD_ATLAS_PREVIEW_PROFILE,
+ } from './atlas-sampling-profiles.js';
+ import type { QuantizedSphericalField } from './geography-algorithm-adapters.js';
++import { issue87PreviewProbe } from './issue-87-preview-probe.js';
+ 
+ const AREA_WEIGHT_SCALE = 2 ** 20;
+ const MAX_CONNECTIVITY_CANDIDATES = 17;
+@@ -86,6 +87,8 @@ export async function selectAtlasLandWaterThreshold(
+   parameters: AtlasLandWaterClassificationParameters,
+   cooperation: AtlasThresholdSelectionCooperation,
+ ): Promise<AtlasThresholdSelectionResult> {
++  const probe = issue87PreviewProbe();
++  const selectionStartMs = probe?.now();
+   if (previewField.profile.profileId !== WORLD_ATLAS_PREVIEW_PROFILE.profileId) {
+     throw new RangeError('Land/water threshold selection requires the version-1 preview profile.');
+   }
+@@ -115,6 +118,25 @@ export async function selectAtlasLandWaterThreshold(
+     compareThresholdCandidates(left, right, parameters.oceanConnectivity),
+   )[0];
+   if (selected === undefined) throw new Error('No atlas land/water threshold candidate exists.');
++  if (selectionStartMs !== undefined) {
++    probe?.record({
++      stage: 'threshold-selection',
++      startMs: selectionStartMs,
++      endMs: probe.now(),
++      details: {
++        candidateCount: candidateIndices.length,
++        contourLevel: selected.contourLevel,
++        previewWaterCoveragePercent: selected.waterCoveragePercent,
++        previewCoverageErrorBasisPoints: selected.coverageErrorBasisPoints,
++        componentCount: selected.proxy.componentCount,
++        largestComponentPercent: selected.proxy.largestComponentPercent,
++        connectivitySupported: supportsConnectivityProxy(
++          parameters.oceanConnectivity,
++          selected.proxy,
++        ),
++      },
++    });
++  }
+   return Object.freeze({
+     status: 'completed',
+     selection: Object.freeze({
+diff --git a/packages/generation/src/atlas-land-water-generator.ts b/packages/generation/src/atlas-land-water-generator.ts
+index ac83a3f..23ca467 100644
+--- a/packages/generation/src/atlas-land-water-generator.ts
++++ b/packages/generation/src/atlas-land-water-generator.ts
+@@ -45,6 +45,7 @@ import {
+   WORLD_ATLAS_FULL_PROFILE,
+   WORLD_ATLAS_PREVIEW_PROFILE,
+ } from './atlas-sampling-profiles.js';
++import { issue87PreviewProbe } from './issue-87-preview-probe.js';
+ 
+ export { validateAtlasLandWaterRealization } from './atlas-land-water-generator-diagnostics.js';
+ 
+@@ -193,11 +194,21 @@ export async function generateAtlasLandWaterPreview(
+       macroParameters,
+       runtime.macroElevationRandom,
+     );
++    const probe = issue87PreviewProbe();
++    const samplingStartMs = probe?.now();
+     const sampled = await sampleAtlasMacroElevationField(
+       WORLD_ATLAS_PREVIEW_PROFILE,
+       fieldAdapter,
+       progress.cooperation('sampling-shared-preview-anchors', 0, 450),
+     );
++    if (samplingStartMs !== undefined) {
++      probe?.record({
++        stage: 'generation-sampling',
++        startMs: samplingStartMs,
++        endMs: probe.now(),
++        details: { sampleCount: sampled.status === 'completed' ? sampled.field.sampleCount : 0 },
++      });
++    }
+     if (sampled.status === 'cancelled') {
+       return atlasLandWaterCancelledResult(input, progress, 'macro');
+     }
+@@ -210,16 +221,34 @@ export async function generateAtlasLandWaterPreview(
+     if (threshold.status === 'cancelled') {
+       return atlasLandWaterCancelledResult(input, progress, 'classification');
+     }
++    const classificationStartMs = probe?.now();
+     const classification = await classifyAtlasLandWater(
+       sampled.field,
+       threshold.selection.contourLevel,
+       input.controls.targetWaterCoveragePercent,
+       progress.cooperation('classifying-land-water', 700, 920),
+     );
++    if (classificationStartMs !== undefined) {
++      probe?.record({
++        stage: 'generation-classification',
++        startMs: classificationStartMs,
++        endMs: probe.now(),
++        details:
++          classification.status === 'completed'
++            ? {
++                realizedWaterCoveragePercent:
++                  classification.output.realizedWaterCoveragePercent,
++                coverageErrorBasisPoints:
++                  classification.output.absoluteWaterCoverageErrorBasisPoints,
++              }
++            : { cancelled: true },
++      });
++    }
+     if (classification.status === 'cancelled') {
+       return atlasLandWaterCancelledResult(input, progress, 'classification');
+     }
+ 
++    const validationStartMs = probe?.now();
+     if (await progress.cooperateOnce('validating-proposal', 1, 1, 920, 999)) {
+       return atlasLandWaterCancelledResult(input, progress, 'classification');
+     }
+@@ -234,7 +263,18 @@ export async function generateAtlasLandWaterPreview(
+     if (diagnostics.some(({ severity }) => severity === 'error')) {
+       return atlasLandWaterInvalidResult(progress, diagnostics);
+     }
++    if (validationStartMs !== undefined) {
++      probe?.record({
++        stage: 'generation-validation',
++        startMs: validationStartMs,
++        endMs: probe.now(),
++        details: { diagnosticCount: diagnostics.length },
++      });
++    }
+ 
++    const materializationStartMs = probe?.now();
++    const macroElevationValues = sampled.field.copyValues();
++    const landWaterSamples = atlasSampleReaderToArray(classification.output.samples);
+     const preview: AtlasLandWaterPreview = Object.freeze({
+       previewKind: 'disposable-atlas-land-water',
+       previewVersion: ATLAS_LAND_WATER_PREVIEW_VERSION,
+@@ -247,10 +287,21 @@ export async function generateAtlasLandWaterPreview(
+       authority: 'disposable',
+       isPromotable: false,
+       controls: input.controls,
+-      macroElevationValues: sampled.field.copyValues(),
++      macroElevationValues,
+       seaLevelContourDoubledTicks: threshold.selection.contourLevel,
+-      landWaterSamples: atlasSampleReaderToArray(classification.output.samples),
++      landWaterSamples,
+     });
++    if (materializationStartMs !== undefined) {
++      probe?.record({
++        stage: 'preview-value-materialization',
++        startMs: materializationStartMs,
++        endMs: probe.now(),
++        details: {
++          macroElevationValueCount: macroElevationValues.length,
++          landWaterSampleCount: landWaterSamples.length,
++        },
++      });
++    }
+     progress.complete();
+     return Object.freeze({
+       status: 'preview',
+diff --git a/packages/generation/src/issue-87-preview-probe.ts b/packages/generation/src/issue-87-preview-probe.ts
+new file mode 100644
+index 0000000..13e0018
+--- /dev/null
++++ b/packages/generation/src/issue-87-preview-probe.ts
+@@ -0,0 +1,19 @@
++interface Issue87PreviewProbeEvent {
++  readonly stage: string;
++  readonly startMs: number;
++  readonly endMs: number;
++  readonly details?: Readonly<Record<string, unknown>>;
++}
++
++interface Issue87PreviewProbe {
++  readonly now: () => number;
++  readonly record: (event: Issue87PreviewProbeEvent) => void;
++}
++
++export function issue87PreviewProbe(): Issue87PreviewProbe | undefined {
++  return (
++    globalThis as typeof globalThis & {
++      readonly __issue87PreviewProbe?: Issue87PreviewProbe;
++    }
++  ).__issue87PreviewProbe;
++}
