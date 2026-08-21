@@ -210,6 +210,13 @@ accepted representation; no production behavior or release limit changed.
 
 ### Required Apple M5/24-GB protocol — outstanding
 
+> **Issue #88 preview observation (2026-08-20): INVALID — no release determination.** The
+> foreground-preserving clean packaged attempt did not establish the required fully painted
+> first-paint boundary or verified process tree. Its timing/RSS rows are retained only as invalid
+> harness evidence in
+> [`investigations/issue-84/preview-gate-2026-08-20`](investigations/issue-84/preview-gate-2026-08-20/decision.md).
+> They must not be used to pass, fail, stop, or resume the release protocol.
+
 The Apple M5/24-GB MacBook Pro recorded above is the designated reference environment. Therefore
 all rows below remain `OUTSTANDING` until the prescribed five fresh-process runs are captured on
 this host. The existing packaged-workflow timings are not a substitute for the formal protocol.

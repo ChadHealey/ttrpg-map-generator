@@ -1,0 +1,36 @@
+Captured 2026-08-20T22:27:07-06:00 from the issue #88 worktree.
+
+$ sw_vers
+ProductName: macOS
+ProductVersion: 26.5.1
+BuildVersion: 25F80
+
+$ system_profiler SPHardwareDataType
+Model Name: MacBook Pro
+Model Identifier: Mac17,2
+Chip: Apple M5
+Memory: 24 GB
+
+$ pmset -g batt
+Now drawing from 'AC Power'
+InternalBattery-0: 80%; AC attached; not charging present: true
+
+$ pmset -g custom
+Battery Power: lowpowermode 0
+AC Power: lowpowermode 0
+
+$ node --version && corepack pnpm --version && rustc --version
+v24.11.0
+11.19.0
+rustc 1.97.1 (8bab26f4f 2026-07-14)
+
+$ xcodebuild -version && clang --version | head -1
+Xcode 26.4
+Build version 17E192
+Apple clang version 21.0.0 (clang-2100.0.123.102)
+
+$ shasum -a 256 <clean executable>
+333faea6f4403f94836de40b1cdf087c0202c7a42ddf6758bb11473eff5156d2
+
+$ stat -f '%z' <clean executable>
+10000528
