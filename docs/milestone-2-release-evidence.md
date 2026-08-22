@@ -1,7 +1,7 @@
 # Milestone 2 release evidence
 
 - **Status:** Release-pending; this document does not mark Milestone 2 complete
-- **Prepared:** 2026-08-17
+- **Prepared:** 2026-08-22
 - **Issue:** [#68 — Prove the Milestone 2 whole-world atlas workflow end to end](https://github.com/ChadHealey/ttrpg-map-generator/issues/68)
 - **Normative contract:** [Milestone 2 whole-world atlas proof](milestone-2-atlas-proof.md)
 - **Retrospective:** [Milestone 2 release-pending retrospective](retrospectives/milestone-2.md)
@@ -19,45 +19,47 @@ environment; the recorded observations are not yet a passing five-process releas
 
 ## Candidate and environment
 
-| Item                         | Recorded value                                                                     |
-| ---------------------------- | ---------------------------------------------------------------------------------- |
-| Branch                       | `codex/issues-65-68`                                                               |
-| Starting integration HEAD    | `3d967a5da7abadb8d8fc4bbc751e0a26b8ae2b20`                                         |
-| Evidence implementation HEAD | `0168c7c1b52a4334773d861e438ef70dbf6657cd`                                         |
-| Documentation HEAD           | The commit containing this report; its exact hash is recorded in the local handoff |
-| Host                         | MacBook Pro `Mac17,2`, Apple M5, 10 cores, 24 GB unified memory                    |
-| Operating system             | macOS 26.5.1, build `25F80`                                                        |
-| Node / pnpm / Rust           | Node 24.11.0 / pnpm 11.19.0 / rustc 1.97.1                                         |
-| Package form                 | Unsigned local v0.1.0 arm64 `.app`; 9.6 MiB bundle, ad-hoc linker signature        |
-| Reference-hardware claim     | Designated reference environment for Milestone 2 release measurements              |
+| Item                      | Recorded value                                                                                                                                  |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Branch                    | `main`                                                                                                                                          |
+| Starting integration HEAD | `3d967a5da7abadb8d8fc4bbc751e0a26b8ae2b20`                                                                                                      |
+| Local evidence HEAD       | `0168c7c1b52a4334773d861e438ef70dbf6657cd`                                                                                                      |
+| Remote CI release HEAD    | [`713dc1039f59cd18864be6581b0d603adb2072c1`](https://github.com/ChadHealey/ttrpg-map-generator/commit/713dc1039f59cd18864be6581b0d603adb2072c1) |
+| Documentation HEAD        | The commit containing this report; its exact hash is recorded in the issue handoff                                                              |
+| Host                      | MacBook Pro `Mac17,2`, Apple M5, 10 cores, 24 GB unified memory                                                                                 |
+| Operating system          | macOS 26.5.1, build `25F80`                                                                                                                     |
+| Node / pnpm / Rust        | Node 24.11.0 / pnpm 11.19.0 / rustc 1.97.1                                                                                                      |
+| Package form              | Unsigned local v0.1.0 arm64 `.app`; 9.6 MiB bundle, ad-hoc linker signature                                                                     |
+| Reference-hardware claim  | Designated reference environment for Milestone 2 release measurements                                                                           |
 
-The starting HEAD identifies the already reviewed #65–#67 chain before #68 changes. The evidence
-implementation HEAD is the exact code/fixture/CI tree used by every heavy release gate and the
-packaged exercise below. The only later commit is this documentation-only report; its exact hash
-and clean status are recorded in the issue handoff because a commit cannot contain its own hash.
+The starting HEAD identifies the already reviewed #65–#67 chain before #68 changes. The local
+evidence HEAD is the exact code/fixture tree used by the costly local gates and packaged exercise
+below. Issue #71's remote CI release HEAD adds the compact-reader timeout correction and is the
+exact commit exercised by the linked macOS/Linux matrix. This documentation-only report records
+that evidence separately because a commit cannot contain its own hash.
 
 ## Acceptance matrix
 
-| Contract lane                | Required evidence                                                                                                                              | Status          | Evidence record                                                        |
-| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------- | ---------------------------------------------------------------------- |
-| Registered desktop inputs    | Seed `81985529216486895` and all nine validated default controls are visible in the packaged app                                               | **PASS**        | Packaged workflow steps 1–2 below                                      |
-| Preview boundary             | Cancel and restart one labelled coarse preview; preview remains disposable and cannot become accepted bytes                                    | **PASS**        | Packaged workflow step 3 plus focused orchestration tests              |
-| Full acceptance              | Full profile is generated separately, validated, and committed atomically; stable semantic identities are inspectable                          | **PASS**        | Packaged workflow step 4 and canonical fixture lane                    |
-| Geography reroll             | Macro revision and declared dependents change while paper, user intent, seed, versions, locks, and unrelated revisions stay canonical          | **PASS**        | `baseline` → `geography-rerolled` canonical comparison                 |
-| Appearance reroll            | Three appearance aspects/revisions and render composite change while all semantic geography and canonical coastline bytes stay fixed           | **PASS**        | `geography-rerolled` → `appearance-rerolled` canonical comparison      |
-| Native save and unload       | Immutable accepted snapshot is committed atomically and accepted document plus scene are truly unloaded                                        | **PASS**        | Packaged workflow steps 7–8 and native recovery gate                   |
-| Generator-free reopen        | Native package validates; accepted aspect/output bytes, package fingerprint, scene semantics, SVG, and PNG agree; generator call count is zero | **PASS**        | Packaged workflow step 9, tripwire test, and saved-project fixture     |
-| Milestone 1 compatibility    | Released Milestone 1 projects and migrations reopen without drift or generator invocation                                                      | **PASS**        | Cross-platform, native-recovery, and end-to-end gates                  |
-| Reopened SVG export          | `atlas-svg-v1`, 400 × 200 mm, deterministic bytes, native atomic receipt, accepted document unchanged                                          | **PASS**        | Packaged workflow step 10 and artifact record                          |
-| Reopened PNG export          | `atlas-png-v1`, 8192 × 4096, deterministic repeat bytes, native atomic receipt, accepted document unchanged                                    | **PASS**        | Packaged workflow step 10, PNG gate, and artifact record               |
-| Evidence separation          | Canonical aspects, accepted outputs, package checksums, geometry, scene/SVG structure, PNG pixels, and performance remain distinct lanes       | **PASS**        | Fixture manifest/review records and sections below                     |
-| Geometry                     | Closed/wound/non-self-intersecting rings; exact partition; identity/order; containment/connectivity; seam/pole and post-quantization validity  | **PASS**        | Root check, cross-platform fixtures, and geometry review               |
-| Visual gallery               | Six registered 1600 × 800 gallery rows plus full-size seam, pole, channel, island, echo, fine-ink, and raster-boundary crops inspected         | **PASS**        | Visual review table below                                              |
-| Deterministic resource gates | PNG dimensions, file ceiling, bounded band/surface allocation, progress/cancellation semantics, and deterministic aftermath pass               | **PASS**        | `pnpm test:png-export`; this is not the release benchmark              |
-| Packaged macOS app           | Unsigned `.app` builds and the complete visible workflow is exercised through that bundle                                                      | **PASS**        | Package and workflow records below                                     |
-| Apple M5/24-GB budgets       | Prescribed warm-up/five-process timing, process-tree RSS, and cancellation acknowledgement protocol passes                                     | **OUTSTANDING** | Reference-hardware section below; protocol must be rerun               |
-| macOS/Linux release matrix   | Exact final commit passes required CI on both platforms with filesystem evidence                                                               | **EXTERNAL**    | Branch is intentionally unpushed; fresh remote matrix remains required |
-| Milestone issue state        | Every included issue is closed or explicitly moved out                                                                                         | **EXTERNAL**    | Eight milestone issues remain open; remote mutation was prohibited     |
+| Contract lane                | Required evidence                                                                                                                              | Status          | Evidence record                                                    |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------- | ------------------------------------------------------------------ |
+| Registered desktop inputs    | Seed `81985529216486895` and all nine validated default controls are visible in the packaged app                                               | **PASS**        | Packaged workflow steps 1–2 below                                  |
+| Preview boundary             | Cancel and restart one labelled coarse preview; preview remains disposable and cannot become accepted bytes                                    | **PASS**        | Packaged workflow step 3 plus focused orchestration tests          |
+| Full acceptance              | Full profile is generated separately, validated, and committed atomically; stable semantic identities are inspectable                          | **PASS**        | Packaged workflow step 4 and canonical fixture lane                |
+| Geography reroll             | Macro revision and declared dependents change while paper, user intent, seed, versions, locks, and unrelated revisions stay canonical          | **PASS**        | `baseline` → `geography-rerolled` canonical comparison             |
+| Appearance reroll            | Three appearance aspects/revisions and render composite change while all semantic geography and canonical coastline bytes stay fixed           | **PASS**        | `geography-rerolled` → `appearance-rerolled` canonical comparison  |
+| Native save and unload       | Immutable accepted snapshot is committed atomically and accepted document plus scene are truly unloaded                                        | **PASS**        | Packaged workflow steps 7–8 and native recovery gate               |
+| Generator-free reopen        | Native package validates; accepted aspect/output bytes, package fingerprint, scene semantics, SVG, and PNG agree; generator call count is zero | **PASS**        | Packaged workflow step 9, tripwire test, and saved-project fixture |
+| Milestone 1 compatibility    | Released Milestone 1 projects and migrations reopen without drift or generator invocation                                                      | **PASS**        | Cross-platform, native-recovery, and end-to-end gates              |
+| Reopened SVG export          | `atlas-svg-v1`, 400 × 200 mm, deterministic bytes, native atomic receipt, accepted document unchanged                                          | **PASS**        | Packaged workflow step 10 and artifact record                      |
+| Reopened PNG export          | `atlas-png-v1`, 8192 × 4096, deterministic repeat bytes, native atomic receipt, accepted document unchanged                                    | **PASS**        | Packaged workflow step 10, PNG gate, and artifact record           |
+| Evidence separation          | Canonical aspects, accepted outputs, package checksums, geometry, scene/SVG structure, PNG pixels, and performance remain distinct lanes       | **PASS**        | Fixture manifest/review records and sections below                 |
+| Geometry                     | Closed/wound/non-self-intersecting rings; exact partition; identity/order; containment/connectivity; seam/pole and post-quantization validity  | **PASS**        | Root check, cross-platform fixtures, and geometry review           |
+| Visual gallery               | Six registered 1600 × 800 gallery rows plus full-size seam, pole, channel, island, echo, fine-ink, and raster-boundary crops inspected         | **PASS**        | Visual review table below                                          |
+| Deterministic resource gates | PNG dimensions, file ceiling, bounded band/surface allocation, progress/cancellation semantics, and deterministic aftermath pass               | **PASS**        | `pnpm test:png-export`; this is not the release benchmark          |
+| Packaged macOS app           | Unsigned `.app` builds and the complete visible workflow is exercised through that bundle                                                      | **PASS**        | Package and workflow records below                                 |
+| Apple M5/24-GB budgets       | Prescribed warm-up/five-process timing, process-tree RSS, and cancellation acknowledgement protocol passes                                     | **OUTSTANDING** | Reference-hardware section below; protocol must be rerun           |
+| macOS/Linux release matrix   | Exact final commit passes required CI on both platforms with filesystem evidence                                                               | **PASS**        | [Issue #71 matrix](#remote-ci-and-milestone-state)                 |
+| Milestone issue state        | Every included issue is closed or explicitly moved out                                                                                         | **EXTERNAL**    | Eight milestone issues remain open; remote mutation was prohibited |
 
 ## Exact local command record
 
@@ -67,16 +69,16 @@ docs-only commit; it is rerun on that exact final HEAD and the commit hash/resul
 the local handoff. Capture the exit code, duration, and any artifact directory without replacing a
 failed result with a narrower command.
 
-| Command                                                                                     | Result              | Notes                                                                                                                                   |
-| ------------------------------------------------------------------------------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `corepack pnpm check`                                                                       | **PASS (382.13 s)** | Completed documentation tree passed 66 files / 525 TS/JS tests and 52 Rust tests; exact committed-HEAD rerun is recorded in the handoff |
-| `corepack pnpm test:cross-platform`                                                         | **PASS (240.92 s)** | Six PNG fixture checks and all eight registered fixture sets passed locally on macOS; Linux remains CI evidence                         |
-| `corepack pnpm test:native-recovery`                                                        | **PASS (302.45 s)** | 28 native tests passed on macOS/APFS, including released M1 and M2 recovery workflows                                                   |
-| `corepack pnpm test:e2e`                                                                    | **PASS (857.80 s)** | 4 TS files / 22 tests and both native M1/M2 workflow bridges passed; reopen called zero generators                                      |
-| `corepack pnpm test:visual`                                                                 | **PASS (242.54 s)** | 13 visual tests plus all eight registered fixture sets passed; human review is below                                                    |
-| `ATLAS_PNG_PROOF_OUTPUT_DIR=/private/tmp/m2-png-proof.8841dF corepack pnpm test:png-export` | **PASS (100.23 s)** | 8 TS files / 68 tests, 6 Rust unit tests, and 4 Rust integrations passed; retained six large outputs                                    |
-| `corepack pnpm build`                                                                       | **PASS (1.48 s)**   | 327 modules; production bundle 479.62 kB JavaScript / 134.69 kB gzip                                                                    |
-| `corepack pnpm --filter @ttrpg-map/desktop tauri build --bundles app --no-sign --ci`        | **PASS (14.31 s)**  | Built the expected unsigned arm64 `.app`                                                                                                |
+| Command                                                                                 | Result              | Notes                                                                                                                                   |
+| --------------------------------------------------------------------------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `corepack pnpm check`                                                                   | **PASS (382.13 s)** | Completed documentation tree passed 66 files / 525 TS/JS tests and 52 Rust tests; exact committed-HEAD rerun is recorded in the handoff |
+| `corepack pnpm test:cross-platform`                                                     | **PASS (240.92 s)** | Six PNG fixture checks and all eight registered fixture sets passed locally on macOS; Linux remains CI evidence                         |
+| `corepack pnpm test:native-recovery`                                                    | **PASS (302.45 s)** | 28 native tests passed on macOS/APFS, including released M1 and M2 recovery workflows                                                   |
+| `corepack pnpm test:e2e`                                                                | **PASS (857.80 s)** | 4 TS files / 22 tests and both native M1/M2 workflow bridges passed; reopen called zero generators                                      |
+| `corepack pnpm test:visual`                                                             | **PASS (242.54 s)** | 13 visual tests plus all eight registered fixture sets passed; human review is below                                                    |
+| `ATLAS_PNG_PROOF_OUTPUT_DIR=<temporary-output-directory> corepack pnpm test:png-export` | **PASS (100.23 s)** | 8 TS files / 68 tests, 6 Rust unit tests, and 4 Rust integrations passed; retained six large outputs                                    |
+| `corepack pnpm build`                                                                   | **PASS (1.48 s)**   | 327 modules; production bundle 479.62 kB JavaScript / 134.69 kB gzip                                                                    |
+| `corepack pnpm --filter @ttrpg-map/desktop tauri build --bundles app --no-sign --ci`    | **PASS (14.31 s)**  | Built the expected unsigned arm64 `.app`                                                                                                |
 
 Focused iteration checks may be listed in the issue handoff, but only the complete commands above
 close their corresponding release rows.
@@ -105,7 +107,7 @@ Vite development window or a test-only CLI.
 | Artifact          | Path                                                                         | SHA-256 / fingerprint                                                                                                                                            | Bytes / dimensions                                     | Status   |
 | ----------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | -------- |
 | Unsigned `.app`   | `apps/desktop/src-tauri/target/release/bundle/macos/TTRPG Map Generator.app` | executable `af2050fab3ccd7acc4c3becbdb08ecf05515a922df853b03e9f010aaf746cf5f`; code-directory `958471821e69686cc8fbd06d30a3b605b5e2701146dcff5184818f69326b7824` | 9.6 MiB bundle; arm64; v0.1.0; ad-hoc linker signature | **PASS** |
-| Saved `.mapworld` | `/private/tmp/m2-packaged.pPIEoF/atlas-proof.mapworld`                       | manifest `98f0689bb0ed066483edc7f0de778a32c4dbf23f73469fcf46dbf451a562aaee`; map `f7cfdce090d98974da55ef06d5acf3471ba3826bb3b8faf6023785cd836a1667`              | 79 MiB package; canonical map 82,482,435 bytes         | **PASS** |
+| Saved `.mapworld` | Temporary local package (not retained)                                       | manifest `98f0689bb0ed066483edc7f0de778a32c4dbf23f73469fcf46dbf451a562aaee`; map `f7cfdce090d98974da55ef06d5acf3471ba3826bb3b8faf6023785cd836a1667`              | 79 MiB package; canonical map 82,482,435 bytes         | **PASS** |
 | Reopened SVG      | `atlas-81985529216486895.svg`                                                | `d1907f45b173d3d008b72de320d845541316549b2e8f52dbeaa30883e2c0d7d5`                                                                                               | 852,650 bytes; 400 × 200 mm; viewBox 2048 × 1024       | **PASS** |
 | Reopened PNG      | `atlas-81985529216486895.png`                                                | `981befbd11122dd20aaa944105494438a887213810480a4c81c57b9244932e72`                                                                                               | 1,201,973 bytes; 8192 × 4096 RGB                       | **PASS** |
 
@@ -148,8 +150,8 @@ human approval.
 
 Record the encoder/profile as `atlas-png-v1` version 1, exact `8192 × 4096` dimensions, and the
 reference environment with every row. The two in-memory runs compared byte-for-byte; one file per
-row is retained under `/private/tmp/m2-png-proof.8841dF`. All nine registered 1600 × 800 gallery
-checkpoints were also reviewed. Geography reroll changes the silhouettes; appearance reroll keeps
+row was retained temporarily for visual review. All nine registered 1600 × 800 gallery checkpoints
+were also reviewed. Geography reroll changes the silhouettes; appearance reroll keeps
 the geography-rerolled compound-path geometry hash fixed; appearance and reopened PNGs are
 byte-identical at SHA-256 `875b15f71e962c8b2c811bf8b79e1f8ef30d2c58fe789069a2ec84bcc928e6cb`.
 Their SVGs are also identical at the reopened SVG hash above. The packaged 8192 × 4096 reopened PNG
@@ -157,11 +159,9 @@ was separately inspected at normal scale and shows clean seams, poles, channels,
 echo strokes, and band joins. Its wrapped-edge mean absolute RGB difference is `0.1632/255`; only
 four isolated high-difference rows occur at coastline antialiasing intersections. Its worst
 absolute 64-row band join is `1.3026/255`, lower than its local neighbors, and both 14-pixel polar
-margins contain zero near-black coastline or echo-color pixels. The reopened-app screenshot at
-`/private/tmp/m2-packaged.pPIEoF/reopened-app.png` is 204,679 bytes with SHA-256
-`73d96cf6d416ef88f9742e72281fc9d87addd38be20c947959ec76bd8da6bf3f`; it visibly records locked
-accepted controls, reopened status, the fresh package target, verified PNG path, and completed
-progress without overlap or clipping. Any intentional fixture update also requires its
+margins contain zero near-black coastline or echo-color pixels. The reviewed reopened-app screenshot
+records locked accepted controls, reopened status, the fresh package target, verified PNG path, and
+completed progress without overlap or clipping. Any intentional fixture update also requires its
 independent, append-only review record under [fixture conventions](07-fixture-conventions.md).
 
 ## Independent review and corrections
@@ -251,10 +251,24 @@ unchanged acceptance meanings remain owned by the
 
 ## Remote CI and milestone state
 
-Remote mutation was prohibited for issue #68, so the branch is intentionally unpushed and no issue
-or milestone fields were changed. The live audit on 2026-08-17 found eight open issues assigned to
-Milestone 2: `#9`, `#10`, `#11`, `#12`, `#65`, `#66`, `#67`, and `#68`. The current milestone cannot
-satisfy the definition-of-done rule that every included issue be closed or explicitly moved out.
+Issue #71 recorded fresh CI evidence for the exact remote release commit
+[`713dc1039f59cd18864be6581b0d603adb2072c1`](https://github.com/ChadHealey/ttrpg-map-generator/commit/713dc1039f59cd18864be6581b0d603adb2072c1).
+The [CI run 32579353749](https://github.com/ChadHealey/ttrpg-map-generator/actions/runs/32579353749)
+completed successfully on 2026-08-22:
+
+| Job                                                                                                           | Result   | Required evidence recorded                                                                                                 |
+| ------------------------------------------------------------------------------------------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------- |
+| [quality (Linux)](https://github.com/ChadHealey/ttrpg-map-generator/actions/runs/32579353749/job/97046289370) | **PASS** | `pnpm check`, deterministic fixtures, desktop workflow, visual, PNG export, build, native recovery; filesystem `ext2/ext3` |
+| [quality (macOS)](https://github.com/ChadHealey/ttrpg-map-generator/actions/runs/32579353749/job/97046289487) | **PASS** | `pnpm check`, deterministic fixtures, desktop workflow, visual, PNG export, build, native recovery; filesystem `APFS`      |
+| [quality-gate](https://github.com/ChadHealey/ttrpg-map-generator/actions/runs/32579353749/job/97052583791)    | **PASS** | Required both platform jobs to succeed                                                                                     |
+
+The workflow publishes no upload artifacts. Its durable remote evidence is the linked run and job
+logs; the existing fixture review records and local packaged artifact hashes remain the authoritative
+artifact evidence for their respective lanes.
+
+The live audit on 2026-08-17 found eight open issues assigned to Milestone 2: `#9`, `#10`, `#11`,
+`#12`, `#65`, `#66`, `#67`, and `#68`. The current milestone cannot satisfy the definition-of-done
+rule that every included issue be closed or explicitly moved out.
 
 The final release owner must perform these actions in order:
 
@@ -263,11 +277,9 @@ The final release owner must perform these actions in order:
    documentation-only commit, with complete command results, packaged receipts, artifact hashes,
    and human visual review. Do not attribute costly gates to the documentation commit unless they
    are rerun there.
-3. Push the exact evidence commit through the normal review workflow and obtain a fresh green macOS
-   and Linux CI matrix, including deterministic fixtures and native filesystem evidence.
-4. Review each of `#9`, `#10`, `#11`, `#12`, `#65`, `#66`, `#67`, and `#68`; close an issue only when
+3. Review each of `#9`, `#10`, `#11`, `#12`, `#65`, `#66`, `#67`, and `#68`; close an issue only when
    its acceptance criteria are satisfied, or explicitly move unfinished work out of Milestone 2.
-5. Only after every row in this report is closed may the milestone status and retrospective be
+4. Only after every row in this report is closed may the milestone status and retrospective be
    changed from release-pending to complete.
 
 Unsigned local packaging is sufficient for the issue #68 exercise. Signing, notarization, pushing,
