@@ -1,0 +1,202 @@
+Captured 2026-08-20 on the issue #88 worktree. NON-RELEASE FEASIBILITY EVIDENCE ONLY.
+Transient PIDs, window IDs, service UUIDs, coalition numbers, and local absolute paths are omitted.
+
+$ git rev-parse HEAD
+4125871b8e43418487634b2fd3ed23a90d3f016f
+
+$ git merge-base --is-ancestor c14c478 HEAD
+exit 0
+
+$ sw_vers
+ProductName: macOS
+ProductVersion: 26.5.1
+BuildVersion: 25F80
+
+$ system_profiler SPHardwareDataType
+Model Name: MacBook Pro
+Model Identifier: Mac17,2
+Chip: Apple M5
+Memory: 24 GB
+
+$ pmset -g batt
+Now drawing from 'AC Power'
+InternalBattery: 80%; AC attached; not charging present: true
+
+$ pmset -g custom
+Battery Power: lowpowermode 0
+AC Power: lowpowermode 0
+
+$ node --version && corepack pnpm --version && rustc --version
+v24.11.0
+11.19.0
+rustc 1.97.1 (8bab26f4f 2026-07-14)
+
+$ xcodebuild -version && clang --version | head -1
+Xcode 26.4
+Build version 17E192
+Apple clang version 21.0.0 (clang-2100.0.123.102)
+
+$ corepack pnpm --filter @ttrpg-map/desktop tauri build --bundles app
+Finished release profile and bundled TTRPG Map Generator.app.
+
+$ shasum -a 256 <clean-candidate-executable>
+333faea6f4403f94836de40b1cdf087c0202c7a42ddf6758bb11473eff5156d2
+
+$ stat -f '%z' <clean-candidate-executable>
+10000528
+
+$ xcrun swiftc -parse-as-library -framework AppKit -framework ScreenCaptureKit \
+    -framework CoreGraphics -framework CoreFoundation -framework Foundation \
+    -o /private/tmp/issue88-screenshot-feasibility \
+    docs/investigations/issue-88/screenshot-feasibility.swift
+exit 0
+
+$ /private/tmp/issue88-screenshot-feasibility app.ttrpgmap.generator
+onScreen=true active=true layer=0 framePoints=1280x800 imagePixels=1280x800 bitsPerPixel=32
+fnv1a64=fb986e2382c2642 landLike=0 waterLike=0
+
+$ <one frontmost proof-fixture dispatch, fixed two-second delay, one final Accessibility read>
+Disposable coarse atlas preview
+DISPOSABLE COARSE PREVIEW — not accepted, saveable, or promotable.
+Accept full atlas enabled: true
+Elapsed read: 2064.684 ms (invalid fixed-delay observation; not a timing result)
+
+$ /private/tmp/issue88-screenshot-feasibility app.ttrpgmap.generator
+onScreen=true active=true layer=0 framePoints=1280x800 imagePixels=1280x800 bitsPerPixel=32
+fnv1a64=6c52f6e4599cbff2 landLike=0 waterLike=3
+Interpretation: the Accessibility-labelled canvas was below the visible window.
+
+$ <AXScrollToVisible on the existing preview canvas>
+exit 0
+
+$ /private/tmp/issue88-screenshot-feasibility app.ttrpgmap.generator
+onScreen=true active=true layer=0 framePoints=1280x800 imagePixels=1280x800 bitsPerPixel=32
+fnv1a64=97e737ece408a16d landLike=79952 waterLike=194205
+
+$ ps -p <app-and-three-helper-pids> -o pid=,ppid=,command=
+The clean app and the WebKit GPU, Networking, and WebContent helpers each reported PPID 1.
+
+$ launchctl print pid/<app-pid>
+The services map contained exactly one live UUID-suffixed service for each role:
+com.apple.WebKit.GPU, com.apple.WebKit.Networking, and com.apple.WebKit.WebContent.
+
+$ launchctl print pid/<each-helper-pid>
+Each helper reported the same application resource coalition and bundle ID
+app.ttrpgmap.generator. ps identified the matching role executable; proc_pidpath is available as a
+future role validator but was not invoked in this observation.
+
+$ launchctl procinfo <app-pid>
+This subcommand requires root privileges: procinfo
+
+$ man launchctl
+IMPORTANT: This output is NOT API in any sense at all. Do NOT rely on the structure or information
+emitted for ANY reason. It may change from release to release without warning.
+
+Repair receipt captured 2026-08-21. NON-RELEASE FEASIBILITY EVIDENCE ONLY.
+
+$ rg 'coalition|responsible' <SDK libproc/resource/proc-info headers>
+No exposed field or function associating an XPC helper with an application resource coalition or
+responsible application was found. The SDK interfaces expose PID enumeration, BSD parentage,
+executable path, RSS, and resource usage; libproc.h labels its own interfaces private and subject to
+change.
+
+$ xcrun swiftc -warnings-as-errors -parse-as-library -framework AppKit \
+    -framework ScreenCaptureKit -framework CoreMedia -framework CoreVideo \
+    -framework Foundation -o /private/tmp/issue88-screen-capture-feasibility \
+    docs/investigations/issue-88/screen-capture-feasibility.swift
+exit 0
+
+$ ioreg -n Root -d1 | rg 'CGSSessionScreenIsLocked'
+CGSSessionScreenIsLocked = Yes
+
+No SCStream target-host observation was run. A locked GUI session cannot prove the required
+frontmost interval, so any result would be invalid. The compiled probe is retained for later
+unlocked feasibility work. This is the historical repair attempt; the later unlocked observation
+below supersedes its feasibility status.
+
+Unlocked SCStream validation captured 2026-08-21. NON-RELEASE FEASIBILITY EVIDENCE ONLY.
+
+$ xcrun swiftc -module-cache-path /private/tmp/issue88-fix-swift-cache \
+    -warnings-as-errors -parse-as-library -framework AppKit \
+    -framework ScreenCaptureKit -framework CoreMedia -framework CoreVideo \
+    -framework Foundation -o /private/tmp/issue88-screen-capture-feasibility \
+    docs/investigations/issue-88/screen-capture-feasibility.swift
+exit 0
+
+$ <fresh app; activate; locate figure; AXScrollToVisible; one pre-dispatch geometry receipt>
+frontmost=true
+canvas global=(708,430) size=744x374
+window global=(640,183) size=1280x800
+
+$ /private/tmp/issue88-screen-capture-feasibility \
+    app.ttrpgmap.generator 20 2 68 247 744 374
+stream=start onScreen=true active=true layer=0 windowFrame=x:640,y:183,w:1280,h:800
+sourceRect=x:68,y:247,w:744,h:374 outputPixels=512x256
+frame=baseline displayMach=20870711651263 callbackMach=20870713448600
+hash=7c71d5c4471d1434 dirtyRects=[] landLike=215 waterLike=0
+topColors=ece2c4:25307,e6dbbb:19594,ede2c4:11518,e5dbbb:9382 qualifies=false
+stream=baseline-ready dispatchDelaySeconds=2
+stream=dispatch-marker mach=20870763930491
+
+$ <pre-dispatch Accessibility hierarchy acquisition after stream startup>
+The first acquisition returned AX error -1719. No preview dispatch occurred. After two additional
+seconds, the hierarchy was available; this setup retry preceded the actual dispatch and is retained
+as observer-perturbation evidence.
+
+$ <activate; one AXPress on Generate coarse preview; fixed two-second delay; one final receipt>
+frontmost=true
+image="Disposable coarse atlas preview"
+caption="DISPOSABLE COARSE PREVIEW — not accepted, saveable, or promotable."
+acceptFullEnabled=true
+canvas global=(708,1393) size=744x374
+window global=(640,183) size=1280x800
+
+stream=stop completeFrames=405 changedFramesAfterDispatch=0 qualifyingFrames=0
+ProbeError.noQualifyingFrame
+
+Interpretation: dispatch scrolled the offscreen control into view and moved the canvas below the
+800-point window. The unchanged crop correctly failed closed even though the final Accessibility
+state reported a completed preview. Complete stream frames on this host carried empty dirty-rect
+arrays, so dirty-region intersection is not an available predicate.
+
+$ <earlier invalid wrong-crop pilot; retained only for attachment behavior>
+frame=changed displayMach=20845160099498 callbackMach=20845163399373
+hash=3bbe3f5dbe668b30 dirtyRects=[] landLike=132 waterLike=0 qualifies=false
+
+Interpretation: a complete frame whose pixels changed still carried an empty dirty-rectangle array.
+
+$ <explicitly AXScrollToVisible after preview; same 512x256 crop; invalid calibration capture>
+frame=baseline hash=7331cfe0ed21269f dirtyRects=[] landLike=36771 waterLike=176
+topColors=abc3bf:89578,d7c9a3:35839,000000:512,c6cabe:504
+
+Interpretation: ScreenCaptureKit converted production water RGB b4cac7 to dominant RGB abc3bf and
+land RGB dccfab to dominant RGB d7c9a3. A per-channel tolerance of 10 bounds both populations on the
+reference host. This explicit post-dispatch scroll is calibration only and cannot be inserted into
+the current measured operation without owner approval.
+
+Review repair geometry bracket captured 2026-08-21. NON-RELEASE FEASIBILITY EVIDENCE ONLY.
+
+The earlier stream receipt separated its pre-dispatch geometry read from a later activation and
+therefore could not attribute the final scroll position to AXPress. It is retained above as invalid
+stream evidence and is superseded for geometry attribution by the uninterrupted observation below.
+
+$ <fresh app; one uninterrupted Accessibility command>
+setup: activate candidate; retain Generate coarse preview button; AXScrollToVisible on figure;
+       fixed 0.5-second stabilization; read pre-dispatch geometry
+preCanvas global=(708,430) size=744x374
+preWindow global=(640,183) size=1280x800
+dispatch: verify frontmost; one AXPress on the retained button
+post-dispatch: fixed two-second delay; no Accessibility reads
+final receipt: reacquire replaced atlas/figure nodes; read final state and geometry once
+frontmost=true
+image="Disposable coarse atlas preview"
+caption="DISPOSABLE COARSE PREVIEW — not accepted, saveable, or promotable."
+acceptFullEnabled=true
+postCanvas global=(708,1393) size=744x374
+postWindow global=(640,183) size=1280x800
+
+The first bracketing pilot retained the pre-dispatch button and reached AXPress but attempted to use
+a stale figure reference in the final receipt; Svelte had replaced that Accessibility node, so the
+read failed with AX error -1719 and no result was used. The fresh observation above reacquired the
+figure only inside the one final structured receipt. It proves that AXPress itself moves the canvas
+from inside to below the unchanged window; no intervening activation or focus change exists.
