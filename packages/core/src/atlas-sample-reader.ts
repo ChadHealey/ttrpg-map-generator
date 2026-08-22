@@ -75,7 +75,8 @@ export function createLandWaterSampleReader(
 export function createCompactMacroElevationSampleReader(
   values: readonly unknown[] | Int32Array,
 ): MacroElevationSampleReader {
-  if (!isDensePlainArray(values) && !isExactInt32Array(values)) {
+  const plainArray = isExactPlainArray(values);
+  if (!plainArray && !isExactInt32Array(values)) {
     throw new TypeError('Compact macro elevation input must be a dense array or Int32Array.');
   }
   if (values.length !== ATLAS_FULL_SAMPLE_COUNT) {
@@ -85,7 +86,9 @@ export function createCompactMacroElevationSampleReader(
   }
   const storage = new Int32Array(values.length);
   for (let index = 0; index < values.length; index += 1) {
-    const value = values[index];
+    const value = plainArray
+      ? plainArrayValueAt(values, index, 'Compact macro elevation input must be a dense array.')
+      : values[index];
     if (
       typeof value !== 'number' ||
       !Number.isSafeInteger(value) ||
@@ -99,6 +102,9 @@ export function createCompactMacroElevationSampleReader(
     }
     storage[index] = value;
   }
+  if (plainArray && !hasOnlyDenseArrayIndexes(values)) {
+    throw new TypeError('Compact macro elevation input must be a dense array or Int32Array.');
+  }
   return compactReader('macro-elevation', values.length, storage.byteLength, (index) => {
     const value = storage[index];
     return value === undefined ? undefined : (value as MacroElevationValueTicks);
@@ -109,7 +115,7 @@ export function createCompactMacroElevationSampleReader(
 export function createCompactLandWaterSampleReader(
   samples: readonly unknown[],
 ): LandWaterSampleReader {
-  if (!isDensePlainArray(samples)) {
+  if (!isExactPlainArray(samples)) {
     throw new TypeError('Compact land/water input must be a dense sample array.');
   }
   if (samples.length !== ATLAS_FULL_SAMPLE_COUNT) {
@@ -119,13 +125,20 @@ export function createCompactLandWaterSampleReader(
   }
   const bits = new Uint8Array(Math.ceil(samples.length / 8));
   for (let index = 0; index < samples.length; index += 1) {
-    const sample = samples[index];
+    const sample = plainArrayValueAt(
+      samples,
+      index,
+      'Compact land/water input must be a dense sample array.',
+    );
     if (sample !== 'land' && sample !== 'water') {
       throw new TypeError(
         `Compact land/water sample ${String(index)} must be either land or water.`,
       );
     }
     if (sample === 'land') setClassificationBit(bits, index);
+  }
+  if (!hasOnlyDenseArrayIndexes(samples)) {
+    throw new TypeError('Compact land/water input must be a dense sample array.');
   }
   return compactClassificationReader(bits, samples.length);
 }
@@ -266,18 +279,24 @@ function classificationBit(storage: Uint8Array, index: number): boolean {
   return (byte & (1 << (index & 7))) !== 0;
 }
 
-function isDensePlainArray(values: readonly unknown[] | Int32Array): values is readonly unknown[] {
-  if (!Array.isArray(values) || Object.getPrototypeOf(values) !== Array.prototype) return false;
-  const keys = Object.keys(values);
-  return (
-    keys.length === values.length &&
-    keys.every((key, index) => key === String(index)) &&
-    Reflect.ownKeys(values).length === values.length + 1 &&
-    keys.every((key) => {
-      const descriptor = Object.getOwnPropertyDescriptor(values, key);
-      return descriptor !== undefined && 'value' in descriptor;
-    })
-  );
+function isExactPlainArray(values: unknown): values is readonly unknown[] {
+  return Array.isArray(values) && Object.getPrototypeOf(values) === Array.prototype;
+}
+
+function plainArrayValueAt(
+  values: readonly unknown[],
+  index: number,
+  malformedMessage: string,
+): unknown {
+  const descriptor = Object.getOwnPropertyDescriptor(values, String(index));
+  if (descriptor === undefined || !descriptor.enumerable || !('value' in descriptor)) {
+    throw new TypeError(malformedMessage);
+  }
+  return descriptor.value;
+}
+
+function hasOnlyDenseArrayIndexes(values: readonly unknown[]): boolean {
+  return Reflect.ownKeys(values).length === values.length + 1;
 }
 
 function isExactInt32Array(value: unknown): value is Int32Array {

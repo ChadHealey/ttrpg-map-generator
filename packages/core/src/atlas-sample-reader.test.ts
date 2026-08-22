@@ -99,6 +99,11 @@ describe('atlas sample readers', () => {
     const sparseMacro = new Array<number>(ATLAS_FULL_SAMPLE_COUNT);
     sparseMacro[0] = 0;
     expect(() => createCompactMacroElevationSampleReader(sparseMacro)).toThrow('dense array');
+    const nonEnumerableMacro = new Array<number>(ATLAS_FULL_SAMPLE_COUNT).fill(0);
+    Object.defineProperty(nonEnumerableMacro, '0', { enumerable: false });
+    expect(() => createCompactMacroElevationSampleReader(nonEnumerableMacro)).toThrow(
+      'dense array',
+    );
 
     const invalidMacro = new Array<number>(ATLAS_FULL_SAMPLE_COUNT).fill(0);
     invalidMacro[1] = Number.NaN;
