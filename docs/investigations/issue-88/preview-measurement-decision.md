@@ -22,6 +22,25 @@ This decision makes no release determination. The issue-84 attempt remains inval
 stays blocked, and the issue-87 instrumented executable remains diagnostic only. No production
 behavior, schema, fixture, workload, hardware condition, numeric budget, or RSS policy changed.
 
+## Owner-approved contract change
+
+On 2026-08-21, the performance-contract owner accepted the two bounded authorities requested by
+this decision:
+
+1. A test-only desktop dispatch may invoke the existing coarse-preview workflow while leaving the
+   preview canvas visible, with no post-dispatch scroll, reveal, pan, zoom, control change, or
+   production-behavior change.
+2. For the designated MacBook Pro `Mac17,2` / Apple M5 / 24 GB host on macOS 26.5.1 (`25F80`)
+   only, a fail-closed resolver may treat `launchctl print` PID-domain/resource-coalition output as
+   the release measurement's application-process-tree authority despite its unsupported-API
+   warning.
+
+The exact first-paint predicate, membership/role separation, dynamic-helper revalidation, privacy
+limits, and invalidation conditions are now owned by the
+[Milestone 2 atlas-proof contract](../../milestone-2-atlas-proof.md#approved-packaged-preview-measurement-authorities).
+This addendum authorizes one bounded observer implementation issue; it does not validate the
+existing issue-84 attempt or resume the release gate.
+
 ## Paint and label boundaries
 
 The current contract measures dispatch through the first fully painted, labelled 512-by-256

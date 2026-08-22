@@ -217,6 +217,13 @@ accepted representation; no production behavior or release limit changed.
 > [`investigations/issue-84/preview-gate-2026-08-20`](investigations/issue-84/preview-gate-2026-08-20/decision.md).
 > They must not be used to pass, fail, stop, or resume the release protocol.
 
+> **Owner decision (2026-08-21):** the release observer may use the approved test-only,
+> no-scroll preview dispatch and the pinned, fail-closed `launchctl print` process-tree resolver
+> defined in the [Milestone 2 atlas-proof contract](milestone-2-atlas-proof.md#approved-packaged-preview-measurement-authorities).
+> This authorization preserves the existing workloads and numeric limits. It does not make the
+> invalid issue-88 observations valid; a bounded observer implementation must first demonstrate
+> the approved boundaries before issue #84 resumes.
+
 The Apple M5/24-GB MacBook Pro recorded above is the designated reference environment. Therefore
 all rows below remain `OUTSTANDING` until the prescribed five fresh-process runs are captured on
 this host. The existing packaged-workflow timings are not a substitute for the formal protocol.

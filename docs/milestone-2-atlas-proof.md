@@ -512,6 +512,44 @@ for every run. CI enforces deterministic output, dimensions, file-size ceilings,
 tile/surface allocation, progress/cancellation semantics, and deterministic aftermath; it does not
 enforce shared-runner wall-clock or cancellation-acknowledgement latency.
 
+### Approved packaged-preview measurement authorities
+
+The following narrowly scoped authorities apply only to the Milestone 2 coarse-preview release
+measurement on MacBook Pro `Mac17,2`, Apple M5, 24 GB, macOS 26.5.1 (`25F80`). They preserve the
+workload and every numeric budget in this contract; they make the existing visible-first-paint and
+application-process-tree boundaries observable. A different host, OS build, helper-role layout, or
+measurement method invalidates the observation until this contract is reviewed again.
+
+- The release observer may use a bounded, test-only desktop dispatch that invokes the same coarse
+  preview request and workflow path as **Generate coarse preview**, without changing controls,
+  preview resolution, generator inputs, scheduling, progress, cancellation, or accepted state. It
+  must leave the preview canvas visible from dispatch through the final receipt. It may not scroll,
+  reveal, pan, zoom, or otherwise modify the viewport after dispatch. The observer records the
+  dispatch boundary and proves the normal production request path was used.
+- A qualifying first paint requires all of: a complete ScreenCaptureKit frame displayed after
+  dispatch; a changed `512 × 256` canvas crop; calibrated bounded populations of the production
+  land and water palette colors; uninterrupted foreground ownership by the packaged candidate; and
+  one final structured Accessibility receipt confirming the labelled disposable preview, its
+  caption, and the enabled **Accept full atlas** control. The final receipt completion is the
+  wall-clock and RSS endpoint. Missing or contradictory evidence invalidates the run.
+- For this pinned host and OS only, `launchctl print` output is the expressly accepted application
+  process-tree membership authority despite the `launchctl(1)` warning that it is not a supported
+  API. The resolver must fail closed on unexpected output, OS/build mismatch, missing, duplicate,
+  replaced, late-created, exited, or unresolvable helpers. It must identify the Tauri app and every
+  GPU, Networking, and WebContent helper from the accepted PID-domain/resource-coalition mapping;
+  executable paths may establish a helper role only after that membership check. PID proximity,
+  launch order, and BSD parentage alone are not membership evidence. Membership is revalidated at
+  both the settled baseline and final receipt so new or replaced helpers are included.
+- Raw receipts containing transient PIDs, service UUIDs, coalition identifiers, local paths, or
+  machine-specific diagnostics remain outside the public repository. The retained public evidence
+  records only sanitized role counts, host/build identity, command and executable hashes, sampling
+  summary, measurements, and invalidation reason when applicable.
+
+These authorities are an owner-approved, fail-closed release-measurement exception, not a general
+macOS process-inspection API or a production instrumentation feature. Any need for a privilege,
+entitlement, private interface, production UI change, post-dispatch reveal action, or changed
+measurement meaning stops the protocol and requires a new owner decision.
+
 | Operation       | Fixed workload                                                                                | Wall-clock | Peak additional memory | Output-size ceiling       |
 | --------------- | --------------------------------------------------------------------------------------------- | ---------- | ---------------------- | ------------------------- |
 | Coarse preview  | dispatch through first fully painted labelled 512 × 256 effective preview                     | `750 ms`   | `256 MiB`              | not applicable            |
