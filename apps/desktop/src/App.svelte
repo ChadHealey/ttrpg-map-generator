@@ -1,5 +1,6 @@
 <script lang="ts">
   import { type AtlasControls, DEFAULT_ATLAS_CONTROLS } from '@ttrpg-map/core';
+  import { onMount } from 'svelte';
 
   import {
     AtlasWorkflow,
@@ -7,6 +8,10 @@
     MILESTONE_TWO_ATLAS_PROOF_SEED,
   } from './atlas-workflow.js';
   import AtlasWorkflowEvidencePanel from './AtlasWorkflowEvidencePanel.svelte';
+  import {
+    installPackagedPreviewDispatch,
+    requestProductionCoarsePreview,
+  } from './packaged-preview-dispatch.js';
   import ProofViewport from './ProofViewport.svelte';
 
   const workflow = new AtlasWorkflow();
@@ -16,6 +21,14 @@
   let selectedEntityId = '';
   let targetPath = '';
 
+  onMount(() =>
+    installPackagedPreviewDispatch(
+      window,
+      import.meta.env.VITE_PACKAGED_PREVIEW_OBSERVER_DISPATCH === '1',
+      () => void preview(),
+    ),
+  );
+
   $: controlsAreAccepted = sameControls(controls, atlas.controls);
   $: editingIsEnabled = isAtlasEditingPhase(atlas.phase) && !atlas.isBusy;
   $: selectedEntity =
@@ -23,7 +36,12 @@
     atlas.inspectionEntities[0];
 
   async function preview(): Promise<void> {
-    await run(workflow.requestPreview(seed, controls));
+    await requestProductionCoarsePreview(
+      (nextSeed, nextControls) => workflow.requestPreview(nextSeed, nextControls),
+      seed,
+      controls,
+      run,
+    );
   }
 
   async function acceptFull(): Promise<void> {
