@@ -4,6 +4,25 @@ import Darwin
 import Foundation
 
 extension AccessibilityObserver {
+  func issue97PrepareFrontmost() throws {
+    guard AXIsProcessTrusted() else {
+      throw PreviewObserverInvalidation.accessibility("Accessibility permission was not granted")
+    }
+    guard AXUIElementSetAttributeValue(
+      application,
+      kAXFrontmostAttribute as CFString,
+      kCFBooleanTrue
+    ) == .success else {
+      throw PreviewObserverInvalidation.accessibility(
+        "the packaged candidate could not acquire the approved unmeasured foreground precondition")
+    }
+    for _ in 0..<200 {
+      if (try? boolean(application, attribute: kAXFrontmostAttribute)) == true { return }
+      Thread.sleep(forTimeInterval: 0.01)
+    }
+    throw PreviewObserverInvalidation.candidateNotFrontmost
+  }
+
   func issue97PressEnabledButton(_ title: String) throws {
     let buttons = try issue97Snapshot().filter {
       (try? issue97String($0, attribute: kAXRoleAttribute)) == kAXButtonRole as String

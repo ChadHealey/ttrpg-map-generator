@@ -146,6 +146,13 @@ remained unconsumed, and the successor moved the same unchanged lifecycle action
 exact-baseline observer chord with bounded low-frequency receipt polling. There is no timing, RSS,
 retention, or release conclusion for that invalid pre-dispatch harness attempt.
 
+Two subsequent proof/SVG readiness attempts also failed closed before fixture configuration or
+sampler start because foreground ownership did not survive external application activation into
+observer startup. Neither created a package, destination, CSV, retained artifact, or measured
+dispatch. The successor now acquires and verifies the candidate's frontmost state through the same
+unmeasured Accessibility precondition pattern used by the approved predecessor, before preparation
+or measurement; foreground remains strictly uninterrupted after measured dispatch.
+
 ## Privacy
 
 Public receipts contain only the gated fixture values and definition hash, approved host/build and

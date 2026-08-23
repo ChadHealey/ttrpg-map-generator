@@ -118,12 +118,13 @@ enum PackagedExportObserver {
       throw PreviewObserverInvalidation.processRole(
         "the candidate executable identity did not match")
     }
+    let accessibility = AccessibilityObserver(applicationPID: targetPID)
+    try accessibility.issue97PrepareFrontmost()
     let initialMembership = try resolveProcesses(appPID: targetPID)
     guard initialMembership.coalition.bundleIdentifier == arguments.bundleIdentifier else {
       throw PreviewObserverInvalidation.launchctl("candidate bundle ID did not match its coalition")
     }
 
-    let accessibility = AccessibilityObserver(applicationPID: targetPID)
     try await prepareExactReopenedAtlas(
       accessibility: accessibility,
       targetPID: targetPID,
@@ -395,11 +396,10 @@ enum PackagedExportObserver {
       withBundleIdentifier: bundleIdentifier
     ).filter { !$0.isTerminated }
     guard applications.count == 1, let application = applications.first,
-      application.processIdentifier > 0,
-      NSWorkspace.shared.frontmostApplication?.processIdentifier == application.processIdentifier
+      application.processIdentifier > 0
     else {
       throw PreviewObserverInvalidation.capture(
-        "expected exactly one live frontmost packaged candidate")
+        "expected exactly one live packaged candidate before observer preparation")
     }
     return application.processIdentifier
   }
