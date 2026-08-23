@@ -1,0 +1,1653 @@
+{
+  "schema": "issue-92-packaged-preview-attribution-v1",
+  "issue": 92,
+  "status": "decision-ready",
+  "measuredOn": "2026-08-22",
+  "timezone": "America/Edmonton",
+  "candidate": {
+    "commit": "c10d6c158319a50cc11e99fd1d89005b5906c4da",
+    "predecessorCommit": "7d985d6e78a12b5825525128863df178ab3962e7",
+    "packageForm": "unsigned local arm64 app",
+    "cleanExecutableSha256": "931235e8a989a3980533c7ba5387ba3622520762f3a05ae551856eb6eec116ee",
+    "instrumentedExecutableSha256": "c78fac6d0be1c35a2480122a88e83b0b8813fb289252a5718edf5842074ad33e",
+    "cleanObserverSha256": "16760afe787cf84647d17fffb3258561882ec77a9307a43eaca22270fe38648a",
+    "instrumentedObserverSha256": "250b56d412999892ebf308de491e528158929a4914c80b934156d6da89d7b195",
+    "samplerSha256": "6bea6159f116d77c8d9de7afd77a9c9bfac3961cc4e8f9316404fcb0b21e2555",
+    "retentionUtilitySha256": "0ee3973afe665f35d50108ca4381afbfa894a75e1a9486b75f96e1229f17d91f"
+  },
+  "host": {
+    "modelIdentifier": "Mac17,2",
+    "chip": "Apple M5",
+    "memory": "24 GB",
+    "macosVersion": "26.5.1",
+    "macosBuild": "25F80",
+    "powerConnected": true,
+    "lowPowerMode": false,
+    "debuggerOrDevelopmentServerAttached": false,
+    "networkDependency": false
+  },
+  "toolchain": {
+    "node": "24.11.0",
+    "pnpm": "11.19.0",
+    "rustc": "1.97.1"
+  },
+  "instrumentation": {
+    "status": "temporary-uncommitted-and-restored",
+    "patchPath": "docs/investigations/issue-92/instrumentation.patch",
+    "patchSha256": "c6c3143844c79301066c0749dbbd665ee52cb6924be499d468350bd692f770fc",
+    "method": "performance.timeOrigin plus performance.now boundaries around the existing production preview stages, a cumulative nested component-traversal metric, one hidden Accessibility-readable sanitized stage profile, and observer-side ScreenCaptureKit/Accessibility interval reconciliation",
+    "intervalAuthority": {
+      "canvasCompletionToQualifyingFrameMilliseconds": "mixed application probe publication, browser paint, and observer frame detection; the final serialization and Svelte publication were not isolated by the probe",
+      "qualifyingFrameToAccessibilityStartMilliseconds": "observer-owned",
+      "accessibilityReceiptMilliseconds": "observer-owned"
+    },
+    "probePerturbation": {
+      "preliminarySerializationDurationMilliseconds": [0, 0],
+      "finalSerializationAndSveltePublicationIsolated": false,
+      "classification": "retained as unattributed instrumentation work inside the mixed canvas-completion-to-qualifying-frame interval"
+    },
+    "cleanSourceSha256": {
+      "apps/desktop/src/App.svelte": "99b17d387036120c1cb03b23c80c1b676fe72aee4f053e73a264223167fd031d",
+      "apps/desktop/src/ProofViewport.svelte": "b0a91dd9315c1ac6be3d8991f9033fca2f71f722401ab243463cddfca84d02f0",
+      "apps/desktop/src/atlas-workflow-generation.ts": "56582d8c2757a9ea1d898035d17751fb6023b9d2118f1af83799c24b31fc7f52",
+      "apps/desktop/src/atlas-workflow.ts": "f967a93df87fb783367e82f88767ab3930016e6cda73c3a57f377843d08b806a",
+      "packages/generation/src/atlas-land-water-generator.ts": "061d2ad392c8228df1c04c4b53055a70844c2d174741125c98e171e79e5d10d7",
+      "packages/generation/src/atlas-land-water-classification.ts": "1e5b8a0242efe565b7531dd8f98950cb1deaa4312c423c511ce0a0e30d4461e3",
+      "docs/investigations/issue-90/packaged-preview-observer.swift": "36caac888298043bb240768b080b181ce22398eefb48801c8b88048810907c76",
+      "docs/investigations/issue-90/packaged-preview-observer-platform.swift": "d9ad34915b9f3fca67a87e14f4f22656c5e82b803cdf43f4d071a84ccc3a9f6d",
+      "docs/investigations/issue-90/packaged-preview-observer-support.swift": "5597e17a7c0e22128623ca8398f2e8dc79e5117202d4ea893089ed6d976f680c"
+    }
+  },
+  "commands": {
+    "transcript": "docs/investigations/issue-92/measurement-commands.md",
+    "cleanBuild": "VITE_PACKAGED_PREVIEW_OBSERVER_DISPATCH=1 corepack pnpm --filter @ttrpg-map/desktop tauri build --bundles app --no-sign --ci",
+    "instrumentedBuild": "VITE_PACKAGED_PREVIEW_OBSERVER_DISPATCH=1 corepack pnpm --filter @ttrpg-map/desktop tauri build --bundles app --no-sign --ci",
+    "observer": "/private/tmp/issue92-profiled-packaged-preview-observer app.ttrpgmap.generator c78fac6d0be1c35a2480122a88e83b0b8813fb289252a5718edf5842074ad33e /private/tmp/issue92-rss-timeline 6bea6159f116d77c8d9de7afd77a9c9bfac3961cc4e8f9316404fcb0b21e2555 /private/tmp/${ISSUE92_RUN_ID}.csv ${ISSUE92_FIXTURE}",
+    "retention": "/private/tmp/issue92-preview-retention ${ISSUE92_REPO_ROOT} /private/tmp/${ISSUE92_RUN_ID}.csv ${APPROVED_PRIVATE_ARCHIVE_ROOT} ${ISSUE92_RUN_ID}",
+    "focusedTests": "corepack pnpm vitest run packages/generation/src/atlas-land-water-generator-contract.test.ts packages/generation/src/atlas-land-water-generator-invariants.test.ts packages/generation/src/atlas-land-water-generator-operation.test.ts packages/generation/src/atlas-land-water-progress.test.ts apps/desktop/src/packaged-preview-dispatch.test.ts apps/desktop/src/atlas-workflow.test.ts apps/desktop/src/atlas-workflow-generation.integration.test.ts",
+    "crossPlatform": "corepack pnpm test:cross-platform",
+    "fullCheck": "corepack pnpm check"
+  },
+  "runOrder": [
+    {
+      "id": "issue92-proof-warmup",
+      "kind": "untimed-warmup",
+      "fixture": "milestone-2-atlas-proof"
+    },
+    {
+      "id": "issue92-proof-1",
+      "kind": "fresh-process-profile",
+      "fixture": "milestone-2-atlas-proof"
+    },
+    {
+      "id": "issue92-proof-2",
+      "kind": "fresh-process-profile",
+      "fixture": "milestone-2-atlas-proof"
+    },
+    {
+      "id": "issue92-proof-3",
+      "kind": "fresh-process-profile",
+      "fixture": "milestone-2-atlas-proof"
+    },
+    {
+      "id": "issue92-fragmented-1",
+      "kind": "fresh-process-profile",
+      "fixture": "milestone-2-atlas-fragmented-islands"
+    },
+    {
+      "id": "issue92-fragmented-2",
+      "kind": "fresh-process-profile",
+      "fixture": "milestone-2-atlas-fragmented-islands"
+    },
+    {
+      "id": "issue92-fragmented-3",
+      "kind": "fresh-process-profile",
+      "fixture": "milestone-2-atlas-fragmented-islands"
+    },
+    {
+      "id": "issue92-control-max-1",
+      "kind": "invalid-profile",
+      "fixture": "milestone-2-atlas-control-max"
+    },
+    {
+      "id": "issue92-control-max-2",
+      "kind": "invalid-profile",
+      "fixture": "milestone-2-atlas-control-max"
+    },
+    {
+      "id": "issue92-control-max-3",
+      "kind": "invalid-profile",
+      "fixture": "milestone-2-atlas-control-max"
+    },
+    {
+      "id": "issue92-control-max-retry-1",
+      "kind": "fresh-process-profile",
+      "fixture": "milestone-2-atlas-control-max"
+    },
+    {
+      "id": "issue92-control-max-retry-2",
+      "kind": "fresh-process-profile",
+      "fixture": "milestone-2-atlas-control-max"
+    },
+    {
+      "id": "issue92-control-max-retry-3",
+      "kind": "fresh-process-profile",
+      "fixture": "milestone-2-atlas-control-max"
+    }
+  ],
+  "observations": [
+    {
+      "id": "issue92-proof-warmup",
+      "kind": "untimed-warmup",
+      "fixture": "milestone-2-atlas-proof",
+      "status": "valid",
+      "observerReceipt": {
+        "path": "docs/investigations/issue-92/receipts/issue92-proof-warmup-observer.json",
+        "sha256": "dd2e1a26c8410ee3ed48edc09657edf8158f82d7dd777ba36a3a9ecdf559eb76",
+        "byteLength": 3731
+      },
+      "privateRetentionReceipt": {
+        "path": "docs/investigations/issue-92/receipts/issue92-proof-warmup-retention.json",
+        "sha256": "2cf3aae1c38023b2a6c53b96aa0920e450bd6a9cb9dc015834aa0af105b6ce14",
+        "byteLength": 227,
+        "version": "private-preview-rss-retention-v1",
+        "status": "retained",
+        "artifactIdentifier": "issue92-proof-warmup",
+        "rawCsvSha256": "677ec34fe686cf42704a478ff4fb536da9a3b78d0ac54a916463f92eacb19951",
+        "rawCsvByteLength": 17916
+      },
+      "result": "not-gated",
+      "observerQualification": {
+        "roleCounts": {
+          "application": 1,
+          "gpu": 1,
+          "networking": 1,
+          "webContent": 1
+        },
+        "visual": {
+          "changedCanvasCrop": true,
+          "completePostDispatchFrame": true,
+          "cropPixels": "512x256",
+          "foregroundIntact": true,
+          "landPaletteBounded": true,
+          "waterPaletteBounded": true
+        },
+        "accessibility": {
+          "acceptFullEnabled": true,
+          "disposableCaption": true,
+          "frontmost": true,
+          "previewLabel": true
+        },
+        "membershipRevalidated": true
+      },
+      "executableIdentity": {
+        "candidateSha256": "c78fac6d0be1c35a2480122a88e83b0b8813fb289252a5718edf5842074ad33e",
+        "samplerSha256": "6bea6159f116d77c8d9de7afd77a9c9bfac3961cc4e8f9316404fcb0b21e2555"
+      },
+      "measurement": {
+        "baselineAggregateRSSBytes": 224477184,
+        "elapsedMilliseconds": 883.598876953125,
+        "maximumSampleIntervalMilliseconds": 6.373046875,
+        "peakAdditionalRSSBytes": 135970816,
+        "sampleCount": 145,
+        "wallClockLimitMilliseconds": 750,
+        "peakAdditionalRSSLimitBytes": 268435456,
+        "wallClockWithinLimit": false,
+        "peakAdditionalRSSWithinLimit": true
+      },
+      "applicationProfile": {
+        "profileVersion": "issue-92-application-stage-profile-v1",
+        "observerDispatchToApplicationMilliseconds": 25.22021484375,
+        "stages": {
+          "workflow-input-preparation": {
+            "startAfterApplicationDispatchMilliseconds": 0,
+            "durationMilliseconds": 1
+          },
+          "generation-setup": {
+            "startAfterApplicationDispatchMilliseconds": 2,
+            "durationMilliseconds": 0
+          },
+          "generation-sampling": {
+            "startAfterApplicationDispatchMilliseconds": 2,
+            "durationMilliseconds": 66
+          },
+          "threshold-selection": {
+            "startAfterApplicationDispatchMilliseconds": 68,
+            "durationMilliseconds": 311
+          },
+          "generation-classification": {
+            "startAfterApplicationDispatchMilliseconds": 380,
+            "durationMilliseconds": 159
+          },
+          "generation-validation": {
+            "startAfterApplicationDispatchMilliseconds": 539,
+            "durationMilliseconds": 9
+          },
+          "preview-value-materialization": {
+            "startAfterApplicationDispatchMilliseconds": 548,
+            "durationMilliseconds": 53
+          },
+          "generation-result-wrapping": {
+            "startAfterApplicationDispatchMilliseconds": 601,
+            "durationMilliseconds": 0
+          },
+          "workflow-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 601,
+            "durationMilliseconds": 0
+          },
+          "svelte-snapshot-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 601,
+            "durationMilliseconds": 0
+          },
+          "canvas-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 601,
+            "durationMilliseconds": 4
+          },
+          "probe-receipt-materialization": {
+            "startAfterApplicationDispatchMilliseconds": 605,
+            "durationMilliseconds": 0
+          }
+        },
+        "metrics": {
+          "selectedComponentCount": 3,
+          "selectedContourLevel": -13854891,
+          "selectedLargestComponentPercent": 50.276133,
+          "thresholdCandidateCount": 17,
+          "thresholdComponentTraversalMilliseconds": 175
+        },
+        "canvasCompletionAfterApplicationDispatchMilliseconds": 605,
+        "namedStageDurationMilliseconds": 603,
+        "measuredButUnattributedApplicationMilliseconds": 2
+      },
+      "endpointIntervals": {
+        "accessibilityReceiptMilliseconds": 62.073974609375,
+        "applicationDispatchToQualifyingFrameMilliseconds": 794.5517578125,
+        "canvasCompletionToQualifyingFrameMilliseconds": 189.5517578125,
+        "qualifyingFrameToAccessibilityStartMilliseconds": 1.7529296875,
+        "canvasCompletionThroughAccessibilityReceiptMilliseconds": 253.378662109375
+      },
+      "reconciliation": {
+        "observerDispatchToApplicationMilliseconds": 25.22021484375,
+        "applicationDispatchThroughCanvasMilliseconds": 605,
+        "mixedPostCanvasThroughObserverEndpointMilliseconds": 253.378662109375,
+        "reconciledElapsedMilliseconds": 883.598876953125,
+        "observedElapsedMilliseconds": 883.598876953125
+      }
+    },
+    {
+      "id": "issue92-proof-1",
+      "kind": "fresh-process-profile",
+      "fixture": "milestone-2-atlas-proof",
+      "status": "valid",
+      "observerReceipt": {
+        "path": "docs/investigations/issue-92/receipts/issue92-proof-1-observer.json",
+        "sha256": "0c2b7637ea3735f8582a45c4636e194d664f6a8c21c659e4f72db2519d14ca49",
+        "byteLength": 3733
+      },
+      "privateRetentionReceipt": {
+        "path": "docs/investigations/issue-92/receipts/issue92-proof-1-retention.json",
+        "sha256": "c15b6f934b06b8f7731cd03d7ef5a1c3adfa9c660762d49f0aba05d011622fb1",
+        "byteLength": 222,
+        "version": "private-preview-rss-retention-v1",
+        "status": "retained",
+        "artifactIdentifier": "issue92-proof-1",
+        "rawCsvSha256": "2ccf723224e6a689d9a8aa62dd9c8f0fd9bc5948e3870e12050e43d39c2ffab5",
+        "rawCsvByteLength": 19934
+      },
+      "result": "diagnostic-wall-clock-fail",
+      "observerQualification": {
+        "roleCounts": {
+          "application": 1,
+          "gpu": 1,
+          "networking": 1,
+          "webContent": 1
+        },
+        "visual": {
+          "changedCanvasCrop": true,
+          "completePostDispatchFrame": true,
+          "cropPixels": "512x256",
+          "foregroundIntact": true,
+          "landPaletteBounded": true,
+          "waterPaletteBounded": true
+        },
+        "accessibility": {
+          "acceptFullEnabled": true,
+          "disposableCaption": true,
+          "frontmost": true,
+          "previewLabel": true
+        },
+        "membershipRevalidated": true
+      },
+      "executableIdentity": {
+        "candidateSha256": "c78fac6d0be1c35a2480122a88e83b0b8813fb289252a5718edf5842074ad33e",
+        "samplerSha256": "6bea6159f116d77c8d9de7afd77a9c9bfac3961cc4e8f9316404fcb0b21e2555"
+      },
+      "measurement": {
+        "baselineAggregateRSSBytes": 225542144,
+        "elapsedMilliseconds": 886.908935546875,
+        "maximumSampleIntervalMilliseconds": 6.39306640625,
+        "peakAdditionalRSSBytes": 123322368,
+        "sampleCount": 147,
+        "wallClockLimitMilliseconds": 750,
+        "peakAdditionalRSSLimitBytes": 268435456,
+        "wallClockWithinLimit": false,
+        "peakAdditionalRSSWithinLimit": true
+      },
+      "applicationProfile": {
+        "profileVersion": "issue-92-application-stage-profile-v1",
+        "observerDispatchToApplicationMilliseconds": 23.027099609375,
+        "stages": {
+          "workflow-input-preparation": {
+            "startAfterApplicationDispatchMilliseconds": 1,
+            "durationMilliseconds": 1
+          },
+          "generation-setup": {
+            "startAfterApplicationDispatchMilliseconds": 3,
+            "durationMilliseconds": 0
+          },
+          "generation-sampling": {
+            "startAfterApplicationDispatchMilliseconds": 3,
+            "durationMilliseconds": 64
+          },
+          "threshold-selection": {
+            "startAfterApplicationDispatchMilliseconds": 67,
+            "durationMilliseconds": 311
+          },
+          "generation-classification": {
+            "startAfterApplicationDispatchMilliseconds": 378,
+            "durationMilliseconds": 160
+          },
+          "generation-validation": {
+            "startAfterApplicationDispatchMilliseconds": 538,
+            "durationMilliseconds": 9
+          },
+          "preview-value-materialization": {
+            "startAfterApplicationDispatchMilliseconds": 547,
+            "durationMilliseconds": 52
+          },
+          "generation-result-wrapping": {
+            "startAfterApplicationDispatchMilliseconds": 599,
+            "durationMilliseconds": 0
+          },
+          "workflow-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 599,
+            "durationMilliseconds": 0
+          },
+          "svelte-snapshot-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 599,
+            "durationMilliseconds": 0
+          },
+          "canvas-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 600,
+            "durationMilliseconds": 3
+          },
+          "probe-receipt-materialization": {
+            "startAfterApplicationDispatchMilliseconds": 603,
+            "durationMilliseconds": 0
+          }
+        },
+        "metrics": {
+          "selectedComponentCount": 3,
+          "selectedContourLevel": -13854891,
+          "selectedLargestComponentPercent": 50.276133,
+          "thresholdCandidateCount": 17,
+          "thresholdComponentTraversalMilliseconds": 172
+        },
+        "canvasCompletionAfterApplicationDispatchMilliseconds": 603,
+        "namedStageDurationMilliseconds": 600,
+        "measuredButUnattributedApplicationMilliseconds": 3
+      },
+      "endpointIntervals": {
+        "accessibilityReceiptMilliseconds": 65.59375,
+        "applicationDispatchToQualifyingFrameMilliseconds": 788.616943359375,
+        "canvasCompletionToQualifyingFrameMilliseconds": 185.616943359375,
+        "qualifyingFrameToAccessibilityStartMilliseconds": 9.671142578125,
+        "canvasCompletionThroughAccessibilityReceiptMilliseconds": 260.8818359375
+      },
+      "reconciliation": {
+        "observerDispatchToApplicationMilliseconds": 23.027099609375,
+        "applicationDispatchThroughCanvasMilliseconds": 603,
+        "mixedPostCanvasThroughObserverEndpointMilliseconds": 260.8818359375,
+        "reconciledElapsedMilliseconds": 886.908935546875,
+        "observedElapsedMilliseconds": 886.908935546875
+      }
+    },
+    {
+      "id": "issue92-proof-2",
+      "kind": "fresh-process-profile",
+      "fixture": "milestone-2-atlas-proof",
+      "status": "valid",
+      "observerReceipt": {
+        "path": "docs/investigations/issue-92/receipts/issue92-proof-2-observer.json",
+        "sha256": "1d9e7a71693607d3d33c155b88db2e159eb702d54333e693e0711eb53b8a91dc",
+        "byteLength": 3723
+      },
+      "privateRetentionReceipt": {
+        "path": "docs/investigations/issue-92/receipts/issue92-proof-2-retention.json",
+        "sha256": "ae52f87039895abd71f27ec097e0e25f1314f10f55c4b4cfcb16ddbf3b42f350",
+        "byteLength": 222,
+        "version": "private-preview-rss-retention-v1",
+        "status": "retained",
+        "artifactIdentifier": "issue92-proof-2",
+        "rawCsvSha256": "53d5fd28bd32e9c0677e6f660e5e771898445c056580afb79fd2453da9494fd4",
+        "rawCsvByteLength": 19014
+      },
+      "result": "diagnostic-wall-clock-fail",
+      "observerQualification": {
+        "roleCounts": {
+          "application": 1,
+          "gpu": 1,
+          "networking": 1,
+          "webContent": 1
+        },
+        "visual": {
+          "changedCanvasCrop": true,
+          "completePostDispatchFrame": true,
+          "cropPixels": "512x256",
+          "foregroundIntact": true,
+          "landPaletteBounded": true,
+          "waterPaletteBounded": true
+        },
+        "accessibility": {
+          "acceptFullEnabled": true,
+          "disposableCaption": true,
+          "frontmost": true,
+          "previewLabel": true
+        },
+        "membershipRevalidated": true
+      },
+      "executableIdentity": {
+        "candidateSha256": "c78fac6d0be1c35a2480122a88e83b0b8813fb289252a5718edf5842074ad33e",
+        "samplerSha256": "6bea6159f116d77c8d9de7afd77a9c9bfac3961cc4e8f9316404fcb0b21e2555"
+      },
+      "measurement": {
+        "baselineAggregateRSSBytes": 223084544,
+        "elapsedMilliseconds": 829.591796875,
+        "maximumSampleIntervalMilliseconds": 6.444,
+        "peakAdditionalRSSBytes": 121110528,
+        "sampleCount": 136,
+        "wallClockLimitMilliseconds": 750,
+        "peakAdditionalRSSLimitBytes": 268435456,
+        "wallClockWithinLimit": false,
+        "peakAdditionalRSSWithinLimit": true
+      },
+      "applicationProfile": {
+        "profileVersion": "issue-92-application-stage-profile-v1",
+        "observerDispatchToApplicationMilliseconds": 23.04296875,
+        "stages": {
+          "workflow-input-preparation": {
+            "startAfterApplicationDispatchMilliseconds": 1,
+            "durationMilliseconds": 0
+          },
+          "generation-setup": {
+            "startAfterApplicationDispatchMilliseconds": 2,
+            "durationMilliseconds": 1
+          },
+          "generation-sampling": {
+            "startAfterApplicationDispatchMilliseconds": 3,
+            "durationMilliseconds": 63
+          },
+          "threshold-selection": {
+            "startAfterApplicationDispatchMilliseconds": 67,
+            "durationMilliseconds": 304
+          },
+          "generation-classification": {
+            "startAfterApplicationDispatchMilliseconds": 371,
+            "durationMilliseconds": 160
+          },
+          "generation-validation": {
+            "startAfterApplicationDispatchMilliseconds": 531,
+            "durationMilliseconds": 7
+          },
+          "preview-value-materialization": {
+            "startAfterApplicationDispatchMilliseconds": 538,
+            "durationMilliseconds": 52
+          },
+          "generation-result-wrapping": {
+            "startAfterApplicationDispatchMilliseconds": 591,
+            "durationMilliseconds": 0
+          },
+          "workflow-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 591,
+            "durationMilliseconds": 0
+          },
+          "svelte-snapshot-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 591,
+            "durationMilliseconds": 0
+          },
+          "canvas-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 591,
+            "durationMilliseconds": 3
+          },
+          "probe-receipt-materialization": {
+            "startAfterApplicationDispatchMilliseconds": 594,
+            "durationMilliseconds": 0
+          }
+        },
+        "metrics": {
+          "selectedComponentCount": 3,
+          "selectedContourLevel": -13854891,
+          "selectedLargestComponentPercent": 50.276133,
+          "thresholdCandidateCount": 17,
+          "thresholdComponentTraversalMilliseconds": 171
+        },
+        "canvasCompletionAfterApplicationDispatchMilliseconds": 594,
+        "namedStageDurationMilliseconds": 590,
+        "measuredButUnattributedApplicationMilliseconds": 4
+      },
+      "endpointIntervals": {
+        "accessibilityReceiptMilliseconds": 57.640869140625,
+        "applicationDispatchToQualifyingFrameMilliseconds": 747.696044921875,
+        "canvasCompletionToQualifyingFrameMilliseconds": 153.696044921875,
+        "qualifyingFrameToAccessibilityStartMilliseconds": 1.2119140625,
+        "canvasCompletionThroughAccessibilityReceiptMilliseconds": 212.548828125
+      },
+      "reconciliation": {
+        "observerDispatchToApplicationMilliseconds": 23.04296875,
+        "applicationDispatchThroughCanvasMilliseconds": 594,
+        "mixedPostCanvasThroughObserverEndpointMilliseconds": 212.548828125,
+        "reconciledElapsedMilliseconds": 829.591796875,
+        "observedElapsedMilliseconds": 829.591796875
+      }
+    },
+    {
+      "id": "issue92-proof-3",
+      "kind": "fresh-process-profile",
+      "fixture": "milestone-2-atlas-proof",
+      "status": "valid",
+      "observerReceipt": {
+        "path": "docs/investigations/issue-92/receipts/issue92-proof-3-observer.json",
+        "sha256": "aa01087a23dee8d8a6dca01e47839ad8b08bf8053e62f88d79f2a49f5f77ed96",
+        "byteLength": 3728
+      },
+      "privateRetentionReceipt": {
+        "path": "docs/investigations/issue-92/receipts/issue92-proof-3-retention.json",
+        "sha256": "9ba18504a28ad522fc8c76cb351ff648b68b155b814c156b2f6fd58c8750ac8e",
+        "byteLength": 222,
+        "version": "private-preview-rss-retention-v1",
+        "status": "retained",
+        "artifactIdentifier": "issue92-proof-3",
+        "rawCsvSha256": "ff04908a4f1a116919e1eada4a0bf0ea8691c7e6b6dfa21f14de497ebf10ee3e",
+        "rawCsvByteLength": 19280
+      },
+      "result": "diagnostic-wall-clock-fail",
+      "observerQualification": {
+        "roleCounts": {
+          "application": 1,
+          "gpu": 1,
+          "networking": 1,
+          "webContent": 1
+        },
+        "visual": {
+          "changedCanvasCrop": true,
+          "completePostDispatchFrame": true,
+          "cropPixels": "512x256",
+          "foregroundIntact": true,
+          "landPaletteBounded": true,
+          "waterPaletteBounded": true
+        },
+        "accessibility": {
+          "acceptFullEnabled": true,
+          "disposableCaption": true,
+          "frontmost": true,
+          "previewLabel": true
+        },
+        "membershipRevalidated": true
+      },
+      "executableIdentity": {
+        "candidateSha256": "c78fac6d0be1c35a2480122a88e83b0b8813fb289252a5718edf5842074ad33e",
+        "samplerSha256": "6bea6159f116d77c8d9de7afd77a9c9bfac3961cc4e8f9316404fcb0b21e2555"
+      },
+      "measurement": {
+        "baselineAggregateRSSBytes": 224608256,
+        "elapsedMilliseconds": 881.659912109375,
+        "maximumSampleIntervalMilliseconds": 6.445,
+        "peakAdditionalRSSBytes": 121470976,
+        "sampleCount": 145,
+        "wallClockLimitMilliseconds": 750,
+        "peakAdditionalRSSLimitBytes": 268435456,
+        "wallClockWithinLimit": false,
+        "peakAdditionalRSSWithinLimit": true
+      },
+      "applicationProfile": {
+        "profileVersion": "issue-92-application-stage-profile-v1",
+        "observerDispatchToApplicationMilliseconds": 27.23388671875,
+        "stages": {
+          "workflow-input-preparation": {
+            "startAfterApplicationDispatchMilliseconds": 1,
+            "durationMilliseconds": 0
+          },
+          "generation-setup": {
+            "startAfterApplicationDispatchMilliseconds": 3,
+            "durationMilliseconds": 0
+          },
+          "generation-sampling": {
+            "startAfterApplicationDispatchMilliseconds": 3,
+            "durationMilliseconds": 68
+          },
+          "threshold-selection": {
+            "startAfterApplicationDispatchMilliseconds": 71,
+            "durationMilliseconds": 304
+          },
+          "generation-classification": {
+            "startAfterApplicationDispatchMilliseconds": 375,
+            "durationMilliseconds": 160
+          },
+          "generation-validation": {
+            "startAfterApplicationDispatchMilliseconds": 535,
+            "durationMilliseconds": 7
+          },
+          "preview-value-materialization": {
+            "startAfterApplicationDispatchMilliseconds": 542,
+            "durationMilliseconds": 52
+          },
+          "generation-result-wrapping": {
+            "startAfterApplicationDispatchMilliseconds": 594,
+            "durationMilliseconds": 0
+          },
+          "workflow-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 594,
+            "durationMilliseconds": 0
+          },
+          "svelte-snapshot-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 594,
+            "durationMilliseconds": 1
+          },
+          "canvas-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 595,
+            "durationMilliseconds": 4
+          },
+          "probe-receipt-materialization": {
+            "startAfterApplicationDispatchMilliseconds": 599,
+            "durationMilliseconds": 0
+          }
+        },
+        "metrics": {
+          "selectedComponentCount": 3,
+          "selectedContourLevel": -13854891,
+          "selectedLargestComponentPercent": 50.276133,
+          "thresholdCandidateCount": 17,
+          "thresholdComponentTraversalMilliseconds": 169
+        },
+        "canvasCompletionAfterApplicationDispatchMilliseconds": 599,
+        "namedStageDurationMilliseconds": 596,
+        "measuredButUnattributedApplicationMilliseconds": 3
+      },
+      "endpointIntervals": {
+        "accessibilityReceiptMilliseconds": 64.76220703125,
+        "applicationDispatchToQualifyingFrameMilliseconds": 788.57763671875,
+        "canvasCompletionToQualifyingFrameMilliseconds": 189.57763671875,
+        "qualifyingFrameToAccessibilityStartMilliseconds": 1.086181640625,
+        "canvasCompletionThroughAccessibilityReceiptMilliseconds": 255.426025390625
+      },
+      "reconciliation": {
+        "observerDispatchToApplicationMilliseconds": 27.23388671875,
+        "applicationDispatchThroughCanvasMilliseconds": 599,
+        "mixedPostCanvasThroughObserverEndpointMilliseconds": 255.426025390625,
+        "reconciledElapsedMilliseconds": 881.659912109375,
+        "observedElapsedMilliseconds": 881.659912109375
+      }
+    },
+    {
+      "id": "issue92-fragmented-1",
+      "kind": "fresh-process-profile",
+      "fixture": "milestone-2-atlas-fragmented-islands",
+      "status": "valid",
+      "observerReceipt": {
+        "path": "docs/investigations/issue-92/receipts/issue92-fragmented-1-observer.json",
+        "sha256": "c2513fab804fdc0251b2aa246436d94499296960b33619aa8c3943eb0f3aed51",
+        "byteLength": 3736
+      },
+      "privateRetentionReceipt": {
+        "path": "docs/investigations/issue-92/receipts/issue92-fragmented-1-retention.json",
+        "sha256": "fce04a61e9a53f6fb97bfe9328d2fe4e61642edbecbfae381a7412b07e474ab1",
+        "byteLength": 227,
+        "version": "private-preview-rss-retention-v1",
+        "status": "retained",
+        "artifactIdentifier": "issue92-fragmented-1",
+        "rawCsvSha256": "486f5b2e8b74bfc174aa4ff8422ae612442c82639a221749c509bda15f476617",
+        "rawCsvByteLength": 19872
+      },
+      "result": "diagnostic-wall-clock-fail",
+      "observerQualification": {
+        "roleCounts": {
+          "application": 1,
+          "gpu": 1,
+          "networking": 1,
+          "webContent": 1
+        },
+        "visual": {
+          "changedCanvasCrop": true,
+          "completePostDispatchFrame": true,
+          "cropPixels": "512x256",
+          "foregroundIntact": true,
+          "landPaletteBounded": true,
+          "waterPaletteBounded": true
+        },
+        "accessibility": {
+          "acceptFullEnabled": true,
+          "disposableCaption": true,
+          "frontmost": true,
+          "previewLabel": true
+        },
+        "membershipRevalidated": true
+      },
+      "executableIdentity": {
+        "candidateSha256": "c78fac6d0be1c35a2480122a88e83b0b8813fb289252a5718edf5842074ad33e",
+        "samplerSha256": "6bea6159f116d77c8d9de7afd77a9c9bfac3961cc4e8f9316404fcb0b21e2555"
+      },
+      "measurement": {
+        "baselineAggregateRSSBytes": 235847680,
+        "elapsedMilliseconds": 931.593994140625,
+        "maximumSampleIntervalMilliseconds": 6.375,
+        "peakAdditionalRSSBytes": 332070912,
+        "sampleCount": 152,
+        "wallClockLimitMilliseconds": 750,
+        "peakAdditionalRSSLimitBytes": 268435456,
+        "wallClockWithinLimit": false,
+        "peakAdditionalRSSWithinLimit": false
+      },
+      "applicationProfile": {
+        "profileVersion": "issue-92-application-stage-profile-v1",
+        "observerDispatchToApplicationMilliseconds": 22.97705078125,
+        "stages": {
+          "workflow-input-preparation": {
+            "startAfterApplicationDispatchMilliseconds": 1,
+            "durationMilliseconds": 0
+          },
+          "generation-setup": {
+            "startAfterApplicationDispatchMilliseconds": 3,
+            "durationMilliseconds": 0
+          },
+          "generation-sampling": {
+            "startAfterApplicationDispatchMilliseconds": 3,
+            "durationMilliseconds": 64
+          },
+          "threshold-selection": {
+            "startAfterApplicationDispatchMilliseconds": 67,
+            "durationMilliseconds": 356
+          },
+          "generation-classification": {
+            "startAfterApplicationDispatchMilliseconds": 423,
+            "durationMilliseconds": 161
+          },
+          "generation-validation": {
+            "startAfterApplicationDispatchMilliseconds": 584,
+            "durationMilliseconds": 7
+          },
+          "preview-value-materialization": {
+            "startAfterApplicationDispatchMilliseconds": 591,
+            "durationMilliseconds": 53
+          },
+          "generation-result-wrapping": {
+            "startAfterApplicationDispatchMilliseconds": 644,
+            "durationMilliseconds": 0
+          },
+          "workflow-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 644,
+            "durationMilliseconds": 0
+          },
+          "svelte-snapshot-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 644,
+            "durationMilliseconds": 0
+          },
+          "canvas-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 644,
+            "durationMilliseconds": 4
+          },
+          "probe-receipt-materialization": {
+            "startAfterApplicationDispatchMilliseconds": 648,
+            "durationMilliseconds": 0
+          }
+        },
+        "metrics": {
+          "selectedComponentCount": 7,
+          "selectedContourLevel": -13386485,
+          "selectedLargestComponentPercent": 54.385296,
+          "thresholdCandidateCount": 18,
+          "thresholdComponentTraversalMilliseconds": 196
+        },
+        "canvasCompletionAfterApplicationDispatchMilliseconds": 648,
+        "namedStageDurationMilliseconds": 645,
+        "measuredButUnattributedApplicationMilliseconds": 3
+      },
+      "endpointIntervals": {
+        "accessibilityReceiptMilliseconds": 65.5126953125,
+        "applicationDispatchToQualifyingFrameMilliseconds": 834.857421875,
+        "canvasCompletionToQualifyingFrameMilliseconds": 186.857421875,
+        "qualifyingFrameToAccessibilityStartMilliseconds": 8.246826171875,
+        "canvasCompletionThroughAccessibilityReceiptMilliseconds": 260.616943359375
+      },
+      "reconciliation": {
+        "observerDispatchToApplicationMilliseconds": 22.97705078125,
+        "applicationDispatchThroughCanvasMilliseconds": 648,
+        "mixedPostCanvasThroughObserverEndpointMilliseconds": 260.616943359375,
+        "reconciledElapsedMilliseconds": 931.593994140625,
+        "observedElapsedMilliseconds": 931.593994140625
+      }
+    },
+    {
+      "id": "issue92-fragmented-2",
+      "kind": "fresh-process-profile",
+      "fixture": "milestone-2-atlas-fragmented-islands",
+      "status": "valid",
+      "observerReceipt": {
+        "path": "docs/investigations/issue-92/receipts/issue92-fragmented-2-observer.json",
+        "sha256": "6b9346c434b59f13115caf204aeca4ba888cb3ee648eacc245f7ec6bf9168122",
+        "byteLength": 3743
+      },
+      "privateRetentionReceipt": {
+        "path": "docs/investigations/issue-92/receipts/issue92-fragmented-2-retention.json",
+        "sha256": "c4a40da37bd7d33167763d53fd0a3879517df710e587d83546859805a0e13554",
+        "byteLength": 227,
+        "version": "private-preview-rss-retention-v1",
+        "status": "retained",
+        "artifactIdentifier": "issue92-fragmented-2",
+        "rawCsvSha256": "2bf71bde712ffad6147b77f28e328af1c3d6fafa4079918d79ee015c127a496c",
+        "rawCsvByteLength": 19606
+      },
+      "result": "diagnostic-wall-clock-fail",
+      "observerQualification": {
+        "roleCounts": {
+          "application": 1,
+          "gpu": 1,
+          "networking": 1,
+          "webContent": 1
+        },
+        "visual": {
+          "changedCanvasCrop": true,
+          "completePostDispatchFrame": true,
+          "cropPixels": "512x256",
+          "foregroundIntact": true,
+          "landPaletteBounded": true,
+          "waterPaletteBounded": true
+        },
+        "accessibility": {
+          "acceptFullEnabled": true,
+          "disposableCaption": true,
+          "frontmost": true,
+          "previewLabel": true
+        },
+        "membershipRevalidated": true
+      },
+      "executableIdentity": {
+        "candidateSha256": "c78fac6d0be1c35a2480122a88e83b0b8813fb289252a5718edf5842074ad33e",
+        "samplerSha256": "6bea6159f116d77c8d9de7afd77a9c9bfac3961cc4e8f9316404fcb0b21e2555"
+      },
+      "measurement": {
+        "baselineAggregateRSSBytes": 238616576,
+        "elapsedMilliseconds": 871.852294921875,
+        "maximumSampleIntervalMilliseconds": 6.368,
+        "peakAdditionalRSSBytes": 126763008,
+        "sampleCount": 143,
+        "wallClockLimitMilliseconds": 750,
+        "peakAdditionalRSSLimitBytes": 268435456,
+        "wallClockWithinLimit": false,
+        "peakAdditionalRSSWithinLimit": true
+      },
+      "applicationProfile": {
+        "profileVersion": "issue-92-application-stage-profile-v1",
+        "observerDispatchToApplicationMilliseconds": 21.464111328125,
+        "stages": {
+          "workflow-input-preparation": {
+            "startAfterApplicationDispatchMilliseconds": 1,
+            "durationMilliseconds": 1
+          },
+          "generation-setup": {
+            "startAfterApplicationDispatchMilliseconds": 3,
+            "durationMilliseconds": 1
+          },
+          "generation-sampling": {
+            "startAfterApplicationDispatchMilliseconds": 4,
+            "durationMilliseconds": 65
+          },
+          "threshold-selection": {
+            "startAfterApplicationDispatchMilliseconds": 69,
+            "durationMilliseconds": 331
+          },
+          "generation-classification": {
+            "startAfterApplicationDispatchMilliseconds": 400,
+            "durationMilliseconds": 160
+          },
+          "generation-validation": {
+            "startAfterApplicationDispatchMilliseconds": 560,
+            "durationMilliseconds": 9
+          },
+          "preview-value-materialization": {
+            "startAfterApplicationDispatchMilliseconds": 569,
+            "durationMilliseconds": 53
+          },
+          "generation-result-wrapping": {
+            "startAfterApplicationDispatchMilliseconds": 622,
+            "durationMilliseconds": 0
+          },
+          "workflow-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 622,
+            "durationMilliseconds": 0
+          },
+          "svelte-snapshot-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 622,
+            "durationMilliseconds": 0
+          },
+          "canvas-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 622,
+            "durationMilliseconds": 4
+          },
+          "probe-receipt-materialization": {
+            "startAfterApplicationDispatchMilliseconds": 626,
+            "durationMilliseconds": 0
+          }
+        },
+        "metrics": {
+          "selectedComponentCount": 7,
+          "selectedContourLevel": -13386485,
+          "selectedLargestComponentPercent": 54.385296,
+          "thresholdCandidateCount": 18,
+          "thresholdComponentTraversalMilliseconds": 176
+        },
+        "canvasCompletionAfterApplicationDispatchMilliseconds": 626,
+        "namedStageDurationMilliseconds": 624,
+        "measuredButUnattributedApplicationMilliseconds": 2
+      },
+      "endpointIntervals": {
+        "accessibilityReceiptMilliseconds": 56.369384765625,
+        "applicationDispatchToQualifyingFrameMilliseconds": 791.240478515625,
+        "canvasCompletionToQualifyingFrameMilliseconds": 165.240478515625,
+        "qualifyingFrameToAccessibilityStartMilliseconds": 2.7783203125,
+        "canvasCompletionThroughAccessibilityReceiptMilliseconds": 224.38818359375
+      },
+      "reconciliation": {
+        "observerDispatchToApplicationMilliseconds": 21.464111328125,
+        "applicationDispatchThroughCanvasMilliseconds": 626,
+        "mixedPostCanvasThroughObserverEndpointMilliseconds": 224.38818359375,
+        "reconciledElapsedMilliseconds": 871.852294921875,
+        "observedElapsedMilliseconds": 871.852294921875
+      }
+    },
+    {
+      "id": "issue92-fragmented-3",
+      "kind": "fresh-process-profile",
+      "fixture": "milestone-2-atlas-fragmented-islands",
+      "status": "valid",
+      "observerReceipt": {
+        "path": "docs/investigations/issue-92/receipts/issue92-fragmented-3-observer.json",
+        "sha256": "981cdea77d8e55ab962b658567814fce515a9de242250859256512deaa8ffcfb",
+        "byteLength": 3743
+      },
+      "privateRetentionReceipt": {
+        "path": "docs/investigations/issue-92/receipts/issue92-fragmented-3-retention.json",
+        "sha256": "29654a6d690aa9122f7e7328c45218fb3a229623911a2691f06fda34f840ff30",
+        "byteLength": 227,
+        "version": "private-preview-rss-retention-v1",
+        "status": "retained",
+        "artifactIdentifier": "issue92-fragmented-3",
+        "rawCsvSha256": "d84e0aca269eb451fcbe1363c26b4e8f510864e52bab59d8f80c0f3b3a115f7f",
+        "rawCsvByteLength": 20330
+      },
+      "result": "diagnostic-wall-clock-fail",
+      "observerQualification": {
+        "roleCounts": {
+          "application": 1,
+          "gpu": 1,
+          "networking": 1,
+          "webContent": 1
+        },
+        "visual": {
+          "changedCanvasCrop": true,
+          "completePostDispatchFrame": true,
+          "cropPixels": "512x256",
+          "foregroundIntact": true,
+          "landPaletteBounded": true,
+          "waterPaletteBounded": true
+        },
+        "accessibility": {
+          "acceptFullEnabled": true,
+          "disposableCaption": true,
+          "frontmost": true,
+          "previewLabel": true
+        },
+        "membershipRevalidated": true
+      },
+      "executableIdentity": {
+        "candidateSha256": "c78fac6d0be1c35a2480122a88e83b0b8813fb289252a5718edf5842074ad33e",
+        "samplerSha256": "6bea6159f116d77c8d9de7afd77a9c9bfac3961cc4e8f9316404fcb0b21e2555"
+      },
+      "measurement": {
+        "baselineAggregateRSSBytes": 235651072,
+        "elapsedMilliseconds": 936.5859375,
+        "maximumSampleIntervalMilliseconds": 6.3701171875,
+        "peakAdditionalRSSBytes": 333365248,
+        "sampleCount": 154,
+        "wallClockLimitMilliseconds": 750,
+        "peakAdditionalRSSLimitBytes": 268435456,
+        "wallClockWithinLimit": false,
+        "peakAdditionalRSSWithinLimit": false
+      },
+      "applicationProfile": {
+        "profileVersion": "issue-92-application-stage-profile-v1",
+        "observerDispatchToApplicationMilliseconds": 20.838134765625,
+        "stages": {
+          "workflow-input-preparation": {
+            "startAfterApplicationDispatchMilliseconds": 1,
+            "durationMilliseconds": 1
+          },
+          "generation-setup": {
+            "startAfterApplicationDispatchMilliseconds": 3,
+            "durationMilliseconds": 1
+          },
+          "generation-sampling": {
+            "startAfterApplicationDispatchMilliseconds": 4,
+            "durationMilliseconds": 66
+          },
+          "threshold-selection": {
+            "startAfterApplicationDispatchMilliseconds": 70,
+            "durationMilliseconds": 351
+          },
+          "generation-classification": {
+            "startAfterApplicationDispatchMilliseconds": 421,
+            "durationMilliseconds": 161
+          },
+          "generation-validation": {
+            "startAfterApplicationDispatchMilliseconds": 582,
+            "durationMilliseconds": 8
+          },
+          "preview-value-materialization": {
+            "startAfterApplicationDispatchMilliseconds": 590,
+            "durationMilliseconds": 54
+          },
+          "generation-result-wrapping": {
+            "startAfterApplicationDispatchMilliseconds": 644,
+            "durationMilliseconds": 0
+          },
+          "workflow-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 644,
+            "durationMilliseconds": 0
+          },
+          "svelte-snapshot-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 644,
+            "durationMilliseconds": 0
+          },
+          "canvas-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 644,
+            "durationMilliseconds": 4
+          },
+          "probe-receipt-materialization": {
+            "startAfterApplicationDispatchMilliseconds": 648,
+            "durationMilliseconds": 0
+          }
+        },
+        "metrics": {
+          "selectedComponentCount": 7,
+          "selectedContourLevel": -13386485,
+          "selectedLargestComponentPercent": 54.385296,
+          "thresholdCandidateCount": 18,
+          "thresholdComponentTraversalMilliseconds": 195
+        },
+        "canvasCompletionAfterApplicationDispatchMilliseconds": 648,
+        "namedStageDurationMilliseconds": 646,
+        "measuredButUnattributedApplicationMilliseconds": 2
+      },
+      "endpointIntervals": {
+        "accessibilityReceiptMilliseconds": 65.85009765625,
+        "applicationDispatchToQualifyingFrameMilliseconds": 839.346923828125,
+        "canvasCompletionToQualifyingFrameMilliseconds": 191.346923828125,
+        "qualifyingFrameToAccessibilityStartMilliseconds": 10.55078125,
+        "canvasCompletionThroughAccessibilityReceiptMilliseconds": 267.747802734375
+      },
+      "reconciliation": {
+        "observerDispatchToApplicationMilliseconds": 20.838134765625,
+        "applicationDispatchThroughCanvasMilliseconds": 648,
+        "mixedPostCanvasThroughObserverEndpointMilliseconds": 267.747802734375,
+        "reconciledElapsedMilliseconds": 936.5859375,
+        "observedElapsedMilliseconds": 936.5859375
+      }
+    },
+    {
+      "id": "issue92-control-max-1",
+      "kind": "invalid-profile",
+      "fixture": "milestone-2-atlas-control-max",
+      "status": "invalid",
+      "observerReceipt": {
+        "path": "docs/investigations/issue-92/receipts/issue92-control-max-1-observer.json",
+        "sha256": "61aef9bcd36fc702e439a74378f7b2f5e8eb0f42522936593cb4d02bcf0caee2",
+        "byteLength": 380
+      },
+      "privateRetentionReceipt": {
+        "path": "docs/investigations/issue-92/receipts/issue92-control-max-1-retention.json",
+        "sha256": "1c7f174314dbdf05acfb99cae1e1493d819e2c8dc3738501f12213c0dd0abfd1",
+        "byteLength": 228,
+        "version": "private-preview-rss-retention-v1",
+        "status": "retained",
+        "artifactIdentifier": "issue92-control-max-1",
+        "rawCsvSha256": "96c0933db7160e99ad486a6a9bf612516d35f882a7c7bce8737e503c8cee42ff",
+        "rawCsvByteLength": 71764
+      },
+      "invalidAuthority": "screen-capture",
+      "invalidReason": "no complete changed post-dispatch frame satisfied the palette predicate"
+    },
+    {
+      "id": "issue92-control-max-2",
+      "kind": "invalid-profile",
+      "fixture": "milestone-2-atlas-control-max",
+      "status": "invalid",
+      "observerReceipt": {
+        "path": "docs/investigations/issue-92/receipts/issue92-control-max-2-observer.json",
+        "sha256": "61aef9bcd36fc702e439a74378f7b2f5e8eb0f42522936593cb4d02bcf0caee2",
+        "byteLength": 380
+      },
+      "privateRetentionReceipt": {
+        "path": "docs/investigations/issue-92/receipts/issue92-control-max-2-retention.json",
+        "sha256": "14aa78ffb1267c609ecfea151a38d5661f183d5488f52ed023ef8f1ce65ab8e9",
+        "byteLength": 228,
+        "version": "private-preview-rss-retention-v1",
+        "status": "retained",
+        "artifactIdentifier": "issue92-control-max-2",
+        "rawCsvSha256": "ad9b22039640cab2061b27b82d707a18e999dd73783d0c2ddcfa026d7f956ad9",
+        "rawCsvByteLength": 72089
+      },
+      "invalidAuthority": "screen-capture",
+      "invalidReason": "no complete changed post-dispatch frame satisfied the palette predicate"
+    },
+    {
+      "id": "issue92-control-max-3",
+      "kind": "invalid-profile",
+      "fixture": "milestone-2-atlas-control-max",
+      "status": "invalid",
+      "observerReceipt": {
+        "path": "docs/investigations/issue-92/receipts/issue92-control-max-3-observer.json",
+        "sha256": "61aef9bcd36fc702e439a74378f7b2f5e8eb0f42522936593cb4d02bcf0caee2",
+        "byteLength": 380
+      },
+      "privateRetentionReceipt": {
+        "path": "docs/investigations/issue-92/receipts/issue92-control-max-3-retention.json",
+        "sha256": "385b606d81821d0e9497462971be587d59cdf72ba9a7498ad08a8719e5f283a8",
+        "byteLength": 228,
+        "version": "private-preview-rss-retention-v1",
+        "status": "retained",
+        "artifactIdentifier": "issue92-control-max-3",
+        "rawCsvSha256": "317fcb09da7f4b75637819577782d586ce8fc4269afaa37efefe25909284b9fb",
+        "rawCsvByteLength": 71959
+      },
+      "invalidAuthority": "screen-capture",
+      "invalidReason": "no complete changed post-dispatch frame satisfied the palette predicate"
+    },
+    {
+      "id": "issue92-control-max-retry-1",
+      "kind": "fresh-process-profile",
+      "fixture": "milestone-2-atlas-control-max",
+      "status": "valid",
+      "observerReceipt": {
+        "path": "docs/investigations/issue-92/receipts/issue92-control-max-retry-1-observer.json",
+        "sha256": "bb901b5ef0554131ccc3e50a1a9af8dd3b2d2f2240fbf0a43fec5b11043f7b38",
+        "byteLength": 3736
+      },
+      "privateRetentionReceipt": {
+        "path": "docs/investigations/issue-92/receipts/issue92-control-max-retry-1-retention.json",
+        "sha256": "3fd360a685804042f05fb7a7c238b718a140745481ffd7ea3157ea1374e769c8",
+        "byteLength": 234,
+        "version": "private-preview-rss-retention-v1",
+        "status": "retained",
+        "artifactIdentifier": "issue92-control-max-retry-1",
+        "rawCsvSha256": "f2ab4747ee5660961e8980d1505b22cca3deb0f8ec661746699e9d08eb4e2298",
+        "rawCsvByteLength": 19540
+      },
+      "result": "diagnostic-wall-clock-fail",
+      "observerQualification": {
+        "roleCounts": {
+          "application": 1,
+          "gpu": 1,
+          "networking": 1,
+          "webContent": 1
+        },
+        "visual": {
+          "changedCanvasCrop": true,
+          "completePostDispatchFrame": true,
+          "cropPixels": "512x256",
+          "foregroundIntact": true,
+          "landPaletteBounded": true,
+          "waterPaletteBounded": true
+        },
+        "accessibility": {
+          "acceptFullEnabled": true,
+          "disposableCaption": true,
+          "frontmost": true,
+          "previewLabel": true
+        },
+        "membershipRevalidated": true
+      },
+      "executableIdentity": {
+        "candidateSha256": "c78fac6d0be1c35a2480122a88e83b0b8813fb289252a5718edf5842074ad33e",
+        "samplerSha256": "6bea6159f116d77c8d9de7afd77a9c9bfac3961cc4e8f9316404fcb0b21e2555"
+      },
+      "measurement": {
+        "baselineAggregateRSSBytes": 240271360,
+        "elapsedMilliseconds": 876.3642578125,
+        "maximumSampleIntervalMilliseconds": 7.193115234375,
+        "peakAdditionalRSSBytes": 141115392,
+        "sampleCount": 144,
+        "wallClockLimitMilliseconds": 750,
+        "peakAdditionalRSSLimitBytes": 268435456,
+        "wallClockWithinLimit": false,
+        "peakAdditionalRSSWithinLimit": true
+      },
+      "applicationProfile": {
+        "profileVersion": "issue-92-application-stage-profile-v1",
+        "observerDispatchToApplicationMilliseconds": 23.646484375,
+        "stages": {
+          "workflow-input-preparation": {
+            "startAfterApplicationDispatchMilliseconds": 1,
+            "durationMilliseconds": 0
+          },
+          "generation-setup": {
+            "startAfterApplicationDispatchMilliseconds": 2,
+            "durationMilliseconds": 1
+          },
+          "generation-sampling": {
+            "startAfterApplicationDispatchMilliseconds": 3,
+            "durationMilliseconds": 67
+          },
+          "threshold-selection": {
+            "startAfterApplicationDispatchMilliseconds": 70,
+            "durationMilliseconds": 339
+          },
+          "generation-classification": {
+            "startAfterApplicationDispatchMilliseconds": 409,
+            "durationMilliseconds": 161
+          },
+          "generation-validation": {
+            "startAfterApplicationDispatchMilliseconds": 570,
+            "durationMilliseconds": 7
+          },
+          "preview-value-materialization": {
+            "startAfterApplicationDispatchMilliseconds": 577,
+            "durationMilliseconds": 55
+          },
+          "generation-result-wrapping": {
+            "startAfterApplicationDispatchMilliseconds": 632,
+            "durationMilliseconds": 0
+          },
+          "workflow-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 632,
+            "durationMilliseconds": 0
+          },
+          "svelte-snapshot-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 632,
+            "durationMilliseconds": 0
+          },
+          "canvas-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 632,
+            "durationMilliseconds": 4
+          },
+          "probe-receipt-materialization": {
+            "startAfterApplicationDispatchMilliseconds": 636,
+            "durationMilliseconds": 0
+          }
+        },
+        "metrics": {
+          "selectedComponentCount": 1,
+          "selectedContourLevel": -13340379,
+          "selectedLargestComponentPercent": 100,
+          "thresholdCandidateCount": 18,
+          "thresholdComponentTraversalMilliseconds": 207
+        },
+        "canvasCompletionAfterApplicationDispatchMilliseconds": 636,
+        "namedStageDurationMilliseconds": 634,
+        "measuredButUnattributedApplicationMilliseconds": 2
+      },
+      "endpointIntervals": {
+        "accessibilityReceiptMilliseconds": 57.910888671875,
+        "applicationDispatchToQualifyingFrameMilliseconds": 783.893310546875,
+        "canvasCompletionToQualifyingFrameMilliseconds": 147.893310546875,
+        "qualifyingFrameToAccessibilityStartMilliseconds": 10.91357421875,
+        "canvasCompletionThroughAccessibilityReceiptMilliseconds": 216.7177734375
+      },
+      "reconciliation": {
+        "observerDispatchToApplicationMilliseconds": 23.646484375,
+        "applicationDispatchThroughCanvasMilliseconds": 636,
+        "mixedPostCanvasThroughObserverEndpointMilliseconds": 216.7177734375,
+        "reconciledElapsedMilliseconds": 876.3642578125,
+        "observedElapsedMilliseconds": 876.3642578125
+      }
+    },
+    {
+      "id": "issue92-control-max-retry-2",
+      "kind": "fresh-process-profile",
+      "fixture": "milestone-2-atlas-control-max",
+      "status": "valid",
+      "observerReceipt": {
+        "path": "docs/investigations/issue-92/receipts/issue92-control-max-retry-2-observer.json",
+        "sha256": "a1e84856fad7f6cedaf4a2bb3e78e767a3167f6f2ada64c9416e020d81be2b4d",
+        "byteLength": 3729
+      },
+      "privateRetentionReceipt": {
+        "path": "docs/investigations/issue-92/receipts/issue92-control-max-retry-2-retention.json",
+        "sha256": "06cccdfd8d5392a6d07cc8a4f0c5dc6cdb92d922157ca5a327ee0e9e54a60e04",
+        "byteLength": 234,
+        "version": "private-preview-rss-retention-v1",
+        "status": "retained",
+        "artifactIdentifier": "issue92-control-max-retry-2",
+        "rawCsvSha256": "7fef7c5564c2f858691b9b9160f12b0624b747e3df175eb319e54ed8dde2729b",
+        "rawCsvByteLength": 19736
+      },
+      "result": "diagnostic-wall-clock-fail",
+      "observerQualification": {
+        "roleCounts": {
+          "application": 1,
+          "gpu": 1,
+          "networking": 1,
+          "webContent": 1
+        },
+        "visual": {
+          "changedCanvasCrop": true,
+          "completePostDispatchFrame": true,
+          "cropPixels": "512x256",
+          "foregroundIntact": true,
+          "landPaletteBounded": true,
+          "waterPaletteBounded": true
+        },
+        "accessibility": {
+          "acceptFullEnabled": true,
+          "disposableCaption": true,
+          "frontmost": true,
+          "previewLabel": true
+        },
+        "membershipRevalidated": true
+      },
+      "executableIdentity": {
+        "candidateSha256": "c78fac6d0be1c35a2480122a88e83b0b8813fb289252a5718edf5842074ad33e",
+        "samplerSha256": "6bea6159f116d77c8d9de7afd77a9c9bfac3961cc4e8f9316404fcb0b21e2555"
+      },
+      "measurement": {
+        "baselineAggregateRSSBytes": 239255552,
+        "elapsedMilliseconds": 878.510986328125,
+        "maximumSampleIntervalMilliseconds": 6.391,
+        "peakAdditionalRSSBytes": 151535616,
+        "sampleCount": 144,
+        "wallClockLimitMilliseconds": 750,
+        "peakAdditionalRSSLimitBytes": 268435456,
+        "wallClockWithinLimit": false,
+        "peakAdditionalRSSWithinLimit": true
+      },
+      "applicationProfile": {
+        "profileVersion": "issue-92-application-stage-profile-v1",
+        "observerDispatchToApplicationMilliseconds": 21.51025390625,
+        "stages": {
+          "workflow-input-preparation": {
+            "startAfterApplicationDispatchMilliseconds": 0,
+            "durationMilliseconds": 2
+          },
+          "generation-setup": {
+            "startAfterApplicationDispatchMilliseconds": 3,
+            "durationMilliseconds": 0
+          },
+          "generation-sampling": {
+            "startAfterApplicationDispatchMilliseconds": 3,
+            "durationMilliseconds": 66
+          },
+          "threshold-selection": {
+            "startAfterApplicationDispatchMilliseconds": 70,
+            "durationMilliseconds": 340
+          },
+          "generation-classification": {
+            "startAfterApplicationDispatchMilliseconds": 410,
+            "durationMilliseconds": 159
+          },
+          "generation-validation": {
+            "startAfterApplicationDispatchMilliseconds": 569,
+            "durationMilliseconds": 9
+          },
+          "preview-value-materialization": {
+            "startAfterApplicationDispatchMilliseconds": 578,
+            "durationMilliseconds": 52
+          },
+          "generation-result-wrapping": {
+            "startAfterApplicationDispatchMilliseconds": 630,
+            "durationMilliseconds": 0
+          },
+          "workflow-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 630,
+            "durationMilliseconds": 0
+          },
+          "svelte-snapshot-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 630,
+            "durationMilliseconds": 0
+          },
+          "canvas-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 630,
+            "durationMilliseconds": 4
+          },
+          "probe-receipt-materialization": {
+            "startAfterApplicationDispatchMilliseconds": 634,
+            "durationMilliseconds": 0
+          }
+        },
+        "metrics": {
+          "selectedComponentCount": 1,
+          "selectedContourLevel": -13340379,
+          "selectedLargestComponentPercent": 100,
+          "thresholdCandidateCount": 18,
+          "thresholdComponentTraversalMilliseconds": 203
+        },
+        "canvasCompletionAfterApplicationDispatchMilliseconds": 634,
+        "namedStageDurationMilliseconds": 632,
+        "measuredButUnattributedApplicationMilliseconds": 2
+      },
+      "endpointIntervals": {
+        "accessibilityReceiptMilliseconds": 57.31884765625,
+        "applicationDispatchToQualifyingFrameMilliseconds": 788.72705078125,
+        "canvasCompletionToQualifyingFrameMilliseconds": 154.72705078125,
+        "qualifyingFrameToAccessibilityStartMilliseconds": 10.954833984375,
+        "canvasCompletionThroughAccessibilityReceiptMilliseconds": 223.000732421875
+      },
+      "reconciliation": {
+        "observerDispatchToApplicationMilliseconds": 21.51025390625,
+        "applicationDispatchThroughCanvasMilliseconds": 634,
+        "mixedPostCanvasThroughObserverEndpointMilliseconds": 223.000732421875,
+        "reconciledElapsedMilliseconds": 878.510986328125,
+        "observedElapsedMilliseconds": 878.510986328125
+      }
+    },
+    {
+      "id": "issue92-control-max-retry-3",
+      "kind": "fresh-process-profile",
+      "fixture": "milestone-2-atlas-control-max",
+      "status": "valid",
+      "observerReceipt": {
+        "path": "docs/investigations/issue-92/receipts/issue92-control-max-retry-3-observer.json",
+        "sha256": "69a40120cee9f1d44a32dc04e8230eca973540854e4315a99eae423bdbc1bb26",
+        "byteLength": 3739
+      },
+      "privateRetentionReceipt": {
+        "path": "docs/investigations/issue-92/receipts/issue92-control-max-retry-3-retention.json",
+        "sha256": "10ba550fc933d9cae4a4ac3091328c087e3ba86cccb81546159d4f0d53802b74",
+        "byteLength": 234,
+        "version": "private-preview-rss-retention-v1",
+        "status": "retained",
+        "artifactIdentifier": "issue92-control-max-retry-3",
+        "rawCsvSha256": "bc47be254c0b3d5ea48e0a96a0e8ad2e8cfe4d6fd305ad8723db80cf08cea147",
+        "rawCsvByteLength": 19737
+      },
+      "result": "diagnostic-wall-clock-fail",
+      "observerQualification": {
+        "roleCounts": {
+          "application": 1,
+          "gpu": 1,
+          "networking": 1,
+          "webContent": 1
+        },
+        "visual": {
+          "changedCanvasCrop": true,
+          "completePostDispatchFrame": true,
+          "cropPixels": "512x256",
+          "foregroundIntact": true,
+          "landPaletteBounded": true,
+          "waterPaletteBounded": true
+        },
+        "accessibility": {
+          "acceptFullEnabled": true,
+          "disposableCaption": true,
+          "frontmost": true,
+          "previewLabel": true
+        },
+        "membershipRevalidated": true
+      },
+      "executableIdentity": {
+        "candidateSha256": "c78fac6d0be1c35a2480122a88e83b0b8813fb289252a5718edf5842074ad33e",
+        "samplerSha256": "6bea6159f116d77c8d9de7afd77a9c9bfac3961cc4e8f9316404fcb0b21e2555"
+      },
+      "measurement": {
+        "baselineAggregateRSSBytes": 239697920,
+        "elapsedMilliseconds": 878.010009765625,
+        "maximumSampleIntervalMilliseconds": 6.364013671875,
+        "peakAdditionalRSSBytes": 131366912,
+        "sampleCount": 143,
+        "wallClockLimitMilliseconds": 750,
+        "peakAdditionalRSSLimitBytes": 268435456,
+        "wallClockWithinLimit": false,
+        "peakAdditionalRSSWithinLimit": true
+      },
+      "applicationProfile": {
+        "profileVersion": "issue-92-application-stage-profile-v1",
+        "observerDispatchToApplicationMilliseconds": 21.568115234375,
+        "stages": {
+          "workflow-input-preparation": {
+            "startAfterApplicationDispatchMilliseconds": 0,
+            "durationMilliseconds": 1
+          },
+          "generation-setup": {
+            "startAfterApplicationDispatchMilliseconds": 2,
+            "durationMilliseconds": 1
+          },
+          "generation-sampling": {
+            "startAfterApplicationDispatchMilliseconds": 3,
+            "durationMilliseconds": 66
+          },
+          "threshold-selection": {
+            "startAfterApplicationDispatchMilliseconds": 69,
+            "durationMilliseconds": 332
+          },
+          "generation-classification": {
+            "startAfterApplicationDispatchMilliseconds": 401,
+            "durationMilliseconds": 159
+          },
+          "generation-validation": {
+            "startAfterApplicationDispatchMilliseconds": 560,
+            "durationMilliseconds": 5
+          },
+          "preview-value-materialization": {
+            "startAfterApplicationDispatchMilliseconds": 565,
+            "durationMilliseconds": 52
+          },
+          "generation-result-wrapping": {
+            "startAfterApplicationDispatchMilliseconds": 617,
+            "durationMilliseconds": 0
+          },
+          "workflow-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 617,
+            "durationMilliseconds": 0
+          },
+          "svelte-snapshot-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 617,
+            "durationMilliseconds": 0
+          },
+          "canvas-presentation": {
+            "startAfterApplicationDispatchMilliseconds": 618,
+            "durationMilliseconds": 4
+          },
+          "probe-receipt-materialization": {
+            "startAfterApplicationDispatchMilliseconds": 622,
+            "durationMilliseconds": 0
+          }
+        },
+        "metrics": {
+          "selectedComponentCount": 1,
+          "selectedContourLevel": -13340379,
+          "selectedLargestComponentPercent": 100,
+          "thresholdCandidateCount": 18,
+          "thresholdComponentTraversalMilliseconds": 204
+        },
+        "canvasCompletionAfterApplicationDispatchMilliseconds": 622,
+        "namedStageDurationMilliseconds": 620,
+        "measuredButUnattributedApplicationMilliseconds": 2
+      },
+      "endpointIntervals": {
+        "accessibilityReceiptMilliseconds": 61.005859375,
+        "applicationDispatchToQualifyingFrameMilliseconds": 784.827880859375,
+        "canvasCompletionToQualifyingFrameMilliseconds": 162.827880859375,
+        "qualifyingFrameToAccessibilityStartMilliseconds": 10.608154296875,
+        "canvasCompletionThroughAccessibilityReceiptMilliseconds": 234.44189453125
+      },
+      "reconciliation": {
+        "observerDispatchToApplicationMilliseconds": 21.568115234375,
+        "applicationDispatchThroughCanvasMilliseconds": 622,
+        "mixedPostCanvasThroughObserverEndpointMilliseconds": 234.44189453125,
+        "reconciledElapsedMilliseconds": 878.010009765625,
+        "observedElapsedMilliseconds": 878.010009765625
+      }
+    }
+  ],
+  "summary": {
+    "disposition": "A",
+    "validFreshProcessCount": 9,
+    "invalidObserverAttemptCount": 3,
+    "allValidFreshProcessesExceededWallClockLimit": true,
+    "fixtureSummary": {
+      "milestone-2-atlas-proof": {
+        "validFreshProcessCount": 3,
+        "observerElapsedMilliseconds": [886.908935546875, 829.591796875, 881.659912109375],
+        "observerElapsedMedianMilliseconds": 881.659912109375,
+        "observerElapsedRangeMilliseconds": [829.591796875, 886.908935546875],
+        "peakAdditionalRSSBytes": [123322368, 121110528, 121470976],
+        "thresholdSelectionRangeMilliseconds": [304, 311],
+        "thresholdComponentTraversalRangeMilliseconds": [169, 172],
+        "canvasCompletionRangeMilliseconds": [594, 603],
+        "mixedPostCanvasThroughObserverEndpointRangeMilliseconds": [212.548828125, 260.8818359375]
+      },
+      "milestone-2-atlas-fragmented-islands": {
+        "validFreshProcessCount": 3,
+        "observerElapsedMilliseconds": [931.593994140625, 871.852294921875, 936.5859375],
+        "observerElapsedMedianMilliseconds": 931.593994140625,
+        "observerElapsedRangeMilliseconds": [871.852294921875, 936.5859375],
+        "peakAdditionalRSSBytes": [332070912, 126763008, 333365248],
+        "thresholdSelectionRangeMilliseconds": [331, 356],
+        "thresholdComponentTraversalRangeMilliseconds": [176, 196],
+        "canvasCompletionRangeMilliseconds": [626, 648],
+        "mixedPostCanvasThroughObserverEndpointRangeMilliseconds": [
+          224.38818359375, 267.747802734375
+        ]
+      },
+      "milestone-2-atlas-control-max": {
+        "validFreshProcessCount": 3,
+        "observerElapsedMilliseconds": [876.3642578125, 878.510986328125, 878.010009765625],
+        "observerElapsedMedianMilliseconds": 878.010009765625,
+        "observerElapsedRangeMilliseconds": [876.3642578125, 878.510986328125],
+        "peakAdditionalRSSBytes": [141115392, 151535616, 131366912],
+        "thresholdSelectionRangeMilliseconds": [332, 340],
+        "thresholdComponentTraversalRangeMilliseconds": [203, 207],
+        "canvasCompletionRangeMilliseconds": [622, 636],
+        "mixedPostCanvasThroughObserverEndpointRangeMilliseconds": [216.7177734375, 234.44189453125]
+      }
+    },
+    "dominantApplicationStage": "threshold-selection",
+    "thresholdSelectionAllFreshRangeMilliseconds": [304, 356],
+    "thresholdComponentTraversalAllFreshRangeMilliseconds": [169, 207],
+    "wallClockOverageAllFreshRangeMilliseconds": [79.591796875, 186.5859375],
+    "mixedPostCanvasThroughEndpointAllFreshRangeMilliseconds": [212.548828125, 267.747802734375],
+    "mixedCanvasCompletionToQualifyingFrameAllFreshRangeMilliseconds": [
+      147.893310546875, 191.346923828125
+    ],
+    "observerOwnedQualifyingFrameThroughEndpointAllFreshRangeMilliseconds": [
+      58.852783203125, 76.40087890625
+    ],
+    "diagnosticRSSLimitFailures": ["issue92-fragmented-1", "issue92-fragmented-3"],
+    "releaseGateClaim": "not-made-three-run-attribution-diagnostic",
+    "productionBehaviorChanged": false,
+    "fixtureChanged": false
+  },
+  "privacy": {
+    "rawCsvCount": 13,
+    "retainedRawCsvCount": 13,
+    "publicEvidenceContainsPrivateArchivePath": false,
+    "publicEvidenceContainsPidBearingCsvContent": false
+  }
+}

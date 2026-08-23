@@ -1,0 +1,13 @@
+{
+  "invalidAuthority": "screen-capture",
+  "invalidReason": "no complete changed post-dispatch frame satisfied the palette predicate",
+  "membershipRevalidated": false,
+  "observerVersion": "packaged-preview-observer-v2-issue92-profile-v1",
+  "status": "invalid",
+  "target": {
+    "memoryGiB": 24,
+    "model": "Mac17,2",
+    "osBuild": "25F80",
+    "osVersion": "26.5.1"
+  }
+}

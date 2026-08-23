@@ -1,0 +1,820 @@
+diff --git a/apps/desktop/src/App.svelte b/apps/desktop/src/App.svelte
+index 891632c..bdc96cf 100644
+--- a/apps/desktop/src/App.svelte
++++ b/apps/desktop/src/App.svelte
+@@ -8,6 +8,7 @@
+     MILESTONE_TWO_ATLAS_PROOF_SEED,
+   } from './atlas-workflow.js';
+   import AtlasWorkflowEvidencePanel from './AtlasWorkflowEvidencePanel.svelte';
++  import { installIssue92PreviewProbe } from './issue-92-preview-probe.js';
+   import {
+     installPackagedPreviewDispatch,
+     requestProductionCoarsePreview,
+@@ -16,10 +17,17 @@
+ 
+   const workflow = new AtlasWorkflow();
+   let atlas = workflow.snapshot;
+-  let seed = MILESTONE_TWO_ATLAS_PROOF_SEED;
++  let seed: string = MILESTONE_TWO_ATLAS_PROOF_SEED;
+   let controls: AtlasControls = { ...DEFAULT_ATLAS_CONTROLS };
+   let selectedEntityId = '';
+   let targetPath = '';
++  const issue92ProfilingEnabled = import.meta.env.VITE_PACKAGED_PREVIEW_OBSERVER_DISPATCH === '1';
++  let issue92StageReceipt = 'issue92-stage-profile:disabled';
++  const issue92Probe = issue92ProfilingEnabled
++    ? installIssue92PreviewProbe((receipt) => {
++        issue92StageReceipt = receipt;
++      })
++    : undefined;
+ 
+   onMount(() =>
+     installPackagedPreviewDispatch(
+@@ -36,6 +44,7 @@
+     atlas.inspectionEntities[0];
+ 
+   async function preview(): Promise<void> {
++    issue92Probe?.begin(issue92FixtureId());
+     await requestProductionCoarsePreview(
+       (nextSeed, nextControls) => workflow.requestPreview(nextSeed, nextControls),
+       seed,
+@@ -44,6 +53,41 @@
+     );
+   }
+ 
++  function issue92FixtureId(): string {
++    if (seed === '81985529216486895' && sameControls(controls, DEFAULT_ATLAS_CONTROLS)) {
++      return 'milestone-2-atlas-proof';
++    }
++    if (
++      seed === '18364758544493064720' &&
++      controls.worldCircumferenceKm === DEFAULT_ATLAS_CONTROLS.worldCircumferenceKm &&
++      controls.targetWaterCoveragePercent === 70 &&
++      controls.continentCountIntent === 5 &&
++      controls.continentDistribution === DEFAULT_ATLAS_CONTROLS.continentDistribution &&
++      controls.fragmentationPercent === 90 &&
++      controls.islandAbundancePercent === 95 &&
++      controls.archipelagoAbundancePercent === 95 &&
++      controls.oceanConnectivity === DEFAULT_ATLAS_CONTROLS.oceanConnectivity &&
++      controls.polarCharacter === DEFAULT_ATLAS_CONTROLS.polarCharacter
++    ) {
++      return 'milestone-2-atlas-fragmented-islands';
++    }
++    if (
++      seed === '16045690984503098046' &&
++      controls.worldCircumferenceKm === 80_000 &&
++      controls.targetWaterCoveragePercent === 80 &&
++      controls.continentCountIntent === 8 &&
++      controls.continentDistribution === 'oneDominant' &&
++      controls.fragmentationPercent === 100 &&
++      controls.islandAbundancePercent === 100 &&
++      controls.archipelagoAbundancePercent === 100 &&
++      controls.oceanConnectivity === 'multipleBasins' &&
++      controls.polarCharacter === 'oceanBiased'
++    ) {
++      return 'milestone-2-atlas-control-max';
++    }
++    return 'unrecognized';
++  }
++
+   async function acceptFull(): Promise<void> {
+     await run(workflow.acceptFull(seed, controls));
+   }
+@@ -96,7 +140,15 @@
+       await operation;
+     } finally {
+       globalThis.clearInterval(timer);
++      const presentationStart = issue92Probe?.now();
+       refresh();
++      if (presentationStart !== undefined) {
++        issue92Probe?.record({
++          stage: 'svelte-snapshot-presentation',
++          startEpochMilliseconds: presentationStart,
++          endEpochMilliseconds: issue92Probe.now(),
++        });
++      }
+     }
+   }
+ 
+@@ -122,6 +174,10 @@
+   }
+ </script>
+ 
++{#if issue92ProfilingEnabled}
++  <output aria-label="Issue 92 stage profile" class="sr-only">{issue92StageReceipt}</output>
++{/if}
++
+ <svelte:head
+   ><meta name="description" content="Milestone 2 deterministic whole-world atlas" /></svelte:head
+ >
+diff --git a/apps/desktop/src/ProofViewport.svelte b/apps/desktop/src/ProofViewport.svelte
+index 12f7030..2a4deb8 100644
+--- a/apps/desktop/src/ProofViewport.svelte
++++ b/apps/desktop/src/ProofViewport.svelte
+@@ -4,6 +4,7 @@
+   import { renderSceneToCanvas } from '@ttrpg-map/render';
+   import { onMount } from 'svelte';
+ 
++  import { issue92PreviewProbe } from './issue-92-preview-probe.js';
+   import { findTopmostNodeAt } from './scene-selection.js';
+   import {
+     INITIAL_VIEWPORT,
+@@ -204,6 +205,8 @@
+     context: CanvasRenderingContext2D,
+     value: AtlasLandWaterPreview,
+   ): void {
++    const probe = issue92PreviewProbe();
++    const presentationStart = probe?.now();
+     const image = context.createImageData(value.longitudeCellCount, value.latitudeBandCount);
+     for (let y = 0; y < value.latitudeBandCount; y += 1) {
+       const latitudeIndex = Math.round(
+@@ -230,6 +233,14 @@
+     buffer.getContext('2d')?.putImageData(image, 0, 0);
+     context.imageSmoothingEnabled = false;
+     context.drawImage(buffer, 0, 0, canvasElement.width, canvasElement.height);
++    if (presentationStart !== undefined) {
++      probe?.record({
++        stage: 'canvas-presentation',
++        startEpochMilliseconds: presentationStart,
++        endEpochMilliseconds: probe.now(),
++      });
++      probe?.complete();
++    }
+   }
+ </script>
+ 
+diff --git a/apps/desktop/src/atlas-workflow-generation.ts b/apps/desktop/src/atlas-workflow-generation.ts
+index 5e7f06c..9a4e91d 100644
+--- a/apps/desktop/src/atlas-workflow-generation.ts
++++ b/apps/desktop/src/atlas-workflow-generation.ts
+@@ -48,6 +48,7 @@ import {
+   retainedAspectProposal,
+   revisionFor,
+ } from './atlas-workflow-generation-support.js';
++import { issue92PreviewProbe } from './issue-92-preview-probe.js';
+ 
+ export { ATLAS_PROOF_WORLD_MAP_ID } from './atlas-workflow-generation-support.js';
+ 
+@@ -113,18 +114,36 @@ async function generatePreview(
+   request: AtlasWorkflowGenerationRequest,
+   runtime: AtlasWorkflowRuntime,
+ ): Promise<AtlasWorkflowPreviewResult> {
++  const probe = issue92PreviewProbe();
++  const preparationStart = probe?.now();
+   const prepared = prepareInput(request, false);
+   if (!prepared.ok) return prepared;
++  if (preparationStart !== undefined) {
++    probe?.record({
++      stage: 'workflow-input-preparation',
++      startEpochMilliseconds: preparationStart,
++      endEpochMilliseconds: probe.now(),
++    });
++  }
+   const result = await generateAtlasLandWaterPreview(
+     prepared.input,
+     landWaterRuntime(prepared.input, request.operationId, runtime),
+   );
+   if (result.status !== 'preview') return generatorFailure(result.status, result.diagnostics);
+-  return Object.freeze({
++  const wrappingStart = probe?.now();
++  const wrapped = Object.freeze({
+     ok: true,
+     preview: result.preview,
+     diagnosticCodes: Object.freeze(result.diagnostics.map(({ code }) => code)),
+   });
++  if (wrappingStart !== undefined) {
++    probe?.record({
++      stage: 'generation-result-wrapping',
++      startEpochMilliseconds: wrappingStart,
++      endEpochMilliseconds: probe.now(),
++    });
++  }
++  return wrapped;
+ }
+ 
+ async function generateAndCommit(
+diff --git a/apps/desktop/src/atlas-workflow.ts b/apps/desktop/src/atlas-workflow.ts
+index 6d5c3ee..ff8a6d4 100644
+--- a/apps/desktop/src/atlas-workflow.ts
++++ b/apps/desktop/src/atlas-workflow.ts
+@@ -56,6 +56,7 @@ import {
+   validateAtlasSaveTarget,
+ } from './atlas-workflow-persistence.js';
+ import { atlasInspectionEntities, atlasRerollChangeSet } from './atlas-workflow-presentation.js';
++import { issue92PreviewProbe } from './issue-92-preview-probe.js';
+ import type { NativeMapworldInvoke } from './mapworld-native-boundary.js';
+ import { tauriMapworldInvoke } from './tauri-mapworld-invoke.js';
+ 
+@@ -192,6 +193,8 @@ export class AtlasWorkflow {
+     );
+     this.#generationInvocationCount += 1;
+     const result = await this.#generation.preview(request, this.#runtime(operation));
++    const probe = issue92PreviewProbe();
++    const presentationStart = probe?.now();
+     if (!this.#isCurrent(operation)) return Object.freeze({ ok: true });
+     this.#finish();
+     this.#diagnosticCodes = result.diagnosticCodes;
+@@ -208,6 +211,13 @@ export class AtlasWorkflow {
+     this.#pendingReroll = undefined;
+     this.#statusMessage =
+       'Disposable coarse preview ready. Accept full atlas runs a separate full-resolution proposal.';
++    if (presentationStart !== undefined) {
++      probe?.record({
++        stage: 'workflow-presentation',
++        startEpochMilliseconds: presentationStart,
++        endEpochMilliseconds: probe.now(),
++      });
++    }
+     return Object.freeze({ ok: true });
+   }
+ 
+diff --git a/docs/investigations/issue-90/packaged-preview-observer-platform.swift b/docs/investigations/issue-90/packaged-preview-observer-platform.swift
+index f17a949..3c76880 100644
+--- a/docs/investigations/issue-90/packaged-preview-observer-platform.swift
++++ b/docs/investigations/issue-90/packaged-preview-observer-platform.swift
+@@ -202,29 +202,45 @@ final class AccessibilityObserver {
+     return crop
+   }
+ 
+-  func finalReceipt() throws -> AccessibilityReceipt {
++  func finalReceipt(expectedFixtureId: String) throws -> FinalAccessibilityObservation {
+     let frontmost = try boolean(application, attribute: kAXFrontmostAttribute)
+     let images = try descendants(role: kAXImageRole as String).filter {
+       (try? label(of: $0)) == previewLabel
+     }
+-    let captions = try descendants(role: kAXStaticTextRole as String).filter {
++    let staticTexts = try descendants(role: kAXStaticTextRole as String)
++    let captions = staticTexts.filter {
+       (try? string($0, attribute: kAXValueAttribute)) == previewCaption
+     }
++    let profileValues = staticTexts.compactMap { try? string($0, attribute: kAXValueAttribute) }
++      .filter { $0.hasPrefix("issue92-stage-profile:") && $0 != "issue92-stage-profile:running" }
+     let buttons = try descendants(role: kAXButtonRole as String).filter {
+       (try? label(of: $0)) == acceptFullTitle
+     }
+     guard images.count == 1, captions.count == 1, buttons.count == 1,
++      profileValues.count == 1,
+       let button = buttons.first,
+       try boolean(button, attribute: kAXEnabledAttribute)
+     else {
+       throw PreviewObserverInvalidation.accessibility(
+         "the final structured preview receipt was incomplete or contradictory")
+     }
+-    return AccessibilityReceipt(
+-      previewLabel: true,
+-      disposableCaption: true,
+-      acceptFullEnabled: true,
+-      frontmost: frontmost
++    guard let profileValue = profileValues.first,
++      let profileData = String(profileValue.dropFirst("issue92-stage-profile:".count))
++        .data(using: .utf8),
++      let profile = try? JSONDecoder().decode(ApplicationStageProfile.self, from: profileData),
++      profile.fixtureId == expectedFixtureId
++    else {
++      throw PreviewObserverInvalidation.accessibility(
++        "the application stage profile was missing, malformed, or for the wrong fixture")
++    }
++    return FinalAccessibilityObservation(
++      receipt: AccessibilityReceipt(
++        previewLabel: true,
++        disposableCaption: true,
++        acceptFullEnabled: true,
++        frontmost: frontmost
++      ),
++      applicationProfile: profile
+     )
+   }
+ 
+diff --git a/docs/investigations/issue-90/packaged-preview-observer-support.swift b/docs/investigations/issue-90/packaged-preview-observer-support.swift
+index c561b9f..8526e33 100644
+--- a/docs/investigations/issue-90/packaged-preview-observer-support.swift
++++ b/docs/investigations/issue-90/packaged-preview-observer-support.swift
+@@ -113,6 +113,46 @@ struct AccessibilityReceipt: Codable {
+   let frontmost: Bool
+ }
+ 
++struct ApplicationStageEvent: Codable {
++  let stage: String
++  let startEpochMilliseconds: Double
++  let endEpochMilliseconds: Double
++}
++
++struct ApplicationStageProfile: Codable {
++  let schema: String
++  let fixtureId: String
++  let dispatchStartEpochMilliseconds: Double
++  let events: [ApplicationStageEvent]
++  let metrics: [String: Double]
++}
++
++struct ApplicationStageEventReceipt: Codable {
++  let stage: String
++  let startAfterApplicationDispatchMilliseconds: Double
++  let durationMilliseconds: Double
++}
++
++struct ApplicationStageProfileReceipt: Codable {
++  let profileVersion: String
++  let fixtureId: String
++  let observerDispatchToApplicationMilliseconds: Double
++  let stages: [ApplicationStageEventReceipt]
++  let metrics: [String: Double]
++}
++
++struct ObserverIntervalReceipt: Codable {
++  let applicationDispatchToQualifyingFrameMilliseconds: Double
++  let canvasCompletionToQualifyingFrameMilliseconds: Double
++  let qualifyingFrameToAccessibilityStartMilliseconds: Double
++  let accessibilityReceiptMilliseconds: Double
++}
++
++struct FinalAccessibilityObservation {
++  let receipt: AccessibilityReceipt
++  let applicationProfile: ApplicationStageProfile
++}
++
+ struct MeasurementReceipt: Codable {
+   let elapsedMilliseconds: Double
+   let baselineAggregateRSSBytes: UInt64
+@@ -134,6 +174,8 @@ struct ObserverReceipt: Codable {
+   let visual: VisualReceipt?
+   let accessibility: AccessibilityReceipt?
+   let executableIdentity: ExecutableIdentityReceipt?
++  let applicationProfile: ApplicationStageProfileReceipt?
++  let observerIntervals: ObserverIntervalReceipt?
+   let membershipRevalidated: Bool
+   let invalidAuthority: String?
+   let invalidReason: String?
+@@ -148,6 +190,8 @@ struct ObserverReceipt: Codable {
+       visual: nil,
+       accessibility: nil,
+       executableIdentity: nil,
++      applicationProfile: nil,
++      observerIntervals: nil,
+       membershipRevalidated: false,
+       invalidAuthority: invalidation.authority,
+       invalidReason: invalidation.description,
+diff --git a/docs/investigations/issue-90/packaged-preview-observer.swift b/docs/investigations/issue-90/packaged-preview-observer.swift
+index af6b204..a8f1c1a 100644
+--- a/docs/investigations/issue-90/packaged-preview-observer.swift
++++ b/docs/investigations/issue-90/packaged-preview-observer.swift
+@@ -5,7 +5,7 @@ import CoreVideo
+ import Foundation
+ import ScreenCaptureKit
+ 
+-let observerSchemaVersion = "packaged-preview-observer-v2"
++let observerSchemaVersion = "packaged-preview-observer-v2-issue92-profile-v1"
+ let targetModel = "Mac17,2"
+ let targetOSVersion = "26.5.1"
+ let targetOSBuild = "25F80"
+@@ -113,11 +113,28 @@ enum PackagedPreviewObserver {
+     frameOutput.markDispatched(at: dispatchMach)
+     try postPreviewDispatch(to: target.applicationPID)
+     let qualifyingFrame = try await waitForQualifyingFrame(frameOutput)
+-    let accessibilityReceipt = try accessibility.finalReceipt()
++    let qualifyingFrameEpochMilliseconds = dispatchEpochMilliseconds
++      + machElapsedMilliseconds(from: dispatchMach, to: qualifyingFrame.callbackTime)
++    let accessibilityStartEpochMilliseconds = Date().timeIntervalSince1970 * 1_000
++    let finalAccessibility = try accessibility.finalReceipt(
++      expectedFixtureId: arguments.expectedFixtureId)
+     let completionEpochMilliseconds = Date().timeIntervalSince1970 * 1_000
+-    guard foreground.isIntact, accessibilityReceipt.frontmost else {
++    guard foreground.isIntact, finalAccessibility.receipt.frontmost else {
+       throw PreviewObserverInvalidation.candidateNotFrontmost
+     }
++    let applicationProfile = try sanitizeApplicationProfile(
++      finalAccessibility.applicationProfile,
++      observerDispatchEpochMilliseconds: dispatchEpochMilliseconds
++    )
++    guard let canvasStage = applicationProfile.stages.first(where: {
++      $0.stage == "canvas-presentation"
++    }) else {
++      throw PreviewObserverInvalidation.accessibility(
++        "the application stage profile omitted canvas presentation")
++    }
++    let canvasCompletionEpochMilliseconds = finalAccessibility.applicationProfile
++      .dispatchStartEpochMilliseconds + canvasStage.startAfterApplicationDispatchMilliseconds
++      + canvasStage.durationMilliseconds
+ 
+     let completionMembership = try resolveProcesses(appPID: target.applicationPID)
+     try PreviewProcessResolver.revalidate(
+@@ -143,11 +160,22 @@ enum PackagedPreviewObserver {
+         landPaletteBounded: boundedPalette(qualifyingFrame.observation.landLike),
+         waterPaletteBounded: boundedPalette(qualifyingFrame.observation.waterLike)
+       ),
+-      accessibility: accessibilityReceipt,
++      accessibility: finalAccessibility.receipt,
+       executableIdentity: ExecutableIdentityReceipt(
+         candidateSha256: candidateSha256,
+         samplerSha256: samplerSha256
+       ),
++      applicationProfile: applicationProfile,
++      observerIntervals: ObserverIntervalReceipt(
++        applicationDispatchToQualifyingFrameMilliseconds: qualifyingFrameEpochMilliseconds
++          - finalAccessibility.applicationProfile.dispatchStartEpochMilliseconds,
++        canvasCompletionToQualifyingFrameMilliseconds: qualifyingFrameEpochMilliseconds
++          - canvasCompletionEpochMilliseconds,
++        qualifyingFrameToAccessibilityStartMilliseconds: accessibilityStartEpochMilliseconds
++          - qualifyingFrameEpochMilliseconds,
++        accessibilityReceiptMilliseconds: completionEpochMilliseconds
++          - accessibilityStartEpochMilliseconds
++      ),
+       membershipRevalidated: true,
+       invalidAuthority: nil,
+       invalidReason: nil,
+@@ -315,6 +343,81 @@ enum PackagedPreviewObserver {
+       && population <= PreviewFramePredicate.maximumPalettePopulation
+   }
+ 
++  private static func machElapsedMilliseconds(from start: UInt64, to end: UInt64) -> Double {
++    var timebase = mach_timebase_info_data_t()
++    mach_timebase_info(&timebase)
++    return Double(end - start) * Double(timebase.numer) / Double(timebase.denom) / 1_000_000
++  }
++
++  private static func sanitizeApplicationProfile(
++    _ profile: ApplicationStageProfile,
++    observerDispatchEpochMilliseconds: Double
++  ) throws -> ApplicationStageProfileReceipt {
++    let expectedStages = [
++      "workflow-input-preparation",
++      "generation-setup",
++      "generation-sampling",
++      "threshold-selection",
++      "generation-classification",
++      "generation-validation",
++      "preview-value-materialization",
++      "generation-result-wrapping",
++      "workflow-presentation",
++      "svelte-snapshot-presentation",
++      "canvas-presentation",
++      "probe-receipt-materialization",
++    ]
++    guard profile.schema == "issue-92-application-stage-profile-v1",
++      profile.events.map(\.stage) == expectedStages,
++      profile.dispatchStartEpochMilliseconds.isFinite,
++      profile.dispatchStartEpochMilliseconds >= observerDispatchEpochMilliseconds,
++      profile.dispatchStartEpochMilliseconds - observerDispatchEpochMilliseconds < 100,
++      profile.metrics.keys.sorted() == [
++        "selectedComponentCount",
++        "selectedContourLevel",
++        "selectedLargestComponentPercent",
++        "thresholdCandidateCount",
++        "thresholdComponentTraversalMilliseconds",
++      ],
++      profile.metrics.values.allSatisfy(\.isFinite),
++      (profile.metrics["thresholdCandidateCount"] ?? 0) > 0,
++      (profile.metrics["selectedComponentCount"] ?? 0) > 0,
++      (profile.metrics["selectedLargestComponentPercent"] ?? -1) >= 0,
++      (profile.metrics["selectedLargestComponentPercent"] ?? 101) <= 100,
++      (profile.metrics["thresholdComponentTraversalMilliseconds"] ?? -1) >= 0
++    else {
++      throw PreviewObserverInvalidation.accessibility(
++        "the application stage profile failed its schema or metric checks")
++    }
++    var previousEnd = profile.dispatchStartEpochMilliseconds
++    var sanitized: [ApplicationStageEventReceipt] = []
++    for event in profile.events {
++      guard event.startEpochMilliseconds.isFinite, event.endEpochMilliseconds.isFinite,
++        event.startEpochMilliseconds >= previousEnd,
++        event.endEpochMilliseconds >= event.startEpochMilliseconds
++      else {
++        throw PreviewObserverInvalidation.accessibility(
++          "the application stage profile contained a missing or overlapping boundary")
++      }
++      sanitized.append(
++        ApplicationStageEventReceipt(
++          stage: event.stage,
++          startAfterApplicationDispatchMilliseconds: event.startEpochMilliseconds
++            - profile.dispatchStartEpochMilliseconds,
++          durationMilliseconds: event.endEpochMilliseconds - event.startEpochMilliseconds
++        ))
++      previousEnd = event.endEpochMilliseconds
++    }
++    return ApplicationStageProfileReceipt(
++      profileVersion: profile.schema,
++      fixtureId: profile.fixtureId,
++      observerDispatchToApplicationMilliseconds: profile.dispatchStartEpochMilliseconds
++        - observerDispatchEpochMilliseconds,
++      stages: sanitized,
++      metrics: profile.metrics
++    )
++  }
++
+   private static func emit(_ receipt: ObserverReceipt) throws {
+     let encoder = JSONEncoder()
+     encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+@@ -330,17 +433,24 @@ private struct ObserverArguments {
+   let samplerPath: String
+   let expectedSamplerSha256: String
+   let rawSamplesPath: String
++  let expectedFixtureId: String
+ 
+   init(_ arguments: [String]) throws {
+-    guard arguments.count == 6 else { throw PreviewObserverInvalidation.usage }
++    guard arguments.count == 7 else { throw PreviewObserverInvalidation.usage }
+     bundleIdentifier = arguments[1]
+     expectedCandidateSha256 = arguments[2]
+     samplerPath = arguments[3]
+     expectedSamplerSha256 = arguments[4]
+     rawSamplesPath = arguments[5]
++    expectedFixtureId = arguments[6]
+     guard bundleIdentifier == "app.ttrpgmap.generator",
+       ExecutableIdentityValidator.isDigest(expectedCandidateSha256),
+-      ExecutableIdentityValidator.isDigest(expectedSamplerSha256)
++      ExecutableIdentityValidator.isDigest(expectedSamplerSha256),
++      [
++        "milestone-2-atlas-proof",
++        "milestone-2-atlas-fragmented-islands",
++        "milestone-2-atlas-control-max",
++      ].contains(expectedFixtureId)
+     else {
+       throw PreviewObserverInvalidation.usage
+     }
+diff --git a/packages/generation/src/atlas-land-water-classification.ts b/packages/generation/src/atlas-land-water-classification.ts
+index dad597b..6cdc29b 100644
+--- a/packages/generation/src/atlas-land-water-classification.ts
++++ b/packages/generation/src/atlas-land-water-classification.ts
+@@ -26,6 +26,7 @@ import {
+   WORLD_ATLAS_PREVIEW_PROFILE,
+ } from './atlas-sampling-profiles.js';
+ import type { QuantizedSphericalField } from './geography-algorithm-adapters.js';
++import { issue92PreviewProbe } from './issue-92-preview-probe.js';
+ 
+ const AREA_WEIGHT_SCALE = 2 ** 20;
+ const MAX_CONNECTIVITY_CANDIDATES = 17;
+@@ -86,6 +87,8 @@ export async function selectAtlasLandWaterThreshold(
+   parameters: AtlasLandWaterClassificationParameters,
+   cooperation: AtlasThresholdSelectionCooperation,
+ ): Promise<AtlasThresholdSelectionResult> {
++  const probe = issue92PreviewProbe();
++  const selectionStart = probe?.now();
+   if (previewField.profile.profileId !== WORLD_ATLAS_PREVIEW_PROFILE.profileId) {
+     throw new RangeError('Land/water threshold selection requires the version-1 preview profile.');
+   }
+@@ -99,11 +102,19 @@ export async function selectAtlasLandWaterThreshold(
+     const weightedTick = weightedTicks[weightedTickIndex];
+     if (weightedTick === undefined) throw new Error('Missing weighted threshold candidate.');
+     const contourLevel = contourAbove(weightedTick.tick);
++    const componentTraversalStart = probe?.now();
++    const proxy = summarizeWaterComponents(previewField, contourLevel);
++    if (componentTraversalStart !== undefined) {
++      probe?.addMetric(
++        'thresholdComponentTraversalMilliseconds',
++        probe.now() - componentTraversalStart,
++      );
++    }
+     candidates.push(
+       Object.freeze({
+         ...weightedTick,
+         contourLevel,
+-        proxy: summarizeWaterComponents(previewField, contourLevel),
++        proxy,
+       }),
+     );
+     if (await cooperation.cooperate(progressIndex + 1, candidateIndices.length)) {
+@@ -115,6 +126,17 @@ export async function selectAtlasLandWaterThreshold(
+     compareThresholdCandidates(left, right, parameters.oceanConnectivity),
+   )[0];
+   if (selected === undefined) throw new Error('No atlas land/water threshold candidate exists.');
++  if (selectionStart !== undefined) {
++    probe?.addMetric('thresholdCandidateCount', candidateIndices.length);
++    probe?.addMetric('selectedContourLevel', selected.contourLevel);
++    probe?.addMetric('selectedComponentCount', selected.proxy.componentCount);
++    probe?.addMetric('selectedLargestComponentPercent', selected.proxy.largestComponentPercent);
++    probe?.record({
++      stage: 'threshold-selection',
++      startEpochMilliseconds: selectionStart,
++      endEpochMilliseconds: probe.now(),
++    });
++  }
+   return Object.freeze({
+     status: 'completed',
+     selection: Object.freeze({
+diff --git a/packages/generation/src/atlas-land-water-generator.ts b/packages/generation/src/atlas-land-water-generator.ts
+index ac83a3f..eeed79c 100644
+--- a/packages/generation/src/atlas-land-water-generator.ts
++++ b/packages/generation/src/atlas-land-water-generator.ts
+@@ -45,6 +45,7 @@ import {
+   WORLD_ATLAS_FULL_PROFILE,
+   WORLD_ATLAS_PREVIEW_PROFILE,
+ } from './atlas-sampling-profiles.js';
++import { issue92PreviewProbe } from './issue-92-preview-probe.js';
+ 
+ export { validateAtlasLandWaterRealization } from './atlas-land-water-generator-diagnostics.js';
+ 
+@@ -182,6 +183,8 @@ export async function generateAtlasLandWaterPreview(
+   );
+ 
+   try {
++    const probe = issue92PreviewProbe();
++    const setupStart = probe?.now();
+     progress.report('preparing', 0, 1, 0, 0);
+     if (progress.isCancellationRequested()) {
+       return atlasLandWaterCancelledResult(input, progress, 'macro');
+@@ -193,11 +196,26 @@ export async function generateAtlasLandWaterPreview(
+       macroParameters,
+       runtime.macroElevationRandom,
+     );
++    if (setupStart !== undefined) {
++      probe?.record({
++        stage: 'generation-setup',
++        startEpochMilliseconds: setupStart,
++        endEpochMilliseconds: probe.now(),
++      });
++    }
++    const samplingStart = probe?.now();
+     const sampled = await sampleAtlasMacroElevationField(
+       WORLD_ATLAS_PREVIEW_PROFILE,
+       fieldAdapter,
+       progress.cooperation('sampling-shared-preview-anchors', 0, 450),
+     );
++    if (samplingStart !== undefined) {
++      probe?.record({
++        stage: 'generation-sampling',
++        startEpochMilliseconds: samplingStart,
++        endEpochMilliseconds: probe.now(),
++      });
++    }
+     if (sampled.status === 'cancelled') {
+       return atlasLandWaterCancelledResult(input, progress, 'macro');
+     }
+@@ -210,16 +228,25 @@ export async function generateAtlasLandWaterPreview(
+     if (threshold.status === 'cancelled') {
+       return atlasLandWaterCancelledResult(input, progress, 'classification');
+     }
++    const classificationStart = probe?.now();
+     const classification = await classifyAtlasLandWater(
+       sampled.field,
+       threshold.selection.contourLevel,
+       input.controls.targetWaterCoveragePercent,
+       progress.cooperation('classifying-land-water', 700, 920),
+     );
++    if (classificationStart !== undefined) {
++      probe?.record({
++        stage: 'generation-classification',
++        startEpochMilliseconds: classificationStart,
++        endEpochMilliseconds: probe.now(),
++      });
++    }
+     if (classification.status === 'cancelled') {
+       return atlasLandWaterCancelledResult(input, progress, 'classification');
+     }
+ 
++    const validationStart = probe?.now();
+     if (await progress.cooperateOnce('validating-proposal', 1, 1, 920, 999)) {
+       return atlasLandWaterCancelledResult(input, progress, 'classification');
+     }
+@@ -234,7 +261,17 @@ export async function generateAtlasLandWaterPreview(
+     if (diagnostics.some(({ severity }) => severity === 'error')) {
+       return atlasLandWaterInvalidResult(progress, diagnostics);
+     }
++    if (validationStart !== undefined) {
++      probe?.record({
++        stage: 'generation-validation',
++        startEpochMilliseconds: validationStart,
++        endEpochMilliseconds: probe.now(),
++      });
++    }
+ 
++    const materializationStart = probe?.now();
++    const macroElevationValues = sampled.field.copyValues();
++    const landWaterSamples = atlasSampleReaderToArray(classification.output.samples);
+     const preview: AtlasLandWaterPreview = Object.freeze({
+       previewKind: 'disposable-atlas-land-water',
+       previewVersion: ATLAS_LAND_WATER_PREVIEW_VERSION,
+@@ -247,10 +284,17 @@ export async function generateAtlasLandWaterPreview(
+       authority: 'disposable',
+       isPromotable: false,
+       controls: input.controls,
+-      macroElevationValues: sampled.field.copyValues(),
++      macroElevationValues,
+       seaLevelContourDoubledTicks: threshold.selection.contourLevel,
+-      landWaterSamples: atlasSampleReaderToArray(classification.output.samples),
++      landWaterSamples,
+     });
++    if (materializationStart !== undefined) {
++      probe?.record({
++        stage: 'preview-value-materialization',
++        startEpochMilliseconds: materializationStart,
++        endEpochMilliseconds: probe.now(),
++      });
++    }
+     progress.complete();
+     return Object.freeze({
+       status: 'preview',
+diff --git a/apps/desktop/src/issue-92-preview-probe.ts b/apps/desktop/src/issue-92-preview-probe.ts
+new file mode 100644
+index 0000000..eab051b
+--- /dev/null
++++ b/apps/desktop/src/issue-92-preview-probe.ts
+@@ -0,0 +1,85 @@
++export interface Issue92PreviewStageEvent {
++  readonly stage: string;
++  readonly startEpochMilliseconds: number;
++  readonly endEpochMilliseconds: number;
++}
++
++export interface Issue92PreviewProbe {
++  readonly now: () => number;
++  readonly begin: (fixtureId: string) => void;
++  readonly record: (event: Issue92PreviewStageEvent) => void;
++  readonly addMetric: (name: string, value: number) => void;
++  readonly complete: () => void;
++}
++
++interface Issue92ProfilePayload {
++  readonly schema: 'issue-92-application-stage-profile-v1';
++  readonly fixtureId: string;
++  readonly dispatchStartEpochMilliseconds: number;
++  readonly events: readonly Issue92PreviewStageEvent[];
++  readonly metrics: Readonly<Record<string, number>>;
++}
++
++const PROFILE_PREFIX = 'issue92-stage-profile:';
++
++export function installIssue92PreviewProbe(
++  publish: (receipt: string) => void,
++): Issue92PreviewProbe {
++  let active = false;
++  let fixtureId = 'unrecognized';
++  let dispatchStartEpochMilliseconds = 0;
++  let events: Issue92PreviewStageEvent[] = [];
++  let metrics: Record<string, number> = {};
++  const now = (): number => performance.timeOrigin + performance.now();
++  const payload = (): Issue92ProfilePayload => ({
++    schema: 'issue-92-application-stage-profile-v1',
++    fixtureId,
++    dispatchStartEpochMilliseconds,
++    events,
++    metrics,
++  });
++  const probe: Issue92PreviewProbe = {
++    now,
++    begin(nextFixtureId): void {
++      active = true;
++      fixtureId = nextFixtureId;
++      dispatchStartEpochMilliseconds = now();
++      events = [];
++      metrics = {};
++      publish(`${PROFILE_PREFIX}running`);
++    },
++    record(event): void {
++      if (active) events.push(event);
++    },
++    addMetric(name, value): void {
++      if (active) metrics[name] = (metrics[name] ?? 0) + value;
++    },
++    complete(): void {
++      if (!active) return;
++      const materializationStart = now();
++      JSON.stringify(payload());
++      const materializationEnd = now();
++      events.push({
++        stage: 'probe-receipt-materialization',
++        startEpochMilliseconds: materializationStart,
++        endEpochMilliseconds: materializationEnd,
++      });
++      active = false;
++      publish(`${PROFILE_PREFIX}${JSON.stringify(payload())}`);
++    },
++  };
++  (
++    globalThis as typeof globalThis & {
++      __issue92PreviewProbe?: Issue92PreviewProbe;
++    }
++  ).__issue92PreviewProbe = probe;
++  return probe;
++}
++
++export function issue92PreviewProbe(): Issue92PreviewProbe | undefined {
++  return (
++    globalThis as typeof globalThis & {
++      readonly __issue92PreviewProbe?: Issue92PreviewProbe;
++    }
++  ).__issue92PreviewProbe;
++}
+diff --git a/packages/generation/src/issue-92-preview-probe.ts b/packages/generation/src/issue-92-preview-probe.ts
+new file mode 100644
+index 0000000..aa93696
+--- /dev/null
++++ b/packages/generation/src/issue-92-preview-probe.ts
+@@ -0,0 +1,19 @@
++interface Issue92PreviewProbeEvent {
++  readonly stage: string;
++  readonly startEpochMilliseconds: number;
++  readonly endEpochMilliseconds: number;
++}
++
++interface Issue92PreviewProbe {
++  readonly now: () => number;
++  readonly record: (event: Issue92PreviewProbeEvent) => void;
++  readonly addMetric: (name: string, value: number) => void;
++}
++
++export function issue92PreviewProbe(): Issue92PreviewProbe | undefined {
++  return (
++    globalThis as typeof globalThis & {
++      readonly __issue92PreviewProbe?: Issue92PreviewProbe;
++    }
++  ).__issue92PreviewProbe;
++}

@@ -1,0 +1,122 @@
+{
+  "accessibility": {
+    "acceptFullEnabled": true,
+    "disposableCaption": true,
+    "frontmost": true,
+    "previewLabel": true
+  },
+  "applicationProfile": {
+    "fixtureId": "milestone-2-atlas-proof",
+    "metrics": {
+      "selectedComponentCount": 3,
+      "selectedContourLevel": -13854891,
+      "selectedLargestComponentPercent": 50.276133,
+      "thresholdCandidateCount": 17,
+      "thresholdComponentTraversalMilliseconds": 169
+    },
+    "observerDispatchToApplicationMilliseconds": 27.23388671875,
+    "profileVersion": "issue-92-application-stage-profile-v1",
+    "stages": [
+      {
+        "durationMilliseconds": 0,
+        "stage": "workflow-input-preparation",
+        "startAfterApplicationDispatchMilliseconds": 1
+      },
+      {
+        "durationMilliseconds": 0,
+        "stage": "generation-setup",
+        "startAfterApplicationDispatchMilliseconds": 3
+      },
+      {
+        "durationMilliseconds": 68,
+        "stage": "generation-sampling",
+        "startAfterApplicationDispatchMilliseconds": 3
+      },
+      {
+        "durationMilliseconds": 304,
+        "stage": "threshold-selection",
+        "startAfterApplicationDispatchMilliseconds": 71
+      },
+      {
+        "durationMilliseconds": 160,
+        "stage": "generation-classification",
+        "startAfterApplicationDispatchMilliseconds": 375
+      },
+      {
+        "durationMilliseconds": 7,
+        "stage": "generation-validation",
+        "startAfterApplicationDispatchMilliseconds": 535
+      },
+      {
+        "durationMilliseconds": 52,
+        "stage": "preview-value-materialization",
+        "startAfterApplicationDispatchMilliseconds": 542
+      },
+      {
+        "durationMilliseconds": 0,
+        "stage": "generation-result-wrapping",
+        "startAfterApplicationDispatchMilliseconds": 594
+      },
+      {
+        "durationMilliseconds": 0,
+        "stage": "workflow-presentation",
+        "startAfterApplicationDispatchMilliseconds": 594
+      },
+      {
+        "durationMilliseconds": 1,
+        "stage": "svelte-snapshot-presentation",
+        "startAfterApplicationDispatchMilliseconds": 594
+      },
+      {
+        "durationMilliseconds": 4,
+        "stage": "canvas-presentation",
+        "startAfterApplicationDispatchMilliseconds": 595
+      },
+      {
+        "durationMilliseconds": 0,
+        "stage": "probe-receipt-materialization",
+        "startAfterApplicationDispatchMilliseconds": 599
+      }
+    ]
+  },
+  "executableIdentity": {
+    "candidateSha256": "c78fac6d0be1c35a2480122a88e83b0b8813fb289252a5718edf5842074ad33e",
+    "samplerSha256": "6bea6159f116d77c8d9de7afd77a9c9bfac3961cc4e8f9316404fcb0b21e2555"
+  },
+  "measurement": {
+    "baselineAggregateRSSBytes": 224608256,
+    "elapsedMilliseconds": 881.659912109375,
+    "maximumSampleIntervalMilliseconds": 6.445,
+    "peakAdditionalRSSBytes": 121470976,
+    "sampleCount": 145
+  },
+  "membershipRevalidated": true,
+  "observerIntervals": {
+    "accessibilityReceiptMilliseconds": 64.76220703125,
+    "applicationDispatchToQualifyingFrameMilliseconds": 788.57763671875,
+    "canvasCompletionToQualifyingFrameMilliseconds": 189.57763671875,
+    "qualifyingFrameToAccessibilityStartMilliseconds": 1.086181640625
+  },
+  "observerVersion": "packaged-preview-observer-v2-issue92-profile-v1",
+  "roleCounts": {
+    "application": 1,
+    "gpu": 1,
+    "networking": 1,
+    "webContent": 1
+  },
+  "status": "valid",
+  "target": {
+    "memoryGiB": 24,
+    "model": "Mac17,2",
+    "osBuild": "25F80",
+    "osVersion": "26.5.1"
+  },
+  "visual": {
+    "changedCanvasCrop": true,
+    "completePostDispatchFrame": true,
+    "cropPixels": "512x256",
+    "foregroundIntact": true,
+    "landPaletteBounded": true,
+    "waterPaletteBounded": true
+  }
+}
