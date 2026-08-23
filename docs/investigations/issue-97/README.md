@@ -153,6 +153,12 @@ dispatch. The successor now acquires and verifies the candidate's frontmost stat
 unmeasured Accessibility precondition pattern used by the approved predecessor, before preparation
 or measurement; foreground remains strictly uninterrupted after measured dispatch.
 
+A third proof/SVG readiness attempt showed that Accessibility frontmost assignment alone did not
+survive on this host. It failed before fixture setup or sampler start and likewise created no
+package, destination, CSV, retained artifact, or measured dispatch. The bounded successor first
+activates the exact running candidate through AppKit, then verifies Accessibility frontmost state;
+this remains an unmeasured readiness action and does not alter the measured continuity predicate.
+
 ## Privacy
 
 Public receipts contain only the gated fixture values and definition hash, approved host/build and

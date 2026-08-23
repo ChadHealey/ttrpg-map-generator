@@ -1,3 +1,4 @@
+import AppKit
 import ApplicationServices
 import CryptoKit
 import Darwin
@@ -7,6 +8,12 @@ extension AccessibilityObserver {
   func issue97PrepareFrontmost() throws {
     guard AXIsProcessTrusted() else {
       throw PreviewObserverInvalidation.accessibility("Accessibility permission was not granted")
+    }
+    guard let runningApplication = NSRunningApplication(processIdentifier: applicationPID),
+      runningApplication.activate(options: [.activateAllWindows])
+    else {
+      throw PreviewObserverInvalidation.accessibility(
+        "the exact packaged candidate could not be activated during unmeasured readiness")
     }
     guard AXUIElementSetAttributeValue(
       application,
