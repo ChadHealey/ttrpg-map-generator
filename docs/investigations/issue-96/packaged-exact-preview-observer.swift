@@ -107,7 +107,7 @@ enum PackagedExactPreviewObserver {
     }
 
     let accessibility = AccessibilityObserver(applicationPID: target.applicationPID)
-    let crop = try accessibility.prepareVisibleCanvas(windowFrame: target.window.frame)
+    let crop = try accessibility.prepareExactPreviewVisibleCanvas(windowFrame: target.window.frame)
     let foreground = try ForegroundMonitor(applicationPID: target.applicationPID)
     defer { foreground.stop() }
     try postObserverDispatch(
