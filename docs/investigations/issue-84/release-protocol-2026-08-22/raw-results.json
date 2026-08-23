@@ -1,0 +1,111 @@
+{
+  "schemaVersion": "issue-84-release-protocol-evidence-v1",
+  "status": "stopped-valid-preview-wall-clock-failure",
+  "candidate": {
+    "commit": "ba10bc4a2902cb8c56137bc90b44fe3764bf02a7",
+    "ciTestedImplementationCommit": "713dc1039f59cd18864be6581b0d603adb2072c1",
+    "executableSha256": "931235e8a989a3980533c7ba5387ba3622520762f3a05ae551856eb6eec116ee",
+    "executableBytes": 10000528,
+    "observerDispatchBuild": true
+  },
+  "host": {
+    "model": "Mac17,2",
+    "chip": "Apple M5",
+    "cores": 10,
+    "memoryGiB": 24,
+    "osVersion": "26.5.1",
+    "osBuild": "25F80",
+    "powerSource": "AC",
+    "lowPowerMode": false
+  },
+  "toolchain": {
+    "node": "24.11.0",
+    "pnpm": "11.19.0",
+    "rustc": "1.97.1"
+  },
+  "observer": {
+    "version": "packaged-preview-observer-v2",
+    "sha256": "334f789791f919f368095227ee2853d0cb54c4bfea8949f904e4ae8fc970d2dc",
+    "samplerSha256": "17b1b2ccdd693c3ab569e322b95d64d97f1bc2621c2930ea8e469d0124f9fbe5",
+    "roleCounts": {
+      "application": 1,
+      "gpu": 1,
+      "networking": 1,
+      "webContent": 1
+    }
+  },
+  "limits": {
+    "previewElapsedMilliseconds": 750,
+    "previewAdditionalRssBytes": 268435456,
+    "maximumSampleIntervalMilliseconds": 20
+  },
+  "runs": [
+    {
+      "id": "proof-warmup",
+      "fixture": "milestone-2-atlas-proof",
+      "kind": "untimed-warmup",
+      "observerStatus": "valid",
+      "elapsedMilliseconds": 872.0400390625,
+      "baselineAggregateRssBytes": 243564544,
+      "peakAggregateRssBytes": 570572800,
+      "peakAdditionalRssBytes": 327008256,
+      "perProcessPeakRssBytes": {
+        "application": 113328128,
+        "gpu": 48054272,
+        "networking": 19316736,
+        "webContent": 389873664
+      },
+      "sampleCount": 143,
+      "maximumSampleIntervalMilliseconds": 6.741,
+      "sanitizedObserverReceipt": {
+        "path": "observer-receipt-proof-warmup.json",
+        "sha256": "5b311e272cf91b64349668df51529aea0a34b6b4832aaec0e37b8d93038a225e",
+        "bytes": 1105
+      },
+      "rawSamplerReceiptSha256": "b69a8023494505d435d13c871114f72048ae79729754ece4b50c41752bc047a8",
+      "rawSamplerReceiptBytes": 17462,
+      "gated": false
+    },
+    {
+      "id": "proof-fresh-1",
+      "fixture": "milestone-2-atlas-proof",
+      "kind": "fresh-process",
+      "observerStatus": "valid",
+      "elapsedMilliseconds": 861.246826171875,
+      "baselineAggregateRssBytes": 224215040,
+      "peakAggregateRssBytes": 348782592,
+      "peakAdditionalRssBytes": 124567552,
+      "perProcessPeakRssBytes": {
+        "application": 112263168,
+        "gpu": 40812544,
+        "networking": 15859712,
+        "webContent": 179879936
+      },
+      "sampleCount": 141,
+      "maximumSampleIntervalMilliseconds": 6.506,
+      "sanitizedObserverReceipt": {
+        "path": "observer-receipt-proof-fresh-1.json",
+        "sha256": "44f7f7bb31b246c9bd04c64417571fdf43a3ceb37fde4fc1c642d1289c949bf5",
+        "bytes": 1107
+      },
+      "rawSamplerReceiptSha256": "623d37e26f965d7df294ca4a545da420e767f10eed5038690cedd957588d0fa3",
+      "rawSamplerReceiptBytes": 19084,
+      "elapsedGate": "fail",
+      "memoryGate": "pass"
+    }
+  ],
+  "rawArtifactRetention": {
+    "status": "not-durably-retained",
+    "limitation": "The PID-bearing sampler CSVs were held only in ephemeral private temporary storage and were unavailable when dedicated review checked retention. Their hashes and sizes remain recorded, but their contents and durable private locations cannot be re-audited. No measurement was rerun because the valid timing failure triggered the protocol stop condition."
+  },
+  "stopDecision": {
+    "reason": "The first valid measured fresh-process preview exceeded 750 ms.",
+    "remainingPreviewRuns": "not-run",
+    "fullGeneration": "not-run",
+    "svgExport": "not-run",
+    "pngExport": "not-run",
+    "cancellationTrials": "not-run",
+    "median": null,
+    "worstOfFive": null
+  }
+}

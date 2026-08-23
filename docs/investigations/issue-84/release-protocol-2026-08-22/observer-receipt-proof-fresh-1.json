@@ -1,0 +1,42 @@
+{
+  "accessibility": {
+    "acceptFullEnabled": true,
+    "disposableCaption": true,
+    "frontmost": true,
+    "previewLabel": true
+  },
+  "executableIdentity": {
+    "candidateSha256": "931235e8a989a3980533c7ba5387ba3622520762f3a05ae551856eb6eec116ee",
+    "samplerSha256": "17b1b2ccdd693c3ab569e322b95d64d97f1bc2621c2930ea8e469d0124f9fbe5"
+  },
+  "measurement": {
+    "baselineAggregateRSSBytes": 224215040,
+    "elapsedMilliseconds": 861.246826171875,
+    "maximumSampleIntervalMilliseconds": 6.506,
+    "peakAdditionalRSSBytes": 124567552,
+    "sampleCount": 141
+  },
+  "membershipRevalidated": true,
+  "observerVersion": "packaged-preview-observer-v2",
+  "roleCounts": {
+    "application": 1,
+    "gpu": 1,
+    "networking": 1,
+    "webContent": 1
+  },
+  "status": "valid",
+  "target": {
+    "memoryGiB": 24,
+    "model": "Mac17,2",
+    "osBuild": "25F80",
+    "osVersion": "26.5.1"
+  },
+  "visual": {
+    "changedCanvasCrop": true,
+    "completePostDispatchFrame": true,
+    "cropPixels": "512x256",
+    "foregroundIntact": true,
+    "landPaletteBounded": true,
+    "waterPaletteBounded": true
+  }
+}
