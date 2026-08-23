@@ -293,14 +293,14 @@ Power Mode off, no debugger/developer tools, and no network dependency. After on
 measure five fresh processes. Sample aggregate additional RSS for the complete application process
 tree at intervals no greater than 20 ms and report every run plus median and worst.
 
-| Operation                            | Fixed limit                                                                     | Required evidence status                                                              |
-| ------------------------------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| Coarse preview                       | ≤900 ms and ≤256 MiB additional process-tree RSS; report ≤750 ms stretch target | **PASS** — all 15 final fresh runs passed; worst time 809.40 ms, worst RSS 157.72 MiB |
-| Full generation                      | ≤10 s and ≤768 MiB additional process-tree RSS                                  | **INCOMPLETE** — first-paint endpoint unproven; control-max was not run               |
-| SVG export                           | ≤3 s, ≤512 MiB, destination ≤32 MiB                                             | **NOT RUN** — not rerun after the preview repair                                      |
-| PNG export                           | ≤15 s, ≤1 GiB, destination ≤64 MiB                                              | **NOT RUN** — not rerun after the preview repair                                      |
-| Preview cancellation                 | Acknowledgement ≤100 ms                                                         | **NOT RUN** — not rerun after the preview repair                                      |
-| Full-generation/SVG/PNG cancellation | Acknowledgement ≤500 ms                                                         | **NOT RUN** — not rerun after the preview repair                                      |
+| Operation                            | Fixed limit                                                                     | Required evidence status                                                                                           |
+| ------------------------------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Coarse preview                       | ≤900 ms and ≤256 MiB additional process-tree RSS; report ≤750 ms stretch target | **PASS** — all 15 final fresh runs passed; worst time 809.40 ms, worst RSS 157.72 MiB                              |
+| Full generation                      | ≤10 s and ≤768 MiB additional process-tree RSS                                  | **INCOMPLETE** — issue #94 qualified the first-paint observer and all three gated fixtures; release matrix not run |
+| SVG export                           | ≤3 s, ≤512 MiB, destination ≤32 MiB                                             | **NOT RUN** — not rerun after the preview repair                                                                   |
+| PNG export                           | ≤15 s, ≤1 GiB, destination ≤64 MiB                                              | **NOT RUN** — not rerun after the preview repair                                                                   |
+| Preview cancellation                 | Acknowledgement ≤100 ms                                                         | **NOT RUN** — not rerun after the preview repair                                                                   |
+| Full-generation/SVG/PNG cancellation | Acknowledgement ≤500 ms                                                         | **NOT RUN** — not rerun after the preview repair                                                                   |
 
 ### Issue #84 partial full-generation rerun (2026-08-23)
 
@@ -322,6 +322,46 @@ full generation, all exports, and all cancellation trials remain unrun. The sani
 values, per-process peaks, observer qualifications, private raw-artifact receipts, known tool
 hashes, missing-command limitation, and stop record are in the
 [issue #84 partial protocol evidence](investigations/issue-84/release-protocol-2026-08-23/README.md).
+
+### Issue #94 packaged full-atlas qualification (2026-08-23)
+
+Issue #94 added the bounded observer-only path that issue #84 lacked, without changing production
+generation, registered fixture authority, or release limits. The implementation candidate was
+`b6d62b37a82d94c067d0344124aeef032d198b8a`; its observer-enabled packaged executable SHA-256 was
+`c72e62f837cbe0d1aa8e3f90d075712349bd49763620ac2cb75ce1b9d5fdbeca`. The successful runs used
+observer SHA-256 `232ec1e222dc04eaf43d884a548c0da1683cdadab7d19fc8403ecd755812090a`, sampler
+SHA-256 `974fcf7c72b66d39e3851e8ca06910b0d8b8cdace4b7796bbe83cdb2f687fef6`, and retention
+SHA-256 `d967f2662b952898ecf659699117e4e43d65db54f562b67a0a2d76a735164052`.
+
+One fresh packaged process for each required fixture produced a valid first-fully-painted accepted
+atlas receipt on MacBook Pro `Mac17,2`, Apple M5, 24 GB, macOS 26.5.1 (`25F80`):
+
+| Fixture                                | Diagnostic elapsed | Diagnostic peak additional RSS | Max interval | Qualification |
+| -------------------------------------- | -----------------: | -----------------------------: | -----------: | ------------- |
+| `milestone-2-atlas-proof`              |        5,491.61 ms |                     413.33 MiB |     7.916 ms | **VALID**     |
+| `milestone-2-atlas-fragmented-islands` |        6,934.09 ms |                     410.78 MiB |    12.296 ms | **VALID**     |
+| `milestone-2-atlas-control-max`        |        4,860.74 ms |                     419.95 MiB |     8.877 ms | **VALID**     |
+
+Every receipt proves the exact checked-in seed and all nine controls; a complete changed
+accepted-land/water/ink frame that rejects the disposable preview; uninterrupted foreground;
+final accepted Accessibility state; one application, GPU, Networking, and WebContent process;
+completion membership equality; valid RSS arithmetic; endpoint coverage; and cadence. The raw
+CSVs were retained privately and their temporary copies removed under opaque artifact identifiers
+`issue94-qualification-proof`, `issue94-qualification-fragmented-islands`, and
+`issue94-qualification-control-max`. Their sanitized retention SHA-256 values are respectively
+`283bafd2efc9b3fceb83f9899616f7cded9a46758e21ed5bc92e29035b7d2743`,
+`f22e9e6f7b2d63e667dc88bab5d692d3fb3fce5e6fd92764a5c2d100e532e073`, and
+`b195d559a186454f06fae2f8497589e76771e407e3b96fd45f46dbb0cea81393`.
+
+Three pre-dispatch fixture-receipt mismatches failed closed before any measured full-generation
+dispatch or raw artifact. They have no timing, RSS, or release conclusion. Complete sanitized
+receipts, definition hashes, invalidations, runbook, privacy boundary, and retained-artifact byte
+lengths are in the
+[issue #94 qualification evidence](investigations/issue-94/README.md).
+
+These three observations qualify the path only. They are not a warm-up plus five-fresh-process
+matrix, do not establish a full-generation budget pass or fail, and do not authorize continuing
+into exports or cancellation. Issue #95 owns the complete successor release protocol.
 
 Run wall-clock and memory gates for `milestone-2-atlas-proof`,
 `milestone-2-atlas-fragmented-islands`, and `milestone-2-atlas-control-max`; apply SVG/PNG file
@@ -353,9 +393,8 @@ rule that every included issue be closed or explicitly moved out.
 
 The final release owner must perform these actions in order:
 
-1. Establish a qualified first-paint observer for the accepted full atlas and resolve or explicitly
-   authorize a bounded control-max packaged-fixture configuration method; then rerun issue #84
-   without changing its fixture, workload, or limits.
+1. Use the issue #94 qualified first-paint observer and gated fixtures to run issue #95's complete
+   successor release protocol without changing its fixture, workload, observer meaning, or limits.
 2. Confirm this report names the exact tested implementation commit and the handoff names the
    documentation-only commit, with complete command results, packaged receipts, artifact hashes,
    and human visual review. Do not attribute costly gates to the documentation commit unless they

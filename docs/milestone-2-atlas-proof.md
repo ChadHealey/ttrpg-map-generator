@@ -550,6 +550,57 @@ macOS process-inspection API or a production instrumentation feature. Any need f
 entitlement, private interface, production UI change, post-dispatch reveal action, or changed
 measurement meaning stops the protocol and requires a new owner decision.
 
+### Approved packaged full-atlas qualification authority
+
+The following successor authority qualifies the observer and gated-fixture setup needed to measure
+the accepted full-atlas first paint. It is pinned to the same MacBook Pro `Mac17,2`, Apple M5,
+24-GB, macOS 26.5.1 (`25F80`) environment and inherits the packaged-preview process-tree, executable
+identity, RSS, cadence, endpoint-coverage, private-retention, and fail-closed requirements above.
+It qualifies the measurement path only; it does not itself run or decide the five-fresh-process
+release gate.
+
+- An observer-enabled package may accept exactly the three registered performance fixtures:
+  `milestone-2-atlas-proof`, `milestone-2-atlas-fragmented-islands`, and
+  `milestone-2-atlas-control-max`. The app must import each checked-in fixture definition directly
+  and validate its fixture ID, canonical unsigned-64 seed, and complete nine-control record. A
+  structured Accessibility receipt must prove that the live seed, controls, and workflow phase
+  still match that definition before preview and full-generation dispatch. Unknown fixtures,
+  partial configuration, malformed definitions or receipts, and any seed/control/state drift
+  invalidate the observation.
+- The gated preview and full-generation dispatches must invoke the same actions and unchanged
+  `AtlasWorkflow` request paths as **Generate coarse preview** and **Accept full atlas**. They may
+  not inject or replace preview data, accepted state, generated records, render scenes, or canvas
+  output. An ordinary package must install neither gated fixture selection nor full-generation
+  dispatch.
+- Before measured full dispatch, the observer qualifies a production disposable preview using the
+  packaged-preview authority, then obtains a fresh process-membership receipt and baseline frame.
+  From measured dispatch until a qualifying accepted frame arrives, it performs no Accessibility
+  traversal and no scroll, reveal, pan, zoom, focus, framing, or other application action.
+- A qualifying first fully painted accepted atlas requires a complete `512 × 256`
+  ScreenCaptureKit crop displayed after dispatch, changed from the disposable-preview baseline,
+  with uninterrupted foreground ownership. With per-channel tolerance `10`, the crop must contain
+  at least `100` pixels each near accepted land `#c9c39a` and water `#afbec0`, at least `8` pixels
+  near accepted ink `#282a24`, and no more than `500` pixels near either disposable-preview palette
+  color. A partial, stale, unchanged, preview-mode, background-only, or ink-free frame invalidates
+  the observation.
+- Only after that frame qualifies may one final Accessibility traversal confirm the accepted
+  canvas label and caption, absence of the disposable-preview label and caption, disabled
+  **Accept full atlas**, exact accepted fixture receipt, and frontmost state. Completion of that
+  receipt remains the wall-clock and RSS endpoint. Accessibility completion without the visual
+  predicate cannot qualify.
+- Every raw PID-bearing sampler CSV is handed immediately to the approved issue #91 retention
+  utility. Public evidence may contain only sanitized fixture values and hashes, host/build and
+  tool identities, role counts, Boolean predicates, timing/RSS summary, opaque retention receipt,
+  and invalidation authority/reason. Pixels, CSV content, PIDs, UUIDs, coalitions, user names,
+  private archive locations, executable paths, and other local paths remain private.
+
+The implementation, exact target-host sequence, negative predicates, and single-run qualification
+receipts are recorded in the
+[issue #94 packaged full-atlas observer evidence](investigations/issue-94/README.md). Any change to
+the registered fixture authority, production actions, crop/palette predicate, completion boundary,
+membership authority, retention behavior, host/build, or numeric release limits requires renewed
+review. The complete release protocol remains separate downstream work.
+
 | Operation       | Fixed workload                                                                                | Wall-clock | Peak additional memory | Output-size ceiling       |
 | --------------- | --------------------------------------------------------------------------------------------- | ---------- | ---------------------- | ------------------------- |
 | Coarse preview  | dispatch through first fully painted labelled 512 × 256 effective preview                     | `900 ms`   | `256 MiB`              | not applicable            |

@@ -1,0 +1,195 @@
+{
+  "schemaVersion": "issue-94-packaged-full-atlas-qualification-v1",
+  "status": "qualified",
+  "scope": "single-run diagnostic qualification only; not the issue-95 release matrix",
+  "candidate": {
+    "commit": "b6d62b37a82d94c067d0344124aeef032d198b8a",
+    "executableSha256": "c72e62f837cbe0d1aa8e3f90d075712349bd49763620ac2cb75ce1b9d5fdbeca"
+  },
+  "host": {
+    "modelIdentifier": "Mac17,2",
+    "processor": "Apple M5",
+    "unifiedMemoryBytes": 25769803776,
+    "operatingSystemVersion": "26.5.1",
+    "operatingSystemBuild": "25F80",
+    "architecture": "arm64",
+    "powerConnected": true,
+    "lowPowerMode": false
+  },
+  "tools": {
+    "observerSha256": "232ec1e222dc04eaf43d884a548c0da1683cdadab7d19fc8403ecd755812090a",
+    "samplerSha256": "974fcf7c72b66d39e3851e8ca06910b0d8b8cdace4b7796bbe83cdb2f687fef6",
+    "retentionSha256": "d967f2662b952898ecf659699117e4e43d65db54f562b67a0a2d76a735164052"
+  },
+  "qualificationRuns": [
+    {
+      "fixtureId": "milestone-2-atlas-proof",
+      "fixtureDefinitionSha256": "20ea56e30d263f974f7a60f012eb6920ca073cba6a8949b62f05fbcbe4e86977",
+      "worldSeed": "81985529216486895",
+      "controls": {
+        "worldCircumferenceKm": 40000,
+        "targetWaterCoveragePercent": 65,
+        "continentCountIntent": 4,
+        "continentDistribution": "varied",
+        "fragmentationPercent": 35,
+        "islandAbundancePercent": 35,
+        "archipelagoAbundancePercent": 25,
+        "oceanConnectivity": "singleGlobal",
+        "polarCharacter": "neutral"
+      },
+      "observerStatus": "valid",
+      "elapsedMilliseconds": 5491.607177734375,
+      "settledBaselineAggregateRssBytes": 378732544,
+      "peakAdditionalAggregateRssBytes": 433405952,
+      "sampleCount": 883,
+      "maximumSampleIntervalMilliseconds": 7.916,
+      "roleCounts": {
+        "application": 1,
+        "gpu": 1,
+        "networking": 1,
+        "webContent": 1
+      },
+      "predicates": {
+        "completeChangedAcceptedFrame": true,
+        "acceptedLandPopulation": true,
+        "acceptedWaterPopulation": true,
+        "acceptedInkPopulation": true,
+        "disposablePreviewRejected": true,
+        "foregroundUninterrupted": true,
+        "acceptedAccessibilityState": true,
+        "exactFixtureReceipt": true,
+        "completionMembershipEqual": true,
+        "rssArithmeticValid": true,
+        "endpointCoverageValid": true,
+        "samplingCadenceValid": true
+      },
+      "retention": {
+        "status": "retained",
+        "artifactIdentifier": "issue94-qualification-proof",
+        "byteLength": 66531,
+        "sha256": "283bafd2efc9b3fceb83f9899616f7cded9a46758e21ed5bc92e29035b7d2743",
+        "temporarySourceRemoved": true
+      }
+    },
+    {
+      "fixtureId": "milestone-2-atlas-fragmented-islands",
+      "fixtureDefinitionSha256": "d8ae2385f7aa4ca59716adb5a116b52888d310c382116b6d8801e60d8e10b363",
+      "worldSeed": "18364758544493064720",
+      "controls": {
+        "worldCircumferenceKm": 40000,
+        "targetWaterCoveragePercent": 70,
+        "continentCountIntent": 5,
+        "continentDistribution": "varied",
+        "fragmentationPercent": 90,
+        "islandAbundancePercent": 95,
+        "archipelagoAbundancePercent": 95,
+        "oceanConnectivity": "singleGlobal",
+        "polarCharacter": "neutral"
+      },
+      "observerStatus": "valid",
+      "elapsedMilliseconds": 6934.093017578125,
+      "settledBaselineAggregateRssBytes": 391020544,
+      "peakAdditionalAggregateRssBytes": 430735360,
+      "sampleCount": 1117,
+      "maximumSampleIntervalMilliseconds": 12.296,
+      "roleCounts": {
+        "application": 1,
+        "gpu": 1,
+        "networking": 1,
+        "webContent": 1
+      },
+      "predicates": {
+        "completeChangedAcceptedFrame": true,
+        "acceptedLandPopulation": true,
+        "acceptedWaterPopulation": true,
+        "acceptedInkPopulation": true,
+        "disposablePreviewRejected": true,
+        "foregroundUninterrupted": true,
+        "acceptedAccessibilityState": true,
+        "exactFixtureReceipt": true,
+        "completionMembershipEqual": true,
+        "rssArithmeticValid": true,
+        "endpointCoverageValid": true,
+        "samplingCadenceValid": true
+      },
+      "retention": {
+        "status": "retained",
+        "artifactIdentifier": "issue94-qualification-fragmented-islands",
+        "byteLength": 83625,
+        "sha256": "f22e9e6f7b2d63e667dc88bab5d692d3fb3fce5e6fd92764a5c2d100e532e073",
+        "temporarySourceRemoved": true
+      }
+    },
+    {
+      "fixtureId": "milestone-2-atlas-control-max",
+      "fixtureDefinitionSha256": "d1d02723484d872e7ec75729084e57d6d9b65e8c4907cdec663491d67f669701",
+      "worldSeed": "16045690984503098046",
+      "controls": {
+        "worldCircumferenceKm": 80000,
+        "targetWaterCoveragePercent": 80,
+        "continentCountIntent": 8,
+        "continentDistribution": "oneDominant",
+        "fragmentationPercent": 100,
+        "islandAbundancePercent": 100,
+        "archipelagoAbundancePercent": 100,
+        "oceanConnectivity": "multipleBasins",
+        "polarCharacter": "oceanBiased"
+      },
+      "observerStatus": "valid",
+      "elapsedMilliseconds": 4860.737060546875,
+      "settledBaselineAggregateRssBytes": 397787136,
+      "peakAdditionalAggregateRssBytes": 440352768,
+      "sampleCount": 786,
+      "maximumSampleIntervalMilliseconds": 8.877,
+      "roleCounts": {
+        "application": 1,
+        "gpu": 1,
+        "networking": 1,
+        "webContent": 1
+      },
+      "predicates": {
+        "completeChangedAcceptedFrame": true,
+        "acceptedLandPopulation": true,
+        "acceptedWaterPopulation": true,
+        "acceptedInkPopulation": true,
+        "disposablePreviewRejected": true,
+        "foregroundUninterrupted": true,
+        "acceptedAccessibilityState": true,
+        "exactFixtureReceipt": true,
+        "completionMembershipEqual": true,
+        "rssArithmeticValid": true,
+        "endpointCoverageValid": true,
+        "samplingCadenceValid": true
+      },
+      "retention": {
+        "status": "retained",
+        "artifactIdentifier": "issue94-qualification-control-max",
+        "byteLength": 61779,
+        "sha256": "b195d559a186454f06fae2f8497589e76771e407e3b96fd45f46dbb0cea81393",
+        "temporarySourceRemoved": true
+      }
+    }
+  ],
+  "failClosedInvalidations": [
+    {
+      "invalidAuthority": "fixture",
+      "invalidReason": "exact registered fixture receipt was unavailable before measured dispatch",
+      "measurementConclusion": null,
+      "rawArtifactCreated": false
+    },
+    {
+      "invalidAuthority": "fixture",
+      "invalidReason": "expected exactly one packaged fixture receipt",
+      "measurementConclusion": null,
+      "rawArtifactCreated": false
+    },
+    {
+      "invalidAuthority": "fixture",
+      "invalidReason": "exact registered fixture receipt did not match the required pre-dispatch workflow phase",
+      "measurementConclusion": null,
+      "rawArtifactCreated": false
+    }
+  ],
+  "releaseBudgetConclusion": null,
+  "remainingReleaseWork": "Issue #95 must run the complete authorized release protocol and five-run matrix without changing fixtures, workloads, observer meaning, or limits."
+}

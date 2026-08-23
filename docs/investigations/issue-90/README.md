@@ -5,6 +5,11 @@ This directory implements the approved, target-host-only observer from
 It qualifies one coarse-preview observation as `valid` or `invalid`; it does not run, pass, fail,
 or replace the five-run release gate from issue #84.
 
+The bounded successor for accepted full-atlas first-paint and exact packaged-fixture qualification
+is documented in the [issue #94 observer evidence](../issue-94/README.md). It reuses this observer's
+host, process-tree, identity, RSS, sampling, and privacy authorities without changing this coarse-
+preview predicate.
+
 ## Dispatch and observation method
 
 Set `VITE_PACKAGED_PREVIEW_OBSERVER_DISPATCH=1` only while building the packaged qualification
