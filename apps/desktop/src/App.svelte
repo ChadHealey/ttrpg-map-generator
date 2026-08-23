@@ -17,6 +17,13 @@
     requestProductionFullAtlas,
   } from './packaged-atlas-observer-dispatch.js';
   import {
+    installPackagedExportObserverDispatch,
+    PACKAGED_EXPORT_OBSERVER_RECEIPT_LABEL,
+    type PackagedExportObserverCompletion,
+    packagedExportObserverReceipt,
+    type PackagedExportObserverState,
+  } from './packaged-export-observer-dispatch.js';
+  import {
     installPackagedPreviewDispatch,
     requestProductionCoarsePreview,
   } from './packaged-preview-dispatch.js';
@@ -29,8 +36,11 @@
   let selectedEntityId = '';
   let targetPath = '';
   let observerFixtureId: GatedAtlasFixtureId | undefined;
+  let exportObserverCompletion: PackagedExportObserverCompletion | undefined;
   const packagedAtlasObserverEnabled =
     import.meta.env.VITE_PACKAGED_ATLAS_OBSERVER_DISPATCH === '1';
+  const packagedExportObserverEnabled =
+    import.meta.env.VITE_PACKAGED_EXPORT_OBSERVER_DISPATCH === '1';
 
   onMount(() => {
     const removePreviewDispatch = installPackagedPreviewDispatch(
@@ -46,9 +56,20 @@
       () => void preview(),
       () => void acceptFull(),
     );
+    const removeExportDispatch = installPackagedExportObserverDispatch(
+      window,
+      import.meta.env.VITE_PACKAGED_EXPORT_OBSERVER_DISPATCH === '1',
+      exportObserverState,
+      (exportTargetPath) => run(workflow.exportSvg(exportTargetPath)),
+      (exportTargetPath) => run(workflow.exportPng(exportTargetPath)),
+      (completion) => {
+        exportObserverCompletion = completion;
+      },
+    );
     return () => {
       removePreviewDispatch();
       removeAtlasDispatch();
+      removeExportDispatch();
     };
   });
 
@@ -69,6 +90,9 @@
           atlas.accepted === undefined ? undefined : String(atlas.accepted.document.worldSeed),
         acceptedControls: atlas.accepted?.geography.controls,
       })
+    : undefined;
+  $: exportObserverReceipt = packagedExportObserverEnabled
+    ? packagedExportObserverReceipt(exportObserverState(), exportObserverCompletion)
     : undefined;
 
   async function preview(): Promise<void> {
@@ -97,6 +121,31 @@
     seed = fixture.worldSeed;
     controls = { ...fixture.controls };
     observerFixtureId = fixture.fixtureId;
+  }
+
+  function exportObserverState(): PackagedExportObserverState {
+    return {
+      fixtureId: observerFixtureId,
+      worldSeed: seed,
+      controls,
+      workflowPhase: atlas.phase,
+      isBusy: atlas.isBusy,
+      hasPreview: atlas.preview !== undefined,
+      acceptedCheckpoint: atlas.acceptedCheckpoint,
+      acceptedIdentity: atlas.accepted,
+      acceptedWorldSeed:
+        atlas.accepted === undefined ? undefined : String(atlas.accepted.document.worldSeed),
+      acceptedControls: atlas.accepted?.geography.controls,
+      savedEvidence: atlas.savedEvidence,
+      reopenedEvidence: atlas.reopenedEvidence,
+      reopenComparison: atlas.reopenComparison,
+      savedManifestSha256: atlas.savedManifestSha256,
+      reopenedManifestSha256: atlas.reopenedManifestSha256,
+      reopenGenerationInvocationCount: atlas.reopenGenerationInvocationCount,
+      saveTargetPath: atlas.targetPath,
+      svgExportReceipt: atlas.svgExportReceipt,
+      pngExportReceipt: atlas.pngExportReceipt,
+    };
   }
 
   function discardPreview(): void {
@@ -181,6 +230,11 @@
   {#if observerReceipt !== undefined}
     <p aria-label={PACKAGED_ATLAS_OBSERVER_RECEIPT_LABEL} class="sr-only">
       {JSON.stringify(observerReceipt)}
+    </p>
+  {/if}
+  {#if exportObserverReceipt !== undefined}
+    <p aria-label={PACKAGED_EXPORT_OBSERVER_RECEIPT_LABEL} class="sr-only">
+      {JSON.stringify(exportObserverReceipt)}
     </p>
   {/if}
   <section aria-labelledby="app-title" class="proof-shell atlas-shell">
