@@ -1,0 +1,117 @@
+{
+  "schemaVersion": "issue-95-release-protocol-stop-evidence-v1",
+  "status": "stopped-observer-authority-drift-before-measured-dispatch",
+  "recordedAt": "2026-08-23",
+  "candidate": {
+    "startingCommit": "45f084dc06d18f62191aeca4dbc229cba0cf9938",
+    "integratedImplementationCommit": "4d65cdf7e405232687803a5b063647a0ce1d30d1",
+    "executableSha256": "c72e62f837cbe0d1aa8e3f90d075712349bd49763620ac2cb75ce1b9d5fdbeca",
+    "executableBytes": 10000528,
+    "architecture": "arm64",
+    "observerDispatchBuild": true
+  },
+  "host": {
+    "modelIdentifier": "Mac17,2",
+    "processor": "Apple M5",
+    "unifiedMemoryBytes": 25769803776,
+    "operatingSystemVersion": "26.5.1",
+    "operatingSystemBuild": "25F80",
+    "architecture": "arm64",
+    "powerConnected": true,
+    "lowPowerMode": false,
+    "accessibilityEnabled": true
+  },
+  "toolchain": {
+    "node": "24.11.0",
+    "pnpm": "11.19.0",
+    "rustc": "1.97.1",
+    "xcode": "26.4 (17E192)"
+  },
+  "compiledTools": {
+    "fullAtlasObserverSha256": "2a5a2eeb623bc529b6c1c225752bbce2095eb5c4d93de21aeb2a18f882305843",
+    "samplerSha256": "2d4d46a819d509b67ba5da63bf3c5098ebdadcc899e36f20740ed4573b8d93f2",
+    "retentionSha256": "1d81fd3e1a4c1a848df82606a1323426e9cb54976aa6605aab20baeeb474a4ce",
+    "usedForMeasurement": false
+  },
+  "privateRetention": {
+    "status": "ready-not-used",
+    "archiveMode": "0700",
+    "priorOpaqueQualificationArtifactCount": 3,
+    "archivePathPublished": false,
+    "newRawArtifacts": 0,
+    "archiveMutated": false
+  },
+  "stopDecision": {
+    "authority": "operation-specific-packaged-observer",
+    "reason": "The integrated candidate cannot produce all issue-required operation-specific receipts without changing observer authority: exact-fixture preview measurement, SVG/PNG success completion, and early/middle/late cancellation acknowledgement/aftermath authorities are absent.",
+    "repeatableValidProductFailure": false,
+    "measuredProductDispatches": 0,
+    "validMeasurements": 0,
+    "invalidMeasurementAttempts": 0,
+    "budgetConclusion": null
+  },
+  "authorityAudit": {
+    "preview": {
+      "status": "missing-exact-fixture-measurement-authority",
+      "approvedFirstPaintObserverExists": true,
+      "approvedExactFixtureReceiptExistsInSeparateFullObserver": true,
+      "approvedCombinedReceiptExists": false
+    },
+    "fullGeneration": {
+      "status": "qualified-not-run-after-global-stop",
+      "approvedExactFixtureFirstPaintObserverExists": true,
+      "priorQualificationIsReleaseMatrix": false
+    },
+    "svgPngCompletion": {
+      "status": "missing-packaged-completion-authority",
+      "automatedAtomicityAndDeterminismTestsExist": true,
+      "approvedPackagedTimingRssReceiptExists": false
+    },
+    "cancellation": {
+      "status": "missing-packaged-acknowledgement-aftermath-authority",
+      "automatedSafePointAndDeterministicAftermathTestsExist": true,
+      "approvedTargetHostLatencyReceiptExists": false
+    }
+  },
+  "protocolRows": {
+    "preview": "not-run-authority-drift",
+    "fullGeneration": "not-run-global-stop-before-first-measured-lane",
+    "svgExport": "not-run-authority-drift",
+    "pngExport": "not-run-authority-drift",
+    "destinationCeilingsAndReplacement": "not-run-on-packaged-candidate",
+    "previewCancellation": "not-run-authority-drift",
+    "fullGenerationCancellation": "not-run-authority-drift",
+    "svgCancellation": "not-run-authority-drift",
+    "pngCancellation": "not-run-authority-drift"
+  },
+  "verification": {
+    "previewObserverCore": "pass",
+    "fullAtlasObserverCore": "pass",
+    "privateRetention": "pass",
+    "focusedTypeScript": {
+      "status": "pass",
+      "files": 9,
+      "tests": 50
+    },
+    "crossPlatform": "pass",
+    "e2e": "pass",
+    "visual": "pass",
+    "pngExport": "pass",
+    "nativeRecovery": "pass",
+    "initialRepositoryCheck": "pass",
+    "finalEvidenceTreeCheck": "pass-recorded-in-branch-handoff",
+    "observerEnabledPackagedBuild": "pass"
+  },
+  "minimumChildSplit": {
+    "count": 4,
+    "children": [
+      "exact-fixture-packaged-preview-receipts",
+      "packaged-svg-png-success-completion",
+      "preview-full-cancellation-acknowledgement",
+      "svg-png-cancellation-acknowledgement"
+    ],
+    "githubMutated": false
+  },
+  "releaseProtocolPassed": false,
+  "issue95Result": "stopped-on-valid-observer-authority-blocker"
+}

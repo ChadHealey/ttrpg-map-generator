@@ -293,14 +293,14 @@ Power Mode off, no debugger/developer tools, and no network dependency. After on
 measure five fresh processes. Sample aggregate additional RSS for the complete application process
 tree at intervals no greater than 20 ms and report every run plus median and worst.
 
-| Operation                            | Fixed limit                                                                     | Required evidence status                                                                                           |
-| ------------------------------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| Coarse preview                       | ≤900 ms and ≤256 MiB additional process-tree RSS; report ≤750 ms stretch target | **PASS** — all 15 final fresh runs passed; worst time 809.40 ms, worst RSS 157.72 MiB                              |
-| Full generation                      | ≤10 s and ≤768 MiB additional process-tree RSS                                  | **INCOMPLETE** — issue #94 qualified the first-paint observer and all three gated fixtures; release matrix not run |
-| SVG export                           | ≤3 s, ≤512 MiB, destination ≤32 MiB                                             | **NOT RUN** — not rerun after the preview repair                                                                   |
-| PNG export                           | ≤15 s, ≤1 GiB, destination ≤64 MiB                                              | **NOT RUN** — not rerun after the preview repair                                                                   |
-| Preview cancellation                 | Acknowledgement ≤100 ms                                                         | **NOT RUN** — not rerun after the preview repair                                                                   |
-| Full-generation/SVG/PNG cancellation | Acknowledgement ≤500 ms                                                         | **NOT RUN** — not rerun after the preview repair                                                                   |
+| Operation                            | Fixed limit                                                                     | Required evidence status                                                               |
+| ------------------------------------ | ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| Coarse preview                       | ≤900 ms and ≤256 MiB additional process-tree RSS; report ≤750 ms stretch target | **PASS** — all 15 final fresh runs passed; worst time 809.40 ms, worst RSS 157.72 MiB  |
+| Full generation                      | ≤10 s and ≤768 MiB additional process-tree RSS                                  | **NOT RUN** — issue #95 stopped on observer-authority drift before measured dispatch   |
+| SVG export                           | ≤3 s, ≤512 MiB, destination ≤32 MiB                                             | **NOT RUN** — issue #95 confirmed no approved packaged completion authority            |
+| PNG export                           | ≤15 s, ≤1 GiB, destination ≤64 MiB                                              | **NOT RUN** — issue #95 confirmed no approved packaged completion authority            |
+| Preview cancellation                 | Acknowledgement ≤100 ms                                                         | **NOT RUN** — issue #95 confirmed no exact-fixture acknowledgement/aftermath authority |
+| Full-generation/SVG/PNG cancellation | Acknowledgement ≤500 ms                                                         | **NOT RUN** — issue #95 confirmed no packaged acknowledgement/aftermath authority      |
 
 ### Issue #84 partial full-generation rerun (2026-08-23)
 
@@ -370,6 +370,28 @@ point and verify no commit/replacement occurs after acknowledgement. The detaile
 unchanged acceptance meanings remain owned by the
 [atlas-proof contract](milestone-2-atlas-proof.md#performance-progress-cancellation-and-resource-budgets).
 
+### Issue #95 observer-authority stop (2026-08-23)
+
+Issue #95 audited and built the exact integrated #94 candidate at
+`45f084dc06d18f62191aeca4dbc229cba0cf9938`. Its observer-enabled packaged executable SHA-256 was
+`c72e62f837cbe0d1aa8e3f90d075712349bd49763620ac2cb75ce1b9d5fdbeca`, exactly matching #94's
+qualified binary. The named focused observer, deterministic generation, export, native recovery,
+visual, E2E, cancellation, cross-platform, root, and packaged-build gates passed.
+
+The hardware matrix stopped before measured dispatch because the integrated authorities cannot
+produce every receipt #95 requires without an observer change. The issue #90 preview observer does
+not prove gated fixture identity; the issue #94 observer proves exact fixture identity but samples
+and emits only full generation; and the candidate has no approved packaged SVG/PNG completion or
+early/middle/late cancellation acknowledgement/aftermath observer. Automated product checks remain
+valid but cannot substitute for target-host timing/RSS/acknowledgement evidence.
+
+No measured operation ran, so there are no valid observations, invalid attempts, medians, worst
+values, or budget failures to report. The approved private archive was ready, but no new raw
+artifact was created or retained. The complete sanitized authority audit, exact outcomes, tool
+hashes, gate results, commands, privacy status, and minimum four-child executable split are in the
+[issue #95 stop evidence](investigations/issue-95/release-protocol-2026-08-23/README.md). Issue #95
+did not pass; it stopped on the contract-required observer-authority blocker without repairing it.
+
 ## Remote CI and milestone state
 
 Issue #71 recorded fresh CI evidence for the exact remote release commit
@@ -393,8 +415,9 @@ rule that every included issue be closed or explicitly moved out.
 
 The final release owner must perform these actions in order:
 
-1. Use the issue #94 qualified first-paint observer and gated fixtures to run issue #95's complete
-   successor release protocol without changing its fixture, workload, observer meaning, or limits.
+1. Implement and qualify the four bounded observer-authority children recorded by issue #95, then
+   revalidate and rerun its complete successor protocol without changing fixtures, workload,
+   production behavior, hardware, or limits.
 2. Confirm this report names the exact tested implementation commit and the handoff names the
    documentation-only commit, with complete command results, packaged receipts, artifact hashes,
    and human visual review. Do not attribute costly gates to the documentation commit unless they
