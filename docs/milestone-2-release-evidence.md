@@ -392,6 +392,44 @@ hashes, gate results, commands, privacy status, and minimum four-child executabl
 [issue #95 stop evidence](investigations/issue-95/release-protocol-2026-08-23/README.md). Issue #95
 did not pass; it stopped on the contract-required observer-authority blocker without repairing it.
 
+### Issue #96 exact-fixture packaged-preview qualification (2026-08-23)
+
+Issue #96 added the bounded observer-only preview authority that issue #95 found missing, without
+changing production generation, fixtures, workload, hardware, budgets, or timeouts. The exact
+implementation candidate was `714be9b092a4780dd2ecb1e7e9c20684ea77edf7`; its observer-enabled
+packaged executable SHA-256 was
+`9e19555d1fbcdd7a72515c8a6c91400cf2f86a07e48ef95c29cd61947a4a2471`. Successful runs used
+observer SHA-256 `b99a95264b4bac7b3238dd463e698dc9b9ef576f72becb187059bda003f3a221`, sampler
+SHA-256 `131c6a94db91430dbd595f871c4a43e7890ae5f3ee2f92fc960739adb6f2ffed`, and retention
+SHA-256 `bbb64eb2e208bb72e590cacff0113c030c74190e3df1b4662dd82569726b85c4`.
+
+One fresh packaged process for each gated fixture produced a valid exact-fixture preview receipt on
+MacBook Pro `Mac17,2`, Apple M5, 24 GB, macOS 26.5.1 (`25F80`):
+
+| Fixture                                | Diagnostic elapsed | Diagnostic peak additional RSS | Max interval | Qualification |
+| -------------------------------------- | -----------------: | -----------------------------: | -----------: | ------------- |
+| `milestone-2-atlas-proof`              |          604.26 ms |                     118.42 MiB |     6.411 ms | **VALID**     |
+| `milestone-2-atlas-fragmented-islands` |          628.08 ms |                     125.69 MiB |     6.468 ms | **VALID**     |
+| `milestone-2-atlas-control-max`        |          701.72 ms |                     131.22 MiB |     9.256 ms | **VALID**     |
+
+Every receipt proves the exact checked-in fixture ID, seed, and all nine controls immediately
+before unchanged production preview dispatch; a complete changed 512 × 256 preview frame;
+uninterrupted foreground; final exact Accessibility state; one application, GPU, Networking, and
+WebContent process; completion membership equality; valid RSS arithmetic; endpoint coverage; and
+cadence. The three PID-bearing CSVs were retained privately, their temporary sources removed, and
+their opaque receipts recorded without publishing the archive path.
+
+Two proof-fixture pre-dispatch attempts failed closed on Accessibility readiness/traversal and
+created no sampler artifact or measurement. The successor walker now bounds unique elements, and
+the runbook treats initial WebKit Accessibility materialization as an unmeasured precondition rather
+than changing a timeout. Full sanitized receipts, invalidations, definition hashes, tool identities,
+retention status, and the privacy boundary are in the
+[issue #96 qualification evidence](investigations/issue-96/README.md).
+
+These observations qualify only the exact-fixture preview path. They do not replace issue #89's
+already passing preview release matrix, make a new release-budget conclusion, run issue #95's
+five-observation matrix, or qualify its still-missing export and cancellation authorities.
+
 ## Remote CI and milestone state
 
 Issue #71 recorded fresh CI evidence for the exact remote release commit
@@ -415,9 +453,9 @@ rule that every included issue be closed or explicitly moved out.
 
 The final release owner must perform these actions in order:
 
-1. Implement and qualify the four bounded observer-authority children recorded by issue #95, then
-   revalidate and rerun its complete successor protocol without changing fixtures, workload,
-   production behavior, hardware, or limits.
+1. Integrate issue #96 and implement and qualify the three remaining bounded observer-authority
+   children recorded by issue #95, then revalidate and rerun its complete successor protocol
+   without changing fixtures, workload, production behavior, hardware, or limits.
 2. Confirm this report names the exact tested implementation commit and the handoff names the
    documentation-only commit, with complete command results, packaged receipts, artifact hashes,
    and human visual review. Do not attribute costly gates to the documentation commit unless they

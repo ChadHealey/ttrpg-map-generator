@@ -601,6 +601,43 @@ the registered fixture authority, production actions, crop/palette predicate, co
 membership authority, retention behavior, host/build, or numeric release limits requires renewed
 review. The complete release protocol remains separate downstream work.
 
+### Approved exact-fixture packaged-preview qualification authority
+
+Issue #96 combines the approved preview first-paint boundary with the exact three-fixture authority
+without changing either production action or measurement meaning. It is pinned to the same MacBook
+Pro `Mac17,2`, Apple M5, 24-GB, macOS 26.5.1 (`25F80`) environment and inherits the process-tree,
+executable-identity, RSS, cadence, endpoint-coverage, private-retention, and fail-closed requirements
+above. It qualifies the path only; it does not run or decide the five-fresh-process release gate.
+
+- The observer-enabled atlas package may install a preview chord only alongside the existing exact
+  fixture handler. On that chord it synchronously revalidates the live fixture ID, canonical seed,
+  and complete nine-control record against the directly imported registered definition before it
+  delegates to the same `preview` action as **Generate coarse preview**. Unknown authority or any
+  live seed/control drift dispatches no preview. Ordinary packages install no atlas-observer
+  handler.
+- The operator may wait for the initial packaged Accessibility UI to materialize before observer
+  start. This is an unmeasured readiness precondition, not a changed timeout. The observer then
+  prepares the visible crop, configures the requested fixture, obtains stable membership and a
+  baseline frame, and parses the exact `configured` receipt immediately before measured dispatch.
+  From dispatch until the qualifying frame it performs no Accessibility traversal, scrolling,
+  reveal, pan, zoom, focus, framing, or other application action.
+- The existing preview-frame predicate remains unchanged: a complete post-dispatch `512 × 256`
+  frame must differ from baseline, retain uninterrupted foreground ownership, and contain bounded
+  populations of both production preview palette colors. Only after that frame qualifies may one
+  final bounded Accessibility snapshot prove the labelled disposable preview and caption, enabled
+  **Accept full atlas**, exact `preview` fixture receipt, and frontmost state. That snapshot's
+  completion remains the wall-clock and RSS endpoint.
+- Accessibility traversal is bounded by unique `CFEqual` elements so repeated WebKit nodes cannot
+  exhaust the limit or weaken exact-count checks. Every created PID-bearing CSV is handed
+  immediately to issue #91 retention. Public evidence retains only the approved sanitized fields;
+  retention failure invalidates the attempt and produces no measurement conclusion.
+
+The implementation, invalid attempts, exact target-host sequence, and one valid single-run receipt
+per gated fixture are recorded in the
+[issue #96 exact-fixture preview evidence](investigations/issue-96/README.md). Those observations
+make no release-budget conclusion and do not authorize issue #95's matrix until its other bounded
+observer-authority children are integrated.
+
 | Operation       | Fixed workload                                                                                | Wall-clock | Peak additional memory | Output-size ceiling       |
 | --------------- | --------------------------------------------------------------------------------------------- | ---------- | ---------------------- | ------------------------- |
 | Coarse preview  | dispatch through first fully painted labelled 512 × 256 effective preview                     | `900 ms`   | `256 MiB`              | not applicable            |
