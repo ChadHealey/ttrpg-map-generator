@@ -38,6 +38,7 @@ enum PreviewObserverInvalidation: Error, Equatable, CustomStringConvertible {
   case candidateNotFrontmost
   case capture(String)
   case dispatch(String)
+  case fixture(String)
   case host(String)
   case launchctl(String)
   case membershipChanged
@@ -52,6 +53,7 @@ enum PreviewObserverInvalidation: Error, Equatable, CustomStringConvertible {
     case .candidateNotFrontmost: "foreground"
     case .capture: "screen-capture"
     case .dispatch: "dispatch"
+    case .fixture: "fixture-receipt"
     case .host: "target-host"
     case .launchctl: "launchctl-membership"
     case .membershipChanged: "launchctl-membership"
@@ -68,6 +70,7 @@ enum PreviewObserverInvalidation: Error, Equatable, CustomStringConvertible {
     case .candidateNotFrontmost: "the packaged candidate did not remain frontmost"
     case .capture(let reason): reason
     case .dispatch(let reason): reason
+    case .fixture(let reason): reason
     case .host(let reason): reason
     case .launchctl(let reason): reason
     case .membershipChanged: "the required PID-domain/resource-coalition membership changed"

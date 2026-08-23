@@ -153,8 +153,8 @@ final class ForegroundMonitor: @unchecked Sendable {
 }
 
 final class AccessibilityObserver {
-  private let applicationPID: pid_t
-  private let application: AXUIElement
+  let applicationPID: pid_t
+  let application: AXUIElement
 
   init(applicationPID: pid_t) {
     self.applicationPID = applicationPID
@@ -228,7 +228,7 @@ final class AccessibilityObserver {
     )
   }
 
-  private func descendants(role: String) throws -> [AXUIElement] {
+  func descendants(role: String) throws -> [AXUIElement] {
     var result: [AXUIElement] = []
     var pending: [AXUIElement] = [application]
     var visited = 0
@@ -244,7 +244,7 @@ final class AccessibilityObserver {
     return result
   }
 
-  private func label(of element: AXUIElement) throws -> String {
+  func label(of element: AXUIElement) throws -> String {
     for attribute in [kAXTitleAttribute, kAXDescriptionAttribute, kAXValueAttribute] {
       if let value = try? string(element, attribute: attribute), !value.isEmpty { return value }
     }
@@ -267,14 +267,14 @@ final class AccessibilityObserver {
     return CGRect(origin: point, size: size)
   }
 
-  private func string(_ element: AXUIElement, attribute: String) throws -> String {
+  func string(_ element: AXUIElement, attribute: String) throws -> String {
     guard let result: String = try value(element, attribute: attribute) else {
       throw PreviewObserverInvalidation.accessibility("missing string attribute")
     }
     return result
   }
 
-  private func boolean(_ element: AXUIElement, attribute: String) throws -> Bool {
+  func boolean(_ element: AXUIElement, attribute: String) throws -> Bool {
     guard let result: Bool = try value(element, attribute: attribute) else {
       throw PreviewObserverInvalidation.accessibility("missing boolean attribute")
     }

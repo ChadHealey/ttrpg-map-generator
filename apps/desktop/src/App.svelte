@@ -9,6 +9,14 @@
   } from './atlas-workflow.js';
   import AtlasWorkflowEvidencePanel from './AtlasWorkflowEvidencePanel.svelte';
   import {
+    type GatedAtlasFixture,
+    type GatedAtlasFixtureId,
+    installPackagedAtlasObserverDispatch,
+    PACKAGED_ATLAS_OBSERVER_RECEIPT_LABEL,
+    packagedAtlasObserverReceipt,
+    requestProductionFullAtlas,
+  } from './packaged-atlas-observer-dispatch.js';
+  import {
     installPackagedPreviewDispatch,
     requestProductionCoarsePreview,
   } from './packaged-preview-dispatch.js';
@@ -16,24 +24,51 @@
 
   const workflow = new AtlasWorkflow();
   let atlas = workflow.snapshot;
-  let seed = MILESTONE_TWO_ATLAS_PROOF_SEED;
+  let seed: string = MILESTONE_TWO_ATLAS_PROOF_SEED;
   let controls: AtlasControls = { ...DEFAULT_ATLAS_CONTROLS };
   let selectedEntityId = '';
   let targetPath = '';
+  let observerFixtureId: GatedAtlasFixtureId | undefined;
+  const packagedAtlasObserverEnabled =
+    import.meta.env.VITE_PACKAGED_ATLAS_OBSERVER_DISPATCH === '1';
 
-  onMount(() =>
-    installPackagedPreviewDispatch(
+  onMount(() => {
+    const removePreviewDispatch = installPackagedPreviewDispatch(
       window,
-      import.meta.env.VITE_PACKAGED_PREVIEW_OBSERVER_DISPATCH === '1',
+      import.meta.env.VITE_PACKAGED_PREVIEW_OBSERVER_DISPATCH === '1' ||
+        packagedAtlasObserverEnabled,
       () => void preview(),
-    ),
-  );
+    );
+    const removeAtlasDispatch = installPackagedAtlasObserverDispatch(
+      window,
+      packagedAtlasObserverEnabled,
+      configureObserverFixture,
+      () => void acceptFull(),
+    );
+    return () => {
+      removePreviewDispatch();
+      removeAtlasDispatch();
+    };
+  });
 
   $: controlsAreAccepted = sameControls(controls, atlas.controls);
   $: editingIsEnabled = isAtlasEditingPhase(atlas.phase) && !atlas.isBusy;
   $: selectedEntity =
     atlas.inspectionEntities.find(({ entityId }) => entityId === selectedEntityId) ??
     atlas.inspectionEntities[0];
+  $: observerReceipt = packagedAtlasObserverEnabled
+    ? packagedAtlasObserverReceipt(observerFixtureId, seed, controls, {
+        workflowPhase: atlas.phase,
+        isBusy: atlas.isBusy,
+        hasPreview: atlas.preview !== undefined,
+        hasAcceptedAtlas: atlas.accepted !== undefined,
+        acceptedCheckpoint: atlas.acceptedCheckpoint,
+        sceneKind: atlas.scene?.sceneKind,
+        acceptedWorldSeed:
+          atlas.accepted === undefined ? undefined : String(atlas.accepted.document.worldSeed),
+        acceptedControls: atlas.accepted?.geography.controls,
+      })
+    : undefined;
 
   async function preview(): Promise<void> {
     await requestProductionCoarsePreview(
@@ -45,7 +80,22 @@
   }
 
   async function acceptFull(): Promise<void> {
-    await run(workflow.acceptFull(seed, controls));
+    await requestProductionFullAtlas(() => workflow.acceptFull(seed, controls), run);
+  }
+
+  function configureObserverFixture(fixture: GatedAtlasFixture): void {
+    if (
+      atlas.isBusy ||
+      atlas.phase !== 'empty' ||
+      atlas.preview !== undefined ||
+      atlas.accepted !== undefined
+    ) {
+      observerFixtureId = undefined;
+      return;
+    }
+    seed = fixture.worldSeed;
+    controls = { ...fixture.controls };
+    observerFixtureId = fixture.fixtureId;
   }
 
   function discardPreview(): void {
@@ -127,6 +177,11 @@
 >
 
 <main>
+  {#if observerReceipt !== undefined}
+    <p aria-label={PACKAGED_ATLAS_OBSERVER_RECEIPT_LABEL} class="sr-only">
+      {JSON.stringify(observerReceipt)}
+    </p>
+  {/if}
   <section aria-labelledby="app-title" class="proof-shell atlas-shell">
     <header class="hero">
       <div>

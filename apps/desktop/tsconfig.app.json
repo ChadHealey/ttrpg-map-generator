@@ -11,5 +11,12 @@
     "allowArbitraryExtensions": true,
     "moduleDetection": "force"
   },
-  "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.js",
+    "src/**/*.svelte",
+    "../../fixtures/fixed-seeds/milestone-2-atlas-control-max/fixture-definition.json",
+    "../../fixtures/fixed-seeds/milestone-2-atlas-fragmented-islands/fixture-definition.json",
+    "../../fixtures/fixed-seeds/milestone-2-atlas-proof/fixture-definition.json"
+  ]
 }
