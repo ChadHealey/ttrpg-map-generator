@@ -9,9 +9,11 @@ five-fresh-process release matrix.
 
 Build the candidate with both `VITE_PACKAGED_ATLAS_OBSERVER_DISPATCH=1` and
 `VITE_PACKAGED_EXPORT_OBSERVER_DISPATCH=1`. The first flag retains issue #96's exact three-fixture
-setup plus issue #94's unchanged preview/full actions. The second installs only two additional
+setup plus issue #94's unchanged preview/full actions. The second installs only three additional
 chords:
 
+- Command-Control-Option-R sequences the unchanged reviewed geography/appearance rerolls, save,
+  unload, and generator-free reopen after an exact accepted-baseline and private save-target check;
 - Command-Control-Option-V invokes the existing `AtlasWorkflow.exportSvg` method; and
 - Command-Control-Option-N invokes the existing `AtlasWorkflow.exportPng` method.
 
@@ -26,7 +28,8 @@ length, platform, and existing ceiling.
 
 Preparation uses the unchanged production controls and actions: exact-fixture selection, preview,
 full acceptance, both reviewed rerolls, save, unload, and reopen. The observer sets one fresh
-private `.mapworld` destination through the existing labelled input and presses the existing
+private `.mapworld` destination through the existing labelled input, then the observer-only
+preparation chord calls those existing workflow methods in the same order as their production
 buttons. Export targets are fixed private siblings of that saved package and are passed through the
 already supported production target parameter; no renderer, serializer, rasterizer, native writer,
 fixture, schema, dimension, ceiling, workload, budget, timeout, or production UI changes.
@@ -135,6 +138,13 @@ retention receipt are secured.
 Target-host qualification is recorded after the exact implementation commit is built and the six
 required single-run observations complete. These are diagnostic authority qualifications only;
 they make no SVG/PNG release-budget conclusion and do not run issue #95's matrix.
+
+One proof/SVG preparation attempt on the initial observer implementation became non-progressing
+before native save. A filesystem-only check proved that no package, stale export destination,
+sampler CSV, or measured export dispatch existed. The process was stopped, the required SVG trial
+remained unconsumed, and the successor moved the same unchanged lifecycle actions behind one
+exact-baseline observer chord with bounded low-frequency receipt polling. There is no timing, RSS,
+retention, or release conclusion for that invalid pre-dispatch harness attempt.
 
 ## Privacy
 

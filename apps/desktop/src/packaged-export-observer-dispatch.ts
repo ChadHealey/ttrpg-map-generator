@@ -130,11 +130,18 @@ export function packagedExportDispatch(
   return undefined;
 }
 
+export function isPackagedReopenPreparationDispatch(
+  event: ExportObserverDispatchKeyEvent,
+): boolean {
+  return hasExactObserverModifiers(event) && event.code === 'KeyR';
+}
+
 /** Installs only the two success-dispatch chords authorized for observer-enabled packages. */
 export function installPackagedExportObserverDispatch(
   target: EventTarget,
   enabled: boolean,
   currentState: () => PackagedExportObserverState,
+  prepareReopened: () => Promise<unknown>,
   exportSvg: (targetPath: string) => Promise<unknown>,
   exportPng: (targetPath: string) => Promise<unknown>,
   recordCompletion: (completion: PackagedExportObserverCompletion | undefined) => void,
@@ -143,6 +150,12 @@ export function installPackagedExportObserverDispatch(
   let dispatchSequence = 0;
   const listener = (rawEvent: Event): void => {
     const event = rawEvent as KeyboardEvent;
+    if (isPackagedReopenPreparationDispatch(event)) {
+      event.preventDefault();
+      recordCompletion(undefined);
+      void requestExactFixtureReopen(currentState(), prepareReopened);
+      return;
+    }
     const format = packagedExportDispatch(event);
     if (format === undefined) return;
     event.preventDefault();
@@ -162,6 +175,19 @@ export function installPackagedExportObserverDispatch(
     dispatchSequence += 1;
     target.removeEventListener('keydown', listener);
   };
+}
+
+export async function requestExactFixtureReopen(
+  state: PackagedExportObserverState,
+  prepareReopened: () => Promise<unknown>,
+): Promise<boolean> {
+  if (!acceptedFixtureAuthority(state)) return false;
+  try {
+    await prepareReopened();
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export async function requestExactFixtureExport(
@@ -287,6 +313,36 @@ function reopenedAuthority(state: PackagedExportObserverState): ReopenedAuthorit
     manifestSha256: state.reopenedManifestSha256,
     saveTargetPath: state.saveTargetPath,
   };
+}
+
+function acceptedFixtureAuthority(state: PackagedExportObserverState): boolean {
+  if (
+    state.fixtureId === undefined ||
+    state.workflowPhase !== 'accepted' ||
+    state.isBusy ||
+    state.hasPreview ||
+    state.acceptedCheckpoint !== 'baseline' ||
+    state.acceptedIdentity === undefined ||
+    state.acceptedWorldSeed === undefined ||
+    state.acceptedControls === undefined ||
+    state.savedEvidence !== undefined ||
+    state.reopenedEvidence !== undefined ||
+    state.reopenComparison !== undefined ||
+    state.savedManifestSha256 !== undefined ||
+    state.reopenedManifestSha256 !== undefined ||
+    state.reopenGenerationInvocationCount !== undefined ||
+    exportTargetPath(state.saveTargetPath, 'svg') === undefined ||
+    exportTargetPath(state.saveTargetPath, 'png') === undefined
+  ) {
+    return false;
+  }
+  const fixture = gatedAtlasFixture(state.fixtureId);
+  return (
+    state.worldSeed === fixture.worldSeed &&
+    state.acceptedWorldSeed === fixture.worldSeed &&
+    sameControls(state.controls, fixture.controls) &&
+    sameControls(state.acceptedControls, fixture.controls)
+  );
 }
 
 function exportCompletion(

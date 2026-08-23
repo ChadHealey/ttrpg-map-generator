@@ -5,16 +5,18 @@ import appSource from './App.svelte?raw';
 import {
   exportTargetPath,
   installPackagedExportObserverDispatch,
+  isPackagedReopenPreparationDispatch,
   packagedExportDispatch,
   packagedExportObserverReceipt,
   type PackagedExportObserverState,
   requestExactFixtureExport,
+  requestExactFixtureReopen,
 } from './packaged-export-observer-dispatch.js';
 
 describe('packaged export observer dispatch', () => {
   it('wires observer-only SVG and PNG dispatch to unchanged workflow exports', () => {
     expect(appSource).toMatch(
-      /installPackagedExportObserverDispatch\([\s\S]*?VITE_PACKAGED_EXPORT_OBSERVER_DISPATCH[\s\S]*?workflow\.exportSvg\(exportTargetPath\)[\s\S]*?workflow\.exportPng\(exportTargetPath\)[\s\S]*?\)/u,
+      /installPackagedExportObserverDispatch\([\s\S]*?VITE_PACKAGED_EXPORT_OBSERVER_DISPATCH[\s\S]*?prepareExportObserverReopenedAtlas[\s\S]*?workflow\.exportSvg\(exportTargetPath\)[\s\S]*?workflow\.exportPng\(exportTargetPath\)[\s\S]*?\)/u,
     );
     expect(appSource).toMatch(
       /async function exportSvg\(\): Promise<void> \{[\s\S]*?workflow\.exportSvg\(\)/u,
@@ -32,6 +34,10 @@ describe('packaged export observer dispatch', () => {
     expect(packagedExportDispatch(dispatchShape('KeyV', { metaKey: false }))).toBeUndefined();
     expect(packagedExportDispatch(dispatchShape('KeyN', { repeat: true }))).toBeUndefined();
     expect(packagedExportDispatch(dispatchShape('KeyP'))).toBeUndefined();
+    expect(isPackagedReopenPreparationDispatch(dispatchShape('KeyR'))).toBe(true);
+    expect(isPackagedReopenPreparationDispatch(dispatchShape('KeyR', { ctrlKey: false }))).toBe(
+      false,
+    );
   });
 
   it('has no dispatch or receipt effect in an ordinary build', async () => {
@@ -43,6 +49,7 @@ describe('packaged export observer dispatch', () => {
       target,
       false,
       () => reopenedState(),
+      () => Promise.resolve(undefined),
       exportSvg,
       exportPng,
       completion,
@@ -56,6 +63,23 @@ describe('packaged export observer dispatch', () => {
     expect(exportSvg).not.toHaveBeenCalled();
     expect(exportPng).not.toHaveBeenCalled();
     expect(completion).not.toHaveBeenCalled();
+  });
+
+  it('delegates exact accepted baseline preparation to unchanged lifecycle actions', async () => {
+    const prepare = vi.fn(() => Promise.resolve(undefined));
+
+    await expect(requestExactFixtureReopen(acceptedState(), prepare)).resolves.toBe(true);
+    expect(prepare).toHaveBeenCalledOnce();
+    for (const candidate of [
+      acceptedState({ worldSeed: '1' }),
+      acceptedState({ workflowPhase: 'preview' }),
+      acceptedState({ isBusy: true }),
+      acceptedState({ acceptedCheckpoint: 'geography-rerolled' }),
+      acceptedState({ saveTargetPath: 'relative.mapworld' }),
+    ]) {
+      await expect(requestExactFixtureReopen(candidate, prepare)).resolves.toBe(false);
+    }
+    expect(prepare).toHaveBeenCalledOnce();
   });
 
   it('derives private sibling destinations without accepting malformed save targets', () => {
@@ -203,6 +227,7 @@ describe('packaged export observer dispatch', () => {
       target,
       true,
       () => current,
+      () => Promise.resolve(undefined),
       exportSvg,
       () => Promise.resolve(undefined),
       record,
@@ -244,6 +269,23 @@ function reopenedState(
     saveTargetPath: '/private/tmp/issue97/atlas.mapworld',
     svgExportReceipt: undefined,
     pngExportReceipt: undefined,
+    ...overrides,
+  };
+}
+
+function acceptedState(
+  overrides: Partial<PackagedExportObserverState> = {},
+): PackagedExportObserverState {
+  return {
+    ...reopenedState(),
+    workflowPhase: 'accepted',
+    acceptedCheckpoint: 'baseline',
+    savedEvidence: undefined,
+    reopenedEvidence: undefined,
+    reopenComparison: undefined,
+    savedManifestSha256: undefined,
+    reopenedManifestSha256: undefined,
+    reopenGenerationInvocationCount: undefined,
     ...overrides,
   };
 }

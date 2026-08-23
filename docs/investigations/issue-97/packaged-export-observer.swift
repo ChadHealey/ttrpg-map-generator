@@ -301,25 +301,12 @@ enum PackagedExportObserver {
       attempts: 30_000
     )
 
-    try await waitForButton(accessibility, title: "Preview geography reroll", attempts: 1_000)
-    try accessibility.issue97PressEnabledButton("Preview geography reroll")
-    try await waitForButton(accessibility, title: "Commit reviewed reroll", attempts: 1_000)
-    try accessibility.issue97PressEnabledButton("Commit reviewed reroll")
-    try await waitForButton(accessibility, title: "Preview appearance reroll", attempts: 30_000)
-    try accessibility.issue97PressEnabledButton("Preview appearance reroll")
-    try await waitForButton(accessibility, title: "Commit reviewed reroll", attempts: 1_000)
-    try accessibility.issue97PressEnabledButton("Commit reviewed reroll")
-    try await waitToSetSaveTarget(accessibility, targetPath: packagePath, attempts: 30_000)
-    try await waitForButton(accessibility, title: "Save accepted .mapworld", attempts: 1_000)
-    try accessibility.issue97PressEnabledButton("Save accepted .mapworld")
-    try await waitForButton(accessibility, title: "Unload accepted atlas", attempts: 30_000)
-    try accessibility.issue97PressEnabledButton("Unload accepted atlas")
-    try await waitForButton(accessibility, title: "Reopen saved atlas", attempts: 1_000)
-    try accessibility.issue97PressEnabledButton("Reopen saved atlas")
+    try await waitToSetSaveTarget(accessibility, targetPath: packagePath, attempts: 1_200)
+    try postObserverDispatch(keyCode: 15, to: targetPID)
     _ = try await waitForReopenedReceipt(
       accessibility,
       definition: fixtureDefinition,
-      attempts: 30_000
+      attempts: 1_200
     )
   }
 
@@ -334,7 +321,7 @@ enum PackagedExportObserver {
         expectedDefinition: definition,
         expectedPhase: phase
       ) { return receipt }
-      try await Task.sleep(nanoseconds: 10_000_000)
+      try await Task.sleep(nanoseconds: 250_000_000)
     }
     throw PreviewObserverInvalidation.fixture(
       "the exact packaged fixture receipt did not reach the required preparation phase")
@@ -351,23 +338,10 @@ enum PackagedExportObserver {
           text,
           expectedDefinition: definition
         ) { return receipt }
-      try await Task.sleep(nanoseconds: 10_000_000)
+      try await Task.sleep(nanoseconds: 250_000_000)
     }
     throw ExportObserverInvalidation.state(
       "the exact generator-free reopened receipt did not become complete")
-  }
-
-  private static func waitForButton(
-    _ accessibility: AccessibilityObserver,
-    title: String,
-    attempts: Int
-  ) async throws {
-    for _ in 0..<attempts {
-      if (try? accessibility.issue97ButtonEnabled(title)) == true { return }
-      try await Task.sleep(nanoseconds: 10_000_000)
-    }
-    throw PreviewObserverInvalidation.accessibility(
-      "the required unchanged production action did not become enabled")
   }
 
   private static func waitToSetSaveTarget(
@@ -377,7 +351,7 @@ enum PackagedExportObserver {
   ) async throws {
     for _ in 0..<attempts {
       if (try? accessibility.issue97SetSaveTarget(targetPath)) != nil { return }
-      try await Task.sleep(nanoseconds: 10_000_000)
+      try await Task.sleep(nanoseconds: 250_000_000)
     }
     throw PreviewObserverInvalidation.accessibility(
       "the unchanged production save target did not become writable after appearance acceptance")

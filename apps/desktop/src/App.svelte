@@ -60,6 +60,7 @@
       window,
       import.meta.env.VITE_PACKAGED_EXPORT_OBSERVER_DISPATCH === '1',
       exportObserverState,
+      prepareExportObserverReopenedAtlas,
       (exportTargetPath) => run(workflow.exportSvg(exportTargetPath)),
       (exportTargetPath) => run(workflow.exportPng(exportTargetPath)),
       (completion) => {
@@ -142,10 +143,21 @@
       savedManifestSha256: atlas.savedManifestSha256,
       reopenedManifestSha256: atlas.reopenedManifestSha256,
       reopenGenerationInvocationCount: atlas.reopenGenerationInvocationCount,
-      saveTargetPath: atlas.targetPath,
+      saveTargetPath: atlas.targetPath.length === 0 ? targetPath : atlas.targetPath,
       svgExportReceipt: atlas.svgExportReceipt,
       pngExportReceipt: atlas.pngExportReceipt,
     };
+  }
+
+  async function prepareExportObserverReopenedAtlas(): Promise<void> {
+    if (!packagedExportObserverEnabled) return;
+    planReroll('geography');
+    await commitReroll();
+    planReroll('appearance');
+    await commitReroll();
+    await save();
+    close();
+    await reopen();
   }
 
   function discardPreview(): void {
