@@ -1,0 +1,1238 @@
+{
+  "schemaVersion": "issue-84-release-protocol-partial-evidence-v1",
+  "status": "invalid-full-generation-endpoint-and-blocked-before-control-max-observation",
+  "measuredAt": "2026-08-23",
+  "candidate": {
+    "commit": "1e11b5f2887e12d6629603dae0c5dec0e854cd6d",
+    "executableSha256": "0327af7dcc5ab794e0d3f191a89bb62dcde60f5c985c7a56cb5acc944c4fa548",
+    "executableBytes": 10000528,
+    "observerDispatchBuild": true
+  },
+  "host": {
+    "model": "MacBook Pro",
+    "modelIdentifier": "Mac17,2",
+    "chip": "Apple M5",
+    "cores": 10,
+    "memoryGiB": 24,
+    "osVersion": "26.5.1",
+    "osBuild": "25F80",
+    "powerSource": "AC",
+    "lowPowerMode": false
+  },
+  "toolchain": {
+    "node": "24.11.0",
+    "pnpm": "11.19.0",
+    "rustc": "1.97.1",
+    "xcode": "26.4 (17E192)"
+  },
+  "authorities": {
+    "observerVersion": "packaged-preview-observer-v2",
+    "observerSha256": "334f789791f919f368095227ee2853d0cb54c4bfea8949f904e4ae8fc970d2dc",
+    "samplerSha256": "17b1b2ccdd693c3ab569e322b95d64d97f1bc2621c2930ea8e469d0124f9fbe5",
+    "retentionSha256": "d0a74202644360e645c866cb48c735c22a4338536ec4f8bdf1e92a62b8318db2",
+    "membershipCheckSha256": "0ab35fdc9da392cd25312826e998a1eea6fb93350385308cf860ab21d74ba5d4",
+    "rssValidatorSha256": "4000b50cd492293becffc6cd306319dcae41f487cbe6cb48c747721fac226eb3",
+    "runOneSha256": "366a5b8b5f20af789d573fe10f9ef47be91662c273ca59e4947ceb37a3be2b32",
+    "runFullSha256": "92aa5802a7b5a3aee143a5c96b74ec0e5a38e27d7e07c0520b57be32f35162b8",
+    "acceptFullJxaSha256": "8bdfecd8c9bb426b354b44d9f46016fd340658be761facac4de1bace8a9df348",
+    "fixtureConfigurationSha256": "da50bf4eddae0c9fbe1d7268ddf899a51fc002d92108067c9dd69d7cdc32cde1"
+  },
+  "limits": {
+    "fullElapsedMilliseconds": 10000,
+    "fullPeakAdditionalRssBytes": 805306368,
+    "maximumSampleIntervalMilliseconds": 20
+  },
+  "repositoryGate": {
+    "command": "corepack pnpm check",
+    "status": "pass",
+    "typescriptJavascript": {
+      "filesPassed": 72,
+      "testsPassed": 553,
+      "testsSkipped": 1
+    },
+    "semanticRetention": {
+      "testsPassed": 1
+    },
+    "rust": {
+      "testsPassed": 52
+    }
+  },
+  "packagedBuild": {
+    "command": "VITE_PACKAGED_PREVIEW_OBSERVER_DISPATCH=1 corepack pnpm --filter @ttrpg-map/desktop tauri build --bundles app --no-sign --ci",
+    "status": "pass"
+  },
+  "focusedCandidateChecks": {
+    "status": "not-run",
+    "commands": [
+      "corepack pnpm test:cross-platform",
+      "corepack pnpm test:native-recovery",
+      "corepack pnpm test:e2e",
+      "corepack pnpm test:visual",
+      "corepack pnpm test:png-export"
+    ]
+  },
+  "measurementCommandRecord": {
+    "status": "unavailable",
+    "missing": [
+      "preview observer invocation",
+      "fixture setup invocation",
+      "full-generation dispatch invocation",
+      "RSS sampler invocation",
+      "RSS validation invocation",
+      "membership revalidation invocation",
+      "private retention invocation"
+    ],
+    "effect": "The retained tool hashes and raw-artifact receipts do not satisfy the issue-required exact command record."
+  },
+  "fullGeneration": {
+    "warmup": {
+      "result": {
+        "runId": "issue84-final-full-warmup-final",
+        "fixture": "milestone-2-atlas-proof",
+        "kind": "untimed-warmup",
+        "status": "invalid",
+        "invalidAuthority": "accepted-atlas-first-paint",
+        "invalidReason": "The Accessibility endpoint did not establish the first fully painted accepted full atlas.",
+        "budgetConclusion": null,
+        "elapsedMilliseconds": 5195,
+        "baselineAggregateRssBytes": 351453184,
+        "peakAggregateRssBytes": 825327616,
+        "peakAdditionalRssBytes": 473874432,
+        "perProcessPeakRssBytes": {
+          "application": 112328704,
+          "gpu": 48168960,
+          "networking": 15745024,
+          "webContent": 649101312
+        },
+        "sampleCount": 847,
+        "maximumSampleIntervalMilliseconds": 6.483154296875,
+        "acceptedAccessibilityReceipt": true,
+        "membershipRevalidated": true
+      },
+      "previewQualification": {
+        "accessibility": {
+          "acceptFullEnabled": true,
+          "disposableCaption": true,
+          "frontmost": true,
+          "previewLabel": true
+        },
+        "executableIdentity": {
+          "candidateSha256": "0327af7dcc5ab794e0d3f191a89bb62dcde60f5c985c7a56cb5acc944c4fa548",
+          "samplerSha256": "17b1b2ccdd693c3ab569e322b95d64d97f1bc2621c2930ea8e469d0124f9fbe5"
+        },
+        "measurement": {
+          "baselineAggregateRSSBytes": 224804864,
+          "elapsedMilliseconds": 765.18310546875,
+          "maximumSampleIntervalMilliseconds": 6.408203125,
+          "peakAdditionalRSSBytes": 127549440,
+          "sampleCount": 126
+        },
+        "membershipRevalidated": true,
+        "observerVersion": "packaged-preview-observer-v2",
+        "roleCounts": {
+          "application": 1,
+          "gpu": 1,
+          "networking": 1,
+          "webContent": 1
+        },
+        "status": "valid",
+        "target": {
+          "memoryGiB": 24,
+          "model": "Mac17,2",
+          "osBuild": "25F80",
+          "osVersion": "26.5.1"
+        },
+        "visual": {
+          "changedCanvasCrop": true,
+          "completePostDispatchFrame": true,
+          "cropPixels": "512x256",
+          "foregroundIntact": true,
+          "landPaletteBounded": true,
+          "waterPaletteBounded": true
+        }
+      },
+      "previewRawArtifact": {
+        "artifactIdentifier": "issue84-final-full-warmup-final-preview",
+        "byteLength": 18224,
+        "sha256": "e02ba16b6ff6158a7d0d96c519851f56d901e54c6300210ddca9f952feb3d3c9",
+        "status": "retained",
+        "version": "private-preview-rss-retention-v1"
+      },
+      "fullRawArtifact": {
+        "artifactIdentifier": "issue84-final-full-warmup-final-full",
+        "byteLength": 68709,
+        "sha256": "d4d581dbf2298edd0dd80325613df962dba8d25b7bc30f29693bd3feb426ea7a",
+        "status": "retained",
+        "version": "private-preview-rss-retention-v1"
+      }
+    },
+    "freshProcessAttempts": [
+      {
+        "result": {
+          "runId": "issue84-final-full-proof-1",
+          "fixture": "milestone-2-atlas-proof",
+          "kind": "fresh-process",
+          "status": "invalid",
+          "invalidAuthority": "accepted-atlas-first-paint",
+          "invalidReason": "The Accessibility endpoint did not establish the first fully painted accepted full atlas.",
+          "budgetConclusion": null,
+          "elapsedMilliseconds": 5120,
+          "baselineAggregateRssBytes": 355926016,
+          "peakAggregateRssBytes": 823459840,
+          "peakAdditionalRssBytes": 467533824,
+          "perProcessPeakRssBytes": {
+            "application": 112197632,
+            "gpu": 48726016,
+            "networking": 15876096,
+            "webContent": 646791168
+          },
+          "sampleCount": 834,
+          "maximumSampleIntervalMilliseconds": 8.02,
+          "acceptedAccessibilityReceipt": true,
+          "membershipRevalidated": true
+        },
+        "previewQualification": {
+          "accessibility": {
+            "acceptFullEnabled": true,
+            "disposableCaption": true,
+            "frontmost": true,
+            "previewLabel": true
+          },
+          "executableIdentity": {
+            "candidateSha256": "0327af7dcc5ab794e0d3f191a89bb62dcde60f5c985c7a56cb5acc944c4fa548",
+            "samplerSha256": "17b1b2ccdd693c3ab569e322b95d64d97f1bc2621c2930ea8e469d0124f9fbe5"
+          },
+          "measurement": {
+            "baselineAggregateRSSBytes": 224509952,
+            "elapsedMilliseconds": 761.39697265625,
+            "maximumSampleIntervalMilliseconds": 6.451,
+            "peakAdditionalRSSBytes": 131481600,
+            "sampleCount": 124
+          },
+          "membershipRevalidated": true,
+          "observerVersion": "packaged-preview-observer-v2",
+          "roleCounts": {
+            "application": 1,
+            "gpu": 1,
+            "networking": 1,
+            "webContent": 1
+          },
+          "status": "valid",
+          "target": {
+            "memoryGiB": 24,
+            "model": "Mac17,2",
+            "osBuild": "25F80",
+            "osVersion": "26.5.1"
+          },
+          "visual": {
+            "changedCanvasCrop": true,
+            "completePostDispatchFrame": true,
+            "cropPixels": "512x256",
+            "foregroundIntact": true,
+            "landPaletteBounded": true,
+            "waterPaletteBounded": true
+          }
+        },
+        "previewRawArtifact": {
+          "artifactIdentifier": "issue84-final-full-proof-1-preview",
+          "byteLength": 18092,
+          "sha256": "3151a25363a37cbc2aa5e9ac793ac58e5d6c920452bccab78069a97878906553",
+          "status": "retained",
+          "version": "private-preview-rss-retention-v1"
+        },
+        "fullRawArtifact": {
+          "artifactIdentifier": "issue84-final-full-proof-1-full",
+          "byteLength": 67455,
+          "sha256": "761aa3d09fc891d452d68c0b7143e8fc04067c02dcc7120954ebb6d8407ebf3a",
+          "status": "retained",
+          "version": "private-preview-rss-retention-v1"
+        }
+      },
+      {
+        "result": {
+          "runId": "issue84-final-full-proof-2",
+          "fixture": "milestone-2-atlas-proof",
+          "kind": "fresh-process",
+          "status": "invalid",
+          "invalidAuthority": "accepted-atlas-first-paint",
+          "invalidReason": "The Accessibility endpoint did not establish the first fully painted accepted full atlas.",
+          "budgetConclusion": null,
+          "elapsedMilliseconds": 5106,
+          "baselineAggregateRssBytes": 352174080,
+          "peakAggregateRssBytes": 812924928,
+          "peakAdditionalRssBytes": 460750848,
+          "perProcessPeakRssBytes": {
+            "application": 112476160,
+            "gpu": 50872320,
+            "networking": 15958016,
+            "webContent": 633683968
+          },
+          "sampleCount": 832,
+          "maximumSampleIntervalMilliseconds": 6.38,
+          "acceptedAccessibilityReceipt": true,
+          "membershipRevalidated": true
+        },
+        "previewQualification": {
+          "accessibility": {
+            "acceptFullEnabled": true,
+            "disposableCaption": true,
+            "frontmost": true,
+            "previewLabel": true
+          },
+          "executableIdentity": {
+            "candidateSha256": "0327af7dcc5ab794e0d3f191a89bb62dcde60f5c985c7a56cb5acc944c4fa548",
+            "samplerSha256": "17b1b2ccdd693c3ab569e322b95d64d97f1bc2621c2930ea8e469d0124f9fbe5"
+          },
+          "measurement": {
+            "baselineAggregateRSSBytes": 225083392,
+            "elapsedMilliseconds": 771.030029296875,
+            "maximumSampleIntervalMilliseconds": 6.4169921875,
+            "peakAdditionalRSSBytes": 127188992,
+            "sampleCount": 126
+          },
+          "membershipRevalidated": true,
+          "observerVersion": "packaged-preview-observer-v2",
+          "roleCounts": {
+            "application": 1,
+            "gpu": 1,
+            "networking": 1,
+            "webContent": 1
+          },
+          "status": "valid",
+          "target": {
+            "memoryGiB": 24,
+            "model": "Mac17,2",
+            "osBuild": "25F80",
+            "osVersion": "26.5.1"
+          },
+          "visual": {
+            "changedCanvasCrop": true,
+            "completePostDispatchFrame": true,
+            "cropPixels": "512x256",
+            "foregroundIntact": true,
+            "landPaletteBounded": true,
+            "waterPaletteBounded": true
+          }
+        },
+        "previewRawArtifact": {
+          "artifactIdentifier": "issue84-final-full-proof-2-preview",
+          "byteLength": 18351,
+          "sha256": "23370fdaa090d9b21d6eeadb8e451e89376772c2a8321a71861c0a2b2ce41133",
+          "status": "retained",
+          "version": "private-preview-rss-retention-v1"
+        },
+        "fullRawArtifact": {
+          "artifactIdentifier": "issue84-final-full-proof-2-full",
+          "byteLength": 67323,
+          "sha256": "d0ad203edd9073c26776140710071241c70533e1836e9f06477acd7314ac92f6",
+          "status": "retained",
+          "version": "private-preview-rss-retention-v1"
+        }
+      },
+      {
+        "result": {
+          "runId": "issue84-final-full-proof-3",
+          "fixture": "milestone-2-atlas-proof",
+          "kind": "fresh-process",
+          "status": "invalid",
+          "invalidAuthority": "accepted-atlas-first-paint",
+          "invalidReason": "The Accessibility endpoint did not establish the first fully painted accepted full atlas.",
+          "budgetConclusion": null,
+          "elapsedMilliseconds": 5129,
+          "baselineAggregateRssBytes": 346177536,
+          "peakAggregateRssBytes": 807419904,
+          "peakAdditionalRssBytes": 461242368,
+          "perProcessPeakRssBytes": {
+            "application": 112640000,
+            "gpu": 51036160,
+            "networking": 15515648,
+            "webContent": 628391936
+          },
+          "sampleCount": 835,
+          "maximumSampleIntervalMilliseconds": 8.33,
+          "acceptedAccessibilityReceipt": true,
+          "membershipRevalidated": true
+        },
+        "previewQualification": {
+          "accessibility": {
+            "acceptFullEnabled": true,
+            "disposableCaption": true,
+            "frontmost": true,
+            "previewLabel": true
+          },
+          "executableIdentity": {
+            "candidateSha256": "0327af7dcc5ab794e0d3f191a89bb62dcde60f5c985c7a56cb5acc944c4fa548",
+            "samplerSha256": "17b1b2ccdd693c3ab569e322b95d64d97f1bc2621c2930ea8e469d0124f9fbe5"
+          },
+          "measurement": {
+            "baselineAggregateRSSBytes": 225067008,
+            "elapsedMilliseconds": 778.954833984375,
+            "maximumSampleIntervalMilliseconds": 6.635986328125,
+            "peakAdditionalRSSBytes": 121225216,
+            "sampleCount": 128
+          },
+          "membershipRevalidated": true,
+          "observerVersion": "packaged-preview-observer-v2",
+          "roleCounts": {
+            "application": 1,
+            "gpu": 1,
+            "networking": 1,
+            "webContent": 1
+          },
+          "status": "valid",
+          "target": {
+            "memoryGiB": 24,
+            "model": "Mac17,2",
+            "osBuild": "25F80",
+            "osVersion": "26.5.1"
+          },
+          "visual": {
+            "changedCanvasCrop": true,
+            "completePostDispatchFrame": true,
+            "cropPixels": "512x256",
+            "foregroundIntact": true,
+            "landPaletteBounded": true,
+            "waterPaletteBounded": true
+          }
+        },
+        "previewRawArtifact": {
+          "artifactIdentifier": "issue84-final-full-proof-3-preview",
+          "byteLength": 18617,
+          "sha256": "c7969e2b1943b6c52619f3623baeda39a7b20b91d91c6147bf0193ce4d165d4f",
+          "status": "retained",
+          "version": "private-preview-rss-retention-v1"
+        },
+        "fullRawArtifact": {
+          "artifactIdentifier": "issue84-final-full-proof-3-full",
+          "byteLength": 67653,
+          "sha256": "e20be21050715640e3e109744c878d3559a1d764c190aafef60c117b87e4fe1f",
+          "status": "retained",
+          "version": "private-preview-rss-retention-v1"
+        }
+      },
+      {
+        "result": {
+          "runId": "issue84-final-full-proof-4",
+          "fixture": "milestone-2-atlas-proof",
+          "kind": "fresh-process",
+          "status": "invalid",
+          "invalidAuthority": "accepted-atlas-first-paint",
+          "invalidReason": "The Accessibility endpoint did not establish the first fully painted accepted full atlas.",
+          "budgetConclusion": null,
+          "elapsedMilliseconds": 5138,
+          "baselineAggregateRssBytes": 348749824,
+          "peakAggregateRssBytes": 810516480,
+          "peakAdditionalRssBytes": 461766656,
+          "perProcessPeakRssBytes": {
+            "application": 112656384,
+            "gpu": 48332800,
+            "networking": 15712256,
+            "webContent": 633864192
+          },
+          "sampleCount": 838,
+          "maximumSampleIntervalMilliseconds": 6.379,
+          "acceptedAccessibilityReceipt": true,
+          "membershipRevalidated": true
+        },
+        "previewQualification": {
+          "accessibility": {
+            "acceptFullEnabled": true,
+            "disposableCaption": true,
+            "frontmost": true,
+            "previewLabel": true
+          },
+          "executableIdentity": {
+            "candidateSha256": "0327af7dcc5ab794e0d3f191a89bb62dcde60f5c985c7a56cb5acc944c4fa548",
+            "samplerSha256": "17b1b2ccdd693c3ab569e322b95d64d97f1bc2621c2930ea8e469d0124f9fbe5"
+          },
+          "measurement": {
+            "baselineAggregateRSSBytes": 224772096,
+            "elapsedMilliseconds": 732.514892578125,
+            "maximumSampleIntervalMilliseconds": 6.39,
+            "peakAdditionalRSSBytes": 124076032,
+            "sampleCount": 120
+          },
+          "membershipRevalidated": true,
+          "observerVersion": "packaged-preview-observer-v2",
+          "roleCounts": {
+            "application": 1,
+            "gpu": 1,
+            "networking": 1,
+            "webContent": 1
+          },
+          "status": "valid",
+          "target": {
+            "memoryGiB": 24,
+            "model": "Mac17,2",
+            "osBuild": "25F80",
+            "osVersion": "26.5.1"
+          },
+          "visual": {
+            "changedCanvasCrop": true,
+            "completePostDispatchFrame": true,
+            "cropPixels": "512x256",
+            "foregroundIntact": true,
+            "landPaletteBounded": true,
+            "waterPaletteBounded": true
+          }
+        },
+        "previewRawArtifact": {
+          "artifactIdentifier": "issue84-final-full-proof-4-preview",
+          "byteLength": 17893,
+          "sha256": "212a30ad45c5ec3f4580cd84614fc96094f1abda924497ac27bdd0932b6396ef",
+          "status": "retained",
+          "version": "private-preview-rss-retention-v1"
+        },
+        "fullRawArtifact": {
+          "artifactIdentifier": "issue84-final-full-proof-4-full",
+          "byteLength": 67785,
+          "sha256": "efa097b3742aad0ba10c628d32ba5532bc1acb9a1578af479f90d29ba0ce9540",
+          "status": "retained",
+          "version": "private-preview-rss-retention-v1"
+        }
+      },
+      {
+        "result": {
+          "runId": "issue84-final-full-proof-5",
+          "fixture": "milestone-2-atlas-proof",
+          "kind": "fresh-process",
+          "status": "invalid",
+          "invalidAuthority": "accepted-atlas-first-paint",
+          "invalidReason": "The Accessibility endpoint did not establish the first fully painted accepted full atlas.",
+          "budgetConclusion": null,
+          "elapsedMilliseconds": 5152,
+          "baselineAggregateRssBytes": 346652672,
+          "peakAggregateRssBytes": 811515904,
+          "peakAdditionalRssBytes": 464863232,
+          "perProcessPeakRssBytes": {
+            "application": 112754688,
+            "gpu": 48365568,
+            "networking": 15695872,
+            "webContent": 634748928
+          },
+          "sampleCount": 836,
+          "maximumSampleIntervalMilliseconds": 6.43,
+          "acceptedAccessibilityReceipt": true,
+          "membershipRevalidated": true
+        },
+        "previewQualification": {
+          "accessibility": {
+            "acceptFullEnabled": true,
+            "disposableCaption": true,
+            "frontmost": true,
+            "previewLabel": true
+          },
+          "executableIdentity": {
+            "candidateSha256": "0327af7dcc5ab794e0d3f191a89bb62dcde60f5c985c7a56cb5acc944c4fa548",
+            "samplerSha256": "17b1b2ccdd693c3ab569e322b95d64d97f1bc2621c2930ea8e469d0124f9fbe5"
+          },
+          "measurement": {
+            "baselineAggregateRSSBytes": 224935936,
+            "elapsedMilliseconds": 739.06591796875,
+            "maximumSampleIntervalMilliseconds": 6.381103515625,
+            "peakAdditionalRSSBytes": 121765888,
+            "sampleCount": 121
+          },
+          "membershipRevalidated": true,
+          "observerVersion": "packaged-preview-observer-v2",
+          "roleCounts": {
+            "application": 1,
+            "gpu": 1,
+            "networking": 1,
+            "webContent": 1
+          },
+          "status": "valid",
+          "target": {
+            "memoryGiB": 24,
+            "model": "Mac17,2",
+            "osBuild": "25F80",
+            "osVersion": "26.5.1"
+          },
+          "visual": {
+            "changedCanvasCrop": true,
+            "completePostDispatchFrame": true,
+            "cropPixels": "512x256",
+            "foregroundIntact": true,
+            "landPaletteBounded": true,
+            "waterPaletteBounded": true
+          }
+        },
+        "previewRawArtifact": {
+          "artifactIdentifier": "issue84-final-full-proof-5-preview",
+          "byteLength": 17958,
+          "sha256": "b933f018881eeec9d279ea441e0e8ad4365442f06a38fc3c577de7682d3ef26f",
+          "status": "retained",
+          "version": "private-preview-rss-retention-v1"
+        },
+        "fullRawArtifact": {
+          "artifactIdentifier": "issue84-final-full-proof-5-full",
+          "byteLength": 67587,
+          "sha256": "61fb0c3724ebbe441a6119b7f05515d187cab6ce04ebcb088ecd0cde6d965789",
+          "status": "retained",
+          "version": "private-preview-rss-retention-v1"
+        }
+      },
+      {
+        "result": {
+          "runId": "issue84-final-full-fragmented-1",
+          "fixture": "milestone-2-atlas-fragmented-islands",
+          "kind": "fresh-process",
+          "status": "invalid",
+          "invalidAuthority": "accepted-atlas-first-paint",
+          "invalidReason": "The Accessibility endpoint did not establish the first fully painted accepted full atlas.",
+          "budgetConclusion": null,
+          "elapsedMilliseconds": 6441,
+          "baselineAggregateRssBytes": 398786560,
+          "peakAggregateRssBytes": 835862528,
+          "peakAdditionalRssBytes": 437075968,
+          "perProcessPeakRssBytes": {
+            "application": 121716736,
+            "gpu": 49283072,
+            "networking": 15630336,
+            "webContent": 649428992
+          },
+          "sampleCount": 1050,
+          "maximumSampleIntervalMilliseconds": 6.400146484375,
+          "acceptedAccessibilityReceipt": true,
+          "membershipRevalidated": true
+        },
+        "previewQualification": {
+          "accessibility": {
+            "acceptFullEnabled": true,
+            "disposableCaption": true,
+            "frontmost": true,
+            "previewLabel": true
+          },
+          "executableIdentity": {
+            "candidateSha256": "0327af7dcc5ab794e0d3f191a89bb62dcde60f5c985c7a56cb5acc944c4fa548",
+            "samplerSha256": "17b1b2ccdd693c3ab569e322b95d64d97f1bc2621c2930ea8e469d0124f9fbe5"
+          },
+          "measurement": {
+            "baselineAggregateRSSBytes": 235667456,
+            "elapsedMilliseconds": 782.3642578125,
+            "maximumSampleIntervalMilliseconds": 6.64599609375,
+            "peakAdditionalRSSBytes": 163217408,
+            "sampleCount": 127
+          },
+          "membershipRevalidated": true,
+          "observerVersion": "packaged-preview-observer-v2",
+          "roleCounts": {
+            "application": 1,
+            "gpu": 1,
+            "networking": 1,
+            "webContent": 1
+          },
+          "status": "valid",
+          "target": {
+            "memoryGiB": 24,
+            "model": "Mac17,2",
+            "osBuild": "25F80",
+            "osVersion": "26.5.1"
+          },
+          "visual": {
+            "changedCanvasCrop": true,
+            "completePostDispatchFrame": true,
+            "cropPixels": "512x256",
+            "foregroundIntact": true,
+            "landPaletteBounded": true,
+            "waterPaletteBounded": true
+          }
+        },
+        "previewRawArtifact": {
+          "artifactIdentifier": "issue84-final-full-fragmented-1-preview",
+          "byteLength": 18288,
+          "sha256": "8dd8202811ec8c81ca07a6391070e3edda279c424faf58d9839d1ee86269738f",
+          "status": "retained",
+          "version": "private-preview-rss-retention-v1"
+        },
+        "fullRawArtifact": {
+          "artifactIdentifier": "issue84-final-full-fragmented-1-full",
+          "byteLength": 81711,
+          "sha256": "b19c4200cf45a95f2108de2196cf7e0b9bdb09cc0a72ad9aa66981bbddf52ab5",
+          "status": "retained",
+          "version": "private-preview-rss-retention-v1"
+        }
+      },
+      {
+        "result": {
+          "runId": "issue84-final-full-fragmented-2",
+          "fixture": "milestone-2-atlas-fragmented-islands",
+          "kind": "fresh-process",
+          "status": "invalid",
+          "invalidAuthority": "accepted-atlas-first-paint",
+          "invalidReason": "The Accessibility endpoint did not establish the first fully painted accepted full atlas.",
+          "budgetConclusion": null,
+          "elapsedMilliseconds": 6393,
+          "baselineAggregateRssBytes": 399048704,
+          "peakAggregateRssBytes": 857948160,
+          "peakAdditionalRssBytes": 458899456,
+          "perProcessPeakRssBytes": {
+            "application": 121962496,
+            "gpu": 53575680,
+            "networking": 15728640,
+            "webContent": 666828800
+          },
+          "sampleCount": 1041,
+          "maximumSampleIntervalMilliseconds": 8.47216796875,
+          "acceptedAccessibilityReceipt": true,
+          "membershipRevalidated": true
+        },
+        "previewQualification": {
+          "accessibility": {
+            "acceptFullEnabled": true,
+            "disposableCaption": true,
+            "frontmost": true,
+            "previewLabel": true
+          },
+          "executableIdentity": {
+            "candidateSha256": "0327af7dcc5ab794e0d3f191a89bb62dcde60f5c985c7a56cb5acc944c4fa548",
+            "samplerSha256": "17b1b2ccdd693c3ab569e322b95d64d97f1bc2621c2930ea8e469d0124f9fbe5"
+          },
+          "measurement": {
+            "baselineAggregateRSSBytes": 236060672,
+            "elapsedMilliseconds": 777.91796875,
+            "maximumSampleIntervalMilliseconds": 6.672,
+            "peakAdditionalRSSBytes": 163069952,
+            "sampleCount": 128
+          },
+          "membershipRevalidated": true,
+          "observerVersion": "packaged-preview-observer-v2",
+          "roleCounts": {
+            "application": 1,
+            "gpu": 1,
+            "networking": 1,
+            "webContent": 1
+          },
+          "status": "valid",
+          "target": {
+            "memoryGiB": 24,
+            "model": "Mac17,2",
+            "osBuild": "25F80",
+            "osVersion": "26.5.1"
+          },
+          "visual": {
+            "changedCanvasCrop": true,
+            "completePostDispatchFrame": true,
+            "cropPixels": "512x256",
+            "foregroundIntact": true,
+            "landPaletteBounded": true,
+            "waterPaletteBounded": true
+          }
+        },
+        "previewRawArtifact": {
+          "artifactIdentifier": "issue84-final-full-fragmented-2-preview",
+          "byteLength": 18158,
+          "sha256": "930de7b0c5d1a2d48bc47a2b027d79d56d6f52b4d4adca733d7b1abd4c6e608e",
+          "status": "retained",
+          "version": "private-preview-rss-retention-v1"
+        },
+        "fullRawArtifact": {
+          "artifactIdentifier": "issue84-final-full-fragmented-2-full",
+          "byteLength": 81183,
+          "sha256": "c87a256b60f214dd1e75d62dde815a31714e5c823fd8422fe397050e01299a4f",
+          "status": "retained",
+          "version": "private-preview-rss-retention-v1"
+        }
+      },
+      {
+        "result": {
+          "runId": "issue84-final-full-fragmented-3-retry",
+          "fixture": "milestone-2-atlas-fragmented-islands",
+          "kind": "fresh-process",
+          "status": "invalid",
+          "invalidAuthority": "accepted-atlas-first-paint",
+          "invalidReason": "The Accessibility endpoint did not establish the first fully painted accepted full atlas.",
+          "budgetConclusion": null,
+          "elapsedMilliseconds": 6371,
+          "baselineAggregateRssBytes": 398966784,
+          "peakAggregateRssBytes": 832831488,
+          "peakAdditionalRssBytes": 433864704,
+          "perProcessPeakRssBytes": {
+            "application": 121995264,
+            "gpu": 49889280,
+            "networking": 15663104,
+            "webContent": 645644288
+          },
+          "sampleCount": 1039,
+          "maximumSampleIntervalMilliseconds": 6.47900390625,
+          "acceptedAccessibilityReceipt": true,
+          "membershipRevalidated": true
+        },
+        "previewQualification": {
+          "accessibility": {
+            "acceptFullEnabled": true,
+            "disposableCaption": true,
+            "frontmost": true,
+            "previewLabel": true
+          },
+          "executableIdentity": {
+            "candidateSha256": "0327af7dcc5ab794e0d3f191a89bb62dcde60f5c985c7a56cb5acc944c4fa548",
+            "samplerSha256": "17b1b2ccdd693c3ab569e322b95d64d97f1bc2621c2930ea8e469d0124f9fbe5"
+          },
+          "measurement": {
+            "baselineAggregateRSSBytes": 235782144,
+            "elapsedMilliseconds": 769.486328125,
+            "maximumSampleIntervalMilliseconds": 6.4,
+            "peakAdditionalRSSBytes": 163299328,
+            "sampleCount": 125
+          },
+          "membershipRevalidated": true,
+          "observerVersion": "packaged-preview-observer-v2",
+          "roleCounts": {
+            "application": 1,
+            "gpu": 1,
+            "networking": 1,
+            "webContent": 1
+          },
+          "status": "valid",
+          "target": {
+            "memoryGiB": 24,
+            "model": "Mac17,2",
+            "osBuild": "25F80",
+            "osVersion": "26.5.1"
+          },
+          "visual": {
+            "changedCanvasCrop": true,
+            "completePostDispatchFrame": true,
+            "cropPixels": "512x256",
+            "foregroundIntact": true,
+            "landPaletteBounded": true,
+            "waterPaletteBounded": true
+          }
+        },
+        "previewRawArtifact": {
+          "artifactIdentifier": "issue84-final-full-fragmented-3-retry-preview",
+          "byteLength": 18157,
+          "sha256": "1bd570703babd9d054a715c8364a5e5d3d46f26183b670f3cb40e8d0436ad6dc",
+          "status": "retained",
+          "version": "private-preview-rss-retention-v1"
+        },
+        "fullRawArtifact": {
+          "artifactIdentifier": "issue84-final-full-fragmented-3-retry-full",
+          "byteLength": 81051,
+          "sha256": "9979ae29bcee0165d32a3ed3ce9154098b44fbf4fe0ef3a357dd4f84e630b792",
+          "status": "retained",
+          "version": "private-preview-rss-retention-v1"
+        }
+      },
+      {
+        "result": {
+          "runId": "issue84-final-full-fragmented-4",
+          "fixture": "milestone-2-atlas-fragmented-islands",
+          "kind": "fresh-process",
+          "status": "invalid",
+          "invalidAuthority": "accepted-atlas-first-paint",
+          "invalidReason": "The Accessibility endpoint did not establish the first fully painted accepted full atlas.",
+          "budgetConclusion": null,
+          "elapsedMilliseconds": 6390,
+          "baselineAggregateRssBytes": 399458304,
+          "peakAggregateRssBytes": 837599232,
+          "peakAdditionalRssBytes": 438140928,
+          "perProcessPeakRssBytes": {
+            "application": 122322944,
+            "gpu": 49381376,
+            "networking": 15450112,
+            "webContent": 650559488
+          },
+          "sampleCount": 1041,
+          "maximumSampleIntervalMilliseconds": 6.409,
+          "acceptedAccessibilityReceipt": true,
+          "membershipRevalidated": true
+        },
+        "previewQualification": {
+          "accessibility": {
+            "acceptFullEnabled": true,
+            "disposableCaption": true,
+            "frontmost": true,
+            "previewLabel": true
+          },
+          "executableIdentity": {
+            "candidateSha256": "0327af7dcc5ab794e0d3f191a89bb62dcde60f5c985c7a56cb5acc944c4fa548",
+            "samplerSha256": "17b1b2ccdd693c3ab569e322b95d64d97f1bc2621c2930ea8e469d0124f9fbe5"
+          },
+          "measurement": {
+            "baselineAggregateRSSBytes": 235667456,
+            "elapsedMilliseconds": 777.75,
+            "maximumSampleIntervalMilliseconds": 6.445068359375,
+            "peakAdditionalRSSBytes": 163872768,
+            "sampleCount": 128
+          },
+          "membershipRevalidated": true,
+          "observerVersion": "packaged-preview-observer-v2",
+          "roleCounts": {
+            "application": 1,
+            "gpu": 1,
+            "networking": 1,
+            "webContent": 1
+          },
+          "status": "valid",
+          "target": {
+            "memoryGiB": 24,
+            "model": "Mac17,2",
+            "osBuild": "25F80",
+            "osVersion": "26.5.1"
+          },
+          "visual": {
+            "changedCanvasCrop": true,
+            "completePostDispatchFrame": true,
+            "cropPixels": "512x256",
+            "foregroundIntact": true,
+            "landPaletteBounded": true,
+            "waterPaletteBounded": true
+          }
+        },
+        "previewRawArtifact": {
+          "artifactIdentifier": "issue84-final-full-fragmented-4-preview",
+          "byteLength": 18353,
+          "sha256": "ebe23144ece337ca52ab4b3eecf96cafe8c95c2cf8ef1b99354b03bda3bcb772",
+          "status": "retained",
+          "version": "private-preview-rss-retention-v1"
+        },
+        "fullRawArtifact": {
+          "artifactIdentifier": "issue84-final-full-fragmented-4-full",
+          "byteLength": 81249,
+          "sha256": "46a0faf423ff99967277908381e5be0f98bf8d718b1810634b2f7ad45ad38785",
+          "status": "retained",
+          "version": "private-preview-rss-retention-v1"
+        }
+      },
+      {
+        "result": {
+          "runId": "issue84-final-full-fragmented-5",
+          "fixture": "milestone-2-atlas-fragmented-islands",
+          "kind": "fresh-process",
+          "status": "invalid",
+          "invalidAuthority": "accepted-atlas-first-paint",
+          "invalidReason": "The Accessibility endpoint did not establish the first fully painted accepted full atlas.",
+          "budgetConclusion": null,
+          "elapsedMilliseconds": 6379,
+          "baselineAggregateRssBytes": 398639104,
+          "peakAggregateRssBytes": 833536000,
+          "peakAdditionalRssBytes": 434896896,
+          "perProcessPeakRssBytes": {
+            "application": 122077184,
+            "gpu": 49643520,
+            "networking": 15335424,
+            "webContent": 646643712
+          },
+          "sampleCount": 1039,
+          "maximumSampleIntervalMilliseconds": 8.605,
+          "acceptedAccessibilityReceipt": true,
+          "membershipRevalidated": true
+        },
+        "previewQualification": {
+          "accessibility": {
+            "acceptFullEnabled": true,
+            "disposableCaption": true,
+            "frontmost": true,
+            "previewLabel": true
+          },
+          "executableIdentity": {
+            "candidateSha256": "0327af7dcc5ab794e0d3f191a89bb62dcde60f5c985c7a56cb5acc944c4fa548",
+            "samplerSha256": "17b1b2ccdd693c3ab569e322b95d64d97f1bc2621c2930ea8e469d0124f9fbe5"
+          },
+          "measurement": {
+            "baselineAggregateRSSBytes": 236077056,
+            "elapsedMilliseconds": 770.202880859375,
+            "maximumSampleIntervalMilliseconds": 10.64111328125,
+            "peakAdditionalRSSBytes": 162676736,
+            "sampleCount": 125
+          },
+          "membershipRevalidated": true,
+          "observerVersion": "packaged-preview-observer-v2",
+          "roleCounts": {
+            "application": 1,
+            "gpu": 1,
+            "networking": 1,
+            "webContent": 1
+          },
+          "status": "valid",
+          "target": {
+            "memoryGiB": 24,
+            "model": "Mac17,2",
+            "osBuild": "25F80",
+            "osVersion": "26.5.1"
+          },
+          "visual": {
+            "changedCanvasCrop": true,
+            "completePostDispatchFrame": true,
+            "cropPixels": "512x256",
+            "foregroundIntact": true,
+            "landPaletteBounded": true,
+            "waterPaletteBounded": true
+          }
+        },
+        "previewRawArtifact": {
+          "artifactIdentifier": "issue84-final-full-fragmented-5-preview",
+          "byteLength": 18026,
+          "sha256": "ed103c7c10907ba114718a7da36ad2ce2f3df72fd66c749729a8ca8f906113c5",
+          "status": "retained",
+          "version": "private-preview-rss-retention-v1"
+        },
+        "fullRawArtifact": {
+          "artifactIdentifier": "issue84-final-full-fragmented-5-full",
+          "byteLength": 81051,
+          "sha256": "2f87913b53ff5e7f3f4e908d9204c77ca75f308f731e3f71321485b5a6b956fb",
+          "status": "retained",
+          "version": "private-preview-rss-retention-v1"
+        }
+      }
+    ],
+    "fixtureSummaries": {
+      "milestone-2-atlas-proof": {
+        "status": "invalid-first-paint-unobserved",
+        "retainedFreshProcessAttempts": 5,
+        "validFreshProcessRuns": 0,
+        "diagnosticMedianElapsedMilliseconds": 5129,
+        "diagnosticWorstElapsedMilliseconds": 5152,
+        "diagnosticMedianPeakAdditionalRssBytes": 461766656,
+        "diagnosticWorstPeakAdditionalRssBytes": 467533824,
+        "budgetConclusion": null
+      },
+      "milestone-2-atlas-fragmented-islands": {
+        "status": "invalid-first-paint-unobserved",
+        "retainedFreshProcessAttempts": 5,
+        "validFreshProcessRuns": 0,
+        "diagnosticMedianElapsedMilliseconds": 6390,
+        "diagnosticWorstElapsedMilliseconds": 6441,
+        "diagnosticMedianPeakAdditionalRssBytes": 437075968,
+        "diagnosticWorstPeakAdditionalRssBytes": 458899456,
+        "budgetConclusion": null
+      },
+      "milestone-2-atlas-control-max": {
+        "status": "not-run",
+        "validFreshProcessRuns": 0
+      }
+    },
+    "invalidAttempts": [
+      {
+        "id": "issue84-final-full-fragmented-3",
+        "status": "invalid",
+        "invalidAuthority": "rss-sampler",
+        "invalidReason": "maximum sampled interval was 25.579 ms, above the 20 ms authority limit",
+        "budgetConclusion": null,
+        "previewQualification": {
+          "accessibility": {
+            "acceptFullEnabled": true,
+            "disposableCaption": true,
+            "frontmost": true,
+            "previewLabel": true
+          },
+          "executableIdentity": {
+            "candidateSha256": "0327af7dcc5ab794e0d3f191a89bb62dcde60f5c985c7a56cb5acc944c4fa548",
+            "samplerSha256": "17b1b2ccdd693c3ab569e322b95d64d97f1bc2621c2930ea8e469d0124f9fbe5"
+          },
+          "measurement": {
+            "baselineAggregateRSSBytes": 239484928,
+            "elapsedMilliseconds": 781.357177734375,
+            "maximumSampleIntervalMilliseconds": 6.431,
+            "peakAdditionalRSSBytes": 136200192,
+            "sampleCount": 127
+          },
+          "membershipRevalidated": true,
+          "observerVersion": "packaged-preview-observer-v2",
+          "roleCounts": {
+            "application": 1,
+            "gpu": 1,
+            "networking": 1,
+            "webContent": 1
+          },
+          "status": "valid",
+          "target": {
+            "memoryGiB": 24,
+            "model": "Mac17,2",
+            "osBuild": "25F80",
+            "osVersion": "26.5.1"
+          },
+          "visual": {
+            "changedCanvasCrop": true,
+            "completePostDispatchFrame": true,
+            "cropPixels": "512x256",
+            "foregroundIntact": true,
+            "landPaletteBounded": true,
+            "waterPaletteBounded": true
+          }
+        },
+        "previewRawArtifact": {
+          "artifactIdentifier": "issue84-final-full-fragmented-3-preview",
+          "byteLength": 18550,
+          "sha256": "7a6832b2852eb60cfb3bb2df655d4050a1434c2d28ff3ad47602b99cc97f8564",
+          "status": "retained",
+          "version": "private-preview-rss-retention-v1"
+        },
+        "fullRawArtifact": {
+          "artifactIdentifier": "issue84-final-full-fragmented-3-invalid-cadence",
+          "byteLength": 80061,
+          "sha256": "195320912862a962cae1a742be1c98a7f315dc3f1e60f9f6dbe1912dd6c5bef4",
+          "status": "retained",
+          "version": "private-preview-rss-retention-v1"
+        }
+      }
+    ]
+  },
+  "warmupHarnessInvalidations": [
+    {
+      "id": "issue84-final-full-warmup-invalid-window",
+      "status": "invalid",
+      "observerReceipt": {
+        "invalidAuthority": "screen-capture",
+        "invalidReason": "expected exactly one on-screen layer-zero candidate window",
+        "membershipRevalidated": false,
+        "observerVersion": "packaged-preview-observer-v2",
+        "status": "invalid",
+        "target": {
+          "memoryGiB": 24,
+          "model": "Mac17,2",
+          "osBuild": "25F80",
+          "osVersion": "26.5.1"
+        }
+      },
+      "rawArtifact": null,
+      "fullOperationDispatched": false
+    },
+    {
+      "id": "issue84-final-full-warmup-invalid-ax-clock",
+      "status": "invalid",
+      "invalidAuthority": "accessibility-harness",
+      "invalidReason": "the AppleScript clock failed before the full-generation dispatch",
+      "previewQualification": {
+        "accessibility": {
+          "acceptFullEnabled": true,
+          "disposableCaption": true,
+          "frontmost": true,
+          "previewLabel": true
+        },
+        "executableIdentity": {
+          "candidateSha256": "0327af7dcc5ab794e0d3f191a89bb62dcde60f5c985c7a56cb5acc944c4fa548",
+          "samplerSha256": "17b1b2ccdd693c3ab569e322b95d64d97f1bc2621c2930ea8e469d0124f9fbe5"
+        },
+        "measurement": {
+          "baselineAggregateRSSBytes": 226590720,
+          "elapsedMilliseconds": 725.432861328125,
+          "maximumSampleIntervalMilliseconds": 6.60498046875,
+          "peakAdditionalRSSBytes": 127549440,
+          "sampleCount": 118
+        },
+        "membershipRevalidated": true,
+        "observerVersion": "packaged-preview-observer-v2",
+        "roleCounts": {
+          "application": 1,
+          "gpu": 1,
+          "networking": 1,
+          "webContent": 1
+        },
+        "status": "valid",
+        "target": {
+          "memoryGiB": 24,
+          "model": "Mac17,2",
+          "osBuild": "25F80",
+          "osVersion": "26.5.1"
+        },
+        "visual": {
+          "changedCanvasCrop": true,
+          "completePostDispatchFrame": true,
+          "cropPixels": "512x256",
+          "foregroundIntact": true,
+          "landPaletteBounded": true,
+          "waterPaletteBounded": true
+        }
+      },
+      "previewRawArtifact": {
+        "artifactIdentifier": "issue84-final-full-warmup-preview",
+        "byteLength": 15227,
+        "sha256": "0f9ad06a0d3b938222211723670924bab69466d53fd4cd453cda328e92d4deba",
+        "status": "retained",
+        "version": "private-preview-rss-retention-v1"
+      },
+      "idleFullTraceArtifact": {
+        "artifactIdentifier": "issue84-final-full-warmup-invalid-ax-clock",
+        "byteLength": 30561,
+        "sha256": "114dd0c63ab215c31eceb21a14517c2a5db56dddf91653e10cc5effb91026dee",
+        "status": "retained",
+        "version": "private-preview-rss-retention-v1"
+      },
+      "budgetConclusion": null,
+      "fullOperationDispatched": false
+    },
+    {
+      "id": "issue84-final-full-warmup-invalid-applescript-clock",
+      "status": "invalid",
+      "invalidAuthority": "accessibility-harness",
+      "invalidReason": "the second AppleScript clock form failed before the full-generation dispatch",
+      "previewQualification": {
+        "accessibility": {
+          "acceptFullEnabled": true,
+          "disposableCaption": true,
+          "frontmost": true,
+          "previewLabel": true
+        },
+        "executableIdentity": {
+          "candidateSha256": "0327af7dcc5ab794e0d3f191a89bb62dcde60f5c985c7a56cb5acc944c4fa548",
+          "samplerSha256": "17b1b2ccdd693c3ab569e322b95d64d97f1bc2621c2930ea8e469d0124f9fbe5"
+        },
+        "measurement": {
+          "baselineAggregateRSSBytes": 224542720,
+          "elapsedMilliseconds": 724.98486328125,
+          "maximumSampleIntervalMilliseconds": 6.363,
+          "peakAdditionalRSSBytes": 130547712,
+          "sampleCount": 121
+        },
+        "membershipRevalidated": true,
+        "observerVersion": "packaged-preview-observer-v2",
+        "roleCounts": {
+          "application": 1,
+          "gpu": 1,
+          "networking": 1,
+          "webContent": 1
+        },
+        "status": "valid",
+        "target": {
+          "memoryGiB": 24,
+          "model": "Mac17,2",
+          "osBuild": "25F80",
+          "osVersion": "26.5.1"
+        },
+        "visual": {
+          "changedCanvasCrop": true,
+          "completePostDispatchFrame": true,
+          "cropPixels": "512x256",
+          "foregroundIntact": true,
+          "landPaletteBounded": true,
+          "waterPaletteBounded": true
+        }
+      },
+      "previewRawArtifact": {
+        "artifactIdentifier": "issue84-final-full-warmup-retry-preview",
+        "byteLength": 17828,
+        "sha256": "a6df45fb6b5b417e4428e569786697133dc8073a6afce27569c9fbf226891ae0",
+        "status": "retained",
+        "version": "private-preview-rss-retention-v1"
+      },
+      "idleFullTraceArtifact": {
+        "artifactIdentifier": "issue84-final-full-warmup-invalid-applescript-clock",
+        "byteLength": 13269,
+        "sha256": "0e677fff1d5709ed090388e0509a14f66fb671e05e6ccd56fda7ccfc29412595",
+        "status": "retained",
+        "version": "private-preview-rss-retention-v1"
+      },
+      "budgetConclusion": null,
+      "fullOperationDispatched": false
+    }
+  ],
+  "stopDecision": {
+    "status": "blocked",
+    "boundary": "control-max pre-dispatch fixture configuration",
+    "reason": "Two materially different native-popup methods failed exact value readback before observer dispatch. The fixed control-max fixture cannot be claimed, and issue #84 does not authorize a new production or test-only fixture-loading path.",
+    "controlMaxAttempts": [
+      "AX menu-item lookup failed before dispatch",
+      "bounded AX menu appearance wait failed before dispatch",
+      "real mouse and native-key selection failed exact popup readback before dispatch"
+    ],
+    "rawArtifactsCreated": false,
+    "productOperationDispatched": false,
+    "remainingFullGeneration": "not-run",
+    "svgExport": "not-run",
+    "pngExport": "not-run",
+    "cancellationTrials": "not-run"
+  }
+}
