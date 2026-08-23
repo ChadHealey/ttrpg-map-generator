@@ -296,11 +296,32 @@ tree at intervals no greater than 20 ms and report every run plus median and wor
 | Operation                            | Fixed limit                                                                     | Required evidence status                                                              |
 | ------------------------------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
 | Coarse preview                       | ≤900 ms and ≤256 MiB additional process-tree RSS; report ≤750 ms stretch target | **PASS** — all 15 final fresh runs passed; worst time 809.40 ms, worst RSS 157.72 MiB |
-| Full generation                      | ≤10 s and ≤768 MiB additional process-tree RSS                                  | **NOT RUN** — not rerun after the preview repair                                      |
+| Full generation                      | ≤10 s and ≤768 MiB additional process-tree RSS                                  | **INCOMPLETE** — first-paint endpoint unproven; control-max was not run               |
 | SVG export                           | ≤3 s, ≤512 MiB, destination ≤32 MiB                                             | **NOT RUN** — not rerun after the preview repair                                      |
 | PNG export                           | ≤15 s, ≤1 GiB, destination ≤64 MiB                                              | **NOT RUN** — not rerun after the preview repair                                      |
 | Preview cancellation                 | Acknowledgement ≤100 ms                                                         | **NOT RUN** — not rerun after the preview repair                                      |
 | Full-generation/SVG/PNG cancellation | Acknowledgement ≤500 ms                                                         | **NOT RUN** — not rerun after the preview repair                                      |
+
+### Issue #84 partial full-generation rerun (2026-08-23)
+
+Issue #84 resumed the remaining full-generation lane on exact candidate
+`1e11b5f2887e12d6629603dae0c5dec0e854cd6d`, whose observer-enabled packaged executable SHA-256
+was `0327af7dcc5ab794e0d3f191a89bb62dcde60f5c985c7a56cb5acc944c4fa548`. The repository gate,
+issue #90 observer/retention tests, and packaged build passed before measurement.
+
+Five proof-fixture and five fragmented-islands fresh-process measurements were retained, but their
+Accessibility endpoint did not establish the required first fully painted accepted atlas. They
+therefore have no release-budget conclusion. Their diagnostic medians and worst values, together
+with one separately cadence-invalidated fragmented-islands attempt, remain available for
+investigation only.
+
+The protocol stopped before control-max observer dispatch because two materially different native
+popup methods failed exact readback of its three required enum controls. No weaker fixture claim,
+new production fixture loader, or additional test-only production path was authorized. Control-max
+full generation, all exports, and all cancellation trials remain unrun. The sanitized per-run
+values, per-process peaks, observer qualifications, private raw-artifact receipts, known tool
+hashes, missing-command limitation, and stop record are in the
+[issue #84 partial protocol evidence](investigations/issue-84/release-protocol-2026-08-23/README.md).
 
 Run wall-clock and memory gates for `milestone-2-atlas-proof`,
 `milestone-2-atlas-fragmented-islands`, and `milestone-2-atlas-control-max`; apply SVG/PNG file
@@ -332,8 +353,9 @@ rule that every included issue be closed or explicitly moved out.
 
 The final release owner must perform these actions in order:
 
-1. Return the valid issue #84 preview failure to #70/#75 release planning. A separately authorized
-   response must preserve the unchanged workload and limits before the complete protocol is rerun.
+1. Establish a qualified first-paint observer for the accepted full atlas and resolve or explicitly
+   authorize a bounded control-max packaged-fixture configuration method; then rerun issue #84
+   without changing its fixture, workload, or limits.
 2. Confirm this report names the exact tested implementation commit and the handoff names the
    documentation-only commit, with complete command results, packaged receipts, artifact hashes,
    and human visual review. Do not attribute costly gates to the documentation commit unless they
