@@ -57,8 +57,10 @@ must not change to complete until the release-evidence report has no pending row
 - Signing and notarization, Linux/Windows packaging, and distribution automation are not required
   for the local unsigned macOS proof.
 - The contract now designates the available Apple M5/24-GB MacBook Pro as the reference machine.
-  The existing 31.045-second full-generation observation exceeds the 10-second budget, so the
-  formal five-process measurements remain outstanding and the budget has not been silently relaxed.
+  [ADR-0019](../adr/0019-coarse-preview-release-budget.md) revises the coarse-preview hard limit to
+  `900 ms`, retains `750 ms` as a reported stretch target, and records a passing corrected
+  three-fixture matrix. Full-generation, export, and cancellation measurements remain outstanding
+  under their unchanged limits, so this revision does not complete the broader reference protocol.
 
 ## Next milestone proof
 

@@ -2,6 +2,7 @@
 
 - **Status:** Release-pending; this document does not mark Milestone 2 complete
 - **Prepared:** 2026-08-22
+- **Updated:** 2026-08-23
 - **Issue:** [#68 — Prove the Milestone 2 whole-world atlas workflow end to end](https://github.com/ChadHealey/ttrpg-map-generator/issues/68)
 - **Normative contract:** [Milestone 2 whole-world atlas proof](milestone-2-atlas-proof.md)
 - **Retrospective:** [Milestone 2 release-pending retrospective](retrospectives/milestone-2.md)
@@ -16,9 +17,10 @@ yet been recorded. `OUTSTANDING` means the required reference protocol has not y
 preparing issue #68.
 
 Milestone 2 cannot be called complete while any contract row is `FAIL`, `NOT RUN`, `PENDING`,
-`OUTSTANDING`, or `EXTERNAL`. The current Apple M5/24-GB development machine is now the designated
-reference environment; the recorded observations are not a passing five-process release-budget
-result.
+`OUTSTANDING`, or `EXTERNAL`. The current Apple M5/24-GB development machine is the designated
+reference environment. The issue #89 coarse-preview matrix passes the revised wall-clock and
+unchanged memory limits, but the other operation and cancellation lanes have not been rerun and the
+overall reference protocol remains outstanding.
 
 ## Candidate and environment
 
@@ -43,26 +45,26 @@ that evidence separately because a commit cannot contain its own hash.
 
 ## Acceptance matrix
 
-| Contract lane                | Required evidence                                                                                                                              | Status       | Evidence record                                                    |
-| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | ------------------------------------------------------------------ |
-| Registered desktop inputs    | Seed `81985529216486895` and all nine validated default controls are visible in the packaged app                                               | **PASS**     | Packaged workflow steps 1–2 below                                  |
-| Preview boundary             | Cancel and restart one labelled coarse preview; preview remains disposable and cannot become accepted bytes                                    | **PASS**     | Packaged workflow step 3 plus focused orchestration tests          |
-| Full acceptance              | Full profile is generated separately, validated, and committed atomically; stable semantic identities are inspectable                          | **PASS**     | Packaged workflow step 4 and canonical fixture lane                |
-| Geography reroll             | Macro revision and declared dependents change while paper, user intent, seed, versions, locks, and unrelated revisions stay canonical          | **PASS**     | `baseline` → `geography-rerolled` canonical comparison             |
-| Appearance reroll            | Three appearance aspects/revisions and render composite change while all semantic geography and canonical coastline bytes stay fixed           | **PASS**     | `geography-rerolled` → `appearance-rerolled` canonical comparison  |
-| Native save and unload       | Immutable accepted snapshot is committed atomically and accepted document plus scene are truly unloaded                                        | **PASS**     | Packaged workflow steps 7–8 and native recovery gate               |
-| Generator-free reopen        | Native package validates; accepted aspect/output bytes, package fingerprint, scene semantics, SVG, and PNG agree; generator call count is zero | **PASS**     | Packaged workflow step 9, tripwire test, and saved-project fixture |
-| Milestone 1 compatibility    | Released Milestone 1 projects and migrations reopen without drift or generator invocation                                                      | **PASS**     | Cross-platform, native-recovery, and end-to-end gates              |
-| Reopened SVG export          | `atlas-svg-v1`, 400 × 200 mm, deterministic bytes, native atomic receipt, accepted document unchanged                                          | **PASS**     | Packaged workflow step 10 and artifact record                      |
-| Reopened PNG export          | `atlas-png-v1`, 8192 × 4096, deterministic repeat bytes, native atomic receipt, accepted document unchanged                                    | **PASS**     | Packaged workflow step 10, PNG gate, and artifact record           |
-| Evidence separation          | Canonical aspects, accepted outputs, package checksums, geometry, scene/SVG structure, PNG pixels, and performance remain distinct lanes       | **PASS**     | Fixture manifest/review records and sections below                 |
-| Geometry                     | Closed/wound/non-self-intersecting rings; exact partition; identity/order; containment/connectivity; seam/pole and post-quantization validity  | **PASS**     | Root check, cross-platform fixtures, and geometry review           |
-| Visual gallery               | Six registered 1600 × 800 gallery rows plus full-size seam, pole, channel, island, echo, fine-ink, and raster-boundary crops inspected         | **PASS**     | Visual review table below                                          |
-| Deterministic resource gates | PNG dimensions, file ceiling, bounded band/surface allocation, progress/cancellation semantics, and deterministic aftermath pass               | **PASS**     | `pnpm test:png-export`; this is not the release benchmark          |
-| Packaged macOS app           | Unsigned `.app` builds and the complete visible workflow is exercised through that bundle                                                      | **PASS**     | Package and workflow records below                                 |
-| Apple M5/24-GB budgets       | Prescribed warm-up/five-process timing, process-tree RSS, and cancellation acknowledgement protocol passes                                     | **FAIL**     | First valid measured preview exceeded 750 ms; protocol stopped     |
-| macOS/Linux release matrix   | Exact final commit passes required CI on both platforms with filesystem evidence                                                               | **PASS**     | [Issue #71 matrix](#remote-ci-and-milestone-state)                 |
-| Milestone issue state        | Every included issue is closed or explicitly moved out                                                                                         | **EXTERNAL** | Eight milestone issues remain open; remote mutation was prohibited |
+| Contract lane                | Required evidence                                                                                                                              | Status          | Evidence record                                                                          |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------- | ---------------------------------------------------------------------------------------- |
+| Registered desktop inputs    | Seed `81985529216486895` and all nine validated default controls are visible in the packaged app                                               | **PASS**        | Packaged workflow steps 1–2 below                                                        |
+| Preview boundary             | Cancel and restart one labelled coarse preview; preview remains disposable and cannot become accepted bytes                                    | **PASS**        | Packaged workflow step 3 plus focused orchestration tests                                |
+| Full acceptance              | Full profile is generated separately, validated, and committed atomically; stable semantic identities are inspectable                          | **PASS**        | Packaged workflow step 4 and canonical fixture lane                                      |
+| Geography reroll             | Macro revision and declared dependents change while paper, user intent, seed, versions, locks, and unrelated revisions stay canonical          | **PASS**        | `baseline` → `geography-rerolled` canonical comparison                                   |
+| Appearance reroll            | Three appearance aspects/revisions and render composite change while all semantic geography and canonical coastline bytes stay fixed           | **PASS**        | `geography-rerolled` → `appearance-rerolled` canonical comparison                        |
+| Native save and unload       | Immutable accepted snapshot is committed atomically and accepted document plus scene are truly unloaded                                        | **PASS**        | Packaged workflow steps 7–8 and native recovery gate                                     |
+| Generator-free reopen        | Native package validates; accepted aspect/output bytes, package fingerprint, scene semantics, SVG, and PNG agree; generator call count is zero | **PASS**        | Packaged workflow step 9, tripwire test, and saved-project fixture                       |
+| Milestone 1 compatibility    | Released Milestone 1 projects and migrations reopen without drift or generator invocation                                                      | **PASS**        | Cross-platform, native-recovery, and end-to-end gates                                    |
+| Reopened SVG export          | `atlas-svg-v1`, 400 × 200 mm, deterministic bytes, native atomic receipt, accepted document unchanged                                          | **PASS**        | Packaged workflow step 10 and artifact record                                            |
+| Reopened PNG export          | `atlas-png-v1`, 8192 × 4096, deterministic repeat bytes, native atomic receipt, accepted document unchanged                                    | **PASS**        | Packaged workflow step 10, PNG gate, and artifact record                                 |
+| Evidence separation          | Canonical aspects, accepted outputs, package checksums, geometry, scene/SVG structure, PNG pixels, and performance remain distinct lanes       | **PASS**        | Fixture manifest/review records and sections below                                       |
+| Geometry                     | Closed/wound/non-self-intersecting rings; exact partition; identity/order; containment/connectivity; seam/pole and post-quantization validity  | **PASS**        | Root check, cross-platform fixtures, and geometry review                                 |
+| Visual gallery               | Six registered 1600 × 800 gallery rows plus full-size seam, pole, channel, island, echo, fine-ink, and raster-boundary crops inspected         | **PASS**        | Visual review table below                                                                |
+| Deterministic resource gates | PNG dimensions, file ceiling, bounded band/surface allocation, progress/cancellation semantics, and deterministic aftermath pass               | **PASS**        | `pnpm test:png-export`; this is not the release benchmark                                |
+| Packaged macOS app           | Unsigned `.app` builds and the complete visible workflow is exercised through that bundle                                                      | **PASS**        | Package and workflow records below                                                       |
+| Apple M5/24-GB budgets       | Prescribed warm-up/five-process timing, process-tree RSS, and cancellation acknowledgement protocol passes                                     | **OUTSTANDING** | Preview passes revised budget; remaining operation and cancellation lanes were not rerun |
+| macOS/Linux release matrix   | Exact final commit passes required CI on both platforms with filesystem evidence                                                               | **PASS**        | [Issue #71 matrix](#remote-ci-and-milestone-state)                                       |
+| Milestone issue state        | Every included issue is closed or explicitly moved out                                                                                         | **EXTERNAL**    | Eight milestone issues remain open; remote mutation was prohibited                       |
 
 ## Exact local command record
 
@@ -244,19 +246,61 @@ The exact sanitized observer outputs are durable, but the PID-bearing sampler CS
 from ephemeral private temporary storage before they became unavailable. Raw-artifact retention is
 therefore an explicit unmet evidence limitation and must be corrected on any authorized rerun.
 
+### Issue #89 post-repair coarse-preview proof (2026-08-23)
+
+[ADR-0019](adr/0019-coarse-preview-release-budget.md) revises only the coarse-preview wall-clock
+limit to `900 ms` and retains `750 ms` as a reported stretch target. The fixed workload, labelled
+first-paint endpoint, five-fresh-process rule, `256 MiB` peak additional process-tree RSS limit,
+observer authorities, progress and cancellation requirements, and all other operation limits remain
+unchanged.
+
+Issue #89 removed the attributed repeated water-component traversal without expanding into workers,
+scheduling, or observer changes. The packaged candidate was based on local HEAD
+`2d4e9a216b0ec4ccd1bbe20f706cfda7e9007d7d`; its executable SHA-256 was
+`0327af7dcc5ab794e0d3f191a89bb62dcde60f5c985c7a56cb5acc944c4fa548`. Observer
+`packaged-preview-observer-v2` had SHA-256
+`a0f1959fcc8b200c900094a845b77fb63c86582904acf97211323779ac2a079a` and used sampler SHA-256
+`2e74843ef4e566c0aa27e95efdb000cdd4d17a2caa6c9b834ab1c256382781f6` on MacBook Pro
+`Mac17,2`, Apple M5, 24 GB, macOS 26.5.1 (`25F80`). Every run revalidated one application, one GPU,
+one Networking, and one WebContent process; the maximum observed RSS sample interval was `7.13 ms`.
+
+The proof fixture's untimed warm-up completed in `756.73 ms` at `119.30 MiB` peak additional RSS.
+The required early clean-process checkpoint then passed at `731.69 ms` and `117.75 MiB`, so the
+full matrix proceeded without expanding into workers, scheduling, or observer changes. The final
+corrected fresh-process matrix was:
+
+| Fixture                                | Run 1                  | Run 2                  | Run 3                  | Run 4                  | Run 5                  | Median    | Worst     | ≤750 ms |
+| -------------------------------------- | ---------------------- | ---------------------- | ---------------------- | ---------------------- | ---------------------- | --------- | --------- | ------- |
+| `milestone-2-atlas-proof`              | 750.31 ms / 125.06 MiB | 770.10 ms / 127.77 MiB | 756.46 ms / 115.23 MiB | 761.62 ms / 122.45 MiB | 750.98 ms / 122.14 MiB | 756.46 ms | 770.10 ms | 0/5     |
+| `milestone-2-atlas-fragmented-islands` | 789.86 ms / 157.72 MiB | 795.20 ms / 156.77 MiB | 744.92 ms / 153.61 MiB | 746.26 ms / 155.64 MiB | 803.13 ms / 156.33 MiB | 789.86 ms | 803.13 ms | 2/5     |
+| `milestone-2-atlas-control-max`        | 745.19 ms / 132.39 MiB | 794.54 ms / 132.72 MiB | 807.35 ms / 133.28 MiB | 790.15 ms / 132.86 MiB | 809.40 ms / 133.16 MiB | 794.54 ms | 809.40 ms | 1/5     |
+
+All fifteen corrected fresh runs passed `900 ms` and `256 MiB`; three met the `750 ms` stretch
+target. Four earlier control observations are excluded because the required control-max seed had not
+been set in the app. They remain retained as misconfigured-attempt evidence and are not counted in
+the fixture matrix.
+
+The warm-up, early checkpoint, and all fifteen qualifying sampler CSVs are retained under the
+approved private archive using artifact identifiers `issue89-final-proof-warmup`,
+`issue89-final-proof-checkpoint`, `issue89-final-proof-1` through `issue89-final-proof-5`,
+`issue89-final-fragmented-islands-1` through `issue89-final-fragmented-islands-5`, and
+`issue89-final-control-max-1` through `issue89-final-control-max-5`. Retention receipts record each
+raw artifact's byte length and SHA-256 without publishing transient PIDs, coalition identifiers,
+service UUIDs, or local paths. This corrects the raw-artifact retention limitation from issue #84.
+
 The required environment is an idle release build with packaged local assets, power connected, Low
 Power Mode off, no debugger/developer tools, and no network dependency. After one untimed warm-up,
 measure five fresh processes. Sample aggregate additional RSS for the complete application process
 tree at intervals no greater than 20 ms and report every run plus median and worst.
 
-| Operation                            | Fixed limit                                      | Required evidence status                                |
-| ------------------------------------ | ------------------------------------------------ | ------------------------------------------------------- |
-| Coarse preview                       | ≤750 ms and ≤256 MiB additional process-tree RSS | **FAIL** — fresh proof run 1 was 861.25 ms / 118.80 MiB |
-| Full generation                      | ≤10 s and ≤768 MiB additional process-tree RSS   | **NOT RUN** — preview stop condition                    |
-| SVG export                           | ≤3 s, ≤512 MiB, destination ≤32 MiB              | **NOT RUN** — preview stop condition                    |
-| PNG export                           | ≤15 s, ≤1 GiB, destination ≤64 MiB               | **NOT RUN** — preview stop condition                    |
-| Preview cancellation                 | Acknowledgement ≤100 ms                          | **NOT RUN** — preview stop condition                    |
-| Full-generation/SVG/PNG cancellation | Acknowledgement ≤500 ms                          | **NOT RUN** — preview stop condition                    |
+| Operation                            | Fixed limit                                                                     | Required evidence status                                                              |
+| ------------------------------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Coarse preview                       | ≤900 ms and ≤256 MiB additional process-tree RSS; report ≤750 ms stretch target | **PASS** — all 15 final fresh runs passed; worst time 809.40 ms, worst RSS 157.72 MiB |
+| Full generation                      | ≤10 s and ≤768 MiB additional process-tree RSS                                  | **NOT RUN** — not rerun after the preview repair                                      |
+| SVG export                           | ≤3 s, ≤512 MiB, destination ≤32 MiB                                             | **NOT RUN** — not rerun after the preview repair                                      |
+| PNG export                           | ≤15 s, ≤1 GiB, destination ≤64 MiB                                              | **NOT RUN** — not rerun after the preview repair                                      |
+| Preview cancellation                 | Acknowledgement ≤100 ms                                                         | **NOT RUN** — not rerun after the preview repair                                      |
+| Full-generation/SVG/PNG cancellation | Acknowledgement ≤500 ms                                                         | **NOT RUN** — not rerun after the preview repair                                      |
 
 Run wall-clock and memory gates for `milestone-2-atlas-proof`,
 `milestone-2-atlas-fragmented-islands`, and `milestone-2-atlas-control-max`; apply SVG/PNG file

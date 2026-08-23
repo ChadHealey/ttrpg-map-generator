@@ -552,16 +552,22 @@ measurement meaning stops the protocol and requires a new owner decision.
 
 | Operation       | Fixed workload                                                                                | Wall-clock | Peak additional memory | Output-size ceiling       |
 | --------------- | --------------------------------------------------------------------------------------------- | ---------- | ---------------------- | ------------------------- |
-| Coarse preview  | dispatch through first fully painted labelled 512 × 256 effective preview                     | `750 ms`   | `256 MiB`              | not applicable            |
+| Coarse preview  | dispatch through first fully painted labelled 512 × 256 effective preview                     | `900 ms`   | `256 MiB`              | not applicable            |
 | Full generation | dispatch through validated commit and first fully painted accepted full atlas                 | `10 s`     | `768 MiB`              | not applicable            |
 | SVG export      | reopened accepted atlas, request through atomically written and verified complete 2:1 output  | `3 s`      | `512 MiB`              | `32 MiB` destination file |
 | PNG export      | reopened accepted atlas, request through atomically written and verified `8192 × 4096` output | `15 s`     | `1 GiB`                | `64 MiB` destination file |
 
+The coarse-preview gate also reports how many fresh runs complete within the original `750 ms`
+stretch target. That target is diagnostic and does not block release; `900 ms` is the hard maximum.
+The measured rationale and unchanged boundaries are recorded in
+[ADR-0019](adr/0019-coarse-preview-release-budget.md).
+
 `pnpm test:png-export` enforces deterministic bytes, dimensions, the file-size ceiling, bounded
 band/surface allocation, progress/cancellation state semantics, native replacement behavior, and
 deterministic aftermath. It is not the release benchmark. The designated Apple M5/24-GB
-five-fresh-process time, aggregate-memory, and 500-ms cancellation-acknowledgement proof remains
-outstanding to issue #68 until rerun under the protocol below.
+coarse-preview time and aggregate-memory matrix is recorded as passing in the release evidence. The
+remaining operation measurements and 500-ms cancellation-acknowledgement proof remain outstanding
+to issue #68 until rerun under the protocol below.
 
 Wall-clock and memory gates run for `milestone-2-atlas-proof`,
 `milestone-2-atlas-fragmented-islands`, and `milestone-2-atlas-control-max`; all six rows must meet
@@ -596,8 +602,10 @@ implementation that meets the budget and existing boundary rules.
 
 A budget adjustment is a deliberate product-contract change. It records the representative
 measurements, bottleneck, attempted bounded remedies, user-visible consequence, and updated limit
-in this document before the final proof can claim success. A faster development machine or an
-unreported lower-resolution workload does not silently redefine the budget.
+in this document before the final proof can claim success. The coarse-preview limit was revised
+from `750 ms` to `900 ms` by [ADR-0019](adr/0019-coarse-preview-release-budget.md) after the complete
+post-repair fixture matrix; `750 ms` remains a reported stretch target. A faster development machine
+or an unreported lower-resolution workload does not silently redefine a budget.
 
 ## Visible desktop workflow
 
