@@ -71,6 +71,27 @@ xcrun swiftc -module-cache-path /private/tmp/issue90-swift-module-cache \
 clang -O2 -Wall -Wextra -Werror \
   -o /private/tmp/issue90-rss-timeline \
   docs/investigations/issue-76/rss-timeline.c
+
+xcrun swiftc -module-cache-path /private/tmp/issue90-swift-module-cache \
+  -warnings-as-errors -parse-as-library -framework CryptoKit \
+  -o /private/tmp/issue91-preview-retention-tests \
+  docs/investigations/issue-90/packaged-preview-observer-core.swift \
+  docs/investigations/issue-90/packaged-preview-observer-security.swift \
+  docs/investigations/issue-90/packaged-preview-retention-model.swift \
+  docs/investigations/issue-90/packaged-preview-retention-core.swift \
+  docs/investigations/issue-90/packaged-preview-retention-command.swift \
+  docs/investigations/issue-90/packaged-preview-retention-tests.swift
+/private/tmp/issue91-preview-retention-tests
+
+xcrun swiftc -module-cache-path /private/tmp/issue90-swift-module-cache \
+  -warnings-as-errors -parse-as-library -framework CryptoKit \
+  -o /private/tmp/issue91-preview-retention \
+  docs/investigations/issue-90/packaged-preview-observer-core.swift \
+  docs/investigations/issue-90/packaged-preview-observer-security.swift \
+  docs/investigations/issue-90/packaged-preview-retention-model.swift \
+  docs/investigations/issue-90/packaged-preview-retention-core.swift \
+  docs/investigations/issue-90/packaged-preview-retention-command.swift \
+  docs/investigations/issue-90/packaged-preview-retention.swift
 ```
 
 Build the test-only packaged candidate with the environment flag set for the frontend build. Give
@@ -90,7 +111,76 @@ with owner-only permissions and refuses an existing file or symlink. Run:
 ```
 
 The CSV is a raw receipt because its header contains transient PIDs. Keep it outside the public
-repository and remove it after retaining the approved private evidence.
+repository. Do not remove it manually; use the retention sequence below immediately after every
+observer attempt, including an invalid attempt that produced a CSV.
+
+## Private raw-CSV retention
+
+The operator must approve a durable private archive root before capture. The utility has no
+default destination, does not select a service, and rejects a relative, aliased, symlinked,
+group/world-accessible, or repository-contained archive root. The root must already exist, be
+owned by the operator, and have mode `0700`. The caller must also choose a fresh opaque artifact
+identifier containing only letters, digits, hyphens, or underscores; it must not encode a PID,
+host name, user name, local path, or other private data.
+
+Use this sequence for each attempt. The shell variables are deliberately unset here: their values
+are operator-approved private state and must not be copied into repository evidence.
+
+```sh
+test -n "$APPROVED_PRIVATE_ARCHIVE_ROOT"
+test -n "$OPAQUE_ARTIFACT_ID"
+test "$(stat -f '%Lp' "$APPROVED_PRIVATE_ARCHIVE_ROOT")" = 700
+
+/private/tmp/issue90-packaged-preview-observer \
+  app.ttrpgmap.generator \
+  <candidate-executable-sha256> \
+  /private/tmp/issue90-rss-timeline \
+  <sampler-sha256> \
+  /private/tmp/issue90-preview-rss.csv \
+  > /private/tmp/issue90-sanitized-observer-receipt.json
+
+/private/tmp/issue91-preview-retention \
+  "$(git rev-parse --show-toplevel)" \
+  /private/tmp/issue90-preview-rss.csv \
+  "$APPROVED_PRIVATE_ARCHIVE_ROOT" \
+  "$OPAQUE_ARTIFACT_ID" \
+  > /private/tmp/issue91-sanitized-retention-receipt.json
+
+test ! -e /private/tmp/issue90-preview-rss.csv
+node -e 'JSON.parse(require("node:fs").readFileSync(process.argv[1], "utf8"))' \
+  /private/tmp/issue91-sanitized-retention-receipt.json
+```
+
+The retention utility opens the source without following symlinks and requires its existing
+owner-only sampler permissions. Within the approved archive root, it creates an owner-only staging
+directory, copies to a new owner-only file, synchronizes it, and proves source/archive SHA-256 and
+byte-length equality. It writes and rereads the sanitized metadata receipt, synchronizes the
+staging directory, and publishes the artifact directory with an exclusive same-filesystem rename.
+It then synchronizes and reopens the published artifact, emits the sanitized receipt, and only
+after that emission succeeds checks that the source path still names the locked, verified file and
+removes that temporary source. It never replaces an artifact.
+
+The only stdout object is the sanitized retention receipt. A successful receipt has
+`version`, `status`, `artifactIdentifier`, `sha256`, and `byteLength`; a safe failure may add only
+`failureCategory` and omits unavailable hash/length fields. It contains no archive root, temporary
+path, CSV header or content, PID, or machine-specific diagnostic. Future issue #84 public evidence
+must retain the receipt's opaque artifact locator, SHA-256, byte length, status, and version, but
+must not retain or infer the private archive path. Exit status `0` additionally proves temporary
+source cleanup. Exit status `2` means the receipt and private archive are valid but the source is
+still present; the command emits no second JSON object after the retained receipt.
+
+Any rejection, collision, permission/copy/verification/receipt-emission failure, or interruption
+before the atomic publish boundary removes only the known incomplete staging files and leaves the
+temporary source available. A receipt-emission failure or interruption after publish also leaves
+the source available and the immutable private artifact in place. Do not retry the same identifier
+by deleting or replacing that artifact: privately verify its stored receipt and exact bytes, or
+obtain approval for a fresh identifier. On exit status `2`, preserve and inspect the source, then
+remove that exact temporary file manually only after the private verification is accepted. Never
+copy private diagnostics from a failed run into public evidence.
+
+The operator or private-store owner is responsible for retention duration, backup, access review,
+and eventual private archive deletion. This utility owns only the one-way handoff and temporary
+source cleanup; it never deletes a committed private artifact.
 
 ## Receipt and invalidation schema
 
