@@ -15,6 +15,13 @@ extension AccessibilityObserver {
       throw PreviewObserverInvalidation.accessibility(
         "the exact packaged candidate could not be activated during unmeasured readiness")
     }
+    let windows = try issue97Elements(application, attribute: kAXWindowsAttribute)
+    guard windows.count == 1, let window = windows.first,
+      AXUIElementPerformAction(window, kAXRaiseAction as CFString) == .success
+    else {
+      throw PreviewObserverInvalidation.accessibility(
+        "the exact packaged candidate window could not be raised during unmeasured readiness")
+    }
     guard AXUIElementSetAttributeValue(
       application,
       kAXFrontmostAttribute as CFString,

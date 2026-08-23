@@ -159,6 +159,11 @@ package, destination, CSV, retained artifact, or measured dispatch. The bounded 
 activates the exact running candidate through AppKit, then verifies Accessibility frontmost state;
 this remains an unmeasured readiness action and does not alter the measured continuity predicate.
 
+The AppKit-only successor also failed closed before fixture setup or sampling. The final bounded
+readiness method requires exactly one candidate Accessibility window, raises it, sets the
+application frontmost, and verifies that state before doing any preparation. This is the same class
+of visible-window setup authorized for #96 and still occurs before the measured dispatch boundary.
+
 ## Privacy
 
 Public receipts contain only the gated fixture values and definition hash, approved host/build and
