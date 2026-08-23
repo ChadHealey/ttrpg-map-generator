@@ -90,26 +90,9 @@ export async function selectAtlasLandWaterThreshold(
     throw new RangeError('Land/water threshold selection requires the version-1 preview profile.');
   }
 
-  const totalWeight = totalSphericalWeight(previewField);
-  const weightedTicks = sortedWeightedTicks(previewField, totalWeight, parameters);
-  const nearestIndex = nearestCoverageIndex(weightedTicks);
-  const candidateIndices = connectivityCandidateIndices(weightedTicks, nearestIndex);
-  const candidates: ThresholdCandidate[] = [];
-  for (const [progressIndex, weightedTickIndex] of candidateIndices.entries()) {
-    const weightedTick = weightedTicks[weightedTickIndex];
-    if (weightedTick === undefined) throw new Error('Missing weighted threshold candidate.');
-    const contourLevel = contourAbove(weightedTick.tick);
-    candidates.push(
-      Object.freeze({
-        ...weightedTick,
-        contourLevel,
-        proxy: summarizeWaterComponents(previewField, contourLevel),
-      }),
-    );
-    if (await cooperation.cooperate(progressIndex + 1, candidateIndices.length)) {
-      return Object.freeze({ status: 'cancelled' });
-    }
-  }
+  const candidateResult = await thresholdCandidates(previewField, parameters, cooperation);
+  if (candidateResult.status === 'cancelled') return candidateResult;
+  const candidates = candidateResult.candidates;
 
   const selected = [...candidates].sort((left, right) =>
     compareThresholdCandidates(left, right, parameters.oceanConnectivity),
@@ -128,6 +111,18 @@ export async function selectAtlasLandWaterThreshold(
       ),
     }),
   });
+}
+
+/** Direct-module test seam; intentionally absent from the package public entry point. */
+export async function inspectAtlasThresholdCandidatesForTesting(
+  previewField: QuantizedSphericalField,
+  parameters: AtlasLandWaterClassificationParameters,
+): Promise<readonly ThresholdCandidate[]> {
+  const result = await thresholdCandidates(previewField, parameters, {
+    cooperate: () => Promise.resolve(false),
+  });
+  if (result.status === 'cancelled') throw new Error('Test candidate inspection was cancelled.');
+  return result.candidates;
 }
 
 /** Classify every anchor from the selected shared threshold and measure weighted spherical area. */
@@ -350,48 +345,128 @@ function supportsConnectivityProxy(
   return proxy.componentCount === 1;
 }
 
-function summarizeWaterComponents(
+async function thresholdCandidates(
   field: QuantizedSphericalField,
-  contourLevel: AtlasContourLevel,
-): AtlasWaterComponentProxy {
-  const visited = new Uint8Array(field.sampleCount);
-  const queue = new Int32Array(field.sampleCount);
+  parameters: AtlasLandWaterClassificationParameters,
+  cooperation: AtlasThresholdSelectionCooperation,
+): Promise<
+  | { readonly status: 'completed'; readonly candidates: readonly ThresholdCandidate[] }
+  | { readonly status: 'cancelled' }
+> {
+  const totalWeight = totalSphericalWeight(field);
+  const weightedTicks = sortedWeightedTicks(field, totalWeight, parameters);
+  const nearestIndex = nearestCoverageIndex(weightedTicks);
+  const candidateIndices = connectivityCandidateIndices(weightedTicks, nearestIndex);
+  const candidateTicks: WeightedTick[] = [];
+  const candidateContours: AtlasContourLevel[] = [];
+  for (const weightedTickIndex of candidateIndices) {
+    const weightedTick = weightedTicks[weightedTickIndex];
+    if (weightedTick === undefined) throw new Error('Missing weighted threshold candidate.');
+    candidateTicks.push(weightedTick);
+    candidateContours.push(contourAbove(weightedTick.tick));
+  }
+
+  const componentResult = await summarizeWaterComponents(field, candidateContours, cooperation);
+  if (componentResult.status === 'cancelled') return componentResult;
+  const candidates = candidateTicks.map((weightedTick, index): ThresholdCandidate => {
+    const contourLevel = candidateContours[index];
+    const proxy = componentResult.proxies[index];
+    if (contourLevel === undefined || proxy === undefined) {
+      throw new Error('Missing water component candidate summary.');
+    }
+    return Object.freeze({ ...weightedTick, contourLevel, proxy });
+  });
+  return Object.freeze({ status: 'completed', candidates: Object.freeze(candidates) });
+}
+
+async function summarizeWaterComponents(
+  field: QuantizedSphericalField,
+  contourLevels: readonly AtlasContourLevel[],
+  cooperation: AtlasThresholdSelectionCooperation,
+): Promise<
+  | { readonly status: 'completed'; readonly proxies: readonly AtlasWaterComponentProxy[] }
+  | { readonly status: 'cancelled' }
+> {
+  const values = new Int32Array(field.sampleCount);
+  const order = Array.from({ length: field.sampleCount }, (_, index) => index);
+  for (let index = 0; index < field.sampleCount; index += 1) {
+    values[index] = field.valueAt(...storageIndexCoordinates(field, index));
+  }
+  order.sort((left, right) => {
+    const leftValue = values[left];
+    const rightValue = values[right];
+    if (leftValue === undefined || rightValue === undefined) {
+      throw new Error('Missing water component sort value.');
+    }
+    return leftValue - rightValue;
+  });
+
+  const active = new Uint8Array(field.sampleCount);
+  const parent = new Int32Array(field.sampleCount);
+  const componentWeights = new Float64Array(field.sampleCount);
+  const proxies = new Array<AtlasWaterComponentProxy>(contourLevels.length);
+  let next = 0;
   let componentCount = 0;
   let totalWaterWeight = 0;
   let largestComponentWeight = 0;
 
-  for (let startIndex = 0; startIndex < field.sampleCount; startIndex += 1) {
-    if (visited[startIndex] !== 0 || isLandAtStorageIndex(field, contourLevel, startIndex))
-      continue;
-    componentCount += 1;
-    let componentWeight = 0;
-    let head = 0;
-    let tail = 0;
-    queue[tail] = startIndex;
-    tail += 1;
-    visited[startIndex] = 1;
-    while (head < tail) {
-      const current = queue[head];
-      head += 1;
-      if (current === undefined) throw new Error('Water component queue lost its current anchor.');
-      const weight = storageIndexWeight(field, current);
-      componentWeight += weight;
+  const activateThrough = (waterUpperBound: number): void => {
+    while (next < order.length) {
+      const index = order[next];
+      const value = index === undefined ? undefined : values[index];
+      if (index === undefined || value === undefined || value > waterUpperBound) break;
+      next += 1;
+      active[index] = 1;
+      parent[index] = index;
+      const weight = storageIndexWeight(field, index);
+      componentWeights[index] = weight;
       totalWaterWeight += weight;
-      forEachNeighbor(field, current, (neighbor) => {
-        if (visited[neighbor] === 0 && !isLandAtStorageIndex(field, contourLevel, neighbor)) {
-          visited[neighbor] = 1;
-          queue[tail] = neighbor;
-          tail += 1;
+      componentCount += 1;
+      largestComponentWeight = Math.max(largestComponentWeight, weight);
+      forEachNeighbor(field, index, (neighbor) => {
+        if (active[neighbor] === 0) return;
+        let left = findRoot(parent, index);
+        let right = findRoot(parent, neighbor);
+        if (left === right) return;
+        if (left > right) [left, right] = [right, left];
+        parent[right] = left;
+        const leftWeight = componentWeights[left];
+        const rightWeight = componentWeights[right];
+        if (leftWeight === undefined || rightWeight === undefined) {
+          throw new Error('Missing water component weight.');
         }
+        const mergedWeight = leftWeight + rightWeight;
+        componentWeights[left] = mergedWeight;
+        componentCount -= 1;
+        largestComponentWeight = Math.max(largestComponentWeight, mergedWeight);
       });
     }
-    largestComponentWeight = Math.max(largestComponentWeight, componentWeight);
-  }
+  };
 
-  return Object.freeze({
-    componentCount,
-    largestComponentPercent: stableRatioPercent(largestComponentWeight, totalWaterWeight),
-  });
+  for (let index = 0; index < contourLevels.length; index += 1) {
+    const contourLevel = contourLevels[index];
+    if (contourLevel === undefined) throw new Error('Missing contour level.');
+    activateThrough(Math.floor((contourLevel - 1) / 2));
+    proxies[index] = Object.freeze({
+      componentCount,
+      largestComponentPercent: stableRatioPercent(largestComponentWeight, totalWaterWeight),
+    });
+    if (await cooperation.cooperate(index + 1, contourLevels.length)) {
+      return Object.freeze({ status: 'cancelled' });
+    }
+  }
+  return Object.freeze({ status: 'completed', proxies: Object.freeze(proxies) });
+}
+
+function findRoot(parent: Int32Array, index: number): number {
+  let root = index;
+  while (parent[root] !== root) root = parent[root] ?? root;
+  while (parent[index] !== index) {
+    const next = parent[index] ?? index;
+    parent[index] = root;
+    index = next;
+  }
+  return root;
 }
 
 function forEachNeighbor(
@@ -424,19 +499,13 @@ function forEachNeighbor(
   visit(storageIndex(width, height, longitudeIndex, latitudeIndex + 1));
 }
 
-function isLandAtStorageIndex(
-  field: QuantizedSphericalField,
-  contourLevel: AtlasContourLevel,
-  index: number,
-): boolean {
+function storageIndexCoordinates(field: QuantizedSphericalField, index: number): [number, number] {
   const width = field.profile.longitudeCellCount;
   const height = field.profile.latitudeBandCount;
-  if (index === 0) return isAtlasLand(field.valueAt(0, 0), contourLevel);
-  if (index === field.sampleCount - 1) {
-    return isAtlasLand(field.valueAt(0, height), contourLevel);
-  }
+  if (index === 0) return [0, 0];
+  if (index === field.sampleCount - 1) return [0, height];
   const offset = index - 1;
-  return isAtlasLand(field.valueAt(offset % width, Math.floor(offset / width) + 1), contourLevel);
+  return [offset % width, Math.floor(offset / width) + 1];
 }
 
 function storageIndexWeight(field: QuantizedSphericalField, index: number): number {
