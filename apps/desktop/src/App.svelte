@@ -35,14 +35,15 @@
   onMount(() => {
     const removePreviewDispatch = installPackagedPreviewDispatch(
       window,
-      import.meta.env.VITE_PACKAGED_PREVIEW_OBSERVER_DISPATCH === '1' ||
-        packagedAtlasObserverEnabled,
+      import.meta.env.VITE_PACKAGED_PREVIEW_OBSERVER_DISPATCH === '1',
       () => void preview(),
     );
     const removeAtlasDispatch = installPackagedAtlasObserverDispatch(
       window,
       packagedAtlasObserverEnabled,
       configureObserverFixture,
+      () => ({ fixtureId: observerFixtureId, worldSeed: seed, controls }),
+      () => void preview(),
       () => void acceptFull(),
     );
     return () => {

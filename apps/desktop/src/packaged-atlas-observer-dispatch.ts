@@ -50,6 +50,12 @@ export interface PackagedAtlasObserverReceipt {
   readonly productionFullPath: true;
 }
 
+export interface PackagedAtlasObserverInput {
+  readonly fixtureId: GatedAtlasFixtureId | undefined;
+  readonly worldSeed: string;
+  readonly controls: AtlasControls;
+}
+
 interface AtlasObserverDispatchKeyEvent {
   readonly altKey: boolean;
   readonly code: string;
@@ -95,11 +101,30 @@ export function isPackagedFullAtlasDispatch(event: AtlasObserverDispatchKeyEvent
   return hasExactObserverModifiers(event) && event.code === 'KeyF';
 }
 
-/** Installs only the fixture/full actions authorized for observer-enabled packaged builds. */
+export function isPackagedAtlasPreviewDispatch(event: AtlasObserverDispatchKeyEvent): boolean {
+  return hasExactObserverModifiers(event) && event.code === 'KeyP';
+}
+
+export function requestExactFixturePreview(
+  input: PackagedAtlasObserverInput,
+  preview: () => void,
+): boolean {
+  if (input.fixtureId === undefined) return false;
+  const fixture = gatedAtlasFixture(input.fixtureId);
+  if (input.worldSeed !== fixture.worldSeed || !sameControls(input.controls, fixture.controls)) {
+    return false;
+  }
+  preview();
+  return true;
+}
+
+/** Installs only the fixture/preview/full actions authorized for observer-enabled packaged builds. */
 export function installPackagedAtlasObserverDispatch(
   target: EventTarget,
   enabled: boolean,
   configureFixture: (fixture: GatedAtlasFixture) => void,
+  currentInput: () => PackagedAtlasObserverInput,
+  preview: () => void,
   acceptFull: () => void,
 ): () => void {
   if (!enabled) return () => undefined;
@@ -109,6 +134,11 @@ export function installPackagedAtlasObserverDispatch(
     if (fixtureId !== undefined) {
       event.preventDefault();
       configureFixture(gatedAtlasFixture(fixtureId));
+      return;
+    }
+    if (isPackagedAtlasPreviewDispatch(event)) {
+      event.preventDefault();
+      requestExactFixturePreview(currentInput(), preview);
       return;
     }
     if (!isPackagedFullAtlasDispatch(event)) return;

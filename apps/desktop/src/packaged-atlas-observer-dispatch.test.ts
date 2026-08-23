@@ -5,9 +5,11 @@ import appSource from './App.svelte?raw';
 import {
   gatedAtlasFixture,
   installPackagedAtlasObserverDispatch,
+  isPackagedAtlasPreviewDispatch,
   isPackagedFullAtlasDispatch,
   packagedAtlasFixtureDispatch,
   packagedAtlasObserverReceipt,
+  requestExactFixturePreview,
   requestProductionFullAtlas,
 } from './packaged-atlas-observer-dispatch.js';
 
@@ -51,10 +53,10 @@ describe('packaged full-atlas observer dispatch', () => {
 
   it('wires observer dispatch and visible controls to the same production actions', () => {
     expect(appSource).toMatch(
-      /installPackagedPreviewDispatch\([\s\S]*?\(\) => void preview\(\),[\s\S]*?\)/u,
+      /installPackagedPreviewDispatch\([\s\S]*?VITE_PACKAGED_PREVIEW_OBSERVER_DISPATCH[\s\S]*?\(\) => void preview\(\),[\s\S]*?\)/u,
     );
     expect(appSource).toMatch(
-      /installPackagedAtlasObserverDispatch\([\s\S]*?configureObserverFixture,[\s\S]*?\(\) => void acceptFull\(\),[\s\S]*?\)/u,
+      /installPackagedAtlasObserverDispatch\([\s\S]*?configureObserverFixture,[\s\S]*?observerFixtureId[\s\S]*?worldSeed: seed[\s\S]*?controls[\s\S]*?\(\) => void preview\(\),[\s\S]*?\(\) => void acceptFull\(\),[\s\S]*?\)/u,
     );
     expect(appSource).toMatch(
       /onclick=\{\(\) => void preview\(\)\}[\s\S]*?>Generate coarse preview<\/button/u,
@@ -70,41 +72,105 @@ describe('packaged full-atlas observer dispatch', () => {
   it('has no fixture or full dispatch effect in an ordinary build', () => {
     const target = new EventTarget();
     const configure = vi.fn();
+    const preview = vi.fn();
     const acceptFull = vi.fn();
-    const remove = installPackagedAtlasObserverDispatch(target, false, configure, acceptFull);
+    const remove = installPackagedAtlasObserverDispatch(
+      target,
+      false,
+      configure,
+      () => ({
+        fixtureId: 'milestone-2-atlas-proof',
+        worldSeed: '81985529216486895',
+        controls: DEFAULT_ATLAS_CONTROLS,
+      }),
+      preview,
+      acceptFull,
+    );
 
     target.dispatchEvent(dispatchEvent('KeyJ'));
+    target.dispatchEvent(dispatchEvent('KeyP'));
     target.dispatchEvent(dispatchEvent('KeyF'));
     remove();
 
     expect(configure).not.toHaveBeenCalled();
+    expect(preview).not.toHaveBeenCalled();
     expect(acceptFull).not.toHaveBeenCalled();
   });
 
-  it('dispatches exact fixture and full chords and removes the handler', () => {
+  it('dispatches exact fixture, preview, and full chords and removes the handler', () => {
     const target = new EventTarget();
     const configure = vi.fn();
+    const preview = vi.fn();
     const acceptFull = vi.fn();
-    const remove = installPackagedAtlasObserverDispatch(target, true, configure, acceptFull);
+    const fixture = gatedAtlasFixture('milestone-2-atlas-control-max');
+    const remove = installPackagedAtlasObserverDispatch(
+      target,
+      true,
+      configure,
+      () => ({
+        fixtureId: fixture.fixtureId,
+        worldSeed: fixture.worldSeed,
+        controls: fixture.controls,
+      }),
+      preview,
+      acceptFull,
+    );
     const fixtureEvent = dispatchEvent('KeyL');
+    const previewEvent = dispatchEvent('KeyP');
     const fullEvent = dispatchEvent('KeyF');
 
     target.dispatchEvent(fixtureEvent);
+    target.dispatchEvent(previewEvent);
     target.dispatchEvent(fullEvent);
     remove();
     target.dispatchEvent(dispatchEvent('KeyJ'));
 
     expect(configure).toHaveBeenCalledTimes(1);
     expect(configure).toHaveBeenCalledWith(gatedAtlasFixture('milestone-2-atlas-control-max'));
+    expect(preview).toHaveBeenCalledTimes(1);
     expect(acceptFull).toHaveBeenCalledTimes(1);
     expect(fixtureEvent.defaultPrevented).toBe(true);
+    expect(previewEvent.defaultPrevented).toBe(true);
     expect(fullEvent.defaultPrevented).toBe(true);
+  });
+
+  it('delegates preview only after exact live fixture, canonical seed, and nine-control readback', () => {
+    const fixture = gatedAtlasFixture('milestone-2-atlas-fragmented-islands');
+    const preview = vi.fn();
+
+    expect(
+      requestExactFixturePreview(
+        {
+          fixtureId: fixture.fixtureId,
+          worldSeed: fixture.worldSeed,
+          controls: fixture.controls,
+        },
+        preview,
+      ),
+    ).toBe(true);
+    expect(preview).toHaveBeenCalledOnce();
+
+    for (const input of [
+      { fixtureId: undefined, worldSeed: fixture.worldSeed, controls: fixture.controls },
+      { fixtureId: fixture.fixtureId, worldSeed: '1', controls: fixture.controls },
+      {
+        fixtureId: fixture.fixtureId,
+        worldSeed: fixture.worldSeed,
+        controls: { ...fixture.controls, islandAbundancePercent: 94 },
+      },
+    ]) {
+      expect(requestExactFixturePreview(input, preview)).toBe(false);
+    }
+    expect(preview).toHaveBeenCalledOnce();
   });
 
   it('rejects partial, repeated, and unknown dispatch input', () => {
     expect(packagedAtlasFixtureDispatch(dispatchShape('KeyJ', { metaKey: false }))).toBeUndefined();
     expect(packagedAtlasFixtureDispatch(dispatchShape('KeyJ', { repeat: true }))).toBeUndefined();
     expect(packagedAtlasFixtureDispatch(dispatchShape('KeyM'))).toBeUndefined();
+    expect(isPackagedAtlasPreviewDispatch(dispatchShape('KeyP', { altKey: false }))).toBe(false);
+    expect(isPackagedAtlasPreviewDispatch(dispatchShape('KeyP', { repeat: true }))).toBe(false);
+    expect(isPackagedAtlasPreviewDispatch(dispatchShape('KeyF'))).toBe(false);
     expect(isPackagedFullAtlasDispatch(dispatchShape('KeyF', { ctrlKey: false }))).toBe(false);
     expect(isPackagedFullAtlasDispatch(dispatchShape('KeyP'))).toBe(false);
   });
