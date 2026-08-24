@@ -10,27 +10,23 @@ final class CancellationQuiescenceFrameOutput: NSObject, SCStreamOutput, SCStrea
   let queue = DispatchQueue(label: "issue98.generation-cancellation.capture")
   private let lock = NSLock()
   private let foreground: ForegroundMonitor
-  private var quietWindow: GenerationCancellationQuietWindow?
+  private var presentationWindow: GenerationCancellationPresentationWindow
 
-  init(foreground: ForegroundMonitor) { self.foreground = foreground }
+  init(operation: GenerationCancellationOperation, foreground: ForegroundMonitor) {
+    self.foreground = foreground
+    presentationWindow = GenerationCancellationPresentationWindow(operation: operation)
+  }
 
-  var quietWindowSummary: GenerationCancellationQuietWindowSummary {
-    lock.withLock {
-      quietWindow?.summary
-        ?? GenerationCancellationQuietWindowSummary(
-          postAcknowledgementBaselineHash: nil,
-          comparisonFrameCount: 0,
-          pixelsChanged: false
-        )
-    }
+  var presentationSummary: GenerationCancellationPresentationSummary {
+    lock.withLock { presentationWindow.summary }
+  }
+  var presentationBaselineEstablished: Bool {
+    lock.withLock { presentationWindow.summary.presentationBaselineEstablished }
   }
   var foregroundIntact: Bool { foreground.isIntact }
 
   func markAcknowledged(at time: UInt64) {
-    lock.withLock {
-      guard quietWindow == nil else { return }
-      quietWindow = GenerationCancellationQuietWindow(terminalAcknowledgementTime: time)
-    }
+    lock.withLock { presentationWindow.markAcknowledged(at: time) }
   }
 
   func stream(
@@ -51,29 +47,83 @@ final class CancellationQuiescenceFrameOutput: NSObject, SCStreamOutput, SCStrea
       CVPixelBufferGetWidth(pixelBuffer) == cancellationCaptureWidth,
       CVPixelBufferGetHeight(pixelBuffer) == cancellationCaptureHeight
     else { return }
-    let hash = pixelHash(pixelBuffer)
+    let observation = inspectPixels(pixelBuffer)
     lock.withLock {
-      quietWindow?.observeCompleteFrame(displayTime: displayTime, hash: hash)
+      if !presentationWindow.summary.presentationBaselineEstablished {
+        presentationWindow.establishPresentationBaseline(observation)
+      } else {
+        presentationWindow.observeCompleteFrame(
+          displayTime: displayTime,
+          observation: observation,
+          foregroundIntact: foreground.isIntact
+        )
+      }
     }
   }
 
   func stream(_ stream: SCStream, didStopWithError error: any Error) {}
 
-  private func pixelHash(_ buffer: CVPixelBuffer) -> UInt64 {
+  private func inspectPixels(_ buffer: CVPixelBuffer) -> GenerationCancellationFrameObservation {
     CVPixelBufferLockBaseAddress(buffer, .readOnly)
     defer { CVPixelBufferUnlockBaseAddress(buffer, .readOnly) }
-    guard let base = CVPixelBufferGetBaseAddress(buffer) else { return 0 }
+    guard let base = CVPixelBufferGetBaseAddress(buffer) else {
+      return GenerationCancellationFrameObservation(
+        preview: PixelObservation(hash: 0, landLike: 0, waterLike: 0),
+        acceptedAtlas: AcceptedAtlasPixelObservation(
+          hash: 0,
+          landLike: 0,
+          waterLike: 0,
+          inkLike: 0,
+          previewLandLike: 0,
+          previewWaterLike: 0
+        )
+      )
+    }
     let bytes = base.assumingMemoryBound(to: UInt8.self)
     let bytesPerRow = CVPixelBufferGetBytesPerRow(buffer)
     var hash: UInt64 = 14_695_981_039_346_656_037
+    var previewLandLike = 0
+    var previewWaterLike = 0
+    var acceptedLandLike = 0
+    var acceptedWaterLike = 0
+    var acceptedInkLike = 0
     for y in 0..<cancellationCaptureHeight {
       let row = bytes.advanced(by: y * bytesPerRow)
       for offset in 0..<(cancellationCaptureWidth * 4) {
         hash ^= UInt64(row[offset])
         hash &*= 1_099_511_628_211
       }
+      for x in 0..<cancellationCaptureWidth {
+        let pixel = row.advanced(by: x * 4)
+        let blue = Int(pixel[0])
+        let green = Int(pixel[1])
+        let red = Int(pixel[2])
+        if near(red, 220) && near(green, 207) && near(blue, 171) { previewLandLike += 1 }
+        if near(red, 180) && near(green, 202) && near(blue, 199) { previewWaterLike += 1 }
+        if near(red, 201) && near(green, 195) && near(blue, 154) { acceptedLandLike += 1 }
+        if near(red, 175) && near(green, 190) && near(blue, 192) { acceptedWaterLike += 1 }
+        if near(red, 40) && near(green, 42) && near(blue, 36) { acceptedInkLike += 1 }
+      }
     }
-    return hash
+    return GenerationCancellationFrameObservation(
+      preview: PixelObservation(
+        hash: hash,
+        landLike: previewLandLike,
+        waterLike: previewWaterLike
+      ),
+      acceptedAtlas: AcceptedAtlasPixelObservation(
+        hash: hash,
+        landLike: acceptedLandLike,
+        waterLike: acceptedWaterLike,
+        inkLike: acceptedInkLike,
+        previewLandLike: previewLandLike,
+        previewWaterLike: previewWaterLike
+      )
+    )
+  }
+
+  private func near(_ observed: Int, _ expected: Int) -> Bool {
+    abs(observed - expected) <= 10
   }
 }
 

@@ -21,57 +21,105 @@ enum GenerationCancellationSafePoint: String, Codable, CaseIterable {
   }
 }
 
-struct GenerationCancellationQuietWindowSummary: Equatable {
-  let postAcknowledgementBaselineHash: UInt64?
-  let comparisonFrameCount: Int
-  let pixelsChanged: Bool
+struct GenerationCancellationFrameObservation: Equatable {
+  let preview: PixelObservation
+  let acceptedAtlas: AcceptedAtlasPixelObservation
 }
 
-struct GenerationCancellationQuietWindow: Equatable {
-  let terminalAcknowledgementTime: UInt64
-  private(set) var postAcknowledgementBaselineHash: UInt64?
-  private(set) var comparisonFrameCount = 0
-  private(set) var pixelsChanged = false
+struct GenerationCancellationPresentationSummary: Equatable {
+  let presentationBaselineEstablished: Bool
+  let postAcknowledgementCompleteFrameCount: Int
+  let pixelChangeFrameCount: Int
+  let completedPresentationSignatureDetected: Bool
 
-  mutating func observeCompleteFrame(displayTime: UInt64, hash: UInt64) {
-    guard displayTime > terminalAcknowledgementTime else { return }
-    guard let baseline = postAcknowledgementBaselineHash else {
-      postAcknowledgementBaselineHash = hash
-      return
-    }
-    comparisonFrameCount += 1
-    if hash != baseline { pixelsChanged = true }
+  var pixelsChanged: Bool { pixelChangeFrameCount > 0 }
+}
+
+struct GenerationCancellationPresentationWindow: Equatable {
+  let operation: GenerationCancellationOperation
+  private(set) var presentationBaseline: GenerationCancellationFrameObservation?
+  private(set) var terminalAcknowledgementTime: UInt64?
+  private(set) var postAcknowledgementCompleteFrameCount = 0
+  private(set) var pixelChangeFrameCount = 0
+  private(set) var completedPresentationSignatureDetected = false
+
+  mutating func establishPresentationBaseline(_ observation: GenerationCancellationFrameObservation) {
+    guard presentationBaseline == nil, terminalAcknowledgementTime == nil else { return }
+    presentationBaseline = observation
   }
 
-  var summary: GenerationCancellationQuietWindowSummary {
-    GenerationCancellationQuietWindowSummary(
-      postAcknowledgementBaselineHash: postAcknowledgementBaselineHash,
-      comparisonFrameCount: comparisonFrameCount,
-      pixelsChanged: pixelsChanged
+  mutating func markAcknowledged(at time: UInt64) {
+    guard terminalAcknowledgementTime == nil else { return }
+    terminalAcknowledgementTime = time
+  }
+
+  mutating func observeCompleteFrame(
+    displayTime: UInt64,
+    observation: GenerationCancellationFrameObservation,
+    foregroundIntact: Bool
+  ) {
+    guard let terminalAcknowledgementTime,
+      displayTime > terminalAcknowledgementTime,
+      let presentationBaseline
+    else { return }
+    postAcknowledgementCompleteFrameCount += 1
+    if observation.preview.hash != presentationBaseline.preview.hash {
+      pixelChangeFrameCount += 1
+    }
+    let signatureDetected: Bool
+    switch operation {
+    case .preview:
+      signatureDetected = PreviewFramePredicate.qualifies(
+        complete: true,
+        displayTime: displayTime,
+        dispatchTime: terminalAcknowledgementTime,
+        baseline: presentationBaseline.preview,
+        candidate: observation.preview,
+        foregroundIntact: foregroundIntact
+      )
+    case .full:
+      signatureDetected = AcceptedAtlasFramePredicate.qualifies(
+        complete: true,
+        displayTime: displayTime,
+        dispatchTime: terminalAcknowledgementTime,
+        baselineHash: presentationBaseline.acceptedAtlas.hash,
+        candidate: observation.acceptedAtlas,
+        foregroundIntact: foregroundIntact
+      )
+    }
+    if signatureDetected { completedPresentationSignatureDetected = true }
+  }
+
+  var summary: GenerationCancellationPresentationSummary {
+    GenerationCancellationPresentationSummary(
+      presentationBaselineEstablished: presentationBaseline != nil,
+      postAcknowledgementCompleteFrameCount: postAcknowledgementCompleteFrameCount,
+      pixelChangeFrameCount: pixelChangeFrameCount,
+      completedPresentationSignatureDetected: completedPresentationSignatureDetected
     )
   }
 }
 
 enum GenerationCancellationPostAcknowledgementValidator {
   static func validate(
-    quietWindow: GenerationCancellationQuietWindowSummary,
+    presentation: GenerationCancellationPresentationSummary,
     foregroundIntact: Bool,
     accessibilityStatePreserved: Bool
   ) throws {
     guard foregroundIntact else { throw PreviewObserverInvalidation.candidateNotFrontmost }
-    guard quietWindow.postAcknowledgementBaselineHash != nil else {
+    guard presentation.presentationBaselineEstablished else {
       throw PreviewObserverInvalidation.capture(
-        "no complete frame strictly after terminal acknowledgement established the quiet-window baseline"
+        "no complete pre-dispatch frame established the previous-presentation baseline"
       )
     }
-    guard quietWindow.comparisonFrameCount > 0 else {
+    guard presentation.postAcknowledgementCompleteFrameCount >= 2 else {
       throw PreviewObserverInvalidation.capture(
-        "no later complete frame was available for the post-acknowledgement quiet-window comparison"
+        "fewer than two complete post-acknowledgement canvas frames were available"
       )
     }
-    guard !quietWindow.pixelsChanged else {
+    guard !presentation.completedPresentationSignatureDetected else {
       throw PreviewObserverInvalidation.capture(
-        "post-acknowledgement quiet-window pixels changed"
+        "the cancelled operation's completed-presentation signature appeared after acknowledgement"
       )
     }
     guard accessibilityStatePreserved else {

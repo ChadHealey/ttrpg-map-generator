@@ -633,6 +633,28 @@ retained. Full sanitized correction, tool identities, replacement receipt, reten
 and stop status are appended to the
 [issue #98 cancellation evidence](investigations/issue-98/README.md#issue-102-replacement-correction-and-stop).
 
+### Issue #103 operation-specific presentation correction (2026-08-23)
+
+Issue #103 changes only the issue #98 observer, focused tests, and owning evidence. Absolute
+post-acknowledgement canvas pixel stability is no longer a qualification predicate. The corrected
+observer requires a complete previous-state frame and multiple complete post-acknowledgement
+frames, continuously applies the unchanged issue #90 completed-preview signature for preview
+cancellation or issue #94 accepted-atlas signature for full cancellation, and retains any detected
+signature as a sticky invalidation even if the UI later returns. Pixel change is reported only as
+sanitized diagnostic metadata.
+
+All independent app-receipt, final Accessibility previous-state/no-commit, foreground, membership,
+≤20-ms sampling/endpoint, deterministic-aftermath, and owner-only retention predicates remain fail
+closed. Focused tests cover pixel-only changes, both late-completion classes, frame absence,
+Accessibility/foreground/membership/sampling failure, and the reused retention failure paths. The
+observer-enabled package is byte-identical to #98/#102 at SHA-256
+`5cf14de9836e9da96655572b35bb0e194d8ebc30360b6d6516f88825dcf7a15d`; the new observer is
+`ffe1589c3841ac577d726800c68e2d5cc3733432cfd4f55f7b2947453cba0018`; all reused tool identities
+reproduce unchanged. Both historical preview/early rows remain separately **INVALID, CONSUMED**
+and privately retained. The authorized target outcome is appended to the
+[issue #98 cancellation evidence](investigations/issue-98/README.md#issue-103-completed-presentation-correction)
+without making an issue #95 matrix or release-budget conclusion.
+
 ## Remote CI and milestone state
 
 Issue #71 recorded fresh CI evidence for the exact remote release commit

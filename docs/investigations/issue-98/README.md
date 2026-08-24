@@ -23,9 +23,15 @@ output, and coastline hashes equal the checked-in fixture authority.
 The independent macOS observer requires the approved host, exact candidate/tool identities, one
 application/GPU/Networking/WebContent membership set, uninterrupted foreground ownership, ≤20-ms
 sampling with dispatch and acknowledgement endpoint coverage, the app receipt, and a one-second
-post-acknowledgement canvas/Accessibility quiet window. It then requires the next completed full
-operation to produce issue #94's changed accepted-atlas first paint and final Accessibility state.
-Every PID-bearing CSV is handed to issue #91 retention before its observer receipt is inspected.
+post-acknowledgement presentation-observation window. Every complete post-acknowledgement frame is
+evaluated against issue #90's completed-preview signature for preview cancellation or issue #94's
+accepted-atlas first-paint signature for full cancellation. Any matching signature remains a
+sticky invalidation even if later frames return to the previous UI. Raw pixel changes are retained
+only as sanitized diagnostic counts and are not independently qualifying or invalidating. Final
+Accessibility must still prove the previous presentation state. The observer then requires the
+next completed full operation to produce issue #94's changed accepted-atlas first paint and final
+Accessibility state. Every PID-bearing CSV is handed to issue #91 retention before its observer
+receipt is inspected.
 
 ## Build and negative-path checks
 
@@ -125,3 +131,30 @@ Execution stopped immediately. Preview/middle, preview/late, and all full-genera
 not run. There was no retry, no invented authority, no issue #95 matrix execution, and no release-
 budget conclusion. The sanitized replacement stop is in
 [`replacement-qualification-2026-08-23/raw-results.json`](replacement-qualification-2026-08-23/raw-results.json).
+
+## Issue 103 completed-presentation correction
+
+Issue #103 corrects only the issue #98 observer, focused tests, and owning documentation. Observer
+version `packaged-generation-cancellation-host-observer-v3` requires a complete previous-state
+frame before dispatch and at least two complete canvas frames after the observed terminal
+acknowledgement. It continuously calls the unchanged issue #90 preview-frame predicate for a
+cancelled preview or the unchanged issue #94 accepted-atlas predicate for a cancelled full
+generation. Detection is sticky across later frames. Pixel-change presence and changed-frame count
+remain sanitized diagnostics; neither is a qualification predicate.
+
+The app receipt, final Accessibility previous-state authority, no-accepted-commit proof,
+uninterrupted foreground monitor, exact four-role membership, ≤20-ms RSS cadence and endpoint
+coverage, deterministic next completion, and issue #91 owner-only retention remain independent and
+fail closed. Focused tests cover pixel-only change, first-frame late preview completion followed by
+UI return, first-frame late accepted-atlas completion followed by UI return, missing complete
+frames, Accessibility drift, foreground loss, membership drift, sampling failure, and retention
+failure. Both historical rows and their owner-only artifacts remain unchanged, **INVALID,
+CONSUMED**; this correction does not reinterpret either row.
+
+Before target use, the new and predecessor Swift suites, focused 14-test packaged dispatch suite,
+cross-platform, E2E, visual, root, unsigned-package, privacy, authorized-surface, fixture-diff, and
+diff gates pass. The package remains byte-identical at SHA-256
+`5cf14de9836e9da96655572b35bb0e194d8ebc30360b6d6516f88825dcf7a15d`. The corrected observer is
+SHA-256 `ffe1589c3841ac577d726800c68e2d5cc3733432cfd4f55f7b2947453cba0018`; the sampler,
+retention utility, readiness controller, and readiness observer reproduce their issue #98
+identities unchanged. Target outcomes are appended only after the authorized one-shot sequence.

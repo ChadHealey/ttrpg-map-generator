@@ -7,7 +7,9 @@ enum PackagedGenerationCancellationObserverCoreTests {
     try rejectsSafePointAmbiguity()
     try rejectsProgressRegressionAndLateCompletion()
     try rejectsLatencyAndCanonicalDrift()
-    try establishesTheBaselineStrictlyAfterAcknowledgement()
+    try acceptsPixelChangesWithoutACompletionSignature()
+    try rejectsLatePreviewCompletionEvenAfterStateReturns()
+    try rejectsLateAcceptedAtlasCompletionEvenAfterStateReturns()
     try rejectsIndependentPostAcknowledgementFailures()
     try preservesIndependentMembershipAndSamplingFailures()
     print("packaged-generation-cancellation-observer-core-tests: passed")
@@ -62,42 +64,122 @@ enum PackagedGenerationCancellationObserverCoreTests {
     )
   }
 
-  private static func establishesTheBaselineStrictlyAfterAcknowledgement() throws {
-    var window = GenerationCancellationQuietWindow(terminalAcknowledgementTime: 1_000)
-    window.observeCompleteFrame(displayTime: 900, hash: 10)
-    window.observeCompleteFrame(displayTime: 1_000, hash: 20)
-    expect(window.summary.postAcknowledgementBaselineHash == nil, "pre-ack frames are ignored")
-    window.observeCompleteFrame(displayTime: 1_001, hash: 30)
-    window.observeCompleteFrame(displayTime: 1_002, hash: 30)
-    expect(window.summary.postAcknowledgementBaselineHash == 30, "first post-ack baseline")
-    expect(window.summary.comparisonFrameCount == 1, "only later frames are comparisons")
-    expect(!window.summary.pixelsChanged, "pre-ack pixels cannot invalidate the quiet window")
+  private static func acceptsPixelChangesWithoutACompletionSignature() throws {
+    var window = presentationWindow(operation: .preview)
+    window.markAcknowledged(at: 1_000)
+    window.observeCompleteFrame(
+      displayTime: 999,
+      observation: frame(hash: 40, previewLand: 100, previewWater: 100),
+      foregroundIntact: true
+    )
+    window.observeCompleteFrame(
+      displayTime: 1_000,
+      observation: frame(hash: 50, previewLand: 100, previewWater: 100),
+      foregroundIntact: true
+    )
+    window.observeCompleteFrame(
+      displayTime: 1_001,
+      observation: frame(hash: 20, previewLand: 0, previewWater: 0),
+      foregroundIntact: true
+    )
+    window.observeCompleteFrame(
+      displayTime: 1_002,
+      observation: frame(hash: 30, previewLand: 99, previewWater: 99),
+      foregroundIntact: true
+    )
+    expect(window.summary.pixelsChanged, "pixel changes remain diagnostic")
+    expect(window.summary.pixelChangeFrameCount == 2, "changed-frame diagnostic count")
+    expect(
+      window.summary.postAcknowledgementCompleteFrameCount == 2,
+      "frames at or before acknowledgement are ignored"
+    )
+    expect(
+      !window.summary.completedPresentationSignatureDetected,
+      "pixel changes alone are not completed presentation"
+    )
+    try GenerationCancellationPostAcknowledgementValidator.validate(
+      presentation: window.summary,
+      foregroundIntact: true,
+      accessibilityStatePreserved: true
+    )
+  }
+
+  private static func rejectsLatePreviewCompletionEvenAfterStateReturns() throws {
+    var window = presentationWindow(operation: .preview)
+    window.markAcknowledged(at: 1_000)
+    window.observeCompleteFrame(
+      displayTime: 1_001,
+      observation: frame(hash: 20, previewLand: 100, previewWater: 100),
+      foregroundIntact: true
+    )
+    window.observeCompleteFrame(
+      displayTime: 1_002,
+      observation: frame(hash: 10),
+      foregroundIntact: true
+    )
+    expect(window.summary.completedPresentationSignatureDetected, "late preview signature is sticky")
+    try expectPostAcknowledgementRejected(
+      window.summary,
+      authority: "screen-capture",
+      reason: "completed-presentation signature appeared"
+    )
+  }
+
+  private static func rejectsLateAcceptedAtlasCompletionEvenAfterStateReturns() throws {
+    var window = presentationWindow(operation: .full)
+    window.markAcknowledged(at: 1_000)
+    window.observeCompleteFrame(
+      displayTime: 1_001,
+      observation: frame(
+        hash: 20,
+        acceptedLand: 100,
+        acceptedWater: 100,
+        acceptedInk: 8,
+        previewLand: 0,
+        previewWater: 0
+      ),
+      foregroundIntact: true
+    )
+    window.observeCompleteFrame(
+      displayTime: 1_002,
+      observation: frame(hash: 10),
+      foregroundIntact: true
+    )
+    expect(
+      window.summary.completedPresentationSignatureDetected,
+      "late accepted-atlas signature is sticky"
+    )
+    try expectPostAcknowledgementRejected(
+      window.summary,
+      authority: "screen-capture",
+      reason: "completed-presentation signature appeared"
+    )
   }
 
   private static func rejectsIndependentPostAcknowledgementFailures() throws {
     try expectPostAcknowledgementRejected(
-      summary(baseline: nil, comparisons: 0, changed: false),
+      summary(baseline: false, frames: 2),
       authority: "screen-capture",
-      reason: "no complete frame strictly after terminal acknowledgement"
+      reason: "no complete pre-dispatch frame"
     )
     try expectPostAcknowledgementRejected(
-      summary(baseline: 1, comparisons: 0, changed: false),
+      summary(baseline: true, frames: 0),
       authority: "screen-capture",
-      reason: "no later complete frame"
+      reason: "fewer than two complete post-acknowledgement"
     )
     try expectPostAcknowledgementRejected(
-      summary(baseline: 1, comparisons: 1, changed: true),
+      summary(baseline: true, frames: 1),
       authority: "screen-capture",
-      reason: "quiet-window pixels changed"
+      reason: "fewer than two complete post-acknowledgement"
     )
     try expectPostAcknowledgementRejected(
-      summary(baseline: 1, comparisons: 1, changed: false),
+      summary(baseline: true, frames: 2),
       foregroundIntact: false,
       authority: "foreground",
       reason: "did not remain frontmost"
     )
     try expectPostAcknowledgementRejected(
-      summary(baseline: 1, comparisons: 1, changed: false),
+      summary(baseline: true, frames: 2),
       accessibilityStatePreserved: false,
       authority: "accessibility",
       reason: "Accessibility presentation state drifted"
@@ -137,7 +219,7 @@ enum PackagedGenerationCancellationObserverCoreTests {
   }
 
   private static func expectPostAcknowledgementRejected(
-    _ quietWindow: GenerationCancellationQuietWindowSummary,
+    _ presentation: GenerationCancellationPresentationSummary,
     foregroundIntact: Bool = true,
     accessibilityStatePreserved: Bool = true,
     authority: String,
@@ -145,7 +227,7 @@ enum PackagedGenerationCancellationObserverCoreTests {
   ) throws {
     do {
       try GenerationCancellationPostAcknowledgementValidator.validate(
-        quietWindow: quietWindow,
+        presentation: presentation,
         foregroundIntact: foregroundIntact,
         accessibilityStatePreserved: accessibilityStatePreserved
       )
@@ -157,14 +239,49 @@ enum PackagedGenerationCancellationObserverCoreTests {
   }
 
   private static func summary(
-    baseline: UInt64?,
-    comparisons: Int,
-    changed: Bool
-  ) -> GenerationCancellationQuietWindowSummary {
-    GenerationCancellationQuietWindowSummary(
-      postAcknowledgementBaselineHash: baseline,
-      comparisonFrameCount: comparisons,
-      pixelsChanged: changed
+    baseline: Bool,
+    frames: Int,
+    pixelChanges: Int = 0,
+    signature: Bool = false
+  ) -> GenerationCancellationPresentationSummary {
+    GenerationCancellationPresentationSummary(
+      presentationBaselineEstablished: baseline,
+      postAcknowledgementCompleteFrameCount: frames,
+      pixelChangeFrameCount: pixelChanges,
+      completedPresentationSignatureDetected: signature
+    )
+  }
+
+  private static func presentationWindow(
+    operation: GenerationCancellationOperation
+  ) -> GenerationCancellationPresentationWindow {
+    var window = GenerationCancellationPresentationWindow(operation: operation)
+    window.establishPresentationBaseline(frame(hash: 10))
+    return window
+  }
+
+  private static func frame(
+    hash: UInt64,
+    acceptedLand: Int = 0,
+    acceptedWater: Int = 0,
+    acceptedInk: Int = 0,
+    previewLand: Int = 0,
+    previewWater: Int = 0
+  ) -> GenerationCancellationFrameObservation {
+    GenerationCancellationFrameObservation(
+      preview: PixelObservation(
+        hash: hash,
+        landLike: previewLand,
+        waterLike: previewWater
+      ),
+      acceptedAtlas: AcceptedAtlasPixelObservation(
+        hash: hash,
+        landLike: acceptedLand,
+        waterLike: acceptedWater,
+        inkLike: acceptedInk,
+        previewLandLike: previewLand,
+        previewWaterLike: previewWater
+      )
     )
   }
 

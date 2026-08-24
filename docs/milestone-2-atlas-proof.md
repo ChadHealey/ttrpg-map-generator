@@ -755,6 +755,20 @@ no cancellation-path qualification, issue #95 matrix claim, or release-budget co
 sanitized replacement stop is appended to the
 [issue #98 generation-cancellation evidence](investigations/issue-98/README.md#issue-102-replacement-correction-and-stop).
 
+Issue #103 supersedes only absolute canvas pixel stability as the cancellation presentation
+predicate. During the one-second post-acknowledgement window, the observer requires complete canvas
+frames and uninterrupted foreground while continuously applying issue #90's approved
+completed-preview signature to preview cancellation or issue #94's approved accepted-atlas
+first-paint signature to full cancellation. A matching signature invalidates the row whenever it
+appears after acknowledgement, even if later frames and final Accessibility return to the previous
+state. Pixel changes are sanitized diagnostic metadata only and independently neither pass nor
+fail. The app receipt, final Accessibility previous-state/no-commit authority, membership, ≤20-ms
+sampling with endpoint coverage, deterministic aftermath, and owner-only retention remain
+independent and fail closed. Both earlier preview/early attempts remain unchanged, **INVALID,
+CONSUMED**, privately retained, and non-authoritative. The bounded correction and target results
+belong to the
+[issue #98 evidence](investigations/issue-98/README.md#issue-103-completed-presentation-correction).
+
 | Operation       | Fixed workload                                                                                | Wall-clock | Peak additional memory | Output-size ceiling       |
 | --------------- | --------------------------------------------------------------------------------------------- | ---------- | ---------------------- | ------------------------- |
 | Coarse preview  | dispatch through first fully painted labelled 512 × 256 effective preview                     | `900 ms`   | `256 MiB`              | not applicable            |
