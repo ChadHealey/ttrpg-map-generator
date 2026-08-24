@@ -1,6 +1,6 @@
 {
   "schemaVersion": "issue97-packaged-export-qualification-evidence-v1",
-  "status": "blocked-consumed-invalid-required-trial",
+  "status": "qualified-current-six-rows-with-preserved-consumed-invalid",
   "target": {
     "model": "Mac17,2",
     "processor": "Apple M5",
@@ -248,5 +248,339 @@
     "releaseBudgetConclusion": "none",
     "issue95MatrixRun": false,
     "smallestBlocker": "The first resumed required trial dispatched and was consumed, then the observer rejected the complete production SVG because its format predicate did not admit the exact XML declaration. The predicate is corrected, but the consumed-invalid stop forbids a rerun or any remaining trial without new authority."
+  },
+  "issue101ReplacementAuthority": {
+    "authorityIssue": 101,
+    "baseCommit": "73f4c579b35037a91874442f1e39dfdfed95baa7",
+    "implementationCandidateCommit": "35a2db5cd105cd32133888f8a84c4ab59691dd1d",
+    "packagedExecutableSha256": "94b5a8b5f3fcd43a361589f35e3449c72cf3aad13610737140c3dd749737cf4e",
+    "correctedObserverSha256": "1b84fb183fc2c34b2b652d2dc168050babb91d35f3fd983b657a4e8b05190d2f",
+    "samplerSha256": "d8b07a40f50d6254faa012bc25cbb5cc8daaa4add35dec1ff670ff759fd775fd",
+    "retentionSha256": "87c2e27e24d559f50780383840290dfe7afdfb5cb1ab15cc33928032ceecde83",
+    "readinessControllerSha256": "68c23690dcdb7f4dd329e0b2152b699ba1d6ef4248d211088aa26bb98c9475c3",
+    "readinessObserverSha256": "9f9c3254ee523f0151ce05f3b5d2573139a26e6bc432ce2c365e1b83d57419ff",
+    "allIdentitiesReproducedBeforeReplacement": true,
+    "targetSessionReadinessReproducedBeforeReplacement": true,
+    "preservedConsumedInvalidAttemptUnchanged": true
+  },
+  "issue101Qualifications": [
+    {
+      "fixtureId": "milestone-2-atlas-proof",
+      "fixtureDefinitionSha256": "20ea56e30d263f974f7a60f012eb6920ca073cba6a8949b62f05fbcbe4e86977",
+      "worldSeed": "81985529216486895",
+      "format": "svg",
+      "status": "valid-authorized-replacement",
+      "freshProcess": true,
+      "requiredTrialConsumed": true,
+      "retried": false,
+      "readinessControllerValid": true,
+      "acceptedState": {
+        "canonicalAspectSetSha256": "cbbec1d45c92bf6acee067ce38235a70f25a77e6cea9a1041f298536cbee77dd",
+        "canonicalOutputSetSha256": "7dd62d2ca9702a6761cfbee124a80065622de5fc356d76893af8ae1f9b4a650c",
+        "canonicalCoastlineOutputSha256": "ec19f547bee93f4c797f5604c2dcf752bbe11d7162763606bb3f3397f04b9342",
+        "renderSceneSha256": "2f0c3914ca521535e0a60a91502903ddb905a1523810e0b5e6c82b61d2e7b134",
+        "manifestSha256": "98f0689bb0ed066483edc7f0de778a32c4dbf23f73469fcf46dbf451a562aaee",
+        "reopenComparisonPassed": true,
+        "reopenGeneratorInvocations": 0,
+        "unchangedAfterExport": true
+      },
+      "destination": {
+        "sha256": "c72f6261534171e7c7048f1cccc304b6a148296ba22090c11e7a1c132e8318db",
+        "byteLength": 852650,
+        "profileId": "atlas-svg-v1",
+        "profileVersion": 1,
+        "dimensions": "400x200mm",
+        "sizeCeilingBytes": 33554432,
+        "atomicIdentityReplacementObserved": true,
+        "nativeReceiptHashAndSizeMatched": true,
+        "temporaryAbsent": true,
+        "xmlDeclarationAndSvgRootValidated": true
+      },
+      "observation": {
+        "roleCounts": { "application": 1, "gpu": 1, "networking": 1, "webContent": 1 },
+        "foregroundIntact": true,
+        "membershipRevalidated": true,
+        "sampleCount": 73,
+        "maximumSampleIntervalMilliseconds": 6.409,
+        "elapsedMilliseconds": 443.4912109375,
+        "peakAdditionalRSSBytes": 17776640
+      },
+      "retention": {
+        "status": "retained",
+        "artifactIdentifier": "issue101-proof-svg-replacement",
+        "sha256": "e9938048dbf9c82b0b12b64e6548bc71128dba549ade8cf57567f430b9ace48b",
+        "byteLength": 10454,
+        "temporaryRawCsvRemoved": true
+      }
+    },
+    {
+      "fixtureId": "milestone-2-atlas-proof",
+      "fixtureDefinitionSha256": "20ea56e30d263f974f7a60f012eb6920ca073cba6a8949b62f05fbcbe4e86977",
+      "worldSeed": "81985529216486895",
+      "format": "png",
+      "status": "valid",
+      "freshProcess": true,
+      "requiredTrialConsumed": true,
+      "retried": false,
+      "readinessControllerValid": true,
+      "acceptedState": {
+        "canonicalAspectSetSha256": "cbbec1d45c92bf6acee067ce38235a70f25a77e6cea9a1041f298536cbee77dd",
+        "canonicalOutputSetSha256": "7dd62d2ca9702a6761cfbee124a80065622de5fc356d76893af8ae1f9b4a650c",
+        "canonicalCoastlineOutputSha256": "ec19f547bee93f4c797f5604c2dcf752bbe11d7162763606bb3f3397f04b9342",
+        "renderSceneSha256": "2f0c3914ca521535e0a60a91502903ddb905a1523810e0b5e6c82b61d2e7b134",
+        "manifestSha256": "98f0689bb0ed066483edc7f0de778a32c4dbf23f73469fcf46dbf451a562aaee",
+        "reopenComparisonPassed": true,
+        "reopenGeneratorInvocations": 0,
+        "unchangedAfterExport": true
+      },
+      "destination": {
+        "sha256": "981befbd11122dd20aaa944105494438a887213810480a4c81c57b9244932e72",
+        "pixelSha256": "fcc917c7e3cb676d3b0f8c159ca6d46ae83fb04e271a30d0245cf7443b08b277",
+        "byteLength": 1201973,
+        "profileId": "atlas-png-v1",
+        "profileVersion": 1,
+        "dimensions": "8192x4096px",
+        "sizeCeilingBytes": 67108864,
+        "atomicIdentityReplacementObserved": true,
+        "nativeReceiptHashAndSizeMatched": true,
+        "temporaryAbsent": true,
+        "completePngStructureValidated": true,
+        "canonicalChunkOrder": ["IHDR", "sRGB", "IDAT", "IDAT", "IEND"]
+      },
+      "observation": {
+        "roleCounts": { "application": 1, "gpu": 1, "networking": 1, "webContent": 1 },
+        "foregroundIntact": true,
+        "membershipRevalidated": true,
+        "sampleCount": 2196,
+        "maximumSampleIntervalMilliseconds": 6.649169921875,
+        "elapsedMilliseconds": 13394.75,
+        "peakAdditionalRSSBytes": 115834880
+      },
+      "retention": {
+        "status": "retained",
+        "artifactIdentifier": "issue101-proof-png",
+        "sha256": "db390caa8c8e81a60fad0af9a53d1462799db7d479882e309e7daca1219daf5a",
+        "byteLength": 155952,
+        "temporaryRawCsvRemoved": true
+      }
+    },
+    {
+      "fixtureId": "milestone-2-atlas-fragmented-islands",
+      "fixtureDefinitionSha256": "d8ae2385f7aa4ca59716adb5a116b52888d310c382116b6d8801e60d8e10b363",
+      "worldSeed": "18364758544493064720",
+      "format": "svg",
+      "status": "valid",
+      "freshProcess": true,
+      "requiredTrialConsumed": true,
+      "retried": false,
+      "readinessControllerValid": true,
+      "acceptedState": {
+        "canonicalAspectSetSha256": "2ffc64f80fcf5a88706759d6e358f8adcf2964c1fbcf83899f4a35730a733814",
+        "canonicalOutputSetSha256": "bcd9ce3501734b95d9637eada398223a880da21aadf1d5c6493a417d49102cdb",
+        "canonicalCoastlineOutputSha256": "06020f3c8cfae4adf5269de9978637e9e45c8d1554cd7b715d04141e1e89b999",
+        "renderSceneSha256": "cc24328599537ee75950124306a08f08b55cc40b9342b0277f33bd1f0157c360",
+        "manifestSha256": "e8a4227e7519bbeb94a9b174badcbf0c753f2fdc29a5b9885b413c4910d1a239",
+        "reopenComparisonPassed": true,
+        "reopenGeneratorInvocations": 0,
+        "unchangedAfterExport": true
+      },
+      "destination": {
+        "sha256": "022c45e9b7b3e6be7122435377a5fd0ccfac9ef550bf5f48583f5cc45cef2446",
+        "byteLength": 921077,
+        "profileId": "atlas-svg-v1",
+        "profileVersion": 1,
+        "dimensions": "400x200mm",
+        "sizeCeilingBytes": 33554432,
+        "atomicIdentityReplacementObserved": true,
+        "nativeReceiptHashAndSizeMatched": true,
+        "temporaryAbsent": true,
+        "xmlDeclarationAndSvgRootValidated": true
+      },
+      "observation": {
+        "roleCounts": { "application": 1, "gpu": 1, "networking": 1, "webContent": 1 },
+        "foregroundIntact": true,
+        "membershipRevalidated": true,
+        "sampleCount": 77,
+        "maximumSampleIntervalMilliseconds": 6.962158203125,
+        "elapsedMilliseconds": 464.56005859375,
+        "peakAdditionalRSSBytes": 12828672
+      },
+      "retention": {
+        "status": "retained",
+        "artifactIdentifier": "issue101-fragmented-islands-svg",
+        "sha256": "10ff3e320656ef71270bc884bb15aed0bf004058641c4757d0cf81ad44681a15",
+        "byteLength": 13603,
+        "temporaryRawCsvRemoved": true
+      }
+    },
+    {
+      "fixtureId": "milestone-2-atlas-fragmented-islands",
+      "fixtureDefinitionSha256": "d8ae2385f7aa4ca59716adb5a116b52888d310c382116b6d8801e60d8e10b363",
+      "worldSeed": "18364758544493064720",
+      "format": "png",
+      "status": "valid",
+      "freshProcess": true,
+      "requiredTrialConsumed": true,
+      "retried": false,
+      "readinessControllerValid": true,
+      "acceptedState": {
+        "canonicalAspectSetSha256": "2ffc64f80fcf5a88706759d6e358f8adcf2964c1fbcf83899f4a35730a733814",
+        "canonicalOutputSetSha256": "bcd9ce3501734b95d9637eada398223a880da21aadf1d5c6493a417d49102cdb",
+        "canonicalCoastlineOutputSha256": "06020f3c8cfae4adf5269de9978637e9e45c8d1554cd7b715d04141e1e89b999",
+        "renderSceneSha256": "cc24328599537ee75950124306a08f08b55cc40b9342b0277f33bd1f0157c360",
+        "manifestSha256": "e8a4227e7519bbeb94a9b174badcbf0c753f2fdc29a5b9885b413c4910d1a239",
+        "reopenComparisonPassed": true,
+        "reopenGeneratorInvocations": 0,
+        "unchangedAfterExport": true
+      },
+      "destination": {
+        "sha256": "078b0407d360f3d54bf43ef3f334c0ee0a8e332f0351cd200acdf4c6da7e9e21",
+        "pixelSha256": "a02345cb715c37f9200a3611a814185113529cd0f68ce16df64520594eb1cc74",
+        "byteLength": 1221450,
+        "profileId": "atlas-png-v1",
+        "profileVersion": 1,
+        "dimensions": "8192x4096px",
+        "sizeCeilingBytes": 67108864,
+        "atomicIdentityReplacementObserved": true,
+        "nativeReceiptHashAndSizeMatched": true,
+        "temporaryAbsent": true,
+        "completePngStructureValidated": true,
+        "canonicalChunkOrder": ["IHDR", "sRGB", "IDAT", "IDAT", "IEND"]
+      },
+      "observation": {
+        "roleCounts": { "application": 1, "gpu": 1, "networking": 1, "webContent": 1 },
+        "foregroundIntact": true,
+        "membershipRevalidated": true,
+        "sampleCount": 2091,
+        "maximumSampleIntervalMilliseconds": 11.146,
+        "elapsedMilliseconds": 12794.412353515625,
+        "peakAdditionalRSSBytes": 3801088
+      },
+      "retention": {
+        "status": "retained",
+        "artifactIdentifier": "issue101-fragmented-islands-png",
+        "sha256": "eaf970c0867dea1273329ecce7ce532d605f93e06f1350292c1bca2f2de5271f",
+        "byteLength": 153245,
+        "temporaryRawCsvRemoved": true
+      }
+    },
+    {
+      "fixtureId": "milestone-2-atlas-control-max",
+      "fixtureDefinitionSha256": "d1d02723484d872e7ec75729084e57d6d9b65e8c4907cdec663491d67f669701",
+      "worldSeed": "16045690984503098046",
+      "format": "svg",
+      "status": "valid",
+      "freshProcess": true,
+      "requiredTrialConsumed": true,
+      "retried": false,
+      "readinessControllerValid": true,
+      "acceptedState": {
+        "canonicalAspectSetSha256": "1409cabd2318348c71360981b48ea604fe1c28e3f7822a0080cf9cc792b04a89",
+        "canonicalOutputSetSha256": "c0a7c05167f279100c5fe781f1b484ff4ad881fd00d6d3ede0ccf0d9bf5b403b",
+        "canonicalCoastlineOutputSha256": "d375240c629fe7295ec766c2cdce2e85625f0ab0fccd02ff8c3a53b415d86132",
+        "renderSceneSha256": "89f72001b80213c099d0c71d60bd96e831540517d8bc0a6650187f8afee18188",
+        "manifestSha256": "da3640cc5df8b27188b1756f45dfd68e7d2e31cf898a79ad690ea70aa5aeeaa7",
+        "reopenComparisonPassed": true,
+        "reopenGeneratorInvocations": 0,
+        "unchangedAfterExport": true
+      },
+      "destination": {
+        "sha256": "f341b22505fd5751ec0980565857a046e2182a54e6ee9d955b73fe6b5fa80d0b",
+        "byteLength": 767851,
+        "profileId": "atlas-svg-v1",
+        "profileVersion": 1,
+        "dimensions": "400x200mm",
+        "sizeCeilingBytes": 33554432,
+        "atomicIdentityReplacementObserved": true,
+        "nativeReceiptHashAndSizeMatched": true,
+        "temporaryAbsent": true,
+        "xmlDeclarationAndSvgRootValidated": true
+      },
+      "observation": {
+        "roleCounts": { "application": 1, "gpu": 1, "networking": 1, "webContent": 1 },
+        "foregroundIntact": true,
+        "membershipRevalidated": true,
+        "sampleCount": 72,
+        "maximumSampleIntervalMilliseconds": 6.366,
+        "elapsedMilliseconds": 438.6279296875,
+        "peakAdditionalRSSBytes": 3604480
+      },
+      "retention": {
+        "status": "retained",
+        "artifactIdentifier": "issue101-control-max-svg",
+        "sha256": "0176e640c5b37bd035c19fc307daa482529ccfe844e7857bfe09c689747d5fe7",
+        "byteLength": 14076,
+        "temporaryRawCsvRemoved": true
+      }
+    },
+    {
+      "fixtureId": "milestone-2-atlas-control-max",
+      "fixtureDefinitionSha256": "d1d02723484d872e7ec75729084e57d6d9b65e8c4907cdec663491d67f669701",
+      "worldSeed": "16045690984503098046",
+      "format": "png",
+      "status": "valid",
+      "freshProcess": true,
+      "requiredTrialConsumed": true,
+      "retried": false,
+      "readinessControllerValid": true,
+      "acceptedState": {
+        "canonicalAspectSetSha256": "1409cabd2318348c71360981b48ea604fe1c28e3f7822a0080cf9cc792b04a89",
+        "canonicalOutputSetSha256": "c0a7c05167f279100c5fe781f1b484ff4ad881fd00d6d3ede0ccf0d9bf5b403b",
+        "canonicalCoastlineOutputSha256": "d375240c629fe7295ec766c2cdce2e85625f0ab0fccd02ff8c3a53b415d86132",
+        "renderSceneSha256": "89f72001b80213c099d0c71d60bd96e831540517d8bc0a6650187f8afee18188",
+        "manifestSha256": "da3640cc5df8b27188b1756f45dfd68e7d2e31cf898a79ad690ea70aa5aeeaa7",
+        "reopenComparisonPassed": true,
+        "reopenGeneratorInvocations": 0,
+        "unchangedAfterExport": true
+      },
+      "destination": {
+        "sha256": "9012be2ed269ac9373a12a8fb40bc23c7161d4a93f8d2bfec6b32a675eaabf4f",
+        "pixelSha256": "e1c1aa30f098a87ca776cbb7e3e484216ccb4d9fffd7f623410cb0b646776070",
+        "byteLength": 1129326,
+        "profileId": "atlas-png-v1",
+        "profileVersion": 1,
+        "dimensions": "8192x4096px",
+        "sizeCeilingBytes": 67108864,
+        "atomicIdentityReplacementObserved": true,
+        "nativeReceiptHashAndSizeMatched": true,
+        "temporaryAbsent": true,
+        "completePngStructureValidated": true,
+        "canonicalChunkOrder": ["IHDR", "sRGB", "IDAT", "IDAT", "IEND"]
+      },
+      "observation": {
+        "roleCounts": { "application": 1, "gpu": 1, "networking": 1, "webContent": 1 },
+        "foregroundIntact": true,
+        "membershipRevalidated": true,
+        "sampleCount": 1817,
+        "maximumSampleIntervalMilliseconds": 6.73,
+        "elapsedMilliseconds": 11084.416748046875,
+        "peakAdditionalRSSBytes": 21954560
+      },
+      "retention": {
+        "status": "retained",
+        "artifactIdentifier": "issue101-control-max-png",
+        "sha256": "eeb1bb3f25c4e3823145a5d1c8e21ba37a877856e6f06a0a9b568cabd180aff4",
+        "byteLength": 135074,
+        "temporaryRawCsvRemoved": true
+      }
+    }
+  ],
+  "issue101Retention": {
+    "approvedOwnerOnlyArchiveReady": true,
+    "newRawArtifactCount": 6,
+    "allRetentionReceiptsValid": true,
+    "temporaryRawCsvCount": 0,
+    "privatePathsPublished": false
+  },
+  "issue101Conclusion": {
+    "currentValidQualificationCount": 6,
+    "authorizedReplacementCount": 1,
+    "additionalAuthorizedRowCount": 5,
+    "silentRetryCount": 0,
+    "preservedConsumedInvalidCount": 1,
+    "preservedConsumedInvalidReinterpreted": false,
+    "issue95MatrixRun": false,
+    "releaseBudgetConclusion": "none",
+    "qualificationConclusion": "The authorized replacement proof/SVG row and all five conditionally authorized rows produced valid packaged completion qualifications from six fresh processes. The earlier consumed observer-invalid proof/SVG attempt remains separately retained and invalid."
   }
 }

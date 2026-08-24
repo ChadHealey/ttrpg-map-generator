@@ -686,7 +686,14 @@ dispatch, then failed closed because the observer format predicate did not admit
 production SVG's exact XML declaration. That required trial is consumed, its raw RSS timeline is
 privately retained, the remaining five trials were not run, and there is no valid SVG/PNG
 qualification or release-budget conclusion. The predicate is corrected and tested, but the trial
-may not be rerun without new authority.
+may not be rerun without new authority. Issue #101 subsequently supplied exactly one replacement
+authority for that consumed row and conditionally authorized the remaining five rows. The corrected
+observer reproduced the unchanged package and tool identities, the replacement proof/SVG row was
+valid, and all five subsequently authorized fresh-process rows were valid. Every raw sampler CSV
+was privately retained before inspection, and the original consumed invalid attempt remains
+separately retained and invalid. These six current completion qualifications establish the issue
+#97 path only; they do not run issue #95's five-process matrix or make a timing, RSS, cancellation,
+or release-budget conclusion.
 
 ### Approved export target-session readiness authority
 

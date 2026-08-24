@@ -1,10 +1,10 @@
 # Issue 97 packaged SVG/PNG completion qualification
 
-This directory records the bounded attempt to close the packaged export-completion authority gap
-identified by [issue #95](../issue-95/release-protocol-2026-08-23/README.md). The observer is
-designed to qualify one SVG and one PNG success observation per gated fixture; this run stopped
-before measured dispatch and does not run, pass, fail, or replace issue #95's five-fresh-process
-release matrix.
+This directory records the bounded packaged export-completion authority work identified by
+[issue #95](../issue-95/release-protocol-2026-08-23/README.md), including the preserved issue #97
+stops and issue #101's explicitly authorized replacement sequence. The observer qualifies one SVG
+and one PNG success observation per gated fixture. None of these observations runs, passes, fails,
+or replaces issue #95's five-fresh-process release matrix.
 
 ## Observer-only dispatch and exact reopened state
 
@@ -277,6 +277,68 @@ corrected, but the already consumed invalid proof/SVG trial may not be rerun wit
 The complete sanitized resumed-attempt record is appended without modifying the six preserved
 initial attempts in
 [`qualification-2026-08-23/raw-results.json`](qualification-2026-08-23/raw-results.json).
+
+### Issue #101 authorized replacement qualification
+
+Issue #101 supplied the bounded authority that the resumed issue #97 sequence correctly did not
+infer. The qualification started from task base
+`73f4c579b35037a91874442f1e39dfdfed95baa7` and reproduced the unchanged implementation candidate
+`35a2db5cd105cd32133888f8a84c4ab59691dd1d`. Before the replacement trial, the package and all
+external tools reproduced these exact identities:
+
+| Artifact                                  | SHA-256                                                            |
+| ----------------------------------------- | ------------------------------------------------------------------ |
+| Observer-enabled packaged executable      | `94b5a8b5f3fcd43a361589f35e3449c72cf3aad13610737140c3dd749737cf4e` |
+| Corrected packaged export observer        | `1b84fb183fc2c34b2b652d2dc168050babb91d35f3fd983b657a4e8b05190d2f` |
+| RSS sampler                               | `d8b07a40f50d6254faa012bc25cbb5cc8daaa4add35dec1ff670ff759fd775fd` |
+| Private retention utility                 | `87c2e27e24d559f50780383840290dfe7afdfb5cb1ab15cc33928032ceecde83` |
+| Issue #100 readiness controller           | `68c23690dcdb7f4dd329e0b2152b699ba1d6ef4248d211088aa26bb98c9475c3` |
+| Issue #100 independent readiness observer | `9f9c3254ee523f0151ce05f3b5d2573139a26e6bc432ce2c365e1b83d57419ff` |
+
+The narrowly approved unsandboxed issue #100 controller invocation reproduced one fresh exact app,
+one visible Accessibility window, successful activation/raise/frontmost actions, retained
+application/window identity, and independent Accessibility plus `NSWorkspace` frontmost state.
+Its receipt configured no fixture, sampler, destination, export, or measurement. The same readiness
+mechanism established a fresh process for each later row.
+
+The replacement proof/SVG row was run exactly once. It was **VALID**, so the remaining five rows
+were authorized and run once each in the prescribed order. There were no retries and no
+stop-triggering invalid row:
+
+| Fixture / format         | Result    | Destination SHA-256 / bytes                                                    | Profile / dimensions                | Elapsed / peak additional RSS / max interval |
+| ------------------------ | --------- | ------------------------------------------------------------------------------ | ----------------------------------- | -------------------------------------------- |
+| proof / SVG replacement  | **VALID** | `c72f6261534171e7c7048f1cccc304b6a148296ba22090c11e7a1c132e8318db` / 852,650   | `atlas-svg-v1` v1 / 400 × 200 mm    | 443.49 ms / 16.95 MiB / 6.409 ms             |
+| proof / PNG              | **VALID** | `981befbd11122dd20aaa944105494438a887213810480a4c81c57b9244932e72` / 1,201,973 | `atlas-png-v1` v1 / 8192 × 4096 RGB | 13,394.75 ms / 110.47 MiB / 6.649 ms         |
+| fragmented-islands / SVG | **VALID** | `022c45e9b7b3e6be7122435377a5fd0ccfac9ef550bf5f48583f5cc45cef2446` / 921,077   | `atlas-svg-v1` v1 / 400 × 200 mm    | 464.56 ms / 12.23 MiB / 6.962 ms             |
+| fragmented-islands / PNG | **VALID** | `078b0407d360f3d54bf43ef3f334c0ee0a8e332f0351cd200acdf4c6da7e9e21` / 1,221,450 | `atlas-png-v1` v1 / 8192 × 4096 RGB | 12,794.41 ms / 3.63 MiB / 11.146 ms          |
+| control-max / SVG        | **VALID** | `f341b22505fd5751ec0980565857a046e2182a54e6ee9d955b73fe6b5fa80d0b` / 767,851   | `atlas-svg-v1` v1 / 400 × 200 mm    | 438.63 ms / 3.44 MiB / 6.366 ms              |
+| control-max / PNG        | **VALID** | `9012be2ed269ac9373a12a8fb40bc23c7161d4a93f8d2bfec6b32a675eaabf4f` / 1,129,326 | `atlas-png-v1` v1 / 8192 × 4096 RGB | 11,084.42 ms / 20.94 MiB / 6.730 ms          |
+
+Every row proved exact fixture ID, seed, and nine controls; exact accepted/reopened state; an
+inode- and hash-changing same-filesystem atomic replacement; native receipt/hash/size agreement;
+the unchanged format profile, dimensions, and ceiling; absence of the native temporary; unchanged
+accepted object, aspect/output/coastline/scene/package evidence; PASS reopen comparison; zero reopen
+generator calls; uninterrupted foreground; equal baseline/completion membership with one
+application, GPU, Networking, and WebContent process; exact sampler arithmetic and endpoint
+coverage; and a maximum interval below 20 ms. Each SVG began with the exact XML declaration followed
+by the SVG root. Each PNG also passed an independent complete-container check covering CRCs,
+canonical `IHDR`/`sRGB`/consecutive `IDAT`/`IEND` order, full stream inflation, scanline filters,
+Adler-32, and exact RGB dimensions.
+
+The six PID-bearing CSVs were each handed to the approved owner-only retention utility immediately
+after observer termination and before receipt or output inspection. All six retention receipts are
+valid, all temporary CSV sources were removed, and no private path or raw content is published. The
+opaque artifact identifiers are `issue101-proof-svg-replacement`, `issue101-proof-png`,
+`issue101-fragmented-islands-svg`, `issue101-fragmented-islands-png`,
+`issue101-control-max-svg`, and `issue101-control-max-png`; their sanitized hashes and byte lengths
+are in the machine-readable receipt.
+
+The earlier consumed proof/SVG attempt remains separately **INVALID, CONSUMED** under observer
+identity `406de0abd9120cf7535a23b86da09b4c8962e98bda798e59159ba6f6945b8642`, with its original private
+retention receipt and invalidation unchanged. Its identical production SVG bytes do not make that
+historical observer-invalid trial valid. The current result is six valid completion-authority rows
+plus one separately preserved consumed invalid attempt. These single-row qualification diagnostics
+make no issue #95 matrix, timing/RSS budget, cancellation, or release-budget conclusion.
 
 ## Privacy
 

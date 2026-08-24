@@ -297,8 +297,8 @@ tree at intervals no greater than 20 ms and report every run plus median and wor
 | ------------------------------------ | ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
 | Coarse preview                       | ≤900 ms and ≤256 MiB additional process-tree RSS; report ≤750 ms stretch target | **PASS** — all 15 final fresh runs passed; worst time 809.40 ms, worst RSS 157.72 MiB  |
 | Full generation                      | ≤10 s and ≤768 MiB additional process-tree RSS                                  | **NOT RUN** — issue #95 stopped on observer-authority drift before measured dispatch   |
-| SVG export                           | ≤3 s, ≤512 MiB, destination ≤32 MiB                                             | **NOT RUN** — #97 consumed path trial invalid; no release-budget conclusion            |
-| PNG export                           | ≤15 s, ≤1 GiB, destination ≤64 MiB                                              | **NOT RUN** — #97 stopped before PNG; no release-budget conclusion                     |
+| SVG export                           | ≤3 s, ≤512 MiB, destination ≤32 MiB                                             | **NOT RUN** — completion path qualified by #101; #95 matrix remains unrun              |
+| PNG export                           | ≤15 s, ≤1 GiB, destination ≤64 MiB                                              | **NOT RUN** — completion path qualified by #101; #95 matrix remains unrun              |
 | Preview cancellation                 | Acknowledgement ≤100 ms                                                         | **NOT RUN** — issue #95 confirmed no exact-fixture acknowledgement/aftermath authority |
 | Full-generation/SVG/PNG cancellation | Acknowledgement ≤500 ms                                                         | **NOT RUN** — issue #95 confirmed no packaged acknowledgement/aftermath authority      |
 
@@ -536,6 +536,48 @@ issue #95's matrix remains unrun. Further qualification requires explicit new au
 the consumed proof/SVG trial. Full sanitized evidence is in the
 [issue #97 packaged export evidence](investigations/issue-97/README.md).
 
+### Issue #101 authorized export replacement qualification (2026-08-23)
+
+Issue #101 supplied exactly one replacement authority for the consumed observer-invalid proof/SVG
+row and authorized the other five rows only after that replacement validated. The task started at
+`73f4c579b35037a91874442f1e39dfdfed95baa7`, rebuilt the unchanged observer-enabled executable at
+SHA-256 `94b5a8b5f3fcd43a361589f35e3449c72cf3aad13610737140c3dd749737cf4e`, and reproduced corrected
+observer SHA-256 `1b84fb183fc2c34b2b652d2dc168050babb91d35f3fd983b657a4e8b05190d2f`, sampler
+`d8b07a40f50d6254faa012bc25cbb5cc8daaa4add35dec1ff670ff759fd775fd`, retention utility
+`87c2e27e24d559f50780383840290dfe7afdfb5cb1ab15cc33928032ceecde83`, and the two issue #100 tool
+identities. The approved issue #100 controller independently re-established the exact pinned host,
+fresh app/window identity, visibility, raise/frontmost state, and zero-operation readiness before
+the replacement.
+
+The replacement proof/SVG row was **VALID** on its only run. The five conditionally authorized
+rows then ran once each in fresh processes and were also **VALID**:
+
+| Fixture                                | SVG result / SHA-256 / bytes                                                                         | PNG result / SHA-256 / bytes                                                               | Maximum sample interval     |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | --------------------------- |
+| `milestone-2-atlas-proof`              | **VALID replacement** / `c72f6261534171e7c7048f1cccc304b6a148296ba22090c11e7a1c132e8318db` / 852,650 | **VALID** / `981befbd11122dd20aaa944105494438a887213810480a4c81c57b9244932e72` / 1,201,973 | SVG 6.409 ms; PNG 6.649 ms  |
+| `milestone-2-atlas-fragmented-islands` | **VALID** / `022c45e9b7b3e6be7122435377a5fd0ccfac9ef550bf5f48583f5cc45cef2446` / 921,077             | **VALID** / `078b0407d360f3d54bf43ef3f334c0ee0a8e332f0351cd200acdf4c6da7e9e21` / 1,221,450 | SVG 6.962 ms; PNG 11.146 ms |
+| `milestone-2-atlas-control-max`        | **VALID** / `f341b22505fd5751ec0980565857a046e2182a54e6ee9d955b73fe6b5fa80d0b` / 767,851             | **VALID** / `9012be2ed269ac9373a12a8fb40bc23c7161d4a93f8d2bfec6b32a675eaabf4f` / 1,129,326 | SVG 6.366 ms; PNG 6.730 ms  |
+
+All six rows proved exact fixture authority; exact accepted/reopened state; inode- and hash-changing
+atomic replacement; matching native receipt, SHA-256, byte length, profile, dimensions, and
+ceiling; absent native temporary; unchanged accepted object and canonical/package evidence; PASS
+reopen comparison; zero reopen generator calls; uninterrupted foreground; stable one-each
+application/GPU/Networking/WebContent membership; exact sampler arithmetic and endpoint coverage;
+and owner-only private retention before inspection. SVG validation admits the exact XML declaration
+followed by the SVG root. Each PNG additionally passed independent complete chunk, CRC, inflate,
+filter, Adler-32, and RGB-dimension validation.
+
+All six raw CSVs are privately retained under opaque artifact identifiers, their temporary sources
+are removed, and no private path or raw content is public. The earlier proof/SVG attempt remains
+separately **INVALID, CONSUMED** with its original retention receipt and invalidation unchanged;
+identical production bytes do not reinterpret that historical observation. There were no retries.
+The complete receipt is in the
+[issue #97 packaged export evidence](investigations/issue-97/README.md).
+
+These observations qualify the export-completion authority only. They are not a warm-up plus five
+fresh runs, do not run issue #95's matrix or cancellation children, and make no export timing/RSS
+budget pass or fail and no release-budget conclusion.
+
 ## Remote CI and milestone state
 
 Issue #71 recorded fresh CI evidence for the exact remote release commit
@@ -559,12 +601,10 @@ rule that every included issue be closed or explicitly moved out.
 
 The final release owner must perform these actions in order:
 
-1. Decide whether to grant new authority for issue #97's consumed proof/SVG trial, then use issue
-   #100's qualified target-session mechanism and corrected observer to obtain all six packaged
-   SVG/PNG success qualifications; implement
-   and qualify issue #95's two cancellation children; then revalidate and rerun the complete
-   successor protocol without changing fixtures, workload, production behavior, hardware, or
-   limits.
+1. Treat issue #101's six packaged SVG/PNG completion qualifications as path authority only;
+   implement and qualify issue #95's two cancellation children, then revalidate and rerun the
+   complete successor protocol without changing fixtures, workload, production behavior, hardware,
+   or limits.
 2. Confirm this report names the exact tested implementation commit and the handoff names the
    documentation-only commit, with complete command results, packaged receipts, artifact hashes,
    and human visual review. Do not attribute costly gates to the documentation commit unless they
