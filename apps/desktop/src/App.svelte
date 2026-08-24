@@ -7,13 +7,20 @@
     isAtlasEditingPhase,
     MILESTONE_TWO_ATLAS_PROOF_SEED,
   } from './atlas-workflow.js';
+  import { createAtlasAcceptedEvidence } from './atlas-workflow-evidence.js';
   import AtlasWorkflowEvidencePanel from './AtlasWorkflowEvidencePanel.svelte';
   import {
     type GatedAtlasFixture,
     type GatedAtlasFixtureId,
     installPackagedAtlasObserverDispatch,
     PACKAGED_ATLAS_OBSERVER_RECEIPT_LABEL,
+    PACKAGED_GENERATION_CANCELLATION_RECEIPT_LABEL,
     packagedAtlasObserverReceipt,
+    type PackagedGenerationCancellationContext,
+    type PackagedGenerationCancellationState,
+    type PackagedGenerationCancellationTrial,
+    requestExactFixtureGenerationCancellation,
+    requestGenerationCancellationAftermath,
     requestProductionFullAtlas,
   } from './packaged-atlas-observer-dispatch.js';
   import {
@@ -37,6 +44,7 @@
   let targetPath = '';
   let observerFixtureId: GatedAtlasFixtureId | undefined;
   let exportObserverCompletion: PackagedExportObserverCompletion | undefined;
+  let generationCancellationContext: PackagedGenerationCancellationContext | undefined;
   const packagedAtlasObserverEnabled =
     import.meta.env.VITE_PACKAGED_ATLAS_OBSERVER_DISPATCH === '1';
   const packagedExportObserverEnabled =
@@ -55,6 +63,8 @@
       () => ({ fixtureId: observerFixtureId, worldSeed: seed, controls }),
       () => void preview(),
       () => void acceptFull(),
+      (trial) => void startGenerationCancellationTrial(trial),
+      () => void completeGenerationCancellationAftermath(),
     );
     const removeExportDispatch = installPackagedExportObserverDispatch(
       window,
@@ -109,7 +119,70 @@
     await requestProductionFullAtlas(() => workflow.acceptFull(seed, controls), run);
   }
 
+  function generationCancellationState(): PackagedGenerationCancellationState {
+    return {
+      fixtureId: observerFixtureId,
+      worldSeed: seed,
+      controls,
+      workflowPhase: atlas.phase,
+      isBusy: atlas.isBusy,
+      hasPreview: atlas.preview !== undefined,
+      acceptedCheckpoint: atlas.acceptedCheckpoint,
+      acceptedIdentity: atlas.accepted,
+      acceptedWorldSeed:
+        atlas.accepted === undefined ? undefined : String(atlas.accepted.document.worldSeed),
+      acceptedControls: atlas.accepted?.geography.controls,
+      progress: atlas.progress,
+      diagnosticCodes: atlas.diagnosticCodes,
+    };
+  }
+
+  async function startGenerationCancellationTrial(
+    trial: PackagedGenerationCancellationTrial,
+  ): Promise<void> {
+    generationCancellationContext = undefined;
+    await requestExactFixtureGenerationCancellation(trial, {
+      currentState: () => workflowCancellationState(),
+      requestPreview: preview,
+      requestFull: acceptFull,
+      cancelActiveOperation: () => workflow.cancelActiveOperation(),
+      acceptedEvidence: async (accepted) => {
+        const result = await createAtlasAcceptedEvidence(accepted, 'baseline');
+        return result.ok ? result.evidence : undefined;
+      },
+      record: (context) => {
+        generationCancellationContext = context;
+        refresh();
+      },
+      nowEpochMilliseconds: () => performance.timeOrigin + performance.now(),
+    });
+  }
+
+  async function completeGenerationCancellationAftermath(): Promise<void> {
+    await requestGenerationCancellationAftermath(generationCancellationContext, {
+      currentState: () => workflowCancellationState(),
+      requestPreview: preview,
+      requestFull: acceptFull,
+      cancelActiveOperation: () => workflow.cancelActiveOperation(),
+      acceptedEvidence: async (accepted) => {
+        const result = await createAtlasAcceptedEvidence(accepted, 'baseline');
+        return result.ok ? result.evidence : undefined;
+      },
+      record: (context) => {
+        generationCancellationContext = context;
+        refresh();
+      },
+      nowEpochMilliseconds: () => performance.timeOrigin + performance.now(),
+    });
+  }
+
+  function workflowCancellationState(): PackagedGenerationCancellationState {
+    atlas = workflow.snapshot;
+    return generationCancellationState();
+  }
+
   function configureObserverFixture(fixture: GatedAtlasFixture): void {
+    generationCancellationContext = undefined;
     if (
       atlas.isBusy ||
       atlas.phase !== 'empty' ||
@@ -242,6 +315,11 @@
   {#if observerReceipt !== undefined}
     <p aria-label={PACKAGED_ATLAS_OBSERVER_RECEIPT_LABEL} class="sr-only">
       {JSON.stringify(observerReceipt)}
+    </p>
+  {/if}
+  {#if generationCancellationContext !== undefined}
+    <p aria-label={PACKAGED_GENERATION_CANCELLATION_RECEIPT_LABEL} class="sr-only">
+      {JSON.stringify(generationCancellationContext.receipt)}
     </p>
   {/if}
   {#if exportObserverReceipt !== undefined}

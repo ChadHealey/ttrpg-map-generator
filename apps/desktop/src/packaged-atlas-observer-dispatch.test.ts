@@ -7,9 +7,15 @@ import {
   installPackagedAtlasObserverDispatch,
   isPackagedAtlasPreviewDispatch,
   isPackagedFullAtlasDispatch,
+  isPackagedGenerationCancellationAftermathDispatch,
   packagedAtlasFixtureDispatch,
   packagedAtlasObserverReceipt,
+  packagedGenerationCancellationDispatch,
+  type PackagedGenerationCancellationState,
+  type PackagedGenerationCancellationTrial,
+  requestExactFixtureGenerationCancellation,
   requestExactFixturePreview,
+  requestGenerationCancellationAftermath,
   requestProductionFullAtlas,
 } from './packaged-atlas-observer-dispatch.js';
 
@@ -67,6 +73,9 @@ describe('packaged full-atlas observer dispatch', () => {
     expect(appSource).toMatch(
       /async function acceptFull\(\): Promise<void> \{[\s\S]*?requestProductionFullAtlas\(\(\) => workflow\.acceptFull\(seed, controls\), run\)/u,
     );
+    expect(appSource).toMatch(
+      /startGenerationCancellationTrial[\s\S]*?requestExactFixtureGenerationCancellation\(trial,[\s\S]*?requestPreview: preview,[\s\S]*?requestFull: acceptFull,[\s\S]*?cancelActiveOperation: \(\) => workflow\.cancelActiveOperation\(\)/u,
+    );
   });
 
   it('has no fixture or full dispatch effect in an ordinary build', () => {
@@ -102,6 +111,8 @@ describe('packaged full-atlas observer dispatch', () => {
     const configure = vi.fn();
     const preview = vi.fn();
     const acceptFull = vi.fn();
+    const cancelTrial = vi.fn();
+    const aftermath = vi.fn();
     const fixture = gatedAtlasFixture('milestone-2-atlas-control-max');
     const remove = installPackagedAtlasObserverDispatch(
       target,
@@ -114,6 +125,8 @@ describe('packaged full-atlas observer dispatch', () => {
       }),
       preview,
       acceptFull,
+      cancelTrial,
+      aftermath,
     );
     const fixtureEvent = dispatchEvent('KeyL');
     const previewEvent = dispatchEvent('KeyP');
@@ -122,6 +135,8 @@ describe('packaged full-atlas observer dispatch', () => {
     target.dispatchEvent(fixtureEvent);
     target.dispatchEvent(previewEvent);
     target.dispatchEvent(fullEvent);
+    target.dispatchEvent(dispatchEvent('KeyW'));
+    target.dispatchEvent(dispatchEvent('KeyG'));
     remove();
     target.dispatchEvent(dispatchEvent('KeyJ'));
 
@@ -129,6 +144,8 @@ describe('packaged full-atlas observer dispatch', () => {
     expect(configure).toHaveBeenCalledWith(gatedAtlasFixture('milestone-2-atlas-control-max'));
     expect(preview).toHaveBeenCalledTimes(1);
     expect(acceptFull).toHaveBeenCalledTimes(1);
+    expect(cancelTrial).toHaveBeenCalledWith({ operation: 'preview', safePoint: 'middle' });
+    expect(aftermath).toHaveBeenCalledOnce();
     expect(fixtureEvent.defaultPrevented).toBe(true);
     expect(previewEvent.defaultPrevented).toBe(true);
     expect(fullEvent.defaultPrevented).toBe(true);
@@ -173,6 +190,115 @@ describe('packaged full-atlas observer dispatch', () => {
     expect(isPackagedAtlasPreviewDispatch(dispatchShape('KeyF'))).toBe(false);
     expect(isPackagedFullAtlasDispatch(dispatchShape('KeyF', { ctrlKey: false }))).toBe(false);
     expect(isPackagedFullAtlasDispatch(dispatchShape('KeyP'))).toBe(false);
+    expect(packagedGenerationCancellationDispatch(dispatchShape('KeyQ'))).toEqual({
+      operation: 'preview',
+      safePoint: 'early',
+    });
+    expect(packagedGenerationCancellationDispatch(dispatchShape('KeyD'))).toEqual({
+      operation: 'full',
+      safePoint: 'late',
+    });
+    expect(
+      packagedGenerationCancellationDispatch(dispatchShape('KeyS', { repeat: true })),
+    ).toBeUndefined();
+    expect(isPackagedGenerationCancellationAftermathDispatch(dispatchShape('KeyG'))).toBe(true);
+    expect(
+      isPackagedGenerationCancellationAftermathDispatch(dispatchShape('KeyG', { metaKey: false })),
+    ).toBe(false);
+  });
+
+  it.each([
+    ['early', 20],
+    ['middle', 600],
+    ['late', 990],
+  ] as const)(
+    'dispatches preview cancellation at the declared %s safe point and acknowledges terminal state',
+    async (safePoint, completedWork) => {
+      const harness = cancellationHarness({ operation: 'preview', safePoint }, completedWork);
+
+      const result = await requestExactFixtureGenerationCancellation(
+        { operation: 'preview', safePoint },
+        harness.dependencies,
+      );
+
+      expect(result?.receipt).toMatchObject({
+        status: 'cancelled',
+        operation: 'preview',
+        safePoint,
+        acknowledgementMilliseconds: 12,
+        costlySchedulingStopped: true,
+        previousStatePreserved: true,
+        noAcceptedCommitAtAcknowledgement: true,
+        terminalProgress: { stage: 'cancelled', isTerminal: true },
+      });
+      expect(harness.cancel).toHaveBeenCalledOnce();
+      expect(harness.records.map(({ receipt }) => receipt.status)).toEqual([
+        'cancellation-requested',
+        'cancelled',
+      ]);
+    },
+  );
+
+  it('fails closed on progress regression, skipped safe point, or late accepted presentation', async () => {
+    const regression = cancellationHarness(
+      { operation: 'preview', safePoint: 'middle' },
+      600,
+      [700, 600],
+    );
+    const regressed = await requestExactFixtureGenerationCancellation(
+      { operation: 'preview', safePoint: 'middle' },
+      regression.dependencies,
+    );
+    expect(regressed?.receipt).toMatchObject({ status: 'invalid' });
+    expect(regressed?.receipt.invalidReason).toMatch(/monotonicity/u);
+
+    const skipped = cancellationHarness({ operation: 'preview', safePoint: 'middle' }, 990);
+    const ambiguous = await requestExactFixtureGenerationCancellation(
+      { operation: 'preview', safePoint: 'middle' },
+      skipped.dependencies,
+    );
+    expect(ambiguous?.receipt).toMatchObject({
+      status: 'invalid',
+      invalidReason: 'declared cancellation safe point was skipped or ambiguous',
+    });
+
+    const late = cancellationHarness({ operation: 'preview', safePoint: 'early' }, 20, undefined, {
+      lateAcceptedCommit: true,
+    });
+    const presented = await requestExactFixtureGenerationCancellation(
+      { operation: 'preview', safePoint: 'early' },
+      late.dependencies,
+    );
+    expect(presented?.receipt).toMatchObject({ status: 'invalid' });
+    expect(presented?.receipt.invalidReason).toMatch(/state changed/u);
+  });
+
+  it('requires the exact disposable preview authority for full cancellation and a deterministic aftermath', async () => {
+    const harness = cancellationHarness({ operation: 'full', safePoint: 'late' }, 990, undefined, {
+      preview: true,
+    });
+    const cancelled = await requestExactFixtureGenerationCancellation(
+      { operation: 'full', safePoint: 'late' },
+      harness.dependencies,
+    );
+    expect(cancelled?.receipt).toMatchObject({
+      status: 'cancelled',
+      preState: {
+        workflowPhase: 'preview',
+        disposablePreviewPresent: true,
+        acceptedAtlasPresent: false,
+      },
+    });
+
+    const completed = await requestGenerationCancellationAftermath(cancelled, harness.dependencies);
+    expect(completed?.receipt).toMatchObject({
+      status: 'aftermath-complete',
+      nextCompletionCanonicallyDeterministic: true,
+      nextCompletion: {
+        canonicalAspectSetSha256:
+          '24ea927af4355fc5d44c1bba2cf49d7a4b47c27404d4c352267ed33ccecd90e2',
+      },
+    });
   });
 
   it('delegates full generation to the supplied production action and presentation path', async () => {
@@ -308,4 +434,131 @@ function dispatchEvent(code: string): KeyboardEvent {
     repeat: { value: false },
   });
   return event as KeyboardEvent;
+}
+
+const PROOF_AUTHORITY = {
+  checkpoint: 'baseline' as const,
+  aspects: [],
+  canonicalAspectSetSha256: '24ea927af4355fc5d44c1bba2cf49d7a4b47c27404d4c352267ed33ccecd90e2',
+  canonicalOutputSetSha256: '6b972a97afdb6e3284745596cf78edf834d6dc32d8bb99d6eac95cddd7438743',
+  canonicalCoastlineOutputSha256:
+    '641bcc8a9a962a2a7e9de14512e6bdfb70bdf98b5c87dda382aa8422b9c9d66c',
+  renderSceneSha256: '0'.repeat(64),
+};
+
+function cancellationHarness(
+  trial: PackagedGenerationCancellationTrial,
+  completedWork: number,
+  progressSequence: readonly number[] = [completedWork],
+  options: {
+    readonly accepted?: NonNullable<PackagedGenerationCancellationState['acceptedIdentity']>;
+    readonly preview?: boolean;
+    readonly lateAcceptedCommit?: boolean;
+  } = {},
+) {
+  let now = 1_000;
+  let resolveOperation: (() => void) | undefined;
+  const accepted = options.accepted;
+  let current: PackagedGenerationCancellationState = cancellationState(accepted, options.preview);
+  const records: NonNullable<
+    Parameters<Parameters<typeof requestExactFixtureGenerationCancellation>[1]['record']>[0]
+  >[] = [];
+  const cancel = vi.fn(() => {
+    now += 12;
+    current = {
+      ...current,
+      workflowPhase: options.lateAcceptedCommit ? 'accepted' : current.workflowPhase,
+      acceptedIdentity: options.lateAcceptedCommit
+        ? ({} as NonNullable<PackagedGenerationCancellationState['acceptedIdentity']>)
+        : current.acceptedIdentity,
+      acceptedCheckpoint: options.lateAcceptedCommit ? 'baseline' : current.acceptedCheckpoint,
+      isBusy: false,
+      progress: progress('cancelled', completedWork, true, true),
+      diagnosticCodes: ['atlas.land-water.cancelled'],
+    };
+    resolveOperation?.();
+    return { ok: true };
+  });
+  let progressIndex = 0;
+  const begin = () => {
+    current = {
+      ...current,
+      isBusy: true,
+      progress: progress('sampling-shared-preview-anchors', progressSequence[0] ?? completedWork),
+      diagnosticCodes: [],
+    };
+    return new Promise<void>((resolve) => {
+      resolveOperation = resolve;
+    });
+  };
+  const dependencies: Parameters<typeof requestExactFixtureGenerationCancellation>[1] = {
+    currentState: () => current,
+    requestPreview: begin,
+    requestFull: () => {
+      if (current.progress?.stage === 'cancelled') {
+        const nextAccepted = {} as NonNullable<
+          PackagedGenerationCancellationState['acceptedIdentity']
+        >;
+        current = {
+          ...cancellationState(nextAccepted),
+          workflowPhase: 'accepted',
+          acceptedCheckpoint: 'baseline',
+          progress: progress('completed', 1_000, false, true),
+        };
+        return Promise.resolve();
+      }
+      return begin();
+    },
+    cancelActiveOperation: cancel,
+    acceptedEvidence: () => Promise.resolve(PROOF_AUTHORITY),
+    record: (context) => {
+      if (context !== undefined) records.push(context);
+    },
+    nowEpochMilliseconds: () => now,
+    yieldControl: () => {
+      progressIndex += 1;
+      const work = progressSequence[progressIndex];
+      if (work !== undefined) {
+        current = { ...current, progress: progress('sampling-full-macro-elevation', work) };
+      }
+      return Promise.resolve();
+    },
+  };
+  return { dependencies, cancel, records, trial };
+}
+
+function cancellationState(
+  accepted?: NonNullable<PackagedGenerationCancellationState['acceptedIdentity']>,
+  preview = false,
+): PackagedGenerationCancellationState {
+  return {
+    fixtureId: 'milestone-2-atlas-proof',
+    worldSeed: '81985529216486895',
+    controls: DEFAULT_ATLAS_CONTROLS,
+    workflowPhase: preview ? 'preview' : accepted === undefined ? 'empty' : 'accepted',
+    isBusy: false,
+    hasPreview: preview,
+    acceptedCheckpoint: accepted === undefined ? undefined : 'baseline',
+    acceptedIdentity: accepted,
+    acceptedWorldSeed: accepted === undefined ? undefined : '81985529216486895',
+    acceptedControls: accepted === undefined ? undefined : DEFAULT_ATLAS_CONTROLS,
+    progress: accepted === undefined ? undefined : progress('completed', 1_000, false, true),
+    diagnosticCodes: [],
+  };
+}
+
+function progress(
+  stage: string,
+  completedWork: number,
+  isCancellationRequested = false,
+  isTerminal = false,
+) {
+  return {
+    operationId: 'atlas:test:1',
+    stage,
+    completedWork,
+    totalWork: 1_000,
+    isCancellationRequested,
+    isTerminal,
+  };
 }
