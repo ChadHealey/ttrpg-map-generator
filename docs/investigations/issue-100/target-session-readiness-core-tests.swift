@@ -5,8 +5,14 @@ enum TargetSessionReadinessCoreTests {
   static func main() throws {
     try acceptsPredecessorRetainedReadiness()
     distinguishesUnsupportedMinimizedFromObservedTrue()
+    try validatesExplicitOperatorReadyPathAndToken()
+    try exercisesAtomicMarkerPublicationCollisionAndCleanup()
+    rejectsReadyMarkerCollisionAndPrematurePublication()
+    rejectsFocusObservationBeforeAtomicPublication()
+    try requiresCleanupOnEveryTerminalPath()
     try validatesExplicitAwaitingState()
     try acceptsOneDetectedOperatorFocusTransition()
+    try acceptsDelayedCoordinatorObservation()
     try acceptsDelayedAccessibilityFrameAndRaise()
     rejectsWrongApplicationFocus()
     rejectsIdentityOrWindowReplacement()
@@ -20,7 +26,144 @@ enum TargetSessionReadinessCoreTests {
     rejectsNonzeroOperationOrdering()
     rejectsWrongIdentityStaleAndMissingCandidateState()
     FileHandle.standardOutput.write(
-      Data("issue109 operator-focus readiness core tests passed\n".utf8))
+      Data("issue110 durable operator-ready latch core tests passed\n".utf8))
+  }
+
+  private static func validatesExplicitOperatorReadyPathAndToken() throws {
+    try Issue110OperatorReadyLatchValidator.validateConfiguration(
+      Issue110OperatorReadyLatchConfiguration(
+        path:
+          "/private/tmp/ttrpg-map-generator-issue110-operator-ready-0123456789abcdef0123456789abcdef.json",
+        token: "issue110-fedcba9876543210fedcba9876543210"
+      ))
+
+    for configuration in [
+      Issue110OperatorReadyLatchConfiguration(
+        path:
+          "/tmp/ttrpg-map-generator-issue110-operator-ready-0123456789abcdef0123456789abcdef.json",
+        token: "issue110-fedcba9876543210fedcba9876543210"
+      ),
+      Issue110OperatorReadyLatchConfiguration(
+        path:
+          "/private/tmp/ttrpg-map-generator-issue110-operator-ready-0123456789abcdef0123456789abcdeg.json",
+        token: "issue110-fedcba9876543210fedcba9876543210"
+      ),
+      Issue110OperatorReadyLatchConfiguration(
+        path:
+          "/private/tmp/ttrpg-map-generator-issue110-operator-ready-0123456789abcdef0123456789abcdef.json",
+        token: "issue110-not-unique"
+      ),
+    ] {
+      expectInvalid(.action) {
+        try Issue110OperatorReadyLatchValidator.validateConfiguration(configuration)
+      }
+    }
+  }
+
+  private static func exercisesAtomicMarkerPublicationCollisionAndCleanup() throws {
+    let configuration = Issue110OperatorReadyLatchConfiguration(
+      path:
+        "/private/tmp/ttrpg-map-generator-issue110-operator-ready-00000000000000000000000000000001.json",
+      token: "issue110-00000000000000000000000000000002"
+    )
+    let latch = try Issue110OperatorReadyLatchPlatform(configuration: configuration)
+    try latch.prepare()
+    defer { _ = try? latch.cleanup() }
+    let published = try latch.publish(
+      bundleIdentifier: "app.ttrpgmap.generator",
+      candidateExecutableSha256: String(repeating: "a", count: 64),
+      exactCandidateValidated: true,
+      consoleSessionValidated: true,
+      declaredOperatorFocusActionCount: 1,
+      zeroOperationProof: .zero
+    )
+    precondition(published.atomicPublicationSucceeded)
+    let markerData = try Data(contentsOf: URL(fileURLWithPath: configuration.path))
+    let marker = try JSONDecoder().decode(Issue110OperatorReadyMarker.self, from: markerData)
+    precondition(marker.state == "awaiting-operator-ready")
+    precondition(marker.token == configuration.token)
+    precondition(marker.handoffTimeoutMilliseconds == 120_000)
+    precondition(marker.exactCandidateValidated)
+    precondition(marker.consoleSessionValidated)
+    try Issue105TargetSessionStabilizer.validateZeroOperationProof(marker.zeroOperationProof)
+    let attributes = try FileManager.default.attributesOfItem(atPath: configuration.path)
+    precondition((attributes[.posixPermissions] as? NSNumber)?.intValue == 0o600)
+
+    let collidingLatch = try Issue110OperatorReadyLatchPlatform(configuration: configuration)
+    expectInvalid(.action) { try collidingLatch.prepare() }
+
+    let cleaned = try latch.cleanup()
+    precondition(cleaned.cleanupAttempted)
+    precondition(cleaned.cleanupSucceeded)
+    precondition(!FileManager.default.fileExists(atPath: configuration.path))
+    precondition(cleaned.stateTransitions.last == "operator-ready-marker-cleaned")
+  }
+
+  private static func rejectsReadyMarkerCollisionAndPrematurePublication() {
+    expectInvalid(.action) {
+      try Issue110OperatorReadyLatchValidator.validateNoExistingMarker(true)
+    }
+    expectInvalid(.action) {
+      try Issue110OperatorReadyLatchValidator.validatePublicationAuthority(
+        exactCandidateValidated: false,
+        consoleSessionValidated: true,
+        zeroOperationProof: .zero
+      )
+    }
+    expectInvalid(.action) {
+      try Issue110OperatorReadyLatchValidator.validatePublicationAuthority(
+        exactCandidateValidated: true,
+        consoleSessionValidated: false,
+        zeroOperationProof: .zero
+      )
+    }
+    expectInvalid(.action) {
+      try Issue110OperatorReadyLatchValidator.validatePublicationAuthority(
+        exactCandidateValidated: true,
+        consoleSessionValidated: true,
+        zeroOperationProof: operationProof(fixtureConfigured: true)
+      )
+    }
+  }
+
+  private static func rejectsFocusObservationBeforeAtomicPublication() {
+    var observationCount = 0
+    expectInvalid(.action) {
+      _ = try Issue105TargetSessionStabilizer.stabilize(
+        policy: testPolicy,
+        retainedIdentity: retainedIdentity,
+        initialSnapshot: awaitingSnapshot(),
+        operatorReadyLatch: .none,
+        declaredOperatorFocusActionCount: 1,
+        elapsedMilliseconds: { 0 },
+        observe: {
+          observationCount += 1
+          return candidateSnapshot()
+        },
+        performRaise: { preconditionFailure("raise must not precede ready publication") },
+        wait: { _ in }
+      )
+    }
+    precondition(observationCount == 0)
+  }
+
+  private static func requiresCleanupOnEveryTerminalPath() throws {
+    for terminalPath in Issue110OperatorReadyTerminalPath.allCases {
+      try Issue110OperatorReadyLatchValidator.validateTerminalCleanup(
+        terminalPath,
+        markerWasPublished: terminalPath != .launchFailure,
+        cleanupAttempted: true,
+        markerStillExists: false
+      )
+      expectInvalid(.action) {
+        try Issue110OperatorReadyLatchValidator.validateTerminalCleanup(
+          terminalPath,
+          markerWasPublished: terminalPath != .launchFailure,
+          cleanupAttempted: false,
+          markerStillExists: terminalPath != .launchFailure
+        )
+      }
+    }
   }
 
   private static func distinguishesUnsupportedMinimizedFromObservedTrue() {
@@ -78,6 +221,8 @@ enum TargetSessionReadinessCoreTests {
     precondition(
       outcome.diagnostics.operatorHandoff.stateTransitions == [
         "exact-candidate-validated",
+        "zero-operation-validated",
+        "awaiting-operator-ready-published",
         "awaiting-operator-focus",
         "operator-focus-detected",
         "accessibility-frontmost-readback",
@@ -87,6 +232,20 @@ enum TargetSessionReadinessCoreTests {
       ])
     precondition(outcome.diagnostics.terminalPredicates.visibleWindow)
     precondition(outcome.diagnostics.terminalPredicates.workspaceFrontmost)
+  }
+
+  private static func acceptsDelayedCoordinatorObservation() throws {
+    let outcome = try stabilize(
+      observations: [
+        awaitingSnapshot(),
+        awaitingSnapshot(),
+        awaitingSnapshot(),
+        candidateSnapshot(),
+        candidateSnapshot(),
+      ])
+    precondition(outcome.diagnostics.operatorHandoff.observationCount == 5)
+    precondition(outcome.diagnostics.operatorHandoff.waitDurationMilliseconds == 200)
+    precondition(outcome.diagnostics.operatorHandoff.focusTransitionDetected)
   }
 
   private static func acceptsDelayedAccessibilityFrameAndRaise() throws {
@@ -144,6 +303,7 @@ enum TargetSessionReadinessCoreTests {
         policy: testPolicy,
         retainedIdentity: retainedIdentity,
         initialSnapshot: awaitingSnapshot(),
+        operatorReadyLatch: publishedLatch(for: testPolicy),
         declaredOperatorFocusActionCount: 1,
         elapsedMilliseconds: { elapsed },
         observe: {
@@ -163,6 +323,7 @@ enum TargetSessionReadinessCoreTests {
         policy: timeoutPolicy,
         retainedIdentity: retainedIdentity,
         initialSnapshot: awaitingSnapshot(),
+        operatorReadyLatch: publishedLatch(for: timeoutPolicy),
         declaredOperatorFocusActionCount: 1,
         elapsedMilliseconds: { elapsed },
         observe: { awaitingSnapshot() },
@@ -187,6 +348,7 @@ enum TargetSessionReadinessCoreTests {
         policy: timeoutPolicy,
         retainedIdentity: retainedIdentity,
         initialSnapshot: awaitingSnapshot(),
+        operatorReadyLatch: publishedLatch(for: timeoutPolicy),
         declaredOperatorFocusActionCount: 1,
         elapsedMilliseconds: { elapsed },
         observe: {
@@ -217,6 +379,7 @@ enum TargetSessionReadinessCoreTests {
           policy: testPolicy,
           retainedIdentity: retainedIdentity,
           initialSnapshot: awaitingSnapshot(),
+          operatorReadyLatch: publishedLatch(for: testPolicy),
           declaredOperatorFocusActionCount: count,
           elapsedMilliseconds: { 0 },
           observe: {
@@ -352,6 +515,7 @@ enum TargetSessionReadinessCoreTests {
       policy: testPolicy,
       retainedIdentity: retainedIdentity,
       initialSnapshot: awaitingSnapshot(),
+      operatorReadyLatch: publishedLatch(for: testPolicy),
       declaredOperatorFocusActionCount: declaredOperatorFocusActionCount,
       elapsedMilliseconds: { elapsed },
       observe: { observations.removeFirst() },
@@ -531,6 +695,25 @@ enum TargetSessionReadinessCoreTests {
     processIdentifier: 42,
     windowIdentity: 7
   )
+
+  private static func publishedLatch(
+    for policy: Issue105StabilizationPolicy
+  ) -> Issue110OperatorReadyLatchDiagnostics {
+    Issue110OperatorReadyLatchDiagnostics(
+      pathPolicy: "explicit-private-tmp-file",
+      tokenValidated: true,
+      existingMarkerCollisionChecked: true,
+      atomicPublicationSucceeded: true,
+      cleanupAttempted: false,
+      cleanupSucceeded: false,
+      handoffTimeoutMilliseconds: policy.timeoutMilliseconds,
+      stateTransitions: [
+        "exact-candidate-validated",
+        "zero-operation-validated",
+        "awaiting-operator-ready-published",
+      ]
+    )
+  }
 
   private static let testPolicy = Issue105StabilizationPolicy(
     timeoutMilliseconds: 400,

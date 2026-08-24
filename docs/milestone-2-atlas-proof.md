@@ -827,6 +827,29 @@ runbook, privacy boundary, and sanitized **INVALID — PRE-DISPATCH STOP** are i
 [issue #109 focus-handoff evidence](investigations/issue-109/README.md). Issue #104 remains blocked
 and **UNCONSUMED**.
 
+### Durable coordinator-observable operator-ready latch
+
+Issue #110 preserves issue #109's test-only real-operator handoff and all independent readiness
+predicates while replacing delayed task commentary as the start signal. The controller accepts one
+explicit strictly validated path directly under `/private/tmp` and one unique explicit token. It
+performs no ambient filesystem discovery. Only after exact fresh application/window/executable/
+console-session validation and the strict zero-operation proof may it atomically publish an
+owner-only `awaiting-operator-ready` JSON marker containing the token and sanitized authority.
+
+The 120,000-ms / 50-ms operator-focus interval begins only after marker publication. The
+coordinator polls the exact marker directly, validates its token and predicates, and only then asks
+the owner for one real click. Issue #109's unchanged exact-candidate Accessibility/Workspace
+frontmost detection, positive-frame readback, `AXRaise`, retained identity, and canonical
+independent observer remain fail closed. No input is synthesized. Marker collision, invalid path/
+token, publication or cleanup failure, timeout, wrong-app focus, ambiguity, drift, replacement, or
+observer disagreement invalidates the preflight; the controller removes its marker on success,
+timeout, invalidation, signal, or launch failure.
+
+The implementation, deterministic lifecycle tests, privacy boundary, exact one-shot runbook, and
+initial **NOT RUN** state are in the [issue #110 latch evidence](investigations/issue-110/README.md).
+The repository must stop at a clean committed implementation boundary until coordinator follow-up.
+Issue #109's stop remains immutable and issue #104 remains **UNCONSUMED**.
+
 ### Packaged generation-cancellation qualification stop
 
 Issue #98 added only a test observer and observer-enabled package wiring around the unchanged

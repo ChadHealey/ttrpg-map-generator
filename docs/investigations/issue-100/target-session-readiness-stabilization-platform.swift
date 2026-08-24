@@ -77,6 +77,7 @@ enum Issue105TargetSessionStabilizationPlatform {
     expectedExecutableSha256: String,
     initialWorkspaceFrontmostProcessIdentifier: Int32,
     initialSnapshot: Issue108TargetSessionReadinessSnapshot,
+    operatorReadyLatch: Issue110OperatorReadyLatchDiagnostics,
     declaredOperatorFocusActionCount: Int
   ) throws -> Issue105StabilizationOutcome {
     let retainedIdentity = Issue105RetainedCandidateIdentity(
@@ -89,6 +90,7 @@ enum Issue105TargetSessionStabilizationPlatform {
       policy: .approved,
       retainedIdentity: retainedIdentity,
       initialSnapshot: initialSnapshot,
+      operatorReadyLatch: operatorReadyLatch,
       declaredOperatorFocusActionCount: declaredOperatorFocusActionCount,
       elapsedMilliseconds: {
         (DispatchTime.now().uptimeNanoseconds - start) / 1_000_000

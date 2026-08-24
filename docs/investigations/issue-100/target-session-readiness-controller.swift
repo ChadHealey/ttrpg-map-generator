@@ -4,32 +4,55 @@ import Foundation
 @main
 enum TargetSessionReadinessController {
   static func main() async {
+    var latch: Issue110OperatorReadyLatchPlatform?
     do {
       let arguments = try Arguments(CommandLine.arguments)
       try Issue105TargetSessionStabilizer.validateDeclaredOperatorFocusActionCount(
         arguments.declaredOperatorFocusActionCount)
-      let receipt = try await qualify(arguments)
+      let preparedLatch = try Issue110OperatorReadyLatchPlatform(
+        configuration: Issue110OperatorReadyLatchConfiguration(
+          path: arguments.operatorReadyLatchPath,
+          token: arguments.operatorReadyLatchToken
+        ))
+      latch = preparedLatch
+      try preparedLatch.prepare()
+      let receipt = try await qualify(arguments, latch: preparedLatch)
       try issue100Emit(receipt)
-    } catch let failure as Issue105ReadinessFailure {
+    } catch {
+      let failure = error as? Issue105ReadinessFailure
+      var invalidation =
+        failure?.invalidation
+        ?? (error as? TargetSessionReadinessInvalidation)
+        ?? TargetSessionReadinessInvalidation.action(
+          "unexpected internal target-session readiness controller failure")
+      var latchDiagnostics = latch?.diagnostics() ?? .none
+      if let latch {
+        do {
+          latchDiagnostics = try latch.cleanup()
+        } catch let cleanupInvalidation as TargetSessionReadinessInvalidation {
+          invalidation = cleanupInvalidation
+          latchDiagnostics = latch.diagnostics()
+        } catch {
+          invalidation = TargetSessionReadinessInvalidation.action(
+            "unexpected operator-ready latch cleanup failure")
+          latchDiagnostics = latch.diagnostics()
+        }
+      }
       try? issue100Emit(
         Issue105TargetSessionReadinessQualificationReceipt.invalid(
-          failure.invalidation,
-          diagnostics: failure.diagnostics
+          invalidation,
+          diagnostics: failure?.diagnostics,
+          operatorReadyLatch: latchDiagnostics
         ))
-      exit(2)
-    } catch let invalidation as TargetSessionReadinessInvalidation {
-      try? issue100Emit(Issue105TargetSessionReadinessQualificationReceipt.invalid(invalidation))
-      exit(2)
-    } catch {
-      let invalidation = TargetSessionReadinessInvalidation.action(
-        "unexpected internal target-session readiness controller failure")
-      try? issue100Emit(Issue105TargetSessionReadinessQualificationReceipt.invalid(invalidation))
       exit(2)
     }
   }
 
   @MainActor
-  private static func qualify(_ arguments: Arguments) async throws
+  private static func qualify(
+    _ arguments: Arguments,
+    latch: Issue110OperatorReadyLatchPlatform
+  ) async throws
     -> Issue105TargetSessionReadinessQualificationReceipt
   {
     try Issue100TargetSessionPlatform.verifyTargetHost()
@@ -123,6 +146,17 @@ enum TargetSessionReadinessController {
     try Issue105TargetSessionStabilizer.validateZeroOperationProof(.zero)
     try Issue105TargetSessionStabilizer.validatePreHandoff(
       initialSnapshot, retainedIdentity: retainedIdentity)
+    latch.installSignalCleanup {
+      _ = application.terminate()
+    }
+    let publishedLatch = try latch.publish(
+      bundleIdentifier: arguments.bundleIdentifier,
+      candidateExecutableSha256: arguments.expectedCandidateSha256,
+      exactCandidateValidated: true,
+      consoleSessionValidated: Issue100TargetSessionPlatform.designatedConsoleSessionMatched(),
+      declaredOperatorFocusActionCount: arguments.declaredOperatorFocusActionCount,
+      zeroOperationProof: .zero
+    )
     try issue109EmitPrompt(
       Issue109OperatorFocusPromptReceipt(
         controllerVersion: issue105ReadinessSchemaVersion,
@@ -141,6 +175,7 @@ enum TargetSessionReadinessController {
       expectedExecutableSha256: arguments.expectedCandidateSha256,
       initialWorkspaceFrontmostProcessIdentifier: initialWorkspaceFrontmostProcessIdentifier,
       initialSnapshot: initialSnapshot,
+      operatorReadyLatch: publishedLatch,
       declaredOperatorFocusActionCount: arguments.declaredOperatorFocusActionCount
     )
 
@@ -183,6 +218,7 @@ enum TargetSessionReadinessController {
     )
     try Issue105TargetSessionStabilizer.validateSnapshot(finalSnapshot)
 
+    let cleanedLatch = try latch.cleanup()
     let finalStabilizationDiagnostics = Issue105StabilizationDiagnostics(
       policyTimeoutMilliseconds: stabilization.diagnostics.policyTimeoutMilliseconds,
       pollIntervalMilliseconds: stabilization.diagnostics.pollIntervalMilliseconds,
@@ -195,6 +231,7 @@ enum TargetSessionReadinessController {
       raiseSucceeded: stabilization.diagnostics.raiseSucceeded,
       frontmost: stabilization.diagnostics.frontmost,
       operatorHandoff: stabilization.diagnostics.operatorHandoff,
+      operatorReadyLatch: cleanedLatch,
       initialVisibilityPredicates: stabilization.diagnostics.initialVisibilityPredicates,
       terminalVisibilityPredicates: Issue106VisibilityPredicates(snapshot: finalSnapshot),
       visibilityPendingObservationCount:
@@ -236,6 +273,7 @@ enum TargetSessionReadinessController {
         applicationAndWindowIdentityRetained: true
       ),
       stabilization: finalStabilizationDiagnostics,
+      operatorReadyLatch: cleanedLatch,
       zeroOperationProof: .zero,
       invalidAuthority: nil,
       invalidReason: nil
@@ -303,9 +341,11 @@ private struct Arguments {
   let readinessObserverPath: String
   let expectedReadinessObserverSha256: String
   let declaredOperatorFocusActionCount: Int
+  let operatorReadyLatchPath: String
+  let operatorReadyLatchToken: String
 
   init(_ arguments: [String]) throws {
-    guard arguments.count == 7,
+    guard arguments.count == 9,
       arguments[1].hasPrefix("/"),
       arguments[2] == "app.ttrpgmap.generator",
       ExecutableIdentityValidator.isDigest(arguments[3]),
@@ -319,5 +359,7 @@ private struct Arguments {
     readinessObserverPath = arguments[4]
     expectedReadinessObserverSha256 = arguments[5]
     self.declaredOperatorFocusActionCount = declaredOperatorFocusActionCount
+    operatorReadyLatchPath = arguments[7]
+    operatorReadyLatchToken = arguments[8]
   }
 }

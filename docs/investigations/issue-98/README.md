@@ -309,3 +309,18 @@ separate check found no remaining candidate process. No retry, fixture, sampler,
 destination, dispatch, measurement, or #98 target action ran. Issue #104 remains **UNCONSUMED**.
 The contract and sanitized stop are in the
 [issue #109 focus-handoff evidence](../issue-109/README.md).
+
+## Issue 110 durable coordinator-observable ready-latch boundary
+
+Issue #109's only assisted preflight is permanently invalid and consumed as a zero-operation
+coordination stop. Issue #110 changes only the external readiness controller/test/docs surface: an
+explicit validated `/private/tmp` path and unique token are supplied before launch, and an
+owner-only `awaiting-operator-ready` marker is atomically published only after exact candidate,
+window, executable, console-session, and zero-operation validation. The coordinator polls that
+marker directly before requesting one real operator click; the 120,000-ms handoff interval begins
+after publication.
+
+The marker lifecycle fails closed and cleans on every terminal path. Issue #109's raw receipt and
+consumed status remain unchanged; no issue #104 row has run. The clean implementation boundary and
+one-shot runbook are in [issue #110](../issue-110/README.md). Qualification is **NOT RUN** pending
+coordinator follow-up, so issue #104 remains blocked and **UNCONSUMED**.

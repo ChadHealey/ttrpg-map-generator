@@ -869,6 +869,30 @@ destination, measurement, issue #95 action, or cancellation conclusion occurred.
 remains **UNCONSUMED**. The bounded contract and complete sanitized receipt are in the
 [issue #109 focus-handoff evidence](investigations/issue-109/README.md).
 
+### Issue #110 durable operator-ready latch boundary
+
+Issue #110 changes only the external issue #100/#105-#109 readiness controller, controller-only
+latch/stabilizer/platform support, focused tests, and owning evidence. Controller version 7 accepts
+one explicit validated marker path beneath `/private/tmp` and one unique issue #110 token. After it
+proves exact fresh application/window/executable/session identity and zero product operations, it
+flushes a complete owner-only marker and atomically publishes `awaiting-operator-ready` without
+replacing an existing path. The 120,000-ms handoff begins only after publication.
+
+The coordinator polls the exact marker rather than task commentary before requesting one real
+owner click. Issue #109's unchanged independent Accessibility/Workspace focus detection,
+positive-frame authority, raise, identity retention, and canonical observer remain required. No
+input is synthesized. The marker is cleaned on every terminal path; collision, invalid path/token,
+publication failure, cleanup failure, timeout, drift, replacement, or observer disagreement fails
+closed. Public receipts contain only sanitized lifecycle/order fields and no marker path, token,
+PID, username, or raw-artifact location.
+
+All implementation and gates are committed before target use. At this report boundary the one
+assisted zero-operation preflight is **NOT RUN** pending coordinator follow-up: no packaged
+candidate, marker, operator action, fixture, sampler, artifact/destination, dispatch, measurement,
+issue #95 action, or issue #104 activity has occurred. Issue #109's invalid stop remains unchanged,
+and issue #104 remains **UNCONSUMED**. The contract and one-shot runbook are in the
+[issue #110 latch evidence](investigations/issue-110/README.md).
+
 ## Remote CI and milestone state
 
 Issue #71 recorded fresh CI evidence for the exact remote release commit

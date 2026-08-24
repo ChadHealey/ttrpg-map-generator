@@ -221,3 +221,19 @@ terminated the candidate. There was no retry, raise, independent observer run, f
 artifact, destination, dispatch, or measurement; a separate process check found no candidate
 remaining. The implementation boundary and sanitized stop are in
 [issue #109](../issue-109/README.md). Issue #104 remains **UNCONSUMED**.
+
+## Issue 110 durable operator-ready latch
+
+Issue #110 preserves issue #109's real-operator and independent-readiness rules while replacing
+commentary-timed coordination with an explicit directly pollable marker. The controller accepts
+one strictly validated `/private/tmp` path and unique issue #110 token, proves exact fresh
+candidate/window/executable/session identity plus zero product operations, then atomically
+publishes an owner-only `awaiting-operator-ready` JSON marker. Only after publication does the
+120,000-ms handoff interval begin.
+
+The marker is removed on every controller terminal path; collision, invalid path/token,
+publication failure, cleanup failure, timeout, drift, replacement, or observer disagreement fails
+closed. No input is synthesized, and ordinary builds install no latch or handoff behavior. The
+implementation contract, deterministic tests, clean one-shot boundary, and coordinator polling
+requirements are in [issue #110](../issue-110/README.md). Qualification is **NOT RUN** until a
+coordinator follow-up; issue #104 remains **UNCONSUMED**.
