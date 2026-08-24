@@ -793,6 +793,15 @@ capture dimensions, palette counts, and the pre-operation pixel-change diagnosti
 earlier preview/early rows remain byte-identical, separately **INVALID, CONSUMED**, privately
 retained, and non-authoritative.
 
+The issue #104 implementation and all pre-target gates passed, and the observer-enabled package
+plus reused sampler, retention, and readiness identities reproduced. Three fresh issue #100
+readiness attempts then failed before fixture configuration, sampler start, raw artifact creation,
+measurement, or operation dispatch because the exact candidate window could not be raised. These
+session-setup failures are not target evidence and consumed no row. The authorized issue #104
+preview/early replacement therefore remains unconsumed; every conditional later row remains
+unauthorized and unrun. There is no new acknowledgement, sampling, visual, cancellation-path,
+first-paint, issue #95 matrix, or release-budget conclusion.
+
 | Operation       | Fixed workload                                                                                | Wall-clock | Peak additional memory | Output-size ceiling       |
 | --------------- | --------------------------------------------------------------------------------------------- | ---------- | ---------------------- | ------------------------- |
 | Coarse preview  | dispatch through first fully painted labelled 512 × 256 effective preview                     | `900 ms`   | `256 MiB`              | not applicable            |

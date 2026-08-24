@@ -227,3 +227,23 @@ palette, complete-frame absence, foreground loss, and application/window/executa
 The three historical preview/early rows and their owner-only artifacts remain byte-identical,
 separately **INVALID, CONSUMED**, and non-authoritative. Target outcomes are appended only after
 the authorized one-shot sequence.
+
+The implementation commit is `5945a0f831bfcccc0761adbd11b018d787acec91`. The observer-enabled
+package reproduced the unchanged executable SHA-256
+`5cf14de9836e9da96655572b35bb0e194d8ebc30360b6d6516f88825dcf7a15d`; the corrected observer is
+SHA-256 `dee96628ba9b9cec31a49b0bd627466a636921f1f73535f1aac421834fbc0e6d`.
+The sampler, retention utility, readiness controller, and readiness observer reproduced their
+issue #98 identities unchanged. Focused current-canvas/aftermath and predecessor suites,
+cross-platform, E2E, visual, root, observer-enabled unsigned-package, privacy, authorized-surface,
+fixture-diff, and diff gates passed before target use.
+
+Three fresh issue #100 readiness attempts then failed closed because the exact candidate window
+could not be raised. Each attempt occurred before fixture configuration, sampler start, raw
+artifact creation, measurement, or operation dispatch, and each invalid candidate was terminated.
+These are sanitized target-session setup failures, not target cancellation evidence. They consumed
+no issue #104 row and created nothing to retain. Execution stopped after the repeated readiness
+blocker; the issue #104 preview/early replacement remains **UNCONSUMED**, and preview middle/late
+plus full early/middle/late remain unauthorized and unrun. There is no new acknowledgement,
+sampling, visual, first-paint, cancellation-path, issue #95 matrix, or release-budget conclusion.
+The sanitized zero-operation stop is in
+[`aftermath-canvas-rebind-qualification-2026-08-24/raw-results.json`](aftermath-canvas-rebind-qualification-2026-08-24/raw-results.json).
