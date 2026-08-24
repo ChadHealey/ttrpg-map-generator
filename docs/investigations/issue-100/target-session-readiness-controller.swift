@@ -119,6 +119,7 @@ enum TargetSessionReadinessController {
           terminalVisibilityPredicates: nil,
           visibilityPendingObservationCount: 0,
           visibilityPendingDurationMilliseconds: 0,
+          minimize: .none,
           terminalPredicates: .none
         )
       )
@@ -183,6 +184,7 @@ enum TargetSessionReadinessController {
         stabilization.diagnostics.visibilityPendingObservationCount,
       visibilityPendingDurationMilliseconds:
         stabilization.diagnostics.visibilityPendingDurationMilliseconds,
+      minimize: stabilization.diagnostics.minimize,
       terminalPredicates: Issue105TerminalPredicates(
         exactCandidateRetained: true,
         exactWindowRetained: true,
@@ -199,7 +201,7 @@ enum TargetSessionReadinessController {
       qualificationKind: "non-measurement-target-session-readiness",
       target: .approved,
       sessionMechanism:
-        "exact-path NSWorkspace launch in active console GUI session; accepted AppKit activation request; bounded retained-frontmost stabilization; AXRaise; AXFrontmost; independent retained Accessibility/NSWorkspace verification",
+        "exact-path NSWorkspace launch in active console GUI session; accepted AppKit activation request; exact-window AXMinimized=false support/write/readback; bounded retained-frontmost stabilization; AXRaise; AXFrontmost; independent retained Accessibility/NSWorkspace verification",
       bundleIdentifier: arguments.bundleIdentifier,
       candidateExecutableSha256: package.executableSha256,
       controllerSha256: controllerSha256,

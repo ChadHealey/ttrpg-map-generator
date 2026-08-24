@@ -36,6 +36,9 @@ enum Issue105TargetSessionStabilizationPlatform {
           expectedExecutableSha256: expectedExecutableSha256
         )
       },
+      writeMinimizedFalse: {
+        minimizedFalseWriteResult(window)
+      },
       performRaise: {
         raiseResult(window)
       },
@@ -46,6 +49,43 @@ enum Issue105TargetSessionStabilizationPlatform {
         Thread.sleep(forTimeInterval: Double(milliseconds) / 1_000)
       }
     )
+  }
+
+  private static func minimizedFalseWriteResult(
+    _ window: AXUIElement
+  ) -> Issue107MinimizeWriteResult {
+    var settable = DarwinBoolean(false)
+    let supportError = AXUIElementIsAttributeSettable(
+      window,
+      kAXMinimizedAttribute as CFString,
+      &settable
+    )
+    switch supportError {
+    case .success:
+      break
+    case .cannotComplete:
+      return .retryableSupportCannotComplete
+    case .attributeUnsupported:
+      return .attributeUnsupported
+    default:
+      return .supportFailed
+    }
+    guard settable.boolValue else { return .notSettable }
+
+    switch AXUIElementSetAttributeValue(
+      window,
+      kAXMinimizedAttribute as CFString,
+      kCFBooleanFalse
+    ) {
+    case .success:
+      return .success
+    case .cannotComplete:
+      return .retryableWriteCannotComplete
+    case .attributeUnsupported:
+      return .attributeUnsupported
+    default:
+      return .writeFailed
+    }
   }
 
   private static func raiseResult(_ window: AXUIElement) -> Issue105SessionActionResult {
