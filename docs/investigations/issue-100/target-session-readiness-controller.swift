@@ -115,6 +115,10 @@ enum TargetSessionReadinessController {
           raiseAttemptCount: 0,
           retryableRaiseFailureCount: 0,
           frontmostWriteAttemptCount: 0,
+          initialVisibilityPredicates: nil,
+          terminalVisibilityPredicates: nil,
+          visibilityPendingObservationCount: 0,
+          visibilityPendingDurationMilliseconds: 0,
           terminalPredicates: .none
         )
       )
@@ -154,7 +158,7 @@ enum TargetSessionReadinessController {
       bundleIdentifier: arguments.bundleIdentifier,
       expectedExecutableSha256: arguments.expectedCandidateSha256
     )
-    try Issue105TargetSessionStabilizer.validateRetainedCandidate(
+    try Issue105TargetSessionStabilizer.validateRetainedIdentity(
       finalSnapshot,
       retainedIdentity: Issue105RetainedCandidateIdentity(
         processIdentifier: application.processIdentifier,
@@ -173,6 +177,12 @@ enum TargetSessionReadinessController {
       raiseAttemptCount: stabilization.diagnostics.raiseAttemptCount,
       retryableRaiseFailureCount: stabilization.diagnostics.retryableRaiseFailureCount,
       frontmostWriteAttemptCount: stabilization.diagnostics.frontmostWriteAttemptCount,
+      initialVisibilityPredicates: stabilization.diagnostics.initialVisibilityPredicates,
+      terminalVisibilityPredicates: Issue106VisibilityPredicates(snapshot: finalSnapshot),
+      visibilityPendingObservationCount:
+        stabilization.diagnostics.visibilityPendingObservationCount,
+      visibilityPendingDurationMilliseconds:
+        stabilization.diagnostics.visibilityPendingDurationMilliseconds,
       terminalPredicates: Issue105TerminalPredicates(
         exactCandidateRetained: true,
         exactWindowRetained: true,

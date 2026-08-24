@@ -9,10 +9,87 @@ enum TargetSessionReadinessCoreTests {
     rejectsActivationAndRaiseFailures()
     rejectsForegroundLossAndIdentityReplacement()
     try acceptsDelayedActivationAndTransientRaiseFailure()
+    try acceptsInitiallyInvisibleExactWindowAfterVisibilitySettles()
+    try acceptsHiddenAndFrameNotVisibleSettling()
     rejectsPermanentActivationAndRaiseFailures()
     rejectsStabilizationDriftAmbiguityForegroundLossAndTimeout()
+    rejectsPersistentInvisibilityAtBoundWithoutActions()
+    rejectsDriftAndAmbiguityWhileInvisible()
+    rejectsVisibilityLossAfterSessionAction()
     FileHandle.standardOutput.write(
       Data("issue100 target-session readiness core tests passed\n".utf8))
+  }
+
+  private static func acceptsInitiallyInvisibleExactWindowAfterVisibilitySettles() throws {
+    var elapsed: UInt64 = 0
+    var observationCount = 0
+    var raiseAttemptCount = 0
+    var frontmostWriteAttemptCount = 0
+    var observations = [
+      validSnapshot(windowMinimized: true, accessibilityFrontmost: false),
+      validSnapshot(accessibilityFrontmost: false),
+      validSnapshot(),
+    ]
+    let outcome = try Issue105TargetSessionStabilizer.stabilize(
+      policy: testPolicy,
+      retainedIdentity: retainedIdentity,
+      elapsedMilliseconds: { elapsed },
+      observe: {
+        observationCount += 1
+        return observations.removeFirst()
+      },
+      performRaise: {
+        precondition(observationCount == 2)
+        raiseAttemptCount += 1
+        return .success
+      },
+      writeFrontmost: {
+        precondition(observationCount == 2)
+        frontmostWriteAttemptCount += 1
+        return .success
+      },
+      wait: { elapsed += $0 }
+    )
+    precondition(raiseAttemptCount == 1)
+    precondition(frontmostWriteAttemptCount == 1)
+    precondition(outcome.diagnostics.initialVisibilityPredicates?.windowMinimized == true)
+    precondition(outcome.diagnostics.initialVisibilityPredicates?.visibleWindow == false)
+    precondition(outcome.diagnostics.terminalVisibilityPredicates?.visibleWindow == true)
+    precondition(outcome.diagnostics.visibilityPendingObservationCount == 1)
+    precondition(outcome.diagnostics.visibilityPendingDurationMilliseconds == 50)
+  }
+
+  private static func acceptsHiddenAndFrameNotVisibleSettling() throws {
+    var elapsed: UInt64 = 0
+    var observationCount = 0
+    var observations = [
+      validSnapshot(applicationHidden: true, accessibilityFrontmost: false),
+      validSnapshot(windowFrameVisible: false, accessibilityFrontmost: false),
+      validSnapshot(accessibilityFrontmost: false),
+      validSnapshot(),
+    ]
+    let outcome = try Issue105TargetSessionStabilizer.stabilize(
+      policy: testPolicy,
+      retainedIdentity: retainedIdentity,
+      elapsedMilliseconds: { elapsed },
+      observe: {
+        observationCount += 1
+        return observations.removeFirst()
+      },
+      performRaise: {
+        precondition(observationCount == 3)
+        return .success
+      },
+      writeFrontmost: {
+        precondition(observationCount == 3)
+        return .success
+      },
+      wait: { elapsed += $0 }
+    )
+    precondition(outcome.diagnostics.initialVisibilityPredicates?.applicationHidden == true)
+    precondition(outcome.diagnostics.visibilityPendingObservationCount == 2)
+    precondition(outcome.diagnostics.visibilityPendingDurationMilliseconds == 100)
+    precondition(outcome.diagnostics.terminalVisibilityPredicates?.visibleWindow == true)
   }
 
   private static func acceptsDelayedActivationAndTransientRaiseFailure() throws {
@@ -88,6 +165,157 @@ enum TargetSessionReadinessCoreTests {
         writeFrontmost: { preconditionFailure("frontmost write must not run before raise") },
         wait: { elapsed += $0 }
       )
+    }
+  }
+
+  private static func rejectsPersistentInvisibilityAtBoundWithoutActions() {
+    var elapsed: UInt64 = 0
+    var raiseAttemptCount = 0
+    var frontmostWriteAttemptCount = 0
+    do {
+      _ = try Issue105TargetSessionStabilizer.stabilize(
+        policy: testPolicy,
+        retainedIdentity: retainedIdentity,
+        elapsedMilliseconds: { elapsed },
+        observe: {
+          validSnapshot(windowFrameVisible: false, accessibilityFrontmost: false)
+        },
+        performRaise: {
+          raiseAttemptCount += 1
+          return .success
+        },
+        writeFrontmost: {
+          frontmostWriteAttemptCount += 1
+          return .success
+        },
+        wait: { elapsed += $0 }
+      )
+      preconditionFailure("expected bounded invisibility timeout")
+    } catch let failure as Issue105ReadinessFailure {
+      precondition(ExpectedAuthority.accessibility.matches(failure.invalidation))
+      precondition(failure.diagnostics.stabilizationDurationMilliseconds == 150)
+      precondition(failure.diagnostics.visibilityPendingObservationCount == 4)
+      precondition(failure.diagnostics.visibilityPendingDurationMilliseconds == 150)
+      precondition(failure.diagnostics.initialVisibilityPredicates?.visibleWindow == false)
+      precondition(failure.diagnostics.terminalVisibilityPredicates?.visibleWindow == false)
+      precondition(failure.diagnostics.raiseAttemptCount == 0)
+      precondition(failure.diagnostics.frontmostWriteAttemptCount == 0)
+    } catch {
+      preconditionFailure("unexpected bounded invisibility error")
+    }
+    precondition(raiseAttemptCount == 0)
+    precondition(frontmostWriteAttemptCount == 0)
+  }
+
+  private static func rejectsDriftAndAmbiguityWhileInvisible() {
+    var elapsed: UInt64 = 0
+    var observations = [
+      validSnapshot(windowFrameVisible: false, accessibilityFrontmost: false),
+      validSnapshot(
+        processIdentifier: 43,
+        windowFrameVisible: false,
+        accessibilityFrontmost: false
+      ),
+    ]
+    do {
+      _ = try Issue105TargetSessionStabilizer.stabilize(
+        policy: testPolicy,
+        retainedIdentity: retainedIdentity,
+        elapsedMilliseconds: { elapsed },
+        observe: { observations.removeFirst() },
+        performRaise: { preconditionFailure("raise must not run while invisible") },
+        writeFrontmost: { preconditionFailure("frontmost write must not run while invisible") },
+        wait: { elapsed += $0 }
+      )
+      preconditionFailure("expected invisible identity drift invalidation")
+    } catch let failure as Issue105ReadinessFailure {
+      precondition(ExpectedAuthority.processState.matches(failure.invalidation))
+      precondition(failure.diagnostics.stabilizationObservationCount == 2)
+      precondition(failure.diagnostics.visibilityPendingObservationCount == 1)
+      precondition(failure.diagnostics.raiseAttemptCount == 0)
+      precondition(failure.diagnostics.frontmostWriteAttemptCount == 0)
+    } catch {
+      preconditionFailure("unexpected invisible identity drift error")
+    }
+
+    for (snapshot, authority) in [
+      (
+        validSnapshot(
+          windowIdentity: 8,
+          windowFrameVisible: false,
+          accessibilityFrontmost: false
+        ), ExpectedAuthority.processState
+      ),
+      (
+        validSnapshot(
+          executableIdentityMatched: false,
+          windowFrameVisible: false,
+          accessibilityFrontmost: false
+        ), ExpectedAuthority.identity
+      ),
+      (
+        validSnapshot(
+          applicationCount: 2,
+          windowFrameVisible: false,
+          accessibilityFrontmost: false
+        ), ExpectedAuthority.processState
+      ),
+      (
+        validSnapshot(
+          windowCount: 2,
+          windowFrameVisible: false,
+          accessibilityFrontmost: false
+        ), ExpectedAuthority.accessibility
+      ),
+    ] {
+      expectStabilizationInvalid(authority) {
+        try stabilization(observations: [snapshot])
+      }
+    }
+
+    var sessionElapsed: UInt64 = 0
+    expectStabilizationInvalid(.session) {
+      _ = try Issue105TargetSessionStabilizer.stabilize(
+        policy: testPolicy,
+        retainedIdentity: retainedIdentity,
+        elapsedMilliseconds: { sessionElapsed },
+        observe: {
+          throw TargetSessionReadinessInvalidation.session(
+            "the designated session changed while visibility was pending")
+        },
+        performRaise: { preconditionFailure("raise must not run after session drift") },
+        writeFrontmost: { preconditionFailure("frontmost write must not run after session drift") },
+        wait: { sessionElapsed += $0 }
+      )
+    }
+  }
+
+  private static func rejectsVisibilityLossAfterSessionAction() {
+    var elapsed: UInt64 = 0
+    var observations = [
+      validSnapshot(accessibilityFrontmost: false),
+      validSnapshot(windowMinimized: true, accessibilityFrontmost: false),
+    ]
+    do {
+      _ = try Issue105TargetSessionStabilizer.stabilize(
+        policy: testPolicy,
+        retainedIdentity: retainedIdentity,
+        elapsedMilliseconds: { elapsed },
+        observe: { observations.removeFirst() },
+        performRaise: { .success },
+        writeFrontmost: { .success },
+        wait: { elapsed += $0 }
+      )
+      preconditionFailure("expected post-action visibility-loss invalidation")
+    } catch let failure as Issue105ReadinessFailure {
+      precondition(ExpectedAuthority.foreground.matches(failure.invalidation))
+      precondition(failure.diagnostics.stabilizationObservationCount == 2)
+      precondition(failure.diagnostics.visibilityPendingObservationCount == 0)
+      precondition(failure.diagnostics.raiseAttemptCount == 1)
+      precondition(failure.diagnostics.frontmostWriteAttemptCount == 1)
+      precondition(failure.diagnostics.terminalVisibilityPredicates?.visibleWindow == false)
+    } catch {
+      preconditionFailure("unexpected post-action visibility-loss error")
     }
   }
 
@@ -281,11 +509,14 @@ enum TargetSessionReadinessCoreTests {
     case foreground
     case identity
     case processState
+    case session
 
     func matches(_ invalidation: TargetSessionReadinessInvalidation) -> Bool {
       switch (self, invalidation) {
       case (.action, .action), (.accessibility, .accessibility), (.foreground, .foreground),
         (.identity, .identity), (.processState, .processState):
+        true
+      case (.session, .session):
         true
       default:
         false

@@ -1,6 +1,6 @@
 import Foundation
 
-let issue105ReadinessSchemaVersion = "issue105-target-session-readiness-v2"
+let issue105ReadinessSchemaVersion = "issue106-target-session-readiness-v3"
 
 struct Issue105RetainedCandidateIdentity: Equatable {
   let processIdentifier: Int32
@@ -44,6 +44,20 @@ struct Issue105TerminalPredicates: Codable, Equatable {
   )
 }
 
+struct Issue106VisibilityPredicates: Codable, Equatable {
+  let applicationHidden: Bool
+  let windowMinimized: Bool
+  let windowFrameVisible: Bool
+  let visibleWindow: Bool
+
+  init(snapshot: TargetSessionReadinessSnapshot) {
+    applicationHidden = snapshot.applicationHidden
+    windowMinimized = snapshot.windowMinimized
+    windowFrameVisible = snapshot.windowFrameVisible
+    visibleWindow = snapshot.visibleWindow
+  }
+}
+
 struct Issue105StabilizationDiagnostics: Codable, Equatable {
   let policyTimeoutMilliseconds: UInt64
   let pollIntervalMilliseconds: UInt64
@@ -53,6 +67,10 @@ struct Issue105StabilizationDiagnostics: Codable, Equatable {
   let raiseAttemptCount: Int
   let retryableRaiseFailureCount: Int
   let frontmostWriteAttemptCount: Int
+  let initialVisibilityPredicates: Issue106VisibilityPredicates?
+  let terminalVisibilityPredicates: Issue106VisibilityPredicates?
+  let visibilityPendingObservationCount: Int
+  let visibilityPendingDurationMilliseconds: UInt64
   let terminalPredicates: Issue105TerminalPredicates
 }
 
@@ -74,7 +92,7 @@ enum Issue105TargetSessionStabilizer {
     }
   }
 
-  static func validateRetainedCandidate(
+  static func validateRetainedIdentity(
     _ snapshot: TargetSessionReadinessSnapshot,
     retainedIdentity: Issue105RetainedCandidateIdentity
   ) throws {
@@ -96,10 +114,6 @@ enum Issue105TargetSessionStabilizer {
       throw TargetSessionReadinessInvalidation.identity(
         "the live packaged candidate executable identity drifted during stabilization")
     }
-    guard snapshot.visibleWindow else {
-      throw TargetSessionReadinessInvalidation.accessibility(
-        "the retained packaged candidate Accessibility window was not visible during stabilization")
-    }
   }
 
   static func stabilize(
@@ -117,6 +131,22 @@ enum Issue105TargetSessionStabilizer {
     var frontmostWriteAttemptCount = 0
     var raiseSucceeded = false
     var frontmostWriteSucceeded = false
+    var initialVisibilityPredicates: Issue106VisibilityPredicates?
+    var terminalVisibilityPredicates: Issue106VisibilityPredicates?
+    var visibilityPendingObservationCount = 0
+    var firstVisibilityPendingElapsedMilliseconds: UInt64?
+    var visibilityBecameReadyElapsedMilliseconds: UInt64?
+
+    func boundedElapsedMilliseconds() -> UInt64 {
+      min(elapsedMilliseconds(), policy.timeoutMilliseconds)
+    }
+
+    func visibilityPendingDurationMilliseconds() -> UInt64 {
+      guard let firstVisibilityPendingElapsedMilliseconds else { return 0 }
+      let terminalElapsedMilliseconds =
+        visibilityBecameReadyElapsedMilliseconds ?? boundedElapsedMilliseconds()
+      return terminalElapsedMilliseconds - firstVisibilityPendingElapsedMilliseconds
+    }
 
     func diagnostics(
       terminalPredicates: Issue105TerminalPredicates = .none
@@ -124,12 +154,16 @@ enum Issue105TargetSessionStabilizer {
       Issue105StabilizationDiagnostics(
         policyTimeoutMilliseconds: policy.timeoutMilliseconds,
         pollIntervalMilliseconds: policy.pollIntervalMilliseconds,
-        stabilizationDurationMilliseconds: min(elapsedMilliseconds(), policy.timeoutMilliseconds),
+        stabilizationDurationMilliseconds: boundedElapsedMilliseconds(),
         activationRequestCount: 1,
         stabilizationObservationCount: observationCount,
         raiseAttemptCount: raiseAttemptCount,
         retryableRaiseFailureCount: retryableRaiseFailureCount,
         frontmostWriteAttemptCount: frontmostWriteAttemptCount,
+        initialVisibilityPredicates: initialVisibilityPredicates,
+        terminalVisibilityPredicates: terminalVisibilityPredicates,
+        visibilityPendingObservationCount: visibilityPendingObservationCount,
+        visibilityPendingDurationMilliseconds: visibilityPendingDurationMilliseconds(),
         terminalPredicates: terminalPredicates
       )
     }
@@ -148,12 +182,37 @@ enum Issue105TargetSessionStabilizer {
       do {
         snapshot = try observe()
         observationCount += 1
-        try validateRetainedCandidate(snapshot, retainedIdentity: retainedIdentity)
+        try validateRetainedIdentity(snapshot, retainedIdentity: retainedIdentity)
       } catch let invalidation as TargetSessionReadinessInvalidation {
         try fail(invalidation)
       } catch {
         try fail(
           .accessibility("the retained readiness state could not be observed during stabilization"))
+      }
+
+      let visibilityPredicates = Issue106VisibilityPredicates(snapshot: snapshot)
+      if initialVisibilityPredicates == nil {
+        initialVisibilityPredicates = visibilityPredicates
+      }
+      terminalVisibilityPredicates = visibilityPredicates
+      if !visibilityPredicates.visibleWindow {
+        if raiseAttemptCount > 0 || frontmostWriteAttemptCount > 0 {
+          try fail(
+            .foreground(
+              "the packaged candidate lost visible-window readiness after a session action"
+            ))
+        }
+        if firstVisibilityPendingElapsedMilliseconds == nil {
+          firstVisibilityPendingElapsedMilliseconds = boundedElapsedMilliseconds()
+        }
+        visibilityPendingObservationCount += 1
+        wait(policy.pollIntervalMilliseconds)
+        continue
+      }
+      if firstVisibilityPendingElapsedMilliseconds != nil,
+        visibilityBecameReadyElapsedMilliseconds == nil
+      {
+        visibilityBecameReadyElapsedMilliseconds = boundedElapsedMilliseconds()
       }
 
       if !raiseSucceeded {
@@ -220,6 +279,12 @@ enum Issue105TargetSessionStabilizer {
       wait(policy.pollIntervalMilliseconds)
     }
 
+    if terminalVisibilityPredicates?.visibleWindow == false {
+      try fail(
+        .accessibility(
+          "the retained packaged candidate window did not become visibly ready before the stabilization timeout"
+        ))
+    }
     try fail(
       .foreground(
         "the packaged candidate did not reach retained frontmost readiness before the stabilization timeout"
