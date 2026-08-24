@@ -840,6 +840,30 @@ and every conditional row remains unauthorized/unrun. The #98/#102/#103 rows and
 through #107 stop records retain their prior SHA-256 values. Complete sanitized evidence is in the
 [issue #108 readiness stop](investigations/issue-108/README.md).
 
+### Issue #109 operator-assisted focus-handoff implementation
+
+Issue #109 changes only the external issue #100/#105-#108 controller, controller-only
+stabilizer/platform support, focused tests, and owning evidence. The version-6 controller first
+proves exact fresh application/window/executable/session identity and a zero-operation boundary,
+then emits a sanitized bounded `awaiting-operator-focus` prompt. Exactly one operator focus action
+must be declared. The controller produces no synthesized click, key, Accessibility focus action,
+AppleScript, GUI script, or Dock action and performs no `AXFrontmost` write.
+
+After the operator action, readiness still requires independently detected exact-candidate
+Accessibility and `NSWorkspace` frontmost, a supported positive window frame, supported `AXRaise`
+when required, retained exact identity, and the unchanged independent readiness observer. Every
+wrong-app, duplicate-action, timeout, ambiguity, drift, post-focus loss, hidden/invisible,
+raise/observer, and nonzero-operation path fails closed. The existing 20,000-ms timeout and 50-ms
+poll interval remain unchanged.
+
+Target qualification is **NOT RUN** at this implementation boundary. All focused/predecessor,
+14-dispatch, package/identity/root/privacy/surface/fixture/protected-evidence/diff gates must pass
+and the implementation must be cleanly committed before exactly one coordinated assisted preflight
+may begin. Issue #104 remains **UNCONSUMED**; no target operation, sampler, artifact/destination,
+measurement, issue #95 action, or cancellation conclusion is authorized. The bounded contract and
+runbook are in the
+[issue #109 focus-handoff evidence](investigations/issue-109/README.md).
+
 ## Remote CI and milestone state
 
 Issue #71 recorded fresh CI evidence for the exact remote release commit

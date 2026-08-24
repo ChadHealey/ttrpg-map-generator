@@ -6,6 +6,8 @@ enum TargetSessionReadinessController {
   static func main() async {
     do {
       let arguments = try Arguments(CommandLine.arguments)
+      try Issue105TargetSessionStabilizer.validateDeclaredOperatorFocusActionCount(
+        arguments.declaredOperatorFocusActionCount)
       let receipt = try await qualify(arguments)
       try issue100Emit(receipt)
     } catch let failure as Issue105ReadinessFailure {
@@ -99,37 +101,47 @@ enum TargetSessionReadinessController {
       application: application,
       bundleIdentifier: arguments.bundleIdentifier
     )
-    let activationAccepted = Issue105TargetSessionStabilizationPlatform.requestActivation(
-      application)
-    do {
-      try Issue105TargetSessionStabilizer.validateActivationRequest(accepted: activationAccepted)
-    } catch let invalidation as TargetSessionReadinessInvalidation {
-      throw Issue105ReadinessFailure(
-        invalidation: invalidation,
-        diagnostics: Issue105StabilizationDiagnostics(
-          policyTimeoutMilliseconds: Issue105StabilizationPolicy.approved.timeoutMilliseconds,
-          pollIntervalMilliseconds: Issue105StabilizationPolicy.approved.pollIntervalMilliseconds,
-          stabilizationDurationMilliseconds: 0,
-          activationRequestCount: 1,
-          stabilizationObservationCount: 0,
-          raiseAttemptCount: 0,
-          retryableRaiseFailureCount: 0,
-          raiseSucceeded: false,
-          frontmost: .none,
-          initialVisibilityPredicates: nil,
-          terminalVisibilityPredicates: nil,
-          visibilityPendingObservationCount: 0,
-          visibilityPendingDurationMilliseconds: 0,
-          actionOrder: ["activation-request"],
-          terminalPredicates: .none
-        )
-      )
+    guard
+      let initialWorkspaceFrontmostProcessIdentifier =
+        Issue105TargetSessionStabilizationPlatform
+        .currentWorkspaceFrontmostProcessIdentifier(),
+      initialWorkspaceFrontmostProcessIdentifier != application.processIdentifier,
+      initialWorkspaceFrontmostProcessIdentifier != ProcessInfo.processInfo.processIdentifier
+    else {
+      throw TargetSessionReadinessInvalidation.foreground(
+        "a distinct initial foreground application was not available for operator handoff")
     }
+    let retainedIdentity = Issue105RetainedCandidateIdentity(
+      processIdentifier: application.processIdentifier,
+      windowIdentity: CFHash(window)
+    )
+    let initialSnapshot = try Issue105TargetSessionStabilizationPlatform.readinessSnapshot(
+      bundleIdentifier: arguments.bundleIdentifier,
+      expectedExecutableSha256: arguments.expectedCandidateSha256,
+      initialWorkspaceFrontmostProcessIdentifier: initialWorkspaceFrontmostProcessIdentifier
+    )
+    try Issue105TargetSessionStabilizer.validateZeroOperationProof(.zero)
+    try Issue105TargetSessionStabilizer.validatePreHandoff(
+      initialSnapshot, retainedIdentity: retainedIdentity)
+    try issue109EmitPrompt(
+      Issue109OperatorFocusPromptReceipt(
+        controllerVersion: issue105ReadinessSchemaVersion,
+        state: "awaiting-operator-focus",
+        bundleIdentifier: arguments.bundleIdentifier,
+        declaredOperatorFocusActionCount: arguments.declaredOperatorFocusActionCount,
+        timeoutMilliseconds: Issue105StabilizationPolicy.approved.timeoutMilliseconds,
+        prompt:
+          "Click exactly once on the packaged app window or its Dock icon, then do not interact with it again.",
+        zeroOperationProof: .zero
+      ))
     let stabilization = try Issue105TargetSessionStabilizationPlatform.stabilize(
       application: application,
       window: window,
       bundleIdentifier: arguments.bundleIdentifier,
-      expectedExecutableSha256: arguments.expectedCandidateSha256
+      expectedExecutableSha256: arguments.expectedCandidateSha256,
+      initialWorkspaceFrontmostProcessIdentifier: initialWorkspaceFrontmostProcessIdentifier,
+      initialSnapshot: initialSnapshot,
+      declaredOperatorFocusActionCount: arguments.declaredOperatorFocusActionCount
     )
 
     let observerReceipt = try runReadinessObserver(
@@ -137,19 +149,20 @@ enum TargetSessionReadinessController {
       bundleIdentifier: arguments.bundleIdentifier,
       expectedCandidateSha256: arguments.expectedCandidateSha256
     )
-    guard observerReceipt.status == "valid",
-      observerReceipt.bundleIdentifier == arguments.bundleIdentifier,
-      observerReceipt.candidateExecutableSha256 == arguments.expectedCandidateSha256,
-      observerReceipt.applicationCount == 1,
-      observerReceipt.accessibilityWindowCount == 1,
-      observerReceipt.visibleAccessibilityWindow == true,
-      observerReceipt.accessibilityFrontmost == true,
-      observerReceipt.workspaceFrontmost == true,
-      observerReceipt.applicationAndWindowIdentityRetained
-    else {
-      throw TargetSessionReadinessInvalidation.foreground(
-        "the independent readiness observer did not verify the approved retained state")
-    }
+    let observerVerified =
+      observerReceipt.status == "valid"
+      && observerReceipt.bundleIdentifier == arguments.bundleIdentifier
+    let observerIdentityVerified =
+      observerReceipt.candidateExecutableSha256 == arguments.expectedCandidateSha256
+    let observerPredicatesVerified =
+      observerReceipt.applicationCount == 1
+      && observerReceipt.accessibilityWindowCount == 1
+      && observerReceipt.visibleAccessibilityWindow == true
+      && observerReceipt.accessibilityFrontmost == true
+      && observerReceipt.workspaceFrontmost == true
+      && observerReceipt.applicationAndWindowIdentityRetained
+    try Issue105TargetSessionStabilizer.validateIndependentObserverAgreement(
+      observerVerified && observerIdentityVerified && observerPredicatesVerified)
 
     guard Issue100TargetSessionPlatform.designatedConsoleSessionMatched() else {
       throw TargetSessionReadinessInvalidation.session(
@@ -158,7 +171,8 @@ enum TargetSessionReadinessController {
 
     let finalSnapshot = try Issue105TargetSessionStabilizationPlatform.readinessSnapshot(
       bundleIdentifier: arguments.bundleIdentifier,
-      expectedExecutableSha256: arguments.expectedCandidateSha256
+      expectedExecutableSha256: arguments.expectedCandidateSha256,
+      initialWorkspaceFrontmostProcessIdentifier: initialWorkspaceFrontmostProcessIdentifier
     )
     try Issue105TargetSessionStabilizer.validateRetainedIdentity(
       finalSnapshot,
@@ -180,6 +194,7 @@ enum TargetSessionReadinessController {
       retryableRaiseFailureCount: stabilization.diagnostics.retryableRaiseFailureCount,
       raiseSucceeded: stabilization.diagnostics.raiseSucceeded,
       frontmost: stabilization.diagnostics.frontmost,
+      operatorHandoff: stabilization.diagnostics.operatorHandoff,
       initialVisibilityPredicates: stabilization.diagnostics.initialVisibilityPredicates,
       terminalVisibilityPredicates: Issue106VisibilityPredicates(snapshot: finalSnapshot),
       visibilityPendingObservationCount:
@@ -203,7 +218,7 @@ enum TargetSessionReadinessController {
       qualificationKind: "non-measurement-target-session-readiness",
       target: .approved,
       sessionMechanism:
-        "exact-path NSWorkspace launch in active console GUI session; accepted AppKit activation request; exact-application AXFrontmost support/write/readback before Workspace and supported positive-frame readiness; AXRaise; independent retained Accessibility/NSWorkspace verification",
+        "exact-path NSWorkspace launch in active console GUI session; bounded explicit awaiting-operator-focus handoff; one declared operator focus action; independently detected exact-candidate Workspace and Accessibility frontmost plus supported positive frame; AXRaise; unchanged retained Accessibility/NSWorkspace observer verification",
       bundleIdentifier: arguments.bundleIdentifier,
       candidateExecutableSha256: package.executableSha256,
       controllerSha256: controllerSha256,
@@ -213,9 +228,9 @@ enum TargetSessionReadinessController {
         exactApplicationCount: true,
         exactAccessibilityWindowCount: true,
         visibleAccessibilityWindow: true,
-        activationSucceeded: true,
+        activationSucceeded: false,
         raiseSucceeded: true,
-        accessibilityFrontmostWriteSucceeded: true,
+        accessibilityFrontmostWriteSucceeded: false,
         accessibilityFrontmostVerified: true,
         workspaceFrontmostVerified: true,
         applicationAndWindowIdentityRetained: true
@@ -287,19 +302,22 @@ private struct Arguments {
   let expectedCandidateSha256: String
   let readinessObserverPath: String
   let expectedReadinessObserverSha256: String
+  let declaredOperatorFocusActionCount: Int
 
   init(_ arguments: [String]) throws {
-    guard arguments.count == 6,
+    guard arguments.count == 7,
       arguments[1].hasPrefix("/"),
       arguments[2] == "app.ttrpgmap.generator",
       ExecutableIdentityValidator.isDigest(arguments[3]),
       arguments[4].hasPrefix("/"),
-      ExecutableIdentityValidator.isDigest(arguments[5])
+      ExecutableIdentityValidator.isDigest(arguments[5]),
+      let declaredOperatorFocusActionCount = Int(arguments[6])
     else { throw TargetSessionReadinessInvalidation.usage }
     applicationPath = arguments[1]
     bundleIdentifier = arguments[2]
     expectedCandidateSha256 = arguments[3]
     readinessObserverPath = arguments[4]
     expectedReadinessObserverSha256 = arguments[5]
+    self.declaredOperatorFocusActionCount = declaredOperatorFocusActionCount
   }
 }

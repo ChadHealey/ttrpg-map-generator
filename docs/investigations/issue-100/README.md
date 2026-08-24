@@ -204,3 +204,16 @@ reads remained explicitly unavailable/`attribute-unsupported`. The controller ti
 minimized writes, raises, independent observer runs, or product operations, then terminated the
 candidate. No retry ran, and issue #104 remains **UNCONSUMED**. The complete sanitized stop and
 provenance correction are in the [issue #108 evidence](../issue-108/README.md).
+
+## Issue 109 operator-assisted focus handoff
+
+Issue #109 adds the explicit bounded operator handoff required after issue #108 exhausted the
+automated foreground path. The controller validates exact fresh identity and zero-operation state
+before emitting `awaiting-operator-focus`; one declared real operator focus action is then
+independently detected through exact-candidate Accessibility/Workspace frontmost plus a supported
+positive frame. No input is synthesized and no `AXFrontmost` write is performed. `AXRaise`, final
+retention, and this directory's canonical independent observer remain fail-closed requirements.
+
+The implementation boundary and exactly-one-preflight runbook are in
+[issue #109](../issue-109/README.md). Qualification remains **NOT RUN** until the implementation and
+all gates are cleanly committed; issue #104 remains **UNCONSUMED**.

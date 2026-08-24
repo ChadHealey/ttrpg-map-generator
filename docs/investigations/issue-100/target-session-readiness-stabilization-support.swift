@@ -1,5 +1,22 @@
 import Foundation
 
+struct Issue109OperatorFocusPromptReceipt: Codable {
+  let controllerVersion: String
+  let state: String
+  let bundleIdentifier: String
+  let declaredOperatorFocusActionCount: Int
+  let timeoutMilliseconds: UInt64
+  let prompt: String
+  let zeroOperationProof: Issue100ZeroOperationReceipt
+}
+
+func issue109EmitPrompt(_ receipt: Issue109OperatorFocusPromptReceipt) throws {
+  let encoder = JSONEncoder()
+  encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+  FileHandle.standardError.write(try encoder.encode(receipt))
+  FileHandle.standardError.write(Data([0x0A]))
+}
+
 struct Issue105TargetSessionReadinessQualificationReceipt: Codable {
   let controllerVersion: String
   let status: String

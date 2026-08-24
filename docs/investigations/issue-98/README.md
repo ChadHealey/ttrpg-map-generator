@@ -291,3 +291,17 @@ destination setup, dispatch, or measurement, then terminated the candidate. No r
 prior rows and stops remain byte-identical; issue #104's replacement remains **UNCONSUMED**, and
 there is no new cancellation, issue #95 matrix, or release-budget conclusion. Complete sanitized
 evidence is in the [issue #107 readiness stop](../issue-107/README.md).
+
+## Issue 109 operator-assisted focus-handoff boundary
+
+Issue #108 subsequently exhausted the bounded automated foreground path: one supported/settable
+application `AXFrontmost=true` write succeeded, but Accessibility and Workspace remained false for
+20,000 ms. Issue #109 therefore changes only the external readiness controller to emit a bounded
+`awaiting-operator-focus` state after exact zero-operation launch validation, permit one declared
+real operator focus action, and independently detect exact-candidate Accessibility/Workspace
+frontmost plus a supported positive frame before `AXRaise` and the unchanged observer.
+
+The issue #109 implementation and gates must be cleanly committed before exactly one coordinated
+assisted preflight. Qualification is **NOT RUN** at this boundary. No #98 target action or issue
+#104 row is authorized; the replacement remains **UNCONSUMED**. The contract and runbook are in
+the [issue #109 focus-handoff evidence](../issue-109/README.md).

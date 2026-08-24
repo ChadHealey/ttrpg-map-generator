@@ -1,6 +1,6 @@
 import Foundation
 
-let issue105ReadinessSchemaVersion = "issue108-target-session-readiness-v5"
+let issue105ReadinessSchemaVersion = "issue109-target-session-readiness-v6"
 
 enum Issue108AccessibilityReadUnavailable: String, Codable, Equatable, Error {
   case attributeUnsupported = "attribute-unsupported"
@@ -44,6 +44,12 @@ struct Issue108AccessibilityBooleanReadReceipt: Codable, Equatable {
   }
 }
 
+enum Issue109WorkspaceFocusState: String, Codable, Equatable {
+  case awaitingInitialApplication = "awaiting-initial-application"
+  case candidate
+  case otherApplication = "other-application"
+}
+
 struct Issue108TargetSessionReadinessSnapshot: Equatable {
   let applicationCount: Int
   let windowCount: Int
@@ -55,6 +61,7 @@ struct Issue108TargetSessionReadinessSnapshot: Equatable {
   let windowFrameVisible: Issue108AccessibilityBooleanRead
   let accessibilityFrontmost: Issue108AccessibilityBooleanRead
   let workspaceFrontmost: Bool
+  let workspaceFocusState: Issue109WorkspaceFocusState
 
   var visibleWindow: Bool {
     !applicationHidden && windowMinimized.supportedValue != true
@@ -72,16 +79,6 @@ enum Issue105SessionActionResult: Equatable {
   case retryableCannotComplete
   case unsupported
   case failed
-}
-
-enum Issue108FrontmostWriteResult: Equatable {
-  case success
-  case retryableSupportCannotComplete
-  case retryableWriteCannotComplete
-  case attributeUnsupported
-  case notSettable
-  case supportFailed
-  case writeFailed
 }
 
 struct Issue105StabilizationPolicy: Equatable {
@@ -152,6 +149,17 @@ struct Issue108FrontmostDiagnostics: Codable, Equatable {
   )
 }
 
+struct Issue109OperatorFocusHandoffDiagnostics: Codable, Equatable {
+  let awaitingStateEmitted: Bool
+  let declaredOperatorFocusActionCount: Int
+  let focusTransitionDetected: Bool
+  let waitDurationMilliseconds: UInt64
+  let observationCount: Int
+  let initialWorkspaceFocusState: Issue109WorkspaceFocusState
+  let terminalWorkspaceFocusState: Issue109WorkspaceFocusState?
+  let stateTransitions: [String]
+}
+
 struct Issue105StabilizationDiagnostics: Codable, Equatable {
   let policyTimeoutMilliseconds: UInt64
   let pollIntervalMilliseconds: UInt64
@@ -162,6 +170,7 @@ struct Issue105StabilizationDiagnostics: Codable, Equatable {
   let retryableRaiseFailureCount: Int
   let raiseSucceeded: Bool
   let frontmost: Issue108FrontmostDiagnostics
+  let operatorHandoff: Issue109OperatorFocusHandoffDiagnostics
   let initialVisibilityPredicates: Issue106VisibilityPredicates?
   let terminalVisibilityPredicates: Issue106VisibilityPredicates?
   let visibilityPendingObservationCount: Int
@@ -181,10 +190,24 @@ struct Issue105ReadinessFailure: Error {
 }
 
 enum Issue105TargetSessionStabilizer {
-  static func validateActivationRequest(accepted: Bool) throws {
-    guard accepted else {
+  static func validateDeclaredOperatorFocusActionCount(_ count: Int) throws {
+    guard count == 1 else {
       throw TargetSessionReadinessInvalidation.action(
-        "the exact packaged candidate activation request was not accepted")
+        "exactly one operator focus action must be declared before launch")
+    }
+  }
+
+  static func validateZeroOperationProof(_ proof: Issue100ZeroOperationReceipt) throws {
+    guard !proof.fixtureConfigured,
+      !proof.samplerStarted,
+      !proof.exportDestinationCreated,
+      !proof.svgDispatched,
+      !proof.pngDispatched,
+      proof.measurementCount == 0,
+      proof.rawArtifactCount == 0
+    else {
+      throw TargetSessionReadinessInvalidation.action(
+        "product or measurement activity preceded readiness qualification")
     }
   }
 
@@ -212,13 +235,39 @@ enum Issue105TargetSessionStabilizer {
     }
   }
 
+  static func validatePreHandoff(
+    _ snapshot: Issue108TargetSessionReadinessSnapshot,
+    retainedIdentity: Issue105RetainedCandidateIdentity
+  ) throws {
+    try validateRetainedIdentity(snapshot, retainedIdentity: retainedIdentity)
+    guard !snapshot.applicationHidden else {
+      throw TargetSessionReadinessInvalidation.accessibility(
+        "the exact packaged candidate application was hidden before operator handoff")
+    }
+    guard snapshot.workspaceFocusState == .awaitingInitialApplication,
+      !snapshot.workspaceFrontmost,
+      snapshot.accessibilityFrontmost.supportedValue != true
+    else {
+      throw TargetSessionReadinessInvalidation.foreground(
+        "the exact candidate was already frontmost before the operator handoff began")
+    }
+  }
+
+  static func validateIndependentObserverAgreement(_ verified: Bool) throws {
+    guard verified else {
+      throw TargetSessionReadinessInvalidation.foreground(
+        "the independent readiness observer did not verify the approved retained state")
+    }
+  }
+
   static func validateSnapshot(_ snapshot: Issue108TargetSessionReadinessSnapshot) throws {
     guard snapshot.visibleWindow else {
       throw TargetSessionReadinessInvalidation.accessibility(
         "the packaged candidate Accessibility window was not visibly frame-ready")
     }
     guard snapshot.accessibilityFrontmost.supportedValue == true,
-      snapshot.workspaceFrontmost
+      snapshot.workspaceFrontmost,
+      snapshot.workspaceFocusState == .candidate
     else {
       throw TargetSessionReadinessInvalidation.foreground(
         "the packaged candidate did not retain independently verified frontmost state")
@@ -228,33 +277,33 @@ enum Issue105TargetSessionStabilizer {
   static func stabilize(
     policy: Issue105StabilizationPolicy,
     retainedIdentity: Issue105RetainedCandidateIdentity,
+    initialSnapshot: Issue108TargetSessionReadinessSnapshot,
+    declaredOperatorFocusActionCount: Int,
     elapsedMilliseconds: () -> UInt64,
     observe: () throws -> Issue108TargetSessionReadinessSnapshot,
-    writeFrontmost: () -> Issue108FrontmostWriteResult,
     performRaise: () -> Issue105SessionActionResult,
     wait: (_ milliseconds: UInt64) -> Void
   ) throws -> Issue105StabilizationOutcome {
+    try validateDeclaredOperatorFocusActionCount(declaredOperatorFocusActionCount)
+    try validatePreHandoff(initialSnapshot, retainedIdentity: retainedIdentity)
+
     var observationCount = 0
     var raiseAttemptCount = 0
     var retryableRaiseFailureCount = 0
     var raiseSucceeded = false
-    var frontmostAttributeSupported: Bool?
-    var frontmostAttributeSettable: Bool?
-    var frontmostWriteAttemptCount = 0
-    var retryableFrontmostSupportFailureCount = 0
-    var retryableFrontmostWriteFailureCount = 0
-    var frontmostWriteSucceeded = false
-    var frontmostReadback: Issue108AccessibilityBooleanReadReceipt?
-    var retryableFrontmostReadbackFailureCount = 0
+    var focusTransitionDetected = false
     var accessibilityReadbackVerified = false
     var workspaceReadbackVerified = false
-    var initialVisibilityPredicates: Issue106VisibilityPredicates?
-    var terminalVisibilityPredicates: Issue106VisibilityPredicates?
+    var frontmostReadback: Issue108AccessibilityBooleanReadReceipt?
+    var retryableFrontmostReadbackFailureCount = 0
+    var terminalWorkspaceFocusState: Issue109WorkspaceFocusState?
+    var terminalVisibilityPredicates = Issue106VisibilityPredicates(snapshot: initialSnapshot)
     var visibilityPendingObservationCount = 0
     var firstVisibilityPendingElapsedMilliseconds: UInt64?
     var visibilityBecameReadyElapsedMilliseconds: UInt64?
     var visibleWindowWasVerified = false
-    var actionOrder = ["activation-request"]
+    var stateTransitions = ["exact-candidate-validated", "awaiting-operator-focus"]
+    var actionOrder = stateTransitions
 
     func boundedElapsedMilliseconds() -> UInt64 {
       min(elapsedMilliseconds(), policy.timeoutMilliseconds)
@@ -262,9 +311,8 @@ enum Issue105TargetSessionStabilizer {
 
     func visibilityPendingDurationMilliseconds() -> UInt64 {
       guard let firstVisibilityPendingElapsedMilliseconds else { return 0 }
-      let terminalElapsedMilliseconds =
-        visibilityBecameReadyElapsedMilliseconds ?? boundedElapsedMilliseconds()
-      return terminalElapsedMilliseconds - firstVisibilityPendingElapsedMilliseconds
+      return (visibilityBecameReadyElapsedMilliseconds ?? boundedElapsedMilliseconds())
+        - firstVisibilityPendingElapsedMilliseconds
     }
 
     func diagnostics(
@@ -274,23 +322,33 @@ enum Issue105TargetSessionStabilizer {
         policyTimeoutMilliseconds: policy.timeoutMilliseconds,
         pollIntervalMilliseconds: policy.pollIntervalMilliseconds,
         stabilizationDurationMilliseconds: boundedElapsedMilliseconds(),
-        activationRequestCount: 1,
+        activationRequestCount: 0,
         stabilizationObservationCount: observationCount,
         raiseAttemptCount: raiseAttemptCount,
         retryableRaiseFailureCount: retryableRaiseFailureCount,
         raiseSucceeded: raiseSucceeded,
         frontmost: Issue108FrontmostDiagnostics(
-          attributeSupported: frontmostAttributeSupported,
-          attributeSettable: frontmostAttributeSettable,
-          writeAttemptCount: frontmostWriteAttemptCount,
-          retryableSupportFailureCount: retryableFrontmostSupportFailureCount,
-          retryableWriteFailureCount: retryableFrontmostWriteFailureCount,
-          writeSucceeded: frontmostWriteSucceeded,
+          attributeSupported: nil,
+          attributeSettable: nil,
+          writeAttemptCount: 0,
+          retryableSupportFailureCount: 0,
+          retryableWriteFailureCount: 0,
+          writeSucceeded: false,
           accessibilityReadback: frontmostReadback,
           retryableReadbackFailureCount: retryableFrontmostReadbackFailureCount,
           workspaceReadbackVerified: workspaceReadbackVerified
         ),
-        initialVisibilityPredicates: initialVisibilityPredicates,
+        operatorHandoff: Issue109OperatorFocusHandoffDiagnostics(
+          awaitingStateEmitted: true,
+          declaredOperatorFocusActionCount: declaredOperatorFocusActionCount,
+          focusTransitionDetected: focusTransitionDetected,
+          waitDurationMilliseconds: boundedElapsedMilliseconds(),
+          observationCount: observationCount,
+          initialWorkspaceFocusState: initialSnapshot.workspaceFocusState,
+          terminalWorkspaceFocusState: terminalWorkspaceFocusState,
+          stateTransitions: stateTransitions
+        ),
+        initialVisibilityPredicates: Issue106VisibilityPredicates(snapshot: initialSnapshot),
         terminalVisibilityPredicates: terminalVisibilityPredicates,
         visibilityPendingObservationCount: visibilityPendingObservationCount,
         visibilityPendingDurationMilliseconds: visibilityPendingDurationMilliseconds(),
@@ -300,10 +358,7 @@ enum Issue105TargetSessionStabilizer {
     }
 
     func fail(_ invalidation: TargetSessionReadinessInvalidation) throws -> Never {
-      throw Issue105ReadinessFailure(
-        invalidation: invalidation,
-        diagnostics: diagnostics()
-      )
+      throw Issue105ReadinessFailure(invalidation: invalidation, diagnostics: diagnostics())
     }
 
     while elapsedMilliseconds() <= policy.timeoutMilliseconds,
@@ -317,72 +372,33 @@ enum Issue105TargetSessionStabilizer {
       } catch let invalidation as TargetSessionReadinessInvalidation {
         try fail(invalidation)
       } catch {
-        try fail(
-          .accessibility("the retained readiness state could not be observed during stabilization"))
+        try fail(.accessibility("the retained readiness state could not be observed"))
       }
 
-      let visibilityPredicates = Issue106VisibilityPredicates(snapshot: snapshot)
-      if initialVisibilityPredicates == nil {
-        initialVisibilityPredicates = visibilityPredicates
-      }
-      terminalVisibilityPredicates = visibilityPredicates
-
-      guard !visibilityPredicates.applicationHidden else {
-        try fail(
-          .accessibility(
-            "the exact packaged candidate application became hidden; unhide is not authorized"
-          ))
+      terminalWorkspaceFocusState = snapshot.workspaceFocusState
+      terminalVisibilityPredicates = Issue106VisibilityPredicates(snapshot: snapshot)
+      guard !snapshot.applicationHidden else {
+        try fail(.accessibility("the exact packaged candidate application became hidden"))
       }
 
-      if !frontmostWriteSucceeded {
-        frontmostWriteAttemptCount += 1
-        switch writeFrontmost() {
-        case .success:
-          frontmostAttributeSupported = true
-          frontmostAttributeSettable = true
-          frontmostWriteSucceeded = true
-          actionOrder.append("frontmost-write-succeeded")
-        case .retryableSupportCannotComplete:
-          retryableFrontmostSupportFailureCount += 1
-          actionOrder.append("frontmost-support-cannot-complete")
-        case .retryableWriteCannotComplete:
-          frontmostAttributeSupported = true
-          frontmostAttributeSettable = true
-          retryableFrontmostWriteFailureCount += 1
-          actionOrder.append("frontmost-write-cannot-complete")
-        case .attributeUnsupported:
-          frontmostAttributeSupported = false
-          frontmostAttributeSettable = false
-          actionOrder.append("frontmost-attribute-unsupported")
-          try fail(
-            .accessibility(
-              "AXFrontmost was unsupported for the retained packaged candidate application"
-            ))
-        case .notSettable:
-          frontmostAttributeSupported = true
-          frontmostAttributeSettable = false
-          actionOrder.append("frontmost-attribute-not-settable")
-          try fail(
-            .accessibility(
-              "AXFrontmost was not settable for the retained packaged candidate application"
-            ))
-        case .supportFailed:
-          actionOrder.append("frontmost-support-failed")
-          try fail(
-            .accessibility(
-              "AXFrontmost support could not be verified for the retained packaged candidate application"
-            ))
-        case .writeFailed:
-          frontmostAttributeSupported = true
-          frontmostAttributeSettable = true
-          actionOrder.append("frontmost-write-failed")
-          try fail(
-            .accessibility(
-              "AXFrontmost=true failed for the retained packaged candidate application"
-            ))
+      switch snapshot.workspaceFocusState {
+      case .otherApplication:
+        try fail(.foreground("focus moved to an undeclared application during operator handoff"))
+      case .awaitingInitialApplication:
+        if focusTransitionDetected {
+          try fail(.foreground("the candidate lost Workspace focus after operator handoff"))
+        }
+        guard snapshot.accessibilityFrontmost.supportedValue != true else {
+          try fail(.foreground("Accessibility and Workspace focus disagreed during handoff"))
         }
         wait(policy.pollIntervalMilliseconds)
         continue
+      case .candidate:
+        if !focusTransitionDetected {
+          focusTransitionDetected = true
+          stateTransitions.append("operator-focus-detected")
+          actionOrder.append("operator-focus-detected")
+        }
       }
 
       frontmostReadback = Issue108AccessibilityBooleanReadReceipt(snapshot.accessibilityFrontmost)
@@ -390,14 +406,12 @@ enum Issue105TargetSessionStabilizer {
       case .supported(true):
         if !accessibilityReadbackVerified {
           accessibilityReadbackVerified = true
+          stateTransitions.append("accessibility-frontmost-readback")
           actionOrder.append("accessibility-frontmost-readback")
         }
       case .supported(false):
         if accessibilityReadbackVerified {
-          try fail(
-            .foreground(
-              "the packaged candidate lost Accessibility foreground after verified readback"
-            ))
+          try fail(.foreground("the candidate lost Accessibility focus after operator handoff"))
         }
         wait(policy.pollIntervalMilliseconds)
         continue
@@ -406,49 +420,40 @@ enum Issue105TargetSessionStabilizer {
         wait(policy.pollIntervalMilliseconds)
         continue
       case .unavailable:
-        try fail(
-          .accessibility(
-            "AXFrontmost readback was unavailable for the retained packaged candidate application"
-          ))
+        try fail(.accessibility("AXFrontmost readback was unavailable after operator handoff"))
       }
 
-      if !snapshot.workspaceFrontmost {
-        if workspaceReadbackVerified {
-          try fail(
-            .foreground(
-              "the packaged candidate lost Workspace foreground after verified readback"
-            ))
-        }
-        wait(policy.pollIntervalMilliseconds)
-        continue
-      }
       if !workspaceReadbackVerified {
         workspaceReadbackVerified = true
+        stateTransitions.append("workspace-frontmost-readback")
         actionOrder.append("workspace-frontmost-readback")
       }
 
-      if !visibilityPredicates.visibleWindow {
-        if visibleWindowWasVerified || raiseSucceeded {
-          try fail(
-            .foreground(
-              "the packaged candidate lost visible-window readiness after it was verified"
-            ))
+      if snapshot.windowMinimized.supportedValue == true {
+        try fail(.accessibility("the exact candidate window was minimized after operator handoff"))
+      }
+      switch snapshot.windowFrameVisible {
+      case .supported(true):
+        if !visibleWindowWasVerified {
+          visibleWindowWasVerified = true
+          visibilityBecameReadyElapsedMilliseconds = boundedElapsedMilliseconds()
+          stateTransitions.append("supported-positive-frame-readback")
+          actionOrder.append("supported-positive-frame-readback")
         }
+      case .supported(false):
+        try fail(
+          .accessibility("the exact candidate window was not visible after operator handoff"))
+      case .unavailable(.noValue), .unavailable(.attributeUnsupported),
+        .unavailable(.cannotComplete):
         if firstVisibilityPendingElapsedMilliseconds == nil {
           firstVisibilityPendingElapsedMilliseconds = boundedElapsedMilliseconds()
         }
         visibilityPendingObservationCount += 1
         wait(policy.pollIntervalMilliseconds)
         continue
-      }
-      if !visibleWindowWasVerified {
-        visibleWindowWasVerified = true
-        actionOrder.append("supported-positive-frame-readback")
-      }
-      if firstVisibilityPendingElapsedMilliseconds != nil,
-        visibilityBecameReadyElapsedMilliseconds == nil
-      {
-        visibilityBecameReadyElapsedMilliseconds = boundedElapsedMilliseconds()
+      case .unavailable:
+        try fail(
+          .accessibility("the exact candidate window frame was invalid after operator handoff"))
       }
 
       if !raiseSucceeded {
@@ -456,21 +461,21 @@ enum Issue105TargetSessionStabilizer {
         switch performRaise() {
         case .success:
           raiseSucceeded = true
+          stateTransitions.append("raise-succeeded")
           actionOrder.append("raise-succeeded")
         case .retryableCannotComplete:
           retryableRaiseFailureCount += 1
           actionOrder.append("raise-cannot-complete")
         case .unsupported:
-          try fail(
-            .accessibility("AXRaise was unsupported for the retained packaged candidate window"))
+          try fail(.accessibility("AXRaise was unsupported for the retained candidate window"))
         case .failed:
-          try fail(
-            .accessibility("AXRaise failed for the retained packaged candidate window"))
+          try fail(.accessibility("AXRaise failed for the retained candidate window"))
         }
         wait(policy.pollIntervalMilliseconds)
         continue
       }
 
+      try validateSnapshot(snapshot)
       let terminalPredicates = Issue105TerminalPredicates(
         exactCandidateRetained: true,
         exactWindowRetained: true,
@@ -485,21 +490,16 @@ enum Issue105TargetSessionStabilizer {
       )
     }
 
-    if !frontmostWriteSucceeded || frontmostReadback?.value != true || !workspaceReadbackVerified {
-      try fail(
-        .foreground(
-          "the packaged candidate did not reach retained frontmost readiness before the stabilization timeout"
-        ))
+    if !focusTransitionDetected {
+      try fail(.foreground("operator focus was not detected before the handoff timeout"))
     }
-    if terminalVisibilityPredicates?.visibleWindow == false {
-      try fail(
-        .accessibility(
-          "the retained packaged candidate window did not become visibly ready before the stabilization timeout"
-        ))
+    if !accessibilityReadbackVerified || !workspaceReadbackVerified {
+      try fail(.foreground("exact-candidate foreground did not settle before the handoff timeout"))
     }
-    try fail(
-      .foreground(
-        "the packaged candidate did not retain raised readiness before the stabilization timeout"
-      ))
+    if !visibleWindowWasVerified {
+      try fail(
+        .accessibility("a supported positive candidate frame was not observed before timeout"))
+    }
+    try fail(.foreground("the candidate did not retain raised readiness before timeout"))
   }
 }

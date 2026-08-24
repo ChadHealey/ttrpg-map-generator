@@ -801,6 +801,27 @@ operation. There was no retry. Issue #104 remains blocked and unconsumed. The sa
 stop, and provenance audit are in the
 [issue #108 readiness evidence](investigations/issue-108/README.md).
 
+### Operator-assisted pre-dispatch focus handoff
+
+Issue #109 replaces the exhausted automated frontmost-transfer attempt only in the external
+test controller. After exact fresh app/window/executable/session and zero-operation validation, the
+controller emits an explicit sanitized `awaiting-operator-focus` state. One operator focus action
+on the packaged app window or its Dock icon is declared before launch and permitted inside the
+unchanged 20,000-ms/50-ms pre-dispatch bound. The controller synthesizes no input and performs no
+`AXFrontmost` write.
+
+The controller must detect rather than assume the exact candidate's Accessibility and
+`NSWorkspace` frontmost transition, retain the exact application/window identity, and observe a
+supported positive frame. Only then may supported `AXRaise` run. A subsequent retained-state read
+and the unchanged canonical issue #98 readiness observer remain required. Wrong-app focus,
+duplicate declaration, ambiguity, drift, timeout/no action, hidden or invisible post-focus state,
+focus loss, raise failure, observer disagreement, or any nonzero product/measurement activity
+fails closed.
+
+The correction, one-shot runbook, privacy boundary, and current **NOT RUN** qualification state are
+in the [issue #109 focus-handoff evidence](investigations/issue-109/README.md). Issue #104 remains
+blocked and unconsumed until exactly one coordinated assisted zero-operation preflight qualifies.
+
 ### Packaged generation-cancellation qualification stop
 
 Issue #98 added only a test observer and observer-enabled package wiring around the unchanged

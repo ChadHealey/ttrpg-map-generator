@@ -3,13 +3,10 @@ import ApplicationServices
 import Foundation
 
 enum Issue105TargetSessionStabilizationPlatform {
-  static func requestActivation(_ application: NSRunningApplication) -> Bool {
-    application.activate(options: [.activateAllWindows])
-  }
-
   static func readinessSnapshot(
     bundleIdentifier: String,
-    expectedExecutableSha256: String
+    expectedExecutableSha256: String,
+    initialWorkspaceFrontmostProcessIdentifier: Int32
   ) throws -> Issue108TargetSessionReadinessSnapshot {
     let applications = Issue100TargetSessionPlatform.exactApplications(
       bundleIdentifier: bundleIdentifier)
@@ -24,7 +21,8 @@ enum Issue105TargetSessionStabilizationPlatform {
         windowMinimized: .unavailable(.noValue),
         windowFrameVisible: .unavailable(.noValue),
         accessibilityFrontmost: .unavailable(.noValue),
-        workspaceFrontmost: false
+        workspaceFrontmost: false,
+        workspaceFocusState: .otherApplication
       )
     }
 
@@ -40,6 +38,16 @@ enum Issue105TargetSessionStabilizationPlatform {
       executableIdentityMatched = false
     }
 
+    let workspaceFrontmostProcessIdentifier =
+      NSWorkspace.shared.frontmostApplication?.processIdentifier
+    let workspaceFocusState: Issue109WorkspaceFocusState
+    if workspaceFrontmostProcessIdentifier == application.processIdentifier {
+      workspaceFocusState = .candidate
+    } else if workspaceFrontmostProcessIdentifier == initialWorkspaceFrontmostProcessIdentifier {
+      workspaceFocusState = .awaitingInitialApplication
+    } else {
+      workspaceFocusState = .otherApplication
+    }
     return Issue108TargetSessionReadinessSnapshot(
       applicationCount: applications.count,
       windowCount: windows.count,
@@ -53,27 +61,35 @@ enum Issue105TargetSessionStabilizationPlatform {
       windowFrameVisible: window.map(positiveFrame) ?? .unavailable(.noValue),
       accessibilityFrontmost: booleanRead(
         applicationElement, attribute: kAXFrontmostAttribute),
-      workspaceFrontmost: NSWorkspace.shared.frontmostApplication?.processIdentifier
-        == application.processIdentifier
+      workspaceFrontmost: workspaceFocusState == .candidate,
+      workspaceFocusState: workspaceFocusState
     )
+  }
+
+  static func currentWorkspaceFrontmostProcessIdentifier() -> Int32? {
+    NSWorkspace.shared.frontmostApplication?.processIdentifier
   }
 
   static func stabilize(
     application: NSRunningApplication,
     window: AXUIElement,
     bundleIdentifier: String,
-    expectedExecutableSha256: String
+    expectedExecutableSha256: String,
+    initialWorkspaceFrontmostProcessIdentifier: Int32,
+    initialSnapshot: Issue108TargetSessionReadinessSnapshot,
+    declaredOperatorFocusActionCount: Int
   ) throws -> Issue105StabilizationOutcome {
     let retainedIdentity = Issue105RetainedCandidateIdentity(
       processIdentifier: application.processIdentifier,
       windowIdentity: CFHash(window)
     )
-    let applicationElement = AXUIElementCreateApplication(application.processIdentifier)
     let start = DispatchTime.now().uptimeNanoseconds
 
     return try Issue105TargetSessionStabilizer.stabilize(
       policy: .approved,
       retainedIdentity: retainedIdentity,
+      initialSnapshot: initialSnapshot,
+      declaredOperatorFocusActionCount: declaredOperatorFocusActionCount,
       elapsedMilliseconds: {
         (DispatchTime.now().uptimeNanoseconds - start) / 1_000_000
       },
@@ -84,11 +100,10 @@ enum Issue105TargetSessionStabilizationPlatform {
         }
         return try readinessSnapshot(
           bundleIdentifier: bundleIdentifier,
-          expectedExecutableSha256: expectedExecutableSha256
+          expectedExecutableSha256: expectedExecutableSha256,
+          initialWorkspaceFrontmostProcessIdentifier:
+            initialWorkspaceFrontmostProcessIdentifier
         )
-      },
-      writeFrontmost: {
-        frontmostWriteResult(applicationElement)
       },
       performRaise: {
         raiseResult(window)
@@ -97,43 +112,6 @@ enum Issue105TargetSessionStabilizationPlatform {
         Thread.sleep(forTimeInterval: Double(milliseconds) / 1_000)
       }
     )
-  }
-
-  private static func frontmostWriteResult(
-    _ applicationElement: AXUIElement
-  ) -> Issue108FrontmostWriteResult {
-    var settable = DarwinBoolean(false)
-    let supportError = AXUIElementIsAttributeSettable(
-      applicationElement,
-      kAXFrontmostAttribute as CFString,
-      &settable
-    )
-    switch supportError {
-    case .success:
-      break
-    case .cannotComplete:
-      return .retryableSupportCannotComplete
-    case .attributeUnsupported:
-      return .attributeUnsupported
-    default:
-      return .supportFailed
-    }
-    guard settable.boolValue else { return .notSettable }
-
-    switch AXUIElementSetAttributeValue(
-      applicationElement,
-      kAXFrontmostAttribute as CFString,
-      kCFBooleanTrue
-    ) {
-    case .success:
-      return .success
-    case .cannotComplete:
-      return .retryableWriteCannotComplete
-    case .attributeUnsupported:
-      return .attributeUnsupported
-    default:
-      return .writeFailed
-    }
   }
 
   private static func positiveFrame(_ element: AXUIElement) -> Issue108AccessibilityBooleanRead {
