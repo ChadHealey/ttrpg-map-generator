@@ -1,0 +1,148 @@
+{
+  "schemaVersion": "issue107-target-session-readiness-evidence-v1",
+  "status": "invalid-pre-dispatch-not-target-evidence",
+  "baseCommit": "35046679efa1a067845ed3019a72142e59f57449",
+  "implementationCommit": "6195f9389a7aa18636b56220c3bf280cb65b0fc7",
+  "branch": "codex/issue-107-restore-minimized-window",
+  "target": {
+    "model": "Mac17,2",
+    "processor": "Apple M5",
+    "memoryGiB": 24,
+    "osVersion": "26.5.1",
+    "osBuild": "25F80"
+  },
+  "correction": {
+    "controllerVersion": "issue107-target-session-readiness-v4",
+    "exactWindowMinimizedReadSeparated": true,
+    "minimizeAttributeSupportAndSettableSeparated": true,
+    "minimizeFalseWriteSeparated": true,
+    "nonMinimizedReadbackSeparated": true,
+    "frameVisibleReadbackSeparated": true,
+    "applicationHiddenFailsImmediately": true,
+    "unhideAuthorityInstalled": false,
+    "raiseOrFrontmostBeforeNonMinimizedVisibleReadbackPermitted": false,
+    "retryableMinimizeResult": "pre-dispatch-cannotComplete-only",
+    "policyTimeoutMilliseconds": 20000,
+    "pollIntervalMilliseconds": 50,
+    "postDispatchRetryPermitted": false,
+    "ordinaryBuildBehaviorInstalled": false
+  },
+  "identities": {
+    "candidateExecutableSha256": "5cf14de9836e9da96655572b35bb0e194d8ebc30360b6d6516f88825dcf7a15d",
+    "correctedReadinessControllerSha256": "c8e6286107967224b8d2c4dbffc8bec4aee7252468a58da7cd0373a63b6260b6",
+    "readinessObserverSha256": "9662c1664d44e93f58dc690a0fb78f08eb1f4751d84fc5790256866e768811ce",
+    "cancellationObserverSha256": "dee96628ba9b9cec31a49b0bd627466a636921f1f73535f1aac421834fbc0e6d",
+    "rssSamplerSha256": "1da835b06e7b2ffbe588e99fee2692d7cfa25f9e8117641c74a5abe73acc3dfe",
+    "retentionUtilitySha256": "c3b2d618b4dbddf9568d4d39334be9a3d0b074ae0b7a5464b4b7e30c5686441b"
+  },
+  "preflight": {
+    "authorizedPreflightCount": 1,
+    "silentRetryCount": 0,
+    "freshProcess": true,
+    "status": "invalid-pre-dispatch-not-target-evidence",
+    "invalidAuthority": "accessibility",
+    "invalidReason": "AXMinimized was unsupported for the retained packaged candidate window",
+    "candidateTerminated": true,
+    "candidateProcessCountAfterStop": 0,
+    "policyTimeoutMilliseconds": 20000,
+    "pollIntervalMilliseconds": 50,
+    "stabilizationDurationMilliseconds": 13,
+    "visibilityPendingObservationCount": 0,
+    "visibilityPendingDurationMilliseconds": 0,
+    "retainedIdentityPredicates": {
+      "exactApplicationCountEveryObservation": true,
+      "exactWindowCountEveryObservation": true,
+      "applicationIdentityRetainedEveryObservation": true,
+      "windowIdentityRetainedEveryObservation": true,
+      "executableIdentityMatchedEveryObservation": true
+    },
+    "initialVisibilityPredicates": {
+      "applicationHidden": false,
+      "windowMinimized": true,
+      "windowFrameVisible": false,
+      "visibleWindow": false
+    },
+    "terminalVisibilityPredicates": {
+      "applicationHidden": false,
+      "windowMinimized": true,
+      "windowFrameVisible": false,
+      "visibleWindow": false
+    },
+    "minimizePredicates": {
+      "restorationRequired": true,
+      "supportCheckAttemptCount": 1,
+      "attributeSupported": false,
+      "attributeSettable": false,
+      "setAttributeWriteAttemptCount": 0,
+      "writeSucceeded": false,
+      "nonMinimizedReadbackVerified": false,
+      "frameVisibleReadbackVerified": false,
+      "retryableSupportFailureCount": 0,
+      "retryableWriteFailureCount": 0,
+      "result": "attributeUnsupported"
+    },
+    "actionOrder": ["activation-request", "minimize-attribute-unsupported"],
+    "actionCounts": {
+      "activationRequest": 1,
+      "stabilizationObservation": 1,
+      "minimizeRestorationInvocation": 1,
+      "minimizeSetAttributeWriteAttempt": 0,
+      "raiseAttempt": 0,
+      "retryableRaiseFailure": 0,
+      "frontmostWriteAttempt": 0,
+      "independentObserverRun": 0
+    },
+    "terminalPredicates": {
+      "exactCandidateRetainedForReadiness": false,
+      "exactWindowRetainedForReadiness": false,
+      "visibleWindow": false,
+      "workspaceFrontmost": false,
+      "accessibilityFrontmost": false,
+      "independentObserverVerified": false
+    }
+  },
+  "zeroOperationProof": {
+    "fixtureConfigured": false,
+    "samplerStarted": false,
+    "rawArtifactCount": 0,
+    "targetArtifactOrDestinationCreated": false,
+    "operationDispatchCount": 0,
+    "previewDispatched": false,
+    "fullGenerationDispatched": false,
+    "svgDispatched": false,
+    "pngDispatched": false,
+    "measurementCount": 0,
+    "issue104ReplacementRowConsumed": false,
+    "issue95MatrixRun": false,
+    "releaseBudgetConclusion": "none"
+  },
+  "gates": {
+    "focusedIssue107ReadinessSuite": "pass",
+    "predecessorSwiftSuites": "pass-issue90-91-94-96-97-98-100-105-106",
+    "focusedPackagedDispatch": "pass-14",
+    "observerEnabledPackagedBuild": "pass-338-modules-one-unsigned-app",
+    "exactIdentityReproduction": "pass-candidate-and-all-reused-tools",
+    "root": "pass-578-and-1-skipped-semantic-retention-24-rust-28-native",
+    "privacyAuthorizedSurfaceFixtureAndDiff": "pass"
+  },
+  "preservation": {
+    "issue98OriginalRowSha256": "4d272597c40e33dc14fe3664b055b2880c0cdb81b6c4a8b86a3fe6ef045d6437",
+    "issue102ReplacementRowSha256": "e6a15ab5a909ea4baec335b1b71688487ce397a076b0a0564a9e5a8d73de0153",
+    "issue103ReplacementRowSha256": "3dd5b5ed31b5eb024710dbce2ba588749317fdcfab0a10d56c0ea0ed3fee926a",
+    "issue104StopSha256": "76b6023836f3d230964d00e931c4775d6f222fafed906d32ee4e39b230ebd40e",
+    "issue105StopReadmeSha256": "d88124a10555a4ffc24258917151ae5ab80334d15b1a1ffed1bf76e10e6cf762",
+    "issue105StopReceiptSha256": "a48bb38ae725852f61cf17a80c7bade15a86d5a4943e8f1b8497cb15d523feca",
+    "issue106StopReadmeSha256": "bf9eb92df9c284bc35cf5017b4bb30ee50271a8bf82eabbb578d3728a3e84ead",
+    "issue106StopReceiptSha256": "61dadb8ce7cd7fdcf7cb3f9567e4507865b2fbbe71abdc6fa97ad6b141dc7506",
+    "historicalRowsReinterpreted": false,
+    "issue104ReplacementRemainsUnconsumed": true
+  },
+  "privacy": {
+    "privatePathsPublished": false,
+    "pidsPublished": false,
+    "rawCsvPublished": false,
+    "screenshotsOrPixelsPublished": false,
+    "privateArtifactsCreated": 0
+  },
+  "conclusion": "The exact-window deminiaturization correction passed every pre-target gate. Its sole replacement preflight failed closed because AXMinimized was not settable/supported on the exact retained minimized window, before any AXMinimized=false write, visibility readback, raise, frontmost write, independent verification, or product setup. No retry ran; issue #104 remains blocked and unconsumed."
+}

@@ -768,6 +768,35 @@ issue #95 matrix, or release-budget conclusion. The #98/#102/#103 rows and #104/
 remain byte-identical. Complete sanitized evidence is in the
 [issue #106 readiness stop](investigations/issue-106/README.md).
 
+### Issue #107 exact minimized-window restoration stop
+
+Issue #107 changed only the external issue #100/#105/#106 readiness controller, stabilizer,
+platform adapter, focused tests, and owning evidence. It preserves the 20,000-ms timeout, 50-ms
+polling, exact identity on every observation, immediate hidden/session/drift/ambiguity failure, and
+the unchanged raise/frontmost and independent Accessibility/`NSWorkspace` authorities. The
+version-4 receipt separately records minimize support, settable state, write result, non-minimized
+readback, frame-visible readback, action order, and retryable `cannotComplete` counts.
+
+The implementation commit is `6195f9389a7aa18636b56220c3bf280cb65b0fc7`. Focused and
+predecessor Swift suites, 14 packaged-dispatch tests, the observer-enabled unsigned package, root
+gate, exact identity reproduction, privacy, authorized-surface, fixture/production-surface,
+protected-evidence, and diff gates passed. The packaged executable and issue #104
+observer/sampler/retention/readiness identities remained unchanged; the corrected controller was
+`c8e6286107967224b8d2c4dbffc8bec4aee7252468a58da7cd0373a63b6260b6`.
+
+Exactly one fresh replacement non-measurement preflight ran. The application was not hidden, and
+the exact application/window/executable identity was retained on its first observation. The window
+was minimized and frame-invisible, but the `AXMinimized` support/settable query returned
+`attributeUnsupported`. The controller failed closed after 13 ms before any set-attribute write,
+non-minimized/frame-visible readback, raise, frontmost write, or independent observer run, then
+terminated the candidate. No retry occurred.
+
+No fixture was configured, sampler or raw artifact/destination created, operation dispatched or
+measured, or issue #95/#104 authority consumed. Issue #104's replacement remains **UNCONSUMED**
+and every conditional row remains unauthorized/unrun. The #98/#102/#103 rows and #104/#105/#106
+stop records remain byte-identical. Complete sanitized evidence is in the
+[issue #107 readiness stop](investigations/issue-107/README.md).
+
 ## Remote CI and milestone state
 
 Issue #71 recorded fresh CI evidence for the exact remote release commit

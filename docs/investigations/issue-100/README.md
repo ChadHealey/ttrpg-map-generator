@@ -168,3 +168,18 @@ zero frontmost writes, and zero independent observer runs, then terminated the c
 was no retry, product setup, sampling, artifact/destination, dispatch, measurement, or issue #104
 consumption. The complete sanitized stop is in the
 [issue #106 evidence](../issue-106/README.md).
+
+## Issue 107 exact minimized-window restoration stop
+
+Issue #107 adds only exact-window `AXMinimized` support/settable verification, an authorized
+`AXMinimized=false` write, separate same-window non-minimized/frame-visible readbacks, and focused
+fail-closed diagnostics before issue #105's unchanged raise/frontmost sequence. A hidden
+application fails immediately; the controller has no unhide authority. The 20,000-ms/50-ms policy,
+identity predicates, independent observer, and zero-product boundary remain unchanged.
+
+Every pre-target gate passed. The sole replacement preflight retained the exact minimized
+application/window/executable identity, but the first `AXMinimized` support/settable query returned
+`attributeUnsupported`. The controller therefore performed no set-attribute write, raise,
+frontmost write, independent observer run, or product action and terminated the candidate after
+13 ms. No retry ran, and issue #104 remains **UNCONSUMED**. The complete sanitized stop is in the
+[issue #107 evidence](../issue-107/README.md).

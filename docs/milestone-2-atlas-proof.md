@@ -760,6 +760,24 @@ was no retry. Issue #104 remains blocked and its replacement remains unconsumed.
 correction and stop are in the
 [issue #106 readiness evidence](investigations/issue-106/README.md).
 
+### Exact minimized-window restoration stop
+
+Issue #107 adds only a test-controller boundary on the exact retained Accessibility window before
+issue #105's unchanged raise/frontmost sequence. A minimized window requires independent
+`AXMinimized` support and settable verification, one `AXMinimized=false` write, retained
+non-minimized readback, and positive-frame visibility readback. A hidden application fails
+immediately because no unhide authority exists. No raise or frontmost write is reachable until the
+same window is non-minimized and visible. Only pre-dispatch `cannotComplete` is bounded/retryable
+inside the unchanged 20-second/50-ms policy.
+
+Every pre-target gate and exact identity check passed. The one authorized replacement
+non-measurement preflight retained the exact minimized application/window/executable identity, but
+the first `AXMinimized` support/settable query returned `attributeUnsupported`. The controller
+failed closed after 13 ms without a set-attribute write, visibility readback, raise, frontmost
+write, independent observer run, or product operation, then terminated the candidate. There was no
+retry. Issue #104 remains blocked and its replacement remains unconsumed. The sanitized correction
+and stop are in the [issue #107 readiness evidence](investigations/issue-107/README.md).
+
 ### Packaged generation-cancellation qualification stop
 
 Issue #98 added only a test observer and observer-enabled package wiring around the unchanged

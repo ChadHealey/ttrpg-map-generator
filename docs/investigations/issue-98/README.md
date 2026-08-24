@@ -276,3 +276,18 @@ The #98/#102/#103 rows and #104/#105 stop records remain byte-identical. Issue #
 remains **UNCONSUMED**, its five conditional rows remain unauthorized/unrun, and there is no new
 cancellation, issue #95 matrix, or release-budget conclusion. Complete sanitized evidence is in
 the [issue #106 readiness stop](../issue-106/README.md).
+
+## Issue 107 exact minimized-window restoration stop
+
+Issue #107 added only the authorized exact-window `AXMinimized=false` support/write/readback
+boundary to the external readiness controller. All focused, predecessor, package, root, identity,
+privacy, authorized-surface, fixture, protected-evidence, and diff gates passed before its exactly
+one replacement preflight.
+
+The exact retained window was minimized and frame-invisible, but `AXMinimized` was reported
+unsupported/non-settable. The controller failed closed after one observation and 13 ms before any
+set-attribute write, raise, frontmost write, independent observer run, fixture/sampler/artifact/
+destination setup, dispatch, or measurement, then terminated the candidate. No retry ran. All
+prior rows and stops remain byte-identical; issue #104's replacement remains **UNCONSUMED**, and
+there is no new cancellation, issue #95 matrix, or release-budget conclusion. Complete sanitized
+evidence is in the [issue #107 readiness stop](../issue-107/README.md).
