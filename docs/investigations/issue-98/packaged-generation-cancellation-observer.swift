@@ -10,7 +10,7 @@ let observerSchemaVersion = "packaged-preview-observer-v2"
 let exactFixturePreviewObserverSchemaVersion = "packaged-exact-preview-observer-v1"
 let fullAtlasObserverSchemaVersion = "packaged-full-atlas-observer-v1"
 let generationCancellationObserverSchemaVersion =
-  "packaged-generation-cancellation-host-observer-v1"
+  "packaged-generation-cancellation-host-observer-v2"
 let targetModel = "Mac17,2"
 let targetOSVersion = "26.5.1"
 let targetOSBuild = "25F80"
@@ -144,7 +144,6 @@ enum PackagedGenerationCancellationObserver {
       queue: cancellationOutput.queue
     )
     try await cancellationStream.startCapture()
-    try await waitForCancellationBaseline(cancellationOutput)
     guard foreground.isIntact else { throw PreviewObserverInvalidation.candidateNotFrontmost }
     try postObserverDispatch(keyCode: arguments.trialKeyCode, to: target.applicationPID)
     let cancelled = try await waitForCancellationReceipt(
@@ -164,18 +163,16 @@ enum PackagedGenerationCancellationObserver {
       completionEpochMilliseconds: acknowledgementEpoch
     )
     try await Task.sleep(nanoseconds: 1_000_000_000)
-    guard cancellationOutput.framesAfterAcknowledgement > 0,
-      !cancellationOutput.changedAfterAcknowledgement,
-      cancellationOutput.foregroundIntact,
-      try accessibility.cancellationPresentationState(
-        operation: arguments.operation,
-        definition: definition
-      )
-    else {
-      throw PreviewObserverInvalidation.capture(
-        "post-acknowledgement presentation, state, or foreground changed"
-      )
-    }
+    let quietWindow = cancellationOutput.quietWindowSummary
+    let accessibilityStatePreserved = try accessibility.cancellationPresentationState(
+      operation: arguments.operation,
+      definition: definition
+    )
+    try GenerationCancellationPostAcknowledgementValidator.validate(
+      quietWindow: quietWindow,
+      foregroundIntact: cancellationOutput.foregroundIntact,
+      accessibilityStatePreserved: accessibilityStatePreserved
+    )
     _ = try accessibility.generationCancellationReceipt(
       definition: definition,
       operation: arguments.operation,
@@ -256,8 +253,9 @@ enum PackagedGenerationCancellationObserver {
       ),
       roleCounts: sanitizedRoleCounts(baselineMembership),
       visual: GenerationCancellationVisualReceipt(
-        cancellationBaselineRetained: true,
-        postAcknowledgementFrameCount: cancellationOutput.framesAfterAcknowledgement,
+        postAcknowledgementBaselineEstablished:
+          quietWindow.postAcknowledgementBaselineHash != nil,
+        postAcknowledgementComparisonFrameCount: quietWindow.comparisonFrameCount,
         acceptedAftermathFrameQualified:
           acceptedFrame.observation.hash != aftermathOutput.baselineHash,
         acceptedAccessibilityQualified: true,
@@ -320,16 +318,6 @@ enum PackagedGenerationCancellationObserver {
       try await Task.sleep(nanoseconds: 10_000_000)
     }
     throw PreviewObserverInvalidation.capture("the exact preview setup did not qualify")
-  }
-
-  private static func waitForCancellationBaseline(
-    _ output: CancellationQuiescenceFrameOutput
-  ) async throws {
-    for _ in 0..<500 {
-      if output.baselineHash != nil { return }
-      try await Task.sleep(nanoseconds: 10_000_000)
-    }
-    throw PreviewObserverInvalidation.capture("no cancellation baseline frame arrived")
   }
 
   private static func waitForFullBaseline(_ output: AcceptedAtlasFrameOutput) async throws {

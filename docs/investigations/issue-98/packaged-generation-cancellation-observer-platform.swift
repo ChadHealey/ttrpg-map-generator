@@ -10,19 +10,28 @@ final class CancellationQuiescenceFrameOutput: NSObject, SCStreamOutput, SCStrea
   let queue = DispatchQueue(label: "issue98.generation-cancellation.capture")
   private let lock = NSLock()
   private let foreground: ForegroundMonitor
-  private var storedBaselineHash: UInt64?
-  private var acknowledgementTime: UInt64?
-  private var lateChangedFrame = false
-  private var postAcknowledgementFrameCount = 0
+  private var quietWindow: GenerationCancellationQuietWindow?
 
   init(foreground: ForegroundMonitor) { self.foreground = foreground }
 
-  var baselineHash: UInt64? { lock.withLock { storedBaselineHash } }
-  var changedAfterAcknowledgement: Bool { lock.withLock { lateChangedFrame } }
-  var framesAfterAcknowledgement: Int { lock.withLock { postAcknowledgementFrameCount } }
+  var quietWindowSummary: GenerationCancellationQuietWindowSummary {
+    lock.withLock {
+      quietWindow?.summary
+        ?? GenerationCancellationQuietWindowSummary(
+          postAcknowledgementBaselineHash: nil,
+          comparisonFrameCount: 0,
+          pixelsChanged: false
+        )
+    }
+  }
   var foregroundIntact: Bool { foreground.isIntact }
 
-  func markAcknowledged(at time: UInt64) { lock.withLock { acknowledgementTime = time } }
+  func markAcknowledged(at time: UInt64) {
+    lock.withLock {
+      guard quietWindow == nil else { return }
+      quietWindow = GenerationCancellationQuietWindow(terminalAcknowledgementTime: time)
+    }
+  }
 
   func stream(
     _ stream: SCStream,
@@ -44,13 +53,7 @@ final class CancellationQuiescenceFrameOutput: NSObject, SCStreamOutput, SCStrea
     else { return }
     let hash = pixelHash(pixelBuffer)
     lock.withLock {
-      guard let baseline = storedBaselineHash else {
-        storedBaselineHash = hash
-        return
-      }
-      guard let acknowledgementTime, displayTime > acknowledgementTime else { return }
-      postAcknowledgementFrameCount += 1
-      if hash != baseline { lateChangedFrame = true }
+      quietWindow?.observeCompleteFrame(displayTime: displayTime, hash: hash)
     }
   }
 

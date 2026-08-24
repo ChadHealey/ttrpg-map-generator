@@ -7,6 +7,9 @@ enum PackagedGenerationCancellationObserverCoreTests {
     try rejectsSafePointAmbiguity()
     try rejectsProgressRegressionAndLateCompletion()
     try rejectsLatencyAndCanonicalDrift()
+    try establishesTheBaselineStrictlyAfterAcknowledgement()
+    try rejectsIndependentPostAcknowledgementFailures()
+    try preservesIndependentMembershipAndSamplingFailures()
     print("packaged-generation-cancellation-observer-core-tests: passed")
   }
 
@@ -56,6 +59,112 @@ enum PackagedGenerationCancellationObserverCoreTests {
       receiptText(operation: .full, safePoint: .early, canonicalDigest: "bad"),
       operation: .full,
       safePoint: .early
+    )
+  }
+
+  private static func establishesTheBaselineStrictlyAfterAcknowledgement() throws {
+    var window = GenerationCancellationQuietWindow(terminalAcknowledgementTime: 1_000)
+    window.observeCompleteFrame(displayTime: 900, hash: 10)
+    window.observeCompleteFrame(displayTime: 1_000, hash: 20)
+    expect(window.summary.postAcknowledgementBaselineHash == nil, "pre-ack frames are ignored")
+    window.observeCompleteFrame(displayTime: 1_001, hash: 30)
+    window.observeCompleteFrame(displayTime: 1_002, hash: 30)
+    expect(window.summary.postAcknowledgementBaselineHash == 30, "first post-ack baseline")
+    expect(window.summary.comparisonFrameCount == 1, "only later frames are comparisons")
+    expect(!window.summary.pixelsChanged, "pre-ack pixels cannot invalidate the quiet window")
+  }
+
+  private static func rejectsIndependentPostAcknowledgementFailures() throws {
+    try expectPostAcknowledgementRejected(
+      summary(baseline: nil, comparisons: 0, changed: false),
+      authority: "screen-capture",
+      reason: "no complete frame strictly after terminal acknowledgement"
+    )
+    try expectPostAcknowledgementRejected(
+      summary(baseline: 1, comparisons: 0, changed: false),
+      authority: "screen-capture",
+      reason: "no later complete frame"
+    )
+    try expectPostAcknowledgementRejected(
+      summary(baseline: 1, comparisons: 1, changed: true),
+      authority: "screen-capture",
+      reason: "quiet-window pixels changed"
+    )
+    try expectPostAcknowledgementRejected(
+      summary(baseline: 1, comparisons: 1, changed: false),
+      foregroundIntact: false,
+      authority: "foreground",
+      reason: "did not remain frontmost"
+    )
+    try expectPostAcknowledgementRejected(
+      summary(baseline: 1, comparisons: 1, changed: false),
+      accessibilityStatePreserved: false,
+      authority: "accessibility",
+      reason: "Accessibility presentation state drifted"
+    )
+  }
+
+  private static func preservesIndependentMembershipAndSamplingFailures() throws {
+    let coalition = LaunchctlCoalition(id: 1, name: "test", bundleIdentifier: "test.bundle")
+    let baseline = ResolvedPreviewProcesses(
+      coalition: coalition,
+      pidsByRole: [.application: 1, .gpu: 2, .networking: 3, .webContent: 4]
+    )
+    let completion = ResolvedPreviewProcesses(
+      coalition: coalition,
+      pidsByRole: [.application: 1, .gpu: 2, .networking: 3, .webContent: 5]
+    )
+    do {
+      try PreviewProcessResolver.revalidate(baseline: baseline, completion: completion)
+      throw TestFailure(message: "expected membership rejection")
+    } catch let invalidation as PreviewObserverInvalidation {
+      expect(invalidation.authority == "launchctl-membership", "membership authority")
+    }
+
+    do {
+      _ = try RSSReceiptValidator.measurement(
+        csv: "epoch_ms,aggregate_rss_bytes,pid_1\n1000,1,1\n1021,1,1\n",
+        summary: "samples=2 max_interval_ms=21",
+        expectedRoleCount: 1,
+        dispatchEpochMilliseconds: 1_000,
+        completionEpochMilliseconds: 1_001
+      )
+      throw TestFailure(message: "expected sampler rejection")
+    } catch let invalidation as PreviewObserverInvalidation {
+      expect(invalidation.authority == "rss-sampler", "sampler authority")
+      expect(invalidation.description.contains("cadence"), "sampler reason")
+    }
+  }
+
+  private static func expectPostAcknowledgementRejected(
+    _ quietWindow: GenerationCancellationQuietWindowSummary,
+    foregroundIntact: Bool = true,
+    accessibilityStatePreserved: Bool = true,
+    authority: String,
+    reason: String
+  ) throws {
+    do {
+      try GenerationCancellationPostAcknowledgementValidator.validate(
+        quietWindow: quietWindow,
+        foregroundIntact: foregroundIntact,
+        accessibilityStatePreserved: accessibilityStatePreserved
+      )
+      throw TestFailure(message: "expected post-acknowledgement rejection")
+    } catch let invalidation as PreviewObserverInvalidation {
+      expect(invalidation.authority == authority, "independent invalidation authority")
+      expect(invalidation.description.contains(reason), "independent invalidation reason")
+    }
+  }
+
+  private static func summary(
+    baseline: UInt64?,
+    comparisons: Int,
+    changed: Bool
+  ) -> GenerationCancellationQuietWindowSummary {
+    GenerationCancellationQuietWindowSummary(
+      postAcknowledgementBaselineHash: baseline,
+      comparisonFrameCount: comparisons,
+      pixelsChanged: changed
     )
   }
 

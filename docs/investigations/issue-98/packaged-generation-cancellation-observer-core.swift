@@ -21,6 +21,67 @@ enum GenerationCancellationSafePoint: String, Codable, CaseIterable {
   }
 }
 
+struct GenerationCancellationQuietWindowSummary: Equatable {
+  let postAcknowledgementBaselineHash: UInt64?
+  let comparisonFrameCount: Int
+  let pixelsChanged: Bool
+}
+
+struct GenerationCancellationQuietWindow: Equatable {
+  let terminalAcknowledgementTime: UInt64
+  private(set) var postAcknowledgementBaselineHash: UInt64?
+  private(set) var comparisonFrameCount = 0
+  private(set) var pixelsChanged = false
+
+  mutating func observeCompleteFrame(displayTime: UInt64, hash: UInt64) {
+    guard displayTime > terminalAcknowledgementTime else { return }
+    guard let baseline = postAcknowledgementBaselineHash else {
+      postAcknowledgementBaselineHash = hash
+      return
+    }
+    comparisonFrameCount += 1
+    if hash != baseline { pixelsChanged = true }
+  }
+
+  var summary: GenerationCancellationQuietWindowSummary {
+    GenerationCancellationQuietWindowSummary(
+      postAcknowledgementBaselineHash: postAcknowledgementBaselineHash,
+      comparisonFrameCount: comparisonFrameCount,
+      pixelsChanged: pixelsChanged
+    )
+  }
+}
+
+enum GenerationCancellationPostAcknowledgementValidator {
+  static func validate(
+    quietWindow: GenerationCancellationQuietWindowSummary,
+    foregroundIntact: Bool,
+    accessibilityStatePreserved: Bool
+  ) throws {
+    guard foregroundIntact else { throw PreviewObserverInvalidation.candidateNotFrontmost }
+    guard quietWindow.postAcknowledgementBaselineHash != nil else {
+      throw PreviewObserverInvalidation.capture(
+        "no complete frame strictly after terminal acknowledgement established the quiet-window baseline"
+      )
+    }
+    guard quietWindow.comparisonFrameCount > 0 else {
+      throw PreviewObserverInvalidation.capture(
+        "no later complete frame was available for the post-acknowledgement quiet-window comparison"
+      )
+    }
+    guard !quietWindow.pixelsChanged else {
+      throw PreviewObserverInvalidation.capture(
+        "post-acknowledgement quiet-window pixels changed"
+      )
+    }
+    guard accessibilityStatePreserved else {
+      throw PreviewObserverInvalidation.accessibility(
+        "post-acknowledgement semantic or Accessibility presentation state drifted"
+      )
+    }
+  }
+}
+
 struct GenerationCancellationProgressReceipt: Codable, Equatable {
   let operationId: String
   let stage: String

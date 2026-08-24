@@ -22,8 +22,8 @@ struct GenerationCancellationTrialReceipt: Codable {
 }
 
 struct GenerationCancellationVisualReceipt: Codable {
-  let cancellationBaselineRetained: Bool
-  let postAcknowledgementFrameCount: Int
+  let postAcknowledgementBaselineEstablished: Bool
+  let postAcknowledgementComparisonFrameCount: Int
   let acceptedAftermathFrameQualified: Bool
   let acceptedAccessibilityQualified: Bool
   let foregroundUninterrupted: Bool
