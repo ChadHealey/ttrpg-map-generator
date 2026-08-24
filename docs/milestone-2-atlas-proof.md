@@ -744,6 +744,17 @@ implementation, identities, sanitized invalidation, retention receipt, gate resu
 boundary are in the
 [issue #98 generation-cancellation evidence](investigations/issue-98/README.md).
 
+Issue #102 corrected only that observer's temporal screen baseline and independent invalidation
+reasons. The authorized replacement preview/early row passed the app receipt's 2-ms terminal
+acknowledgement prerequisite, stopped scheduling, preserved state, no-commit, progress, sampling,
+and private-retention prerequisites. The corrected screen authority then observed a later complete
+frame change from the first complete frame strictly after acknowledgement. The replacement is
+**INVALID, CONSUMED**, and the original invalid row remains separately unchanged and consumed.
+Execution stopped without running preview middle/late or any full-generation row. There is still
+no cancellation-path qualification, issue #95 matrix claim, or release-budget conclusion. The
+sanitized replacement stop is appended to the
+[issue #98 generation-cancellation evidence](investigations/issue-98/README.md#issue-102-replacement-correction-and-stop).
+
 | Operation       | Fixed workload                                                                                | Wall-clock | Peak additional memory | Output-size ceiling       |
 | --------------- | --------------------------------------------------------------------------------------------- | ---------- | ---------------------- | ------------------------- |
 | Coarse preview  | dispatch through first fully painted labelled 512 × 256 effective preview                     | `900 ms`   | `256 MiB`              | not applicable            |

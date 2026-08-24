@@ -79,3 +79,49 @@ remains unqualified, and issue #95's five-run release matrix remains unrun.
 
 The complete sanitized machine-readable receipt is in
 [`qualification-2026-08-23/raw-results.json`](qualification-2026-08-23/raw-results.json).
+
+## Issue 102 replacement correction and stop
+
+Issue #102 corrected only the issue #98 observer and tests. Observer version
+`packaged-generation-cancellation-host-observer-v2` ignores every frame at or before the observed
+terminal acknowledgement, establishes the quiet-window screen baseline from the first complete
+frame strictly after acknowledgement, and compares only later complete frames. Screen-frame
+absence/change, Accessibility state drift, foreground loss, membership drift, sampling failure,
+and retention failure now retain separate fail-closed authorities and reasons. Production app,
+generation, cancellation, safe-point, progress, fixture, workload, budget, timeout, render,
+export, persistence, and native-write surfaces are unchanged.
+
+The exact observer-enabled packaged executable remained
+`5cf14de9836e9da96655572b35bb0e194d8ebc30360b6d6516f88825dcf7a15d`. The corrected observer was
+`62b580279bd67ab850ac39e0ca10bc5d56340c29832fd966358a97b0ca6429e3`; the sampler, retention,
+readiness controller, and readiness observer reproduced their issue #98 identities unchanged.
+Focused temporal and independent-invalidation tests plus every predecessor, deterministic, E2E,
+visual, root, unsigned-package, privacy, authorized-surface, fixture-diff, and diff gate passed
+before target use.
+
+Issue #100 readiness then qualified one fresh exact process without consuming a trial. The single
+authorized replacement preview/early row dispatched once. Its app receipt reported early-stage
+work `28/1000`, two monotonic progress samples, terminal cancellation in **2 ms** against the
+unchanged 100-ms prerequisite, stopped costly scheduling, preserved previous state, and no
+accepted commit at acknowledgement. Sampling retained 69 valid rows across 418.223 ms with a
+6.371-ms maximum interval, exact four-role arithmetic, and dispatch/acknowledgement endpoint
+coverage.
+
+The replacement is nevertheless **INVALID, CONSUMED**. The corrected screen authority established
+its first complete post-acknowledgement baseline and observed at least one later complete frame,
+but that later frame changed from the baseline. The independent sanitized authority is
+`screen-capture`; the exact reason is `post-acknowledgement quiet-window pixels changed`. This is
+not acknowledgement-latency, deterministic-aftermath, cancellation-path, or release-budget
+authority.
+
+The replacement CSV was retained owner-only before either sanitized receipt was inspected, and
+its temporary source was removed. Its opaque identifier is
+`issue102_preview_early_replacement`, retained byte length is 4,554, and SHA-256 is
+`2f6957fdcb7d454a36028a25a2eb9afcb149e82b434175ea88171d3e8cb1ecbc`. No private path or raw
+content is published. The original `issue98_preview_early` invalid trial and its retained bytes
+remain separately unchanged, invalid, consumed, and owner-only.
+
+Execution stopped immediately. Preview/middle, preview/late, and all full-generation rows were
+not run. There was no retry, no invented authority, no issue #95 matrix execution, and no release-
+budget conclusion. The sanitized replacement stop is in
+[`replacement-qualification-2026-08-23/raw-results.json`](replacement-qualification-2026-08-23/raw-results.json).

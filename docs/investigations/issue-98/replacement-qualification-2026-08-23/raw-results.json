@@ -1,0 +1,142 @@
+{
+  "baseCommit": "807cbed8f253a11fcc31b17bbbfe51c1e1e65b72",
+  "implementationCommit": "4ab271e6ef8a69b52e9f2263ca9b47fcf3062d4a",
+  "branch": "codex/issue-102-generation-cancellation-replacement",
+  "status": "replacement-invalid-consumed-stopped",
+  "correction": {
+    "observerVersion": "packaged-generation-cancellation-host-observer-v2",
+    "postAcknowledgementBaseline": "first-complete-frame-strictly-after-terminal-acknowledgement",
+    "comparisonFrames": "later-complete-frames-only",
+    "minimumComparisonFrameCount": 1,
+    "independentInvalidationAuthorities": [
+      "screen-capture",
+      "accessibility",
+      "foreground",
+      "launchctl-membership",
+      "rss-sampler",
+      "private-retention"
+    ]
+  },
+  "target": {
+    "model": "Mac17,2",
+    "osVersion": "26.5.1",
+    "osBuild": "25F80",
+    "memoryGiB": 24
+  },
+  "identities": {
+    "candidateExecutableSha256": "5cf14de9836e9da96655572b35bb0e194d8ebc30360b6d6516f88825dcf7a15d",
+    "correctedCancellationObserverSha256": "62b580279bd67ab850ac39e0ca10bc5d56340c29832fd966358a97b0ca6429e3",
+    "originalCancellationObserverSha256": "eedee77c2825652dd03dac05e965a8ff309dcd6af6b4f4defb46940bb850e6b8",
+    "rssSamplerSha256": "1da835b06e7b2ffbe588e99fee2692d7cfa25f9e8117641c74a5abe73acc3dfe",
+    "retentionUtilitySha256": "c3b2d618b4dbddf9568d4d39334be9a3d0b074ae0b7a5464b4b7e30c5686441b",
+    "readinessControllerSha256": "613e5f10a63f7293ca9e4aa4c2ab483185594d54560a4e286a145abcbf98a337",
+    "readinessObserverSha256": "9662c1664d44e93f58dc690a0fb78f08eb1f4751d84fc5790256866e768811ce"
+  },
+  "readiness": {
+    "status": "valid",
+    "freshProcess": true,
+    "exactApplicationCount": true,
+    "exactAccessibilityWindowCount": true,
+    "visibleAccessibilityWindow": true,
+    "activationSucceeded": true,
+    "raiseSucceeded": true,
+    "accessibilityFrontmostWriteSucceeded": true,
+    "accessibilityFrontmostVerified": true,
+    "workspaceFrontmostVerified": true,
+    "applicationAndWindowIdentityRetained": true,
+    "fixtureConfigured": false,
+    "samplerStarted": false,
+    "measurementCount": 0,
+    "rawArtifactCount": 0
+  },
+  "historicalInvalidation": {
+    "status": "invalid-consumed-unchanged",
+    "artifactIdentifier": "issue98_preview_early",
+    "sha256": "9bff1541c47955afed1526bc4e9b611659c0fdc228d73ea7172c64091a2bc46e",
+    "byteLength": 4879,
+    "temporarySourceRemoved": true,
+    "privateLocationPublished": false,
+    "reinterpreted": false,
+    "overwritten": false,
+    "deleted": false
+  },
+  "trials": [
+    {
+      "authority": "issue-102-replacement",
+      "operation": "preview",
+      "safePoint": "early",
+      "fixtureId": "milestone-2-atlas-proof",
+      "status": "invalid-consumed",
+      "invalidAuthority": "screen-capture",
+      "invalidReason": "post-acknowledgement quiet-window pixels changed",
+      "appReceipt": {
+        "status": "cancelled",
+        "observedStage": "sampling-shared-preview-anchors",
+        "observedCompletedWork": 28,
+        "targetCompletedWork": 0,
+        "progressSampleCount": 2,
+        "progressMonotonic": true,
+        "acknowledgementLimitMilliseconds": 100,
+        "acknowledgementMilliseconds": 2,
+        "costlySchedulingStopped": true,
+        "previousStatePreserved": true,
+        "noAcceptedCommitAtAcknowledgement": true
+      },
+      "screenAuthority": {
+        "postAcknowledgementBaselineEstablished": true,
+        "laterCompleteComparisonFrameObserved": true,
+        "laterCompleteFrameChangedFromBaseline": true
+      },
+      "sampling": {
+        "rawSampleCount": 69,
+        "rawSampleDurationMilliseconds": 418.223,
+        "maximumObservedSampleIntervalMilliseconds": 6.371,
+        "requiredRoleCount": 4,
+        "allRequiredRolesNonzeroAndAggregateExact": true,
+        "strictlyIncreasingTimestamps": true,
+        "cadenceWithin20Milliseconds": true,
+        "dispatchEndpointCoverage": true,
+        "acknowledgementEndpointCoverage": true
+      },
+      "deterministicAftermathQualified": false,
+      "retention": {
+        "version": "private-preview-rss-retention-v1",
+        "status": "retained",
+        "artifactIdentifier": "issue102_preview_early_replacement",
+        "sha256": "2f6957fdcb7d454a36028a25a2eb9afcb149e82b434175ea88171d3e8cb1ecbc",
+        "byteLength": 4554,
+        "temporarySourceRemoved": true,
+        "privateLocationPublished": false
+      }
+    },
+    { "operation": "preview", "safePoint": "middle", "status": "not-run-stop" },
+    { "operation": "preview", "safePoint": "late", "status": "not-run-stop" },
+    { "operation": "full", "safePoint": "early", "status": "not-run-stop" },
+    { "operation": "full", "safePoint": "middle", "status": "not-run-stop" },
+    { "operation": "full", "safePoint": "late", "status": "not-run-stop" }
+  ],
+  "gates": {
+    "focusedTemporalAndIndependentInvalidationPaths": "pass",
+    "predecessorObserverRetentionAndReadinessPaths": "pass",
+    "focusedGenerationCancellationTests": "pass-14",
+    "deterministicCrossPlatform": "pass-6-png-and-8-fixtures",
+    "e2e": "pass-22-and-2-native",
+    "visual": "pass-13-and-8-fixtures",
+    "root": "pass-578-and-1-skipped",
+    "semanticRetention": "pass",
+    "rust": "pass-24-and-28",
+    "observerEnabledPackagedBuild": "pass-338-modules-one-unsigned-app",
+    "privacyAuthorizedSurfaceAndFixtureDiff": "pass",
+    "gitDiffCheck": "pass"
+  },
+  "qualificationConclusion": {
+    "previewCancellationAuthority": false,
+    "fullGenerationCancellationAuthority": false,
+    "issue95FiveRunMatrixClaim": false,
+    "releaseBudgetConclusion": false,
+    "replacementAuthorityUsed": true,
+    "replacementDispatchCount": 1,
+    "silentRetryCount": 0,
+    "laterAuthorizedRowCount": 0
+  }
+}
