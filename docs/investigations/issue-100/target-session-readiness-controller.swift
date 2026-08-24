@@ -8,20 +8,27 @@ enum TargetSessionReadinessController {
       let arguments = try Arguments(CommandLine.arguments)
       let receipt = try await qualify(arguments)
       try issue100Emit(receipt)
+    } catch let failure as Issue105ReadinessFailure {
+      try? issue100Emit(
+        Issue105TargetSessionReadinessQualificationReceipt.invalid(
+          failure.invalidation,
+          diagnostics: failure.diagnostics
+        ))
+      exit(2)
     } catch let invalidation as TargetSessionReadinessInvalidation {
-      try? issue100Emit(TargetSessionReadinessQualificationReceipt.invalid(invalidation))
+      try? issue100Emit(Issue105TargetSessionReadinessQualificationReceipt.invalid(invalidation))
       exit(2)
     } catch {
       let invalidation = TargetSessionReadinessInvalidation.action(
         "unexpected internal target-session readiness controller failure")
-      try? issue100Emit(TargetSessionReadinessQualificationReceipt.invalid(invalidation))
+      try? issue100Emit(Issue105TargetSessionReadinessQualificationReceipt.invalid(invalidation))
       exit(2)
     }
   }
 
   @MainActor
   private static func qualify(_ arguments: Arguments) async throws
-    -> TargetSessionReadinessQualificationReceipt
+    -> Issue105TargetSessionReadinessQualificationReceipt
   {
     try Issue100TargetSessionPlatform.verifyTargetHost()
     let consoleSessionMatched = Issue100TargetSessionPlatform.designatedConsoleSessionMatched()
@@ -92,13 +99,32 @@ enum TargetSessionReadinessController {
       application: application,
       bundleIdentifier: arguments.bundleIdentifier
     )
-    let action = try Issue100TargetSessionPlatform.performReadinessActions(
+    let activationAccepted = Issue105TargetSessionStabilizationPlatform.requestActivation(
+      application)
+    do {
+      try Issue105TargetSessionStabilizer.validateActivationRequest(accepted: activationAccepted)
+    } catch let invalidation as TargetSessionReadinessInvalidation {
+      throw Issue105ReadinessFailure(
+        invalidation: invalidation,
+        diagnostics: Issue105StabilizationDiagnostics(
+          policyTimeoutMilliseconds: Issue105StabilizationPolicy.approved.timeoutMilliseconds,
+          pollIntervalMilliseconds: Issue105StabilizationPolicy.approved.pollIntervalMilliseconds,
+          stabilizationDurationMilliseconds: 0,
+          activationRequestCount: 1,
+          stabilizationObservationCount: 0,
+          raiseAttemptCount: 0,
+          retryableRaiseFailureCount: 0,
+          frontmostWriteAttemptCount: 0,
+          terminalPredicates: .none
+        )
+      )
+    }
+    let stabilization = try Issue105TargetSessionStabilizationPlatform.stabilize(
       application: application,
       window: window,
-      consoleSessionMatched: consoleSessionMatched,
-      packageIdentityMatched: true
+      bundleIdentifier: arguments.bundleIdentifier,
+      expectedExecutableSha256: arguments.expectedCandidateSha256
     )
-    try TargetSessionReadinessPredicate.validateAction(action)
 
     let observerReceipt = try runReadinessObserver(
       path: arguments.readinessObserverPath,
@@ -119,13 +145,51 @@ enum TargetSessionReadinessController {
         "the independent readiness observer did not verify the approved retained state")
     }
 
-    let receipt = TargetSessionReadinessQualificationReceipt(
-      controllerVersion: issue100ReadinessSchemaVersion,
+    guard Issue100TargetSessionPlatform.designatedConsoleSessionMatched() else {
+      throw TargetSessionReadinessInvalidation.session(
+        "the designated logged-in console GUI session changed before terminal verification")
+    }
+
+    let finalSnapshot = try Issue100TargetSessionPlatform.readinessSnapshot(
+      bundleIdentifier: arguments.bundleIdentifier,
+      expectedExecutableSha256: arguments.expectedCandidateSha256
+    )
+    try Issue105TargetSessionStabilizer.validateRetainedCandidate(
+      finalSnapshot,
+      retainedIdentity: Issue105RetainedCandidateIdentity(
+        processIdentifier: application.processIdentifier,
+        windowIdentity: CFHash(window)
+      )
+    )
+    try TargetSessionReadinessPredicate.validateSnapshot(finalSnapshot)
+
+    let finalStabilizationDiagnostics = Issue105StabilizationDiagnostics(
+      policyTimeoutMilliseconds: stabilization.diagnostics.policyTimeoutMilliseconds,
+      pollIntervalMilliseconds: stabilization.diagnostics.pollIntervalMilliseconds,
+      stabilizationDurationMilliseconds:
+        stabilization.diagnostics.stabilizationDurationMilliseconds,
+      activationRequestCount: stabilization.diagnostics.activationRequestCount,
+      stabilizationObservationCount: stabilization.diagnostics.stabilizationObservationCount,
+      raiseAttemptCount: stabilization.diagnostics.raiseAttemptCount,
+      retryableRaiseFailureCount: stabilization.diagnostics.retryableRaiseFailureCount,
+      frontmostWriteAttemptCount: stabilization.diagnostics.frontmostWriteAttemptCount,
+      terminalPredicates: Issue105TerminalPredicates(
+        exactCandidateRetained: true,
+        exactWindowRetained: true,
+        visibleWindow: finalSnapshot.visibleWindow,
+        workspaceFrontmost: finalSnapshot.workspaceFrontmost,
+        accessibilityFrontmost: finalSnapshot.accessibilityFrontmost,
+        independentObserverVerified: true
+      )
+    )
+
+    let receipt = Issue105TargetSessionReadinessQualificationReceipt(
+      controllerVersion: issue105ReadinessSchemaVersion,
       status: "valid",
       qualificationKind: "non-measurement-target-session-readiness",
       target: .approved,
       sessionMechanism:
-        "exact-path NSWorkspace launch in active console GUI session; AppKit activation; AXRaise and AXFrontmost; independent retained Accessibility/NSWorkspace verification",
+        "exact-path NSWorkspace launch in active console GUI session; accepted AppKit activation request; bounded retained-frontmost stabilization; AXRaise; AXFrontmost; independent retained Accessibility/NSWorkspace verification",
       bundleIdentifier: arguments.bundleIdentifier,
       candidateExecutableSha256: package.executableSha256,
       controllerSha256: controllerSha256,
@@ -135,13 +199,14 @@ enum TargetSessionReadinessController {
         exactApplicationCount: true,
         exactAccessibilityWindowCount: true,
         visibleAccessibilityWindow: true,
-        activationSucceeded: action.activationSucceeded,
-        raiseSucceeded: action.raiseSucceeded,
-        accessibilityFrontmostWriteSucceeded: action.frontmostWriteSucceeded,
+        activationSucceeded: true,
+        raiseSucceeded: true,
+        accessibilityFrontmostWriteSucceeded: true,
         accessibilityFrontmostVerified: true,
         workspaceFrontmostVerified: true,
         applicationAndWindowIdentityRetained: true
       ),
+      stabilization: finalStabilizationDiagnostics,
       zeroOperationProof: .zero,
       invalidAuthority: nil,
       invalidReason: nil

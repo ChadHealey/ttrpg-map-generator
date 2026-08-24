@@ -8,7 +8,110 @@ enum TargetSessionReadinessCoreTests {
     rejectsZeroOrMultipleCandidatesAndWindows()
     rejectsActivationAndRaiseFailures()
     rejectsForegroundLossAndIdentityReplacement()
-    FileHandle.standardOutput.write(Data("issue100 target-session readiness core tests passed\n".utf8))
+    try acceptsDelayedActivationAndTransientRaiseFailure()
+    rejectsPermanentActivationAndRaiseFailures()
+    rejectsStabilizationDriftAmbiguityForegroundLossAndTimeout()
+    FileHandle.standardOutput.write(
+      Data("issue100 target-session readiness core tests passed\n".utf8))
+  }
+
+  private static func acceptsDelayedActivationAndTransientRaiseFailure() throws {
+    var elapsed: UInt64 = 0
+    var observations = [
+      validSnapshot(accessibilityFrontmost: false, workspaceFrontmost: false),
+      validSnapshot(accessibilityFrontmost: false, workspaceFrontmost: true),
+      validSnapshot(accessibilityFrontmost: false, workspaceFrontmost: true),
+      validSnapshot(accessibilityFrontmost: true, workspaceFrontmost: true),
+    ]
+    var raiseResults: [Issue105SessionActionResult] = [.retryableCannotComplete, .success]
+    let outcome = try Issue105TargetSessionStabilizer.stabilize(
+      policy: testPolicy,
+      retainedIdentity: retainedIdentity,
+      elapsedMilliseconds: { elapsed },
+      observe: { observations.removeFirst() },
+      performRaise: { raiseResults.removeFirst() },
+      writeFrontmost: { .success },
+      wait: { elapsed += $0 }
+    )
+    precondition(outcome.diagnostics.stabilizationObservationCount == 4)
+    precondition(outcome.diagnostics.raiseAttemptCount == 2)
+    precondition(outcome.diagnostics.retryableRaiseFailureCount == 1)
+    precondition(outcome.diagnostics.frontmostWriteAttemptCount == 1)
+    precondition(outcome.diagnostics.terminalPredicates.accessibilityFrontmost)
+  }
+
+  private static func rejectsPermanentActivationAndRaiseFailures() {
+    expectInvalid(.action) {
+      try Issue105TargetSessionStabilizer.validateActivationRequest(accepted: false)
+    }
+    expectStabilizationInvalid(.accessibility) {
+      try stabilization(raiseResults: [.failed])
+    }
+    expectStabilizationInvalid(.accessibility) {
+      try stabilization(raiseResults: [.unsupported])
+    }
+    expectStabilizationInvalid(.accessibility) {
+      try stabilization(raiseResults: [.success], frontmostWriteResult: .failed)
+    }
+  }
+
+  private static func rejectsStabilizationDriftAmbiguityForegroundLossAndTimeout() {
+    expectStabilizationInvalid(.processState) {
+      try stabilization(observations: [validSnapshot(processIdentifier: 43)])
+    }
+    expectStabilizationInvalid(.processState) {
+      try stabilization(observations: [validSnapshot(windowIdentity: 8)])
+    }
+    expectStabilizationInvalid(.processState) {
+      try stabilization(observations: [validSnapshot(applicationCount: 2)])
+    }
+    expectStabilizationInvalid(.accessibility) {
+      try stabilization(observations: [validSnapshot(windowCount: 2)])
+    }
+    expectStabilizationInvalid(.foreground) {
+      try stabilization(
+        observations: [
+          validSnapshot(accessibilityFrontmost: false),
+          validSnapshot(accessibilityFrontmost: false, workspaceFrontmost: false),
+        ]
+      )
+    }
+
+    var elapsed: UInt64 = 0
+    expectStabilizationInvalid(.foreground) {
+      _ = try Issue105TargetSessionStabilizer.stabilize(
+        policy: testPolicy,
+        retainedIdentity: retainedIdentity,
+        elapsedMilliseconds: { elapsed },
+        observe: { validSnapshot(accessibilityFrontmost: false, workspaceFrontmost: false) },
+        performRaise: { preconditionFailure("raise must not run before activation stabilizes") },
+        writeFrontmost: { preconditionFailure("frontmost write must not run before raise") },
+        wait: { elapsed += $0 }
+      )
+    }
+  }
+
+  @discardableResult
+  private static func stabilization(
+    observations suppliedObservations: [TargetSessionReadinessSnapshot] = [
+      validSnapshot(accessibilityFrontmost: false),
+      validSnapshot(),
+    ],
+    raiseResults suppliedRaiseResults: [Issue105SessionActionResult] = [.success],
+    frontmostWriteResult: Issue105SessionActionResult = .success
+  ) throws -> Issue105StabilizationOutcome {
+    var elapsed: UInt64 = 0
+    var observations = suppliedObservations
+    var raiseResults = suppliedRaiseResults
+    return try Issue105TargetSessionStabilizer.stabilize(
+      policy: testPolicy,
+      retainedIdentity: retainedIdentity,
+      elapsedMilliseconds: { elapsed },
+      observe: { observations.removeFirst() },
+      performRaise: { raiseResults.removeFirst() },
+      writeFrontmost: { frontmostWriteResult },
+      wait: { elapsed += $0 }
+    )
   }
 
   private static func acceptsOnlyRetainedExactReadiness() throws {
@@ -18,7 +121,8 @@ enum TargetSessionReadinessCoreTests {
       packageIdentityMatched: true
     )
     try TargetSessionReadinessPredicate.validateAction(validAction())
-    try TargetSessionReadinessPredicate.validateRetained(first: validSnapshot(), second: validSnapshot())
+    try TargetSessionReadinessPredicate.validateRetained(
+      first: validSnapshot(), second: validSnapshot())
   }
 
   private static func rejectsWrongIdentityAndStaleProcessState() {
@@ -144,6 +248,32 @@ enum TargetSessionReadinessCoreTests {
       preconditionFailure("unexpected readiness error")
     }
   }
+
+  private static func expectStabilizationInvalid(
+    _ expectedAuthority: ExpectedAuthority,
+    _ operation: () throws -> Void
+  ) {
+    do {
+      try operation()
+      preconditionFailure("expected fail-closed stabilization invalidation")
+    } catch let failure as Issue105ReadinessFailure {
+      precondition(expectedAuthority.matches(failure.invalidation))
+      precondition(failure.diagnostics.activationRequestCount == 1)
+    } catch {
+      preconditionFailure("unexpected stabilization error")
+    }
+  }
+
+  private static let retainedIdentity = Issue105RetainedCandidateIdentity(
+    processIdentifier: 42,
+    windowIdentity: 7
+  )
+
+  private static let testPolicy = Issue105StabilizationPolicy(
+    timeoutMilliseconds: 150,
+    pollIntervalMilliseconds: 50,
+    maximumObservationCount: 4
+  )
 
   private enum ExpectedAuthority {
     case action
