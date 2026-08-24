@@ -809,13 +809,21 @@ independent observer remain fail closed.
 
 The implementation commit is `e144fff323c4f1e682d1f5db54ecb374e9f7d133`. Focused and
 predecessor Swift suites, 14 packaged-dispatch tests, the observer-enabled unsigned package, root
-gate, exact identity reproduction, privacy, authorized-surface, fixture/production-surface,
-protected-evidence, Swift-format, and diff gates passed. The packaged executable, issue #104
-cancellation observer, sampler, and retention utility retained their exact prior hashes. The
+gate, privacy, authorized-surface, fixture/production-surface, protected-evidence, Swift-format,
+and diff gates passed. The packaged executable, issue #104 cancellation observer, sampler, and
+retention utility retained their exact prior hashes. The pre-target canonical readiness-observer
+identity check was incomplete; it had compiled the noncanonical artifact described below. The
 corrected controller was
-`ade48973c2631381b221bfe8e92fbbd5ee31f1c5affda26a79574f7058cb0e04`; the independently
-compiled unchanged-source readiness observer was
-`f2c9b54561c68d8dea89ced7253316b7e1604db1b2eac42683e7d1609be4f023`.
+`ade48973c2631381b221bfe8e92fbbd5ee31f1c5affda26a79574f7058cb0e04`. Replaying issue #98's
+authoritative observer flags, input order, and canonical output basename reproduced the unchanged
+protected readiness observer exactly at
+`9662c1664d44e93f58dc690a0fb78f08eb1f4751d84fc5790256866e768811ce`.
+
+The preflight had been supplied a differently ordered/output-named observer artifact at
+`f2c9b54561c68d8dea89ced7253316b7e1604db1b2eac42683e7d1609be4f023`. That artifact was
+noncanonical, and the controller timed out before its independent-observer stage, so it was never
+executed. The issue #108 receipt preserves that argument provenance separately from the canonical
+protected identity.
 
 Exactly one fresh replacement non-measurement preflight ran. Its one activation request was
 accepted; exact application/window/executable/session identity survived all 292 observations.

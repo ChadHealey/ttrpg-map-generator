@@ -51,11 +51,28 @@ respectively:
 - `1da835b06e7b2ffbe588e99fee2692d7cfa25f9e8117641c74a5abe73acc3dfe`;
 - `c3b2d618b4dbddf9568d4d39334be9a3d0b074ae0b7a5464b4b7e30c5686441b`.
 
+The original protected-readiness-observer gate was incomplete before the preflight: it compiled
+and hashed the noncanonical artifact described below instead of replaying the authoritative issue
+#98 build. All other listed pre-target gates and reused identities passed. A post-preflight,
+no-GUI provenance audit corrected this evidence before handoff.
+
 The corrected readiness controller was
-`ade48973c2631381b221bfe8e92fbbd5ee31f1c5affda26a79574f7058cb0e04`; the independently compiled
-readiness observer was
-`f2c9b54561c68d8dea89ced7253316b7e1604db1b2eac42683e7d1609be4f023`. The observer's source and
-verification behavior are unchanged.
+`ade48973c2631381b221bfe8e92fbbd5ee31f1c5affda26a79574f7058cb0e04`. A provenance audit replayed
+the original issue #98 task log's authoritative observer build: `-module-cache-path
+/private/tmp/issue100-swift-module-cache`, `-warnings-as-errors`, `-parse-as-library`, the AppKit,
+ApplicationServices, CryptoKit, and Foundation frameworks, and these inputs in order: preview core,
+preview security, readiness core, readiness platform, readiness support, and the observer entry
+point. Compiled to the canonical `/private/tmp/issue98-readiness-observer` output path, the unchanged
+sources reproduced the protected observer SHA-256 exactly:
+`9662c1664d44e93f58dc690a0fb78f08eb1f4751d84fc5790256866e768811ce`.
+
+The preflight command had instead received
+`f2c9b54561c68d8dea89ced7253316b7e1604db1b2eac42683e7d1609be4f023`, built with readiness support
+before readiness platform and the different `/private/tmp/issue108-target-session-readiness-observer`
+output path. That noncanonical artifact passed the controller's supplied-file hash check but is not
+the protected observer identity. The controller stopped before observer launch, so the artifact was
+never executed and contributed no independent-observer verification to the preflight outcome. The
+observer's canonical sources and verification behavior remain unchanged.
 
 The root gate passed 74 test files with 578 tests and one intentional skip, the semantic-retention
 proof, 24 Rust unit tests, and 28 native recovery tests. Swift formatting, privacy,

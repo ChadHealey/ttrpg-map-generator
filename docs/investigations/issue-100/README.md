@@ -194,10 +194,13 @@ true readback now precede Workspace foreground, supported positive-frame readine
 There is no `AXMinimized` write, unhide, or manual interaction authority. The independent observer
 source and final retained-state requirement are unchanged.
 
-Every pre-target gate passed. The sole replacement preflight retained the exact identity for 292
-observations / 20,000 ms. One supported/settable `AXFrontmost=true` write returned success, but
-Accessibility readback remained supported `false`, Workspace remained not frontmost, and minimized
-plus frame reads remained explicitly unavailable/`attribute-unsupported`. The controller timed out
-with zero minimized writes, raises, independent observer runs, or product operations, then
-terminated the candidate. No retry ran, and issue #104 remains **UNCONSUMED**. The complete
-sanitized stop is in the [issue #108 evidence](../issue-108/README.md).
+Every pre-target gate except canonical protected-readiness-observer reproduction passed. The
+preflight received a noncanonical observer artifact but timed out before observer launch. A later
+no-GUI provenance audit replayed issue #98's authoritative build and reproduced the protected
+observer exactly. The sole replacement preflight retained the exact identity for 292 observations /
+20,000 ms. One supported/settable `AXFrontmost=true` write returned success, but Accessibility
+readback remained supported `false`, Workspace remained not frontmost, and minimized plus frame
+reads remained explicitly unavailable/`attribute-unsupported`. The controller timed out with zero
+minimized writes, raises, independent observer runs, or product operations, then terminated the
+candidate. No retry ran, and issue #104 remains **UNCONSUMED**. The complete sanitized stop and
+provenance correction are in the [issue #108 evidence](../issue-108/README.md).

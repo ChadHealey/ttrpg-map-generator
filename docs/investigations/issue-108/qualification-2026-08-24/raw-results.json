@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "issue108-target-session-readiness-evidence-v1",
+  "schemaVersion": "issue108-target-session-readiness-evidence-v2",
   "status": "invalid-pre-dispatch-not-target-evidence",
   "baseCommit": "26d52070b810679067e0f5c6b288a1963df49e5b",
   "implementationCommit": "e144fff323c4f1e682d1f5db54ecb374e9f7d133",
@@ -32,7 +32,10 @@
   "identities": {
     "candidateExecutableSha256": "5cf14de9836e9da96655572b35bb0e194d8ebc30360b6d6516f88825dcf7a15d",
     "correctedReadinessControllerSha256": "ade48973c2631381b221bfe8e92fbbd5ee31f1c5affda26a79574f7058cb0e04",
-    "readinessObserverSha256": "f2c9b54561c68d8dea89ced7253316b7e1604db1b2eac42683e7d1609be4f023",
+    "canonicalProtectedReadinessObserverSha256": "9662c1664d44e93f58dc690a0fb78f08eb1f4751d84fc5790256866e768811ce",
+    "preflightReadinessObserverArgumentSha256": "f2c9b54561c68d8dea89ced7253316b7e1604db1b2eac42683e7d1609be4f023",
+    "preflightReadinessObserverArgumentCanonical": false,
+    "preflightReadinessObserverArgumentExecuted": false,
     "cancellationObserverSha256": "dee96628ba9b9cec31a49b0bd627466a636921f1f73535f1aac421834fbc0e6d",
     "rssSamplerSha256": "1da835b06e7b2ffbe588e99fee2692d7cfa25f9e8117641c74a5abe73acc3dfe",
     "retentionUtilitySha256": "c3b2d618b4dbddf9568d4d39334be9a3d0b074ae0b7a5464b4b7e30c5686441b"
@@ -139,7 +142,9 @@
     "predecessorSwiftSuites": "pass-issue90-91-94-96-97-98-100-105-106-107",
     "focusedPackagedDispatch": "pass-14",
     "observerEnabledPackagedBuild": "pass-338-modules-one-unsigned-app",
-    "exactIdentityReproduction": "pass-candidate-cancellation-observer-sampler-retention-and-readiness-tools",
+    "preflightExactIdentityReproduction": "partial-pass-canonical-readiness-observer-not-reproduced-before-preflight",
+    "postPreflightExactIdentityReproduction": "pass-candidate-cancellation-observer-sampler-retention-and-canonical-readiness-observer",
+    "postPreflightReadinessObserverProvenanceAudit": "pass-canonical-issue98-command-reproduced-noncanonical-preflight-argument-unexecuted",
     "root": "pass-578-and-1-skipped-semantic-retention-24-rust-28-native",
     "privacyAuthorizedSurfaceFixtureProtectedEvidenceAndDiff": "pass"
   },
@@ -165,5 +170,5 @@
     "screenshotsOrPixelsPublished": false,
     "privateArtifactsCreated": 0
   },
-  "conclusion": "The explicit capability and frontmost-first correction passed every pre-target gate. Its sole preflight retained exact identity and successfully wrote supported/settable AXFrontmost=true once, but Accessibility readback remained supported false and Workspace remained not frontmost through the unchanged 20-second bound. Minimized and frame reads remained explicitly unavailable/attribute-unsupported. No AXMinimized write, AXRaise, independent observer, product setup, retry, or issue #104 consumption occurred."
+  "conclusion": "The explicit capability and frontmost-first correction passed every pre-target gate except canonical protected-readiness-observer reproduction. A post-preflight no-GUI audit reproduced SHA-256 9662c1664d44e93f58dc690a0fb78f08eb1f4751d84fc5790256866e768811ce with the authoritative issue #98 build. The differently ordered/output-named f2c9b54561c68d8dea89ced7253316b7e1604db1b2eac42683e7d1609be4f023 artifact supplied to the preflight was noncanonical and never executed. The sole preflight retained exact identity and successfully wrote supported/settable AXFrontmost=true once, but Accessibility readback remained supported false and Workspace remained not frontmost through the unchanged 20-second bound. Minimized and frame reads remained explicitly unavailable/attribute-unsupported. No AXMinimized write, AXRaise, independent observer, product setup, retry, or issue #104 consumption occurred."
 }

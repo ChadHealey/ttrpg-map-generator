@@ -788,14 +788,17 @@ supported positive-frame visibility, and `AXRaise`. No `AXMinimized` write, unhi
 interaction, or UI scripting is authorized. Final retained state and the unchanged independent
 Accessibility/`NSWorkspace` observer remain required.
 
-Every pre-target gate and exact identity check passed. The one authorized replacement
-non-measurement preflight retained exact identity for 292 observations through the unchanged
-20,000-ms bound. One supported/settable `AXFrontmost=true` write returned success, but
-Accessibility readback remained supported `false` and Workspace never became frontmost. Minimized
-and frame reads remained explicitly unavailable/`attribute-unsupported`. The controller timed out
-before frame readiness, `AXRaise`, or independent observer verification, then terminated the
-candidate. It performed no minimized write or product operation. There was no retry. Issue #104
-remains blocked and unconsumed. The sanitized correction and stop are in the
+Every pre-target gate except canonical protected-readiness-observer reproduction passed. The
+preflight received a noncanonical observer artifact but stopped before observer launch. A later
+no-GUI provenance audit replayed issue #98's authoritative build and reproduced the protected
+observer exactly. The one authorized replacement non-measurement preflight retained exact identity
+for 292 observations through the unchanged 20,000-ms bound. One supported/settable
+`AXFrontmost=true` write returned success, but Accessibility readback remained supported `false` and
+Workspace never became frontmost. Minimized and frame reads remained explicitly unavailable/
+`attribute-unsupported`. The controller timed out before frame readiness, `AXRaise`, or independent
+observer verification, then terminated the candidate. It performed no minimized write or product
+operation. There was no retry. Issue #104 remains blocked and unconsumed. The sanitized correction,
+stop, and provenance audit are in the
 [issue #108 readiness evidence](investigations/issue-108/README.md).
 
 ### Packaged generation-cancellation qualification stop
