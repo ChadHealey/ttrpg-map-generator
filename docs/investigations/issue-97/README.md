@@ -157,6 +157,8 @@ retention receipt are secured.
 
 ## Qualification result
 
+### Preserved initial stop
+
 The final bounded implementation candidate is commit
 `35a2db5cd105cd32133888f8a84c4ab59691dd1d`. Its observer-enabled packaged executable SHA-256 is
 `94b5a8b5f3fcd43a361589f35e3449c72cf3aad13610737140c3dd749737cf4e`; observer SHA-256 is
@@ -164,7 +166,7 @@ The final bounded implementation candidate is commit
 `d8b07a40f50d6254faa012bc25cbb5cc8daaa4add35dec1ff670ff759fd775fd`; and retention SHA-256 is
 `87c2e27e24d559f50780383840290dfe7afdfb5cb1ab15cc33928032ceecde83`.
 
-Target-host qualification is **BLOCKED BEFORE MEASURED DISPATCH**. The raised-window successor
+The initial target-host qualification was **BLOCKED BEFORE MEASURED DISPATCH**. The raised-window successor
 could not establish the approved unmeasured visible/frontmost readiness predicate in this Codex
 desktop session. The exact target-host outcomes are:
 
@@ -212,6 +214,69 @@ smallest blocker is target-session UI arbitration: the designated host is correc
 desktop session cannot give the packaged candidate the approved visible/frontmost preparation
 state. A successor may rerun the unchanged final candidate only after that external session state
 changes; it must not reinterpret these invalid attempts or claim their absent measurements.
+
+### Resumed qualification stop
+
+The qualification resumed from base
+`312836caf7fec00af5f32c261ddced3f9b4a11cd` using issue #100's approved controller and the
+unchanged packaged executable. The executable SHA-256 remained
+`94b5a8b5f3fcd43a361589f35e3449c72cf3aad13610737140c3dd749737cf4e`; controller SHA-256 was
+`68c23690dcdb7f4dd329e0b2152b699ba1d6ef4248d211088aa26bb98c9475c3`; its independent
+readiness-observer SHA-256 was
+`9f9c3254ee523f0151ce05f3b5d2573139a26e6bc432ce2c365e1b83d57419ff`; sampler and retention
+identities remained the values above.
+
+Four resumed proof/SVG attempts failed before measured dispatch and did not consume a required
+trial. Three exposed the pinned WebKit save-target field's live Accessibility contract: its title
+is uppercase, its stable identifier is `AXDOMIdentifier`, and direct `AXValue` assignment does not
+emit the controlled browser input event. The corrected observer requires the exact title plus DOM
+identifier, focuses that one field, sends the private path as a process-targeted Unicode keyboard
+event, and verifies exact readback. The fourth pre-dispatch attempt completed the production
+save/reopen workflow but exposed that the hidden reopened paragraph is not reactively republished.
+The corrected observer instead requires the exact disabled target plus the unique visible reopened
+ready status before dispatch; the unchanged packaged dispatch gate still rejects anything without
+full exact-fixture reopened authority, and the final receipt proves the exact accepted hashes and
+unchanged state. These four attempts created no sampler CSV and each has retention status
+`not-created`.
+
+The next fresh proof/SVG process passed every issue #100 readiness predicate and reached measured
+dispatch using observer SHA-256
+`406de0abd9120cf7535a23b86da09b4c8962e98bda798e59159ba6f6945b8642`. It was the first consumed
+required trial and failed closed at destination validation. Immediate post-run diagnostics proved:
+
+- verified inode- and hash-changing destination replacement;
+- final SHA-256 `c72f6261534171e7c7048f1cccc304b6a148296ba22090c11e7a1c132e8318db`
+  and 852,650 bytes, matching the exact native completion receipt;
+- profile `atlas-svg-v1` version 1, dimensions `400x200mm`, and the unchanged 32-MiB ceiling pass;
+- exact accepted/reopened canonical hashes, PASS reopen comparison, zero reopen generator calls,
+  and `acceptedStateUnchanged: true`;
+- the native temporary absent and a complete production SVG present; and
+- one raw RSS artifact immediately retained in the approved owner-only archive under opaque ID
+  `issue97-proof-svg-qualification`, SHA-256
+  `2096a3f940e63928264f7438fa8907c71a8d0c6740b99f95c3b695c16a4707f5`, 7,545 bytes, with no
+  temporary raw CSV left behind.
+
+The only failed predicate required the `<svg>` element at byte zero, while the unchanged complete
+production SVG correctly begins with `<?xml version="1.0" encoding="UTF-8"?>`. The observer-only
+format predicate and negative-path tests now admit that exact production declaration; the stopped,
+corrected observer SHA-256 is
+`1b84fb183fc2c34b2b652d2dc168050babb91d35f3fd983b657a4e8b05190d2f`. It was compiled and tested
+but was not used for another qualification because the consumed-invalid rule requires an immediate
+global stop.
+
+| Fixture                                | SVG                                               | PNG                                 |
+| -------------------------------------- | ------------------------------------------------- | ----------------------------------- |
+| `milestone-2-atlas-proof`              | **INVALID, CONSUMED** — observer format predicate | **NOT RUN** — consumed-invalid stop |
+| `milestone-2-atlas-fragmented-islands` | **NOT RUN** — global consumed-invalid stop        | **NOT RUN** — global stop           |
+| `milestone-2-atlas-control-max`        | **NOT RUN** — global consumed-invalid stop        | **NOT RUN** — global stop           |
+
+There are zero valid qualifications and zero measurement conclusions. No remaining required trial
+or issue #95 matrix operation ran, and no SVG/PNG release-budget pass or fail is claimed. The
+smallest blocker is procedural after an observer defect: the exact production SVG predicate is
+corrected, but the already consumed invalid proof/SVG trial may not be rerun without new authority.
+The complete sanitized resumed-attempt record is appended without modifying the six preserved
+initial attempts in
+[`qualification-2026-08-23/raw-results.json`](qualification-2026-08-23/raw-results.json).
 
 ## Privacy
 

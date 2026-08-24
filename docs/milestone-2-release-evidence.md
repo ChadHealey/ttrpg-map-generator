@@ -297,8 +297,8 @@ tree at intervals no greater than 20 ms and report every run plus median and wor
 | ------------------------------------ | ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
 | Coarse preview                       | ≤900 ms and ≤256 MiB additional process-tree RSS; report ≤750 ms stretch target | **PASS** — all 15 final fresh runs passed; worst time 809.40 ms, worst RSS 157.72 MiB  |
 | Full generation                      | ≤10 s and ≤768 MiB additional process-tree RSS                                  | **NOT RUN** — issue #95 stopped on observer-authority drift before measured dispatch   |
-| SVG export                           | ≤3 s, ≤512 MiB, destination ≤32 MiB                                             | **NOT RUN** — #100 qualifies readiness; #97 export qualification has not resumed       |
-| PNG export                           | ≤15 s, ≤1 GiB, destination ≤64 MiB                                              | **NOT RUN** — #100 dispatched no export and made no measurement conclusion             |
+| SVG export                           | ≤3 s, ≤512 MiB, destination ≤32 MiB                                             | **NOT RUN** — #97 consumed path trial invalid; no release-budget conclusion            |
+| PNG export                           | ≤15 s, ≤1 GiB, destination ≤64 MiB                                              | **NOT RUN** — #97 stopped before PNG; no release-budget conclusion                     |
 | Preview cancellation                 | Acknowledgement ≤100 ms                                                         | **NOT RUN** — issue #95 confirmed no exact-fixture acknowledgement/aftermath authority |
 | Full-generation/SVG/PNG cancellation | Acknowledgement ≤500 ms                                                         | **NOT RUN** — issue #95 confirmed no packaged acknowledgement/aftermath authority      |
 
@@ -504,6 +504,38 @@ The complete controller contract, checks, preliminary fail-closed integration at
 receipt, privacy boundary, and zero-operation proof are in the
 [issue #100 target-session readiness evidence](investigations/issue-100/README.md).
 
+### Issue #97 resumed packaged SVG/PNG qualification stop (2026-08-23)
+
+Issue #97 resumed from `312836caf7fec00af5f32c261ddced3f9b4a11cd` with the unchanged packaged
+executable SHA-256
+`94b5a8b5f3fcd43a361589f35e3449c72cf3aad13610737140c3dd749737cf4e` and issue #100 controller
+SHA-256 `68c23690dcdb7f4dd329e0b2152b699ba1d6ef4248d211088aa26bb98c9475c3`.
+Four proof/SVG observer attempts failed before dispatch while the observer was corrected to match
+the pinned WebKit save field, emit a real controlled-input event, and use exact visible reopened
+readiness plus the unchanged packaged exact-authority dispatch gate. They created no sampler CSV
+and consumed no trial. The preserved six earlier #97 attempts remain unchanged and invalid.
+
+The next fresh proof/SVG process passed issue #100 readiness and reached measured export dispatch
+under observer SHA-256
+`406de0abd9120cf7535a23b86da09b4c8962e98bda798e59159ba6f6945b8642`. It produced one
+inode-changing atomic replacement and a complete final receipt: SHA-256
+`c72f6261534171e7c7048f1cccc304b6a148296ba22090c11e7a1c132e8318db`, 852,650 bytes,
+`atlas-svg-v1` v1, `400x200mm`, native receipt verified, 32-MiB ceiling passed, unchanged accepted
+state, exact canonical/package hashes, PASS reopen comparison, and zero reopen generator calls. The
+native temporary was absent. Its raw RSS timeline was immediately retained in the approved
+owner-only archive; no private path or raw content is public.
+
+The trial nevertheless failed closed because the observer's complete-format predicate required
+the `<svg>` element at byte zero while the unchanged production SVG begins with its exact XML
+declaration. This was the first consumed required trial, so the sequence stopped immediately. The
+remaining PNG plus both formats for fragmented-islands and control-max were not run. The corrected
+observer predicate is compiled and tested under SHA-256
+`1b84fb183fc2c34b2b652d2dc168050babb91d35f3fd983b657a4e8b05190d2f`, but no rerun was made.
+There are zero valid qualifications, zero measurement conclusions, and no release-budget result;
+issue #95's matrix remains unrun. Further qualification requires explicit new authority to rerun
+the consumed proof/SVG trial. Full sanitized evidence is in the
+[issue #97 packaged export evidence](investigations/issue-97/README.md).
+
 ## Remote CI and milestone state
 
 Issue #71 recorded fresh CI evidence for the exact remote release commit
@@ -527,8 +559,9 @@ rule that every included issue be closed or explicitly moved out.
 
 The final release owner must perform these actions in order:
 
-1. Use issue #100's qualified target-session mechanism to revalidate and resume issue #97's
-   unchanged final candidate and obtain its six packaged SVG/PNG success qualifications; implement
+1. Decide whether to grant new authority for issue #97's consumed proof/SVG trial, then use issue
+   #100's qualified target-session mechanism and corrected observer to obtain all six packaged
+   SVG/PNG success qualifications; implement
    and qualify issue #95's two cancellation children; then revalidate and rerun the complete
    successor protocol without changing fixtures, workload, production behavior, hardware, or
    limits.

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "issue97-packaged-export-qualification-evidence-v1",
-  "status": "blocked-before-measured-dispatch",
+  "status": "blocked-consumed-invalid-required-trial",
   "target": {
     "model": "Mac17,2",
     "processor": "Apple M5",
@@ -101,36 +101,152 @@
       "retentionStatus": "not-created"
     }
   ],
+  "resumeTooling": {
+    "baseCommit": "312836caf7fec00af5f32c261ddced3f9b4a11cd",
+    "packagedExecutableSha256": "94b5a8b5f3fcd43a361589f35e3449c72cf3aad13610737140c3dd749737cf4e",
+    "readinessControllerSha256": "68c23690dcdb7f4dd329e0b2152b699ba1d6ef4248d211088aa26bb98c9475c3",
+    "readinessObserverSha256": "9f9c3254ee523f0151ce05f3b5d2573139a26e6bc432ce2c365e1b83d57419ff",
+    "consumedTrialObserverSha256": "406de0abd9120cf7535a23b86da09b4c8962e98bda798e59159ba6f6945b8642",
+    "correctedStoppedObserverSha256": "1b84fb183fc2c34b2b652d2dc168050babb91d35f3fd983b657a4e8b05190d2f",
+    "samplerSha256": "d8b07a40f50d6254faa012bc25cbb5cc8daaa4add35dec1ff670ff759fd775fd",
+    "retentionSha256": "87c2e27e24d559f50780383840290dfe7afdfb5cb1ab15cc33928032ceecde83"
+  },
+  "resumeAttempts": [
+    {
+      "attempt": "proof-svg-resume-save-target-selector",
+      "status": "invalid",
+      "invalidAuthority": "accessibility",
+      "invalidReason": "the unchanged production save target did not become writable after appearance acceptance",
+      "fixtureConfigured": true,
+      "packageCreated": false,
+      "staleDestinationCreated": false,
+      "samplerStarted": false,
+      "measuredExportDispatched": false,
+      "rawArtifactCreated": false,
+      "retentionStatus": "not-created",
+      "requiredTrialConsumed": false
+    },
+    {
+      "attempt": "proof-svg-resume-early-save-target-selector",
+      "status": "invalid",
+      "invalidAuthority": "accessibility",
+      "invalidReason": "the unchanged production save target did not become writable after appearance acceptance",
+      "fixtureConfigured": true,
+      "packageCreated": false,
+      "staleDestinationCreated": false,
+      "samplerStarted": false,
+      "measuredExportDispatched": false,
+      "rawArtifactCreated": false,
+      "retentionStatus": "not-created",
+      "requiredTrialConsumed": false
+    },
+    {
+      "attempt": "proof-svg-resume-exact-field-axvalue",
+      "status": "invalid",
+      "invalidAuthority": "accessibility",
+      "invalidReason": "the unchanged production save target did not become writable after appearance acceptance",
+      "fixtureConfigured": true,
+      "packageCreated": false,
+      "staleDestinationCreated": false,
+      "samplerStarted": false,
+      "measuredExportDispatched": false,
+      "rawArtifactCreated": false,
+      "retentionStatus": "not-created",
+      "requiredTrialConsumed": false
+    },
+    {
+      "attempt": "proof-svg-resume-gated-reopened-publication",
+      "status": "invalid",
+      "invalidAuthority": "accepted-state-receipt",
+      "invalidReason": "the exact generator-free reopened receipt did not become complete",
+      "fixtureConfigured": true,
+      "packageCreated": true,
+      "staleDestinationCreated": false,
+      "samplerStarted": false,
+      "measuredExportDispatched": false,
+      "rawArtifactCreated": false,
+      "retentionStatus": "not-created",
+      "requiredTrialConsumed": false
+    },
+    {
+      "attempt": "proof-svg-qualification",
+      "status": "invalid",
+      "invalidAuthority": "destination-replacement",
+      "invalidReason": "the destination did not prove one complete atomic replacement matching the native receipt",
+      "fixtureConfigured": true,
+      "packageCreated": true,
+      "staleDestinationCreated": true,
+      "samplerStarted": true,
+      "measuredExportDispatched": true,
+      "rawArtifactCreated": true,
+      "retentionStatus": "retained",
+      "retentionArtifactIdentifier": "issue97-proof-svg-qualification",
+      "retainedRawArtifactSha256": "2096a3f940e63928264f7438fa8907c71a8d0c6740b99f95c3b695c16a4707f5",
+      "retainedRawArtifactByteLength": 7545,
+      "requiredTrialConsumed": true,
+      "readinessControllerStatus": "valid",
+      "acceptedState": {
+        "canonicalAspectSetSha256": "cbbec1d45c92bf6acee067ce38235a70f25a77e6cea9a1041f298536cbee77dd",
+        "canonicalOutputSetSha256": "7dd62d2ca9702a6761cfbee124a80065622de5fc356d76893af8ae1f9b4a650c",
+        "canonicalCoastlineOutputSha256": "ec19f547bee93f4c797f5604c2dcf752bbe11d7162763606bb3f3397f04b9342",
+        "renderSceneSha256": "2f0c3914ca521535e0a60a91502903ddb905a1523810e0b5e6c82b61d2e7b134",
+        "manifestSha256": "98f0689bb0ed066483edc7f0de778a32c4dbf23f73469fcf46dbf451a562aaee",
+        "reopenComparisonPassed": true,
+        "reopenGeneratorInvocations": 0
+      },
+      "completionReceipt": {
+        "format": "svg",
+        "sha256": "c72f6261534171e7c7048f1cccc304b6a148296ba22090c11e7a1c132e8318db",
+        "byteLength": 852650,
+        "profileId": "atlas-svg-v1",
+        "profileVersion": 1,
+        "dimensions": "400x200mm",
+        "nativeAtomicReceiptVerified": true,
+        "acceptedStateUnchanged": true,
+        "sizeCeilingBytes": 33554432,
+        "sizeCeilingPassed": true
+      },
+      "postRunDiagnosis": {
+        "atomicIdentityReplacementObserved": true,
+        "sha256Matched": true,
+        "byteLengthMatched": true,
+        "temporaryAbsent": true,
+        "completeProductionSvgPresent": true,
+        "observerFormatPredicateMatched": false,
+        "rootCause": "the observer required the svg element at byte zero but the unchanged production SVG begins with its exact XML declaration"
+      }
+    }
+  ],
   "qualificationOutcomes": [
     {
       "fixtureId": "milestone-2-atlas-proof",
-      "svg": "not-run-readiness-blocker",
-      "png": "not-run-global-stop"
+      "svg": "invalid-consumed-observer-format-predicate",
+      "png": "not-run-consumed-invalid-stop"
     },
     {
       "fixtureId": "milestone-2-atlas-fragmented-islands",
-      "svg": "not-run-global-stop",
-      "png": "not-run-global-stop"
+      "svg": "not-run-consumed-invalid-stop",
+      "png": "not-run-consumed-invalid-stop"
     },
     {
       "fixtureId": "milestone-2-atlas-control-max",
-      "svg": "not-run-global-stop",
-      "png": "not-run-global-stop"
+      "svg": "not-run-consumed-invalid-stop",
+      "png": "not-run-consumed-invalid-stop"
     }
   ],
   "retention": {
     "approvedOwnerOnlyArchiveReady": true,
-    "newRawArtifactCount": 0,
-    "archiveMutated": false,
+    "newRawArtifactCount": 1,
+    "archiveMutated": true,
     "temporaryRawCsvCount": 0,
     "privatePathsPublished": false
   },
   "conclusion": {
     "measurementCount": 0,
     "validQualificationCount": 0,
-    "consumedRequiredTrialCount": 0,
+    "consumedRequiredTrialCount": 1,
     "releaseBudgetConclusion": "none",
     "issue95MatrixRun": false,
-    "smallestBlocker": "The designated packaged candidate cannot establish the approved unmeasured frontmost visible-window readiness predicate from this Codex desktop session, so no export completion measurement may be dispatched."
+    "smallestBlocker": "The first resumed required trial dispatched and was consumed, then the observer rejected the complete production SVG because its format predicate did not admit the exact XML declaration. The predicate is corrected, but the consumed-invalid stop forbids a rerun or any remaining trial without new authority."
   }
 }

@@ -654,8 +654,11 @@ does not run or decide issue #95's five-fresh-process release gate.
   zero reopen generator calls, no preview/busy state, and the fixed private sibling destination
   before it delegates to the unchanged `AtlasWorkflow.exportSvg` or `AtlasWorkflow.exportPng`
   method. Ordinary packages install none of these handlers or receipts.
-- Before measured dispatch, the observer requires the existing complete exact-reopened receipt and
-  records a fresh owner-only stale regular destination's device, inode, SHA-256, and byte length.
+- Before measured dispatch, the observer requires the exact disabled save target and unique
+  production reopened/export-ready status, while the unchanged packaged dispatch gate requires
+  complete exact-fixture reopened authority. The final receipt supplies the exact canonical state
+  and unchanged-state proof. The observer also records a fresh owner-only stale regular
+  destination's device, inode, SHA-256, and byte length.
   From dispatch until replacement is observed, it performs no Accessibility traversal and no
   application scroll, reveal, pan, zoom, focus, framing, or other action. It may poll only that
   exact destination while independently monitoring foreground ownership and process-tree RSS.
@@ -677,10 +680,13 @@ bad hash/size/profile/dimensions/ceiling, accepted-state drift, foreground or he
 invalidity, or retention failure yields no measurement conclusion. A required trial is consumed
 only by measured export dispatch and is never silently rerun. The implementation, target-host
 sequence, invalid attempts, qualification status, privacy boundary, and sanitized receipts are in
-the [issue #97 packaged export evidence](investigations/issue-97/README.md). Its current target-host
-run stopped before measured dispatch because the packaged candidate could not acquire the approved
-visible/frontmost readiness state in this Codex desktop session; therefore it records no valid
-SVG/PNG qualification and makes no release-budget conclusion.
+the [issue #97 packaged export evidence](investigations/issue-97/README.md). Issue #100 subsequently
+qualified the target-session readiness mechanism. The resumed run reached its first measured SVG
+dispatch, then failed closed because the observer format predicate did not admit the unchanged
+production SVG's exact XML declaration. That required trial is consumed, its raw RSS timeline is
+privately retained, the remaining five trials were not run, and there is no valid SVG/PNG
+qualification or release-budget conclusion. The predicate is corrected and tested, but the trial
+may not be rerun without new authority.
 
 ### Approved export target-session readiness authority
 
@@ -705,7 +711,7 @@ The issue #100 receipt is an unmeasured readiness qualification only. It configu
 starts no sampler, creates no destination, dispatches no SVG/PNG, consumes no issue #97 required
 trial, and makes no timing, RSS, completion-authority, or release-budget conclusion. Its valid
 qualification authorizes a new task to revalidate and resume issue #97's unchanged final candidate
-and six unconsumed trials; it neither reinterprets issue #97's six invalid pre-dispatch attempts nor
+and six then-unconsumed trials; it neither reinterprets issue #97's six invalid pre-dispatch attempts nor
 qualifies export completion by itself.
 
 | Operation       | Fixed workload                                                                                | Wall-clock | Peak additional memory | Output-size ceiling       |
