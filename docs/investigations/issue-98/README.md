@@ -158,3 +158,37 @@ diff gates pass. The package remains byte-identical at SHA-256
 SHA-256 `ffe1589c3841ac577d726800c68e2d5cc3733432cfd4f55f7b2947453cba0018`; the sampler,
 retention utility, readiness controller, and readiness observer reproduce their issue #98
 identities unchanged. Target outcomes are appended only after the authorized one-shot sequence.
+
+The implementation commit is `e783ac5f78c2747698e106d6638644e3046450f4`. Issue #100 readiness
+qualified one fresh exact process with zero fixture, sampler, measurement, or raw-artifact
+activity. One pre-dispatch observer invocation then rejected a non-direct temporary raw path before
+target capture; it configured no fixture, started no sampler, created no raw artifact, dispatched
+no operation, and consumed no row.
+
+The single authorized issue #103 preview/early replacement then dispatched once. Its app receipt
+reported early-stage work `28/1000`, two monotonic progress samples, terminal acknowledgement in
+**2 ms** against the unchanged 100-ms prerequisite, stopped costly scheduling, preserved previous
+state, no accepted commit at acknowledgement, and a recorded canonically deterministic next
+completion. Sampling had 63 valid rows over 379.503 ms with a 6.396-ms maximum interval, exact
+four-role arithmetic, and dispatch/acknowledgement endpoint coverage. The corrected cancellation
+presentation authority established its previous-state baseline, observed the required complete
+post-acknowledgement frames, detected no cancelled-preview completion signature, retained
+foreground, and passed final Accessibility previous-state authority. Exact pixel-change diagnostic
+counts were not published because the observer later emitted only its fail-closed invalid receipt.
+
+The replacement is nevertheless **INVALID, CONSUMED**. Although the app receipt recorded a
+canonically deterministic aftermath completion, the independent observer did not qualify issue
+#94's required accepted-atlas aftermath frame. Its sanitized authority is `screen-capture`; the
+reason is `the deterministic accepted aftermath did not qualify`. The first retention invocation
+also rejected a symlinked archive-root argument as `unsafeArchiveRoot`; without rerunning the row,
+the same intact raw CSV was then retained through the canonical owner-only root before further
+evidence inspection. The retained opaque identifier is `issue103_preview_early_replacement`, byte
+length is 4,164, and SHA-256 is
+`48f1cd3a2375664bdce48370c4da3ccbb054a10a865590bc294e9d4b6b1acec5`; its temporary source was
+removed and no private location is published.
+
+Execution stopped immediately after the invalid row. Preview/middle, preview/late, and all full
+rows were not run; there was no row retry, no issue #95 matrix activity, and no release-budget
+conclusion. Both historical rows and private artifacts remain separately unchanged, **INVALID,
+CONSUMED**, and owner-only. The complete sanitized receipt is in
+[`operation-signature-qualification-2026-08-23/raw-results.json`](operation-signature-qualification-2026-08-23/raw-results.json).

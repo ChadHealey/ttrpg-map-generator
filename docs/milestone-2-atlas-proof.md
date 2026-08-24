@@ -769,6 +769,15 @@ CONSUMED**, privately retained, and non-authoritative. The bounded correction an
 belong to the
 [issue #98 evidence](investigations/issue-98/README.md#issue-103-completed-presentation-correction).
 
+The single authorized issue #103 preview/early replacement passed its 2-ms app acknowledgement,
+stopped-scheduling, previous-state/no-commit, operation-specific presentation, foreground,
+four-role membership, 63-row/6.396-ms sampling, endpoint, and eventual owner-only retention
+predicates. It is nevertheless **INVALID, CONSUMED** because the independent observer did not
+qualify the required accepted-atlas deterministic-aftermath frame. Execution stopped; preview
+middle/late and every full row remain unrun. There is no cancellation-path authority, issue #95
+matrix claim, or release-budget conclusion. Both earlier invalid rows remain separately unchanged,
+consumed, and privately retained.
+
 | Operation       | Fixed workload                                                                                | Wall-clock | Peak additional memory | Output-size ceiling       |
 | --------------- | --------------------------------------------------------------------------------------------- | ---------- | ---------------------- | ------------------------- |
 | Coarse preview  | dispatch through first fully painted labelled 512 × 256 effective preview                     | `900 ms`   | `256 MiB`              | not applicable            |

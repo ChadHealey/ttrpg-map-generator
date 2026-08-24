@@ -293,14 +293,14 @@ Power Mode off, no debugger/developer tools, and no network dependency. After on
 measure five fresh processes. Sample aggregate additional RSS for the complete application process
 tree at intervals no greater than 20 ms and report every run plus median and worst.
 
-| Operation                            | Fixed limit                                                                     | Required evidence status                                                                                           |
-| ------------------------------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| Coarse preview                       | ≤900 ms and ≤256 MiB additional process-tree RSS; report ≤750 ms stretch target | **PASS** — all 15 final fresh runs passed; worst time 809.40 ms, worst RSS 157.72 MiB                              |
-| Full generation                      | ≤10 s and ≤768 MiB additional process-tree RSS                                  | **NOT RUN** — issue #95 stopped on observer-authority drift before measured dispatch                               |
-| SVG export                           | ≤3 s, ≤512 MiB, destination ≤32 MiB                                             | **NOT RUN** — completion path qualified by #101; #95 matrix remains unrun                                          |
-| PNG export                           | ≤15 s, ≤1 GiB, destination ≤64 MiB                                              | **NOT RUN** — completion path qualified by #101; #95 matrix remains unrun                                          |
-| Preview cancellation                 | Acknowledgement ≤100 ms                                                         | **INVALID, CONSUMED** — #98 original and #102 replacement rows are separately invalid/consumed; later rows not run |
-| Full-generation/SVG/PNG cancellation | Acknowledgement ≤500 ms                                                         | **NOT RUN** — #102 stopped immediately after its consumed replacement preview invalidation                         |
+| Operation                            | Fixed limit                                                                     | Required evidence status                                                                                              |
+| ------------------------------------ | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Coarse preview                       | ≤900 ms and ≤256 MiB additional process-tree RSS; report ≤750 ms stretch target | **PASS** — all 15 final fresh runs passed; worst time 809.40 ms, worst RSS 157.72 MiB                                 |
+| Full generation                      | ≤10 s and ≤768 MiB additional process-tree RSS                                  | **NOT RUN** — issue #95 stopped on observer-authority drift before measured dispatch                                  |
+| SVG export                           | ≤3 s, ≤512 MiB, destination ≤32 MiB                                             | **NOT RUN** — completion path qualified by #101; #95 matrix remains unrun                                             |
+| PNG export                           | ≤15 s, ≤1 GiB, destination ≤64 MiB                                              | **NOT RUN** — completion path qualified by #101; #95 matrix remains unrun                                             |
+| Preview cancellation                 | Acknowledgement ≤100 ms                                                         | **INVALID, CONSUMED** — #98, #102, and #103 preview/early rows remain separately invalid/consumed; later rows not run |
+| Full-generation/SVG/PNG cancellation | Acknowledgement ≤500 ms                                                         | **NOT RUN** — #103 stopped immediately after its consumed replacement preview invalidation                            |
 
 ### Issue #84 partial full-generation rerun (2026-08-23)
 
@@ -654,6 +654,27 @@ reproduce unchanged. Both historical preview/early rows remain separately **INVA
 and privately retained. The authorized target outcome is appended to the
 [issue #98 cancellation evidence](investigations/issue-98/README.md#issue-103-completed-presentation-correction)
 without making an issue #95 matrix or release-budget conclusion.
+
+The implementation commit is `e783ac5f78c2747698e106d6638644e3046450f4`. Pre-target focused,
+deterministic, E2E, visual, root, unsigned-package, privacy, fixture-surface, and diff gates passed.
+Issue #100 readiness qualified one fresh process with zero trial activity. A path-shape rejection
+before target capture configured no fixture, started no sampler, created no raw CSV, dispatched no
+operation, and consumed no row.
+
+The one authorized preview/early replacement then dispatched once. It passed the 2-ms
+acknowledgement prerequisite, stopped scheduling, previous-state/no-commit, final Accessibility,
+foreground, stable membership, and sampling authorities. The retained sampler had 63 rows across
+379.503 ms, a 6.396-ms maximum interval, exact four-role arithmetic, and both endpoints covered.
+No cancelled-preview completion signature appeared after acknowledgement. The app later recorded
+a canonically deterministic next completion, but the observer did not qualify issue #94's required
+accepted-atlas aftermath frame. The row is therefore **INVALID, CONSUMED** under `screen-capture`
+authority with reason `the deterministic accepted aftermath did not qualify`.
+
+The first retention call fail-closed on a symlinked archive-root argument; the same intact raw CSV
+was then retained through the canonical owner-only root without a row retry, and the temporary
+source was removed. Execution stopped immediately. Preview middle/late and all full rows were not
+run. Both historical invalidations remain unchanged and privately retained. There is no valid
+cancellation qualification, issue #95 matrix claim, or release-budget conclusion.
 
 ## Remote CI and milestone state
 
