@@ -854,6 +854,30 @@ separate check found no remaining candidate process. No retry or target activity
 result is **INVALID — PRE-DISPATCH STOP**. Issue #109's stop remains immutable, and issue #104
 remains blocked and **UNCONSUMED**.
 
+### Codex Computer Use focus-handoff stop
+
+Issue #111 authorized one Codex Computer Use focus-only click after direct validation of issue
+#110's durable marker. A read-only Finder inspection first proved Computer Use was callable in the
+available desktop session without a lock or authentication boundary. All focused/predecessor,
+14-dispatch, package, exact preserved-identity, root, cross-platform, privacy, surface, fixture,
+protected-evidence, and diff gates passed before target use. A fresh current-toolchain package
+rebuild was noncanonical and excluded; the preserved exact issue #110 candidate and tools directly
+matched every recorded SHA-256 identity.
+
+Exactly one unchanged-controller preflight validated the candidate/session and zero-operation
+boundary, atomically published its marker, and entered the 120,000-ms handoff. The required
+post-marker read-only Computer Use inspection did not return inside the bound, so no focus click
+occurred. The controller timed out fail-closed after 1,702 observations, cleaned the marker, and
+terminated its candidate before frame readiness, raise, or independent-observer execution.
+
+The delayed inspection returned only after the controller's terminal state and transparently
+relaunched one stray zero-operation candidate. One termination signal restored zero candidate
+processes. This extra tool-caused launch violates the exact-one-candidate contract and is not
+product or target evidence. The result is **INVALID — PRE-DISPATCH STOP** with no retry, product
+input, fixture, sampler, artifact, dispatch, measurement, issue #95 action, or issue #104 activity.
+Issue #109/#110 remain immutable, and issue #104 remains blocked and **UNCONSUMED**. The sanitized
+receipt is in the [issue #111 Computer Use stop](investigations/issue-111/README.md).
+
 ### Packaged generation-cancellation qualification stop
 
 Issue #98 added only a test observer and observer-enabled package wiring around the unchanged

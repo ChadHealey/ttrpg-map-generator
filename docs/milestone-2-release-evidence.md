@@ -293,14 +293,14 @@ Power Mode off, no debugger/developer tools, and no network dependency. After on
 measure five fresh processes. Sample aggregate additional RSS for the complete application process
 tree at intervals no greater than 20 ms and report every run plus median and worst.
 
-| Operation                            | Fixed limit                                                                     | Required evidence status                                                                                               |
-| ------------------------------------ | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| Coarse preview                       | ≤900 ms and ≤256 MiB additional process-tree RSS; report ≤750 ms stretch target | **PASS** — all 15 final fresh runs passed; worst time 809.40 ms, worst RSS 157.72 MiB                                  |
-| Full generation                      | ≤10 s and ≤768 MiB additional process-tree RSS                                  | **NOT RUN** — issue #95 stopped on observer-authority drift before measured dispatch                                   |
-| SVG export                           | ≤3 s, ≤512 MiB, destination ≤32 MiB                                             | **NOT RUN** — completion path qualified by #101; #95 matrix remains unrun                                              |
-| PNG export                           | ≤15 s, ≤1 GiB, destination ≤64 MiB                                              | **NOT RUN** — completion path qualified by #101; #95 matrix remains unrun                                              |
-| Preview cancellation                 | Acknowledgement ≤100 ms                                                         | **OUTSTANDING** — #98/#102/#103 rows remain invalid/consumed; #104 replacement remains unconsumed after readiness stop |
-| Full-generation/SVG/PNG cancellation | Acknowledgement ≤500 ms                                                         | **NOT RUN** — #103 stopped immediately after its consumed replacement preview invalidation                             |
+| Operation                            | Fixed limit                                                                     | Required evidence status                                                                                          |
+| ------------------------------------ | ------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Coarse preview                       | ≤900 ms and ≤256 MiB additional process-tree RSS; report ≤750 ms stretch target | **PASS** — all 15 final fresh runs passed; worst time 809.40 ms, worst RSS 157.72 MiB                             |
+| Full generation                      | ≤10 s and ≤768 MiB additional process-tree RSS                                  | **NOT RUN** — issue #95 stopped on observer-authority drift before measured dispatch                              |
+| SVG export                           | ≤3 s, ≤512 MiB, destination ≤32 MiB                                             | **NOT RUN** — completion path qualified by #101; #95 matrix remains unrun                                         |
+| PNG export                           | ≤15 s, ≤1 GiB, destination ≤64 MiB                                              | **NOT RUN** — completion path qualified by #101; #95 matrix remains unrun                                         |
+| Preview cancellation                 | Acknowledgement ≤100 ms                                                         | **OUTSTANDING** — #98/#102/#103 rows remain invalid/consumed; #104 replacement remains unconsumed after #111 stop |
+| Full-generation/SVG/PNG cancellation | Acknowledgement ≤500 ms                                                         | **NOT RUN** — #103 stopped immediately after its consumed replacement preview invalidation                        |
 
 ### Issue #84 partial full-generation rerun (2026-08-23)
 
@@ -898,6 +898,32 @@ fixture, sampler, artifact/destination, dispatch, measurement, issue #95 action,
 activity. Issue #109's invalid consumed stop remains unchanged, and issue #104 remains blocked and
 **UNCONSUMED**. The contract and sanitized receipt are in the
 [issue #110 latch evidence](investigations/issue-110/README.md).
+
+### Issue #111 Codex Computer Use focus-handoff stop
+
+Issue #111 authorized exactly one Codex Computer Use focus-only click after direct coordinator
+validation of issue #110's durable marker. A read-only Finder inspection first proved Computer Use
+was callable in the available desktop session without a lock or authentication boundary. All
+focused/predecessor, 14-dispatch, package, exact preserved-identity, root, cross-platform,
+privacy, surface, fixture, protected-evidence, and diff gates passed. A fresh current-toolchain
+package rebuild was noncanonical and excluded from target use; the preserved exact issue #110
+candidate and tools directly matched every recorded identity.
+
+The unchanged controller launched its exact candidate once, validated the candidate/session and
+zero-operation boundary, atomically published the marker, and entered the 120,000-ms handoff. The
+post-marker read-only Computer Use inspection did not return inside that bound, so the focus click
+was never performed. The controller timed out after 1,702 observations without Accessibility or
+Workspace frontmost, cleaned its marker, and terminated the candidate before raise or independent
+observer execution.
+
+The delayed inspection returned only after terminal cleanup and transparently relaunched one
+stray zero-operation candidate. One termination signal restored zero candidate processes. The
+extra tool-caused launch violates the exact-one-candidate contract and supplies no target or
+product evidence. The result is **INVALID — PRE-DISPATCH STOP**. There was no retry, product input,
+fixture, sampler, artifact/destination, dispatch, measurement, issue #95 action, or issue #104
+activity. Issue #109/#110 remain immutable, and issue #104 remains **UNCONSUMED**. The complete
+sanitized record is in the
+[issue #111 Computer Use stop](investigations/issue-111/README.md).
 
 ## Remote CI and milestone state
 

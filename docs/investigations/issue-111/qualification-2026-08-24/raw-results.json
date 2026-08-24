@@ -1,0 +1,158 @@
+{
+  "schemaVersion": "issue111-computer-use-focus-handoff-evidence-v1",
+  "baseCommit": "939aeaceac230941a720d61b3e5ab4ec16ca64e1",
+  "branch": "codex/issue-111-computer-use-focus-retry",
+  "status": "invalid-computer-use-preflight-stopped",
+  "target": {
+    "model": "Mac17,2",
+    "osVersion": "26.5.1",
+    "osBuild": "25F80",
+    "memoryGiB": 24
+  },
+  "identities": {
+    "candidateExecutableSha256": "5cf14de9836e9da96655572b35bb0e194d8ebc30360b6d6516f88825dcf7a15d",
+    "operatorReadyLatchControllerSha256": "2e941986cf8d3a38e25e5319d84da93daa1572c95ce329ba512cea5a3c23fb51",
+    "canonicalReadinessObserverSha256": "9662c1664d44e93f58dc690a0fb78f08eb1f4751d84fc5790256866e768811ce",
+    "cancellationObserverSha256": "dee96628ba9b9cec31a49b0bd627466a636921f1f73535f1aac421834fbc0e6d",
+    "rssSamplerSha256": "1da835b06e7b2ffbe588e99fee2692d7cfa25f9e8117641c74a5abe73acc3dfe",
+    "retentionUtilitySha256": "c3b2d618b4dbddf9568d4d39334be9a3d0b074ae0b7a5464b4b7e30c5686441b"
+  },
+  "preTargetGates": {
+    "computerUseCapability": "pass-read-only-finder-state-returned",
+    "lockedSessionAvailability": "pass-desktop-available-no-authentication-boundary",
+    "focusedOperatorReadyLatchSuite": "pass",
+    "predecessorSwiftSuites": "pass-6",
+    "packagedDispatchTests": "pass-14",
+    "observerEnabledUnsignedPackageModules": 338,
+    "freshToolchainRebuildIdentity": "noncanonical-excluded-from-target-use",
+    "exactPreservedCandidateIdentity": "pass",
+    "exactControllerObserverSamplerRetentionIdentities": "pass",
+    "rootCheck": "pass-74-files-578-tests-1-skipped-semantic-retention-24-rust-unit-28-native-recovery",
+    "crossPlatform": "pass-6-png-checks-8-fixture-sets",
+    "sourceParity": "pass-preserved-exact-artifacts-match-integrated-sources",
+    "publicPrivacyAuthorizedSurfaceFixtureProtectedEvidenceAndDiff": "pass"
+  },
+  "postOutcomeGates": {
+    "formatCheck": "pass",
+    "jsonValidation": "pass",
+    "exactCanonicalIdentityRevalidation": "pass",
+    "publicPrivacy": "pass",
+    "authorizedSurface": "pass-evidence-and-owning-docs-only",
+    "fixtureAndProductionSurface": "pass-unchanged",
+    "canonicalReadinessObserverSources": "pass-byte-unchanged-from-base",
+    "priorRawEvidence": "pass-byte-unchanged",
+    "terminalMarkerCleanup": "pass",
+    "terminalCandidateProcessCount": "pass-zero-after-stray-cleanup",
+    "diffCheck": "pass"
+  },
+  "preflight": {
+    "controllerAttemptCount": 1,
+    "status": "invalid-pre-dispatch-not-target-evidence",
+    "qualificationKind": "non-measurement-target-session-readiness",
+    "controllerVersion": "issue110-target-session-readiness-v7",
+    "invalidAuthority": "computer-use-coordination",
+    "invalidReason": "read-only Computer Use inspection did not return before the handoff timeout; no focus click occurred",
+    "operatorReadyLatch": {
+      "pathPolicy": "explicit-private-tmp-file",
+      "tokenValidated": true,
+      "existingMarkerCollisionChecked": true,
+      "atomicPublicationSucceeded": true,
+      "directCoordinatorValidationSucceeded": true,
+      "ownerOnlyModeValidated": true,
+      "cleanupAttempted": true,
+      "cleanupSucceeded": true,
+      "handoffTimeoutMilliseconds": 120000,
+      "stateTransitions": [
+        "exact-candidate-validated",
+        "zero-operation-validated",
+        "awaiting-operator-ready-published",
+        "operator-ready-marker-cleaned"
+      ]
+    },
+    "computerUse": {
+      "preRepositoryPermissionInspectionCount": 1,
+      "postMarkerCandidateInspectionCount": 1,
+      "postMarkerInspectionDisposition": "returned-after-controller-terminal-not-actionable",
+      "candidateWindowCountInDelayedInspection": 1,
+      "screenshotPixelsPublished": false,
+      "focusClickCount": 0,
+      "otherInputActionCount": 0,
+      "productInteractionCount": 0,
+      "actionTargetClass": null
+    },
+    "awaitingOperatorFocusStateEmitted": true,
+    "declaredOperatorFocusActionCount": 1,
+    "focusTransitionDetected": false,
+    "policyTimeoutMilliseconds": 120000,
+    "pollIntervalMilliseconds": 50,
+    "waitDurationMilliseconds": 120000,
+    "observationCount": 1702,
+    "initialWorkspaceFocusState": "awaiting-initial-application",
+    "terminalWorkspaceFocusState": "awaiting-initial-application",
+    "actionOrder": [
+      "exact-candidate-validated",
+      "zero-operation-validated",
+      "awaiting-operator-ready-published",
+      "awaiting-operator-focus",
+      "read-only-computer-use-inspection-requested",
+      "controller-timeout",
+      "operator-ready-marker-cleaned",
+      "delayed-inspection-returned-after-terminal",
+      "stray-candidate-terminated"
+    ],
+    "activationRequestCount": 0,
+    "frontmostWriteAttemptCount": 0,
+    "raiseAttemptCount": 0,
+    "independentObserverRunCount": 0,
+    "terminalPredicates": {
+      "accessibilityFrontmost": false,
+      "workspaceFrontmost": false,
+      "exactCandidateRetained": false,
+      "exactWindowRetained": false,
+      "visibleWindow": false,
+      "independentObserverVerified": false
+    },
+    "candidateLifecycle": {
+      "controllerCandidateLaunchCount": 1,
+      "postControllerComputerUseTransparentRelaunchCount": 1,
+      "exactlyOneCandidateLaunchSatisfied": false,
+      "controllerCandidateTerminationCompleted": true,
+      "strayCandidateTerminationSignalCount": 1,
+      "finalCandidateProcessCount": 0
+    },
+    "postExitMarkerPresent": false,
+    "retryCount": 0
+  },
+  "zeroOperationProof": {
+    "fixtureConfigured": false,
+    "samplerStarted": false,
+    "rawArtifactCount": 0,
+    "targetDestinationCreated": false,
+    "previewDispatched": false,
+    "fullGenerationDispatched": false,
+    "svgDispatched": false,
+    "pngDispatched": false,
+    "measurementCount": 0,
+    "issue95OperationCount": 0,
+    "issue104ReplacementConsumed": false
+  },
+  "preservation": {
+    "priorEvidenceReinterpreted": false,
+    "priorEvidenceOverwritten": false,
+    "issue109Status": "invalid-and-consumed",
+    "issue110Status": "invalid-and-consumed",
+    "issue104State": "unconsumed",
+    "conditionalCancellationRowsRun": 0
+  },
+  "privacy": {
+    "markerPathPublished": false,
+    "markerTokenPublished": false,
+    "localPathsPublished": false,
+    "processIdentifiersPublished": false,
+    "serviceIdentifiersPublished": false,
+    "userIdentityPublished": false,
+    "screenshotsOrPixelsPublished": false,
+    "privateArtifactLocationsPublished": false
+  },
+  "conclusion": "The exactly one authorized controller preflight validated the exact candidate/session and zero-operation prerequisites, atomically published and directly validated the durable marker, and entered the 120,000-ms focus handoff. The required read-only Computer Use inspection did not return inside that bound, so no focus click occurred. The unchanged controller timed out fail-closed after 1,702 observations, cleaned its marker, and terminated its candidate. The delayed inspection returned only after terminal cleanup and transparently relaunched one stray zero-operation candidate; one termination signal restored zero candidate processes. No retry, product input, fixture, sampler, artifact, destination, dispatch, measurement, issue #95 operation, or issue #104 consumption occurred. The extra tool-caused candidate launch invalidates the one-candidate contract. This is a pre-dispatch stop, not target or release evidence."
+}
