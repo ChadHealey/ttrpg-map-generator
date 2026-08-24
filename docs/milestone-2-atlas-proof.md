@@ -818,9 +818,14 @@ duplicate declaration, ambiguity, drift, timeout/no action, hidden or invisible 
 focus loss, raise failure, observer disagreement, or any nonzero product/measurement activity
 fails closed.
 
-The correction, one-shot runbook, privacy boundary, and current **NOT RUN** qualification state are
-in the [issue #109 focus-handoff evidence](investigations/issue-109/README.md). Issue #104 remains
-blocked and unconsumed until exactly one coordinated assisted zero-operation preflight qualifies.
+Exactly one coordinated assisted zero-operation preflight reached `awaiting-operator-focus`, then
+timed out fail-closed after 20,000 ms / 286 observations without independently detecting the exact
+candidate as Accessibility or Workspace frontmost. The controller stopped before raise or the
+independent observer, terminated the candidate, and a separate read-only check found no remaining
+candidate process. No retry or product/measurement activity occurred. The correction, one-shot
+runbook, privacy boundary, and sanitized **INVALID — PRE-DISPATCH STOP** are in the
+[issue #109 focus-handoff evidence](investigations/issue-109/README.md). Issue #104 remains blocked
+and **UNCONSUMED**.
 
 ### Packaged generation-cancellation qualification stop
 

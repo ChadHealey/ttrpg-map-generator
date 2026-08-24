@@ -301,7 +301,11 @@ application `AXFrontmost=true` write succeeded, but Accessibility and Workspace 
 real operator focus action, and independently detect exact-candidate Accessibility/Workspace
 frontmost plus a supported positive frame before `AXRaise` and the unchanged observer.
 
-The issue #109 implementation and gates must be cleanly committed before exactly one coordinated
-assisted preflight. Qualification is **NOT RUN** at this boundary. No #98 target action or issue
-#104 row is authorized; the replacement remains **UNCONSUMED**. The contract and runbook are in
-the [issue #109 focus-handoff evidence](../issue-109/README.md).
+After the issue #109 implementation and gates were cleanly committed, exactly one coordinated
+assisted preflight reached `awaiting-operator-focus` but timed out after 20,000 ms / 286 observations
+without independently detecting the exact candidate as Accessibility or Workspace frontmost. It
+stopped before raise or independent-observer verification, terminated the candidate, and a
+separate check found no remaining candidate process. No retry, fixture, sampler, artifact,
+destination, dispatch, measurement, or #98 target action ran. Issue #104 remains **UNCONSUMED**.
+The contract and sanitized stop are in the
+[issue #109 focus-handoff evidence](../issue-109/README.md).

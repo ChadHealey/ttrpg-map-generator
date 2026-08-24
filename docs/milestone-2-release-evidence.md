@@ -840,7 +840,7 @@ and every conditional row remains unauthorized/unrun. The #98/#102/#103 rows and
 through #107 stop records retain their prior SHA-256 values. Complete sanitized evidence is in the
 [issue #108 readiness stop](investigations/issue-108/README.md).
 
-### Issue #109 operator-assisted focus-handoff implementation
+### Issue #109 operator-assisted focus-handoff stop
 
 Issue #109 changes only the external issue #100/#105-#108 controller, controller-only
 stabilizer/platform support, focused tests, and owning evidence. The version-6 controller first
@@ -856,12 +856,17 @@ wrong-app, duplicate-action, timeout, ambiguity, drift, post-focus loss, hidden/
 raise/observer, and nonzero-operation path fails closed. The existing 20,000-ms timeout and 50-ms
 poll interval remain unchanged.
 
-Target qualification is **NOT RUN** at this implementation boundary. All focused/predecessor,
-14-dispatch, package/identity/root/privacy/surface/fixture/protected-evidence/diff gates must pass
-and the implementation must be cleanly committed before exactly one coordinated assisted preflight
-may begin. Issue #104 remains **UNCONSUMED**; no target operation, sampler, artifact/destination,
-measurement, issue #95 action, or cancellation conclusion is authorized. The bounded contract and
-runbook are in the
+All focused/predecessor, 14-dispatch, package/identity/root/privacy/surface/fixture/
+protected-evidence/diff gates passed and the implementation was cleanly committed before the
+coordinated assisted preflight began. Exactly one preflight reached `awaiting-operator-focus`, but
+timed out fail-closed after 20,000 ms / 286 observations without independently detecting the exact
+candidate as Accessibility or Workspace frontmost. The controller stopped before raise or the
+independent observer, terminated the candidate, and a separate read-only check found zero remaining
+candidate processes.
+
+The result is **INVALID — PRE-DISPATCH STOP**. No retry, target operation, sampler, artifact/
+destination, measurement, issue #95 action, or cancellation conclusion occurred. Issue #104
+remains **UNCONSUMED**. The bounded contract and complete sanitized receipt are in the
 [issue #109 focus-handoff evidence](investigations/issue-109/README.md).
 
 ## Remote CI and milestone state

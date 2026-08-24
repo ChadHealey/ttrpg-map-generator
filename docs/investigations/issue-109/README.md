@@ -120,15 +120,25 @@ When the controller emits `awaiting-operator-focus`, the exact operator action i
 > Click exactly once on the packaged app window or its Dock icon, then do not interact with it
 > again.
 
-The planned handshake timeout is 20,000 ms. Run exactly one fresh assisted preflight, with no retry
-regardless of outcome. Do not configure a fixture, start a sampler, create an artifact or
-destination, dispatch or measure an operation, run issue #95, or consume issue #104. Record the
-sanitized result only after the process terminates and a separate read-only check proves no invalid
-candidate remains.
+The handshake timeout was 20,000 ms. Exactly one fresh assisted preflight was authorized, with no
+retry regardless of outcome. The run configured no fixture, started no sampler, created no artifact
+or destination, dispatched or measured no operation, did not run issue #95, and did not consume
+issue #104. The sanitized result was recorded only after the process terminated and a separate
+read-only check proved no invalid candidate remained.
 
 ## Qualification state
 
-**NOT RUN.** The implementation and all required gates must be cleanly committed before the
-coordinated operator-assisted preflight begins. Issue #104 remains blocked and its replacement row
-remains **UNCONSUMED**. No cancellation, first-paint, issue #95 matrix, or release-budget conclusion
-is authorized here.
+**INVALID — PRE-DISPATCH STOP.** Exactly one coordinated operator-assisted preflight reached
+`awaiting-operator-focus`, but the controller did not independently detect the exact candidate
+becoming Accessibility or Workspace frontmost before the 20,000-ms timeout. The initial and
+terminal Workspace focus classification remained `awaiting-initial-application` across 286
+observations. The action order stopped at `exact-candidate-validated`,
+`awaiting-operator-focus`; focus-transition detection was false.
+
+The controller performed zero activation requests, `AXFrontmost` writes, raises, independent
+observer runs, fixture/sampler/artifact/destination setup, dispatches, or measurements. It
+terminated the invalid candidate, and a separate read-only process check found zero remaining
+candidate processes. No retry ran. Issue #104 remains blocked and its replacement row remains
+**UNCONSUMED**. This result is not cancellation, first-paint, issue #95 matrix, target-operation, or
+release-budget evidence. The complete sanitized receipt is in
+[`qualification-2026-08-24/raw-results.json`](qualification-2026-08-24/raw-results.json).

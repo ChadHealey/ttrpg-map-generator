@@ -214,6 +214,10 @@ independently detected through exact-candidate Accessibility/Workspace frontmost
 positive frame. No input is synthesized and no `AXFrontmost` write is performed. `AXRaise`, final
 retention, and this directory's canonical independent observer remain fail-closed requirements.
 
-The implementation boundary and exactly-one-preflight runbook are in
-[issue #109](../issue-109/README.md). Qualification remains **NOT RUN** until the implementation and
-all gates are cleanly committed; issue #104 remains **UNCONSUMED**.
+After the implementation and all gates were cleanly committed, exactly one assisted preflight
+reached `awaiting-operator-focus`. It timed out fail-closed after 20,000 ms / 286 observations
+without independently detecting the exact candidate as Accessibility or Workspace frontmost, then
+terminated the candidate. There was no retry, raise, independent observer run, fixture, sampler,
+artifact, destination, dispatch, or measurement; a separate process check found no candidate
+remaining. The implementation boundary and sanitized stop are in
+[issue #109](../issue-109/README.md). Issue #104 remains **UNCONSUMED**.
