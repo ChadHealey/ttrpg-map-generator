@@ -738,6 +738,36 @@ remains unauthorized/unrun. This is a setup stop with no cancellation-path, issu
 release-budget conclusion. Complete sanitized evidence is in the
 [issue #105 readiness stop](investigations/issue-105/README.md).
 
+### Issue #106 bounded exact-window visibility settling stop
+
+Issue #106 changed only the external issue #100/#105 readiness stabilizer, focused tests, and
+owning evidence. It preserves the 20,000-ms timeout, 50-ms polling, exact identity on every
+observation, no action before visibility, immediate drift/ambiguity/action failure, and unchanged
+independent Accessibility/`NSWorkspace` verification. The sanitized version-3 receipt adds the
+initial/terminal application-hidden, window-minimized, frame-visible, and combined-visible values
+plus pending observation count/duration.
+
+The implementation commit is `13101539eb1e0487badfb7716db06e84b91b067e`. Focused and
+predecessor Swift suites, 14 packaged-dispatch tests, the observer-enabled unsigned package, root
+gate, exact identity reproduction, privacy, authorized-surface, fixture/production-surface,
+protected-evidence, and diff gates passed. The packaged executable and issue #104
+observer/sampler/retention/readiness identities remained unchanged; the corrected controller was
+`b3108470757a17c6573f29b1df91dd52baa2a9c9635633476a1edb1d28f93226`.
+
+Exactly one fresh replacement non-measurement preflight ran. Its one activation request was
+accepted; the exact retained application/window identity survived all 295 observations. Initially
+and terminally the application was not hidden, but the window was minimized, frame-invisible, and
+not visibly ready. After 19,985 ms pending and 20,000 ms total stabilization, the controller timed
+out fail-closed with zero raise attempts, zero retryable raise failures, zero frontmost writes, and
+zero independent observer runs, then terminated the candidate. No retry occurred.
+
+No fixture was configured, sampler or raw artifact/destination created, operation dispatched or
+measured, or issue #95/#104 authority consumed. Issue #104's replacement remains **UNCONSUMED**
+and every conditional row remains unauthorized/unrun. There is no cancellation-path, first-paint,
+issue #95 matrix, or release-budget conclusion. The #98/#102/#103 rows and #104/#105 stop records
+remain byte-identical. Complete sanitized evidence is in the
+[issue #106 readiness stop](investigations/issue-106/README.md).
+
 ## Remote CI and milestone state
 
 Issue #71 recorded fresh CI evidence for the exact remote release commit

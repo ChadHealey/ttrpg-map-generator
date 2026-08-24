@@ -262,3 +262,17 @@ The issue #104 replacement remains **UNCONSUMED** and all five conditional rows 
 and unrun. The three historical invalid rows and the issue #104 stop record remain byte-identical
 and are not reinterpreted. Complete sanitized evidence is in the
 [issue #105 readiness stop](../issue-105/README.md).
+
+## Issue 106 bounded exact-window visibility settling stop
+
+Issue #106 corrected only the readiness controller's same-identity pre-action visibility-pending
+classification. All gates and identities passed before its single replacement preflight. That
+preflight retained the exact candidate/window identity but timed out fail-closed after 295 pending
+observations because the window remained minimized and frame-invisible. It performed zero raises,
+frontmost writes, independent observer runs, fixture/sampler/artifact/destination setup,
+dispatches, or measurements, and no retry ran.
+
+The #98/#102/#103 rows and #104/#105 stop records remain byte-identical. Issue #104's replacement
+remains **UNCONSUMED**, its five conditional rows remain unauthorized/unrun, and there is no new
+cancellation, issue #95 matrix, or release-budget conclusion. Complete sanitized evidence is in
+the [issue #106 readiness stop](../issue-106/README.md).

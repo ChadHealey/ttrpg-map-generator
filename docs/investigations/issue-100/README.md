@@ -152,3 +152,19 @@ fixture, sampler, artifact/destination, dispatch, measurement, or issue #104 con
 This result neither invalidates the historical issue #100 qualification nor proves the mechanism
 reusable for current fresh tasks. The complete sanitized stop and newly isolated initial-visibility
 settling limitation are in the [issue #105 evidence](../issue-105/README.md).
+
+## Issue 106 bounded exact-window visibility settling stop
+
+Issue #106 separates retained identity validity from pre-action launch visibility readiness while
+preserving issue #105's 20,000-ms/50-ms policy and every terminal readiness predicate. An exact
+same-identity window may remain visibility-pending within that bound; no `AXRaise` or frontmost
+write may occur before visibility, and invisibility after a session action remains terminal.
+
+Every pre-target gate passed, and the exact candidate plus all reused tool identities reproduced.
+The sole replacement preflight retained exactly one application/window identity for 295 pending
+observations, but the window remained minimized and frame-invisible through the 20,000-ms bound.
+The controller failed closed after 19,985 ms pending, with one activation request, zero raises,
+zero frontmost writes, and zero independent observer runs, then terminated the candidate. There
+was no retry, product setup, sampling, artifact/destination, dispatch, measurement, or issue #104
+consumption. The complete sanitized stop is in the
+[issue #106 evidence](../issue-106/README.md).

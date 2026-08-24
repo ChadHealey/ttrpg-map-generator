@@ -1,0 +1,127 @@
+{
+  "schemaVersion": "issue106-target-session-readiness-evidence-v1",
+  "status": "invalid-pre-dispatch-not-target-evidence",
+  "baseCommit": "0aa337a4bc8707675710b7d7594b06c5fc451bb3",
+  "implementationCommit": "13101539eb1e0487badfb7716db06e84b91b067e",
+  "branch": "codex/issue-106-window-visibility-settling",
+  "target": {
+    "model": "Mac17,2",
+    "processor": "Apple M5",
+    "memoryGiB": 24,
+    "osVersion": "26.5.1",
+    "osBuild": "25F80"
+  },
+  "correction": {
+    "controllerVersion": "issue106-target-session-readiness-v3",
+    "retainedIdentityValidationSeparated": true,
+    "preActionVisibilityReadinessSeparated": true,
+    "policyTimeoutMilliseconds": 20000,
+    "pollIntervalMilliseconds": 50,
+    "preActionInvisibilityPendingOnlyWithinBound": true,
+    "invisibilityAcceptedAsReadiness": false,
+    "raiseOrFrontmostWriteBeforeVisibilityPermitted": false,
+    "postActionVisibilityLossPending": false,
+    "independentAccessibilityAndWorkspaceVerificationPreserved": true,
+    "ordinaryBuildBehaviorInstalled": false
+  },
+  "identities": {
+    "candidateExecutableSha256": "5cf14de9836e9da96655572b35bb0e194d8ebc30360b6d6516f88825dcf7a15d",
+    "correctedReadinessControllerSha256": "b3108470757a17c6573f29b1df91dd52baa2a9c9635633476a1edb1d28f93226",
+    "readinessObserverSha256": "9662c1664d44e93f58dc690a0fb78f08eb1f4751d84fc5790256866e768811ce",
+    "cancellationObserverSha256": "dee96628ba9b9cec31a49b0bd627466a636921f1f73535f1aac421834fbc0e6d",
+    "rssSamplerSha256": "1da835b06e7b2ffbe588e99fee2692d7cfa25f9e8117641c74a5abe73acc3dfe",
+    "retentionUtilitySha256": "c3b2d618b4dbddf9568d4d39334be9a3d0b074ae0b7a5464b4b7e30c5686441b"
+  },
+  "preflight": {
+    "authorizedPreflightCount": 1,
+    "silentRetryCount": 0,
+    "freshProcess": true,
+    "status": "invalid-pre-dispatch-not-target-evidence",
+    "invalidAuthority": "accessibility",
+    "invalidReason": "the retained packaged candidate window did not become visibly ready before the stabilization timeout",
+    "candidateTerminated": true,
+    "candidateProcessCountAfterStop": 0,
+    "policyTimeoutMilliseconds": 20000,
+    "pollIntervalMilliseconds": 50,
+    "stabilizationDurationMilliseconds": 20000,
+    "visibilityPendingObservationCount": 295,
+    "visibilityPendingDurationMilliseconds": 19985,
+    "retainedIdentityPredicates": {
+      "exactApplicationCountEveryObservation": true,
+      "exactWindowCountEveryObservation": true,
+      "applicationIdentityRetainedEveryObservation": true,
+      "windowIdentityRetainedEveryObservation": true,
+      "executableIdentityMatchedEveryObservation": true
+    },
+    "initialVisibilityPredicates": {
+      "applicationHidden": false,
+      "windowMinimized": true,
+      "windowFrameVisible": false,
+      "visibleWindow": false
+    },
+    "terminalVisibilityPredicates": {
+      "applicationHidden": false,
+      "windowMinimized": true,
+      "windowFrameVisible": false,
+      "visibleWindow": false
+    },
+    "actionCounts": {
+      "activationRequest": 1,
+      "stabilizationObservation": 295,
+      "raiseAttempt": 0,
+      "retryableRaiseFailure": 0,
+      "frontmostWriteAttempt": 0,
+      "independentObserverRun": 0
+    },
+    "terminalPredicates": {
+      "exactCandidateRetained": false,
+      "exactWindowRetained": false,
+      "visibleWindow": false,
+      "workspaceFrontmost": false,
+      "accessibilityFrontmost": false,
+      "independentObserverVerified": false
+    }
+  },
+  "zeroOperationProof": {
+    "fixtureConfigured": false,
+    "samplerStarted": false,
+    "rawArtifactCount": 0,
+    "targetArtifactOrDestinationCreated": false,
+    "operationDispatchCount": 0,
+    "previewDispatched": false,
+    "fullGenerationDispatched": false,
+    "svgDispatched": false,
+    "pngDispatched": false,
+    "measurementCount": 0,
+    "issue104ReplacementRowConsumed": false,
+    "issue95MatrixRun": false,
+    "releaseBudgetConclusion": "none"
+  },
+  "gates": {
+    "focusedIssue106ReadinessSuite": "pass",
+    "predecessorSwiftSuites": "pass-issue90-91-94-96-97-98-100",
+    "focusedPackagedDispatch": "pass-14",
+    "observerEnabledPackagedBuild": "pass-338-modules-one-unsigned-app",
+    "exactIdentityReproduction": "pass-candidate-and-all-reused-tools",
+    "root": "pass-578-and-1-skipped-semantic-retention-24-rust-28-native",
+    "privacyAuthorizedSurfaceFixtureAndDiff": "pass"
+  },
+  "preservation": {
+    "issue98OriginalRowSha256": "4d272597c40e33dc14fe3664b055b2880c0cdb81b6c4a8b86a3fe6ef045d6437",
+    "issue102ReplacementRowSha256": "e6a15ab5a909ea4baec335b1b71688487ce397a076b0a0564a9e5a8d73de0153",
+    "issue103ReplacementRowSha256": "3dd5b5ed31b5eb024710dbce2ba588749317fdcfab0a10d56c0ea0ed3fee926a",
+    "issue104StopSha256": "76b6023836f3d230964d00e931c4775d6f222fafed906d32ee4e39b230ebd40e",
+    "issue105StopReadmeSha256": "d88124a10555a4ffc24258917151ae5ab80334d15b1a1ffed1bf76e10e6cf762",
+    "issue105StopReceiptSha256": "a48bb38ae725852f61cf17a80c7bade15a86d5a4943e8f1b8497cb15d523feca",
+    "historicalRowsReinterpreted": false,
+    "issue104ReplacementRemainsUnconsumed": true
+  },
+  "privacy": {
+    "privatePathsPublished": false,
+    "pidsPublished": false,
+    "rawCsvPublished": false,
+    "screenshotsOrPixelsPublished": false,
+    "privateArtifactsCreated": 0
+  },
+  "conclusion": "The bounded visibility-pending correction passed every pre-target gate. Its sole replacement preflight retained the exact identity but timed out fail-closed on persistent minimized/frame-invisible state before raise, frontmost write, independent verification, or product setup. Issue #104 remains blocked and unconsumed."
+}

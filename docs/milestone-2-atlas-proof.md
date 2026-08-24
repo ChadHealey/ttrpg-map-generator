@@ -740,6 +740,26 @@ unconsumed; this stop makes no cancellation, first-paint, issue #95 matrix, or r
 The sanitized correction and result are in the
 [issue #105 readiness evidence](investigations/issue-105/README.md).
 
+### Bounded exact-window visibility settling stop
+
+Issue #106 splits exact application/window/executable identity validation from pre-action launch
+visibility readiness inside issue #105's unchanged 20-second/50-ms policy. An exact retained
+window may remain pending while application-hidden, window-minimized, and positive-frame
+visibility settle. Pending invisibility is never readiness, and no `AXRaise` or `AXFrontmost`
+write occurs before visibility. Ambiguity, session or identity drift, unsupported/non-retryable
+actions, post-action visibility/foreground loss, and timeout remain fail closed. The unchanged
+independent Accessibility/`NSWorkspace` observer remains required after stabilization.
+
+Every pre-target gate and exact identity reproduction passed. The one authorized replacement
+non-measurement preflight retained the exact application/window identity for 295 observations,
+but the window remained minimized and frame-invisible through the unchanged 20,000-ms bound. The
+controller stopped with zero raise attempts, zero frontmost writes, and zero independent observer
+runs, then terminated the candidate. It configured no fixture, started no sampler, created no
+artifact/destination, dispatched or measured no operation, and consumed no issue #104 row. There
+was no retry. Issue #104 remains blocked and its replacement remains unconsumed. The sanitized
+correction and stop are in the
+[issue #106 readiness evidence](investigations/issue-106/README.md).
+
 ### Packaged generation-cancellation qualification stop
 
 Issue #98 added only a test observer and observer-enabled package wiring around the unchanged
