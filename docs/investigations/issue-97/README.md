@@ -1,9 +1,10 @@
 # Issue 97 packaged SVG/PNG completion qualification
 
-This directory closes the packaged export-completion authority gap identified by
-[issue #95](../issue-95/release-protocol-2026-08-23/README.md). It qualifies one SVG and one PNG
-success observation per gated fixture; it does not run, pass, fail, or replace issue #95's
-five-fresh-process release matrix.
+This directory records the bounded attempt to close the packaged export-completion authority gap
+identified by [issue #95](../issue-95/release-protocol-2026-08-23/README.md). The observer is
+designed to qualify one SVG and one PNG success observation per gated fixture; this run stopped
+before measured dispatch and does not run, pass, fail, or replace issue #95's five-fresh-process
+release matrix.
 
 ## Observer-only dispatch and exact reopened state
 
@@ -102,6 +103,27 @@ The unchanged issue #90 observer core, issue #94 fixture parser, issue #96 exact
 and issue #91 retention tests also run. Focused product checks cover the packaged dispatch, SVG/PNG
 orchestrators, native boundaries, export progress/aftermath, and native atomic replacement.
 
+The completed non-hardware verification record is:
+
+| Check                                         | Result                                                                                                         |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Focused export observer and product paths     | **PASS** — 6 TypeScript files, 27 tests                                                                        |
+| Issue #90, #94, #96, and #97 observer suites  | **PASS** — all Swift parser, predicate, and observer-core suites                                               |
+| Issue #91 private retention and failure paths | **PASS**                                                                                                       |
+| `corepack pnpm test:cross-platform`           | **PASS** — 6 PNG checks and 8 registered deterministic fixture sets                                            |
+| `corepack pnpm test:png-export`               | **PASS** — 68 TypeScript tests, 6 Rust unit tests, and 4 native integration tests                              |
+| `corepack pnpm test:native-recovery`          | **PASS** — 28 native recovery tests                                                                            |
+| `corepack pnpm test:e2e`                      | **PASS** — 22 TypeScript tests and 2 native workflow bridges                                                   |
+| `corepack pnpm test:visual`                   | **PASS** — 13 tests and 8 registered fixture sets                                                              |
+| `corepack pnpm check`                         | **PASS** — 74 files, 573 passed and 1 skipped TS/JS test; semantic retention; 24 Rust unit and 28 native tests |
+| Observer-enabled packaged build               | **PASS** — 335 frontend modules and one unsigned `.app`; executable hash matched the recorded candidate        |
+| Privacy, fixture-diff, and `git diff --check` | **PASS** — no fixture/render/native-production changes, private paths, raw CSVs, or whitespace errors          |
+
+This branch changes no rendered output, so the passing visual gate required no new human render
+comparison. The first root-check invocation stopped at formatting for two evidence documents; the
+documents were formatted and the complete root check was rerun from the beginning to the passing
+result above.
+
 ## Exact target-host sequence
 
 For each format/fixture pair, start a fresh observer-enabled packaged process and wait for its
@@ -135,9 +157,29 @@ retention receipt are secured.
 
 ## Qualification result
 
-Target-host qualification is recorded after the exact implementation commit is built and the six
-required single-run observations complete. These are diagnostic authority qualifications only;
-they make no SVG/PNG release-budget conclusion and do not run issue #95's matrix.
+The final bounded implementation candidate is commit
+`35a2db5cd105cd32133888f8a84c4ab59691dd1d`. Its observer-enabled packaged executable SHA-256 is
+`94b5a8b5f3fcd43a361589f35e3449c72cf3aad13610737140c3dd749737cf4e`; observer SHA-256 is
+`0c0d3979f3c6c50ffa375fe2459b53b7dd49fad58bd5e3b4b246aaf221db38bd`; sampler SHA-256 is
+`d8b07a40f50d6254faa012bc25cbb5cc8daaa4add35dec1ff670ff759fd775fd`; and retention SHA-256 is
+`87c2e27e24d559f50780383840290dfe7afdfb5cb1ab15cc33928032ceecde83`.
+
+Target-host qualification is **BLOCKED BEFORE MEASURED DISPATCH**. The raised-window successor
+could not establish the approved unmeasured visible/frontmost readiness predicate in this Codex
+desktop session. The exact target-host outcomes are:
+
+| Fixture                                | SVG                                   | PNG                |
+| -------------------------------------- | ------------------------------------- | ------------------ |
+| `milestone-2-atlas-proof`              | **NOT RUN** — readiness blocker       | **NOT RUN** — stop |
+| `milestone-2-atlas-fragmented-islands` | **NOT RUN** — global fail-closed stop | **NOT RUN** — stop |
+| `milestone-2-atlas-control-max`        | **NOT RUN** — global fail-closed stop | **NOT RUN** — stop |
+
+No attempt reached sampler start, stale-destination creation, or measured export dispatch. There
+are zero measurements, zero consumed required trials, zero raw CSVs, and zero new private retained
+artifacts. The approved owner-only archive was ready but unmodified. No SVG/PNG timing, RSS,
+completion-authority, or release-budget conclusion exists, and issue #95's matrix was not run.
+The complete sanitized stop evidence is in
+[`qualification-2026-08-23/raw-results.json`](qualification-2026-08-23/raw-results.json).
 
 One proof/SVG preparation attempt on the initial observer implementation became non-progressing
 before native save. A filesystem-only check proved that no package, stale export destination,
@@ -163,6 +205,13 @@ The AppKit-only successor also failed closed before fixture setup or sampling. T
 readiness method requires exactly one candidate Accessibility window, raises it, sets the
 application frontmost, and verifies that state before doing any preparation. This is the same class
 of visible-window setup authorized for #96 and still occurs before the measured dispatch boundary.
+
+That final readiness attempt failed because the candidate Accessibility window could not be raised.
+Issue #97 therefore stops without weakening the visible-window or foreground authority. The
+smallest blocker is target-session UI arbitration: the designated host is correct, but this Codex
+desktop session cannot give the packaged candidate the approved visible/frontmost preparation
+state. A successor may rerun the unchanged final candidate only after that external session state
+changes; it must not reinterpret these invalid attempts or claim their absent measurements.
 
 ## Privacy
 

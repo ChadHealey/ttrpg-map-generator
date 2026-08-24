@@ -1,0 +1,136 @@
+{
+  "schemaVersion": "issue97-packaged-export-qualification-evidence-v1",
+  "status": "blocked-before-measured-dispatch",
+  "target": {
+    "model": "Mac17,2",
+    "processor": "Apple M5",
+    "memoryGiB": 24,
+    "osVersion": "26.5.1",
+    "osBuild": "25F80"
+  },
+  "finalCandidate": {
+    "commit": "35a2db5cd105cd32133888f8a84c4ab59691dd1d",
+    "packagedExecutableSha256": "94b5a8b5f3fcd43a361589f35e3449c72cf3aad13610737140c3dd749737cf4e",
+    "observerSha256": "0c0d3979f3c6c50ffa375fe2459b53b7dd49fad58bd5e3b4b246aaf221db38bd",
+    "samplerSha256": "d8b07a40f50d6254faa012bc25cbb5cc8daaa4add35dec1ff670ff759fd775fd",
+    "retentionSha256": "87c2e27e24d559f50780383840290dfe7afdfb5cb1ab15cc33928032ceecde83"
+  },
+  "attempts": [
+    {
+      "attempt": "proof-svg-initial-preparation",
+      "candidateCommit": "2e922816e4119a0ce82bab7ec111fda5203f1d8e",
+      "status": "invalid",
+      "invalidAuthority": "preparation-progress",
+      "invalidReason": "observer preparation became non-progressing before native save",
+      "fixtureConfigured": true,
+      "samplerStarted": false,
+      "packageCreated": false,
+      "staleDestinationCreated": false,
+      "measuredExportDispatched": false,
+      "rawArtifactCreated": false,
+      "retentionStatus": "not-created"
+    },
+    {
+      "attempt": "proof-svg-external-readiness",
+      "candidateCommit": "ecfb7b46440f458eeb31ea6453a38eb5fe8fe8c2",
+      "status": "invalid",
+      "invalidAuthority": "screen-capture",
+      "invalidReason": "expected exactly one live frontmost packaged candidate",
+      "fixtureConfigured": false,
+      "samplerStarted": false,
+      "packageCreated": false,
+      "staleDestinationCreated": false,
+      "measuredExportDispatched": false,
+      "rawArtifactCreated": false,
+      "retentionStatus": "not-created"
+    },
+    {
+      "attempt": "proof-svg-explicit-activation-readiness",
+      "candidateCommit": "ecfb7b46440f458eeb31ea6453a38eb5fe8fe8c2",
+      "status": "invalid",
+      "invalidAuthority": "screen-capture",
+      "invalidReason": "expected exactly one live frontmost packaged candidate",
+      "fixtureConfigured": false,
+      "samplerStarted": false,
+      "packageCreated": false,
+      "staleDestinationCreated": false,
+      "measuredExportDispatched": false,
+      "rawArtifactCreated": false,
+      "retentionStatus": "not-created"
+    },
+    {
+      "attempt": "proof-svg-accessibility-frontmost-readiness",
+      "candidateCommit": "6e9a351ec1dff3ea25d87c7a45af7e099de9e24f",
+      "status": "invalid",
+      "invalidAuthority": "foreground",
+      "invalidReason": "the packaged candidate did not remain frontmost",
+      "fixtureConfigured": false,
+      "samplerStarted": false,
+      "packageCreated": false,
+      "staleDestinationCreated": false,
+      "measuredExportDispatched": false,
+      "rawArtifactCreated": false,
+      "retentionStatus": "not-created"
+    },
+    {
+      "attempt": "proof-svg-appkit-frontmost-readiness",
+      "candidateCommit": "932b3bdbc2afac58ab455075bba33e89179d3c77",
+      "status": "invalid",
+      "invalidAuthority": "foreground",
+      "invalidReason": "the packaged candidate did not remain frontmost",
+      "fixtureConfigured": false,
+      "samplerStarted": false,
+      "packageCreated": false,
+      "staleDestinationCreated": false,
+      "measuredExportDispatched": false,
+      "rawArtifactCreated": false,
+      "retentionStatus": "not-created"
+    },
+    {
+      "attempt": "proof-svg-raised-window-readiness",
+      "candidateCommit": "35a2db5cd105cd32133888f8a84c4ab59691dd1d",
+      "status": "invalid",
+      "invalidAuthority": "accessibility",
+      "invalidReason": "the exact packaged candidate window could not be raised during unmeasured readiness",
+      "fixtureConfigured": false,
+      "samplerStarted": false,
+      "packageCreated": false,
+      "staleDestinationCreated": false,
+      "measuredExportDispatched": false,
+      "rawArtifactCreated": false,
+      "retentionStatus": "not-created"
+    }
+  ],
+  "qualificationOutcomes": [
+    {
+      "fixtureId": "milestone-2-atlas-proof",
+      "svg": "not-run-readiness-blocker",
+      "png": "not-run-global-stop"
+    },
+    {
+      "fixtureId": "milestone-2-atlas-fragmented-islands",
+      "svg": "not-run-global-stop",
+      "png": "not-run-global-stop"
+    },
+    {
+      "fixtureId": "milestone-2-atlas-control-max",
+      "svg": "not-run-global-stop",
+      "png": "not-run-global-stop"
+    }
+  ],
+  "retention": {
+    "approvedOwnerOnlyArchiveReady": true,
+    "newRawArtifactCount": 0,
+    "archiveMutated": false,
+    "temporaryRawCsvCount": 0,
+    "privatePathsPublished": false
+  },
+  "conclusion": {
+    "measurementCount": 0,
+    "validQualificationCount": 0,
+    "consumedRequiredTrialCount": 0,
+    "releaseBudgetConclusion": "none",
+    "issue95MatrixRun": false,
+    "smallestBlocker": "The designated packaged candidate cannot establish the approved unmeasured frontmost visible-window readiness predicate from this Codex desktop session, so no export completion measurement may be dispatched."
+  }
+}

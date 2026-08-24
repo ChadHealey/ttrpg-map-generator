@@ -638,6 +638,50 @@ per gated fixture are recorded in the
 make no release-budget conclusion and do not authorize issue #95's matrix until its other bounded
 observer-authority children are integrated.
 
+### Approved packaged SVG/PNG completion qualification authority
+
+Issue #97 combines the exact-fixture authority above with the unchanged production
+save/unload/reopen and SVG/PNG actions. It is pinned to MacBook Pro `Mac17,2`, Apple M5, 24 GB,
+macOS 26.5.1 (`25F80`) and inherits the process-tree, executable-identity, RSS, cadence/coverage,
+private-retention, and fail-closed requirements above. It qualifies the completion path only; it
+does not run or decide issue #95's five-fresh-process release gate.
+
+- The observer-enabled package may install one preparation chord and one SVG/PNG chord only beside
+  the existing exact-fixture handler. Preparation synchronously revalidates the accepted baseline,
+  exact fixture ID, canonical seed, all nine controls, and a fresh private save target before it
+  calls the same reviewed reroll, save, unload, and generator-free reopen methods as the production
+  controls. Export dispatch synchronously revalidates exact reopened canonical/package evidence,
+  zero reopen generator calls, no preview/busy state, and the fixed private sibling destination
+  before it delegates to the unchanged `AtlasWorkflow.exportSvg` or `AtlasWorkflow.exportPng`
+  method. Ordinary packages install none of these handlers or receipts.
+- Before measured dispatch, the observer requires the existing complete exact-reopened receipt and
+  records a fresh owner-only stale regular destination's device, inode, SHA-256, and byte length.
+  From dispatch until replacement is observed, it performs no Accessibility traversal and no
+  application scroll, reveal, pan, zoom, focus, framing, or other action. It may poll only that
+  exact destination while independently monitoring foreground ownership and process-tree RSS.
+- Completion requires a same-filesystem inode-changing atomic replacement whose complete SHA-256
+  and byte length match the app's verified native receipt; absence of the format-specific native
+  temporary; exact `atlas-svg-v1` 400 by 200 mm or `atlas-png-v1` 8192 by 4096 RGB structure; the
+  unchanged 32-MiB SVG or 64-MiB PNG ceiling; and one final bounded Accessibility receipt proving
+  the same fixture, canonical accepted-state hashes, manifest fingerprint, generator-free reopen,
+  verified completion, and frontmost state. Completion of that receipt is the wall-clock and RSS
+  endpoint.
+- Accepted object identity and canonical aspect/output/coastline/scene/package evidence must remain
+  unchanged across export. Baseline and completion membership must be equal, every sampler row
+  must contain all required roles with exact aggregate arithmetic and endpoint coverage, and the
+  maximum interval remains 20 ms. Every created PID-bearing CSV is immediately handed to issue #91
+  retention, including an invalid attempt. Retention failure invalidates the attempt.
+
+Stale or in-place destinations, missing replacement, partial output, a recognizable temporary,
+bad hash/size/profile/dimensions/ceiling, accepted-state drift, foreground or helper drift, sampler
+invalidity, or retention failure yields no measurement conclusion. A required trial is consumed
+only by measured export dispatch and is never silently rerun. The implementation, target-host
+sequence, invalid attempts, qualification status, privacy boundary, and sanitized receipts are in
+the [issue #97 packaged export evidence](investigations/issue-97/README.md). Its current target-host
+run stopped before measured dispatch because the packaged candidate could not acquire the approved
+visible/frontmost readiness state in this Codex desktop session; therefore it records no valid
+SVG/PNG qualification and makes no release-budget conclusion.
+
 | Operation       | Fixed workload                                                                                | Wall-clock | Peak additional memory | Output-size ceiling       |
 | --------------- | --------------------------------------------------------------------------------------------- | ---------- | ---------------------- | ------------------------- |
 | Coarse preview  | dispatch through first fully painted labelled 512 × 256 effective preview                     | `900 ms`   | `256 MiB`              | not applicable            |

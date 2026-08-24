@@ -297,8 +297,8 @@ tree at intervals no greater than 20 ms and report every run plus median and wor
 | ------------------------------------ | ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
 | Coarse preview                       | ≤900 ms and ≤256 MiB additional process-tree RSS; report ≤750 ms stretch target | **PASS** — all 15 final fresh runs passed; worst time 809.40 ms, worst RSS 157.72 MiB  |
 | Full generation                      | ≤10 s and ≤768 MiB additional process-tree RSS                                  | **NOT RUN** — issue #95 stopped on observer-authority drift before measured dispatch   |
-| SVG export                           | ≤3 s, ≤512 MiB, destination ≤32 MiB                                             | **NOT RUN** — issue #95 confirmed no approved packaged completion authority            |
-| PNG export                           | ≤15 s, ≤1 GiB, destination ≤64 MiB                                              | **NOT RUN** — issue #95 confirmed no approved packaged completion authority            |
+| SVG export                           | ≤3 s, ≤512 MiB, destination ≤32 MiB                                             | **NOT RUN** — #97 implementation exists but target readiness blocked qualification     |
+| PNG export                           | ≤15 s, ≤1 GiB, destination ≤64 MiB                                              | **NOT RUN** — #97 stopped before any measured export dispatch                          |
 | Preview cancellation                 | Acknowledgement ≤100 ms                                                         | **NOT RUN** — issue #95 confirmed no exact-fixture acknowledgement/aftermath authority |
 | Full-generation/SVG/PNG cancellation | Acknowledgement ≤500 ms                                                         | **NOT RUN** — issue #95 confirmed no packaged acknowledgement/aftermath authority      |
 
@@ -430,6 +430,46 @@ These observations qualify only the exact-fixture preview path. They do not repl
 already passing preview release matrix, make a new release-budget conclusion, run issue #95's
 five-observation matrix, or qualify its still-missing export and cancellation authorities.
 
+### Issue #97 packaged SVG/PNG completion qualification stop (2026-08-23)
+
+Issue #97 implemented the bounded packaged export observer authorized after issue #95 without
+changing production export/render algorithms, native atomic writes, fixtures, schemas, dimensions,
+ceilings, workloads, budgets, timeouts, or production UI. Its final implementation candidate was
+`35a2db5cd105cd32133888f8a84c4ab59691dd1d`; observer-enabled packaged executable SHA-256 was
+`94b5a8b5f3fcd43a361589f35e3449c72cf3aad13610737140c3dd749737cf4e`; observer SHA-256 was
+`0c0d3979f3c6c50ffa375fe2459b53b7dd49fad58bd5e3b4b246aaf221db38bd`; sampler SHA-256 was
+`d8b07a40f50d6254faa012bc25cbb5cc8daaa4add35dec1ff670ff759fd775fd`; and retention SHA-256 was
+`87c2e27e24d559f50780383840290dfe7afdfb5cb1ab15cc33928032ceecde83`.
+
+The observer synchronously gates the three exact fixtures, drives unchanged production
+reroll/save/unload/reopen actions, proves generator-free canonical/package equality, seeds a stale
+private regular destination, and qualifies completion only after an externally observed
+inode-changing atomic replacement agrees with the native hash/size receipt, exact format/dimensions,
+unchanged ceiling, temporary absence, unchanged accepted state, foreground continuity, stable
+membership, valid ≤20-ms sampling, and immediate issue #91 retention. Focused parser, dispatch,
+orchestrator, native destination, predecessor-authority, and retention checks passed.
+
+Target-host qualification stopped before measured export dispatch. One initial preparation attempt
+became non-progressing before native save, and five bounded readiness successors failed before
+fixture setup because the packaged candidate could not acquire or retain the approved visible/
+frontmost state; the final successor could not raise its one Accessibility window. No attempt
+started the sampler, created a stale destination, dispatched SVG or PNG, produced a measurement,
+consumed a required trial, or created a raw CSV. The approved owner-only private archive remained
+ready and unmodified.
+
+| Fixture                                | SVG                                   | PNG                |
+| -------------------------------------- | ------------------------------------- | ------------------ |
+| `milestone-2-atlas-proof`              | **NOT RUN** — readiness blocker       | **NOT RUN** — stop |
+| `milestone-2-atlas-fragmented-islands` | **NOT RUN** — global fail-closed stop | **NOT RUN** — stop |
+| `milestone-2-atlas-control-max`        | **NOT RUN** — global fail-closed stop | **NOT RUN** — stop |
+
+This is an external target-session UI-arbitration blocker, not a product export failure or a
+budget result. The complete sanitized attempts, zero-dispatch proof, tool identities, privacy
+status, and smallest blocker are in the
+[issue #97 packaged export evidence](investigations/issue-97/README.md). Issue #97 does not qualify
+the export authority, does not run issue #95's matrix, and leaves all cancellation children
+untouched.
+
 ## Remote CI and milestone state
 
 Issue #71 recorded fresh CI evidence for the exact remote release commit
@@ -453,9 +493,10 @@ rule that every included issue be closed or explicitly moved out.
 
 The final release owner must perform these actions in order:
 
-1. Integrate issue #96 and implement and qualify the three remaining bounded observer-authority
-   children recorded by issue #95, then revalidate and rerun its complete successor protocol
-   without changing fixtures, workload, production behavior, hardware, or limits.
+1. Resolve issue #97's external visible/frontmost target-session blocker and obtain its six
+   packaged SVG/PNG success qualifications; implement and qualify issue #95's two cancellation
+   children; then revalidate and rerun the complete successor protocol without changing fixtures,
+   workload, production behavior, hardware, or limits.
 2. Confirm this report names the exact tested implementation commit and the handoff names the
    documentation-only commit, with complete command results, packaged receipts, artifact hashes,
    and human visual review. Do not attribute costly gates to the documentation commit unless they
