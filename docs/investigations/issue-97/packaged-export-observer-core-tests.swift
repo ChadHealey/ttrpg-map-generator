@@ -6,6 +6,9 @@ enum PackagedExportObserverCoreTests {
     try parsesExactReopenedAndCompletionReceipts()
     try rejectsStateDriftAndBadCompletion()
     try validatesOnlyCompleteAtomicReplacement()
+    matchesOnlyTheExactProductionSaveTarget()
+    matchesOnlyExactReopenedReadiness()
+    validatesTheCompleteProductionSVGPrefix()
     FileHandle.standardOutput.write(Data("issue97 export observer core tests passed\n".utf8))
   }
 
@@ -22,6 +25,12 @@ enum PackagedExportObserverCoreTests {
       expectedReopened: reopened
     )
     precondition(completion.completion?.profileId == "atlas-svg-v1")
+    let gatedCompletion = try PackagedExportStateReceiptParser.parseCompletionAfterGatedDispatch(
+      receiptJSON(phase: "svg-complete", completion: completionObject(.svg)),
+      expectedDefinition: definition,
+      expectedFormat: .svg
+    )
+    precondition(gatedCompletion.completion?.acceptedStateUnchanged == true)
   }
 
   private static func rejectsStateDriftAndBadCompletion() throws {
@@ -43,6 +52,13 @@ enum PackagedExportObserverCoreTests {
           expectedDefinition: definition,
           expectedFormat: .svg,
           expectedReopened: reopened
+        )
+      }
+      expectInvalid {
+        _ = try PackagedExportStateReceiptParser.parseCompletionAfterGatedDispatch(
+          receiptJSON(phase: "svg-complete", completion: completion),
+          expectedDefinition: definition,
+          expectedFormat: .svg
         )
       }
     }
@@ -119,6 +135,71 @@ enum PackagedExportObserverCoreTests {
         formatValid: false
       )
     }
+  }
+
+  private static func matchesOnlyTheExactProductionSaveTarget() {
+    precondition(
+      ExportSaveTargetPredicate.matches(
+        label: "SAVE TARGET · FRESH ABSOLUTE .MAPWORLD PATH",
+        domIdentifier: "mapworld-target"
+      ))
+    precondition(
+      !ExportSaveTargetPredicate.matches(
+        label: "Save target · fresh absolute .mapworld path",
+        domIdentifier: "mapworld-target"
+      ))
+    precondition(
+      !ExportSaveTargetPredicate.matches(
+        label: "SAVE TARGET · FRESH ABSOLUTE .MAPWORLD PATH",
+        domIdentifier: "other-target"
+      ))
+  }
+
+  private static func matchesOnlyExactReopenedReadiness() {
+    let target = "/private/work/atlas.mapworld"
+    let status = ExportReopenedReadinessPredicate.exactStatus
+    precondition(
+      ExportReopenedReadinessPredicate.matches(
+        targetPath: target,
+        saveTargetReadback: target,
+        saveTargetEnabled: false,
+        statusValues: [status]
+      ))
+    for values in [[], [status, status], ["REOPENED"]] {
+      precondition(
+        !ExportReopenedReadinessPredicate.matches(
+          targetPath: target,
+          saveTargetReadback: target,
+          saveTargetEnabled: false,
+          statusValues: values
+        ))
+    }
+    precondition(
+      !ExportReopenedReadinessPredicate.matches(
+        targetPath: target,
+        saveTargetReadback: "/private/work/other.mapworld",
+        saveTargetEnabled: false,
+        statusValues: [status]
+      ))
+    precondition(
+      !ExportReopenedReadinessPredicate.matches(
+        targetPath: target,
+        saveTargetReadback: target,
+        saveTargetEnabled: true,
+        statusValues: [status]
+      ))
+  }
+
+  private static func validatesTheCompleteProductionSVGPrefix() {
+    let valid = #"<?xml version="1.0" encoding="UTF-8"?>"# + "\n"
+      + #"<svg xmlns="http://www.w3.org/2000/svg" width="400mm" height="200mm" viewBox="0 0 2048 1024" data-export-profile="atlas-svg-v1" data-export-version="1"></svg>"#
+    precondition(ExportSVGFormatPredicate.matches(valid))
+    precondition(!ExportSVGFormatPredicate.matches(valid.dropFirst(39).description))
+    precondition(
+      !ExportSVGFormatPredicate.matches(
+        valid.replacingOccurrences(of: "atlas-svg-v1", with: "other-profile")
+      ))
+    precondition(!ExportSVGFormatPredicate.matches(#"<?xml version="1.0" encoding="UTF-8"?>"#))
   }
 
   private static func fixtureDefinition() -> GatedAtlasFixtureDefinition {

@@ -128,6 +128,35 @@ enum PackagedExportStateReceiptParser {
     return receipt
   }
 
+  static func parseCompletionAfterGatedDispatch(
+    _ text: String,
+    expectedDefinition: GatedAtlasFixtureDefinition,
+    expectedFormat: PackagedExportFormat
+  ) throws -> PackagedExportStateReceipt {
+    let receipt = try parse(text, completionExpected: true)
+    try validateBase(
+      receipt,
+      expectedDefinition: expectedDefinition,
+      expectedPhase: expectedFormat.phase
+    )
+    guard let completion = receipt.completion,
+      completion.format == expectedFormat,
+      completion.platform == "macos",
+      completion.profileId == expectedFormat.profileID,
+      completion.profileVersion == 1,
+      completion.dimensions == expectedFormat.dimensions,
+      completion.nativeAtomicReceiptVerified,
+      completion.acceptedStateUnchanged,
+      isDigest(completion.sha256),
+      completion.byteLength > 0,
+      completion.byteLength <= expectedFormat.maximumBytes
+    else {
+      throw ExportObserverInvalidation.state(
+        "the gated export completion contradicted its format, ceiling, native receipt, or accepted state")
+    }
+    return receipt
+  }
+
   private static func parse(
     _ text: String,
     completionExpected: Bool
@@ -233,5 +262,37 @@ enum ExportDestinationPredicate {
       throw ExportObserverInvalidation.destination(
         "the destination did not prove one complete atomic replacement matching the native receipt")
     }
+  }
+}
+
+enum ExportSaveTargetPredicate {
+  static func matches(label: String, domIdentifier: String) -> Bool {
+    label == "SAVE TARGET · FRESH ABSOLUTE .MAPWORLD PATH"
+      && domIdentifier == "mapworld-target"
+  }
+}
+
+enum ExportReopenedReadinessPredicate {
+  static let exactStatus =
+    "Reopened exact accepted atlas from native bytes with zero generator calls; SVG and PNG export are ready."
+
+  static func matches(
+    targetPath: String,
+    saveTargetReadback: String,
+    saveTargetEnabled: Bool,
+    statusValues: [String]
+  ) -> Bool {
+    saveTargetReadback == targetPath
+      && !saveTargetEnabled
+      && statusValues.filter { $0 == exactStatus }.count == 1
+  }
+}
+
+enum ExportSVGFormatPredicate {
+  static func matches(_ text: String) -> Bool {
+    text.hasPrefix(
+      #"<?xml version="1.0" encoding="UTF-8"?>"# + "\n"
+        + #"<svg xmlns="http://www.w3.org/2000/svg" width="400mm" height="200mm" viewBox="0 0 2048 1024""#
+    ) && text.contains(#"data-export-profile="atlas-svg-v1" data-export-version="1""#)
   }
 }

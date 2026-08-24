@@ -132,11 +132,6 @@ enum PackagedExportObserver {
       fixtureId: arguments.fixtureId,
       packagePath: packagePath
     )
-    let reopenedText = try accessibility.issue97ExportReceiptText()
-    let reopenedReceipt = try PackagedExportStateReceiptParser.parseReopened(
-      reopenedText,
-      expectedDefinition: fixtureDefinition
-    )
     let baselineMembership = try resolveProcesses(appPID: targetPID)
     try PreviewProcessResolver.revalidate(
       baseline: initialMembership,
@@ -172,11 +167,10 @@ enum PackagedExportObserver {
     try await Task.sleep(nanoseconds: 250_000_000)
     let completionText = try accessibility.issue97ExportReceiptText()
     let completionEpochMilliseconds = Date().timeIntervalSince1970 * 1_000
-    let completionReceipt = try PackagedExportStateReceiptParser.parseCompletion(
+    let completionReceipt = try PackagedExportStateReceiptParser.parseCompletionAfterGatedDispatch(
       completionText,
       expectedDefinition: fixtureDefinition,
-      expectedFormat: arguments.format,
-      expectedReopened: reopenedReceipt
+      expectedFormat: arguments.format
     )
     guard let completion = completionReceipt.completion else {
       throw ExportObserverInvalidation.state("the final export receipt omitted completion")
@@ -222,13 +216,13 @@ enum PackagedExportObserver {
       ),
       roleCounts: sanitizedRoleCounts(baselineMembership),
       acceptedState: ExportAcceptedStateReceipt(
-        canonicalAspectSetSha256: reopenedReceipt.canonicalAspectSetSha256,
-        canonicalOutputSetSha256: reopenedReceipt.canonicalOutputSetSha256,
-        canonicalCoastlineOutputSha256: reopenedReceipt.canonicalCoastlineOutputSha256,
-        renderSceneSha256: reopenedReceipt.renderSceneSha256,
-        manifestSha256: reopenedReceipt.manifestSha256,
-        reopenComparisonPassed: reopenedReceipt.reopenComparisonPassed,
-        reopenGeneratorInvocations: reopenedReceipt.reopenGeneratorInvocations,
+        canonicalAspectSetSha256: completionReceipt.canonicalAspectSetSha256,
+        canonicalOutputSetSha256: completionReceipt.canonicalOutputSetSha256,
+        canonicalCoastlineOutputSha256: completionReceipt.canonicalCoastlineOutputSha256,
+        renderSceneSha256: completionReceipt.renderSceneSha256,
+        manifestSha256: completionReceipt.manifestSha256,
+        reopenComparisonPassed: completionReceipt.reopenComparisonPassed,
+        reopenGeneratorInvocations: completionReceipt.reopenGeneratorInvocations,
         unchangedAfterExport: completion.acceptedStateUnchanged
       ),
       destination: ExportDestinationReceipt(
@@ -304,9 +298,9 @@ enum PackagedExportObserver {
 
     try await waitToSetSaveTarget(accessibility, targetPath: packagePath, attempts: 1_200)
     try postObserverDispatch(keyCode: 15, to: targetPID)
-    _ = try await waitForReopenedReceipt(
+    try await waitForReopenedReadiness(
       accessibility,
-      definition: fixtureDefinition,
+      packagePath: packagePath,
       attempts: 1_200
     )
   }
@@ -328,21 +322,17 @@ enum PackagedExportObserver {
       "the exact packaged fixture receipt did not reach the required preparation phase")
   }
 
-  private static func waitForReopenedReceipt(
+  private static func waitForReopenedReadiness(
     _ accessibility: AccessibilityObserver,
-    definition: GatedAtlasFixtureDefinition,
+    packagePath: String,
     attempts: Int
-  ) async throws -> PackagedExportStateReceipt {
+  ) async throws {
     for _ in 0..<attempts {
-      if let text = try? accessibility.issue97ExportReceiptText(),
-        let receipt = try? PackagedExportStateReceiptParser.parseReopened(
-          text,
-          expectedDefinition: definition
-        ) { return receipt }
+      if (try? accessibility.issue97ReopenedReadiness(packagePath)) == true { return }
       try await Task.sleep(nanoseconds: 250_000_000)
     }
     throw ExportObserverInvalidation.state(
-      "the exact generator-free reopened receipt did not become complete")
+      "the exact generator-free reopened production readiness did not become complete")
   }
 
   private static func waitToSetSaveTarget(

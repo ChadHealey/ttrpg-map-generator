@@ -65,21 +65,80 @@ extension AccessibilityObserver {
       guard (try? issue97String($0, attribute: kAXRoleAttribute)) == kAXTextFieldRole as String
       else { return false }
       let label = (try? self.label(of: $0)) ?? ""
-      let identifier = (try? issue97String($0, attribute: kAXIdentifierAttribute)) ?? ""
-      return label.contains("Save target") || identifier == "mapworld-target"
+      let domIdentifier = (try? issue97String($0, attribute: "AXDOMIdentifier")) ?? ""
+      return ExportSaveTargetPredicate.matches(
+        label: label,
+        domIdentifier: domIdentifier
+      )
     }
-    guard fields.count == 1, let field = fields.first,
-      AXUIElementSetAttributeValue(field, kAXValueAttribute as CFString, targetPath as CFString)
-        == .success
+    guard fields.count == 1, let field = fields.first else {
+      throw PreviewObserverInvalidation.accessibility(
+        "the exact production save-target field could not be resolved")
+    }
+    guard AXUIElementSetAttributeValue(
+      field,
+      kAXFocusedAttribute as CFString,
+      kCFBooleanTrue
+    ) == .success,
+      try boolean(field, attribute: kAXFocusedAttribute),
+      let source = CGEventSource(stateID: .hidSystemState),
+      let selectDown = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: true),
+      let selectUp = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: false),
+      let typeDown = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: true),
+      let typeUp = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: false)
     else {
       throw PreviewObserverInvalidation.accessibility(
-        "the production save-target field could not be set exactly")
+        "the exact production save-target field could not acquire keyboard input focus")
     }
-    let readback = try issue97String(field, attribute: kAXValueAttribute)
-    guard readback == targetPath else {
-      throw PreviewObserverInvalidation.accessibility(
-        "the production save-target field did not read back exactly")
+    selectDown.flags = .maskCommand
+    selectUp.flags = .maskCommand
+    selectDown.postToPid(applicationPID)
+    selectUp.postToPid(applicationPID)
+    Thread.sleep(forTimeInterval: 0.1)
+
+    let utf16 = Array(targetPath.utf16)
+    utf16.withUnsafeBufferPointer { buffer in
+      typeDown.keyboardSetUnicodeString(
+        stringLength: buffer.count,
+        unicodeString: buffer.baseAddress
+      )
+      typeUp.keyboardSetUnicodeString(
+        stringLength: buffer.count,
+        unicodeString: buffer.baseAddress
+      )
     }
+    typeDown.postToPid(applicationPID)
+    typeUp.postToPid(applicationPID)
+    for _ in 0..<50 {
+      if (try? issue97String(field, attribute: kAXValueAttribute)) == targetPath { return }
+      Thread.sleep(forTimeInterval: 0.01)
+    }
+    throw PreviewObserverInvalidation.accessibility(
+      "the production save-target field did not read back the exact typed path")
+  }
+
+  func issue97ReopenedReadiness(_ targetPath: String) throws -> Bool {
+    let snapshot = try issue97Snapshot()
+    let fields = snapshot.filter {
+      guard (try? issue97String($0, attribute: kAXRoleAttribute)) == kAXTextFieldRole as String
+      else { return false }
+      let label = (try? self.label(of: $0)) ?? ""
+      let domIdentifier = (try? issue97String($0, attribute: "AXDOMIdentifier")) ?? ""
+      return ExportSaveTargetPredicate.matches(label: label, domIdentifier: domIdentifier)
+    }
+    guard fields.count == 1, let field = fields.first else { return false }
+    let statusValues = snapshot.compactMap { element -> String? in
+      guard (try? issue97String(element, attribute: kAXRoleAttribute))
+        == kAXStaticTextRole as String
+      else { return nil }
+      return try? issue97String(element, attribute: kAXValueAttribute)
+    }
+    return ExportReopenedReadinessPredicate.matches(
+      targetPath: targetPath,
+      saveTargetReadback: try issue97String(field, attribute: kAXValueAttribute),
+      saveTargetEnabled: try boolean(field, attribute: kAXEnabledAttribute),
+      statusValues: statusValues
+    )
   }
 
   func issue97FixtureReceipt(
@@ -239,9 +298,7 @@ enum Issue97Destination {
     switch format {
     case .svg:
       guard let text = String(data: data, encoding: .utf8) else { return false }
-      return text.hasPrefix(
-        #"<svg xmlns="http://www.w3.org/2000/svg" width="400mm" height="200mm" viewBox="0 0 2048 1024""#
-      ) && text.contains(#"data-export-profile="atlas-svg-v1" data-export-version="1""#)
+      return ExportSVGFormatPredicate.matches(text)
     case .png:
       guard data.count >= 33 else { return false }
       let bytes = [UInt8](data.prefix(33))
