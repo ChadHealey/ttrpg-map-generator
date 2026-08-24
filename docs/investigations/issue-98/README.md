@@ -192,3 +192,38 @@ rows were not run; there was no row retry, no issue #95 matrix activity, and no 
 conclusion. Both historical rows and private artifacts remain separately unchanged, **INVALID,
 CONSUMED**, and owner-only. The complete sanitized receipt is in
 [`operation-signature-qualification-2026-08-23/raw-results.json`](operation-signature-qualification-2026-08-23/raw-results.json).
+
+## Issue 104 deterministic-aftermath accepted-canvas rebind
+
+Issue #104 corrects only the deterministic-aftermath portion of the issue #98 observer, its
+focused tests, and this owning documentation. Observer version
+`packaged-generation-cancellation-host-observer-v4` leaves the issue #103 cancellation
+acknowledgement and one-second operation-specific post-acknowledgement presentation predicates
+unchanged.
+
+After the app reports `aftermath-complete` with the canonical next-completion hashes, the observer
+first requires issue #94's accepted Accessibility authority: exactly one accepted canvas label and
+caption, no disposable-preview label or caption, disabled **Accept full atlas**, the exact accepted
+fixture receipt, and frontmost state. It then independently revalidates the same application,
+window, executable, and four-role membership identities; resolves exactly one current accepted
+canvas AX element; converts that element's current bounds to a positive crop contained by the
+current candidate window; and starts a fresh ScreenCaptureKit stream on that crop. It performs no
+scroll, reveal, focus, framing, or other state-changing application action after aftermath
+dispatch.
+
+The new stream is explicitly post-completion, non-timing evidence. It makes no first-paint or
+cancellation-latency claim and uses no dispatch/baseline comparison to qualify. At least one
+complete foreground frame must contain issue #94's unchanged minimum accepted land, water, and ink
+populations while remaining at or below both unchanged disposable-preview palette maxima.
+Candidate identity, foreground, membership, app receipt, Accessibility, cancellation sampling and
+endpoint coverage, and later owner-only retention remain separate fail-closed authorities. The
+sanitized valid receipt records the complete-frame count, current crop dimensions, fixed capture
+dimensions, all five palette counts, palette predicate results, and whether the pre-operation
+canvas pixels changed during issue #103's independent presentation window.
+
+Focused tests reject reuse of stale geometry, zero or multiple current accepted canvases,
+out-of-window or empty crops, every missing accepted-palette population, either excess preview
+palette, complete-frame absence, foreground loss, and application/window/executable identity drift.
+The three historical preview/early rows and their owner-only artifacts remain byte-identical,
+separately **INVALID, CONSUMED**, and non-authoritative. Target outcomes are appended only after
+the authorized one-shot sequence.

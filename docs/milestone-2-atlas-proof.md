@@ -778,6 +778,21 @@ middle/late and every full row remain unrun. There is no cancellation-path autho
 matrix claim, or release-budget conclusion. Both earlier invalid rows remain separately unchanged,
 consumed, and privately retained.
 
+Issue #104 supersedes only the deterministic-aftermath accepted-canvas observation that invalidated
+the issue #103 replacement. After the app's canonical `aftermath-complete` receipt and issue #94's
+accepted Accessibility authority both qualify, the observer re-resolves exactly one current
+visible accepted-canvas AX element and its current window-relative crop. It then starts a fresh
+post-completion capture stream on that crop and requires at least one complete foreground frame
+with issue #94's unchanged accepted land/water/ink and disposable-preview rejection populations.
+This is non-timing aftermath evidence: it establishes neither first paint nor cancellation
+acknowledgement timing, and it performs no post-dispatch action that alters product state.
+Application/window/executable identity, foreground, four-role membership, app/Accessibility
+authority, cancellation sampling/endpoints, deterministic canonical output, and owner-only
+retention remain independent and fail closed. Sanitized evidence records frame count, crop and
+capture dimensions, palette counts, and the pre-operation pixel-change diagnostic. The three
+earlier preview/early rows remain byte-identical, separately **INVALID, CONSUMED**, privately
+retained, and non-authoritative.
+
 | Operation       | Fixed workload                                                                                | Wall-clock | Peak additional memory | Output-size ceiling       |
 | --------------- | --------------------------------------------------------------------------------------------- | ---------- | ---------------------- | ------------------------- |
 | Coarse preview  | dispatch through first fully painted labelled 512 × 256 effective preview                     | `900 ms`   | `256 MiB`              | not applicable            |

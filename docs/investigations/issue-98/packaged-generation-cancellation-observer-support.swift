@@ -32,6 +32,26 @@ struct GenerationCancellationVisualReceipt: Codable {
   let foregroundUninterrupted: Bool
 }
 
+struct GenerationCancellationAftermathVisualReceipt: Codable {
+  let evidenceKind: String
+  let firstPaintClaim: Bool
+  let currentAcceptedCanvasReresolved: Bool
+  let freshPostCompletionCaptureStream: Bool
+  let completeFrameCount: Int
+  let cropWidthPoints: Int
+  let cropHeightPoints: Int
+  let captureWidthPixels: Int
+  let captureHeightPixels: Int
+  let acceptedLandPaletteCount: Int
+  let acceptedWaterPaletteCount: Int
+  let acceptedInkPaletteCount: Int
+  let previewLandPaletteCount: Int
+  let previewWaterPaletteCount: Int
+  let acceptedPaletteQualified: Bool
+  let previewPaletteRejected: Bool
+  let preOperationCanvasPixelsChanged: Bool
+}
+
 struct GenerationCancellationObserverReceipt: Codable {
   let observerVersion: String
   let status: String
@@ -40,6 +60,7 @@ struct GenerationCancellationObserverReceipt: Codable {
   let trial: GenerationCancellationTrialReceipt?
   let roleCounts: [String: Int]?
   let visual: GenerationCancellationVisualReceipt?
+  let aftermathVisual: GenerationCancellationAftermathVisualReceipt?
   let executableIdentity: ExecutableIdentityReceipt?
   let membershipRevalidated: Bool
   let measurement: MeasurementReceipt?
@@ -55,6 +76,7 @@ struct GenerationCancellationObserverReceipt: Codable {
       trial: nil,
       roleCounts: nil,
       visual: nil,
+      aftermathVisual: nil,
       executableIdentity: nil,
       membershipRevalidated: false,
       measurement: nil,

@@ -127,6 +127,116 @@ final class CancellationQuiescenceFrameOutput: NSObject, SCStreamOutput, SCStrea
   }
 }
 
+final class DeterministicAftermathFrameOutput: NSObject, SCStreamOutput, SCStreamDelegate,
+  @unchecked Sendable
+{
+  let queue = DispatchQueue(label: "issue104.generation-cancellation.aftermath-capture")
+  private let lock = NSLock()
+  private let foreground: ForegroundMonitor
+  private var completeFrameCount = 0
+  private var qualifyingObservation: AcceptedAtlasPixelObservation?
+
+  init(foreground: ForegroundMonitor) {
+    self.foreground = foreground
+  }
+
+  var summary: GenerationCancellationAftermathFrameSummary {
+    lock.withLock {
+      GenerationCancellationAftermathFrameSummary(
+        completeFrameCount: completeFrameCount,
+        qualifyingObservation: qualifyingObservation
+      )
+    }
+  }
+  var foregroundIntact: Bool { foreground.isIntact }
+
+  func stream(
+    _ stream: SCStream,
+    didOutputSampleBuffer sampleBuffer: CMSampleBuffer,
+    of outputType: SCStreamOutputType
+  ) {
+    guard outputType == .screen, sampleBuffer.isValid,
+      let attachments = CMSampleBufferGetSampleAttachmentsArray(
+        sampleBuffer,
+        createIfNecessary: false
+      ) as? [[SCStreamFrameInfo: Any]],
+      let frame = attachments.first,
+      let statusValue = frame[.status] as? Int,
+      SCFrameStatus(rawValue: statusValue) == .complete,
+      let pixelBuffer = sampleBuffer.imageBuffer,
+      CVPixelBufferGetWidth(pixelBuffer) == cancellationCaptureWidth,
+      CVPixelBufferGetHeight(pixelBuffer) == cancellationCaptureHeight
+    else { return }
+    let observation = inspectPixels(pixelBuffer)
+    lock.withLock {
+      completeFrameCount += 1
+      guard qualifyingObservation == nil,
+        GenerationCancellationAftermathFramePredicate.qualifies(
+          complete: true,
+          candidate: observation,
+          foregroundIntact: foreground.isIntact
+        )
+      else { return }
+      qualifyingObservation = observation
+    }
+  }
+
+  func stream(_ stream: SCStream, didStopWithError error: any Error) {}
+
+  private func inspectPixels(_ buffer: CVPixelBuffer) -> AcceptedAtlasPixelObservation {
+    CVPixelBufferLockBaseAddress(buffer, .readOnly)
+    defer { CVPixelBufferUnlockBaseAddress(buffer, .readOnly) }
+    guard let base = CVPixelBufferGetBaseAddress(buffer) else {
+      return AcceptedAtlasPixelObservation(
+        hash: 0,
+        landLike: 0,
+        waterLike: 0,
+        inkLike: 0,
+        previewLandLike: 0,
+        previewWaterLike: 0
+      )
+    }
+    let bytes = base.assumingMemoryBound(to: UInt8.self)
+    let bytesPerRow = CVPixelBufferGetBytesPerRow(buffer)
+    var hash: UInt64 = 14_695_981_039_346_656_037
+    var previewLandLike = 0
+    var previewWaterLike = 0
+    var acceptedLandLike = 0
+    var acceptedWaterLike = 0
+    var acceptedInkLike = 0
+    for y in 0..<cancellationCaptureHeight {
+      let row = bytes.advanced(by: y * bytesPerRow)
+      for offset in 0..<(cancellationCaptureWidth * 4) {
+        hash ^= UInt64(row[offset])
+        hash &*= 1_099_511_628_211
+      }
+      for x in 0..<cancellationCaptureWidth {
+        let pixel = row.advanced(by: x * 4)
+        let blue = Int(pixel[0])
+        let green = Int(pixel[1])
+        let red = Int(pixel[2])
+        if near(red, 220) && near(green, 207) && near(blue, 171) { previewLandLike += 1 }
+        if near(red, 180) && near(green, 202) && near(blue, 199) { previewWaterLike += 1 }
+        if near(red, 201) && near(green, 195) && near(blue, 154) { acceptedLandLike += 1 }
+        if near(red, 175) && near(green, 190) && near(blue, 192) { acceptedWaterLike += 1 }
+        if near(red, 40) && near(green, 42) && near(blue, 36) { acceptedInkLike += 1 }
+      }
+    }
+    return AcceptedAtlasPixelObservation(
+      hash: hash,
+      landLike: acceptedLandLike,
+      waterLike: acceptedWaterLike,
+      inkLike: acceptedInkLike,
+      previewLandLike: previewLandLike,
+      previewWaterLike: previewWaterLike
+    )
+  }
+
+  private func near(_ observed: Int, _ expected: Int) -> Bool {
+    abs(observed - expected) <= 10
+  }
+}
+
 extension AccessibilityObserver {
   func generationCancellationReceipt(
     definition: GatedAtlasFixtureDefinition,
@@ -184,6 +294,27 @@ extension AccessibilityObserver {
     return previewImageCount == 1 && previewCaptionCount == 1 && acceptedCaptionCount == 0
   }
 
+  func currentAcceptedCanvasCrop(windowFrame: CGRect) throws
+    -> GenerationCancellationAftermathCanvasResolution
+  {
+    guard AXIsProcessTrusted() else {
+      throw PreviewObserverInvalidation.accessibility("Accessibility permission was not granted")
+    }
+    guard try boolean(application, attribute: kAXFrontmostAttribute) else {
+      throw PreviewObserverInvalidation.candidateNotFrontmost
+    }
+    let acceptedCanvasFrames = try cancellationSnapshot().compactMap { element -> CGRect? in
+      guard (try? string(element, attribute: kAXRoleAttribute)) == kAXImageRole as String,
+        (try? label(of: element)) == acceptedAtlasLabel
+      else { return nil }
+      return try cancellationFrame(of: element)
+    }
+    return try GenerationCancellationAftermathCanvasResolver.resolve(
+      acceptedCanvasFrames: acceptedCanvasFrames,
+      windowFrame: windowFrame
+    )
+  }
+
   private func cancellationSnapshot() throws -> [AXUIElement] {
     var result: [AXUIElement] = []
     var pending: [AXUIElement] = [application]
@@ -210,5 +341,39 @@ extension AccessibilityObserver {
       }
     }
     return result
+  }
+
+  private func cancellationFrame(of element: AXUIElement) throws -> CGRect {
+    guard let positionValue: AXValue = try cancellationValue(
+      element,
+      attribute: kAXPositionAttribute
+    ),
+      let sizeValue: AXValue = try cancellationValue(
+        element,
+        attribute: kAXSizeAttribute
+      )
+    else {
+      throw PreviewObserverInvalidation.accessibility(
+        "current accepted canvas bounds were unavailable"
+      )
+    }
+    var point = CGPoint.zero
+    var size = CGSize.zero
+    guard AXValueGetValue(positionValue, .cgPoint, &point),
+      AXValueGetValue(sizeValue, .cgSize, &size)
+    else {
+      throw PreviewObserverInvalidation.accessibility("current accepted canvas bounds were invalid")
+    }
+    return CGRect(origin: point, size: size)
+  }
+
+  private func cancellationValue<T>(_ element: AXUIElement, attribute: String) throws -> T? {
+    var raw: CFTypeRef?
+    let error = AXUIElementCopyAttributeValue(element, attribute as CFString, &raw)
+    if error == .noValue || error == .attributeUnsupported { return nil }
+    guard error == .success else {
+      throw PreviewObserverInvalidation.accessibility("Accessibility attribute read failed")
+    }
+    return raw as? T
   }
 }

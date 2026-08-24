@@ -10,7 +10,7 @@ let observerSchemaVersion = "packaged-preview-observer-v2"
 let exactFixturePreviewObserverSchemaVersion = "packaged-exact-preview-observer-v1"
 let fullAtlasObserverSchemaVersion = "packaged-full-atlas-observer-v1"
 let generationCancellationObserverSchemaVersion =
-  "packaged-generation-cancellation-host-observer-v3"
+  "packaged-generation-cancellation-host-observer-v4"
 let targetModel = "Mac17,2"
 let targetOSVersion = "26.5.1"
 let targetOSBuild = "25F80"
@@ -89,6 +89,11 @@ enum PackagedGenerationCancellationObserver {
     guard candidateSha256 == arguments.expectedCandidateSha256 else {
       throw PreviewObserverInvalidation.processRole("the candidate executable identity did not match")
     }
+    let expectedCandidateIdentity = GenerationCancellationAftermathCandidateIdentity(
+      applicationPID: target.applicationPID,
+      windowID: target.window.windowID,
+      executableSha256: candidateSha256
+    )
     let initialMembership = try resolveProcesses(appPID: target.applicationPID)
     guard initialMembership.coalition.bundleIdentifier == arguments.bundleIdentifier else {
       throw PreviewObserverInvalidation.launchctl("candidate bundle ID did not match its coalition")
@@ -190,22 +195,7 @@ enum PackagedGenerationCancellationObserver {
     )
     try await cancellationStream.stopCapture()
 
-    let aftermathOutput = AcceptedAtlasFrameOutput(foreground: foreground)
-    let aftermathStream = try makeStream(
-      window: target.window,
-      crop: crop,
-      output: aftermathOutput,
-      queue: aftermathOutput.queue
-    )
-    try await aftermathStream.startCapture()
-    try await waitForFullBaseline(aftermathOutput)
-    aftermathOutput.markDispatched(at: mach_absolute_time())
     try postObserverDispatch(keyCode: 5, to: target.applicationPID)
-    let acceptedFrame = try await waitForAcceptedAtlasFrame(aftermathOutput)
-    let acceptedAccessibility = try await waitForAcceptedAtlasReceipt(
-      accessibility,
-      definition: definition
-    )
     let aftermath = try await waitForCancellationReceipt(
       accessibility,
       definition: definition,
@@ -213,15 +203,74 @@ enum PackagedGenerationCancellationObserver {
       safePoint: arguments.safePoint,
       status: "aftermath-complete"
     )
-    guard foreground.isIntact, acceptedAccessibility.frontmost,
-      let canonical = aftermath.nextCompletion
-    else { throw PreviewObserverInvalidation.candidateNotFrontmost }
+    guard let canonical = aftermath.nextCompletion else {
+      throw PreviewObserverInvalidation.accessibility(
+        "the canonical deterministic-aftermath receipt was incomplete"
+      )
+    }
+    let acceptedAccessibility = try await waitForAcceptedAtlasReceipt(
+      accessibility,
+      definition: definition
+    )
+    guard foreground.isIntact, acceptedAccessibility.frontmost else {
+      throw PreviewObserverInvalidation.candidateNotFrontmost
+    }
+
+    let reboundTarget = try await captureTarget(bundleIdentifier: arguments.bundleIdentifier)
+    let reboundCandidateSha256 = try ExecutableIdentityValidator.sha256(
+      atPath: try executablePath(for: reboundTarget.applicationPID).path
+    )
+    try GenerationCancellationAftermathCandidateIdentityValidator.validate(
+      expected: expectedCandidateIdentity,
+      current: GenerationCancellationAftermathCandidateIdentity(
+        applicationPID: reboundTarget.applicationPID,
+        windowID: reboundTarget.window.windowID,
+        executableSha256: reboundCandidateSha256
+      )
+    )
+    let currentCanvas = try accessibility.currentAcceptedCanvasCrop(
+      windowFrame: reboundTarget.window.frame
+    )
+    let aftermathMembership = try resolveProcesses(appPID: reboundTarget.applicationPID)
+    try PreviewProcessResolver.revalidate(
+      baseline: baselineMembership,
+      completion: aftermathMembership
+    )
+
+    let aftermathOutput = DeterministicAftermathFrameOutput(foreground: foreground)
+    let aftermathStream = try makeStream(
+      window: reboundTarget.window,
+      crop: currentCanvas.crop,
+      output: aftermathOutput,
+      queue: aftermathOutput.queue
+    )
+    try await aftermathStream.startCapture()
+    let acceptedObservation = try await waitForDeterministicAftermathFrame(aftermathOutput)
+    try await aftermathStream.stopCapture()
+
+    let finalTarget = try await captureTarget(bundleIdentifier: arguments.bundleIdentifier)
+    let finalCandidateSha256 = try ExecutableIdentityValidator.sha256(
+      atPath: try executablePath(for: finalTarget.applicationPID).path
+    )
+    try GenerationCancellationAftermathCandidateIdentityValidator.validate(
+      expected: expectedCandidateIdentity,
+      current: GenerationCancellationAftermathCandidateIdentity(
+        applicationPID: finalTarget.applicationPID,
+        windowID: finalTarget.window.windowID,
+        executableSha256: finalCandidateSha256
+      )
+    )
     let completionMembership = try resolveProcesses(appPID: target.applicationPID)
     try PreviewProcessResolver.revalidate(
       baseline: baselineMembership,
       completion: completionMembership
     )
-    try await aftermathStream.stopCapture()
+    try PreviewProcessResolver.revalidate(
+      baseline: aftermathMembership,
+      completion: completionMembership
+    )
+    guard foreground.isIntact else { throw PreviewObserverInvalidation.candidateNotFrontmost }
+    let aftermathFrameSummary = aftermathOutput.summary
 
     return GenerationCancellationObserverReceipt(
       observerVersion: generationCancellationObserverSchemaVersion,
@@ -264,10 +313,28 @@ enum PackagedGenerationCancellationObserver {
         pixelsChangedDiagnostic: presentation.pixelsChanged,
         completedPresentationSignatureDetected:
           presentation.completedPresentationSignatureDetected,
-        acceptedAftermathFrameQualified:
-          acceptedFrame.observation.hash != aftermathOutput.baselineHash,
+        acceptedAftermathFrameQualified: true,
         acceptedAccessibilityQualified: true,
         foregroundUninterrupted: foreground.isIntact
+      ),
+      aftermathVisual: GenerationCancellationAftermathVisualReceipt(
+        evidenceKind: "post-completion-non-timing",
+        firstPaintClaim: false,
+        currentAcceptedCanvasReresolved: true,
+        freshPostCompletionCaptureStream: true,
+        completeFrameCount: aftermathFrameSummary.completeFrameCount,
+        cropWidthPoints: Int(currentCanvas.crop.width.rounded()),
+        cropHeightPoints: Int(currentCanvas.crop.height.rounded()),
+        captureWidthPixels: cancellationCaptureWidth,
+        captureHeightPixels: cancellationCaptureHeight,
+        acceptedLandPaletteCount: acceptedObservation.landLike,
+        acceptedWaterPaletteCount: acceptedObservation.waterLike,
+        acceptedInkPaletteCount: acceptedObservation.inkLike,
+        previewLandPaletteCount: acceptedObservation.previewLandLike,
+        previewWaterPaletteCount: acceptedObservation.previewWaterLike,
+        acceptedPaletteQualified: true,
+        previewPaletteRejected: true,
+        preOperationCanvasPixelsChanged: presentation.pixelsChanged
       ),
       executableIdentity: ExecutableIdentityReceipt(
         candidateSha256: candidateSha256,
@@ -341,23 +408,29 @@ enum PackagedGenerationCancellationObserver {
     throw PreviewObserverInvalidation.capture("the exact preview setup did not qualify")
   }
 
-  private static func waitForFullBaseline(_ output: AcceptedAtlasFrameOutput) async throws {
-    for _ in 0..<500 {
-      if output.baselineHash != nil { return }
-      try await Task.sleep(nanoseconds: 10_000_000)
-    }
-    throw PreviewObserverInvalidation.capture("no deterministic-aftermath baseline frame arrived")
-  }
-
-  private static func waitForAcceptedAtlasFrame(_ output: AcceptedAtlasFrameOutput) async throws
-    -> AcceptedAtlasQualifyingFrame
-  {
+  private static func waitForDeterministicAftermathFrame(
+    _ output: DeterministicAftermathFrameOutput
+  ) async throws -> AcceptedAtlasPixelObservation {
     for _ in 0..<2_000 {
-      if let frame = output.qualifyingFrame { return frame }
-      if !output.foregroundIntact { throw PreviewObserverInvalidation.candidateNotFrontmost }
+      let summary = output.summary
+      if summary.qualifyingObservation != nil {
+        return try GenerationCancellationAftermathFrameValidator.validate(
+          summary,
+          foregroundIntact: output.foregroundIntact
+        )
+      }
+      if !output.foregroundIntact {
+        return try GenerationCancellationAftermathFrameValidator.validate(
+          summary,
+          foregroundIntact: false
+        )
+      }
       try await Task.sleep(nanoseconds: 10_000_000)
     }
-    throw PreviewObserverInvalidation.capture("the deterministic accepted aftermath did not qualify")
+    return try GenerationCancellationAftermathFrameValidator.validate(
+      output.summary,
+      foregroundIntact: output.foregroundIntact
+    )
   }
 
   private static func waitForFixtureReceipt(

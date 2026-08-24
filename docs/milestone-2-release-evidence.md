@@ -676,6 +676,24 @@ source was removed. Execution stopped immediately. Preview middle/late and all f
 run. Both historical invalidations remain unchanged and privately retained. There is no valid
 cancellation qualification, issue #95 matrix claim, or release-budget conclusion.
 
+### Issue #104 deterministic-aftermath accepted-canvas correction
+
+Issue #104 changes only the issue #98 observer, focused tests, and owning evidence. Observer
+version `packaged-generation-cancellation-host-observer-v4` preserves issue #103's cancellation
+acknowledgement and post-acknowledgement completed-presentation predicates. Deterministic aftermath
+now first requires the app's canonical `aftermath-complete` receipt and issue #94's accepted
+Accessibility state, then revalidates candidate and membership identity, re-resolves the current
+accepted-canvas AX element and current window-relative crop, and starts a fresh post-completion
+capture stream on that crop.
+
+The capture is explicitly non-timing evidence and makes no first-paint claim. It requires a
+complete foreground frame with the unchanged issue #94 accepted land/water/ink populations and
+disposable-preview palette rejection. Focused tests cover stale/current crop resolution, AX/crop
+ambiguity, accepted and preview palettes, frame absence, foreground loss, and candidate identity
+drift. All three historical preview/early rows and their private artifacts remain byte-identical,
+separately **INVALID, CONSUMED**, and non-authoritative. Target results are appended only after the
+implementation and all pre-target gates are committed.
+
 ## Remote CI and milestone state
 
 Issue #71 recorded fresh CI evidence for the exact remote release commit

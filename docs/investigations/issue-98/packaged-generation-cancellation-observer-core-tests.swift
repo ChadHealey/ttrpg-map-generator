@@ -12,6 +12,11 @@ enum PackagedGenerationCancellationObserverCoreTests {
     try rejectsLateAcceptedAtlasCompletionEvenAfterStateReturns()
     try rejectsIndependentPostAcknowledgementFailures()
     try preservesIndependentMembershipAndSamplingFailures()
+    try resolvesTheCurrentAcceptedCanvasInsteadOfTheStaleCrop()
+    try rejectsCurrentAcceptedCanvasAmbiguityAndInvalidCrops()
+    try qualifiesTheAcceptedAftermathPaletteAndRejectsPreviewPalette()
+    try rejectsAftermathFrameAbsenceAndForegroundLoss()
+    try rejectsAftermathCandidateIdentityDrift()
     print("packaged-generation-cancellation-observer-core-tests: passed")
   }
 
@@ -216,6 +221,168 @@ enum PackagedGenerationCancellationObserverCoreTests {
       expect(invalidation.authority == "rss-sampler", "sampler authority")
       expect(invalidation.description.contains("cadence"), "sampler reason")
     }
+  }
+
+  private static func resolvesTheCurrentAcceptedCanvasInsteadOfTheStaleCrop() throws {
+    let windowFrame = CGRect(x: 100, y: 200, width: 1_000, height: 700)
+    let stalePreOperationCrop = CGRect(x: 40, y: 50, width: 512, height: 256)
+    let resolution = try GenerationCancellationAftermathCanvasResolver.resolve(
+      acceptedCanvasFrames: [CGRect(x: 260, y: 380, width: 640, height: 320)],
+      windowFrame: windowFrame
+    )
+    expect(
+      resolution.crop == CGRect(x: 160, y: 180, width: 640, height: 320),
+      "current AX geometry is converted to a window-relative crop"
+    )
+    expect(resolution.crop != stalePreOperationCrop, "the stale pre-operation crop is not reused")
+  }
+
+  private static func rejectsCurrentAcceptedCanvasAmbiguityAndInvalidCrops() throws {
+    let windowFrame = CGRect(x: 100, y: 200, width: 1_000, height: 700)
+    for frames in [
+      [CGRect](),
+      [
+        CGRect(x: 200, y: 300, width: 512, height: 256),
+        CGRect(x: 210, y: 310, width: 512, height: 256),
+      ],
+      [CGRect(x: 50, y: 300, width: 512, height: 256)],
+      [CGRect(x: 200, y: 300, width: 0, height: 256)],
+    ] {
+      do {
+        _ = try GenerationCancellationAftermathCanvasResolver.resolve(
+          acceptedCanvasFrames: frames,
+          windowFrame: windowFrame
+        )
+        throw TestFailure(message: "expected current accepted-canvas rejection")
+      } catch let invalidation as PreviewObserverInvalidation {
+        expect(invalidation.authority == "accessibility", "AX/crop authority")
+      }
+    }
+  }
+
+  private static func qualifiesTheAcceptedAftermathPaletteAndRejectsPreviewPalette() throws {
+    let accepted = acceptedObservation()
+    expect(
+      GenerationCancellationAftermathFramePredicate.qualifies(
+        complete: true,
+        candidate: accepted,
+        foregroundIntact: true
+      ),
+      "accepted aftermath palette"
+    )
+    for rejected in [
+      acceptedObservation(land: 99),
+      acceptedObservation(water: 99),
+      acceptedObservation(ink: 7),
+    ] {
+      expect(
+        !GenerationCancellationAftermathFramePredicate.qualifies(
+          complete: true,
+          candidate: rejected,
+          foregroundIntact: true
+        ),
+        "each accepted palette population remains independently required"
+      )
+    }
+    expect(
+      !GenerationCancellationAftermathFramePredicate.qualifies(
+        complete: true,
+        candidate: acceptedObservation(previewLand: 501),
+        foregroundIntact: true
+      ),
+      "preview land palette is rejected"
+    )
+    expect(
+      !GenerationCancellationAftermathFramePredicate.qualifies(
+        complete: true,
+        candidate: acceptedObservation(previewWater: 501),
+        foregroundIntact: true
+      ),
+      "preview water palette is rejected"
+    )
+  }
+
+  private static func rejectsAftermathFrameAbsenceAndForegroundLoss() throws {
+    do {
+      _ = try GenerationCancellationAftermathFrameValidator.validate(
+        GenerationCancellationAftermathFrameSummary(
+          completeFrameCount: 0,
+          qualifyingObservation: nil
+        ),
+        foregroundIntact: true
+      )
+      throw TestFailure(message: "expected complete-frame rejection")
+    } catch let invalidation as PreviewObserverInvalidation {
+      expect(invalidation.authority == "screen-capture", "frame-absence authority")
+    }
+    do {
+      _ = try GenerationCancellationAftermathFrameValidator.validate(
+        GenerationCancellationAftermathFrameSummary(
+          completeFrameCount: 1,
+          qualifyingObservation: acceptedObservation()
+        ),
+        foregroundIntact: false
+      )
+      throw TestFailure(message: "expected aftermath foreground rejection")
+    } catch let invalidation as PreviewObserverInvalidation {
+      expect(invalidation.authority == "foreground", "aftermath foreground authority")
+    }
+  }
+
+  private static func rejectsAftermathCandidateIdentityDrift() throws {
+    let expected = GenerationCancellationAftermathCandidateIdentity(
+      applicationPID: 1,
+      windowID: 2,
+      executableSha256: String(repeating: "a", count: 64)
+    )
+    try GenerationCancellationAftermathCandidateIdentityValidator.validate(
+      expected: expected,
+      current: expected
+    )
+    for current in [
+      GenerationCancellationAftermathCandidateIdentity(
+        applicationPID: 9,
+        windowID: expected.windowID,
+        executableSha256: expected.executableSha256
+      ),
+      GenerationCancellationAftermathCandidateIdentity(
+        applicationPID: expected.applicationPID,
+        windowID: 9,
+        executableSha256: expected.executableSha256
+      ),
+      GenerationCancellationAftermathCandidateIdentity(
+        applicationPID: expected.applicationPID,
+        windowID: expected.windowID,
+        executableSha256: String(repeating: "b", count: 64)
+      ),
+    ] {
+      do {
+        try GenerationCancellationAftermathCandidateIdentityValidator.validate(
+          expected: expected,
+          current: current
+        )
+        throw TestFailure(message: "expected candidate identity rejection")
+      } catch let invalidation as PreviewObserverInvalidation {
+        expect(invalidation.authority == "process-role", "identity drift authority")
+      }
+    }
+  }
+
+  private static func acceptedObservation(
+    land: Int = AcceptedAtlasFramePredicate.minimumLandOrWaterPopulation,
+    water: Int = AcceptedAtlasFramePredicate.minimumLandOrWaterPopulation,
+    ink: Int = AcceptedAtlasFramePredicate.minimumInkPopulation,
+    previewLand: Int = 0,
+    previewWater: Int = 0
+  ) -> AcceptedAtlasPixelObservation {
+    AcceptedAtlasPixelObservation(
+      hash: 1,
+      landLike: land,
+      waterLike: water,
+      inkLike: ink,
+      previewLandLike: previewLand,
+      previewWaterLike: previewWater
+    )
   }
 
   private static func expectPostAcknowledgementRejected(

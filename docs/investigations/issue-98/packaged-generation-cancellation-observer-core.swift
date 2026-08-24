@@ -1,3 +1,4 @@
+import CoreGraphics
 import Foundation
 
 enum GenerationCancellationOperation: String, Codable, CaseIterable {
@@ -97,6 +98,95 @@ struct GenerationCancellationPresentationWindow: Equatable {
       pixelChangeFrameCount: pixelChangeFrameCount,
       completedPresentationSignatureDetected: completedPresentationSignatureDetected
     )
+  }
+}
+
+struct GenerationCancellationAftermathCanvasResolution {
+  let crop: CGRect
+}
+
+enum GenerationCancellationAftermathCanvasResolver {
+  static func resolve(
+    acceptedCanvasFrames: [CGRect],
+    windowFrame: CGRect
+  ) throws -> GenerationCancellationAftermathCanvasResolution {
+    guard acceptedCanvasFrames.count == 1, let canvasFrame = acceptedCanvasFrames.first else {
+      throw PreviewObserverInvalidation.accessibility(
+        "expected exactly one current accepted canvas image after canonical completion"
+      )
+    }
+    let crop = CGRect(
+      x: canvasFrame.origin.x - windowFrame.origin.x,
+      y: canvasFrame.origin.y - windowFrame.origin.y,
+      width: canvasFrame.size.width,
+      height: canvasFrame.size.height
+    )
+    let windowLocal = CGRect(origin: .zero, size: windowFrame.size)
+    guard crop.width > 0, crop.height > 0, windowLocal.contains(crop) else {
+      throw PreviewObserverInvalidation.accessibility(
+        "the current accepted canvas crop was outside the candidate window"
+      )
+    }
+    return GenerationCancellationAftermathCanvasResolution(crop: crop)
+  }
+}
+
+struct GenerationCancellationAftermathCandidateIdentity: Equatable {
+  let applicationPID: Int32
+  let windowID: UInt32
+  let executableSha256: String
+}
+
+enum GenerationCancellationAftermathCandidateIdentityValidator {
+  static func validate(
+    expected: GenerationCancellationAftermathCandidateIdentity,
+    current: GenerationCancellationAftermathCandidateIdentity
+  ) throws {
+    guard current == expected else {
+      throw PreviewObserverInvalidation.processRole(
+        "candidate application, window, or executable identity drifted during deterministic aftermath"
+      )
+    }
+  }
+}
+
+enum GenerationCancellationAftermathFramePredicate {
+  static func qualifies(
+    complete: Bool,
+    candidate: AcceptedAtlasPixelObservation,
+    foregroundIntact: Bool
+  ) -> Bool {
+    complete && foregroundIntact
+      && candidate.landLike >= AcceptedAtlasFramePredicate.minimumLandOrWaterPopulation
+      && candidate.waterLike >= AcceptedAtlasFramePredicate.minimumLandOrWaterPopulation
+      && candidate.inkLike >= AcceptedAtlasFramePredicate.minimumInkPopulation
+      && candidate.previewLandLike <= AcceptedAtlasFramePredicate.maximumPreviewPopulation
+      && candidate.previewWaterLike <= AcceptedAtlasFramePredicate.maximumPreviewPopulation
+  }
+}
+
+struct GenerationCancellationAftermathFrameSummary: Equatable {
+  let completeFrameCount: Int
+  let qualifyingObservation: AcceptedAtlasPixelObservation?
+}
+
+enum GenerationCancellationAftermathFrameValidator {
+  static func validate(
+    _ summary: GenerationCancellationAftermathFrameSummary,
+    foregroundIntact: Bool
+  ) throws -> AcceptedAtlasPixelObservation {
+    guard foregroundIntact else { throw PreviewObserverInvalidation.candidateNotFrontmost }
+    guard summary.completeFrameCount > 0 else {
+      throw PreviewObserverInvalidation.capture(
+        "no complete frame arrived from the current accepted-canvas aftermath stream"
+      )
+    }
+    guard let observation = summary.qualifyingObservation else {
+      throw PreviewObserverInvalidation.capture(
+        "the current accepted canvas did not satisfy the accepted aftermath palette"
+      )
+    }
+    return observation
   }
 }
 
