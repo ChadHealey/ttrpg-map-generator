@@ -710,6 +710,34 @@ matrix, or release-budget conclusion. Complete sanitized identities, gates, zero
 receipts, historical-retention proof, and row statuses are in the
 [issue #98 evidence](investigations/issue-98/aftermath-canvas-rebind-qualification-2026-08-24/raw-results.json).
 
+### Issue #105 reusable target-session readiness stabilization stop
+
+Issue #105 changed only the external issue #100 controller, controller-only stabilization support,
+focused tests, and owning evidence. Implementation
+`bdad48f7b2fcd7c01b4f2aa4f2161bfdb4c7ce13` separates activation-request acceptance from a
+bounded retained-candidate/frontmost stabilization policy, explicit `AXRaise` and `AXFrontmost`
+support/results, terminal retained readback, and the unchanged independent Accessibility and
+`NSWorkspace` verification. Only pre-dispatch `AXRaise` `cannotComplete` is retryable. All other
+timeout, session, identity, ambiguity, visibility, action, and foreground failures remain terminal.
+
+Focused issue #105 and predecessor #90/#91/#94/#96/#97/#98/#100 Swift suites, the 14-test packaged
+dispatch suite, the observer-enabled unsigned package, the root gate, exact identity reproduction,
+privacy, authorized-surface, fixture/production-surface, protected-evidence, and diff gates passed.
+The packaged executable remained
+`5cf14de9836e9da96655572b35bb0e194d8ebc30360b6d6516f88825dcf7a15d`; all issue #104
+observer/sampler/retention/readiness identities reproduced unchanged. The corrected controller was
+`0079b8fae359d691172fe4c577b7d72b752c8239a84063ca6c32320193538d95`.
+
+Exactly one fresh non-measurement preflight ran on the designated host. It accepted one activation
+request, then failed closed after one observation and 9 ms because the retained Accessibility
+window was not yet visible. It made zero raise attempts, zero frontmost writes, and zero independent
+observer runs, then terminated the candidate. No retry occurred. No fixture was configured, no
+sampler or raw artifact/destination was created, no operation was dispatched or measured, and no
+issue #104 row was consumed. The replacement remains **UNCONSUMED** and every conditional row
+remains unauthorized/unrun. This is a setup stop with no cancellation-path, issue #95 matrix, or
+release-budget conclusion. Complete sanitized evidence is in the
+[issue #105 readiness stop](investigations/issue-105/README.md).
+
 ## Remote CI and milestone state
 
 Issue #71 recorded fresh CI evidence for the exact remote release commit

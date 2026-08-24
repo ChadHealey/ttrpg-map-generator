@@ -133,3 +133,22 @@ UUID, coalition, screenshot, pixel data, CSV, private archive location, package,
 There were zero configured fixtures, samplers, export destinations, SVG/PNG dispatches,
 measurements, raw CSVs, retained artifacts, and consumed issue #97 trials. The six issue #97
 pre-dispatch invalidations remain unchanged and invalid.
+
+## Issue 105 reusable-readiness stabilization stop
+
+Issue #105 supersedes only the controller's immediate asynchronous activation-to-`AXRaise`
+boundary. Implementation `bdad48f7b2fcd7c01b4f2aa4f2161bfdb4c7ce13` separates activation
+request acceptance, bounded retained-candidate/frontmost stabilization, explicit raise support and
+result, frontmost-write support and result, terminal readback, and the unchanged independent
+observer. It retries only `AXRaise` `cannotComplete` before product setup and records sanitized
+action counts, duration, and terminal predicates.
+
+All pre-target gates and unchanged candidate/tool identity reproductions passed. The sole
+authorized fresh preflight then failed closed 9 ms after activation because its first retained
+Accessibility-window observation was not yet visible. It made zero raise attempts and zero
+frontmost writes, did not run the independent observer, and terminated the candidate. No retry,
+fixture, sampler, artifact/destination, dispatch, measurement, or issue #104 consumption occurred.
+
+This result neither invalidates the historical issue #100 qualification nor proves the mechanism
+reusable for current fresh tasks. The complete sanitized stop and newly isolated initial-visibility
+settling limitation are in the [issue #105 evidence](../issue-105/README.md).

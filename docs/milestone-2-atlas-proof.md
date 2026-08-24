@@ -721,6 +721,25 @@ qualification authorizes a new task to revalidate and resume issue #97's unchang
 and six then-unconsumed trials; it neither reinterprets issue #97's six invalid pre-dispatch attempts nor
 qualifies export completion by itself.
 
+### Reusable target-session readiness stabilization stop
+
+Issue #105 corrects only the external test controller's asynchronous activation-to-`AXRaise`
+ordering. Activation request acceptance, bounded retained-candidate/frontmost stabilization,
+`AXRaise` support/result, `AXFrontmost` support/write, terminal retained identity/frontmost
+readback, and the unchanged independent Accessibility/`NSWorkspace` observer are separate
+fail-closed authorities. Only `AXRaise` `cannotComplete` may be retried, only inside the bounded
+pre-dispatch policy. Ordinary packages install no new behavior.
+
+The implementation and every pre-target gate passed, and the exact issue #104 candidate plus all
+reused tool identities reproduced. The one authorized fresh non-measurement preflight then stopped
+at its first stabilization observation because the retained Accessibility window was not yet
+visible. It performed no raise or frontmost write and ran no independent observer. It configured no
+fixture, started no sampler, created no artifact/destination, dispatched or measured no operation,
+and consumed no issue #104 row. There was no retry. Issue #104 remains blocked with its replacement
+unconsumed; this stop makes no cancellation, first-paint, issue #95 matrix, or release-budget claim.
+The sanitized correction and result are in the
+[issue #105 readiness evidence](investigations/issue-105/README.md).
+
 ### Packaged generation-cancellation qualification stop
 
 Issue #98 added only a test observer and observer-enabled package wiring around the unchanged

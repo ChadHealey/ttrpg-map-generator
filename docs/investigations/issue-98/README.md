@@ -247,3 +247,18 @@ plus full early/middle/late remain unauthorized and unrun. There is no new ackno
 sampling, visual, first-paint, cancellation-path, issue #95 matrix, or release-budget conclusion.
 The sanitized zero-operation stop is in
 [`aftermath-canvas-rebind-qualification-2026-08-24/raw-results.json`](aftermath-canvas-rebind-qualification-2026-08-24/raw-results.json).
+
+## Issue 105 reusable-readiness stabilization stop
+
+Issue #105 committed its controller-only activation-to-raise stabilization after focused,
+predecessor, package, root, identity, privacy, authorized-surface, fixture, and diff gates passed.
+Its exactly one fresh non-measurement preflight failed closed before `AXRaise` because the retained
+Accessibility window was not yet visible at the first post-activation observation. The invalid
+candidate was terminated and no retry occurred.
+
+The preflight configured no fixture, started no sampler, created no raw artifact or target
+destination, dispatched no operation, produced no measurement, and consumed no issue #104 row.
+The issue #104 replacement remains **UNCONSUMED** and all five conditional rows remain unauthorized
+and unrun. The three historical invalid rows and the issue #104 stop record remain byte-identical
+and are not reinterpreted. Complete sanitized evidence is in the
+[issue #105 readiness stop](../issue-105/README.md).

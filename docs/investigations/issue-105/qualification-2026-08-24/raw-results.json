@@ -1,0 +1,102 @@
+{
+  "schemaVersion": "issue105-target-session-readiness-evidence-v1",
+  "status": "invalid-pre-dispatch-not-target-evidence",
+  "baseCommit": "03a640fe91bf2cf7bdd14309e7bde6b5445a8355",
+  "implementationCommit": "bdad48f7b2fcd7c01b4f2aa4f2161bfdb4c7ce13",
+  "branch": "codex/issue-105-readiness-stabilization",
+  "target": {
+    "model": "Mac17,2",
+    "processor": "Apple M5",
+    "memoryGiB": 24,
+    "osVersion": "26.5.1",
+    "osBuild": "25F80"
+  },
+  "correction": {
+    "controllerVersion": "issue105-target-session-readiness-v2",
+    "activationRequestSeparated": true,
+    "retainedFrontmostStabilizationSeparated": true,
+    "raiseSupportAndResultSeparated": true,
+    "frontmostWriteSupportAndResultSeparated": true,
+    "independentAccessibilityAndWorkspaceVerificationPreserved": true,
+    "retryableRaiseResult": "cannotComplete-only",
+    "postDispatchRetryPermitted": false,
+    "ordinaryBuildBehaviorInstalled": false
+  },
+  "identities": {
+    "candidateExecutableSha256": "5cf14de9836e9da96655572b35bb0e194d8ebc30360b6d6516f88825dcf7a15d",
+    "correctedReadinessControllerSha256": "0079b8fae359d691172fe4c577b7d72b752c8239a84063ca6c32320193538d95",
+    "readinessObserverSha256": "9662c1664d44e93f58dc690a0fb78f08eb1f4751d84fc5790256866e768811ce",
+    "cancellationObserverSha256": "dee96628ba9b9cec31a49b0bd627466a636921f1f73535f1aac421834fbc0e6d",
+    "rssSamplerSha256": "1da835b06e7b2ffbe588e99fee2692d7cfa25f9e8117641c74a5abe73acc3dfe",
+    "retentionUtilitySha256": "c3b2d618b4dbddf9568d4d39334be9a3d0b074ae0b7a5464b4b7e30c5686441b"
+  },
+  "preflight": {
+    "authorizedPreflightCount": 1,
+    "silentRetryCount": 0,
+    "freshProcess": true,
+    "status": "invalid-pre-dispatch-not-target-evidence",
+    "invalidAuthority": "accessibility",
+    "invalidReason": "the retained packaged candidate Accessibility window was not visible during stabilization",
+    "candidateTerminated": true,
+    "candidateProcessCountAfterStop": 0,
+    "policyTimeoutMilliseconds": 20000,
+    "pollIntervalMilliseconds": 50,
+    "stabilizationDurationMilliseconds": 9,
+    "actionCounts": {
+      "activationRequest": 1,
+      "stabilizationObservation": 1,
+      "raiseAttempt": 0,
+      "retryableRaiseFailure": 0,
+      "frontmostWriteAttempt": 0,
+      "independentObserverRun": 0
+    },
+    "terminalPredicates": {
+      "exactCandidateRetained": false,
+      "exactWindowRetained": false,
+      "visibleWindow": false,
+      "workspaceFrontmost": false,
+      "accessibilityFrontmost": false,
+      "independentObserverVerified": false
+    }
+  },
+  "zeroOperationProof": {
+    "fixtureConfigured": false,
+    "samplerStarted": false,
+    "rawArtifactCount": 0,
+    "targetArtifactOrDestinationCreated": false,
+    "operationDispatchCount": 0,
+    "previewDispatched": false,
+    "fullGenerationDispatched": false,
+    "svgDispatched": false,
+    "pngDispatched": false,
+    "measurementCount": 0,
+    "issue104ReplacementRowConsumed": false,
+    "issue95MatrixRun": false,
+    "releaseBudgetConclusion": "none"
+  },
+  "gates": {
+    "focusedIssue105ReadinessSuite": "pass",
+    "predecessorSwiftSuites": "pass-issue90-91-94-96-97-98-100",
+    "focusedPackagedDispatch": "pass-14",
+    "observerEnabledPackagedBuild": "pass-338-modules-one-unsigned-app",
+    "exactIdentityReproduction": "pass-candidate-and-all-reused-tools",
+    "root": "pass-578-and-1-skipped-semantic-retention-24-rust-28-native",
+    "privacyAuthorizedSurfaceFixtureAndDiff": "pass"
+  },
+  "preservation": {
+    "issue98OriginalRowSha256": "4d272597c40e33dc14fe3664b055b2880c0cdb81b6c4a8b86a3fe6ef045d6437",
+    "issue102ReplacementRowSha256": "e6a15ab5a909ea4baec335b1b71688487ce397a076b0a0564a9e5a8d73de0153",
+    "issue103ReplacementRowSha256": "3dd5b5ed31b5eb024710dbce2ba588749317fdcfab0a10d56c0ea0ed3fee926a",
+    "issue104StopSha256": "76b6023836f3d230964d00e931c4775d6f222fafed906d32ee4e39b230ebd40e",
+    "historicalRowsReinterpreted": false,
+    "issue104ReplacementRemainsUnconsumed": true
+  },
+  "privacy": {
+    "privatePathsPublished": false,
+    "pidsPublished": false,
+    "rawCsvPublished": false,
+    "screenshotsOrPixelsPublished": false,
+    "privateArtifactsCreated": 0
+  },
+  "conclusion": "The bounded activation-to-raise correction passed every pre-target gate, but the sole authorized preflight failed closed on initial retained-window invisibility before raise, frontmost write, independent verification, or any product setup. Issue #104 remains blocked and unconsumed."
+}
