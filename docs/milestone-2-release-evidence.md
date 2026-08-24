@@ -797,6 +797,41 @@ and every conditional row remains unauthorized/unrun. The #98/#102/#103 rows and
 stop records remain byte-identical. Complete sanitized evidence is in the
 [issue #107 readiness stop](investigations/issue-107/README.md).
 
+### Issue #108 frontmost capability-ordering stop
+
+Issue #108 changed only the external issue #100/#105/#106/#107 controller, controller-only
+stabilizer/platform adapter, focused tests, and owning evidence. The version-5 receipt records
+minimized, positive-frame, and application-frontmost reads as supported values or explicit
+unavailable reasons. Exact-application `AXFrontmost` support/write/readback now precedes Workspace,
+window, and raise requirements. No minimized write, unhide, manual interaction, or UI scripting is
+installed. The unchanged 20,000-ms/50-ms policy, identity requirements, final retained state, and
+independent observer remain fail closed.
+
+The implementation commit is `e144fff323c4f1e682d1f5db54ecb374e9f7d133`. Focused and
+predecessor Swift suites, 14 packaged-dispatch tests, the observer-enabled unsigned package, root
+gate, exact identity reproduction, privacy, authorized-surface, fixture/production-surface,
+protected-evidence, Swift-format, and diff gates passed. The packaged executable, issue #104
+cancellation observer, sampler, and retention utility retained their exact prior hashes. The
+corrected controller was
+`ade48973c2631381b221bfe8e92fbbd5ee31f1c5affda26a79574f7058cb0e04`; the independently
+compiled unchanged-source readiness observer was
+`f2c9b54561c68d8dea89ced7253316b7e1604db1b2eac42683e7d1609be4f023`.
+
+Exactly one fresh replacement non-measurement preflight ran. Its one activation request was
+accepted; exact application/window/executable/session identity survived all 292 observations.
+Application `AXFrontmost` was supported and settable, and one `AXFrontmost=true` write returned
+success before Workspace, window, or raise requirements. Accessibility readback nevertheless
+remained supported `false`, Workspace remained not frontmost, and minimized plus frame reads
+remained explicitly unavailable/`attribute-unsupported`. At 20,000 ms the controller timed out
+under `foreground` authority with zero minimized writes, raises, independent observer runs, or
+product operations, then terminated the candidate. No retry occurred.
+
+No fixture was configured, sampler or raw artifact/destination created, operation dispatched or
+measured, or issue #95/#104 authority consumed. Issue #104's replacement remains **UNCONSUMED**
+and every conditional row remains unauthorized/unrun. The #98/#102/#103 rows and issue #104
+through #107 stop records retain their prior SHA-256 values. Complete sanitized evidence is in the
+[issue #108 readiness stop](investigations/issue-108/README.md).
+
 ## Remote CI and milestone state
 
 Issue #71 recorded fresh CI evidence for the exact remote release commit

@@ -1,0 +1,169 @@
+{
+  "schemaVersion": "issue108-target-session-readiness-evidence-v1",
+  "status": "invalid-pre-dispatch-not-target-evidence",
+  "baseCommit": "26d52070b810679067e0f5c6b288a1963df49e5b",
+  "implementationCommit": "e144fff323c4f1e682d1f5db54ecb374e9f7d133",
+  "branch": "codex/issue-108-frontmost-ordering",
+  "target": {
+    "model": "Mac17,2",
+    "processor": "Apple M5",
+    "memoryGiB": 24,
+    "osVersion": "26.5.1",
+    "osBuild": "25F80"
+  },
+  "correction": {
+    "controllerVersion": "issue108-target-session-readiness-v5",
+    "minimizedReadHasExplicitCapabilityState": true,
+    "frameReadHasExplicitCapabilityState": true,
+    "accessibilityFrontmostReadHasExplicitCapabilityState": true,
+    "unsupportedOrUnreadableValuesPublishedAsObservedBooleans": false,
+    "minimizedWriteInstalled": false,
+    "applicationFrontmostSupportWriteReadbackPrecedesWorkspace": true,
+    "applicationFrontmostSupportWriteReadbackPrecedesWindowVisibility": true,
+    "applicationFrontmostSupportWriteReadbackPrecedesRaise": true,
+    "raiseRequiresSupportedPositiveFrame": true,
+    "independentObserverSourceChanged": false,
+    "policyTimeoutMilliseconds": 20000,
+    "pollIntervalMilliseconds": 50,
+    "retryableResult": "pre-dispatch-cannotComplete-only",
+    "postDispatchRetryPermitted": false,
+    "ordinaryBuildBehaviorInstalled": false
+  },
+  "identities": {
+    "candidateExecutableSha256": "5cf14de9836e9da96655572b35bb0e194d8ebc30360b6d6516f88825dcf7a15d",
+    "correctedReadinessControllerSha256": "ade48973c2631381b221bfe8e92fbbd5ee31f1c5affda26a79574f7058cb0e04",
+    "readinessObserverSha256": "f2c9b54561c68d8dea89ced7253316b7e1604db1b2eac42683e7d1609be4f023",
+    "cancellationObserverSha256": "dee96628ba9b9cec31a49b0bd627466a636921f1f73535f1aac421834fbc0e6d",
+    "rssSamplerSha256": "1da835b06e7b2ffbe588e99fee2692d7cfa25f9e8117641c74a5abe73acc3dfe",
+    "retentionUtilitySha256": "c3b2d618b4dbddf9568d4d39334be9a3d0b074ae0b7a5464b4b7e30c5686441b"
+  },
+  "preflight": {
+    "authorizedPreflightCount": 1,
+    "silentRetryCount": 0,
+    "freshProcess": true,
+    "status": "invalid-pre-dispatch-not-target-evidence",
+    "invalidAuthority": "foreground",
+    "invalidReason": "the packaged candidate did not reach retained frontmost readiness before the stabilization timeout",
+    "candidateTerminated": true,
+    "candidateProcessCountAfterStop": 0,
+    "policyTimeoutMilliseconds": 20000,
+    "pollIntervalMilliseconds": 50,
+    "stabilizationDurationMilliseconds": 20000,
+    "stabilizationObservationCount": 292,
+    "visibilityPendingObservationCount": 0,
+    "visibilityPendingDurationMilliseconds": 0,
+    "retainedIdentityPredicates": {
+      "exactApplicationCountEveryObservation": true,
+      "exactWindowCountEveryObservation": true,
+      "applicationIdentityRetainedEveryObservation": true,
+      "windowIdentityRetainedEveryObservation": true,
+      "executableIdentityMatchedEveryObservation": true,
+      "consoleSessionMatchedEveryObservation": true
+    },
+    "initialVisibilityPredicates": {
+      "applicationHidden": false,
+      "windowMinimized": {
+        "state": "unavailable",
+        "unavailableReason": "attribute-unsupported"
+      },
+      "windowFrameVisible": {
+        "state": "unavailable",
+        "unavailableReason": "attribute-unsupported"
+      },
+      "visibleWindow": false
+    },
+    "terminalVisibilityPredicates": {
+      "applicationHidden": false,
+      "windowMinimized": {
+        "state": "unavailable",
+        "unavailableReason": "attribute-unsupported"
+      },
+      "windowFrameVisible": {
+        "state": "unavailable",
+        "unavailableReason": "attribute-unsupported"
+      },
+      "visibleWindow": false
+    },
+    "frontmostPredicates": {
+      "attributeSupported": true,
+      "attributeSettable": true,
+      "supportCheckAttemptCount": 1,
+      "writeAttemptCount": 1,
+      "writeSucceeded": true,
+      "accessibilityReadback": {
+        "state": "supported",
+        "value": false
+      },
+      "accessibilityReadbackVerifiedTrue": false,
+      "workspaceReadbackVerified": false,
+      "retryableSupportFailureCount": 0,
+      "retryableWriteFailureCount": 0,
+      "retryableReadbackFailureCount": 0
+    },
+    "actionOrder": ["activation-request", "frontmost-write-succeeded"],
+    "actionCounts": {
+      "activationRequest": 1,
+      "stabilizationObservation": 292,
+      "minimizeSetAttributeWriteAttempt": 0,
+      "frontmostWriteAttempt": 1,
+      "raiseAttempt": 0,
+      "retryableRaiseFailure": 0,
+      "independentObserverRun": 0
+    },
+    "terminalPredicates": {
+      "exactCandidateRetainedForReadiness": false,
+      "exactWindowRetainedForReadiness": false,
+      "visibleWindow": false,
+      "workspaceFrontmost": false,
+      "accessibilityFrontmost": false,
+      "independentObserverVerified": false
+    }
+  },
+  "zeroOperationProof": {
+    "fixtureConfigured": false,
+    "samplerStarted": false,
+    "rawArtifactCount": 0,
+    "targetArtifactOrDestinationCreated": false,
+    "operationDispatchCount": 0,
+    "previewDispatched": false,
+    "fullGenerationDispatched": false,
+    "svgDispatched": false,
+    "pngDispatched": false,
+    "measurementCount": 0,
+    "issue104ReplacementRowConsumed": false,
+    "issue95MatrixRun": false,
+    "releaseBudgetConclusion": "none"
+  },
+  "gates": {
+    "focusedIssue108ReadinessSuite": "pass",
+    "predecessorSwiftSuites": "pass-issue90-91-94-96-97-98-100-105-106-107",
+    "focusedPackagedDispatch": "pass-14",
+    "observerEnabledPackagedBuild": "pass-338-modules-one-unsigned-app",
+    "exactIdentityReproduction": "pass-candidate-cancellation-observer-sampler-retention-and-readiness-tools",
+    "root": "pass-578-and-1-skipped-semantic-retention-24-rust-28-native",
+    "privacyAuthorizedSurfaceFixtureProtectedEvidenceAndDiff": "pass"
+  },
+  "preservation": {
+    "issue98OriginalRowSha256": "4d272597c40e33dc14fe3664b055b2880c0cdb81b6c4a8b86a3fe6ef045d6437",
+    "issue102ReplacementRowSha256": "e6a15ab5a909ea4baec335b1b71688487ce397a076b0a0564a9e5a8d73de0153",
+    "issue103ReplacementRowSha256": "3dd5b5ed31b5eb024710dbce2ba588749317fdcfab0a10d56c0ea0ed3fee926a",
+    "issue104StopSha256": "76b6023836f3d230964d00e931c4775d6f222fafed906d32ee4e39b230ebd40e",
+    "issue105StopReadmeSha256": "d88124a10555a4ffc24258917151ae5ab80334d15b1a1ffed1bf76e10e6cf762",
+    "issue105StopReceiptSha256": "a48bb38ae725852f61cf17a80c7bade15a86d5a4943e8f1b8497cb15d523feca",
+    "issue106StopReadmeSha256": "bf9eb92df9c284bc35cf5017b4bb30ee50271a8bf82eabbb578d3728a3e84ead",
+    "issue106StopReceiptSha256": "61dadb8ce7cd7fdcf7cb3f9567e4507865b2fbbe71abdc6fa97ad6b141dc7506",
+    "issue107StopReadmeSha256": "c486722b4abfb20bee54571cbcc461ac76512c848add9cf6a4edca059897164d",
+    "issue107StopReceiptSha256": "efc31387fd0e48ff11f57617b8b1ea7b78b13b730bfd284f703e1871d297063a",
+    "historicalRowsReinterpreted": false,
+    "priorStopRecordsChanged": false,
+    "issue104ReplacementRemainsUnconsumed": true
+  },
+  "privacy": {
+    "privatePathsPublished": false,
+    "pidsPublished": false,
+    "rawCsvPublished": false,
+    "screenshotsOrPixelsPublished": false,
+    "privateArtifactsCreated": 0
+  },
+  "conclusion": "The explicit capability and frontmost-first correction passed every pre-target gate. Its sole preflight retained exact identity and successfully wrote supported/settable AXFrontmost=true once, but Accessibility readback remained supported false and Workspace remained not frontmost through the unchanged 20-second bound. Minimized and frame reads remained explicitly unavailable/attribute-unsupported. No AXMinimized write, AXRaise, independent observer, product setup, retry, or issue #104 consumption occurred."
+}

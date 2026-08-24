@@ -183,3 +183,21 @@ application/window/executable identity, but the first `AXMinimized` support/sett
 frontmost write, independent observer run, or product action and terminated the candidate after
 13 ms. No retry ran, and issue #104 remains **UNCONSUMED**. The complete sanitized stop is in the
 [issue #107 evidence](../issue-107/README.md).
+
+## Issue 108 frontmost capability-ordering stop
+
+Issue #108 moves the capability model into the controller-only stabilizer. Minimized, positive-
+frame, and application-frontmost reads now record supported values or explicit unavailable reasons;
+unsupported minimized state is no longer published as observed `true`. After exact identity and
+accepted activation, supported/settable exact-application `AXFrontmost=true` write and supported-
+true readback now precede Workspace foreground, supported positive-frame readiness, and `AXRaise`.
+There is no `AXMinimized` write, unhide, or manual interaction authority. The independent observer
+source and final retained-state requirement are unchanged.
+
+Every pre-target gate passed. The sole replacement preflight retained the exact identity for 292
+observations / 20,000 ms. One supported/settable `AXFrontmost=true` write returned success, but
+Accessibility readback remained supported `false`, Workspace remained not frontmost, and minimized
+plus frame reads remained explicitly unavailable/`attribute-unsupported`. The controller timed out
+with zero minimized writes, raises, independent observer runs, or product operations, then
+terminated the candidate. No retry ran, and issue #104 remains **UNCONSUMED**. The complete
+sanitized stop is in the [issue #108 evidence](../issue-108/README.md).
