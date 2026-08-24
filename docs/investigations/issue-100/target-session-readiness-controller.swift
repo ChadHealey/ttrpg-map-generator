@@ -114,12 +114,13 @@ enum TargetSessionReadinessController {
           stabilizationObservationCount: 0,
           raiseAttemptCount: 0,
           retryableRaiseFailureCount: 0,
-          frontmostWriteAttemptCount: 0,
+          raiseSucceeded: false,
+          frontmost: .none,
           initialVisibilityPredicates: nil,
           terminalVisibilityPredicates: nil,
           visibilityPendingObservationCount: 0,
           visibilityPendingDurationMilliseconds: 0,
-          minimize: .none,
+          actionOrder: ["activation-request"],
           terminalPredicates: .none
         )
       )
@@ -155,7 +156,7 @@ enum TargetSessionReadinessController {
         "the designated logged-in console GUI session changed before terminal verification")
     }
 
-    let finalSnapshot = try Issue100TargetSessionPlatform.readinessSnapshot(
+    let finalSnapshot = try Issue105TargetSessionStabilizationPlatform.readinessSnapshot(
       bundleIdentifier: arguments.bundleIdentifier,
       expectedExecutableSha256: arguments.expectedCandidateSha256
     )
@@ -166,7 +167,7 @@ enum TargetSessionReadinessController {
         windowIdentity: CFHash(window)
       )
     )
-    try TargetSessionReadinessPredicate.validateSnapshot(finalSnapshot)
+    try Issue105TargetSessionStabilizer.validateSnapshot(finalSnapshot)
 
     let finalStabilizationDiagnostics = Issue105StabilizationDiagnostics(
       policyTimeoutMilliseconds: stabilization.diagnostics.policyTimeoutMilliseconds,
@@ -177,20 +178,21 @@ enum TargetSessionReadinessController {
       stabilizationObservationCount: stabilization.diagnostics.stabilizationObservationCount,
       raiseAttemptCount: stabilization.diagnostics.raiseAttemptCount,
       retryableRaiseFailureCount: stabilization.diagnostics.retryableRaiseFailureCount,
-      frontmostWriteAttemptCount: stabilization.diagnostics.frontmostWriteAttemptCount,
+      raiseSucceeded: stabilization.diagnostics.raiseSucceeded,
+      frontmost: stabilization.diagnostics.frontmost,
       initialVisibilityPredicates: stabilization.diagnostics.initialVisibilityPredicates,
       terminalVisibilityPredicates: Issue106VisibilityPredicates(snapshot: finalSnapshot),
       visibilityPendingObservationCount:
         stabilization.diagnostics.visibilityPendingObservationCount,
       visibilityPendingDurationMilliseconds:
         stabilization.diagnostics.visibilityPendingDurationMilliseconds,
-      minimize: stabilization.diagnostics.minimize,
+      actionOrder: stabilization.diagnostics.actionOrder,
       terminalPredicates: Issue105TerminalPredicates(
         exactCandidateRetained: true,
         exactWindowRetained: true,
         visibleWindow: finalSnapshot.visibleWindow,
         workspaceFrontmost: finalSnapshot.workspaceFrontmost,
-        accessibilityFrontmost: finalSnapshot.accessibilityFrontmost,
+        accessibilityFrontmost: finalSnapshot.accessibilityFrontmost.supportedValue == true,
         independentObserverVerified: true
       )
     )
@@ -201,7 +203,7 @@ enum TargetSessionReadinessController {
       qualificationKind: "non-measurement-target-session-readiness",
       target: .approved,
       sessionMechanism:
-        "exact-path NSWorkspace launch in active console GUI session; accepted AppKit activation request; exact-window AXMinimized=false support/write/readback; bounded retained-frontmost stabilization; AXRaise; AXFrontmost; independent retained Accessibility/NSWorkspace verification",
+        "exact-path NSWorkspace launch in active console GUI session; accepted AppKit activation request; exact-application AXFrontmost support/write/readback before Workspace and supported positive-frame readiness; AXRaise; independent retained Accessibility/NSWorkspace verification",
       bundleIdentifier: arguments.bundleIdentifier,
       candidateExecutableSha256: package.executableSha256,
       controllerSha256: controllerSha256,

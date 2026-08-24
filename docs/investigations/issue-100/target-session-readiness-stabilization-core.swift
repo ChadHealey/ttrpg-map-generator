@@ -1,6 +1,66 @@
 import Foundation
 
-let issue105ReadinessSchemaVersion = "issue107-target-session-readiness-v4"
+let issue105ReadinessSchemaVersion = "issue108-target-session-readiness-v5"
+
+enum Issue108AccessibilityReadUnavailable: String, Codable, Equatable, Error {
+  case attributeUnsupported = "attribute-unsupported"
+  case cannotComplete = "cannot-complete"
+  case invalidValue = "invalid-value"
+  case noValue = "no-value"
+  case readError = "read-error"
+}
+
+enum Issue108AccessibilityBooleanRead: Equatable {
+  case supported(Bool)
+  case unavailable(Issue108AccessibilityReadUnavailable)
+
+  var supportedValue: Bool? {
+    guard case .supported(let value) = self else { return nil }
+    return value
+  }
+}
+
+enum Issue108AccessibilityReadState: String, Codable, Equatable {
+  case supported
+  case unavailable
+}
+
+struct Issue108AccessibilityBooleanReadReceipt: Codable, Equatable {
+  let state: Issue108AccessibilityReadState
+  let value: Bool?
+  let unavailableReason: Issue108AccessibilityReadUnavailable?
+
+  init(_ read: Issue108AccessibilityBooleanRead) {
+    switch read {
+    case .supported(let value):
+      state = .supported
+      self.value = value
+      unavailableReason = nil
+    case .unavailable(let reason):
+      state = .unavailable
+      value = nil
+      unavailableReason = reason
+    }
+  }
+}
+
+struct Issue108TargetSessionReadinessSnapshot: Equatable {
+  let applicationCount: Int
+  let windowCount: Int
+  let processIdentifier: Int32?
+  let windowIdentity: UInt?
+  let executableIdentityMatched: Bool
+  let applicationHidden: Bool
+  let windowMinimized: Issue108AccessibilityBooleanRead
+  let windowFrameVisible: Issue108AccessibilityBooleanRead
+  let accessibilityFrontmost: Issue108AccessibilityBooleanRead
+  let workspaceFrontmost: Bool
+
+  var visibleWindow: Bool {
+    !applicationHidden && windowMinimized.supportedValue != true
+      && windowFrameVisible.supportedValue == true
+  }
+}
 
 struct Issue105RetainedCandidateIdentity: Equatable {
   let processIdentifier: Int32
@@ -14,7 +74,7 @@ enum Issue105SessionActionResult: Equatable {
   case failed
 }
 
-enum Issue107MinimizeWriteResult: Equatable {
+enum Issue108FrontmostWriteResult: Equatable {
   case success
   case retryableSupportCannotComplete
   case retryableWriteCannotComplete
@@ -56,41 +116,39 @@ struct Issue105TerminalPredicates: Codable, Equatable {
 
 struct Issue106VisibilityPredicates: Codable, Equatable {
   let applicationHidden: Bool
-  let windowMinimized: Bool
-  let windowFrameVisible: Bool
+  let windowMinimized: Issue108AccessibilityBooleanReadReceipt
+  let windowFrameVisible: Issue108AccessibilityBooleanReadReceipt
   let visibleWindow: Bool
 
-  init(snapshot: TargetSessionReadinessSnapshot) {
+  init(snapshot: Issue108TargetSessionReadinessSnapshot) {
     applicationHidden = snapshot.applicationHidden
-    windowMinimized = snapshot.windowMinimized
-    windowFrameVisible = snapshot.windowFrameVisible
+    windowMinimized = Issue108AccessibilityBooleanReadReceipt(snapshot.windowMinimized)
+    windowFrameVisible = Issue108AccessibilityBooleanReadReceipt(snapshot.windowFrameVisible)
     visibleWindow = snapshot.visibleWindow
   }
 }
 
-struct Issue107MinimizeDiagnostics: Codable, Equatable {
-  let restorationRequired: Bool
+struct Issue108FrontmostDiagnostics: Codable, Equatable {
   let attributeSupported: Bool?
   let attributeSettable: Bool?
   let writeAttemptCount: Int
   let retryableSupportFailureCount: Int
   let retryableWriteFailureCount: Int
   let writeSucceeded: Bool
-  let nonMinimizedReadbackVerified: Bool
-  let frameVisibleReadbackVerified: Bool
-  let actionOrder: [String]
+  let accessibilityReadback: Issue108AccessibilityBooleanReadReceipt?
+  let retryableReadbackFailureCount: Int
+  let workspaceReadbackVerified: Bool
 
-  static let none = Issue107MinimizeDiagnostics(
-    restorationRequired: false,
+  static let none = Issue108FrontmostDiagnostics(
     attributeSupported: nil,
     attributeSettable: nil,
     writeAttemptCount: 0,
     retryableSupportFailureCount: 0,
     retryableWriteFailureCount: 0,
     writeSucceeded: false,
-    nonMinimizedReadbackVerified: false,
-    frameVisibleReadbackVerified: false,
-    actionOrder: ["activation-request"]
+    accessibilityReadback: nil,
+    retryableReadbackFailureCount: 0,
+    workspaceReadbackVerified: false
   )
 }
 
@@ -102,18 +160,19 @@ struct Issue105StabilizationDiagnostics: Codable, Equatable {
   let stabilizationObservationCount: Int
   let raiseAttemptCount: Int
   let retryableRaiseFailureCount: Int
-  let frontmostWriteAttemptCount: Int
+  let raiseSucceeded: Bool
+  let frontmost: Issue108FrontmostDiagnostics
   let initialVisibilityPredicates: Issue106VisibilityPredicates?
   let terminalVisibilityPredicates: Issue106VisibilityPredicates?
   let visibilityPendingObservationCount: Int
   let visibilityPendingDurationMilliseconds: UInt64
-  let minimize: Issue107MinimizeDiagnostics
+  let actionOrder: [String]
   let terminalPredicates: Issue105TerminalPredicates
 }
 
 struct Issue105StabilizationOutcome: Equatable {
   let diagnostics: Issue105StabilizationDiagnostics
-  let terminalSnapshot: TargetSessionReadinessSnapshot
+  let terminalSnapshot: Issue108TargetSessionReadinessSnapshot
 }
 
 struct Issue105ReadinessFailure: Error {
@@ -130,7 +189,7 @@ enum Issue105TargetSessionStabilizer {
   }
 
   static func validateRetainedIdentity(
-    _ snapshot: TargetSessionReadinessSnapshot,
+    _ snapshot: Issue108TargetSessionReadinessSnapshot,
     retainedIdentity: Issue105RetainedCandidateIdentity
   ) throws {
     guard snapshot.applicationCount == 1, snapshot.processIdentifier != nil else {
@@ -153,37 +212,48 @@ enum Issue105TargetSessionStabilizer {
     }
   }
 
+  static func validateSnapshot(_ snapshot: Issue108TargetSessionReadinessSnapshot) throws {
+    guard snapshot.visibleWindow else {
+      throw TargetSessionReadinessInvalidation.accessibility(
+        "the packaged candidate Accessibility window was not visibly frame-ready")
+    }
+    guard snapshot.accessibilityFrontmost.supportedValue == true,
+      snapshot.workspaceFrontmost
+    else {
+      throw TargetSessionReadinessInvalidation.foreground(
+        "the packaged candidate did not retain independently verified frontmost state")
+    }
+  }
+
   static func stabilize(
     policy: Issue105StabilizationPolicy,
     retainedIdentity: Issue105RetainedCandidateIdentity,
     elapsedMilliseconds: () -> UInt64,
-    observe: () throws -> TargetSessionReadinessSnapshot,
-    writeMinimizedFalse: () -> Issue107MinimizeWriteResult,
+    observe: () throws -> Issue108TargetSessionReadinessSnapshot,
+    writeFrontmost: () -> Issue108FrontmostWriteResult,
     performRaise: () -> Issue105SessionActionResult,
-    writeFrontmost: () -> Issue105SessionActionResult,
     wait: (_ milliseconds: UInt64) -> Void
   ) throws -> Issue105StabilizationOutcome {
     var observationCount = 0
     var raiseAttemptCount = 0
     var retryableRaiseFailureCount = 0
-    var frontmostWriteAttemptCount = 0
     var raiseSucceeded = false
+    var frontmostAttributeSupported: Bool?
+    var frontmostAttributeSettable: Bool?
+    var frontmostWriteAttemptCount = 0
+    var retryableFrontmostSupportFailureCount = 0
+    var retryableFrontmostWriteFailureCount = 0
     var frontmostWriteSucceeded = false
+    var frontmostReadback: Issue108AccessibilityBooleanReadReceipt?
+    var retryableFrontmostReadbackFailureCount = 0
+    var accessibilityReadbackVerified = false
+    var workspaceReadbackVerified = false
     var initialVisibilityPredicates: Issue106VisibilityPredicates?
     var terminalVisibilityPredicates: Issue106VisibilityPredicates?
     var visibilityPendingObservationCount = 0
     var firstVisibilityPendingElapsedMilliseconds: UInt64?
     var visibilityBecameReadyElapsedMilliseconds: UInt64?
     var visibleWindowWasVerified = false
-    var restorationRequired = false
-    var minimizeAttributeSupported: Bool?
-    var minimizeAttributeSettable: Bool?
-    var minimizeWriteAttemptCount = 0
-    var retryableMinimizeSupportFailureCount = 0
-    var retryableMinimizeWriteFailureCount = 0
-    var minimizeWriteSucceeded = false
-    var nonMinimizedReadbackVerified = false
-    var frameVisibleReadbackVerified = false
     var actionOrder = ["activation-request"]
 
     func boundedElapsedMilliseconds() -> UInt64 {
@@ -208,23 +278,23 @@ enum Issue105TargetSessionStabilizer {
         stabilizationObservationCount: observationCount,
         raiseAttemptCount: raiseAttemptCount,
         retryableRaiseFailureCount: retryableRaiseFailureCount,
-        frontmostWriteAttemptCount: frontmostWriteAttemptCount,
+        raiseSucceeded: raiseSucceeded,
+        frontmost: Issue108FrontmostDiagnostics(
+          attributeSupported: frontmostAttributeSupported,
+          attributeSettable: frontmostAttributeSettable,
+          writeAttemptCount: frontmostWriteAttemptCount,
+          retryableSupportFailureCount: retryableFrontmostSupportFailureCount,
+          retryableWriteFailureCount: retryableFrontmostWriteFailureCount,
+          writeSucceeded: frontmostWriteSucceeded,
+          accessibilityReadback: frontmostReadback,
+          retryableReadbackFailureCount: retryableFrontmostReadbackFailureCount,
+          workspaceReadbackVerified: workspaceReadbackVerified
+        ),
         initialVisibilityPredicates: initialVisibilityPredicates,
         terminalVisibilityPredicates: terminalVisibilityPredicates,
         visibilityPendingObservationCount: visibilityPendingObservationCount,
         visibilityPendingDurationMilliseconds: visibilityPendingDurationMilliseconds(),
-        minimize: Issue107MinimizeDiagnostics(
-          restorationRequired: restorationRequired,
-          attributeSupported: minimizeAttributeSupported,
-          attributeSettable: minimizeAttributeSettable,
-          writeAttemptCount: minimizeWriteAttemptCount,
-          retryableSupportFailureCount: retryableMinimizeSupportFailureCount,
-          retryableWriteFailureCount: retryableMinimizeWriteFailureCount,
-          writeSucceeded: minimizeWriteSucceeded,
-          nonMinimizedReadbackVerified: nonMinimizedReadbackVerified,
-          frameVisibleReadbackVerified: frameVisibleReadbackVerified,
-          actionOrder: actionOrder
-        ),
+        actionOrder: actionOrder,
         terminalPredicates: terminalPredicates
       )
     }
@@ -239,7 +309,7 @@ enum Issue105TargetSessionStabilizer {
     while elapsedMilliseconds() <= policy.timeoutMilliseconds,
       observationCount < policy.maximumObservationCount
     {
-      let snapshot: TargetSessionReadinessSnapshot
+      let snapshot: Issue108TargetSessionReadinessSnapshot
       do {
         snapshot = try observe()
         observationCount += 1
@@ -264,81 +334,104 @@ enum Issue105TargetSessionStabilizer {
           ))
       }
 
-      if visibilityPredicates.windowMinimized {
-        if visibleWindowWasVerified || nonMinimizedReadbackVerified || raiseAttemptCount > 0
-          || frontmostWriteAttemptCount > 0
-        {
+      if !frontmostWriteSucceeded {
+        frontmostWriteAttemptCount += 1
+        switch writeFrontmost() {
+        case .success:
+          frontmostAttributeSupported = true
+          frontmostAttributeSettable = true
+          frontmostWriteSucceeded = true
+          actionOrder.append("frontmost-write-succeeded")
+        case .retryableSupportCannotComplete:
+          retryableFrontmostSupportFailureCount += 1
+          actionOrder.append("frontmost-support-cannot-complete")
+        case .retryableWriteCannotComplete:
+          frontmostAttributeSupported = true
+          frontmostAttributeSettable = true
+          retryableFrontmostWriteFailureCount += 1
+          actionOrder.append("frontmost-write-cannot-complete")
+        case .attributeUnsupported:
+          frontmostAttributeSupported = false
+          frontmostAttributeSettable = false
+          actionOrder.append("frontmost-attribute-unsupported")
           try fail(
-            .foreground(
-              "the exact packaged candidate window became minimized after visibility restoration"
+            .accessibility(
+              "AXFrontmost was unsupported for the retained packaged candidate application"
+            ))
+        case .notSettable:
+          frontmostAttributeSupported = true
+          frontmostAttributeSettable = false
+          actionOrder.append("frontmost-attribute-not-settable")
+          try fail(
+            .accessibility(
+              "AXFrontmost was not settable for the retained packaged candidate application"
+            ))
+        case .supportFailed:
+          actionOrder.append("frontmost-support-failed")
+          try fail(
+            .accessibility(
+              "AXFrontmost support could not be verified for the retained packaged candidate application"
+            ))
+        case .writeFailed:
+          frontmostAttributeSupported = true
+          frontmostAttributeSettable = true
+          actionOrder.append("frontmost-write-failed")
+          try fail(
+            .accessibility(
+              "AXFrontmost=true failed for the retained packaged candidate application"
             ))
         }
-        restorationRequired = true
-        if !minimizeWriteSucceeded {
-          minimizeWriteAttemptCount += 1
-          switch writeMinimizedFalse() {
-          case .success:
-            minimizeAttributeSupported = true
-            minimizeAttributeSettable = true
-            minimizeWriteSucceeded = true
-            actionOrder.append("minimize-write-succeeded")
-          case .retryableSupportCannotComplete:
-            retryableMinimizeSupportFailureCount += 1
-            actionOrder.append("minimize-support-cannot-complete")
-          case .retryableWriteCannotComplete:
-            minimizeAttributeSupported = true
-            minimizeAttributeSettable = true
-            retryableMinimizeWriteFailureCount += 1
-            actionOrder.append("minimize-write-cannot-complete")
-          case .attributeUnsupported:
-            minimizeAttributeSupported = false
-            minimizeAttributeSettable = false
-            actionOrder.append("minimize-attribute-unsupported")
-            try fail(
-              .accessibility(
-                "AXMinimized was unsupported for the retained packaged candidate window"
-              ))
-          case .notSettable:
-            minimizeAttributeSupported = true
-            minimizeAttributeSettable = false
-            actionOrder.append("minimize-attribute-not-settable")
-            try fail(
-              .accessibility(
-                "AXMinimized was not settable for the retained packaged candidate window"
-              ))
-          case .supportFailed:
-            actionOrder.append("minimize-support-failed")
-            try fail(
-              .accessibility(
-                "AXMinimized support could not be verified for the retained packaged candidate window"
-              ))
-          case .writeFailed:
-            minimizeAttributeSupported = true
-            minimizeAttributeSettable = true
-            actionOrder.append("minimize-write-failed")
-            try fail(
-              .accessibility(
-                "AXMinimized=false failed for the retained packaged candidate window"
-              ))
-          }
-        }
-      } else if restorationRequired && !nonMinimizedReadbackVerified {
-        nonMinimizedReadbackVerified = true
-        actionOrder.append("non-minimized-readback")
+        wait(policy.pollIntervalMilliseconds)
+        continue
       }
 
-      if restorationRequired && nonMinimizedReadbackVerified && visibilityPredicates.windowFrameVisible
-        && !frameVisibleReadbackVerified
-      {
-        frameVisibleReadbackVerified = true
-        actionOrder.append("frame-visible-readback")
+      frontmostReadback = Issue108AccessibilityBooleanReadReceipt(snapshot.accessibilityFrontmost)
+      switch snapshot.accessibilityFrontmost {
+      case .supported(true):
+        if !accessibilityReadbackVerified {
+          accessibilityReadbackVerified = true
+          actionOrder.append("accessibility-frontmost-readback")
+        }
+      case .supported(false):
+        if accessibilityReadbackVerified {
+          try fail(
+            .foreground(
+              "the packaged candidate lost Accessibility foreground after verified readback"
+            ))
+        }
+        wait(policy.pollIntervalMilliseconds)
+        continue
+      case .unavailable(.cannotComplete):
+        retryableFrontmostReadbackFailureCount += 1
+        wait(policy.pollIntervalMilliseconds)
+        continue
+      case .unavailable:
+        try fail(
+          .accessibility(
+            "AXFrontmost readback was unavailable for the retained packaged candidate application"
+          ))
+      }
+
+      if !snapshot.workspaceFrontmost {
+        if workspaceReadbackVerified {
+          try fail(
+            .foreground(
+              "the packaged candidate lost Workspace foreground after verified readback"
+            ))
+        }
+        wait(policy.pollIntervalMilliseconds)
+        continue
+      }
+      if !workspaceReadbackVerified {
+        workspaceReadbackVerified = true
+        actionOrder.append("workspace-frontmost-readback")
       }
 
       if !visibilityPredicates.visibleWindow {
-        if visibleWindowWasVerified || raiseAttemptCount > 0 || frontmostWriteAttemptCount > 0 {
+        if visibleWindowWasVerified || raiseSucceeded {
           try fail(
             .foreground(
-              "the packaged candidate lost visible-window readiness after a session action"
+              "the packaged candidate lost visible-window readiness after it was verified"
             ))
         }
         if firstVisibilityPendingElapsedMilliseconds == nil {
@@ -348,7 +441,10 @@ enum Issue105TargetSessionStabilizer {
         wait(policy.pollIntervalMilliseconds)
         continue
       }
-      visibleWindowWasVerified = true
+      if !visibleWindowWasVerified {
+        visibleWindowWasVerified = true
+        actionOrder.append("supported-positive-frame-readback")
+      }
       if firstVisibilityPendingElapsedMilliseconds != nil,
         visibilityBecameReadyElapsedMilliseconds == nil
       {
@@ -356,11 +452,6 @@ enum Issue105TargetSessionStabilizer {
       }
 
       if !raiseSucceeded {
-        if !snapshot.workspaceFrontmost {
-          wait(policy.pollIntervalMilliseconds)
-          continue
-        }
-
         raiseAttemptCount += 1
         switch performRaise() {
         case .success:
@@ -369,8 +460,6 @@ enum Issue105TargetSessionStabilizer {
         case .retryableCannotComplete:
           retryableRaiseFailureCount += 1
           actionOrder.append("raise-cannot-complete")
-          wait(policy.pollIntervalMilliseconds)
-          continue
         case .unsupported:
           try fail(
             .accessibility("AXRaise was unsupported for the retained packaged candidate window"))
@@ -378,50 +467,30 @@ enum Issue105TargetSessionStabilizer {
           try fail(
             .accessibility("AXRaise failed for the retained packaged candidate window"))
         }
-
-        frontmostWriteAttemptCount += 1
-        switch writeFrontmost() {
-        case .success:
-          frontmostWriteSucceeded = true
-          actionOrder.append("frontmost-write-succeeded")
-        case .retryableCannotComplete:
-          try fail(
-            .accessibility("the Accessibility frontmost write could not complete"))
-        case .unsupported:
-          try fail(
-            .accessibility("the Accessibility frontmost write was unsupported"))
-        case .failed:
-          try fail(
-            .accessibility("the Accessibility frontmost write failed"))
-        }
         wait(policy.pollIntervalMilliseconds)
         continue
       }
 
-      guard frontmostWriteSucceeded else {
-        try fail(.accessibility("the Accessibility frontmost write did not complete"))
-      }
-      guard snapshot.workspaceFrontmost else {
-        try fail(
-          .foreground("the packaged candidate lost Workspace foreground during stabilization"))
-      }
-      if snapshot.accessibilityFrontmost {
-        let terminalPredicates = Issue105TerminalPredicates(
-          exactCandidateRetained: true,
-          exactWindowRetained: true,
-          visibleWindow: true,
-          workspaceFrontmost: true,
-          accessibilityFrontmost: true,
-          independentObserverVerified: false
-        )
-        return Issue105StabilizationOutcome(
-          diagnostics: diagnostics(terminalPredicates: terminalPredicates),
-          terminalSnapshot: snapshot
-        )
-      }
-      wait(policy.pollIntervalMilliseconds)
+      let terminalPredicates = Issue105TerminalPredicates(
+        exactCandidateRetained: true,
+        exactWindowRetained: true,
+        visibleWindow: true,
+        workspaceFrontmost: true,
+        accessibilityFrontmost: true,
+        independentObserverVerified: false
+      )
+      return Issue105StabilizationOutcome(
+        diagnostics: diagnostics(terminalPredicates: terminalPredicates),
+        terminalSnapshot: snapshot
+      )
     }
 
+    if !frontmostWriteSucceeded || frontmostReadback?.value != true || !workspaceReadbackVerified {
+      try fail(
+        .foreground(
+          "the packaged candidate did not reach retained frontmost readiness before the stabilization timeout"
+        ))
+    }
     if terminalVisibilityPredicates?.visibleWindow == false {
       try fail(
         .accessibility(
@@ -430,7 +499,7 @@ enum Issue105TargetSessionStabilizer {
     }
     try fail(
       .foreground(
-        "the packaged candidate did not reach retained frontmost readiness before the stabilization timeout"
+        "the packaged candidate did not retain raised readiness before the stabilization timeout"
       ))
   }
 }

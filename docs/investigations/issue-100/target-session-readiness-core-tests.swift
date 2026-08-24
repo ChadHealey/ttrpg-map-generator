@@ -4,39 +4,86 @@ import Foundation
 enum TargetSessionReadinessCoreTests {
   static func main() throws {
     try acceptsOnlyRetainedExactReadiness()
-    rejectsWrongIdentityAndStaleProcessState()
-    rejectsZeroOrMultipleCandidatesAndWindows()
-    rejectsActivationAndRaiseFailures()
-    rejectsForegroundLossAndIdentityReplacement()
-    try acceptsDelayedActivationAndTransientRaiseFailure()
-    try restoresMinimizedExactWindowBeforeRaiseAndFrontmost()
-    try acceptsTransientMinimizeWriteFailureThenRestores()
-    try acceptsFrameNotVisibleSettling()
-    rejectsHiddenApplicationWithoutUnhide()
-    rejectsUnsupportedAndNonSettableMinimizeAttribute()
-    rejectsPermanentMinimizeSupportAndWriteFailures()
-    rejectsSuccessfulMinimizeWriteWithoutReadback()
-    rejectsDriftAndAmbiguityDuringRestoration()
-    rejectsVisibilityLossAfterRestoration()
+    distinguishesUnsupportedMinimizedFromObservedTrue()
+    recordsMissingFrameAsUnavailable()
+    try writesApplicationFrontmostBeforeWindowReadinessAndRaise()
+    try acceptsDelayedWorkspaceAndFrameReadiness()
+    try retriesOnlyCannotCompleteFrontmostBoundaries()
+    rejectsFrontmostSupportAndWriteFailures()
+    rejectsFrontmostReadbackFailures()
+    try retriesCannotCompleteFrontmostReadback()
+    try acceptsTransientRaiseCannotComplete()
     rejectsPermanentActivationAndRaiseFailures()
-    rejectsStabilizationDriftAmbiguityForegroundLossAndTimeout()
-    rejectsPersistentInvisibilityAtBoundWithoutActions()
-    rejectsDriftAndAmbiguityWhileInvisible()
-    rejectsVisibilityLossAfterSessionAction()
+    rejectsIdentityDriftAndAmbiguityBeforeActions()
+    rejectsIdentityDriftWhileWorkspaceOrFrameIsPending()
+    rejectsForegroundLossBeforeRaise()
+    rejectsHiddenApplicationWithoutUnhide()
+    rejectsPersistentFrontmostAndFrameTimeouts()
+    rejectsForegroundOrVisibilityLossAfterRaise()
+    rejectsWrongIdentityStaleAndMissingCandidateState()
     FileHandle.standardOutput.write(
       Data("issue100 target-session readiness core tests passed\n".utf8))
   }
 
-  private static func restoresMinimizedExactWindowBeforeRaiseAndFrontmost() throws {
+  private static func distinguishesUnsupportedMinimizedFromObservedTrue() {
+    let unsupported = validSnapshot(windowMinimized: .unavailable(.attributeUnsupported))
+    precondition(unsupported.windowMinimized.supportedValue == nil)
+    precondition(unsupported.visibleWindow)
+    let unsupportedReceipt = Issue108AccessibilityBooleanReadReceipt(
+      unsupported.windowMinimized)
+    precondition(unsupportedReceipt.state == .unavailable)
+    precondition(unsupportedReceipt.value == nil)
+    precondition(unsupportedReceipt.unavailableReason == .attributeUnsupported)
+
+    let observedTrue = validSnapshot(windowMinimized: .supported(true))
+    precondition(observedTrue.windowMinimized.supportedValue == true)
+    precondition(!observedTrue.visibleWindow)
+    let observedReceipt = Issue108AccessibilityBooleanReadReceipt(observedTrue.windowMinimized)
+    precondition(observedReceipt.state == .supported)
+    precondition(observedReceipt.value == true)
+    precondition(observedReceipt.unavailableReason == nil)
+  }
+
+  private static func recordsMissingFrameAsUnavailable() {
+    for reason in [
+      Issue108AccessibilityReadUnavailable.noValue,
+      .attributeUnsupported,
+      .cannotComplete,
+      .invalidValue,
+      .readError,
+    ] {
+      let snapshot = validSnapshot(windowFrameVisible: .unavailable(reason))
+      precondition(!snapshot.visibleWindow)
+      let receipt = Issue106VisibilityPredicates(snapshot: snapshot).windowFrameVisible
+      precondition(receipt.state == .unavailable)
+      precondition(receipt.value == nil)
+      precondition(receipt.unavailableReason == reason)
+    }
+  }
+
+  private static func writesApplicationFrontmostBeforeWindowReadinessAndRaise() throws {
     var elapsed: UInt64 = 0
     var observationCount = 0
-    var raiseAttemptCount = 0
-    var frontmostWriteAttemptCount = 0
+    var frontmostWriteCount = 0
+    var raiseCount = 0
     var observations = [
-      validSnapshot(windowMinimized: true, accessibilityFrontmost: false),
-      validSnapshot(windowFrameVisible: false, accessibilityFrontmost: false),
-      validSnapshot(accessibilityFrontmost: false),
-      validSnapshot(),
+      validSnapshot(
+        windowMinimized: .unavailable(.attributeUnsupported),
+        windowFrameVisible: .unavailable(.noValue),
+        accessibilityFrontmost: .supported(false),
+        workspaceFrontmost: false
+      ),
+      validSnapshot(
+        windowMinimized: .unavailable(.attributeUnsupported),
+        windowFrameVisible: .unavailable(.noValue),
+        workspaceFrontmost: false
+      ),
+      validSnapshot(
+        windowMinimized: .unavailable(.attributeUnsupported),
+        windowFrameVisible: .unavailable(.attributeUnsupported)
+      ),
+      validSnapshot(windowMinimized: .unavailable(.attributeUnsupported)),
+      validSnapshot(windowMinimized: .unavailable(.attributeUnsupported)),
     ]
     let outcome = try Issue105TargetSessionStabilizer.stabilize(
       policy: testPolicy,
@@ -46,515 +93,392 @@ enum TargetSessionReadinessCoreTests {
         observationCount += 1
         return observations.removeFirst()
       },
-      writeMinimizedFalse: {
+      writeFrontmost: {
         precondition(observationCount == 1)
+        precondition(raiseCount == 0)
+        frontmostWriteCount += 1
         return .success
       },
       performRaise: {
-        precondition(observationCount == 3)
-        raiseAttemptCount += 1
-        return .success
-      },
-      writeFrontmost: {
-        precondition(observationCount == 3)
-        frontmostWriteAttemptCount += 1
+        precondition(observationCount == 4)
+        precondition(frontmostWriteCount == 1)
+        raiseCount += 1
         return .success
       },
       wait: { elapsed += $0 }
     )
-    precondition(raiseAttemptCount == 1)
-    precondition(frontmostWriteAttemptCount == 1)
-    precondition(outcome.diagnostics.initialVisibilityPredicates?.windowMinimized == true)
-    precondition(outcome.diagnostics.initialVisibilityPredicates?.visibleWindow == false)
-    precondition(outcome.diagnostics.terminalVisibilityPredicates?.visibleWindow == true)
-    precondition(outcome.diagnostics.visibilityPendingObservationCount == 2)
-    precondition(outcome.diagnostics.visibilityPendingDurationMilliseconds == 100)
-    precondition(outcome.diagnostics.minimize.restorationRequired)
-    precondition(outcome.diagnostics.minimize.attributeSupported == true)
-    precondition(outcome.diagnostics.minimize.attributeSettable == true)
-    precondition(outcome.diagnostics.minimize.writeAttemptCount == 1)
-    precondition(outcome.diagnostics.minimize.writeSucceeded)
-    precondition(outcome.diagnostics.minimize.nonMinimizedReadbackVerified)
-    precondition(outcome.diagnostics.minimize.frameVisibleReadbackVerified)
+    precondition(frontmostWriteCount == 1)
+    precondition(raiseCount == 1)
+    precondition(outcome.diagnostics.frontmost.attributeSupported == true)
+    precondition(outcome.diagnostics.frontmost.attributeSettable == true)
+    precondition(outcome.diagnostics.frontmost.writeSucceeded)
+    precondition(outcome.diagnostics.frontmost.accessibilityReadback?.value == true)
+    precondition(outcome.diagnostics.frontmost.workspaceReadbackVerified)
+    precondition(outcome.diagnostics.visibilityPendingObservationCount == 1)
     precondition(
-      outcome.diagnostics.minimize.actionOrder == [
+      outcome.diagnostics.actionOrder == [
         "activation-request",
-        "minimize-write-succeeded",
-        "non-minimized-readback",
-        "frame-visible-readback",
-        "raise-succeeded",
         "frontmost-write-succeeded",
+        "accessibility-frontmost-readback",
+        "workspace-frontmost-readback",
+        "supported-positive-frame-readback",
+        "raise-succeeded",
       ])
   }
 
-  private static func acceptsTransientMinimizeWriteFailureThenRestores() throws {
+  private static func acceptsDelayedWorkspaceAndFrameReadiness() throws {
     var elapsed: UInt64 = 0
     var observations = [
-      validSnapshot(windowMinimized: true, accessibilityFrontmost: false),
-      validSnapshot(windowMinimized: true, accessibilityFrontmost: false),
-      validSnapshot(accessibilityFrontmost: false),
-      validSnapshot(),
-    ]
-    var minimizeResults: [Issue107MinimizeWriteResult] = [
-      .retryableWriteCannotComplete, .success,
-    ]
-    let outcome = try Issue105TargetSessionStabilizer.stabilize(
-      policy: testPolicy,
-      retainedIdentity: retainedIdentity,
-      elapsedMilliseconds: { elapsed },
-      observe: { observations.removeFirst() },
-      writeMinimizedFalse: { minimizeResults.removeFirst() },
-      performRaise: { .success },
-      writeFrontmost: { .success },
-      wait: { elapsed += $0 }
-    )
-    precondition(outcome.diagnostics.minimize.writeAttemptCount == 2)
-    precondition(outcome.diagnostics.minimize.retryableWriteFailureCount == 1)
-    precondition(outcome.diagnostics.minimize.writeSucceeded)
-    precondition(outcome.diagnostics.raiseAttemptCount == 1)
-    precondition(outcome.diagnostics.frontmostWriteAttemptCount == 1)
-  }
-
-  private static func acceptsFrameNotVisibleSettling() throws {
-    var elapsed: UInt64 = 0
-    var observationCount = 0
-    var observations = [
-      validSnapshot(windowFrameVisible: false, accessibilityFrontmost: false),
-      validSnapshot(accessibilityFrontmost: false),
-      validSnapshot(),
-    ]
-    let outcome = try Issue105TargetSessionStabilizer.stabilize(
-      policy: testPolicy,
-      retainedIdentity: retainedIdentity,
-      elapsedMilliseconds: { elapsed },
-      observe: {
-        observationCount += 1
-        return observations.removeFirst()
-      },
-      writeMinimizedFalse: { preconditionFailure("minimize write must not run") },
-      performRaise: {
-        precondition(observationCount == 2)
-        return .success
-      },
-      writeFrontmost: {
-        precondition(observationCount == 2)
-        return .success
-      },
-      wait: { elapsed += $0 }
-    )
-    precondition(outcome.diagnostics.initialVisibilityPredicates?.applicationHidden == false)
-    precondition(outcome.diagnostics.visibilityPendingObservationCount == 1)
-    precondition(outcome.diagnostics.visibilityPendingDurationMilliseconds == 50)
-    precondition(outcome.diagnostics.terminalVisibilityPredicates?.visibleWindow == true)
-  }
-
-  private static func rejectsHiddenApplicationWithoutUnhide() {
-    expectStabilizationInvalid(.accessibility) {
-      try stabilization(
-        observations: [validSnapshot(applicationHidden: true, accessibilityFrontmost: false)]
-      )
-    }
-  }
-
-  private static func rejectsUnsupportedAndNonSettableMinimizeAttribute() {
-    for result in [
-      Issue107MinimizeWriteResult.attributeUnsupported,
-      Issue107MinimizeWriteResult.notSettable,
-    ] {
-      expectStabilizationInvalid(.accessibility) {
-        try minimizedStabilization(writeResults: [result])
-      }
-    }
-  }
-
-  private static func rejectsPermanentMinimizeSupportAndWriteFailures() {
-    for result in [
-      Issue107MinimizeWriteResult.supportFailed,
-      Issue107MinimizeWriteResult.writeFailed,
-    ] {
-      expectStabilizationInvalid(.accessibility) {
-        try minimizedStabilization(writeResults: [result])
-      }
-    }
-  }
-
-  private static func rejectsSuccessfulMinimizeWriteWithoutReadback() {
-    var elapsed: UInt64 = 0
-    var minimizeWriteCount = 0
-    do {
-      _ = try Issue105TargetSessionStabilizer.stabilize(
-        policy: testPolicy,
-        retainedIdentity: retainedIdentity,
-        elapsedMilliseconds: { elapsed },
-        observe: { validSnapshot(windowMinimized: true, accessibilityFrontmost: false) },
-        writeMinimizedFalse: {
-          minimizeWriteCount += 1
-          return .success
-        },
-        performRaise: { preconditionFailure("raise must not run before minimize readback") },
-        writeFrontmost: { preconditionFailure("frontmost write must not run before visibility") },
-        wait: { elapsed += $0 }
-      )
-      preconditionFailure("expected bounded minimize-readback timeout")
-    } catch let failure as Issue105ReadinessFailure {
-      precondition(ExpectedAuthority.accessibility.matches(failure.invalidation))
-      precondition(failure.diagnostics.minimize.writeAttemptCount == 1)
-      precondition(failure.diagnostics.minimize.writeSucceeded)
-      precondition(!failure.diagnostics.minimize.nonMinimizedReadbackVerified)
-      precondition(failure.diagnostics.raiseAttemptCount == 0)
-      precondition(failure.diagnostics.frontmostWriteAttemptCount == 0)
-    } catch {
-      preconditionFailure("unexpected minimize-readback timeout error")
-    }
-    precondition(minimizeWriteCount == 1)
-  }
-
-  private static func rejectsDriftAndAmbiguityDuringRestoration() {
-    let driftingSnapshots = [
-      (validSnapshot(processIdentifier: 43, windowMinimized: true), ExpectedAuthority.processState),
-      (validSnapshot(windowIdentity: 8, windowMinimized: true), ExpectedAuthority.processState),
-      (validSnapshot(applicationCount: 2, windowMinimized: true), ExpectedAuthority.processState),
-      (validSnapshot(windowCount: 2, windowMinimized: true), ExpectedAuthority.accessibility),
-      (
-        validSnapshot(executableIdentityMatched: false, windowMinimized: true),
-        ExpectedAuthority.identity
+      validSnapshot(
+        windowFrameVisible: .unavailable(.noValue),
+        accessibilityFrontmost: .supported(false),
+        workspaceFrontmost: false
       ),
+      validSnapshot(windowFrameVisible: .unavailable(.noValue), workspaceFrontmost: false),
+      validSnapshot(windowFrameVisible: .unavailable(.noValue)),
+      validSnapshot(windowFrameVisible: .supported(false)),
+      validSnapshot(),
+      validSnapshot(),
     ]
-    for (driftingSnapshot, authority) in driftingSnapshots {
-      var elapsed: UInt64 = 0
-      var observations = [
-        validSnapshot(windowMinimized: true, accessibilityFrontmost: false),
-        driftingSnapshot,
-      ]
-      do {
-        _ = try Issue105TargetSessionStabilizer.stabilize(
-          policy: testPolicy,
-          retainedIdentity: retainedIdentity,
-          elapsedMilliseconds: { elapsed },
-          observe: { observations.removeFirst() },
-          writeMinimizedFalse: { .success },
-          performRaise: { preconditionFailure("raise must not run during restoration drift") },
-          writeFrontmost: {
-            preconditionFailure("frontmost write must not run during restoration drift")
-          },
-          wait: { elapsed += $0 }
-        )
-        preconditionFailure("expected restoration identity invalidation")
-      } catch let failure as Issue105ReadinessFailure {
-        precondition(authority.matches(failure.invalidation))
-        precondition(failure.diagnostics.stabilizationObservationCount == 2)
-        precondition(failure.diagnostics.minimize.writeAttemptCount == 1)
-        precondition(failure.diagnostics.raiseAttemptCount == 0)
-        precondition(failure.diagnostics.frontmostWriteAttemptCount == 0)
-      } catch {
-        preconditionFailure("unexpected restoration drift error")
-      }
-    }
-  }
-
-  private static func rejectsVisibilityLossAfterRestoration() {
-    var elapsed: UInt64 = 0
-    var observations = [
-      validSnapshot(windowMinimized: true, accessibilityFrontmost: false),
-      validSnapshot(accessibilityFrontmost: false, workspaceFrontmost: false),
-      validSnapshot(windowFrameVisible: false, accessibilityFrontmost: false),
-    ]
-    do {
-      _ = try Issue105TargetSessionStabilizer.stabilize(
-        policy: testPolicy,
-        retainedIdentity: retainedIdentity,
-        elapsedMilliseconds: { elapsed },
-        observe: { observations.removeFirst() },
-        writeMinimizedFalse: { .success },
-        performRaise: { preconditionFailure("raise must not run before Workspace foreground") },
-        writeFrontmost: { preconditionFailure("frontmost write must not run before raise") },
-        wait: { elapsed += $0 }
-      )
-      preconditionFailure("expected post-restoration visibility loss")
-    } catch let failure as Issue105ReadinessFailure {
-      precondition(ExpectedAuthority.foreground.matches(failure.invalidation))
-      precondition(failure.diagnostics.minimize.nonMinimizedReadbackVerified)
-      precondition(failure.diagnostics.minimize.frameVisibleReadbackVerified)
-      precondition(failure.diagnostics.raiseAttemptCount == 0)
-      precondition(failure.diagnostics.frontmostWriteAttemptCount == 0)
-    } catch {
-      preconditionFailure("unexpected post-restoration visibility error")
-    }
-  }
-
-  private static func acceptsDelayedActivationAndTransientRaiseFailure() throws {
-    var elapsed: UInt64 = 0
-    var observations = [
-      validSnapshot(accessibilityFrontmost: false, workspaceFrontmost: false),
-      validSnapshot(accessibilityFrontmost: false, workspaceFrontmost: true),
-      validSnapshot(accessibilityFrontmost: false, workspaceFrontmost: true),
-      validSnapshot(accessibilityFrontmost: true, workspaceFrontmost: true),
-    ]
-    var raiseResults: [Issue105SessionActionResult] = [.retryableCannotComplete, .success]
+    var raiseCount = 0
     let outcome = try Issue105TargetSessionStabilizer.stabilize(
       policy: testPolicy,
       retainedIdentity: retainedIdentity,
       elapsedMilliseconds: { elapsed },
       observe: { observations.removeFirst() },
-      writeMinimizedFalse: { preconditionFailure("minimize write must not run") },
-      performRaise: { raiseResults.removeFirst() },
       writeFrontmost: { .success },
+      performRaise: {
+        raiseCount += 1
+        return .success
+      },
       wait: { elapsed += $0 }
     )
-    precondition(outcome.diagnostics.stabilizationObservationCount == 4)
+    precondition(raiseCount == 1)
+    precondition(outcome.diagnostics.stabilizationObservationCount == 6)
+    precondition(outcome.diagnostics.visibilityPendingObservationCount == 2)
+    precondition(outcome.diagnostics.visibilityPendingDurationMilliseconds == 100)
+  }
+
+  private static func retriesOnlyCannotCompleteFrontmostBoundaries() throws {
+    var elapsed: UInt64 = 0
+    var frontmostResults: [Issue108FrontmostWriteResult] = [
+      .retryableSupportCannotComplete,
+      .retryableWriteCannotComplete,
+      .success,
+    ]
+    var observations = [
+      validSnapshot(accessibilityFrontmost: .supported(false), workspaceFrontmost: false),
+      validSnapshot(accessibilityFrontmost: .supported(false), workspaceFrontmost: false),
+      validSnapshot(accessibilityFrontmost: .supported(false), workspaceFrontmost: false),
+      validSnapshot(),
+      validSnapshot(),
+    ]
+    let outcome = try Issue105TargetSessionStabilizer.stabilize(
+      policy: testPolicy,
+      retainedIdentity: retainedIdentity,
+      elapsedMilliseconds: { elapsed },
+      observe: { observations.removeFirst() },
+      writeFrontmost: { frontmostResults.removeFirst() },
+      performRaise: { .success },
+      wait: { elapsed += $0 }
+    )
+    precondition(outcome.diagnostics.frontmost.writeAttemptCount == 3)
+    precondition(outcome.diagnostics.frontmost.retryableSupportFailureCount == 1)
+    precondition(outcome.diagnostics.frontmost.retryableWriteFailureCount == 1)
+    precondition(outcome.diagnostics.raiseAttemptCount == 1)
+  }
+
+  private static func rejectsFrontmostSupportAndWriteFailures() {
+    for result in [
+      Issue108FrontmostWriteResult.attributeUnsupported,
+      .notSettable,
+      .supportFailed,
+      .writeFailed,
+    ] {
+      var raiseCount = 0
+      do {
+        _ = try stabilize(
+          observations: [
+            validSnapshot(
+              windowFrameVisible: .unavailable(.noValue),
+              accessibilityFrontmost: .supported(false),
+              workspaceFrontmost: false
+            )
+          ],
+          frontmostResults: [result],
+          performRaise: {
+            raiseCount += 1
+            return .success
+          }
+        )
+        preconditionFailure("expected frontmost capability invalidation")
+      } catch let failure as Issue105ReadinessFailure {
+        precondition(ExpectedAuthority.accessibility.matches(failure.invalidation))
+        precondition(failure.diagnostics.frontmost.writeAttemptCount == 1)
+        precondition(failure.diagnostics.raiseAttemptCount == 0)
+      } catch {
+        preconditionFailure("unexpected frontmost capability error")
+      }
+      precondition(raiseCount == 0)
+    }
+  }
+
+  private static func rejectsFrontmostReadbackFailures() {
+    for reason in [
+      Issue108AccessibilityReadUnavailable.attributeUnsupported,
+      .noValue,
+      .invalidValue,
+      .readError,
+    ] {
+      expectStabilizationInvalid(.accessibility) {
+        try stabilize(
+          observations: [
+            validSnapshot(accessibilityFrontmost: .supported(false)),
+            validSnapshot(accessibilityFrontmost: .unavailable(reason)),
+          ]
+        )
+      }
+    }
+  }
+
+  private static func retriesCannotCompleteFrontmostReadback() throws {
+    let outcome = try stabilize(
+      observations: [
+        validSnapshot(accessibilityFrontmost: .supported(false), workspaceFrontmost: false),
+        validSnapshot(accessibilityFrontmost: .unavailable(.cannotComplete)),
+        validSnapshot(),
+        validSnapshot(),
+      ]
+    )
+    precondition(outcome.diagnostics.frontmost.retryableReadbackFailureCount == 1)
+    precondition(outcome.diagnostics.frontmost.accessibilityReadback?.value == true)
+  }
+
+  private static func acceptsTransientRaiseCannotComplete() throws {
+    var raiseResults: [Issue105SessionActionResult] = [.retryableCannotComplete, .success]
+    let outcome = try stabilize(
+      observations: [
+        validSnapshot(accessibilityFrontmost: .supported(false)),
+        validSnapshot(),
+        validSnapshot(),
+        validSnapshot(),
+      ],
+      performRaise: { raiseResults.removeFirst() }
+    )
     precondition(outcome.diagnostics.raiseAttemptCount == 2)
     precondition(outcome.diagnostics.retryableRaiseFailureCount == 1)
-    precondition(outcome.diagnostics.frontmostWriteAttemptCount == 1)
-    precondition(outcome.diagnostics.terminalPredicates.accessibilityFrontmost)
+    precondition(outcome.diagnostics.raiseSucceeded)
   }
 
   private static func rejectsPermanentActivationAndRaiseFailures() {
     expectInvalid(.action) {
       try Issue105TargetSessionStabilizer.validateActivationRequest(accepted: false)
     }
-    expectStabilizationInvalid(.accessibility) {
-      try stabilization(raiseResults: [.failed])
-    }
-    expectStabilizationInvalid(.accessibility) {
-      try stabilization(raiseResults: [.unsupported])
-    }
-    expectStabilizationInvalid(.accessibility) {
-      try stabilization(raiseResults: [.success], frontmostWriteResult: .failed)
-    }
-  }
-
-  private static func rejectsStabilizationDriftAmbiguityForegroundLossAndTimeout() {
-    expectStabilizationInvalid(.processState) {
-      try stabilization(observations: [validSnapshot(processIdentifier: 43)])
-    }
-    expectStabilizationInvalid(.processState) {
-      try stabilization(observations: [validSnapshot(windowIdentity: 8)])
-    }
-    expectStabilizationInvalid(.processState) {
-      try stabilization(observations: [validSnapshot(applicationCount: 2)])
-    }
-    expectStabilizationInvalid(.accessibility) {
-      try stabilization(observations: [validSnapshot(windowCount: 2)])
-    }
-    expectStabilizationInvalid(.foreground) {
-      try stabilization(
-        observations: [
-          validSnapshot(accessibilityFrontmost: false),
-          validSnapshot(accessibilityFrontmost: false, workspaceFrontmost: false),
-        ]
-      )
-    }
-
-    var elapsed: UInt64 = 0
-    expectStabilizationInvalid(.foreground) {
-      _ = try Issue105TargetSessionStabilizer.stabilize(
-        policy: testPolicy,
-        retainedIdentity: retainedIdentity,
-        elapsedMilliseconds: { elapsed },
-        observe: { validSnapshot(accessibilityFrontmost: false, workspaceFrontmost: false) },
-        writeMinimizedFalse: { preconditionFailure("minimize write must not run") },
-        performRaise: { preconditionFailure("raise must not run before activation stabilizes") },
-        writeFrontmost: { preconditionFailure("frontmost write must not run before raise") },
-        wait: { elapsed += $0 }
-      )
+    for result in [Issue105SessionActionResult.unsupported, .failed] {
+      expectStabilizationInvalid(.accessibility) {
+        try stabilize(
+          observations: [
+            validSnapshot(accessibilityFrontmost: .supported(false)),
+            validSnapshot(),
+          ],
+          performRaise: { result }
+        )
+      }
     }
   }
 
-  private static func rejectsPersistentInvisibilityAtBoundWithoutActions() {
-    var elapsed: UInt64 = 0
-    var raiseAttemptCount = 0
-    var frontmostWriteAttemptCount = 0
-    do {
-      _ = try Issue105TargetSessionStabilizer.stabilize(
-        policy: testPolicy,
-        retainedIdentity: retainedIdentity,
-        elapsedMilliseconds: { elapsed },
-        observe: {
-          validSnapshot(windowFrameVisible: false, accessibilityFrontmost: false)
-        },
-        writeMinimizedFalse: { preconditionFailure("minimize write must not run") },
-        performRaise: {
-          raiseAttemptCount += 1
-          return .success
-        },
-        writeFrontmost: {
-          frontmostWriteAttemptCount += 1
-          return .success
-        },
-        wait: { elapsed += $0 }
-      )
-      preconditionFailure("expected bounded invisibility timeout")
-    } catch let failure as Issue105ReadinessFailure {
-      precondition(ExpectedAuthority.accessibility.matches(failure.invalidation))
-      precondition(failure.diagnostics.stabilizationDurationMilliseconds == 150)
-      precondition(failure.diagnostics.visibilityPendingObservationCount == 4)
-      precondition(failure.diagnostics.visibilityPendingDurationMilliseconds == 150)
-      precondition(failure.diagnostics.initialVisibilityPredicates?.visibleWindow == false)
-      precondition(failure.diagnostics.terminalVisibilityPredicates?.visibleWindow == false)
-      precondition(failure.diagnostics.raiseAttemptCount == 0)
-      precondition(failure.diagnostics.frontmostWriteAttemptCount == 0)
-    } catch {
-      preconditionFailure("unexpected bounded invisibility error")
-    }
-    precondition(raiseAttemptCount == 0)
-    precondition(frontmostWriteAttemptCount == 0)
-  }
-
-  private static func rejectsDriftAndAmbiguityWhileInvisible() {
-    var elapsed: UInt64 = 0
-    var observations = [
-      validSnapshot(windowFrameVisible: false, accessibilityFrontmost: false),
-      validSnapshot(
-        processIdentifier: 43,
-        windowFrameVisible: false,
-        accessibilityFrontmost: false
-      ),
-    ]
-    do {
-      _ = try Issue105TargetSessionStabilizer.stabilize(
-        policy: testPolicy,
-        retainedIdentity: retainedIdentity,
-        elapsedMilliseconds: { elapsed },
-        observe: { observations.removeFirst() },
-        writeMinimizedFalse: { preconditionFailure("minimize write must not run") },
-        performRaise: { preconditionFailure("raise must not run while invisible") },
-        writeFrontmost: { preconditionFailure("frontmost write must not run while invisible") },
-        wait: { elapsed += $0 }
-      )
-      preconditionFailure("expected invisible identity drift invalidation")
-    } catch let failure as Issue105ReadinessFailure {
-      precondition(ExpectedAuthority.processState.matches(failure.invalidation))
-      precondition(failure.diagnostics.stabilizationObservationCount == 2)
-      precondition(failure.diagnostics.visibilityPendingObservationCount == 1)
-      precondition(failure.diagnostics.raiseAttemptCount == 0)
-      precondition(failure.diagnostics.frontmostWriteAttemptCount == 0)
-    } catch {
-      preconditionFailure("unexpected invisible identity drift error")
-    }
-
+  private static func rejectsIdentityDriftAndAmbiguityBeforeActions() {
     for (snapshot, authority) in [
-      (
-        validSnapshot(
-          windowIdentity: 8,
-          windowFrameVisible: false,
-          accessibilityFrontmost: false
-        ), ExpectedAuthority.processState
-      ),
-      (
-        validSnapshot(
-          executableIdentityMatched: false,
-          windowFrameVisible: false,
-          accessibilityFrontmost: false
-        ), ExpectedAuthority.identity
-      ),
-      (
-        validSnapshot(
-          applicationCount: 2,
-          windowFrameVisible: false,
-          accessibilityFrontmost: false
-        ), ExpectedAuthority.processState
-      ),
-      (
-        validSnapshot(
-          windowCount: 2,
-          windowFrameVisible: false,
-          accessibilityFrontmost: false
-        ), ExpectedAuthority.accessibility
-      ),
+      (validSnapshot(processIdentifier: 43), ExpectedAuthority.processState),
+      (validSnapshot(windowIdentity: 8), ExpectedAuthority.processState),
+      (validSnapshot(applicationCount: 2), ExpectedAuthority.processState),
+      (validSnapshot(windowCount: 2), ExpectedAuthority.accessibility),
+      (validSnapshot(executableIdentityMatched: false), ExpectedAuthority.identity),
     ] {
-      expectStabilizationInvalid(authority) {
-        try stabilization(observations: [snapshot])
+      var frontmostWriteCount = 0
+      do {
+        _ = try stabilize(
+          observations: [snapshot],
+          writeFrontmost: {
+            frontmostWriteCount += 1
+            return .success
+          }
+        )
+        preconditionFailure("expected pre-action identity invalidation")
+      } catch let failure as Issue105ReadinessFailure {
+        precondition(authority.matches(failure.invalidation))
+        precondition(failure.diagnostics.frontmost.writeAttemptCount == 0)
+        precondition(failure.diagnostics.raiseAttemptCount == 0)
+      } catch {
+        preconditionFailure("unexpected pre-action identity error")
+      }
+      precondition(frontmostWriteCount == 0)
+    }
+  }
+
+  private static func rejectsIdentityDriftWhileWorkspaceOrFrameIsPending() {
+    for driftingSnapshot in [
+      validSnapshot(processIdentifier: 43, workspaceFrontmost: false),
+      validSnapshot(windowIdentity: 8, windowFrameVisible: .unavailable(.noValue)),
+      validSnapshot(applicationCount: 2, workspaceFrontmost: false),
+      validSnapshot(windowCount: 2, windowFrameVisible: .unavailable(.noValue)),
+    ] {
+      do {
+        _ = try stabilize(
+          observations: [
+            validSnapshot(accessibilityFrontmost: .supported(false), workspaceFrontmost: false),
+            validSnapshot(workspaceFrontmost: false),
+            driftingSnapshot,
+          ]
+        )
+        preconditionFailure("expected pending identity invalidation")
+      } catch let failure as Issue105ReadinessFailure {
+        precondition(
+          ExpectedAuthority.processState.matches(failure.invalidation)
+            || ExpectedAuthority.accessibility.matches(failure.invalidation))
+        precondition(failure.diagnostics.raiseAttemptCount == 0)
+      } catch {
+        preconditionFailure("unexpected pending identity error")
       }
     }
 
-    var sessionElapsed: UInt64 = 0
+    var elapsed: UInt64 = 0
     expectStabilizationInvalid(.session) {
       _ = try Issue105TargetSessionStabilizer.stabilize(
         policy: testPolicy,
         retainedIdentity: retainedIdentity,
-        elapsedMilliseconds: { sessionElapsed },
+        elapsedMilliseconds: { elapsed },
         observe: {
           throw TargetSessionReadinessInvalidation.session(
-            "the designated session changed while visibility was pending")
+            "the designated session changed during frontmost settling")
         },
-        writeMinimizedFalse: { preconditionFailure("minimize write must not run") },
+        writeFrontmost: { preconditionFailure("frontmost must not run after session drift") },
         performRaise: { preconditionFailure("raise must not run after session drift") },
-        writeFrontmost: { preconditionFailure("frontmost write must not run after session drift") },
-        wait: { sessionElapsed += $0 }
-      )
-    }
-  }
-
-  private static func rejectsVisibilityLossAfterSessionAction() {
-    var elapsed: UInt64 = 0
-    var observations = [
-      validSnapshot(accessibilityFrontmost: false),
-      validSnapshot(windowMinimized: true, accessibilityFrontmost: false),
-    ]
-    do {
-      _ = try Issue105TargetSessionStabilizer.stabilize(
-        policy: testPolicy,
-        retainedIdentity: retainedIdentity,
-        elapsedMilliseconds: { elapsed },
-        observe: { observations.removeFirst() },
-        writeMinimizedFalse: { preconditionFailure("minimize write must not run after action") },
-        performRaise: { .success },
-        writeFrontmost: { .success },
         wait: { elapsed += $0 }
       )
-      preconditionFailure("expected post-action visibility-loss invalidation")
-    } catch let failure as Issue105ReadinessFailure {
-      precondition(ExpectedAuthority.foreground.matches(failure.invalidation))
-      precondition(failure.diagnostics.stabilizationObservationCount == 2)
-      precondition(failure.diagnostics.visibilityPendingObservationCount == 0)
-      precondition(failure.diagnostics.raiseAttemptCount == 1)
-      precondition(failure.diagnostics.frontmostWriteAttemptCount == 1)
-      precondition(failure.diagnostics.terminalVisibilityPredicates?.visibleWindow == false)
-    } catch {
-      preconditionFailure("unexpected post-action visibility-loss error")
     }
   }
 
-  @discardableResult
-  private static func stabilization(
-    observations suppliedObservations: [TargetSessionReadinessSnapshot] = [
-      validSnapshot(accessibilityFrontmost: false),
-      validSnapshot(),
-    ],
-    raiseResults suppliedRaiseResults: [Issue105SessionActionResult] = [.success],
-    frontmostWriteResult: Issue105SessionActionResult = .success
-  ) throws -> Issue105StabilizationOutcome {
-    var elapsed: UInt64 = 0
-    var observations = suppliedObservations
-    var raiseResults = suppliedRaiseResults
-    return try Issue105TargetSessionStabilizer.stabilize(
-      policy: testPolicy,
-      retainedIdentity: retainedIdentity,
-      elapsedMilliseconds: { elapsed },
-      observe: { observations.removeFirst() },
-      writeMinimizedFalse: { preconditionFailure("minimize write must not run") },
-      performRaise: { raiseResults.removeFirst() },
-      writeFrontmost: { frontmostWriteResult },
-      wait: { elapsed += $0 }
-    )
+  private static func rejectsHiddenApplicationWithoutUnhide() {
+    var frontmostWriteCount = 0
+    expectStabilizationInvalid(.accessibility) {
+      try stabilize(
+        observations: [validSnapshot(applicationHidden: true)],
+        writeFrontmost: {
+          frontmostWriteCount += 1
+          return .success
+        }
+      )
+    }
+    precondition(frontmostWriteCount == 0)
   }
 
-  @discardableResult
-  private static func minimizedStabilization(
-    writeResults suppliedWriteResults: [Issue107MinimizeWriteResult]
-  ) throws -> Issue105StabilizationOutcome {
-    var elapsed: UInt64 = 0
-    var writeResults = suppliedWriteResults
-    return try Issue105TargetSessionStabilizer.stabilize(
-      policy: testPolicy,
-      retainedIdentity: retainedIdentity,
-      elapsedMilliseconds: { elapsed },
-      observe: { validSnapshot(windowMinimized: true, accessibilityFrontmost: false) },
-      writeMinimizedFalse: { writeResults.removeFirst() },
-      performRaise: { preconditionFailure("raise must not run while minimized") },
-      writeFrontmost: { preconditionFailure("frontmost write must not run while minimized") },
-      wait: { elapsed += $0 }
-    )
+  private static func rejectsForegroundLossBeforeRaise() {
+    for terminal in [
+      validSnapshot(
+        windowFrameVisible: .unavailable(.noValue),
+        accessibilityFrontmost: .supported(false)
+      ),
+      validSnapshot(
+        windowFrameVisible: .unavailable(.noValue),
+        workspaceFrontmost: false
+      ),
+    ] {
+      do {
+        _ = try stabilize(
+          observations: [
+            validSnapshot(
+              windowFrameVisible: .unavailable(.noValue),
+              accessibilityFrontmost: .supported(false),
+              workspaceFrontmost: false
+            ),
+            validSnapshot(windowFrameVisible: .unavailable(.noValue)),
+            terminal,
+          ]
+        )
+        preconditionFailure("expected verified-foreground loss")
+      } catch let failure as Issue105ReadinessFailure {
+        precondition(ExpectedAuthority.foreground.matches(failure.invalidation))
+        precondition(failure.diagnostics.raiseAttemptCount == 0)
+      } catch {
+        preconditionFailure("unexpected verified-foreground loss error")
+      }
+    }
+  }
+
+  private static func rejectsPersistentFrontmostAndFrameTimeouts() {
+    var frontmostElapsed: UInt64 = 0
+    do {
+      _ = try Issue105TargetSessionStabilizer.stabilize(
+        policy: timeoutPolicy,
+        retainedIdentity: retainedIdentity,
+        elapsedMilliseconds: { frontmostElapsed },
+        observe: { validSnapshot(accessibilityFrontmost: .supported(false)) },
+        writeFrontmost: { .success },
+        performRaise: { preconditionFailure("raise must not run before frontmost readback") },
+        wait: { frontmostElapsed += $0 }
+      )
+      preconditionFailure("expected frontmost timeout")
+    } catch let failure as Issue105ReadinessFailure {
+      precondition(ExpectedAuthority.foreground.matches(failure.invalidation))
+      precondition(failure.diagnostics.frontmost.writeAttemptCount == 1)
+      precondition(failure.diagnostics.raiseAttemptCount == 0)
+    } catch {
+      preconditionFailure("unexpected frontmost timeout error")
+    }
+
+    var frameElapsed: UInt64 = 0
+    do {
+      _ = try Issue105TargetSessionStabilizer.stabilize(
+        policy: timeoutPolicy,
+        retainedIdentity: retainedIdentity,
+        elapsedMilliseconds: { frameElapsed },
+        observe: {
+          validSnapshot(
+            windowMinimized: .unavailable(.attributeUnsupported),
+            windowFrameVisible: .unavailable(.noValue)
+          )
+        },
+        writeFrontmost: { .success },
+        performRaise: { preconditionFailure("raise must not run without a supported frame") },
+        wait: { frameElapsed += $0 }
+      )
+      preconditionFailure("expected frame timeout")
+    } catch let failure as Issue105ReadinessFailure {
+      precondition(ExpectedAuthority.accessibility.matches(failure.invalidation))
+      precondition(failure.diagnostics.visibilityPendingObservationCount == 2)
+      precondition(failure.diagnostics.raiseAttemptCount == 0)
+      precondition(
+        failure.diagnostics.terminalVisibilityPredicates?.windowFrameVisible.state
+          == .unavailable)
+    } catch {
+      preconditionFailure("unexpected frame timeout error")
+    }
+  }
+
+  private static func rejectsForegroundOrVisibilityLossAfterRaise() {
+    for terminal in [
+      validSnapshot(workspaceFrontmost: false),
+      validSnapshot(accessibilityFrontmost: .supported(false)),
+      validSnapshot(windowFrameVisible: .unavailable(.noValue)),
+      validSnapshot(windowMinimized: .supported(true)),
+      validSnapshot(processIdentifier: 43),
+    ] {
+      do {
+        _ = try stabilize(
+          observations: [
+            validSnapshot(accessibilityFrontmost: .supported(false)),
+            validSnapshot(),
+            terminal,
+          ]
+        )
+        preconditionFailure("expected retained-state invalidation")
+      } catch let failure as Issue105ReadinessFailure {
+        precondition(failure.diagnostics.raiseSucceeded)
+      } catch {
+        preconditionFailure("unexpected retained-state error")
+      }
+    }
   }
 
   private static func acceptsOnlyRetainedExactReadiness() throws {
@@ -565,10 +489,17 @@ enum TargetSessionReadinessCoreTests {
     )
     try TargetSessionReadinessPredicate.validateAction(validAction())
     try TargetSessionReadinessPredicate.validateRetained(
-      first: validSnapshot(), second: validSnapshot())
+      first: validPredecessorSnapshot(), second: validPredecessorSnapshot())
   }
 
-  private static func rejectsWrongIdentityAndStaleProcessState() {
+  private static func rejectsWrongIdentityStaleAndMissingCandidateState() {
+    expectInvalid(.session) {
+      try TargetSessionReadinessPredicate.validatePrelaunch(
+        existingApplicationCount: 0,
+        consoleSessionMatched: false,
+        packageIdentityMatched: true
+      )
+    }
     expectInvalid(.identity) {
       try TargetSessionReadinessPredicate.validatePrelaunch(
         existingApplicationCount: 0,
@@ -583,62 +514,45 @@ enum TargetSessionReadinessCoreTests {
         packageIdentityMatched: true
       )
     }
-  }
-
-  private static func rejectsZeroOrMultipleCandidatesAndWindows() {
     for count in [0, 2] {
       expectInvalid(.processState) {
-        try TargetSessionReadinessPredicate.validateSnapshot(validSnapshot(applicationCount: count))
+        try TargetSessionReadinessPredicate.validateSnapshot(
+          validPredecessorSnapshot(applicationCount: count))
       }
-    }
-    for count in [0, 2] {
       expectInvalid(.accessibility) {
-        try TargetSessionReadinessPredicate.validateSnapshot(validSnapshot(windowCount: count))
+        try TargetSessionReadinessPredicate.validateSnapshot(
+          validPredecessorSnapshot(windowCount: count))
       }
     }
     expectInvalid(.accessibility) {
-      try TargetSessionReadinessPredicate.validateSnapshot(validSnapshot(windowMinimized: true))
+      try Issue105TargetSessionStabilizer.validateSnapshot(
+        validSnapshot(windowFrameVisible: .unavailable(.noValue)))
     }
-  }
-
-  private static func rejectsActivationAndRaiseFailures() {
-    expectInvalid(.action) {
-      try TargetSessionReadinessPredicate.validateAction(
-        TargetSessionActionReceipt(
-          consoleSessionMatched: true,
-          packageIdentityMatched: true,
-          launchSucceeded: true,
-          activationSucceeded: false,
-          raiseSucceeded: true,
-          frontmostWriteSucceeded: true
-        ))
-    }
-    expectInvalid(.accessibility) {
-      try TargetSessionReadinessPredicate.validateAction(
-        TargetSessionActionReceipt(
-          consoleSessionMatched: true,
-          packageIdentityMatched: true,
-          launchSucceeded: true,
-          activationSucceeded: true,
-          raiseSucceeded: false,
-          frontmostWriteSucceeded: true
-        ))
-    }
-  }
-
-  private static func rejectsForegroundLossAndIdentityReplacement() {
     expectInvalid(.foreground) {
-      try TargetSessionReadinessPredicate.validateRetained(
-        first: validSnapshot(),
-        second: validSnapshot(accessibilityFrontmost: false)
-      )
+      try Issue105TargetSessionStabilizer.validateSnapshot(
+        validSnapshot(accessibilityFrontmost: .unavailable(.attributeUnsupported)))
     }
-    expectInvalid(.processState) {
-      try TargetSessionReadinessPredicate.validateRetained(
-        first: validSnapshot(),
-        second: validSnapshot(processIdentifier: 43)
-      )
-    }
+  }
+
+  @discardableResult
+  private static func stabilize(
+    observations suppliedObservations: [Issue108TargetSessionReadinessSnapshot],
+    frontmostResults suppliedFrontmostResults: [Issue108FrontmostWriteResult] = [.success],
+    writeFrontmost suppliedWriteFrontmost: (() -> Issue108FrontmostWriteResult)? = nil,
+    performRaise suppliedPerformRaise: (() -> Issue105SessionActionResult)? = nil
+  ) throws -> Issue105StabilizationOutcome {
+    var elapsed: UInt64 = 0
+    var observations = suppliedObservations
+    var frontmostResults = suppliedFrontmostResults
+    return try Issue105TargetSessionStabilizer.stabilize(
+      policy: testPolicy,
+      retainedIdentity: retainedIdentity,
+      elapsedMilliseconds: { elapsed },
+      observe: { observations.removeFirst() },
+      writeFrontmost: suppliedWriteFrontmost ?? { frontmostResults.removeFirst() },
+      performRaise: suppliedPerformRaise ?? { .success },
+      wait: { elapsed += $0 }
+    )
   }
 
   private static func validAction() -> TargetSessionActionReceipt {
@@ -652,6 +566,24 @@ enum TargetSessionReadinessCoreTests {
     )
   }
 
+  private static func validPredecessorSnapshot(
+    applicationCount: Int = 1,
+    windowCount: Int = 1
+  ) -> TargetSessionReadinessSnapshot {
+    TargetSessionReadinessSnapshot(
+      applicationCount: applicationCount,
+      windowCount: windowCount,
+      processIdentifier: applicationCount == 1 ? 42 : nil,
+      windowIdentity: windowCount == 1 ? 7 : nil,
+      executableIdentityMatched: true,
+      applicationHidden: false,
+      windowMinimized: false,
+      windowFrameVisible: true,
+      accessibilityFrontmost: true,
+      workspaceFrontmost: true
+    )
+  }
+
   private static func validSnapshot(
     applicationCount: Int = 1,
     windowCount: Int = 1,
@@ -659,12 +591,12 @@ enum TargetSessionReadinessCoreTests {
     windowIdentity: UInt? = 7,
     executableIdentityMatched: Bool = true,
     applicationHidden: Bool = false,
-    windowMinimized: Bool = false,
-    windowFrameVisible: Bool = true,
-    accessibilityFrontmost: Bool = true,
+    windowMinimized: Issue108AccessibilityBooleanRead = .supported(false),
+    windowFrameVisible: Issue108AccessibilityBooleanRead = .supported(true),
+    accessibilityFrontmost: Issue108AccessibilityBooleanRead = .supported(true),
     workspaceFrontmost: Bool = true
-  ) -> TargetSessionReadinessSnapshot {
-    TargetSessionReadinessSnapshot(
+  ) -> Issue108TargetSessionReadinessSnapshot {
+    Issue108TargetSessionReadinessSnapshot(
       applicationCount: applicationCount,
       windowCount: windowCount,
       processIdentifier: applicationCount == 1 ? processIdentifier : nil,
@@ -713,9 +645,15 @@ enum TargetSessionReadinessCoreTests {
   )
 
   private static let testPolicy = Issue105StabilizationPolicy(
-    timeoutMilliseconds: 150,
+    timeoutMilliseconds: 400,
     pollIntervalMilliseconds: 50,
-    maximumObservationCount: 4
+    maximumObservationCount: 9
+  )
+
+  private static let timeoutPolicy = Issue105StabilizationPolicy(
+    timeoutMilliseconds: 100,
+    pollIntervalMilliseconds: 50,
+    maximumObservationCount: 3
   )
 
   private enum ExpectedAuthority {
@@ -729,9 +667,7 @@ enum TargetSessionReadinessCoreTests {
     func matches(_ invalidation: TargetSessionReadinessInvalidation) -> Bool {
       switch (self, invalidation) {
       case (.action, .action), (.accessibility, .accessibility), (.foreground, .foreground),
-        (.identity, .identity), (.processState, .processState):
-        true
-      case (.session, .session):
+        (.identity, .identity), (.processState, .processState), (.session, .session):
         true
       default:
         false
