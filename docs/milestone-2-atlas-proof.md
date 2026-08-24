@@ -845,10 +845,14 @@ token, publication or cleanup failure, timeout, wrong-app focus, ambiguity, drif
 observer disagreement invalidates the preflight; the controller removes its marker on success,
 timeout, invalidation, signal, or launch failure.
 
-The implementation, deterministic lifecycle tests, privacy boundary, exact one-shot runbook, and
-initial **NOT RUN** state are in the [issue #110 latch evidence](investigations/issue-110/README.md).
-The repository must stop at a clean committed implementation boundary until coordinator follow-up.
-Issue #109's stop remains immutable and issue #104 remains **UNCONSUMED**.
+The implementation, deterministic lifecycle tests, privacy boundary, and exact one-shot runbook are
+in the [issue #110 latch evidence](investigations/issue-110/README.md). From the clean committed
+boundary, exactly one assisted zero-operation preflight validated its prerequisites, atomically
+published the marker, and allowed the full 120,000-ms handoff. It timed out fail-closed after 1,711
+observations without independently detecting operator focus; marker cleanup succeeded and a
+separate check found no remaining candidate process. No retry or target activity occurred. The
+result is **INVALID — PRE-DISPATCH STOP**. Issue #109's stop remains immutable, and issue #104
+remains blocked and **UNCONSUMED**.
 
 ### Packaged generation-cancellation qualification stop
 

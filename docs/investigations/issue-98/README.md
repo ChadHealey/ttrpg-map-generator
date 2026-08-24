@@ -322,5 +322,12 @@ after publication.
 
 The marker lifecycle fails closed and cleans on every terminal path. Issue #109's raw receipt and
 consumed status remain unchanged; no issue #104 row has run. The clean implementation boundary and
-one-shot runbook are in [issue #110](../issue-110/README.md). Qualification is **NOT RUN** pending
-coordinator follow-up, so issue #104 remains blocked and **UNCONSUMED**.
+one-shot runbook are in [issue #110](../issue-110/README.md).
+
+Exactly one issue #110 assisted zero-operation preflight validated its committed prerequisites,
+atomically published the durable marker, and allowed the full 120,000-ms handoff. It timed out
+fail-closed after 1,711 observations without independently detecting an operator focus transition;
+marker cleanup succeeded and a separate check found no candidate process. There was no retry,
+raise, independent-observer run, fixture, sampler, artifact, destination, dispatch, measurement,
+or issue #104 activity. The result is **INVALID — PRE-DISPATCH STOP**, and issue #104 remains
+blocked and **UNCONSUMED**.

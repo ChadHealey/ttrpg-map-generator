@@ -1,0 +1,141 @@
+{
+  "schemaVersion": "issue110-operator-ready-latch-evidence-v1",
+  "implementationCommit": "469b3a9a908a0d44d0a96aa72ff19d3c084e04f4",
+  "branch": "codex/issue-110-operator-ready-latch",
+  "status": "invalid-assisted-preflight-stopped",
+  "target": {
+    "model": "Mac17,2",
+    "osVersion": "26.5.1",
+    "osBuild": "25F80",
+    "memoryGiB": 24
+  },
+  "identities": {
+    "candidateExecutableSha256": "5cf14de9836e9da96655572b35bb0e194d8ebc30360b6d6516f88825dcf7a15d",
+    "operatorReadyLatchControllerSha256": "2e941986cf8d3a38e25e5319d84da93daa1572c95ce329ba512cea5a3c23fb51",
+    "canonicalReadinessObserverSha256": "9662c1664d44e93f58dc690a0fb78f08eb1f4751d84fc5790256866e768811ce",
+    "cancellationObserverSha256": "dee96628ba9b9cec31a49b0bd627466a636921f1f73535f1aac421834fbc0e6d",
+    "rssSamplerSha256": "1da835b06e7b2ffbe588e99fee2692d7cfa25f9e8117641c74a5abe73acc3dfe",
+    "retentionUtilitySha256": "c3b2d618b4dbddf9568d4d39334be9a3d0b074ae0b7a5464b4b7e30c5686441b"
+  },
+  "preTargetGates": {
+    "focusedOperatorReadyLatchSuite": "pass",
+    "predecessorSwiftSuites": "pass-6",
+    "packagedDispatchTests": "pass-14",
+    "observerEnabledUnsignedPackageModules": 338,
+    "rootCheck": "pass-74-files-578-tests-1-skipped-semantic-retention-24-rust-unit-28-native-recovery",
+    "crossPlatform": "pass-6-png-checks-8-fixture-sets",
+    "identityReproduction": "pass",
+    "privacySurfaceFixtureProtectedEvidenceAndDiff": "pass"
+  },
+  "postOutcomeGates": {
+    "focusedOperatorReadyLatchSuite": "pass",
+    "formatCheck": "pass",
+    "jsonValidation": "pass",
+    "identityReproduction": "pass",
+    "publicPrivacy": "pass",
+    "authorizedSurface": "pass-evidence-and-owning-docs-only",
+    "fixtureAndProductionSurface": "pass-unchanged-from-implementation-boundary",
+    "canonicalReadinessObserverSources": "pass-byte-unchanged-from-base",
+    "priorRawEvidence": "pass-unchanged",
+    "diffCheck": "pass"
+  },
+  "preflight": {
+    "attemptCount": 1,
+    "status": "invalid-pre-dispatch-not-target-evidence",
+    "qualificationKind": "non-measurement-target-session-readiness",
+    "controllerVersion": "issue110-target-session-readiness-v7",
+    "invalidAuthority": "foreground",
+    "invalidReason": "operator focus was not detected before the handoff timeout",
+    "operatorReadyLatch": {
+      "pathPolicy": "explicit-private-tmp-file",
+      "tokenValidated": true,
+      "existingMarkerCollisionChecked": true,
+      "atomicPublicationSucceeded": true,
+      "cleanupAttempted": true,
+      "cleanupSucceeded": true,
+      "handoffTimeoutMilliseconds": 120000,
+      "stateTransitions": [
+        "exact-candidate-validated",
+        "zero-operation-validated",
+        "awaiting-operator-ready-published",
+        "operator-ready-marker-cleaned"
+      ]
+    },
+    "awaitingOperatorFocusStateEmitted": true,
+    "declaredOperatorFocusActionCount": 1,
+    "focusTransitionDetected": false,
+    "policyTimeoutMilliseconds": 120000,
+    "pollIntervalMilliseconds": 50,
+    "waitDurationMilliseconds": 120000,
+    "observationCount": 1711,
+    "initialWorkspaceFocusState": "awaiting-initial-application",
+    "terminalWorkspaceFocusState": "awaiting-initial-application",
+    "actionOrder": [
+      "exact-candidate-validated",
+      "zero-operation-validated",
+      "awaiting-operator-ready-published",
+      "awaiting-operator-focus"
+    ],
+    "activationRequestCount": 0,
+    "frontmostWriteAttemptCount": 0,
+    "raiseAttemptCount": 0,
+    "independentObserverRunCount": 0,
+    "initialVisibility": {
+      "applicationHidden": false,
+      "windowMinimizedState": "unavailable",
+      "windowMinimizedUnavailableReason": "attribute-unsupported",
+      "windowFrameVisibleState": "unavailable",
+      "windowFrameVisibleUnavailableReason": "attribute-unsupported",
+      "visibleWindow": false
+    },
+    "terminalVisibility": {
+      "applicationHidden": false,
+      "windowMinimizedState": "unavailable",
+      "windowMinimizedUnavailableReason": "attribute-unsupported",
+      "windowFrameVisibleState": "unavailable",
+      "windowFrameVisibleUnavailableReason": "attribute-unsupported",
+      "visibleWindow": false
+    },
+    "terminalPredicates": {
+      "accessibilityFrontmost": false,
+      "workspaceFrontmost": false,
+      "exactCandidateRetained": false,
+      "exactWindowRetained": false,
+      "visibleWindow": false,
+      "independentObserverVerified": false
+    },
+    "postExitMarkerPresent": false,
+    "postExitCandidateProcessCount": 0
+  },
+  "zeroOperationProof": {
+    "fixtureConfigured": false,
+    "samplerStarted": false,
+    "rawArtifactCount": 0,
+    "targetDestinationCreated": false,
+    "previewDispatched": false,
+    "fullGenerationDispatched": false,
+    "svgDispatched": false,
+    "pngDispatched": false,
+    "measurementCount": 0,
+    "issue95OperationCount": 0,
+    "issue104ReplacementConsumed": false,
+    "retryCount": 0
+  },
+  "preservation": {
+    "priorEvidenceReinterpreted": false,
+    "priorEvidenceOverwritten": false,
+    "issue109Status": "invalid-and-consumed",
+    "issue104State": "unconsumed",
+    "conditionalCancellationRowsRun": 0
+  },
+  "privacy": {
+    "markerPathPublished": false,
+    "markerTokenPublished": false,
+    "localPathsPublished": false,
+    "processIdentifiersPublished": false,
+    "userIdentityPublished": false,
+    "screenshotsOrPixelsPublished": false,
+    "privateArtifactLocationsPublished": false
+  },
+  "conclusion": "The exactly one authorized operator-assisted zero-operation preflight validated the exact candidate/session and zero-operation prerequisites, atomically published the durable coordinator-visible marker, and allowed the full 120,000-ms handoff interval. It did not independently detect an operator focus transition and timed out fail-closed after 1,711 observations. The marker was cleaned, and a separate read-only check found zero remaining candidate processes. No retry, raise, frontmost write, independent observer run, fixture, sampler, artifact, destination, dispatch, measurement, issue #95 operation, or issue #104 consumption occurred. This is a pre-dispatch readiness stop, not target cancellation or release evidence."
+}

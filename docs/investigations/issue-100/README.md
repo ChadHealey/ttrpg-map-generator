@@ -235,5 +235,11 @@ The marker is removed on every controller terminal path; collision, invalid path
 publication failure, cleanup failure, timeout, drift, replacement, or observer disagreement fails
 closed. No input is synthesized, and ordinary builds install no latch or handoff behavior. The
 implementation contract, deterministic tests, clean one-shot boundary, and coordinator polling
-requirements are in [issue #110](../issue-110/README.md). Qualification is **NOT RUN** until a
-coordinator follow-up; issue #104 remains **UNCONSUMED**.
+requirements are in [issue #110](../issue-110/README.md).
+
+Exactly one issue #110 assisted zero-operation preflight validated the committed candidate/session
+and zero-operation prerequisites, atomically published the marker, and allowed all 120,000 ms. It
+timed out fail-closed after 1,711 observations without independently detecting an operator focus
+transition. Marker cleanup succeeded, a separate check found no candidate process, and no retry or
+product/measurement activity occurred. The result is **INVALID — PRE-DISPATCH STOP**; issue #104
+remains blocked and **UNCONSUMED**.

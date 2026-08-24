@@ -124,11 +124,9 @@ UI, generator, render, export, persistence, native-write, fixture, workload, saf
 ceiling, sampling, or target-operation timeout owner changed. The only widened time boundary is
 the issue #110-authorized pre-dispatch operator handoff after marker publication.
 
-At this boundary the target preflight is **NOT RUN**. No packaged candidate has been launched, no
-marker has been published for coordination, and no operator action has been requested. No fixture,
-sampler, raw artifact, destination, dispatch, measurement, issue #95 action, or issue #104 action
-has occurred. Issue #109's invalid stop remains immutable and issue #104's replacement row remains
-**UNCONSUMED**.
+At that boundary the target preflight was **NOT RUN**. No packaged candidate had been launched, no
+marker had been published for coordination, and no operator action had been requested. That
+historical boundary remains the source of the one authorized attempt described below.
 
 ## Exactly one assisted preflight
 
@@ -161,5 +159,22 @@ read-only check proves no invalid candidate remains.
 
 ## Qualification state
 
-**NOT RUN — AWAITING COORDINATOR FOLLOW-UP.** The repository is intentionally stopped at the clean
-committed one-shot boundary. Issue #104 remains blocked and **UNCONSUMED**.
+**INVALID — PRE-DISPATCH STOP.** From implementation commit
+`469b3a9a908a0d44d0a96aa72ff19d3c084e04f4`, exactly one coordinated operator-assisted preflight
+validated the exact candidate/session and zero-operation prerequisites, atomically published the
+durable marker, and entered `awaiting-operator-focus`. The controller allowed the complete
+120,000-ms handoff interval and made 1,711 focus observations, but did not independently detect the
+exact candidate becoming Accessibility or Workspace frontmost. Initial and terminal Workspace
+focus classification remained `awaiting-initial-application`.
+
+The marker lifecycle recorded valid path/token/collision checks, successful atomic publication,
+and successful terminal cleanup. The controller performed zero activation requests,
+`AXFrontmost` writes, raises, independent-observer runs, fixture/sampler/artifact/destination setup,
+dispatches, or measurements. A separate terminal check found the explicit marker absent and zero
+remaining candidate processes. No retry ran.
+
+Issue #109's invalid consumed stop remains immutable. Issue #104 remains blocked and its
+replacement row remains **UNCONSUMED**; no issue #104 target activity occurred. This result is not
+cancellation, first-paint, issue #95 matrix, target-operation, or release-budget evidence. The
+complete sanitized receipt is in
+[`qualification-2026-08-24/raw-results.json`](qualification-2026-08-24/raw-results.json).

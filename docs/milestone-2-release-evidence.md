@@ -886,11 +886,17 @@ publication failure, cleanup failure, timeout, drift, replacement, or observer d
 closed. Public receipts contain only sanitized lifecycle/order fields and no marker path, token,
 PID, username, or raw-artifact location.
 
-All implementation and gates are committed before target use. At this report boundary the one
-assisted zero-operation preflight is **NOT RUN** pending coordinator follow-up: no packaged
-candidate, marker, operator action, fixture, sampler, artifact/destination, dispatch, measurement,
-issue #95 action, or issue #104 activity has occurred. Issue #109's invalid stop remains unchanged,
-and issue #104 remains **UNCONSUMED**. The contract and one-shot runbook are in the
+All implementation and pre-target gates were committed before target use. From implementation
+commit `469b3a9a908a0d44d0a96aa72ff19d3c084e04f4`, exactly one assisted zero-operation preflight
+validated the exact candidate/session and zero-operation prerequisites, atomically published its
+durable marker, and allowed the full 120,000-ms handoff. It timed out fail-closed after 1,711
+observations without independently detecting operator focus. Marker cleanup succeeded, and a
+separate read-only check found zero candidate processes.
+
+The result is **INVALID — PRE-DISPATCH STOP**. There was no retry, raise, independent-observer run,
+fixture, sampler, artifact/destination, dispatch, measurement, issue #95 action, or issue #104
+activity. Issue #109's invalid consumed stop remains unchanged, and issue #104 remains blocked and
+**UNCONSUMED**. The contract and sanitized receipt are in the
 [issue #110 latch evidence](investigations/issue-110/README.md).
 
 ## Remote CI and milestone state
