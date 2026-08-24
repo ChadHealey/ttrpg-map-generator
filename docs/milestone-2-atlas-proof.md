@@ -682,6 +682,32 @@ run stopped before measured dispatch because the packaged candidate could not ac
 visible/frontmost readiness state in this Codex desktop session; therefore it records no valid
 SVG/PNG qualification and makes no release-budget conclusion.
 
+### Approved export target-session readiness authority
+
+Issue #100 closes only issue #97's external target-session launch/readiness gap. A test-only
+controller may launch the exact observer-enabled package by path in the active logged-in console
+GUI session after proving the approved host, exact bundle/executable identity, and zero stale
+candidate applications. It must then require exactly one matching application and one
+Accessibility window, activate the application, perform `AXRaise`, write `AXFrontmost`, and obtain
+an independent read-only observer receipt that retains the same application/window identity while
+proving the window is visible and both Accessibility and `NSWorkspace` report the candidate
+frontmost.
+
+Wrong identity, stale/zero/multiple candidates or windows, invisible/minimized windows,
+activation/raise/frontmost-write failure, foreground loss, or identity replacement fails closed.
+The controller and observer remain external test tools under
+[`investigations/issue-100`](investigations/issue-100/README.md); ordinary packages install no new
+behavior. A narrowly approved unsandboxed GUI/session invocation is permitted when the execution
+sandbox would otherwise deny this in-scope launch/activation action, but sandbox denial itself is
+not target-host product evidence.
+
+The issue #100 receipt is an unmeasured readiness qualification only. It configures no fixture,
+starts no sampler, creates no destination, dispatches no SVG/PNG, consumes no issue #97 required
+trial, and makes no timing, RSS, completion-authority, or release-budget conclusion. Its valid
+qualification authorizes a new task to revalidate and resume issue #97's unchanged final candidate
+and six unconsumed trials; it neither reinterprets issue #97's six invalid pre-dispatch attempts nor
+qualifies export completion by itself.
+
 | Operation       | Fixed workload                                                                                | Wall-clock | Peak additional memory | Output-size ceiling       |
 | --------------- | --------------------------------------------------------------------------------------------- | ---------- | ---------------------- | ------------------------- |
 | Coarse preview  | dispatch through first fully painted labelled 512 × 256 effective preview                     | `900 ms`   | `256 MiB`              | not applicable            |

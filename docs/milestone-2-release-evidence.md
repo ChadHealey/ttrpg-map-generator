@@ -297,8 +297,8 @@ tree at intervals no greater than 20 ms and report every run plus median and wor
 | ------------------------------------ | ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
 | Coarse preview                       | ≤900 ms and ≤256 MiB additional process-tree RSS; report ≤750 ms stretch target | **PASS** — all 15 final fresh runs passed; worst time 809.40 ms, worst RSS 157.72 MiB  |
 | Full generation                      | ≤10 s and ≤768 MiB additional process-tree RSS                                  | **NOT RUN** — issue #95 stopped on observer-authority drift before measured dispatch   |
-| SVG export                           | ≤3 s, ≤512 MiB, destination ≤32 MiB                                             | **NOT RUN** — #97 implementation exists but target readiness blocked qualification     |
-| PNG export                           | ≤15 s, ≤1 GiB, destination ≤64 MiB                                              | **NOT RUN** — #97 stopped before any measured export dispatch                          |
+| SVG export                           | ≤3 s, ≤512 MiB, destination ≤32 MiB                                             | **NOT RUN** — #100 qualifies readiness; #97 export qualification has not resumed       |
+| PNG export                           | ≤15 s, ≤1 GiB, destination ≤64 MiB                                              | **NOT RUN** — #100 dispatched no export and made no measurement conclusion             |
 | Preview cancellation                 | Acknowledgement ≤100 ms                                                         | **NOT RUN** — issue #95 confirmed no exact-fixture acknowledgement/aftermath authority |
 | Full-generation/SVG/PNG cancellation | Acknowledgement ≤500 ms                                                         | **NOT RUN** — issue #95 confirmed no packaged acknowledgement/aftermath authority      |
 
@@ -470,6 +470,40 @@ status, and smallest blocker are in the
 the export authority, does not run issue #95's matrix, and leaves all cancellation children
 untouched.
 
+### Issue #100 export target-session readiness qualification (2026-08-23)
+
+Issue #100 added only an external test controller and independent readiness observer. Ordinary
+builds install no new behavior. The controller proves the approved host and active logged-in
+console session, exact app/bundle/executable identity, and fresh process state before it launches
+the exact issue #97 observer-enabled package. It then requires one application and one
+Accessibility window, activates/raises/fronts it, and accepts readiness only after the separate
+observer retains the same application/window identity and independently confirms a visible window
+plus Accessibility and `NSWorkspace` frontmost state.
+
+The implementation commit was `6fabe0bad82a293b60746b98326e4d8f5e374a16`. It reproduced
+issue #97's unchanged packaged executable SHA-256
+`94b5a8b5f3fcd43a361589f35e3449c72cf3aad13610737140c3dd749737cf4e` and observer
+SHA-256 `0c0d3979f3c6c50ffa375fe2459b53b7dd49fad58bd5e3b4b246aaf221db38bd`. The final
+readiness controller SHA-256 was
+`68c23690dcdb7f4dd329e0b2152b699ba1d6ef4248d211088aa26bb98c9475c3`; its independent
+observer SHA-256 was
+`9f9c3254ee523f0151ce05f3b5d2573139a26e6bc432ce2c365e1b83d57419ff`.
+
+One fresh-process, non-measurement qualification on the approved MacBook Pro `Mac17,2`, Apple M5,
+24-GB, macOS 26.5.1 (`25F80`) target was **VALID**. A narrow unsandboxed GUI/session invocation was
+required because the Codex execution sandbox denied the otherwise authorized process/session
+inspection and activation boundary; no manual interaction was required. Sandbox denial was not
+treated as target evidence.
+
+The qualification configured no fixture, started no sampler, created no package/export
+destination, dispatched no SVG/PNG, produced no measurement or raw artifact, consumed no issue #97
+trial, and ran no issue #95 matrix operation. It makes no completion-authority or release-budget
+conclusion. Issue #97 may now be revalidated and resumed in a new task using its unchanged final
+candidate and all six unconsumed required trials. Its six previous invalid attempts remain invalid.
+The complete controller contract, checks, preliminary fail-closed integration attempt, sanitized
+receipt, privacy boundary, and zero-operation proof are in the
+[issue #100 target-session readiness evidence](investigations/issue-100/README.md).
+
 ## Remote CI and milestone state
 
 Issue #71 recorded fresh CI evidence for the exact remote release commit
@@ -493,10 +527,11 @@ rule that every included issue be closed or explicitly moved out.
 
 The final release owner must perform these actions in order:
 
-1. Resolve issue #97's external visible/frontmost target-session blocker and obtain its six
-   packaged SVG/PNG success qualifications; implement and qualify issue #95's two cancellation
-   children; then revalidate and rerun the complete successor protocol without changing fixtures,
-   workload, production behavior, hardware, or limits.
+1. Use issue #100's qualified target-session mechanism to revalidate and resume issue #97's
+   unchanged final candidate and obtain its six packaged SVG/PNG success qualifications; implement
+   and qualify issue #95's two cancellation children; then revalidate and rerun the complete
+   successor protocol without changing fixtures, workload, production behavior, hardware, or
+   limits.
 2. Confirm this report names the exact tested implementation commit and the handoff names the
    documentation-only commit, with complete command results, packaged receipts, artifact hashes,
    and human visual review. Do not attribute costly gates to the documentation commit unless they

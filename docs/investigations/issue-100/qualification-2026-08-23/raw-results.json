@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "issue100-target-session-readiness-evidence-v1",
+  "status": "valid",
+  "target": {
+    "model": "Mac17,2",
+    "processor": "Apple M5",
+    "memoryGiB": 24,
+    "osVersion": "26.5.1",
+    "osBuild": "25F80"
+  },
+  "implementation": {
+    "commit": "6fabe0bad82a293b60746b98326e4d8f5e374a16",
+    "issue97IntegratedCandidateCommit": "8228b48139ae125432448d376cc1b8ef917257db",
+    "bundleIdentifier": "app.ttrpgmap.generator",
+    "packagedExecutableSha256": "94b5a8b5f3fcd43a361589f35e3449c72cf3aad13610737140c3dd749737cf4e",
+    "issue97ObserverSha256": "0c0d3979f3c6c50ffa375fe2459b53b7dd49fad58bd5e3b4b246aaf221db38bd",
+    "readinessControllerSha256": "68c23690dcdb7f4dd329e0b2152b699ba1d6ef4248d211088aa26bb98c9475c3",
+    "readinessObserverSha256": "9f9c3254ee523f0151ce05f3b5d2573139a26e6bc432ce2c365e1b83d57419ff"
+  },
+  "sessionAuthority": {
+    "mechanism": "exact-path NSWorkspace launch in active console GUI session; AppKit activation; AXRaise and AXFrontmost; independent retained Accessibility and NSWorkspace verification",
+    "narrowUnsandboxedGuiInvocationApproved": true,
+    "manualInteractionRequired": false,
+    "consoleSessionMatched": true
+  },
+  "prequalificationIntegrationAttempts": [
+    {
+      "status": "invalid",
+      "invalidAuthority": "accessibility",
+      "invalidReason": "transient fresh-WebKit Accessibility materialization was initially treated as terminal",
+      "candidateLaunched": true,
+      "activationAttempted": false,
+      "windowRaiseAttempted": false,
+      "fixtureConfigured": false,
+      "samplerStarted": false,
+      "exportDestinationCreated": false,
+      "measuredExportDispatched": false,
+      "measurementCount": 0,
+      "rawArtifactCount": 0
+    }
+  ],
+  "qualification": {
+    "kind": "non-measurement-target-session-readiness",
+    "validQualificationCount": 1,
+    "freshProcess": true,
+    "applicationCount": 1,
+    "accessibilityWindowCount": 1,
+    "visibleAccessibilityWindow": true,
+    "activationSucceeded": true,
+    "windowRaiseSucceeded": true,
+    "accessibilityFrontmostWriteSucceeded": true,
+    "accessibilityFrontmostVerified": true,
+    "workspaceFrontmostVerified": true,
+    "applicationAndWindowIdentityRetained": true
+  },
+  "zeroOperationProof": {
+    "fixtureConfigured": false,
+    "samplerStarted": false,
+    "exportDestinationCreated": false,
+    "svgDispatched": false,
+    "pngDispatched": false,
+    "measurementCount": 0,
+    "rawArtifactCount": 0,
+    "consumedIssue97RequiredTrialCount": 0,
+    "issue95MatrixRun": false,
+    "releaseBudgetConclusion": "none"
+  },
+  "predecessorInvalidations": {
+    "issue97InvalidAttemptCount": 6,
+    "reinterpretedCount": 0,
+    "remainInvalid": true
+  },
+  "privacy": {
+    "privatePathsPublished": false,
+    "pidsPublished": false,
+    "rawCsvPublished": false,
+    "screenshotsOrPixelsPublished": false,
+    "privateArtifactsCreated": 0
+  },
+  "conclusion": "The exact unchanged issue #97 packaged candidate can reach and retain the approved fresh-process visible/frontmost target-session readiness state through the bounded issue #100 mechanism. No product operation or release measurement was performed."
+}
