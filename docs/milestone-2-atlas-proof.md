@@ -721,6 +721,29 @@ qualification authorizes a new task to revalidate and resume issue #97's unchang
 and six then-unconsumed trials; it neither reinterprets issue #97's six invalid pre-dispatch attempts nor
 qualifies export completion by itself.
 
+### Packaged generation-cancellation qualification stop
+
+Issue #98 added only a test observer and observer-enabled package wiring around the unchanged
+production preview, full-generation, and cancellation actions. It reuses the exact-fixture preview,
+accepted-atlas first-paint, process/RSS, private-retention, and target-session readiness authorities.
+No generator/workflow cancellation semantics, safe point, progress cadence, fixture, schema,
+workload, budget, timeout, render, export, or persistence behavior changed.
+
+After every focused negative-path and repository gate passed, issue #100 readiness qualified one
+fresh exact target process without consuming a trial. The first required preview/early trial then
+passed the app receipt's bounded monotonic progress, terminal cancellation, ≤100-ms prerequisite,
+stopped-scheduling, preserved-state, no-accepted-commit, and ≤20-ms sampler checks. It failed closed
+on the independent observer's combined one-second post-acknowledgement presentation/state/
+foreground predicate. The trial is **INVALID, CONSUMED**; its PID-bearing artifact was retained
+owner-only before inspection and its temporary source was removed.
+
+Per the non-retry contract, preview/middle, preview/late, and all full-generation cancellation rows
+were not run. There is no packaged preview or full-generation cancellation qualification, no
+replacement authority, no release-budget conclusion, and no issue #95 five-run matrix claim. The
+implementation, identities, sanitized invalidation, retention receipt, gate results, and privacy
+boundary are in the
+[issue #98 generation-cancellation evidence](investigations/issue-98/README.md).
+
 | Operation       | Fixed workload                                                                                | Wall-clock | Peak additional memory | Output-size ceiling       |
 | --------------- | --------------------------------------------------------------------------------------------- | ---------- | ---------------------- | ------------------------- |
 | Coarse preview  | dispatch through first fully painted labelled 512 × 256 effective preview                     | `900 ms`   | `256 MiB`              | not applicable            |

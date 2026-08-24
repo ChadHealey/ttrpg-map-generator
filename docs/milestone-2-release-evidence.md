@@ -299,8 +299,8 @@ tree at intervals no greater than 20 ms and report every run plus median and wor
 | Full generation                      | ≤10 s and ≤768 MiB additional process-tree RSS                                  | **NOT RUN** — issue #95 stopped on observer-authority drift before measured dispatch   |
 | SVG export                           | ≤3 s, ≤512 MiB, destination ≤32 MiB                                             | **NOT RUN** — completion path qualified by #101; #95 matrix remains unrun              |
 | PNG export                           | ≤15 s, ≤1 GiB, destination ≤64 MiB                                              | **NOT RUN** — completion path qualified by #101; #95 matrix remains unrun              |
-| Preview cancellation                 | Acknowledgement ≤100 ms                                                         | **NOT RUN** — issue #95 confirmed no exact-fixture acknowledgement/aftermath authority |
-| Full-generation/SVG/PNG cancellation | Acknowledgement ≤500 ms                                                         | **NOT RUN** — issue #95 confirmed no packaged acknowledgement/aftermath authority      |
+| Preview cancellation                 | Acknowledgement ≤100 ms                                                         | **INVALID, CONSUMED** — #98 early row failed the post-ack observer; later rows not run |
+| Full-generation/SVG/PNG cancellation | Acknowledgement ≤500 ms                                                         | **NOT RUN** — #98 stopped immediately after the first consumed preview invalidation    |
 
 ### Issue #84 partial full-generation rerun (2026-08-23)
 
@@ -577,6 +577,29 @@ The complete receipt is in the
 These observations qualify the export-completion authority only. They are not a warm-up plus five
 fresh runs, do not run issue #95's matrix or cancellation children, and make no export timing/RSS
 budget pass or fail and no release-budget conclusion.
+
+### Issue #98 packaged generation-cancellation qualification stop (2026-08-23)
+
+Issue #98 implemented only observer-enabled package wiring, negative-path tests, and an independent
+target-host observer. The hooks invoke the same production preview, full-generation, and
+cancellation actions; fixtures and all production generator, workflow, safe-point, progress,
+render, export, persistence, budget, workload, and timeout owners are unchanged. The implementation
+commit was `19686859b9c6f88a771134afbf8fc31533a4ad2b`; the packaged executable SHA-256 was
+`5cf14de9836e9da96655572b35bb0e194d8ebc30360b6d6516f88825dcf7a15d`.
+
+All predecessor and new negative-path suites, deterministic, E2E, visual, root, packaged-build,
+privacy, and authorized-surface gates passed. One fresh issue #100 readiness qualification was
+valid and consumed no trial. The first measured preview/early cancellation row then passed its app
+receipt and sampler prerequisites but failed closed on the independent observer's combined
+one-second post-acknowledgement presentation/state/foreground predicate. Its status is
+**INVALID, CONSUMED**. The raw PID-bearing sampler CSV was retained owner-only before the receipt
+was inspected, and its temporary source was removed.
+
+Execution stopped immediately. Preview/middle, preview/late, and full-generation early/middle/late
+were not run. There are zero valid cancellation qualifications, no timing/RSS budget conclusion,
+no deterministic-aftermath authority, no retry, and no issue #95 five-run release-matrix claim.
+The full sanitized receipt and tool identities are in the
+[issue #98 cancellation evidence](investigations/issue-98/README.md).
 
 ## Remote CI and milestone state
 
