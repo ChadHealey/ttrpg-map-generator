@@ -331,3 +331,17 @@ marker cleanup succeeded and a separate check found no candidate process. There 
 raise, independent-observer run, fixture, sampler, artifact, destination, dispatch, measurement,
 or issue #104 activity. The result is **INVALID — PRE-DISPATCH STOP**, and issue #104 remains
 blocked and **UNCONSUMED**.
+
+## Issue 118 process-bound successor decision
+
+Issue #118 ends further focus-dependent command-channel design and selects an observer-build-only
+private Unix-domain stream socket in
+[ADR-0020](../../adr/0020-process-bound-observer-command-channel.md). Mutual peer-PID checks, a
+per-launch capability, strict framing/sequence/allowlist rules, one in-flight command, and terminal
+cleanup bind the controller to the exact candidate/session. Existing TypeScript fixture, state,
+cancellation, aftermath, reopen, and export validators remain the only operation authorities.
+
+This discovery added only the decision, an isolated no-app-launch Rust prototype, ordered child
+drafts, and these minimal direction updates. It made no production wiring or protected-observer
+change, launched no package, and performed no product, fixture, sampler, artifact, dispatch,
+measurement, issue #95, or issue #104 activity. The replacement #104 row remains **UNCONSUMED**.

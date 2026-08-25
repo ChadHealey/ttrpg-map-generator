@@ -1083,6 +1083,18 @@ PRE-HANDOFF PRE-DISPATCH STOP**. Issue #104 remains blocked and **UNCONSUMED**; 
 requires a new issue and owner decision. The complete sanitized receipt is in the
 [issue #117 qualification evidence](investigations/issue-117/README.md).
 
+### Issue #118 process-bound observer command decision
+
+Issue #118 replaces further focus-path design with the observer-only Unix-domain stream contract in
+[ADR-0020](adr/0020-process-bound-observer-command-channel.md). The decision requires compile-time
+ordinary-build absence, mutual exact-process and per-session authentication, bounded binary frames,
+an explicit operation allowlist, one in-flight command, exact acknowledgements, replay rejection,
+terminal cleanup, and reuse of the existing TypeScript operation authorities. The isolated
+standard-library prototype passed without app launch, and the ordered implementation drafts keep
+native transport, frontend binding, Swift client, and target qualification separate. No dependency
+review is required. No package, target process, fixture, dispatch, artifact, measurement, issue #95
+operation, or issue #104 activity occurred; #104 remains **UNCONSUMED**.
+
 ## Remote CI and milestone state
 
 Issue #71 recorded fresh CI evidence for the exact remote release commit

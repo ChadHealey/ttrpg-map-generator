@@ -1039,6 +1039,17 @@ activity occurred. The result is **INVALID — PRE-HANDOFF PRE-DISPATCH STOP**. 
 blocked and **UNCONSUMED**; any successor requires a new issue and owner decision. The sanitized
 receipt is in the [issue #117 qualification evidence](investigations/issue-117/README.md).
 
+### Issue #118 process-bound observer command decision
+
+Issue #118 selects a compile-time observer-build-only private Unix-domain stream socket with
+mutual peer-PID checks and a per-launch capability. [ADR-0020](adr/0020-process-bound-observer-command-channel.md)
+fixes the framing, allowlist, ordering, acknowledgement, timeout, cleanup, Rust/Svelte lifecycle,
+ordinary-build absence, and macOS/Linux compile boundary. A standalone Rust harness proves the
+framing/authentication/state machine without launching the app. Four ordered executable child
+drafts separate native transport, frontend authority binding, Swift client, and one zero-operation
+target qualification. No production wiring, package build, target process, product action, or
+issue #104 activity occurred; #104 remains blocked and **UNCONSUMED**.
+
 ### Packaged generation-cancellation qualification stop
 
 Issue #98 added only a test observer and observer-enabled package wiring around the unchanged
