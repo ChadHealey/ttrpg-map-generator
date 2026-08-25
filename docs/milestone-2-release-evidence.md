@@ -955,18 +955,18 @@ read returned prompt-free inside its bound, its transparent zero-operation proce
 was terminated, and a separate check found zero target processes. No input, focus,
 product operation, or downstream activity occurred.
 
-The exact preserved issue #110 artifact identities passed. The required root check
-then failed at its first formatting stage on pre-existing table layout in protected
-issue #112 evidence. Because issue #113 forbids changing that evidence, the attempt
-stopped before controller launch, marker creation, post-marker read, or click. A
-terminal check found zero candidate processes. There was no target retry, fallback,
-fixture, sampler, artifact/destination, dispatch, measurement, issue #95 action, or
-#104 activity.
+The amended live issue authorized one mechanical Prettier repair to issue #112's
+Markdown table. Normalized table-cell comparison proved semantic content unchanged,
+and all raw artifacts, decisions, privacy boundaries, and protected observer sources
+remain unchanged. The focused issue #110 and six predecessor Swift suites, 14
+dispatch tests, 338-module package build, root check, cross-platform fixtures, exact
+preserved identities, privacy, surface, protected-evidence, Swift-format, and diff
+gates then passed. The current-toolchain package was noncanonical and excluded from
+target use.
 
-The result is **INVALID — PRE-TARGET GATE STOP**. Computer Use is retired for this
-M2 focus handoff. Prior evidence remains immutable, issue #104 remains blocked and
-**UNCONSUMED**, and the separately authorized one-real-owner-click route is the sole
-successor. The contract and sanitized result are in the
+The result is **PREFLIGHT GATES PASSED — TARGET NOT RUN**. No controller candidate,
+marker, post-marker read, or focus click has occurred. Issue #104 remains blocked and
+**UNCONSUMED**. The contract and sanitized preflight record are in the
 [issue #113 qualification record](investigations/issue-113/README.md).
 
 ## Remote CI and milestone state

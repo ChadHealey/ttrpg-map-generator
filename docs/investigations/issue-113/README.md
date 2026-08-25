@@ -49,25 +49,25 @@ task; an invalid result retires Computer Use for this M2 handoff and leaves issu
 
 ## Qualification state
 
-**INVALID — PRE-TARGET GATE STOP.** The permission warm-up and exact preserved
-artifact identities passed, but the required root check stopped in its first
-formatting stage. The formatter rejected pre-existing table layout in the protected
-issue #112 evidence. The new issue #113 files themselves passed targeted formatting,
-staged-file, privacy, and diff checks.
+**PREFLIGHT GATES PASSED — TARGET NOT RUN.** The live issue #113 amendment authorized
+one mechanical Prettier repair to issue #112's Markdown table after the initial
+formatting stop. The exact diff changed only table alignment. A normalized table-cell
+comparison proved semantic text and numbers unchanged, and the route decision,
+privacy boundary, every prior raw artifact, and every protected observer source
+remain byte-unchanged.
 
-Making the root gate pass would require changing issue #112 evidence, which live
-issue #113 explicitly forbids. The failure therefore closed the fail-closed boundary
-before controller or candidate launch. The remaining focused, predecessor,
-14-dispatch, package-build, root, cross-platform, Swift-format, and post-build gates
-were not run after the first terminal gate failure.
+After that repair, the focused issue #110 suite and all six predecessor Swift suites
+passed. The packaged dispatch suite passed 14 tests. The observer-enabled unsigned
+package built with 338 frontend modules; its current-toolchain executable was
+noncanonical and excluded from target use. Root `corepack pnpm check` passed 74 test
+files / 578 tests with one intentional skip, the isolated semantic-retention proof,
+24 Rust unit tests, and 28 native recovery tests. `test:cross-platform` passed six PNG
+checks and all eight deterministic fixture sets. Exact preserved candidate,
+controller, readiness-observer, cancellation-observer, sampler, and retention
+identities reproduced. Swift formatting, public privacy, authorized surface,
+fixture/production surface, protected evidence, and diff gates passed.
 
-No controller candidate was launched, no marker path or token was created, no marker
-was published, and no post-marker read or focus click occurred. A terminal read-only
-process check found zero preserved candidate processes. No fixture, sampler, artifact,
-destination, dispatch, measurement, issue #95 operation, or issue #104 activity
-occurred. There was no target retry or fallback.
-
-Computer Use is retired for this M2 focus handoff. Issue #104 remains blocked and
-**UNCONSUMED**. The only successor is issue #112's separately authorized one-real-owner-click
-route in a new issue and fresh task. The complete sanitized receipt is in
+No controller candidate has been launched, no marker path or token has been created,
+and no post-marker read or focus click has occurred. Issue #104 remains blocked and
+**UNCONSUMED**. The current sanitized preflight receipt is in
 [`qualification-2026-08-24/raw-results.json`](qualification-2026-08-24/raw-results.json).

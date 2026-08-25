@@ -909,18 +909,18 @@ repository access, one bounded prompt-free TTRPG permission-path read returned, 
 transparent zero-operation process was terminated, and a separate check found zero
 targets. No input or product operation occurred.
 
-The exact preserved issue #110 identities reproduced, but the required root check
-then failed in its first formatting stage on pre-existing table layout in protected
-issue #112 evidence. Changing that prior evidence was forbidden, so the attempt
-stopped before controller launch, marker creation, post-marker read, or click. A
-terminal check found zero candidate processes. No target retry, fallback, fixture,
-sampler, artifact, dispatch, measurement, issue #95 action, or issue #104 activity
-occurred.
+The amended live issue authorized one mechanical Prettier repair to issue #112's
+Markdown table. Normalized table-cell comparison proved semantic content unchanged;
+all raw artifacts, decisions, privacy boundaries, and protected observer sources
+remain unchanged. The focused issue #110 and six predecessor Swift suites, 14
+dispatch tests, 338-module package build, root check, cross-platform fixtures, exact
+preserved identities, privacy, surface, protected-evidence, Swift-format, and diff
+gates then passed. The current-toolchain package was noncanonical and excluded from
+target use.
 
-The result is **INVALID — PRE-TARGET GATE STOP**. Computer Use is retired for this
-M2 handoff, prior evidence remains immutable, and issue #104 remains blocked and
-**UNCONSUMED**. The separately authorized one-real-owner-click route is the sole
-successor. The bounded contract and sanitized result are in the
+The result is **PREFLIGHT GATES PASSED — TARGET NOT RUN**. No controller candidate,
+marker, post-marker read, or focus click has occurred. Issue #104 remains blocked and
+**UNCONSUMED**. The bounded contract and sanitized preflight record are in the
 [issue #113 qualification record](investigations/issue-113/README.md).
 
 ### Packaged generation-cancellation qualification stop

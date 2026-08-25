@@ -2,7 +2,7 @@
   "schemaVersion": "issue113-app-specific-computer-use-focus-evidence-v1",
   "baseCommit": "535b0a4e14b0f7a4067a0c42b72f0e138a7b7426",
   "branch": "codex/issue-113-always-allowed-computer-use-focus",
-  "status": "invalid-pre-target-gate-stopped",
+  "status": "preflight-gates-passed-target-not-run",
   "permissionWarmup": {
     "application": "TTRPG Map Generator",
     "taskSideBoundMilliseconds": 10000,
@@ -28,18 +28,22 @@
     "exactPreservedCandidateIdentity": "pass",
     "exactControllerObserverSamplerRetentionIdentities": "pass",
     "targetedIssue113Formatting": "pass",
+    "issue112MechanicalTableRepair": "pass-prettier-only",
+    "issue112NormalizedTableCellComparison": "pass-semantic-content-unchanged",
     "stagedFilePolicy": "pass",
     "publicPrivacy": "pass",
     "authorizedSurface": "pass-evidence-and-owning-docs-only",
     "diffCheck": "pass",
-    "rootCheck": "fail-first-format-stage-preexisting-protected-issue112-table-layout",
-    "focusedOperatorReadyLatchSuite": "not-run-after-terminal-gate-failure",
-    "predecessorSwiftSuites": "not-run-after-terminal-gate-failure",
-    "packagedDispatchTests": "not-run-after-terminal-gate-failure",
-    "observerEnabledUnsignedPackageBuild": "not-run-after-terminal-gate-failure",
-    "crossPlatform": "not-run-after-terminal-gate-failure",
-    "swiftFormatting": "not-run-after-terminal-gate-failure",
-    "protectedEvidence": "pass-issue109-through-issue112-unchanged"
+    "rootCheck": "pass-74-files-578-tests-1-skipped-semantic-retention-24-rust-unit-28-native-recovery",
+    "focusedOperatorReadyLatchSuite": "pass",
+    "predecessorSwiftSuites": "pass-6",
+    "packagedDispatchTests": "pass-14",
+    "observerEnabledUnsignedPackageModules": 338,
+    "freshToolchainRebuildIdentity": "noncanonical-excluded-from-target-use",
+    "crossPlatform": "pass-6-png-checks-8-fixture-sets",
+    "swiftFormatting": "pass-focused-issue110-changed-sources",
+    "fixtureAndProductionSurface": "pass-unchanged",
+    "protectedEvidence": "pass-prior-raw-artifacts-and-observer-sources-unchanged"
   },
   "preflight": {
     "controllerAttemptCount": 0,
@@ -88,9 +92,9 @@
     "privateArtifactLocationsPublished": false
   },
   "decision": {
-    "computerUseM2FocusMechanism": "retired",
+    "computerUseM2FocusMechanism": "pending-one-shot-preflight",
     "issue104MayResume": false,
-    "successor": "newly-authorized-one-real-owner-click-route"
+    "successor": "pending-controller-outcome"
   },
-  "conclusion": "The required app-specific permission warm-up returned prompt-free inside its 10-second bound, performed zero input, and cleaned its transparent zero-operation process. Exact preserved issue #110 artifact identities reproduced. Before target use, the required root check failed in its first formatting stage on pre-existing table layout in protected issue #112 evidence. Changing that prior evidence is forbidden by live issue #113, so the qualification stopped fail-closed before controller launch, marker creation, post-marker inspection, or click. A terminal read-only check found zero candidate processes. No target retry, fallback, product operation, fixture, sampler, artifact, destination, dispatch, measurement, issue #95 operation, or issue #104 consumption occurred. Computer Use is retired for this M2 focus handoff; the separately authorized real-owner-click route is the sole successor."
+  "conclusion": "The required app-specific permission warm-up returned prompt-free inside its 10-second bound, performed zero input, and cleaned its transparent zero-operation process. The live issue #113 amendment authorized a mechanical Prettier repair to issue #112's table; normalized table-cell comparison proved semantic content unchanged, and all raw/protected evidence remained unchanged. The focused issue #110 suite, six predecessor Swift suites, 14 dispatch tests, 338-module observer-enabled package build, root check, cross-platform fixtures, exact preserved identities, Swift formatting, privacy, surface, protected-evidence, and diff gates passed. The fresh current-toolchain package was noncanonical and excluded from target use. No controller candidate, marker, post-marker read, click, product operation, fixture, sampler, artifact, destination, dispatch, measurement, issue #95 operation, or issue #104 consumption has occurred. The exactly one target preflight remains authorized and unconsumed."
 }
