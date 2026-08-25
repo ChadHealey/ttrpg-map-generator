@@ -17,9 +17,11 @@ handoff and adds an explicit coordinator-visible boundary:
 2. Before launch, the controller validates the path/token and fails closed if either the marker or
    its private publication temporary already exists. It never removes a colliding marker it does
    not own.
-3. The controller proves the approved host and console session, exact fresh package/application/
-   window/executable identity, a distinct initial foreground application, and the canonical
-   zero-operation receipt before publication.
+3. The controller proves the approved host and console session, captures an explicit Workspace
+   application or desktop/no-application foreground anchor before a nonactivating exact candidate
+   launch, then proves fresh package/application/window/executable identity, retained initial
+   foreground classification, candidate Workspace and Accessibility non-frontmost state, and the
+   canonical zero-operation receipt before publication.
 4. It writes a complete owner-only marker temporary, flushes it, and creates the visible marker
    with an atomic no-replace hard link. The marker's sanitized `awaiting-operator-ready` payload
    includes the explicit token, public bundle/candidate identities, exact candidate/session
@@ -39,6 +41,23 @@ handoff and adds an explicit coordinator-visible boundary:
 The exact marker path and token are task-coordination values, not repository evidence. They are
 reported privately at the clean implementation boundary and must be absent before the one-shot
 controller is launched.
+
+## Issue #116 successor correction
+
+Issue #116 corrects the controller ordering after issue #115 proved that the integrated issue #110
+controller captured its initial foreground PID only after an activating candidate launch and
+Accessibility-window wait. The corrected controller captures the foreground before launch and
+passes `activates = false`. It models a retained application, desktop/no-application, and
+unavailable authority explicitly instead of using a sentinel PID. Pre-handoff validation now
+requires the exact candidate to be Workspace non-frontmost and Accessibility supported-false;
+candidate/controller focus, anchor drift, third-app focus, missing authority, and identity/window
+drift fail closed.
+
+This is an implementation-only successor. It does not reopen or replace issue #110's historical
+one-shot result, authorize a new candidate launch, or change latch publication, one-owner-action,
+120-second handoff, frame, raise, observer, zero-operation, cleanup, or privacy rules. The bounded
+correction and deterministic evidence are in the
+[issue #116 record](../issue-116/README.md).
 
 ## Deterministic tests
 

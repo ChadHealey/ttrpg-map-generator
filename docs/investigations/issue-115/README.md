@@ -83,3 +83,17 @@ processes. No retry or fallback ran. Issue #114 remains immutable. Issue #104
 remains blocked and **UNCONSUMED**; another attempt requires a new explicit owner
 decision. The complete sanitized receipt is in
 [`qualification-2026-08-25/raw-results.json`](qualification-2026-08-25/raw-results.json).
+
+## Issue #116 successor diagnosis
+
+Issue #116 verified the failure against the unchanged source: the controller requested candidate
+activation, launched and waited for the candidate Accessibility window, and only then captured its
+initial Workspace foreground PID. The candidate could therefore become the value rejected as an
+invalid initial anchor. The successor implementation captures an explicit application or
+desktop/no-application foreground state before a nonactivating launch and retains fail-closed proof
+that the exact candidate is not Workspace or Accessibility frontmost before handoff.
+
+This additive diagnosis does not alter issue #115's authority, attempt, invalid/consumed status,
+receipt, cleanup result, or downstream issue #104 state. No issue #116 target run or owner action
+occurred. The corrected contract and deterministic tests are in the
+[issue #116 implementation record](../issue-116/README.md).

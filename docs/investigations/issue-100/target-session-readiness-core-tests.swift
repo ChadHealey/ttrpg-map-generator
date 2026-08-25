@@ -2,7 +2,10 @@ import Foundation
 
 @main
 enum TargetSessionReadinessCoreTests {
-  static func main() throws {
+  static func main() async throws {
+    try await capturesForegroundBeforeNonactivatingLaunch()
+    try validatesApplicationDesktopAndUnavailableForegroundModels()
+    try validatesRetainedPrehandoffForegroundAuthority()
     try acceptsPredecessorRetainedReadiness()
     distinguishesUnsupportedMinimizedFromObservedTrue()
     try validatesExplicitOperatorReadyPathAndToken()
@@ -12,6 +15,7 @@ enum TargetSessionReadinessCoreTests {
     try requiresCleanupOnEveryTerminalPath()
     try validatesExplicitAwaitingState()
     try acceptsOneDetectedOperatorFocusTransition()
+    try acceptsDesktopToCandidateTransition()
     try acceptsDelayedCoordinatorObservation()
     try acceptsDelayedAccessibilityFrameAndRaise()
     rejectsWrongApplicationFocus()
@@ -26,7 +30,135 @@ enum TargetSessionReadinessCoreTests {
     rejectsNonzeroOperationOrdering()
     rejectsWrongIdentityStaleAndMissingCandidateState()
     FileHandle.standardOutput.write(
-      Data("issue110 durable operator-ready latch core tests passed\n".utf8))
+      Data("issue116 prelaunch foreground controller core tests passed\n".utf8))
+  }
+
+  @MainActor
+  private static func capturesForegroundBeforeNonactivatingLaunch() async throws {
+    var events: [String] = []
+    let launch = try await Issue116PrelaunchForegroundController.captureThenLaunch(
+      controllerProcessIdentifier: 7,
+      captureWorkspaceForeground: {
+        events.append("foreground-captured")
+        return .application(processIdentifier: 11)
+      },
+      launchCandidate: { requestsActivation in
+        precondition(!requestsActivation)
+        events.append("candidate-launched-without-activation")
+        return 42
+      }
+    )
+    precondition(events == ["foreground-captured", "candidate-launched-without-activation"])
+    precondition(launch.initialWorkspaceForeground == .application(processIdentifier: 11))
+    precondition(launch.candidate == 42)
+
+    for invalidForeground in [
+      Issue116WorkspaceForegroundState.application(processIdentifier: 7),
+      .unavailable,
+    ] {
+      var launchCount = 0
+      do {
+        let _: Issue116CandidateLaunch<Int> =
+          try await Issue116PrelaunchForegroundController.captureThenLaunch(
+            controllerProcessIdentifier: 7,
+            captureWorkspaceForeground: { invalidForeground },
+            launchCandidate: { _ in
+              launchCount += 1
+              return 42
+            }
+          )
+        preconditionFailure("expected invalid foreground to stop before launch")
+      } catch let invalidation as TargetSessionReadinessInvalidation {
+        precondition(ExpectedAuthority.foreground.matches(invalidation))
+        precondition(launchCount == 0)
+      }
+    }
+  }
+
+  private static func validatesApplicationDesktopAndUnavailableForegroundModels() throws {
+    precondition(
+      Issue116PrelaunchForegroundController.captureWorkspaceForeground(processIdentifier: 11)
+        == .application(processIdentifier: 11))
+    precondition(
+      Issue116PrelaunchForegroundController.captureWorkspaceForeground(processIdentifier: nil)
+        == .desktop)
+    try Issue116PrelaunchForegroundController.validateInitialWorkspaceForeground(
+      .application(processIdentifier: 11),
+      controllerProcessIdentifier: 7
+    )
+    try Issue116PrelaunchForegroundController.validateInitialWorkspaceForeground(
+      .desktop,
+      controllerProcessIdentifier: 7
+    )
+    expectInvalid(.foreground) {
+      try Issue116PrelaunchForegroundController.validateInitialWorkspaceForeground(
+        .application(processIdentifier: 7),
+        controllerProcessIdentifier: 7
+      )
+    }
+    expectInvalid(.foreground) {
+      try Issue116PrelaunchForegroundController.validateInitialWorkspaceForeground(
+        .unavailable,
+        controllerProcessIdentifier: 7
+      )
+    }
+  }
+
+  private static func validatesRetainedPrehandoffForegroundAuthority() throws {
+    let applicationAnchor = Issue116WorkspaceForegroundState.application(processIdentifier: 11)
+    precondition(
+      Issue116PrelaunchForegroundController.classifyWorkspaceFocus(
+        currentForeground: applicationAnchor,
+        initialForeground: applicationAnchor,
+        candidateProcessIdentifier: 42
+      ) == .awaitingInitialApplication)
+    precondition(
+      Issue116PrelaunchForegroundController.classifyWorkspaceFocus(
+        currentForeground: .desktop,
+        initialForeground: .desktop,
+        candidateProcessIdentifier: 42
+      ) == .awaitingDesktop)
+    precondition(
+      Issue116PrelaunchForegroundController.classifyWorkspaceFocus(
+        currentForeground: .application(processIdentifier: 42),
+        initialForeground: applicationAnchor,
+        candidateProcessIdentifier: 42
+      ) == .candidate)
+    precondition(
+      Issue116PrelaunchForegroundController.classifyWorkspaceFocus(
+        currentForeground: .application(processIdentifier: 12),
+        initialForeground: applicationAnchor,
+        candidateProcessIdentifier: 42
+      ) == .otherApplication)
+    precondition(
+      Issue116PrelaunchForegroundController.classifyWorkspaceFocus(
+        currentForeground: .application(processIdentifier: 12),
+        initialForeground: .desktop,
+        candidateProcessIdentifier: 42
+      ) == .otherApplication)
+    precondition(
+      Issue116PrelaunchForegroundController.classifyWorkspaceFocus(
+        currentForeground: .unavailable,
+        initialForeground: applicationAnchor,
+        candidateProcessIdentifier: 42
+      ) == .unavailable)
+
+    try Issue105TargetSessionStabilizer.validatePreHandoff(
+      awaitingSnapshot(), retainedIdentity: retainedIdentity)
+    try Issue105TargetSessionStabilizer.validatePreHandoff(
+      awaitingDesktopSnapshot(), retainedIdentity: retainedIdentity)
+    for snapshot in [
+      candidateSnapshot(),
+      awaitingSnapshot(accessibilityFrontmost: .supported(true)),
+      awaitingSnapshot(accessibilityFrontmost: .unavailable(.cannotComplete)),
+      awaitingSnapshot(workspaceFocusState: .otherApplication),
+      awaitingSnapshot(workspaceFocusState: .unavailable),
+    ] {
+      expectInvalid(.foreground) {
+        try Issue105TargetSessionStabilizer.validatePreHandoff(
+          snapshot, retainedIdentity: retainedIdentity)
+      }
+    }
   }
 
   private static func validatesExplicitOperatorReadyPathAndToken() throws {
@@ -232,6 +364,21 @@ enum TargetSessionReadinessCoreTests {
       ])
     precondition(outcome.diagnostics.terminalPredicates.visibleWindow)
     precondition(outcome.diagnostics.terminalPredicates.workspaceFrontmost)
+  }
+
+  private static func acceptsDesktopToCandidateTransition() throws {
+    let outcome = try stabilize(
+      initialSnapshot: awaitingDesktopSnapshot(),
+      observations: [
+        awaitingDesktopSnapshot(),
+        candidateSnapshot(),
+        candidateSnapshot(),
+      ]
+    )
+    precondition(outcome.diagnostics.operatorHandoff.focusTransitionDetected)
+    precondition(
+      outcome.diagnostics.operatorHandoff.initialWorkspaceFocusState == .awaitingInitialApplication)
+    precondition(outcome.diagnostics.operatorHandoff.terminalWorkspaceFocusState == .candidate)
   }
 
   private static func acceptsDelayedCoordinatorObservation() throws {
@@ -505,6 +652,7 @@ enum TargetSessionReadinessCoreTests {
 
   @discardableResult
   private static func stabilize(
+    initialSnapshot: Issue108TargetSessionReadinessSnapshot? = nil,
     observations suppliedObservations: [Issue108TargetSessionReadinessSnapshot],
     declaredOperatorFocusActionCount: Int = 1,
     performRaise suppliedPerformRaise: (() -> Issue105SessionActionResult)? = nil
@@ -514,7 +662,7 @@ enum TargetSessionReadinessCoreTests {
     return try Issue105TargetSessionStabilizer.stabilize(
       policy: testPolicy,
       retainedIdentity: retainedIdentity,
-      initialSnapshot: awaitingSnapshot(),
+      initialSnapshot: initialSnapshot ?? awaitingSnapshot(),
       operatorReadyLatch: publishedLatch(for: testPolicy),
       declaredOperatorFocusActionCount: declaredOperatorFocusActionCount,
       elapsedMilliseconds: { elapsed },
@@ -530,7 +678,9 @@ enum TargetSessionReadinessCoreTests {
     processIdentifier: Int32? = 42,
     windowIdentity: UInt? = 7,
     executableIdentityMatched: Bool = true,
-    applicationHidden: Bool = false
+    applicationHidden: Bool = false,
+    accessibilityFrontmost: Issue108AccessibilityBooleanRead = .supported(false),
+    workspaceFocusState: Issue116WorkspaceFocusState = .awaitingInitialApplication
   ) -> Issue108TargetSessionReadinessSnapshot {
     snapshot(
       applicationCount: applicationCount,
@@ -541,10 +691,14 @@ enum TargetSessionReadinessCoreTests {
       applicationHidden: applicationHidden,
       windowMinimized: .unavailable(.attributeUnsupported),
       windowFrameVisible: .unavailable(.attributeUnsupported),
-      accessibilityFrontmost: .supported(false),
+      accessibilityFrontmost: accessibilityFrontmost,
       workspaceFrontmost: false,
-      workspaceFocusState: .awaitingInitialApplication
+      workspaceFocusState: workspaceFocusState
     )
+  }
+
+  private static func awaitingDesktopSnapshot() -> Issue108TargetSessionReadinessSnapshot {
+    awaitingSnapshot(workspaceFocusState: .awaitingDesktop)
   }
 
   private static func candidateSnapshot(
@@ -557,7 +711,7 @@ enum TargetSessionReadinessCoreTests {
     windowMinimized: Issue108AccessibilityBooleanRead = .supported(false),
     windowFrameVisible: Issue108AccessibilityBooleanRead = .supported(true),
     accessibilityFrontmost: Issue108AccessibilityBooleanRead = .supported(true),
-    workspaceFocusState: Issue109WorkspaceFocusState = .candidate
+    workspaceFocusState: Issue116WorkspaceFocusState = .candidate
   ) -> Issue108TargetSessionReadinessSnapshot {
     snapshot(
       applicationCount: applicationCount,
@@ -585,7 +739,7 @@ enum TargetSessionReadinessCoreTests {
     windowFrameVisible: Issue108AccessibilityBooleanRead,
     accessibilityFrontmost: Issue108AccessibilityBooleanRead,
     workspaceFrontmost: Bool,
-    workspaceFocusState: Issue109WorkspaceFocusState
+    workspaceFocusState: Issue116WorkspaceFocusState
   ) -> Issue108TargetSessionReadinessSnapshot {
     Issue108TargetSessionReadinessSnapshot(
       applicationCount: applicationCount,

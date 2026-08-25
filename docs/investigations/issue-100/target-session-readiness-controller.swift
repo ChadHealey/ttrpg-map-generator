@@ -93,20 +93,32 @@ enum TargetSessionReadinessController {
       packageIdentityMatched: true
     )
 
-    let configuration = NSWorkspace.OpenConfiguration()
-    configuration.activates = true
-    configuration.addsToRecentItems = false
-    configuration.createsNewApplicationInstance = true
-    let application: NSRunningApplication
+    let launch: Issue116CandidateLaunch<NSRunningApplication>
     do {
-      application = try await NSWorkspace.shared.openApplication(
-        at: package.applicationURL,
-        configuration: configuration
+      launch = try await Issue116PrelaunchForegroundController.captureThenLaunch(
+        controllerProcessIdentifier: ProcessInfo.processInfo.processIdentifier,
+        captureWorkspaceForeground: {
+          Issue105TargetSessionStabilizationPlatform.currentWorkspaceForeground()
+        },
+        launchCandidate: { requestsActivation in
+          let configuration = NSWorkspace.OpenConfiguration()
+          configuration.activates = requestsActivation
+          configuration.addsToRecentItems = false
+          configuration.createsNewApplicationInstance = true
+          return try await NSWorkspace.shared.openApplication(
+            at: package.applicationURL,
+            configuration: configuration
+          )
+        }
       )
+    } catch let invalidation as TargetSessionReadinessInvalidation {
+      throw invalidation
     } catch {
       throw TargetSessionReadinessInvalidation.action(
         "the exact packaged candidate could not be launched in the target GUI session")
     }
+    let application = launch.candidate
+    let initialWorkspaceForeground = launch.initialWorkspaceForeground
     var qualificationSucceeded = false
     defer {
       if !qualificationSucceeded { _ = application.terminate() }
@@ -124,16 +136,6 @@ enum TargetSessionReadinessController {
       application: application,
       bundleIdentifier: arguments.bundleIdentifier
     )
-    guard
-      let initialWorkspaceFrontmostProcessIdentifier =
-        Issue105TargetSessionStabilizationPlatform
-        .currentWorkspaceFrontmostProcessIdentifier(),
-      initialWorkspaceFrontmostProcessIdentifier != application.processIdentifier,
-      initialWorkspaceFrontmostProcessIdentifier != ProcessInfo.processInfo.processIdentifier
-    else {
-      throw TargetSessionReadinessInvalidation.foreground(
-        "a distinct initial foreground application was not available for operator handoff")
-    }
     let retainedIdentity = Issue105RetainedCandidateIdentity(
       processIdentifier: application.processIdentifier,
       windowIdentity: CFHash(window)
@@ -141,7 +143,7 @@ enum TargetSessionReadinessController {
     let initialSnapshot = try Issue105TargetSessionStabilizationPlatform.readinessSnapshot(
       bundleIdentifier: arguments.bundleIdentifier,
       expectedExecutableSha256: arguments.expectedCandidateSha256,
-      initialWorkspaceFrontmostProcessIdentifier: initialWorkspaceFrontmostProcessIdentifier
+      initialWorkspaceForeground: initialWorkspaceForeground
     )
     try Issue105TargetSessionStabilizer.validateZeroOperationProof(.zero)
     try Issue105TargetSessionStabilizer.validatePreHandoff(
@@ -173,7 +175,7 @@ enum TargetSessionReadinessController {
       window: window,
       bundleIdentifier: arguments.bundleIdentifier,
       expectedExecutableSha256: arguments.expectedCandidateSha256,
-      initialWorkspaceFrontmostProcessIdentifier: initialWorkspaceFrontmostProcessIdentifier,
+      initialWorkspaceForeground: initialWorkspaceForeground,
       initialSnapshot: initialSnapshot,
       operatorReadyLatch: publishedLatch,
       declaredOperatorFocusActionCount: arguments.declaredOperatorFocusActionCount
@@ -207,7 +209,7 @@ enum TargetSessionReadinessController {
     let finalSnapshot = try Issue105TargetSessionStabilizationPlatform.readinessSnapshot(
       bundleIdentifier: arguments.bundleIdentifier,
       expectedExecutableSha256: arguments.expectedCandidateSha256,
-      initialWorkspaceFrontmostProcessIdentifier: initialWorkspaceFrontmostProcessIdentifier
+      initialWorkspaceForeground: initialWorkspaceForeground
     )
     try Issue105TargetSessionStabilizer.validateRetainedIdentity(
       finalSnapshot,
@@ -255,7 +257,7 @@ enum TargetSessionReadinessController {
       qualificationKind: "non-measurement-target-session-readiness",
       target: .approved,
       sessionMechanism:
-        "exact-path NSWorkspace launch in active console GUI session; bounded explicit awaiting-operator-focus handoff; one declared operator focus action; independently detected exact-candidate Workspace and Accessibility frontmost plus supported positive frame; AXRaise; unchanged retained Accessibility/NSWorkspace observer verification",
+        "prelaunch-captured explicit Workspace application/desktop anchor; exact-path nonactivating NSWorkspace launch in active console GUI session; bounded explicit awaiting-operator-focus handoff; one declared operator focus action; independently detected exact-candidate Workspace and Accessibility frontmost plus supported positive frame; AXRaise; unchanged retained Accessibility/NSWorkspace observer verification",
       bundleIdentifier: arguments.bundleIdentifier,
       candidateExecutableSha256: package.executableSha256,
       controllerSha256: controllerSha256,

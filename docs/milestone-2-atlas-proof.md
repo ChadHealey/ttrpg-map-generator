@@ -992,6 +992,28 @@ blocked and **UNCONSUMED**. Another attempt requires a new explicit owner
 decision. The sanitized record is in the
 [issue #115 owner-focus evidence](investigations/issue-115/README.md).
 
+### Issue #116 prelaunch foreground capture correction
+
+Issue #116 verified that the issue #115 stop followed from controller ordering: the integrated
+controller requested activation, launched and waited for the candidate window, and only then read
+the initial Workspace foreground PID. The activating launch could make the exact candidate the
+value rejected as the initial anchor.
+
+The corrected external controller captures an explicit retained-application or
+desktop/no-application foreground state before launching the exact candidate with activation
+disabled. After exact process/window/executable retention, latch publication remains forbidden
+unless the initial anchor is still classified and the exact candidate is Workspace non-frontmost
+and Accessibility supported-false. Controller/candidate focus, undeclared third-app focus, missing
+authority, and identity/window drift fail closed. Desktop is modeled explicitly rather than with a
+magic PID. One later exact-candidate transition remains the only success path.
+
+The issue #110 latch, one-owner-action, 120-second handoff, frame, raise, independent-observer,
+zero-operation, cleanup, and privacy contracts remain unchanged. The focused and predecessor Swift
+and static gates establish the implementation without a live candidate or owner action. The
+implementation-only record is in the
+[issue #116 correction evidence](investigations/issue-116/README.md). Issue #115 remains immutable;
+issue #104 remains blocked and **UNCONSUMED** pending separate fresh authority.
+
 ### Packaged generation-cancellation qualification stop
 
 Issue #98 added only a test observer and observer-enabled package wiring around the unchanged

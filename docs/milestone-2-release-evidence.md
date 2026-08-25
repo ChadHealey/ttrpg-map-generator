@@ -1038,6 +1038,27 @@ and **UNCONSUMED**; another attempt requires a new explicit owner decision. The
 complete sanitized receipt is in the
 [issue #115 owner-focus evidence](investigations/issue-115/README.md).
 
+### Issue #116 prelaunch foreground capture correction
+
+Issue #116 verified the source-backed cause of issue #115's pre-handoff stop. The integrated
+controller used an activating launch and captured the supposed initial Workspace foreground PID
+only after candidate launch and Accessibility-window establishment. The new candidate could
+therefore become the rejected initial foreground value.
+
+The implementation-only correction captures an explicit application or desktop/no-application
+foreground state before a nonactivating candidate launch. It requires the retained exact candidate
+to remain Workspace non-frontmost and Accessibility supported-false before marker publication.
+Candidate/controller focus, undeclared third-app focus, unavailable authority, anchor or identity/
+window drift, and ambiguous Accessibility readback fail closed. Desktop has a named state and no
+sentinel PID. Only one later transition to the exact candidate can succeed.
+
+Issue #110's marker lifecycle, one owner action, 120-second bound, frame, raise, retained identity,
+independent observer, zero-operation, cleanup, and privacy contracts remain unchanged. Focused and
+six predecessor Swift suites plus static gates verify this boundary without a live candidate,
+marker, owner action, product activity, or issue #104 activity. The record is in the
+[issue #116 correction evidence](investigations/issue-116/README.md). Issue #115 remains immutable
+and **INVALID — PRE-HANDOFF PRE-DISPATCH STOP**. Issue #104 remains blocked and **UNCONSUMED**.
+
 ## Remote CI and milestone state
 
 Issue #71 recorded fresh CI evidence for the exact remote release commit

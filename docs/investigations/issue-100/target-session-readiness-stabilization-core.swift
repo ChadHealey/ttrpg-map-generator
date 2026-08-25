@@ -51,6 +51,103 @@ enum Issue109WorkspaceFocusState: String, Codable, Equatable {
   case otherApplication = "other-application"
 }
 
+enum Issue116WorkspaceFocusState: Equatable {
+  case awaitingInitialApplication
+  case awaitingDesktop
+  case candidate
+  case unavailable
+  case otherApplication
+
+  var diagnosticsState: Issue109WorkspaceFocusState {
+    switch self {
+    case .awaitingInitialApplication, .awaitingDesktop:
+      return .awaitingInitialApplication
+    case .candidate:
+      return .candidate
+    case .otherApplication, .unavailable:
+      return .otherApplication
+    }
+  }
+}
+
+enum Issue116WorkspaceForegroundState: Equatable {
+  case application(processIdentifier: Int32)
+  case desktop
+  case unavailable
+}
+
+struct Issue116CandidateLaunch<Candidate> {
+  let initialWorkspaceForeground: Issue116WorkspaceForegroundState
+  let candidate: Candidate
+}
+
+enum Issue116PrelaunchForegroundController {
+  static func captureWorkspaceForeground(
+    processIdentifier: Int32?
+  ) -> Issue116WorkspaceForegroundState {
+    guard let processIdentifier else { return .desktop }
+    return .application(processIdentifier: processIdentifier)
+  }
+
+  static func validateInitialWorkspaceForeground(
+    _ foreground: Issue116WorkspaceForegroundState,
+    controllerProcessIdentifier: Int32
+  ) throws {
+    switch foreground {
+    case .application(let processIdentifier)
+    where processIdentifier == controllerProcessIdentifier:
+      throw TargetSessionReadinessInvalidation.foreground(
+        "the readiness controller acquired foreground ownership before candidate launch")
+    case .application, .desktop:
+      return
+    case .unavailable:
+      throw TargetSessionReadinessInvalidation.foreground(
+        "initial Workspace foreground authority was unavailable before candidate launch")
+    }
+  }
+
+  @MainActor
+  static func captureThenLaunch<Candidate>(
+    controllerProcessIdentifier: Int32,
+    captureWorkspaceForeground: () -> Issue116WorkspaceForegroundState,
+    launchCandidate: (_ requestsActivation: Bool) async throws -> Candidate
+  ) async throws -> Issue116CandidateLaunch<Candidate> {
+    let initialWorkspaceForeground = captureWorkspaceForeground()
+    try validateInitialWorkspaceForeground(
+      initialWorkspaceForeground,
+      controllerProcessIdentifier: controllerProcessIdentifier
+    )
+    let candidate = try await launchCandidate(false)
+    return Issue116CandidateLaunch(
+      initialWorkspaceForeground: initialWorkspaceForeground,
+      candidate: candidate
+    )
+  }
+
+  static func classifyWorkspaceFocus(
+    currentForeground: Issue116WorkspaceForegroundState,
+    initialForeground: Issue116WorkspaceForegroundState,
+    candidateProcessIdentifier: Int32
+  ) -> Issue116WorkspaceFocusState {
+    switch currentForeground {
+    case .application(let processIdentifier)
+    where processIdentifier == candidateProcessIdentifier:
+      return .candidate
+    case .application(let processIdentifier):
+      guard
+        case .application(let initialProcessIdentifier) = initialForeground,
+        processIdentifier == initialProcessIdentifier
+      else { return .otherApplication }
+      return .awaitingInitialApplication
+    case .desktop:
+      guard initialForeground == .desktop else { return .otherApplication }
+      return .awaitingDesktop
+    case .unavailable:
+      return .unavailable
+    }
+  }
+}
+
 struct Issue108TargetSessionReadinessSnapshot: Equatable {
   let applicationCount: Int
   let windowCount: Int
@@ -62,7 +159,7 @@ struct Issue108TargetSessionReadinessSnapshot: Equatable {
   let windowFrameVisible: Issue108AccessibilityBooleanRead
   let accessibilityFrontmost: Issue108AccessibilityBooleanRead
   let workspaceFrontmost: Bool
-  let workspaceFocusState: Issue109WorkspaceFocusState
+  let workspaceFocusState: Issue116WorkspaceFocusState
 
   var visibleWindow: Bool {
     !applicationHidden && windowMinimized.supportedValue != true
@@ -371,12 +468,18 @@ enum Issue105TargetSessionStabilizer {
       throw TargetSessionReadinessInvalidation.accessibility(
         "the exact packaged candidate application was hidden before operator handoff")
     }
-    guard snapshot.workspaceFocusState == .awaitingInitialApplication,
-      !snapshot.workspaceFrontmost,
-      snapshot.accessibilityFrontmost.supportedValue != true
+    let awaitingInitialForeground: Bool
+    switch snapshot.workspaceFocusState {
+    case .awaitingInitialApplication, .awaitingDesktop:
+      awaitingInitialForeground = true
+    case .candidate, .otherApplication, .unavailable:
+      awaitingInitialForeground = false
+    }
+    guard awaitingInitialForeground, !snapshot.workspaceFrontmost,
+      snapshot.accessibilityFrontmost == .supported(false)
     else {
       throw TargetSessionReadinessInvalidation.foreground(
-        "the exact candidate was already frontmost before the operator handoff began")
+        "the exact candidate was not proven non-frontmost before the operator handoff began")
     }
   }
 
@@ -487,7 +590,7 @@ enum Issue105TargetSessionStabilizer {
           focusTransitionDetected: focusTransitionDetected,
           waitDurationMilliseconds: boundedElapsedMilliseconds(),
           observationCount: observationCount,
-          initialWorkspaceFocusState: initialSnapshot.workspaceFocusState,
+          initialWorkspaceFocusState: initialSnapshot.workspaceFocusState.diagnosticsState,
           terminalWorkspaceFocusState: terminalWorkspaceFocusState,
           stateTransitions: stateTransitions
         ),
@@ -519,7 +622,7 @@ enum Issue105TargetSessionStabilizer {
         try fail(.accessibility("the retained readiness state could not be observed"))
       }
 
-      terminalWorkspaceFocusState = snapshot.workspaceFocusState
+      terminalWorkspaceFocusState = snapshot.workspaceFocusState.diagnosticsState
       terminalVisibilityPredicates = Issue106VisibilityPredicates(snapshot: snapshot)
       guard !snapshot.applicationHidden else {
         try fail(.accessibility("the exact packaged candidate application became hidden"))
@@ -528,11 +631,13 @@ enum Issue105TargetSessionStabilizer {
       switch snapshot.workspaceFocusState {
       case .otherApplication:
         try fail(.foreground("focus moved to an undeclared application during operator handoff"))
-      case .awaitingInitialApplication:
+      case .unavailable:
+        try fail(.foreground("Workspace foreground authority became unavailable during handoff"))
+      case .awaitingInitialApplication, .awaitingDesktop:
         if focusTransitionDetected {
           try fail(.foreground("the candidate lost Workspace focus after operator handoff"))
         }
-        guard snapshot.accessibilityFrontmost.supportedValue != true else {
+        guard snapshot.accessibilityFrontmost == .supported(false) else {
           try fail(.foreground("Accessibility and Workspace focus disagreed during handoff"))
         }
         wait(policy.pollIntervalMilliseconds)

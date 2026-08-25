@@ -6,7 +6,7 @@ enum Issue105TargetSessionStabilizationPlatform {
   static func readinessSnapshot(
     bundleIdentifier: String,
     expectedExecutableSha256: String,
-    initialWorkspaceFrontmostProcessIdentifier: Int32
+    initialWorkspaceForeground: Issue116WorkspaceForegroundState
   ) throws -> Issue108TargetSessionReadinessSnapshot {
     let applications = Issue100TargetSessionPlatform.exactApplications(
       bundleIdentifier: bundleIdentifier)
@@ -38,16 +38,11 @@ enum Issue105TargetSessionStabilizationPlatform {
       executableIdentityMatched = false
     }
 
-    let workspaceFrontmostProcessIdentifier =
-      NSWorkspace.shared.frontmostApplication?.processIdentifier
-    let workspaceFocusState: Issue109WorkspaceFocusState
-    if workspaceFrontmostProcessIdentifier == application.processIdentifier {
-      workspaceFocusState = .candidate
-    } else if workspaceFrontmostProcessIdentifier == initialWorkspaceFrontmostProcessIdentifier {
-      workspaceFocusState = .awaitingInitialApplication
-    } else {
-      workspaceFocusState = .otherApplication
-    }
+    let workspaceFocusState = Issue116PrelaunchForegroundController.classifyWorkspaceFocus(
+      currentForeground: currentWorkspaceForeground(),
+      initialForeground: initialWorkspaceForeground,
+      candidateProcessIdentifier: application.processIdentifier
+    )
     return Issue108TargetSessionReadinessSnapshot(
       applicationCount: applications.count,
       windowCount: windows.count,
@@ -66,8 +61,10 @@ enum Issue105TargetSessionStabilizationPlatform {
     )
   }
 
-  static func currentWorkspaceFrontmostProcessIdentifier() -> Int32? {
-    NSWorkspace.shared.frontmostApplication?.processIdentifier
+  static func currentWorkspaceForeground() -> Issue116WorkspaceForegroundState {
+    Issue116PrelaunchForegroundController.captureWorkspaceForeground(
+      processIdentifier: NSWorkspace.shared.frontmostApplication?.processIdentifier
+    )
   }
 
   static func stabilize(
@@ -75,7 +72,7 @@ enum Issue105TargetSessionStabilizationPlatform {
     window: AXUIElement,
     bundleIdentifier: String,
     expectedExecutableSha256: String,
-    initialWorkspaceFrontmostProcessIdentifier: Int32,
+    initialWorkspaceForeground: Issue116WorkspaceForegroundState,
     initialSnapshot: Issue108TargetSessionReadinessSnapshot,
     operatorReadyLatch: Issue110OperatorReadyLatchDiagnostics,
     declaredOperatorFocusActionCount: Int
@@ -103,8 +100,7 @@ enum Issue105TargetSessionStabilizationPlatform {
         return try readinessSnapshot(
           bundleIdentifier: bundleIdentifier,
           expectedExecutableSha256: expectedExecutableSha256,
-          initialWorkspaceFrontmostProcessIdentifier:
-            initialWorkspaceFrontmostProcessIdentifier
+          initialWorkspaceForeground: initialWorkspaceForeground
         )
       },
       performRaise: {
