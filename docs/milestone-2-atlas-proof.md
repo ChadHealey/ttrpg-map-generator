@@ -901,6 +901,28 @@ authorized. Issue #104 remains blocked and **UNCONSUMED**. The complete bounded
 record and successor draft are in the
 [issue #112 latency diagnosis](investigations/issue-112/README.md).
 
+### Issue #113 final app-specific focus qualification boundary
+
+Live issue #113 supplies newer, issue-specific authority for exactly one final
+app-specific Computer Use exception to issue #112's successor decision. Before any
+repository access, one bounded prompt-free TTRPG permission-path read returned, its
+transparent zero-operation process was terminated, and a separate check found zero
+targets. No input or product operation occurred.
+
+The exact preserved issue #110 identities reproduced, but the required root check
+then failed in its first formatting stage on pre-existing table layout in protected
+issue #112 evidence. Changing that prior evidence was forbidden, so the attempt
+stopped before controller launch, marker creation, post-marker read, or click. A
+terminal check found zero candidate processes. No target retry, fallback, fixture,
+sampler, artifact, dispatch, measurement, issue #95 action, or issue #104 activity
+occurred.
+
+The result is **INVALID — PRE-TARGET GATE STOP**. Computer Use is retired for this
+M2 handoff, prior evidence remains immutable, and issue #104 remains blocked and
+**UNCONSUMED**. The separately authorized one-real-owner-click route is the sole
+successor. The bounded contract and sanitized result are in the
+[issue #113 qualification record](investigations/issue-113/README.md).
+
 ### Packaged generation-cancellation qualification stop
 
 Issue #98 added only a test observer and observer-enabled package wiring around the unchanged

@@ -1,0 +1,96 @@
+{
+  "schemaVersion": "issue113-app-specific-computer-use-focus-evidence-v1",
+  "baseCommit": "535b0a4e14b0f7a4067a0c42b72f0e138a7b7426",
+  "branch": "codex/issue-113-always-allowed-computer-use-focus",
+  "status": "invalid-pre-target-gate-stopped",
+  "permissionWarmup": {
+    "application": "TTRPG Map Generator",
+    "taskSideBoundMilliseconds": 10000,
+    "completionClass": "returned-prompt-free",
+    "elapsedBucket": "under-1s",
+    "reportedWindowCount": 1,
+    "readOnlyInspectionCount": 1,
+    "focusClickCount": 0,
+    "otherInputActionCount": 0,
+    "productInteractionCount": 0,
+    "transparentProcessTerminationSignalCount": 1,
+    "postCleanupTargetProcessCount": 0
+  },
+  "identities": {
+    "candidateExecutableSha256": "5cf14de9836e9da96655572b35bb0e194d8ebc30360b6d6516f88825dcf7a15d",
+    "operatorReadyLatchControllerSha256": "2e941986cf8d3a38e25e5319d84da93daa1572c95ce329ba512cea5a3c23fb51",
+    "canonicalReadinessObserverSha256": "9662c1664d44e93f58dc690a0fb78f08eb1f4751d84fc5790256866e768811ce",
+    "cancellationObserverSha256": "dee96628ba9b9cec31a49b0bd627466a636921f1f73535f1aac421834fbc0e6d",
+    "rssSamplerSha256": "1da835b06e7b2ffbe588e99fee2692d7cfa25f9e8117641c74a5abe73acc3dfe",
+    "retentionUtilitySha256": "c3b2d618b4dbddf9568d4d39334be9a3d0b074ae0b7a5464b4b7e30c5686441b"
+  },
+  "preTargetGates": {
+    "exactPreservedCandidateIdentity": "pass",
+    "exactControllerObserverSamplerRetentionIdentities": "pass",
+    "targetedIssue113Formatting": "pass",
+    "stagedFilePolicy": "pass",
+    "publicPrivacy": "pass",
+    "authorizedSurface": "pass-evidence-and-owning-docs-only",
+    "diffCheck": "pass",
+    "rootCheck": "fail-first-format-stage-preexisting-protected-issue112-table-layout",
+    "focusedOperatorReadyLatchSuite": "not-run-after-terminal-gate-failure",
+    "predecessorSwiftSuites": "not-run-after-terminal-gate-failure",
+    "packagedDispatchTests": "not-run-after-terminal-gate-failure",
+    "observerEnabledUnsignedPackageBuild": "not-run-after-terminal-gate-failure",
+    "crossPlatform": "not-run-after-terminal-gate-failure",
+    "swiftFormatting": "not-run-after-terminal-gate-failure",
+    "protectedEvidence": "pass-issue109-through-issue112-unchanged"
+  },
+  "preflight": {
+    "controllerAttemptCount": 0,
+    "controllerCandidateLaunchCount": 0,
+    "declaredOperatorFocusActionCount": 0,
+    "markerPathOrTokenCreated": false,
+    "markerPublished": false,
+    "postMarkerCandidateInspectionCount": 0,
+    "focusClickCount": 0,
+    "otherComputerUseActionCount": 0,
+    "retryCount": 0,
+    "fallbackCount": 0,
+    "finalCandidateProcessCount": 0
+  },
+  "zeroOperationProof": {
+    "fixtureConfigured": false,
+    "samplerStarted": false,
+    "rawArtifactCount": 0,
+    "targetDestinationCreated": false,
+    "previewDispatched": false,
+    "fullGenerationDispatched": false,
+    "svgDispatched": false,
+    "pngDispatched": false,
+    "measurementCount": 0,
+    "issue95OperationCount": 0,
+    "issue104ReplacementConsumed": false
+  },
+  "preservation": {
+    "priorEvidenceReinterpreted": false,
+    "priorEvidenceOverwritten": false,
+    "issue109Status": "invalid-and-consumed",
+    "issue110Status": "invalid-and-consumed",
+    "issue111Status": "invalid-and-consumed",
+    "issue112Status": "diagnostic-complete",
+    "issue104State": "unconsumed"
+  },
+  "privacy": {
+    "markerPathPublished": false,
+    "markerTokenPublished": false,
+    "localPathsPublished": false,
+    "processIdentifiersPublished": false,
+    "serviceIdentifiersPublished": false,
+    "userIdentityPublished": false,
+    "screenshotsOrPixelsPublished": false,
+    "accessibilityContentPublished": false,
+    "privateArtifactLocationsPublished": false
+  },
+  "decision": {
+    "computerUseM2FocusMechanism": "retired",
+    "issue104MayResume": false,
+    "successor": "newly-authorized-one-real-owner-click-route"
+  },
+  "conclusion": "The required app-specific permission warm-up returned prompt-free inside its 10-second bound, performed zero input, and cleaned its transparent zero-operation process. Exact preserved issue #110 artifact identities reproduced. Before target use, the required root check failed in its first formatting stage on pre-existing table layout in protected issue #112 evidence. Changing that prior evidence is forbidden by live issue #113, so the qualification stopped fail-closed before controller launch, marker creation, post-marker inspection, or click. A terminal read-only check found zero candidate processes. No target retry, fallback, product operation, fixture, sampler, artifact, destination, dispatch, measurement, issue #95 operation, or issue #104 consumption occurred. Computer Use is retired for this M2 focus handoff; the separately authorized real-owner-click route is the sole successor."
+}

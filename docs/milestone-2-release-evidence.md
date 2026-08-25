@@ -947,6 +947,28 @@ durable latch; no native fallback or second mechanism is authorized. Issue #104
 remains blocked and **UNCONSUMED**. The successor contract is in the
 [issue #112 latency diagnosis](investigations/issue-112/README.md).
 
+### Issue #113 final app-specific focus qualification boundary
+
+Live issue #113 authorizes one final app-specific Computer Use exception to issue
+#112's successor decision. Before repository access, the exact TTRPG permission-path
+read returned prompt-free inside its bound, its transparent zero-operation process
+was terminated, and a separate check found zero target processes. No input, focus,
+product operation, or downstream activity occurred.
+
+The exact preserved issue #110 artifact identities passed. The required root check
+then failed at its first formatting stage on pre-existing table layout in protected
+issue #112 evidence. Because issue #113 forbids changing that evidence, the attempt
+stopped before controller launch, marker creation, post-marker read, or click. A
+terminal check found zero candidate processes. There was no target retry, fallback,
+fixture, sampler, artifact/destination, dispatch, measurement, issue #95 action, or
+#104 activity.
+
+The result is **INVALID — PRE-TARGET GATE STOP**. Computer Use is retired for this
+M2 focus handoff. Prior evidence remains immutable, issue #104 remains blocked and
+**UNCONSUMED**, and the separately authorized one-real-owner-click route is the sole
+successor. The contract and sanitized result are in the
+[issue #113 qualification record](investigations/issue-113/README.md).
+
 ## Remote CI and milestone state
 
 Issue #71 recorded fresh CI evidence for the exact remote release commit
