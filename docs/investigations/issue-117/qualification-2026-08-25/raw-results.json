@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "issue117-corrected-owner-focus-qualification-evidence-v1",
+  "baseCommit": "110a890a0480c41cbf766e681c9558578d627088",
+  "coordinationCommit": "1ab5557196f963e4223f1fda366575d3c0c870cc",
+  "branch": "codex/issue-117-focus-qualification",
+  "status": "invalid-candidate-not-proven-nonfrontmost-pre-handoff-preflight-stopped",
+  "activationEvidence": {
+    "freshAfterPhaseAArmed": true,
+    "ownerReportedMacUnlocked": true,
+    "ownerReportedPresentForOneClick": true,
+    "confirmationReusedFromEarlierTask": false
+  },
+  "identities": {
+    "candidateExecutableSha256": "5cf14de9836e9da96655572b35bb0e194d8ebc30360b6d6516f88825dcf7a15d",
+    "correctedReadinessControllerSha256": "0d10dc6d72959edd91989e82ff0c4f0e7238728396ae7059aedc510abd1ebf5f",
+    "canonicalReadinessObserverSha256": "9662c1664d44e93f58dc690a0fb78f08eb1f4751d84fc5790256866e768811ce",
+    "cancellationObserverSha256": "dee96628ba9b9cec31a49b0bd627466a636921f1f73535f1aac421834fbc0e6d",
+    "rssSamplerSha256": "1da835b06e7b2ffbe588e99fee2692d7cfa25f9e8117641c74a5abe73acc3dfe",
+    "retentionUtilitySha256": "c3b2d618b4dbddf9568d4d39334be9a3d0b074ae0b7a5464b4b7e30c5686441b"
+  },
+  "preTargetGates": {
+    "cleanExactCoordinationHead": "pass",
+    "zeroTargetProcesses": "pass",
+    "markerAndPublicationTemporaryCollision": "pass-absent",
+    "exactCanonicalIdentities": "pass-6",
+    "issue116FocusedControllerGates": "reused-passing-no-drift-not-rerun",
+    "issue116SixPredecessorSwiftSuites": "reused-passing-no-drift-not-rerun",
+    "publicPrivacy": "pass",
+    "fixtureAndProductionSurface": "pass-unchanged",
+    "priorRawEvidence": "pass-unchanged",
+    "protectedObserverSources": "pass-unchanged",
+    "diffCheck": "pass"
+  },
+  "postOutcomeGates": {
+    "formatCheck": "pass",
+    "jsonValidation": "pass",
+    "exactCanonicalIdentityRevalidation": "pass",
+    "publicPrivacy": "pass",
+    "authorizedSurface": "pass-evidence-and-owning-docs-only",
+    "fixtureAndProductionSurface": "pass-unchanged",
+    "priorRawEvidence": "pass-unchanged",
+    "protectedObserverSources": "pass-unchanged",
+    "terminalMarkerCleanup": "pass",
+    "terminalCandidateProcessCount": "pass-zero",
+    "diffCheck": "pass"
+  },
+  "preflight": {
+    "controllerAttemptCount": 1,
+    "controllerCandidateLaunchCount": 1,
+    "declaredOwnerFocusActionCount": 1,
+    "status": "invalid-pre-handoff-pre-dispatch-not-target-evidence",
+    "qualificationKind": "non-measurement-target-session-readiness",
+    "controllerVersion": "issue110-target-session-readiness-v7",
+    "invalidAuthority": "foreground",
+    "invalidReason": "the exact candidate was not proven non-frontmost before the operator handoff began",
+    "prelaunchForegroundCaptureOrdered": true,
+    "nonactivatingLaunchRequested": true,
+    "operatorReadyLatch": {
+      "pathPolicy": "explicit-private-tmp-file",
+      "tokenValidated": true,
+      "existingMarkerCollisionChecked": true,
+      "atomicPublicationSucceeded": false,
+      "directCoordinatorValidationReached": false,
+      "ownerOnlyModeValidationReached": false,
+      "cleanupAttempted": true,
+      "cleanupSucceeded": true,
+      "handoffTimeoutMilliseconds": 120000,
+      "stateTransitions": []
+    },
+    "ownerInstructionEmitted": false,
+    "ownerPhysicalClickStatus": "not-requested",
+    "awaitingOperatorFocusStateEmitted": false,
+    "focusObservationBegan": false,
+    "frontmostWriteAttemptCount": 0,
+    "raiseAttemptCount": 0,
+    "independentObserverRunCount": 0,
+    "postExitMarkerPresent": false,
+    "postExitPublicationTemporaryPresent": false,
+    "retryCount": 0,
+    "fallbackCount": 0,
+    "finalCandidateProcessCount": 0
+  },
+  "zeroOperationProof": {
+    "fixtureConfigured": false,
+    "samplerStarted": false,
+    "rawArtifactCount": 0,
+    "targetDestinationCreated": false,
+    "previewDispatched": false,
+    "fullGenerationDispatched": false,
+    "svgDispatched": false,
+    "pngDispatched": false,
+    "measurementCount": 0,
+    "issue95OperationCount": 0,
+    "issue104ReplacementConsumed": false
+  },
+  "preservation": {
+    "priorEvidenceReinterpreted": false,
+    "priorEvidenceOverwritten": false,
+    "issue115Status": "invalid-and-consumed-immutable",
+    "issue104State": "unconsumed"
+  },
+  "privacy": {
+    "markerPathPublished": false,
+    "markerTokenPublished": false,
+    "localPathsPublished": false,
+    "processIdentifiersPublished": false,
+    "serviceIdentifiersPublished": false,
+    "userIdentityPublished": false,
+    "screenshotsOrPixelsPublished": false,
+    "accessibilityContentPublished": false,
+    "privateArtifactLocationsPublished": false,
+    "rawDiagnosticsPublished": false
+  },
+  "decision": {
+    "issue117MayRetry": false,
+    "fallbackAuthorized": false,
+    "issue104MayResume": false,
+    "successor": "new-issue-and-owner-decision-required"
+  },
+  "controllerReceipt": {
+    "controllerVersion": "issue110-target-session-readiness-v7",
+    "status": "invalid",
+    "qualificationKind": "non-measurement-target-session-readiness",
+    "invalidAuthority": "foreground",
+    "invalidReason": "the exact candidate was not proven non-frontmost before the operator handoff began",
+    "target": {
+      "model": "Mac17,2",
+      "osVersion": "26.5.1",
+      "osBuild": "25F80",
+      "memoryGiB": 24
+    },
+    "operatorReadyLatch": {
+      "pathPolicy": "explicit-private-tmp-file",
+      "tokenValidated": true,
+      "existingMarkerCollisionChecked": true,
+      "atomicPublicationSucceeded": false,
+      "cleanupAttempted": true,
+      "cleanupSucceeded": true,
+      "handoffTimeoutMilliseconds": 120000,
+      "stateTransitions": []
+    },
+    "zeroOperationProof": {
+      "fixtureConfigured": false,
+      "samplerStarted": false,
+      "exportDestinationCreated": false,
+      "svgDispatched": false,
+      "pngDispatched": false,
+      "measurementCount": 0,
+      "rawArtifactCount": 0
+    }
+  },
+  "conclusion": "Phase A was cleanly armed before fresh owner confirmation. The exact committed HEAD, zero target processes, absent marker and publication temporary, corrected compiled controller, exact candidate, and preserved observer identities were reconfirmed. The corrected controller was invoked exactly once with one declared owner focus action and launched exactly one nonactivating exact candidate. It failed closed under foreground authority before marker publication because the exact candidate was not proven non-frontmost before operator handoff. The owner-only marker was never published or directly validated, no CLICK NOW instruction was emitted, and no owner action was requested. Controller cleanup succeeded; separate checks found the marker and publication temporary absent and zero target processes. No retry, fallback, GUI input by Codex, Computer Use, focus observation, raise, frontmost write, independent observer, product action, fixture, sampler, artifact, destination, dispatch, measurement, issue #95 operation, or issue #104 consumption occurred. The result is invalid and consumed; issue #104 remains unconsumed, and any successor requires a new issue and owner decision."
+}

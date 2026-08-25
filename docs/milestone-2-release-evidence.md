@@ -1059,6 +1059,30 @@ marker, owner action, product activity, or issue #104 activity. The record is in
 [issue #116 correction evidence](investigations/issue-116/README.md). Issue #115 remains immutable
 and **INVALID — PRE-HANDOFF PRE-DISPATCH STOP**. Issue #104 remains blocked and **UNCONSUMED**.
 
+### Issue #117 corrected owner focus qualification stop
+
+Issue #117 armed the corrected qualification in Phase A from exact integrated commit `110a890`.
+The fresh corrected controller and five preserved supporting authorities reproduced their recorded
+identities; issue #116's immediately preceding focused and predecessor gates were reused without
+drift. The branch stopped clean at coordination commit `1ab5557` with zero target processes and no
+marker collision before fresh owner presence was requested.
+
+After fresh confirmation that the owner was present at the unlocked Mac and ready to click, the
+clean HEAD, identities, zero-process state, and absent marker state were reconfirmed. One corrected
+controller invocation launched exactly one nonactivating exact candidate with one declared owner
+focus action. Before marker publication, the controller failed closed under `foreground` authority
+because the exact candidate was not proven non-frontmost before the operator handoff began.
+
+The owner-only marker was never directly validated, no `CLICK NOW:` instruction was emitted, and
+no owner action was requested. The controller cleaned its unowned marker state and terminated the
+candidate; separate checks found the marker and publication temporary absent and zero target
+processes. No retry, fallback, Codex GUI input, Computer Use, focus observation, raise, frontmost
+write, independent observer, product action, fixture, sampler, artifact/destination, dispatch,
+measurement, issue #95 operation, or issue #104 activity occurred. The result is **INVALID —
+PRE-HANDOFF PRE-DISPATCH STOP**. Issue #104 remains blocked and **UNCONSUMED**; any successor
+requires a new issue and owner decision. The complete sanitized receipt is in the
+[issue #117 qualification evidence](investigations/issue-117/README.md).
+
 ## Remote CI and milestone state
 
 Issue #71 recorded fresh CI evidence for the exact remote release commit

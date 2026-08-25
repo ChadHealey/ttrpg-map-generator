@@ -1014,6 +1014,31 @@ implementation-only record is in the
 [issue #116 correction evidence](investigations/issue-116/README.md). Issue #115 remains immutable;
 issue #104 remains blocked and **UNCONSUMED** pending separate fresh authority.
 
+### Issue #117 corrected owner focus qualification stop
+
+Issue #117 split the corrected owner focus qualification into a committed Phase A arm and one
+freshly authorized Phase B handoff. Phase A began at exact integrated commit `110a890`, compiled
+the corrected controller, reproduced the six candidate/controller/observer/sampler/retention
+identities, reused issue #116's immediately preceding passing focused and predecessor gates without
+drift, and stopped clean at coordination commit `1ab5557` with zero target processes and no marker
+collision.
+
+After fresh confirmation that the owner was present at the unlocked Mac and ready to click, the
+clean committed HEAD, identities, zero-process state, and collision-free marker state were
+reconfirmed. The corrected controller was invoked exactly once and launched one nonactivating exact
+candidate with one declared owner focus action. It failed closed under `foreground` authority
+before marker publication because the exact candidate was not proven non-frontmost before the
+operator handoff began.
+
+The owner-only marker was never directly validated, no `CLICK NOW:` instruction was emitted, and
+no owner action was requested. Controller cleanup succeeded; separate checks found the marker and
+publication temporary absent and zero target processes. No retry, fallback, Codex GUI input,
+Computer Use, focus observation, raise, frontmost write, independent observer, product action,
+fixture, sampler, artifact/destination, dispatch, measurement, issue #95 operation, or issue #104
+activity occurred. The result is **INVALID — PRE-HANDOFF PRE-DISPATCH STOP**. Issue #104 remains
+blocked and **UNCONSUMED**; any successor requires a new issue and owner decision. The sanitized
+receipt is in the [issue #117 qualification evidence](investigations/issue-117/README.md).
+
 ### Packaged generation-cancellation qualification stop
 
 Issue #98 added only a test observer and observer-enabled package wiring around the unchanged

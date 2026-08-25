@@ -63,10 +63,33 @@ unchanged production, fixture, prior-evidence, and protected-observer surfaces, 
 Markdown formatting, authorized diff, and diff whitespace. The only repository change from the
 integrated base is this public coordination record. No prior raw evidence was rewritten or deleted.
 
-## Qualification state
+## Phase A qualification state
 
 **ARMED — NOT LAUNCHED.** The corrected controller is compiled and retained locally, the exact
 candidate and supporting authorities are preserved, the private marker state is absent, and zero
 target processes remain. No candidate was launched, no marker was published, the 120-second
 handoff did not begin, and no owner action was requested. This task is awaiting coordinator
 follow-up for Phase B.
+
+## Phase B one-shot outcome
+
+After Phase A was reported armed, the coordinator supplied fresh confirmation that the owner was
+physically present at the unlocked Mac and ready to click immediately. The clean committed HEAD,
+zero-target-process state, absent exact marker and publication temporary, corrected controller,
+and preserved candidate and observer identities were reconfirmed.
+
+The corrected controller was invoked exactly once with one declared real-owner focus action and
+launched exactly one nonactivating exact candidate. It failed closed under `foreground` authority
+before marker publication because the exact candidate was not proven non-frontmost before the
+operator handoff began. The owner-only marker was therefore never directly validated, no
+`CLICK NOW:` instruction was emitted, and no owner action was requested.
+
+The controller performed no focus observation, raise, frontmost write, independent-observer run,
+fixture configuration, sampler start, artifact or destination creation, dispatch, measurement,
+issue #95 operation, or issue #104 activity. Its unowned marker cleanup succeeded. Separate
+terminal checks found the marker and publication temporary absent and zero target processes. No
+retry or fallback ran.
+
+**INVALID — PRE-HANDOFF PRE-DISPATCH STOP.** Issue #104 remains blocked and **UNCONSUMED**. Any
+successor requires a new issue and owner decision. The complete sanitized receipt is in
+[`qualification-2026-08-25/raw-results.json`](qualification-2026-08-25/raw-results.json).
