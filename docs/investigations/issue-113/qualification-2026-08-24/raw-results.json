@@ -2,7 +2,7 @@
   "schemaVersion": "issue113-app-specific-computer-use-focus-evidence-v1",
   "baseCommit": "535b0a4e14b0f7a4067a0c42b72f0e138a7b7426",
   "branch": "codex/issue-113-always-allowed-computer-use-focus",
-  "status": "preflight-gates-passed-target-not-run",
+  "status": "invalid-authentication-boundary-preflight-stopped",
   "permissionWarmup": {
     "application": "TTRPG Map Generator",
     "taskSideBoundMilliseconds": 10000,
@@ -45,15 +45,70 @@
     "fixtureAndProductionSurface": "pass-unchanged",
     "protectedEvidence": "pass-prior-raw-artifacts-and-observer-sources-unchanged"
   },
+  "postOutcomeGates": {
+    "formatCheck": "pass",
+    "jsonValidation": "pass",
+    "exactCanonicalIdentityRevalidation": "pass",
+    "publicPrivacy": "pass",
+    "authorizedSurface": "pass-evidence-and-owning-docs-only",
+    "fixtureAndProductionSurface": "pass-unchanged",
+    "priorRawEvidence": "pass-unchanged",
+    "protectedObserverSources": "pass-unchanged",
+    "terminalMarkerCleanup": "pass",
+    "terminalCandidateProcessCount": "pass-zero",
+    "diffCheck": "pass"
+  },
   "preflight": {
-    "controllerAttemptCount": 0,
-    "controllerCandidateLaunchCount": 0,
-    "declaredOperatorFocusActionCount": 0,
-    "markerPathOrTokenCreated": false,
-    "markerPublished": false,
-    "postMarkerCandidateInspectionCount": 0,
+    "controllerAttemptCount": 1,
+    "status": "invalid-pre-dispatch-not-target-evidence",
+    "qualificationKind": "non-measurement-target-session-readiness",
+    "controllerVersion": "issue110-target-session-readiness-v7",
+    "invalidAuthority": "computer-use-authentication-boundary",
+    "invalidReason": "the single post-marker read reported a locked Mac and unavailable automatic unlock",
+    "controllerCandidateLaunchCount": 1,
+    "declaredOperatorFocusActionCount": 1,
+    "operatorReadyLatch": {
+      "pathPolicy": "explicit-private-tmp-file",
+      "tokenValidated": true,
+      "existingMarkerCollisionChecked": true,
+      "atomicPublicationSucceeded": true,
+      "directCoordinatorValidationSucceeded": true,
+      "ownerOnlyModeValidated": true,
+      "cleanupAttempted": true,
+      "cleanupSucceeded": true,
+      "handoffTimeoutMilliseconds": 120000,
+      "stateTransitions": [
+        "exact-candidate-validated",
+        "zero-operation-validated",
+        "awaiting-operator-ready-published",
+        "operator-ready-marker-cleaned"
+      ]
+    },
+    "postMarkerCandidateInspectionCount": 1,
+    "postMarkerInspectionDisposition": "authentication-boundary-locked-mac-automatic-unlock-unavailable",
+    "postMarkerInspectionElapsedBucket": "under-1s",
+    "postMarkerPackagedWindowCountProved": false,
     "focusClickCount": 0,
     "otherComputerUseActionCount": 0,
+    "awaitingOperatorFocusStateEmitted": true,
+    "focusTransitionDetected": false,
+    "policyTimeoutMilliseconds": 120000,
+    "pollIntervalMilliseconds": 50,
+    "waitDurationMilliseconds": 120000,
+    "observationCount": 1705,
+    "activationRequestCount": 0,
+    "frontmostWriteAttemptCount": 0,
+    "raiseAttemptCount": 0,
+    "independentObserverRunCount": 0,
+    "terminalPredicates": {
+      "accessibilityFrontmost": false,
+      "workspaceFrontmost": false,
+      "exactCandidateRetained": false,
+      "exactWindowRetained": false,
+      "visibleWindow": false,
+      "independentObserverVerified": false
+    },
+    "postExitMarkerPresent": false,
     "retryCount": 0,
     "fallbackCount": 0,
     "finalCandidateProcessCount": 0
@@ -92,9 +147,9 @@
     "privateArtifactLocationsPublished": false
   },
   "decision": {
-    "computerUseM2FocusMechanism": "pending-one-shot-preflight",
+    "computerUseM2FocusMechanism": "retired",
     "issue104MayResume": false,
-    "successor": "pending-controller-outcome"
+    "successor": "newly-authorized-one-real-owner-click-route"
   },
-  "conclusion": "The required app-specific permission warm-up returned prompt-free inside its 10-second bound, performed zero input, and cleaned its transparent zero-operation process. The live issue #113 amendment authorized a mechanical Prettier repair to issue #112's table; normalized table-cell comparison proved semantic content unchanged, and all raw/protected evidence remained unchanged. The focused issue #110 suite, six predecessor Swift suites, 14 dispatch tests, 338-module observer-enabled package build, root check, cross-platform fixtures, exact preserved identities, Swift formatting, privacy, surface, protected-evidence, and diff gates passed. The fresh current-toolchain package was noncanonical and excluded from target use. No controller candidate, marker, post-marker read, click, product operation, fixture, sampler, artifact, destination, dispatch, measurement, issue #95 operation, or issue #104 consumption has occurred. The exactly one target preflight remains authorized and unconsumed."
+  "conclusion": "The required app-specific permission warm-up returned prompt-free inside its 10-second bound, performed zero input, and cleaned its transparent zero-operation process. The authorized mechanical issue #112 table repair was semantic-neutral, and every pre-target gate passed with the noncanonical fresh package excluded from target use. The unchanged controller launched the exact preserved candidate once, validated the candidate/session and zero-operation boundary, atomically published the marker, and entered the 120-second handoff. Direct coordinator marker validation passed. The single post-marker Computer Use read returned an authentication boundary in the under-1-second bucket because the Mac was locked and automatic unlock was unavailable. No app state was actionable, so no click or other Computer Use action occurred and no retry ran. The controller independently timed out after 1,705 observations without focus, cleaned its marker, and terminated the candidate before raise or observer execution. Terminal checks found the marker and publication temporary absent and zero TTRPG processes. No product operation, fixture, sampler, artifact, destination, dispatch, measurement, issue #95 operation, or issue #104 consumption occurred. Computer Use is retired for this M2 handoff; the one-real-owner-click route is the sole successor."
 }

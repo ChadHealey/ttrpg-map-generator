@@ -49,7 +49,7 @@ task; an invalid result retires Computer Use for this M2 handoff and leaves issu
 
 ## Qualification state
 
-**PREFLIGHT GATES PASSED — TARGET NOT RUN.** The live issue #113 amendment authorized
+The live issue #113 amendment authorized
 one mechanical Prettier repair to issue #112's Markdown table after the initial
 formatting stop. The exact diff changed only table alignment. A normalized table-cell
 comparison proved semantic text and numbers unchanged, and the route decision,
@@ -67,7 +67,30 @@ controller, readiness-observer, cancellation-observer, sampler, and retention
 identities reproduced. Swift formatting, public privacy, authorized surface,
 fixture/production surface, protected evidence, and diff gates passed.
 
-No controller candidate has been launched, no marker path or token has been created,
-and no post-marker read or focus click has occurred. Issue #104 remains blocked and
-**UNCONSUMED**. The current sanitized preflight receipt is in
+**INVALID — PRE-DISPATCH STOP.** The unchanged controller launched the exact
+preserved candidate once with one declared focus action. It validated the candidate
+and console session, proved the zero-operation boundary, atomically published the
+owner-only marker, and emitted `awaiting-operator-focus`. Direct coordinator
+validation proved the exact marker schema and state, private mode, token and package
+binding, candidate/session predicates, 120,000-ms handoff, one declared action, and
+complete zero-operation receipt.
+
+The single post-marker Computer Use read then returned an authentication boundary in
+the `under-1s` bucket: the Mac was locked and automatic unlock was unavailable. It
+returned no actionable app state, so exactly one packaged window could not be proved.
+No click or other Computer Use action occurred, and the read was not retried. The
+unchanged controller independently completed its full 120,000-ms handoff and 1,705
+observations without detecting Accessibility or Workspace frontmost. It stopped
+before frame readiness, raise, retained-state validation, or the independent
+observer.
+
+The controller cleaned its marker and terminated its candidate. Separate terminal
+checks found the marker and publication temporary absent and zero TTRPG processes.
+No fixture, sampler, artifact, destination, dispatch, measurement, issue #95
+operation, or issue #104 activity occurred. There was no retry or fallback.
+
+Computer Use is retired for this M2 focus handoff. Issue #104 remains blocked and
+**UNCONSUMED**. The sole successor is issue #112's separately authorized
+one-real-owner-click route in a new issue and fresh task. The complete sanitized
+receipt is in
 [`qualification-2026-08-24/raw-results.json`](qualification-2026-08-24/raw-results.json).

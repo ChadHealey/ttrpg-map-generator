@@ -964,9 +964,22 @@ preserved identities, privacy, surface, protected-evidence, Swift-format, and di
 gates then passed. The current-toolchain package was noncanonical and excluded from
 target use.
 
-The result is **PREFLIGHT GATES PASSED — TARGET NOT RUN**. No controller candidate,
-marker, post-marker read, or focus click has occurred. Issue #104 remains blocked and
-**UNCONSUMED**. The contract and sanitized preflight record are in the
+The unchanged controller then launched the exact candidate once, validated its
+candidate/session and zero-operation prerequisites, atomically published the marker,
+and entered the 120,000-ms handoff. Direct coordinator validation proved the exact
+owner-only marker. The single post-marker Computer Use read returned an
+authentication boundary in the `under-1s` bucket because the Mac was locked and
+automatic unlock was unavailable. No actionable app state returned, so no click or
+other Computer Use action occurred and there was no retry.
+
+The controller independently timed out after 1,705 observations without detecting
+Accessibility or Workspace frontmost. It cleaned its marker and terminated the
+candidate before frame, raise, retained-state, or observer validation. Terminal
+checks found the marker and publication temporary absent and zero TTRPG processes.
+The result is **INVALID — PRE-DISPATCH STOP**. Computer Use is retired for this M2
+handoff; issue #104 remains blocked and **UNCONSUMED**, and issue #112's
+one-real-owner-click route is the sole successor. The contract and sanitized result
+are in the
 [issue #113 qualification record](investigations/issue-113/README.md).
 
 ## Remote CI and milestone state
