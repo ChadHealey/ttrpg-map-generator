@@ -62,6 +62,18 @@ final class Issue121PrivateEndpoint {
     return endpoint
   }
 
+  static func adoptNoLaunchInterop(bootstrap: Issue121Bootstrap) throws
+    -> Issue121PrivateEndpoint
+  {
+    try validatePathPolicy(
+      directoryPath: bootstrap.directoryPath,
+      socketPath: bootstrap.socketPath
+    )
+    let identity = try validatePrivateDirectory(bootstrap.directoryPath)
+    _ = try validateSocketNode(bootstrap.socketPath)
+    return Issue121PrivateEndpoint(bootstrap: bootstrap, directoryIdentity: identity)
+  }
+
   static func validatePathPolicy(directoryPath: String, socketPath: String) throws {
     guard
       URL(fileURLWithPath: directoryPath).deletingLastPathComponent().path
@@ -324,8 +336,28 @@ final class Issue121ConnectedSocket {
     }
   }
 
-  func hasBufferedInput(decoder: Issue121FrameStreamDecoder) -> Bool {
-    !pendingFrames.isEmpty || !decoder.bytes.isEmpty
+  func requireNoUnsolicitedInput(decoder: Issue121FrameStreamDecoder) throws {
+    try requireNoBufferedInput(decoder: decoder)
+    while true {
+      var pollDescriptor = pollfd(fd: descriptor, events: Int16(POLLIN), revents: 0)
+      let result = poll(&pollDescriptor, 1, 0)
+      if result < 0, errno == EINTR { continue }
+      guard result >= 0 else { throw Issue121Failure.disconnect }
+      if result == 0 { return }
+      if pollDescriptor.revents & Int16(POLLHUP | POLLERR | POLLNVAL) != 0 {
+        throw Issue121Failure.disconnect
+      }
+      if pollDescriptor.revents & Int16(POLLIN) != 0 {
+        throw Issue121Failure.lifecycle
+      }
+      throw Issue121Failure.disconnect
+    }
+  }
+
+  func requireNoBufferedInput(decoder: Issue121FrameStreamDecoder) throws {
+    guard pendingFrames.isEmpty, decoder.bytes.isEmpty else {
+      throw Issue121Failure.lifecycle
+    }
   }
 
   func closeIfNeeded() {

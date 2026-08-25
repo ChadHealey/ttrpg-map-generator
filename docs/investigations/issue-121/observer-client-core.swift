@@ -317,6 +317,11 @@ struct Issue121ControllerSession {
     )
   }
 
+  mutating func finishQualification() throws {
+    guard state == .ready(nextSequence: 1) else { throw fail(.lifecycle) }
+    state = .terminal
+  }
+
   mutating func receiveStarted(_ frame: Issue121Frame) throws {
     guard case .awaitingStarted(let sequence) = state else { throw fail(.lifecycle) }
     try validateCommon(frame, expectedSequence: sequence)

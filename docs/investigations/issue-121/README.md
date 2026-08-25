@@ -16,16 +16,21 @@ Accessibility action, input synthesis, focus operation, or reusable automation A
   launch-configuration construction, Unix socket access, effective-UID checks, and `LOCAL_PEERPID`.
 - `observer-client-controller.swift` binds the pure state machine to the macOS adapters. It verifies
   the connected peer and retained candidate again before sending `HELLO`, accepts no new command
-  before matching `COMPLETE`, and treats cleanup uncertainty as terminal.
-- `observer-client-main.swift` exposes only the no-launch interoperability-client mode. It removes
-  the harness bootstrap environment before connecting and emits a fixed sanitized result.
+  before matching `COMPLETE`, exposes a bounded READY-only zero-command qualification, and treats
+  candidate or endpoint cleanup uncertainty as terminal.
+- `observer-client-main.swift` exposes only the no-launch interoperability command and qualification
+  modes. It removes the harness bootstrap environment before connecting and emits a fixed sanitized
+  result.
 - `observer-client-test-support.swift`, `observer-client-codec-tests.swift`,
   `observer-client-security-tests.swift`, and `observer-client-tests.swift` form the focused Swift
   security, codec, lifecycle, path, peer, privacy, deadline, disconnect, and cleanup suite.
 - `apps/desktop/src-tauri/tests/observer_swift_interop.rs` directly imports the production #119
-  Rust protocol and peer-credential sources. Its ignored focused test is run explicitly with the
-  freshly compiled Swift executable; it compares Swift's raw `HELLO` and `COMMAND` bytes with the
-  production Rust encoder, and both directions fragment every frame into one-byte writes.
+  Rust protocol and peer-credential sources. Its ignored focused tests are run explicitly with the
+  freshly compiled Swift executable. The one-command test compares Swift's raw `HELLO` and
+  `COMMAND` bytes with the production Rust encoder and fragments every frame into one-byte writes.
+  The qualification test validates the same authenticated READY boundary, then proves controller
+  EOF with zero post-READY bytes, zero COMMAND frames, sanitized `commandCount: 0`, and complete
+  endpoint cleanup.
 
 The interoperability harness's one `0x11` frame is consumed by the isolated production Rust state
 machine and returns a fixed harness receipt. It does not start Tauri, a webview, a packaged app, or
@@ -65,6 +70,12 @@ ISSUE121_SWIFT_CLIENT=/private/tmp/issue121-observer-client \
     --features observer-command-channel --test observer_swift_interop \
     rust_swift_production_authority_fragmented_round_trip \
     -- --ignored --exact --test-threads=1
+
+ISSUE121_SWIFT_CLIENT=/private/tmp/issue121-observer-client \
+  cargo test --manifest-path apps/desktop/src-tauri/Cargo.toml \
+    --features observer-command-channel --test observer_swift_interop \
+    rust_swift_production_authority_zero_command_qualification \
+    -- --ignored --exact --test-threads=1
 ```
 
 The final command may require a narrow sandbox exception to create the owner-only Unix socket
@@ -74,6 +85,7 @@ not authorize an app or package launch.
 ## Limitation and next boundary
 
 This issue proves the five-value `NSWorkspace.OpenConfiguration.environment` and its nonactivating
-flags by construction only. Environment propagation, exact packaged-candidate connection, and a
-zero-command candidate lifetime require the separately authorized successor qualification. Issue
-#104 remains unconsumed.
+flags by construction and provides the READY-only zero-command client lifecycle. Environment
+propagation and exact packaged-candidate qualification remain evidence-only work for the separately
+authorized successor; that successor must not invent or patch the client lifecycle. Issue #104
+remains unconsumed.

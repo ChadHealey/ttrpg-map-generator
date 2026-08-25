@@ -91,6 +91,25 @@ func issue121RunCodecLifecycleTests(_ runner: inout Issue121TestRunner) throws {
     try session.receiveReady(issue121Frame(.ready))
     try issue121Expect(session.state == .ready(nextSequence: 1), "ready")
   }
+  try runner.test("zero-command qualification becomes terminal without a command") {
+    var session = try issue121ReadySession()
+    try session.finishQualification()
+    try issue121Expect(session.state == .terminal, "qualified terminal state")
+    try issue121ExpectFailure(.lifecycle) {
+      _ = try session.command(.coarsePreview)
+    }
+  }
+  try runner.test("zero-command qualification requires exact READY state") {
+    var awaitingReady = try Issue121ControllerSession(
+      session: issue121TestSession,
+      capability: issue121TestCapability,
+      privateValues: []
+    )
+    try issue121ExpectFailure(.lifecycle) { try awaitingReady.finishQualification() }
+
+    var awaitingCompletion = try issue121AwaitingCompletion()
+    try issue121ExpectFailure(.lifecycle) { try awaitingCompletion.finishQualification() }
+  }
   try runner.test("wrong session is terminal") {
     var session = try Issue121ControllerSession(
       session: issue121TestSession,

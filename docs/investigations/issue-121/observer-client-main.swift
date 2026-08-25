@@ -20,10 +20,15 @@ enum Issue121ObserverClientMain {
       unsetenv(name)
     }
     do {
-      guard CommandLine.arguments == [CommandLine.arguments[0], "interop-client"] else {
+      let result: Issue121PublicResult
+      if CommandLine.arguments == [CommandLine.arguments[0], "interop-client"] {
+        result = try Issue121InteropClient.run(environment: environment)
+      } else if CommandLine.arguments == [CommandLine.arguments[0], "interop-qualification"] {
+        result = try Issue121InteropClient.qualify(environment: environment)
+      } else {
         throw Issue121Failure.usage
       }
-      try emit(Issue121InteropClient.run(environment: environment))
+      try emit(result)
     } catch let failure as Issue121Failure {
       try? emit(Issue121PublicResult.invalid(failure))
       exit(2)

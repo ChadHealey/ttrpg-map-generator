@@ -144,13 +144,58 @@ func issue121RunSecurityPlatformTests(_ runner: inout Issue121TestRunner) throws
         == issue121Frame(.ready),
       "ready"
     )
-    try issue121Expect(reader.hasBufferedInput(decoder: decoder), "started retained")
+    try issue121ExpectFailure(.lifecycle) {
+      try reader.requireNoUnsolicitedInput(decoder: decoder)
+    }
     try issue121Expect(
       try reader.readFrame(deadlineNanoseconds: deadline, decoder: &decoder)
         == issue121Frame(.started, sequence: 1),
       "started"
     )
-    try issue121Expect(!reader.hasBufferedInput(decoder: decoder), "buffer drained")
+    try reader.requireNoUnsolicitedInput(decoder: decoder)
+  }
+  try runner.test("qualification rejects buffered available input and disconnect") {
+    var descriptors = [Int32](repeating: -1, count: 2)
+    try issue121Expect(socketpair(AF_UNIX, SOCK_STREAM, 0, &descriptors) == 0, "socketpair")
+    let reader = Issue121ConnectedSocket.adoptConnectedDescriptorForTesting(descriptors[0])
+    let writer = Issue121ConnectedSocket.adoptConnectedDescriptorForTesting(descriptors[1])
+    var decoder = Issue121FrameStreamDecoder()
+    try reader.requireNoUnsolicitedInput(decoder: decoder)
+    try writer.writeAll(try Issue121Codec.encode(issue121Frame(.started, sequence: 1)))
+    try issue121ExpectFailure(.lifecycle) {
+      try reader.requireNoUnsolicitedInput(decoder: decoder)
+    }
+    _ = try reader.readFrame(
+      deadlineNanoseconds: DispatchTime.now().uptimeNanoseconds + 1_000_000_000,
+      decoder: &decoder
+    )
+    try reader.requireNoUnsolicitedInput(decoder: decoder)
+    writer.closeIfNeeded()
+    try issue121ExpectFailure(.disconnect) {
+      try reader.requireNoUnsolicitedInput(decoder: decoder)
+    }
+    reader.closeIfNeeded()
+
+    var bufferedDescriptors = [Int32](repeating: -1, count: 2)
+    try issue121Expect(
+      socketpair(AF_UNIX, SOCK_STREAM, 0, &bufferedDescriptors) == 0,
+      "buffered socketpair"
+    )
+    let bufferedReader = Issue121ConnectedSocket.adoptConnectedDescriptorForTesting(
+      bufferedDescriptors[0]
+    )
+    let bufferedWriter = Issue121ConnectedSocket.adoptConnectedDescriptorForTesting(
+      bufferedDescriptors[1]
+    )
+    defer {
+      bufferedReader.closeIfNeeded()
+      bufferedWriter.closeIfNeeded()
+    }
+    var partialDecoder = Issue121FrameStreamDecoder()
+    _ = try partialDecoder.append([UInt8(ascii: "T")])
+    try issue121ExpectFailure(.lifecycle) {
+      try bufferedReader.requireNoUnsolicitedInput(decoder: partialDecoder)
+    }
   }
   try runner.test("launch plan contains exactly five future values and no activation") {
     let endpoint = try Issue121PrivateEndpoint.create()
