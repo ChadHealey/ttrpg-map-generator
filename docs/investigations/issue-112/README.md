@@ -29,11 +29,11 @@ was available or used.
 Each matrix call had an explicit task-side bound. The matrix stopped at its first
 timeout; no timed-out call was retried and no successful call was repeated.
 
-| Call | Completion class | Elapsed bucket | Session / application disposition |
-| --- | --- | --- | --- |
-| `list_apps` | returned | under 1 s | desktop session available; no authentication or lock boundary observed |
-| `get_app_state(Finder)` | returned | under 1 s | read-only state returned; raw accessibility and screenshot content withheld |
-| `get_app_state(Dock)` | server timeout | 5 s bound reached | non-product read did not return; matrix stopped |
+| Call                    | Completion class | Elapsed bucket    | Session / application disposition                                           |
+| ----------------------- | ---------------- | ----------------- | --------------------------------------------------------------------------- |
+| `list_apps`             | returned         | under 1 s         | desktop session available; no authentication or lock boundary observed      |
+| `get_app_state(Finder)` | returned         | under 1 s         | read-only state returned; raw accessibility and screenshot content withheld |
+| `get_app_state(Dock)`   | server timeout   | 5 s bound reached | non-product read did not return; matrix stopped                             |
 
 The successful inventory and Finder read distinguish task capability and desktop
 availability from the later Dock failure. The timeout shows that the service is not
