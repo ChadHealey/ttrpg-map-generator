@@ -878,6 +878,29 @@ input, fixture, sampler, artifact, dispatch, measurement, issue #95 action, or i
 Issue #109/#110 remain immutable, and issue #104 remains blocked and **UNCONSUMED**. The sanitized
 receipt is in the [issue #111 Computer Use stop](investigations/issue-111/README.md).
 
+### Issue #112 Computer Use latency diagnosis
+
+Issue #112 ran only a bounded, non-product Computer Use responsiveness matrix from
+`05739af`. The application inventory and read-only Finder state returned in the
+under-1-second bucket, but the bounded read-only Dock state call reached its 5-second
+server-timeout boundary. The matrix stopped there with no retry or successful-call
+repeat. This distinguishes desktop availability from reliable bounded service
+responsiveness; it is not target, latch, product, or release evidence.
+
+A later explicit user-authorized, permission-only TTRPG inspection was isolated from
+the matrix and from all M2 evidence. Its transparent zero-operation launch was
+terminated, and a follow-up check found zero target processes. No input, focus,
+marker, fixture, sampler, artifact, dispatch, measurement, issue #95 action, or
+issue #104 activity occurred. Sanitized evidence contains no pixels, accessibility
+content, paths, identities, or raw diagnostics.
+
+Computer Use is therefore not viable for M2's post-marker focus action. The only
+successor route is a separately authorized single real-owner click under the
+unchanged issue #110 durable latch; no native fallback or second mechanism is
+authorized. Issue #104 remains blocked and **UNCONSUMED**. The complete bounded
+record and successor draft are in the
+[issue #112 latency diagnosis](investigations/issue-112/README.md).
+
 ### Packaged generation-cancellation qualification stop
 
 Issue #98 added only a test observer and observer-enabled package wiring around the unchanged

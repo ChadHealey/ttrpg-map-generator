@@ -925,6 +925,28 @@ activity. Issue #109/#110 remain immutable, and issue #104 remains **UNCONSUMED*
 sanitized record is in the
 [issue #111 Computer Use stop](investigations/issue-111/README.md).
 
+### Issue #112 Computer Use latency diagnosis
+
+Issue #112 bounded the remaining unknown to non-product Computer Use responsiveness.
+The read-only application inventory and Finder state returned in the under-1-second
+bucket, while the read-only Dock state call reached its 5-second server-timeout
+boundary. The matrix stopped at that first timeout without a retry or a successful
+call repeat. It establishes an inconsistent bounded service response, not any
+candidate, product, latch, performance, or release behavior.
+
+An explicit user-authorized, permission-only TTRPG inspection was kept outside this
+diagnosis's M2 evidence boundary. Its zero-operation transparent launch was
+terminated and a follow-up check found zero target processes. No product input,
+focus, marker, fixture, sampler, artifact/destination, dispatch, measurement,
+issue #95 action, or #104 activity occurred. The sanitized record excludes pixels,
+accessibility content, paths, identities, and raw diagnostics.
+
+Computer Use is not viable for the M2 post-marker focus action. The sole successor
+is a separately authorized one-real-owner-click issue using the unchanged #110
+durable latch; no native fallback or second mechanism is authorized. Issue #104
+remains blocked and **UNCONSUMED**. The successor contract is in the
+[issue #112 latency diagnosis](investigations/issue-112/README.md).
+
 ## Remote CI and milestone state
 
 Issue #71 recorded fresh CI evidence for the exact remote release commit
