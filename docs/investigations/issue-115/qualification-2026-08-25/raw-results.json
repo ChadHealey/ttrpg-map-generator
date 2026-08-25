@@ -1,0 +1,156 @@
+{
+  "schemaVersion": "issue115-real-owner-focus-handoff-evidence-v1",
+  "baseCommit": "14ba6565252c72687a1c051fa9b4e8f614902492",
+  "coordinationCommit": "39b5f452a2f1b2cb2b748446ff7512a7965b64f2",
+  "branch": "codex/issue-115-owner-focus-handoff",
+  "status": "invalid-initial-foreground-pre-handoff-preflight-stopped",
+  "activationEvidence": {
+    "freshForThisTask": true,
+    "ownerReportedMacUnlocked": true,
+    "ownerReportedPresentForOneClick": true,
+    "confirmationReusedFromEarlierTask": false
+  },
+  "identities": {
+    "candidateExecutableSha256": "5cf14de9836e9da96655572b35bb0e194d8ebc30360b6d6516f88825dcf7a15d",
+    "operatorReadyLatchControllerSha256": "2e941986cf8d3a38e25e5319d84da93daa1572c95ce329ba512cea5a3c23fb51",
+    "canonicalReadinessObserverSha256": "9662c1664d44e93f58dc690a0fb78f08eb1f4751d84fc5790256866e768811ce",
+    "cancellationObserverSha256": "dee96628ba9b9cec31a49b0bd627466a636921f1f73535f1aac421834fbc0e6d",
+    "rssSamplerSha256": "1da835b06e7b2ffbe588e99fee2692d7cfa25f9e8117641c74a5abe73acc3dfe",
+    "retentionUtilitySha256": "c3b2d618b4dbddf9568d4d39334be9a3d0b074ae0b7a5464b4b7e30c5686441b"
+  },
+  "preTargetGates": {
+    "exactIntegratedBase": "pass",
+    "cleanHead": "pass",
+    "zeroTargetProcesses": "pass",
+    "markerCollision": "pass-absent",
+    "exactCanonicalIdentities": "pass-6",
+    "publicPrivacy": "pass",
+    "authorizedSurface": "pass-evidence-and-owning-docs-only",
+    "fixtureAndProductionSurface": "pass-unchanged",
+    "protectedEvidence": "pass-prior-evidence-and-observer-sources-unchanged",
+    "diffCheck": "pass",
+    "issue114SevenSwiftSuites": "reused-passing-no-drift-not-rerun",
+    "issue114PackagedDispatchTests": "reused-pass-14-no-drift-not-rerun",
+    "issue114PackageBuild": "reused-passing-no-drift-not-rerun",
+    "issue114RootCheck": "reused-passing-no-drift-not-rerun"
+  },
+  "postOutcomeGates": {
+    "formatCheck": "pass",
+    "jsonValidation": "pass",
+    "exactCanonicalIdentityRevalidation": "pass",
+    "publicPrivacy": "pass",
+    "authorizedSurface": "pass-evidence-and-owning-docs-only",
+    "fixtureAndProductionSurface": "pass-unchanged",
+    "priorRawEvidence": "pass-unchanged",
+    "protectedObserverSources": "pass-unchanged",
+    "terminalMarkerCleanup": "pass",
+    "terminalCandidateProcessCount": "pass-zero",
+    "diffCheck": "pass"
+  },
+  "preflight": {
+    "controllerAttemptCount": 1,
+    "status": "invalid-pre-dispatch-not-target-evidence",
+    "qualificationKind": "non-measurement-target-session-readiness",
+    "controllerVersion": "issue110-target-session-readiness-v7",
+    "invalidAuthority": "foreground",
+    "invalidReason": "a distinct initial foreground application was not available for operator handoff",
+    "controllerCandidateLaunchCount": 1,
+    "exactFreshCandidateAndWindowEstablished": true,
+    "declaredOwnerFocusActionCount": 1,
+    "operatorReadyLatch": {
+      "pathPolicy": "explicit-private-tmp-file",
+      "tokenValidated": true,
+      "existingMarkerCollisionChecked": true,
+      "atomicPublicationSucceeded": false,
+      "directCoordinatorValidationReached": false,
+      "ownerOnlyModeValidationReached": false,
+      "cleanupAttempted": true,
+      "cleanupSucceeded": true,
+      "handoffTimeoutMilliseconds": 120000,
+      "stateTransitions": []
+    },
+    "ownerInstructionEmitted": false,
+    "ownerPhysicalClickStatus": "not-requested",
+    "awaitingOperatorFocusStateEmitted": false,
+    "focusObservationBegan": false,
+    "activationRequestCount": 0,
+    "frontmostWriteAttemptCount": 0,
+    "raiseAttemptCount": 0,
+    "independentObserverRunCount": 0,
+    "postExitMarkerPresent": false,
+    "postExitPublicationTemporaryPresent": false,
+    "retryCount": 0,
+    "fallbackCount": 0,
+    "finalCandidateProcessCount": 0
+  },
+  "zeroOperationProof": {
+    "fixtureConfigured": false,
+    "samplerStarted": false,
+    "rawArtifactCount": 0,
+    "targetDestinationCreated": false,
+    "previewDispatched": false,
+    "fullGenerationDispatched": false,
+    "svgDispatched": false,
+    "pngDispatched": false,
+    "measurementCount": 0,
+    "issue95OperationCount": 0,
+    "issue104ReplacementConsumed": false
+  },
+  "preservation": {
+    "priorEvidenceReinterpreted": false,
+    "priorEvidenceOverwritten": false,
+    "issue114Status": "invalid-and-consumed-immutable",
+    "issue104State": "unconsumed"
+  },
+  "privacy": {
+    "markerPathPublished": false,
+    "markerTokenPublished": false,
+    "localPathsPublished": false,
+    "processIdentifiersPublished": false,
+    "serviceIdentifiersPublished": false,
+    "userIdentityPublished": false,
+    "screenshotsOrPixelsPublished": false,
+    "accessibilityContentPublished": false,
+    "privateArtifactLocationsPublished": false,
+    "rawDiagnosticsPublished": false
+  },
+  "decision": {
+    "issue115MayRetry": false,
+    "fallbackAuthorized": false,
+    "issue104MayResume": false,
+    "successor": "new-owner-decision-required"
+  },
+  "controllerReceipt": {
+    "controllerVersion": "issue110-target-session-readiness-v7",
+    "status": "invalid",
+    "qualificationKind": "non-measurement-target-session-readiness",
+    "invalidAuthority": "foreground",
+    "invalidReason": "a distinct initial foreground application was not available for operator handoff",
+    "target": {
+      "model": "Mac17,2",
+      "osVersion": "26.5.1",
+      "osBuild": "25F80",
+      "memoryGiB": 24
+    },
+    "operatorReadyLatch": {
+      "pathPolicy": "explicit-private-tmp-file",
+      "tokenValidated": true,
+      "existingMarkerCollisionChecked": true,
+      "atomicPublicationSucceeded": false,
+      "cleanupAttempted": true,
+      "cleanupSucceeded": true,
+      "handoffTimeoutMilliseconds": 120000,
+      "stateTransitions": []
+    },
+    "zeroOperationProof": {
+      "fixtureConfigured": false,
+      "samplerStarted": false,
+      "exportDestinationCreated": false,
+      "svgDispatched": false,
+      "pngDispatched": false,
+      "measurementCount": 0,
+      "rawArtifactCount": 0
+    }
+  },
+  "conclusion": "Every issue-authorized quick check passed from the clean docs-only coordination commit, including exact integrated parent, zero target processes and marker collision, six canonical identities, public privacy, unchanged production/fixture/protected-evidence surfaces, and diff. With no drift detected, issue #114's immediately preceding passing seven Swift suites, 14 packaged dispatch tests, package build, and root check were reused without rerun. The unchanged issue #110 controller was invoked exactly once and launched the exact preserved candidate, but stopped before marker publication because a distinct initial foreground application was not available for the operator handoff. The owner-only marker was never published or directly validated, so no CLICK NOW instruction was emitted and no owner action was requested. The controller terminated the candidate and cleaned its unowned marker state; separate checks found the marker and publication temporary absent and zero target processes. No GUI input by Codex, Computer Use, focus observation, raise, frontmost write, independent observer, product action, fixture, sampler, artifact, destination, dispatch, measurement, issue #95 operation, or issue #104 consumption occurred. No retry or fallback is authorized; issue #114 remains immutable, issue #104 remains unconsumed, and a new explicit owner decision is required."
+}

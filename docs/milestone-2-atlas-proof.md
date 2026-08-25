@@ -964,6 +964,34 @@ PRE-DISPATCH STOP**. Issue #104 remains blocked and **UNCONSUMED**; another
 attempt or focus mechanism requires a new owner decision. The sanitized record
 is in the [issue #114 owner-click evidence](investigations/issue-114/README.md).
 
+### Issue #115 owner focus handoff stop
+
+Issue #115 supplied fresh authority for exactly one successor real-owner focus
+action while preserving issue #114 as immutable. From clean docs-only
+coordination commit `39b5f45`, the exact integrated parent, zero-process and
+marker-collision state, six canonical identities, public privacy, authorized
+surface, unchanged production/fixture/protected evidence, and diff checks
+passed. No drift was detected, so issue #114's immediately preceding passing
+Swift, dispatch, package-build, and root-check gates were reused without rerun.
+
+The unchanged controller was invoked once and launched the exact candidate. It
+established one fresh exact application and Accessibility window, then failed
+closed before marker publication because a distinct initial foreground
+application was not available for the handoff. The owner-only marker could not
+be directly validated, so no `CLICK NOW:` instruction was emitted and no owner
+action was requested.
+
+The controller terminated its candidate and cleaned its unowned marker state;
+separate checks found the marker and publication temporary absent and zero
+target processes. No retry, fallback, Codex GUI input, Computer Use, focus
+observation, raise, frontmost write, independent observer, product action,
+fixture, sampler, artifact, dispatch, measurement, issue #95 operation, or
+issue #104 activity occurred. The result is **INVALID — PRE-HANDOFF
+PRE-DISPATCH STOP**. Issue #114 remains immutable, and issue #104 remains
+blocked and **UNCONSUMED**. Another attempt requires a new explicit owner
+decision. The sanitized record is in the
+[issue #115 owner-focus evidence](investigations/issue-115/README.md).
+
 ### Packaged generation-cancellation qualification stop
 
 Issue #98 added only a test observer and observer-enabled package wiring around the unchanged

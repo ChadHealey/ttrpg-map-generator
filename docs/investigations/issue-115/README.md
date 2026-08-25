@@ -49,3 +49,37 @@ Public evidence contains no marker path or token, local path, PID, service
 identifier, username, raw diagnostic, pixel, screenshot, Accessibility content,
 credential, or private artifact location. The terminal result is recorded only
 after direct marker cleanup and zero-target-process checks.
+
+## Qualification state
+
+The issue-authorized quick checks passed from clean coordination commit
+`39b5f45`. Its parent was exact integrated commit `14ba656`; zero target
+processes and no exact marker collision existed; the candidate, controller,
+readiness observer, cancellation observer, RSS sampler, and retention utility
+reproduced all six canonical SHA-256 identities. The only change from the
+integrated base was this docs-only coordination record. Production, fixture,
+protected-observer, and prior-evidence surfaces were unchanged, and the public
+privacy and diff checks passed. No drift was detected, so issue #114's
+immediately preceding passing seven Swift suites, 14 dispatch tests, package
+build, and root check were reused without rerun.
+
+**INVALID — PRE-HANDOFF PRE-DISPATCH STOP.** The unchanged controller was
+invoked exactly once and launched the exact packaged candidate. It established
+one fresh exact application and Accessibility window, but stopped before marker
+publication because a distinct initial foreground application was not available
+for the operator handoff. The controller reported the sanitized `foreground`
+invalidation and terminated its candidate.
+
+Because the owner-only marker was never published, direct marker validation was
+not reachable and no `CLICK NOW:` instruction was emitted. No owner action was
+requested. The controller performed no focus observation, raise, frontmost
+write, independent-observer run, fixture configuration, sampler start, artifact
+or destination creation, dispatch, measurement, issue #95 operation, or issue
+#104 activity.
+
+The controller's unowned marker cleanup completed successfully. Separate
+terminal checks found the marker and publication temporary absent and zero TTRPG
+processes. No retry or fallback ran. Issue #114 remains immutable. Issue #104
+remains blocked and **UNCONSUMED**; another attempt requires a new explicit owner
+decision. The complete sanitized receipt is in
+[`qualification-2026-08-25/raw-results.json`](qualification-2026-08-25/raw-results.json).

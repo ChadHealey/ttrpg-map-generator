@@ -299,7 +299,7 @@ tree at intervals no greater than 20 ms and report every run plus median and wor
 | Full generation                      | ≤10 s and ≤768 MiB additional process-tree RSS                                  | **NOT RUN** — issue #95 stopped on observer-authority drift before measured dispatch                              |
 | SVG export                           | ≤3 s, ≤512 MiB, destination ≤32 MiB                                             | **NOT RUN** — completion path qualified by #101; #95 matrix remains unrun                                         |
 | PNG export                           | ≤15 s, ≤1 GiB, destination ≤64 MiB                                              | **NOT RUN** — completion path qualified by #101; #95 matrix remains unrun                                         |
-| Preview cancellation                 | Acknowledgement ≤100 ms                                                         | **OUTSTANDING** — #98/#102/#103 rows remain invalid/consumed; #104 replacement remains unconsumed after #114 stop |
+| Preview cancellation                 | Acknowledgement ≤100 ms                                                         | **OUTSTANDING** — #98/#102/#103 rows remain invalid/consumed; #104 replacement remains unconsumed after #115 stop |
 | Full-generation/SVG/PNG cancellation | Acknowledgement ≤500 ms                                                         | **NOT RUN** — #103 stopped immediately after its consumed replacement preview invalidation                        |
 
 ### Issue #84 partial full-generation rerun (2026-08-23)
@@ -1009,6 +1009,34 @@ measurement, issue #95 operation, or issue #104 activity. The result is
 another attempt or focus mechanism requires a new owner decision. The complete
 sanitized receipt is in the
 [issue #114 owner-click evidence](investigations/issue-114/README.md).
+
+### Issue #115 owner focus handoff stop
+
+Issue #115 supplied fresh authority for exactly one successor real-owner focus
+action while preserving issue #114 as immutable. Its exact integrated parent,
+zero-process and marker-collision state, six canonical identities, public
+privacy, docs-only authorized surface, unchanged production/fixture/protected
+evidence, and diff checks passed from clean coordination commit `39b5f45`. No
+drift was detected, so issue #114's immediately preceding passing Swift,
+dispatch, package-build, and root-check gates were reused without rerun.
+
+The unchanged controller was invoked once and launched the exact packaged
+candidate. It established one fresh exact application and Accessibility window,
+but failed closed before marker publication because a distinct initial
+foreground application was not available for the operator handoff. The
+owner-only marker was therefore not directly validated, no `CLICK NOW:`
+instruction was emitted, and no owner action was requested.
+
+The controller terminated its candidate and cleaned its unowned marker state.
+Separate checks found the marker and publication temporary absent and zero
+target processes. There was no retry, fallback, Codex GUI input, Computer Use,
+focus observation, raise, frontmost write, independent-observer run, product
+action, fixture, sampler, artifact/destination, dispatch, measurement, issue #95
+operation, or issue #104 activity. The result is **INVALID — PRE-HANDOFF
+PRE-DISPATCH STOP**. Issue #114 remains immutable. Issue #104 remains blocked
+and **UNCONSUMED**; another attempt requires a new explicit owner decision. The
+complete sanitized receipt is in the
+[issue #115 owner-focus evidence](investigations/issue-115/README.md).
 
 ## Remote CI and milestone state
 
