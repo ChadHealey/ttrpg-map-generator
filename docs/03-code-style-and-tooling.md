@@ -220,6 +220,11 @@ cargo test --all-targets --all-features -- --test-threads=1
   `observer-command-channel` is selected. Its macOS peer-credential and pre-thread environment
   operations stay in the documented `observer_command_channel/platform_macos.rs` unsafe adapter;
   all-feature builds on other platforms compile only a non-listening, fail-closed stub.
+- ADR-0020's paired frontend entry resolves to the command bridge only when Vite compiles with
+  `VITE_OBSERVER_COMMAND_CHANNEL=1`; missing or inexact values resolve a tree-shaken no-op entry.
+  Observer packaging must select this gate together with Cargo's `observer-command-channel`
+  feature. Ordinary and inexact-gate bundle scans must exclude the listener, opcode table, event
+  and command names, stable diagnostics, and bridge chunk.
 - Moving a generation algorithm into Rust or WASM requires a representative
   benchmark, a deterministic compatibility strategy, and an ADR.
 

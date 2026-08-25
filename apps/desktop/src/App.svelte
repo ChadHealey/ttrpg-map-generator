@@ -1,6 +1,10 @@
 <script lang="ts">
   import { type AtlasControls, DEFAULT_ATLAS_CONTROLS } from '@ttrpg-map/core';
   import { onMount } from 'svelte';
+  import {
+    installObserverCommandChannelBridge,
+    OBSERVER_COMMAND_CHANNEL_COMPILED,
+  } from 'virtual:observer-command-channel-entry';
 
   import {
     AtlasWorkflow,
@@ -9,17 +13,21 @@
   } from './atlas-workflow.js';
   import { createAtlasAcceptedEvidence } from './atlas-workflow-evidence.js';
   import AtlasWorkflowEvidencePanel from './AtlasWorkflowEvidencePanel.svelte';
+  import type { ObserverCommandAuthorities } from './observer-command-channel-bridge.js';
   import {
     type GatedAtlasFixture,
+    gatedAtlasFixture,
     type GatedAtlasFixtureId,
     installPackagedAtlasObserverDispatch,
     PACKAGED_ATLAS_OBSERVER_RECEIPT_LABEL,
     PACKAGED_GENERATION_CANCELLATION_RECEIPT_LABEL,
     packagedAtlasObserverReceipt,
     type PackagedGenerationCancellationContext,
+    type PackagedGenerationCancellationDependencies,
     type PackagedGenerationCancellationState,
     type PackagedGenerationCancellationTrial,
     requestExactFixtureGenerationCancellation,
+    requestExactFixturePreview,
     requestGenerationCancellationAftermath,
     requestProductionFullAtlas,
   } from './packaged-atlas-observer-dispatch.js';
@@ -29,6 +37,8 @@
     type PackagedExportObserverCompletion,
     packagedExportObserverReceipt,
     type PackagedExportObserverState,
+    requestExactFixtureExport,
+    requestExactFixtureReopen,
   } from './packaged-export-observer-dispatch.js';
   import {
     installPackagedPreviewDispatch,
@@ -51,6 +61,9 @@
     import.meta.env.VITE_PACKAGED_EXPORT_OBSERVER_DISPATCH === '1';
 
   onMount(() => {
+    let mounted = true;
+    const componentIsMounted = () => mounted;
+    let removeObserverCommandChannel: () => void = () => undefined;
     const removePreviewDispatch = installPackagedPreviewDispatch(
       window,
       import.meta.env.VITE_PACKAGED_PREVIEW_OBSERVER_DISPATCH === '1',
@@ -77,7 +90,25 @@
         exportObserverCompletion = completion;
       },
     );
+    if (OBSERVER_COMMAND_CHANNEL_COMPILED) {
+      void Promise.resolve()
+        .then(async () => {
+          if (!mounted) return;
+          const remove = await installObserverCommandChannelBridge(
+            observerCommandAuthorities(),
+            componentIsMounted,
+          );
+          if (!componentIsMounted()) {
+            remove();
+            return;
+          }
+          removeObserverCommandChannel = remove;
+        })
+        .catch(() => undefined);
+    }
     return () => {
+      mounted = false;
+      removeObserverCommandChannel();
       removePreviewDispatch();
       removeAtlasDispatch();
       removeExportDispatch();
@@ -139,41 +170,18 @@
 
   async function startGenerationCancellationTrial(
     trial: PackagedGenerationCancellationTrial,
-  ): Promise<void> {
+  ): Promise<PackagedGenerationCancellationContext | undefined> {
     generationCancellationContext = undefined;
-    await requestExactFixtureGenerationCancellation(trial, {
-      currentState: () => workflowCancellationState(),
-      requestPreview: preview,
-      requestFull: acceptFull,
-      cancelActiveOperation: () => workflow.cancelActiveOperation(),
-      acceptedEvidence: async (accepted) => {
-        const result = await createAtlasAcceptedEvidence(accepted, 'baseline');
-        return result.ok ? result.evidence : undefined;
-      },
-      record: (context) => {
-        generationCancellationContext = context;
-        refresh();
-      },
-      nowEpochMilliseconds: () => performance.timeOrigin + performance.now(),
-    });
+    return requestExactFixtureGenerationCancellation(trial, cancellationDependencies());
   }
 
-  async function completeGenerationCancellationAftermath(): Promise<void> {
-    await requestGenerationCancellationAftermath(generationCancellationContext, {
-      currentState: () => workflowCancellationState(),
-      requestPreview: preview,
-      requestFull: acceptFull,
-      cancelActiveOperation: () => workflow.cancelActiveOperation(),
-      acceptedEvidence: async (accepted) => {
-        const result = await createAtlasAcceptedEvidence(accepted, 'baseline');
-        return result.ok ? result.evidence : undefined;
-      },
-      record: (context) => {
-        generationCancellationContext = context;
-        refresh();
-      },
-      nowEpochMilliseconds: () => performance.timeOrigin + performance.now(),
-    });
+  async function completeGenerationCancellationAftermath(): Promise<
+    PackagedGenerationCancellationContext | undefined
+  > {
+    return requestGenerationCancellationAftermath(
+      generationCancellationContext,
+      cancellationDependencies(),
+    );
   }
 
   function workflowCancellationState(): PackagedGenerationCancellationState {
@@ -223,7 +231,6 @@
   }
 
   async function prepareExportObserverReopenedAtlas(): Promise<void> {
-    if (!packagedExportObserverEnabled) return;
     planReroll('geography');
     await commitReroll();
     planReroll('appearance');
@@ -231,6 +238,124 @@
     await save();
     close();
     await reopen();
+  }
+
+  function observerCommandAuthorities(): ObserverCommandAuthorities {
+    return {
+      configureFixture: configureObserverCommandFixture,
+      requestPreview: requestObserverCommandPreview,
+      requestFull: requestObserverCommandFull,
+      requestCancellation: requestObserverCommandCancellation,
+      requestCancellationAftermath: requestObserverCommandCancellationAftermath,
+      prepareReopen: prepareObserverCommandReopen,
+      requestExport: requestObserverCommandExport,
+      cancelActiveOperation: cancelObserverCommandOperation,
+    };
+  }
+
+  function configureObserverCommandFixture(fixtureId: GatedAtlasFixtureId) {
+    refresh();
+    configureObserverFixture(gatedAtlasFixture(fixtureId));
+    refresh();
+    return currentPackagedAtlasObserverReceipt();
+  }
+
+  async function requestObserverCommandPreview() {
+    let operation: Promise<void> | undefined;
+    const accepted = requestExactFixturePreview(
+      { fixtureId: observerFixtureId, worldSeed: seed, controls },
+      () => {
+        operation = preview();
+      },
+    );
+    if (!accepted || operation === undefined) return undefined;
+    await operation;
+    return currentPackagedAtlasObserverReceipt();
+  }
+
+  async function requestObserverCommandFull() {
+    await acceptFull();
+    return currentPackagedAtlasObserverReceipt();
+  }
+
+  async function requestObserverCommandCancellation(trial: PackagedGenerationCancellationTrial) {
+    const context = await startGenerationCancellationTrial(trial);
+    return context?.receipt.status === 'cancelled' ? context.receipt : undefined;
+  }
+
+  async function requestObserverCommandCancellationAftermath() {
+    const context = await completeGenerationCancellationAftermath();
+    return context?.receipt.status === 'aftermath-complete' ? context.receipt : undefined;
+  }
+
+  async function prepareObserverCommandReopen(privateSavePath: string) {
+    targetPath = privateSavePath;
+    exportObserverCompletion = undefined;
+    const accepted = await requestExactFixtureReopen(
+      exportObserverState(),
+      prepareExportObserverReopenedAtlas,
+    );
+    return accepted
+      ? packagedExportObserverReceipt(exportObserverState(), exportObserverCompletion)
+      : undefined;
+  }
+
+  async function requestObserverCommandExport(format: 'svg' | 'png') {
+    exportObserverCompletion = undefined;
+    const completion = await requestExactFixtureExport(
+      format,
+      exportObserverState(),
+      (exportTargetPath) =>
+        run(
+          format === 'svg'
+            ? workflow.exportSvg(exportTargetPath)
+            : workflow.exportPng(exportTargetPath),
+        ),
+      exportObserverState,
+    );
+    exportObserverCompletion = completion;
+    return completion === undefined
+      ? undefined
+      : packagedExportObserverReceipt(exportObserverState(), completion);
+  }
+
+  function currentPackagedAtlasObserverReceipt() {
+    refresh();
+    return packagedAtlasObserverReceipt(observerFixtureId, seed, controls, {
+      workflowPhase: atlas.phase,
+      isBusy: atlas.isBusy,
+      hasPreview: atlas.preview !== undefined,
+      hasAcceptedAtlas: atlas.accepted !== undefined,
+      acceptedCheckpoint: atlas.acceptedCheckpoint,
+      sceneKind: atlas.scene?.sceneKind,
+      acceptedWorldSeed:
+        atlas.accepted === undefined ? undefined : String(atlas.accepted.document.worldSeed),
+      acceptedControls: atlas.accepted?.geography.controls,
+    });
+  }
+
+  function cancellationDependencies(): PackagedGenerationCancellationDependencies {
+    return {
+      currentState: () => workflowCancellationState(),
+      requestPreview: preview,
+      requestFull: acceptFull,
+      cancelActiveOperation: () => workflow.cancelActiveOperation(),
+      acceptedEvidence: async (accepted) => {
+        const result = await createAtlasAcceptedEvidence(accepted, 'baseline');
+        return result.ok ? result.evidence : undefined;
+      },
+      record: (context: PackagedGenerationCancellationContext | undefined) => {
+        generationCancellationContext = context;
+        refresh();
+      },
+      nowEpochMilliseconds: () => performance.timeOrigin + performance.now(),
+    };
+  }
+
+  function cancelObserverCommandOperation(): void {
+    refresh();
+    if (atlas.isBusy && atlas.isCancellationAllowed) workflow.cancelActiveOperation();
+    refresh();
   }
 
   function discardPreview(): void {
