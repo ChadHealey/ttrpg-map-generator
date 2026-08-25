@@ -1,0 +1,79 @@
+# Issue 121 standalone observer client
+
+This directory owns ADR-0020's standalone Swift controller/client and its no-app-launch evidence
+boundary. It creates private session state, constructs the exact future `NSWorkspace` launch
+configuration, authenticates one retained candidate process, and implements the fixed `TMOC` v1
+controller lifecycle. It does not contain an app-launch call, product authority, fixture logic,
+Accessibility action, input synthesis, focus operation, or reusable automation API.
+
+## Boundaries
+
+- `observer-client-core.swift` owns the pure codec, fragmented stream decoder, command table,
+  receipt privacy checks, fixed deadlines, and single-in-flight controller state machine.
+- `observer-client-platform.swift` owns exact package, bundle, process-path, and executable-digest
+  identity validation.
+- `observer-client-ipc.swift` owns secure randomness, direct-`/private/tmp` namespace checks, future
+  launch-configuration construction, Unix socket access, effective-UID checks, and `LOCAL_PEERPID`.
+- `observer-client-controller.swift` binds the pure state machine to the macOS adapters. It verifies
+  the connected peer and retained candidate again before sending `HELLO`, accepts no new command
+  before matching `COMPLETE`, and treats cleanup uncertainty as terminal.
+- `observer-client-main.swift` exposes only the no-launch interoperability-client mode. It removes
+  the harness bootstrap environment before connecting and emits a fixed sanitized result.
+- `observer-client-test-support.swift`, `observer-client-codec-tests.swift`,
+  `observer-client-security-tests.swift`, and `observer-client-tests.swift` form the focused Swift
+  security, codec, lifecycle, path, peer, privacy, deadline, disconnect, and cleanup suite.
+- `apps/desktop/src-tauri/tests/observer_swift_interop.rs` directly imports the production #119
+  Rust protocol and peer-credential sources. Its ignored focused test is run explicitly with the
+  freshly compiled Swift executable; it compares Swift's raw `HELLO` and `COMMAND` bytes with the
+  production Rust encoder, and both directions fragment every frame into one-byte writes.
+
+The interoperability harness's one `0x11` frame is consumed by the isolated production Rust state
+machine and returns a fixed harness receipt. It does not start Tauri, a webview, a packaged app, or
+the product operation represented by that opcode.
+
+## No-launch verification
+
+```sh
+mkdir -p /private/tmp/issue121-swift-module-cache
+
+xcrun swift-format lint --strict docs/investigations/issue-121/*.swift
+
+xcrun swiftc -module-cache-path /private/tmp/issue121-swift-module-cache \
+  -warnings-as-errors -parse-as-library \
+  -o /private/tmp/issue121-observer-client-tests \
+  docs/investigations/issue-121/observer-client-core.swift \
+  docs/investigations/issue-121/observer-client-platform.swift \
+  docs/investigations/issue-121/observer-client-ipc.swift \
+  docs/investigations/issue-121/observer-client-controller.swift \
+  docs/investigations/issue-121/observer-client-test-support.swift \
+  docs/investigations/issue-121/observer-client-codec-tests.swift \
+  docs/investigations/issue-121/observer-client-security-tests.swift \
+  docs/investigations/issue-121/observer-client-tests.swift
+/private/tmp/issue121-observer-client-tests
+
+xcrun swiftc -module-cache-path /private/tmp/issue121-swift-module-cache \
+  -warnings-as-errors -parse-as-library \
+  -o /private/tmp/issue121-observer-client \
+  docs/investigations/issue-121/observer-client-core.swift \
+  docs/investigations/issue-121/observer-client-platform.swift \
+  docs/investigations/issue-121/observer-client-ipc.swift \
+  docs/investigations/issue-121/observer-client-controller.swift \
+  docs/investigations/issue-121/observer-client-main.swift
+
+ISSUE121_SWIFT_CLIENT=/private/tmp/issue121-observer-client \
+  cargo test --manifest-path apps/desktop/src-tauri/Cargo.toml \
+    --features observer-command-channel --test observer_swift_interop \
+    rust_swift_production_authority_fragmented_round_trip \
+    -- --ignored --exact --test-threads=1
+```
+
+The final command may require a narrow sandbox exception to create the owner-only Unix socket
+directly beneath `/private/tmp`. That exception authorizes only this process-local harness; it does
+not authorize an app or package launch.
+
+## Limitation and next boundary
+
+This issue proves the five-value `NSWorkspace.OpenConfiguration.environment` and its nonactivating
+flags by construction only. Environment propagation, exact packaged-candidate connection, and a
+zero-command candidate lifetime require the separately authorized successor qualification. Issue
+#104 remains unconsumed.

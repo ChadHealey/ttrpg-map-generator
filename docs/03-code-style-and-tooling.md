@@ -225,6 +225,11 @@ cargo test --all-targets --all-features -- --test-threads=1
   Observer packaging must select this gate together with Cargo's `observer-command-channel`
   feature. Ordinary and inexact-gate bundle scans must exclude the listener, opcode table, event
   and command names, stable diagnostics, and bridge chunk.
+- ADR-0020's standalone Swift controller is verified through the no-launch compile, focused, and
+  Rust interoperability commands in
+  [`investigations/issue-121/README.md`](investigations/issue-121/README.md). That gate imports the
+  production Rust protocol source directly, fragments both stream directions, and must not build or
+  launch Tauri or a packaged candidate.
 - Moving a generation algorithm into Rust or WASM requires a representative
   benchmark, a deterministic compatibility strategy, and an ADR.
 
