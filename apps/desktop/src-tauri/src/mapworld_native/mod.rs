@@ -21,7 +21,7 @@ mod save_support;
 #[cfg(test)]
 mod save_tests;
 pub mod service;
-mod sha256;
+pub(crate) mod sha256;
 
 pub use fault::{FaultMode, FaultSpec};
 pub use model::{

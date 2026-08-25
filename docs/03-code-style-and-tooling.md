@@ -216,6 +216,10 @@ cargo test --all-targets --all-features -- --test-threads=1
 - ADR-0008's required POSIX operations use the single isolated unsafe boundary at
   `apps/desktop/src-tauri/src/mapworld_native/platform_ffi.rs`; all callers use safe wrappers and
   the same native recovery suite must exercise those wrappers on macOS and Linux.
+- ADR-0020's observer command channel is absent unless the default-off Cargo feature
+  `observer-command-channel` is selected. Its macOS peer-credential and pre-thread environment
+  operations stay in the documented `observer_command_channel/platform_macos.rs` unsafe adapter;
+  all-feature builds on other platforms compile only a non-listening, fail-closed stub.
 - Moving a generation algorithm into Rust or WASM requires a representative
   benchmark, a deterministic compatibility strategy, and an ADR.
 
