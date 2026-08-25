@@ -299,7 +299,7 @@ tree at intervals no greater than 20 ms and report every run plus median and wor
 | Full generation                      | ≤10 s and ≤768 MiB additional process-tree RSS                                  | **NOT RUN** — issue #95 stopped on observer-authority drift before measured dispatch                              |
 | SVG export                           | ≤3 s, ≤512 MiB, destination ≤32 MiB                                             | **NOT RUN** — completion path qualified by #101; #95 matrix remains unrun                                         |
 | PNG export                           | ≤15 s, ≤1 GiB, destination ≤64 MiB                                              | **NOT RUN** — completion path qualified by #101; #95 matrix remains unrun                                         |
-| Preview cancellation                 | Acknowledgement ≤100 ms                                                         | **OUTSTANDING** — #98/#102/#103 rows remain invalid/consumed; #104 replacement remains unconsumed after #111 stop |
+| Preview cancellation                 | Acknowledgement ≤100 ms                                                         | **OUTSTANDING** — #98/#102/#103 rows remain invalid/consumed; #104 replacement remains unconsumed after #114 stop |
 | Full-generation/SVG/PNG cancellation | Acknowledgement ≤500 ms                                                         | **NOT RUN** — #103 stopped immediately after its consumed replacement preview invalidation                        |
 
 ### Issue #84 partial full-generation rerun (2026-08-23)
@@ -981,6 +981,34 @@ handoff; issue #104 remains blocked and **UNCONSUMED**, and issue #112's
 one-real-owner-click route is the sole successor. The contract and sanitized result
 are in the
 [issue #113 qualification record](investigations/issue-113/README.md).
+
+### Issue #114 real-owner focus qualification stop
+
+Issue #114 authorized exactly one real-owner focus click through issue #110's
+unchanged durable latch after fresh owner confirmation of presence at an
+unlocked Mac. Issue #113's exact-base full-gate evidence was reused. The bounded
+clean-head, zero-process/collision, exact-identity, seven-Swift-suite,
+14-dispatch, privacy, surface, protected-evidence, and diff gates passed from
+clean docs-only coordination commit `0fc47b8` before target use.
+
+The unchanged controller launched the exact preserved candidate once, validated
+the candidate/session and strict zero-operation boundary, atomically published
+the owner-only marker, and entered its 120,000-ms handoff. Direct coordinator
+validation passed and the owner instruction was emitted immediately. The
+controller made 1,802 observations without detecting the exact candidate as
+Accessibility or Workspace frontmost. Whether a physical owner click occurred
+is not established; the required focus transition was not detected.
+
+The controller stopped before frame qualification, raise, retained-state, or
+independent-observer execution. Marker cleanup succeeded, the candidate was
+terminated, and separate checks found the marker and publication temporary
+absent and zero target processes. There was no retry, fallback, Codex GUI input,
+Computer Use, product action, fixture, sampler, artifact/destination, dispatch,
+measurement, issue #95 operation, or issue #104 activity. The result is
+**INVALID — PRE-DISPATCH STOP**. Issue #104 remains blocked and **UNCONSUMED**;
+another attempt or focus mechanism requires a new owner decision. The complete
+sanitized receipt is in the
+[issue #114 owner-click evidence](investigations/issue-114/README.md).
 
 ## Remote CI and milestone state
 

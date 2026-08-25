@@ -936,6 +936,34 @@ one-real-owner-click route is the sole successor. The bounded contract and sanit
 result are in the
 [issue #113 qualification record](investigations/issue-113/README.md).
 
+### Issue #114 real-owner focus qualification stop
+
+Issue #114 authorized exactly one real-owner focus click through issue #110's
+unchanged durable latch after fresh confirmation that the owner was present at
+an unlocked Mac. Issue #113's exact-base full-gate evidence was reused. The
+bounded clean-head, zero-process/collision, six exact-identity, seven Swift
+suite, 14-dispatch, privacy, surface, protected-evidence, and diff gates passed
+from a clean docs-only coordination commit before target launch.
+
+The unchanged controller launched the exact preserved candidate once, validated
+the candidate/session and zero-operation boundary, atomically published its
+owner-only marker, and entered the 120,000-ms handoff. Direct coordinator
+validation proved the complete marker and the owner instruction was emitted
+immediately. Across 1,802 observations the controller did not detect the exact
+candidate becoming Accessibility or Workspace frontmost. Whether a physical
+click occurred is not established; the required focus transition was not
+detected.
+
+The controller timed out before frame qualification, raise, retained-state, or
+independent-observer execution. It cleaned the marker and terminated the
+candidate; separate terminal checks found the marker and publication temporary
+absent and zero target processes. No retry, fallback, Codex GUI input, Computer
+Use, product action, fixture, sampler, artifact, dispatch, measurement, issue
+#95 operation, or issue #104 activity occurred. The result is **INVALID —
+PRE-DISPATCH STOP**. Issue #104 remains blocked and **UNCONSUMED**; another
+attempt or focus mechanism requires a new owner decision. The sanitized record
+is in the [issue #114 owner-click evidence](investigations/issue-114/README.md).
+
 ### Packaged generation-cancellation qualification stop
 
 Issue #98 added only a test observer and observer-enabled package wiring around the unchanged
