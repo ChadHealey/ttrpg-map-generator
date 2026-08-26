@@ -1,0 +1,21 @@
+{
+  "activeGuiSession": true,
+  "candidateLaunchCount": 0,
+  "candidateProcessCount": 0,
+  "clientTreeGitIdentity": "68e9701aa1b064be85905cfe00ee85bc5268572f",
+  "commandCount": 0,
+  "controllerInvocationCount": 0,
+  "controllerSha256": "6a46384bbbbe5c6c66f639c9d48af00ac32cc6b5f327b9c34a9e0cbdc9d2e38b",
+  "issue104Consumed": false,
+  "observerExecutableSha256": "657e6cacad7499e6e5fd4f6e29bb7414a392f9e434ef2939dc5a47d26fefc13f",
+  "observerPackageBuildCount": 1,
+  "observerRuntimeDirectoryCount": 0,
+  "observerSocketCount": 0,
+  "ordinaryExecutableSha256": "25686c85f7b92516202a55a5f2939aa24a66c7d39a059f4b91594e6926c104ab",
+  "ordinaryPackageBuildCount": 1,
+  "productOperationCount": 0,
+  "protectedInvestigationAggregateSha256": "cfa31642d322035e5f5c984328fa168b54a419d4bea0595efcfdb299a8e3b14d",
+  "sourceCommit": "fb5e259103251b7e884bd0221dc72aa5765c6fe2",
+  "status": "armed-not-launched",
+  "wrapperBlobGitIdentity": "844afc9df0a469b4f2487559985f6fd8b57ebdd4"
+}
