@@ -81,3 +81,32 @@ There was no retry, fallback, activation, input, fixture, sampler, artifact/dest
 operation, #95 action, or #104 activity, and no code was corrected after Phase B began. Issue #104
 remains **UNCONSUMED** and NOT READY. The sole sanitized result is
 [`qualification-2026-08-25/result.json`](qualification-2026-08-25/result.json).
+
+## Issue #125 idempotent cleanup correction
+
+Issue #125 corrects only the wrapper's retained-candidate terminal cleanup from exact integrated
+commit `400b42ad8c82c49ee762811f3b6e4a50f9d3b46f`. An already-terminated retained handle now succeeds
+without another termination request only when its PID relationship is unchanged and a fresh exact
+bundle scan finds zero running candidates. A live candidate still passes the complete retained and
+scanned identity checks before one termination request. A false return from that request is treated
+as a possible race, never as success: the wrapper waits within the existing five-second bound and
+requires both retained termination and a fresh zero-candidate scan.
+
+Replacement, multiple, wrong-PID, wrong-identity, nonterminating, and deadline states remain
+fail-closed. Candidate cleanup still completes before endpoint cleanup is attempted. The expanded
+injected suite passes 14 no-launch cases, including explicit absence-before-endpoint-cleanup
+ordering. Issue #121/#123 passes 39 Swift tests and both no-app-launch Rust/Swift interoperability
+cases; issue #119 passes 26 focused and two ordinary-absence tests; issue #120 plus packaged
+dispatch passes 71 tests; and all six protected Swift executables pass.
+
+Root `corepack pnpm check` passes 77 files with 619 tests and one intentional skip, semantic
+retention, 50 Rust unit tests, and 28 native recovery tests. The named cross-platform gate passes
+six PNG comparisons and all eight registered fixture sets; the named APFS recovery gate passes all
+28 cases. Privacy, authorized-surface, product/fixture, protocol/server/frontend, dependency/
+lockfile, capability/entitlement, protected-evidence, staged-file, formatting, and diff gates pass.
+
+The correction built and launched no packaged candidate, created no live observer endpoint, sent no
+COMMAND frame, invoked no product operation, and performed no issue #95 or #104 action. Issue #124
+and all historical evidence remain byte-identical, **INVALID/CONSUMED**, and uninterpreted. Issue
+#104 remains blocked and **UNCONSUMED**; any new zero-command qualification requires separate
+authority after this correction integrates.

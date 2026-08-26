@@ -26,6 +26,7 @@ struct Issue122LaunchDependencies {
   let openApplication:
     (URL, NSWorkspace.OpenConfiguration) async throws -> Issue122RunningApplicationHandle
   let runningApplications: (String) -> [Issue122RunningApplicationHandle]
+  let nowNanoseconds: () -> UInt64
   let sleep: (useconds_t) -> Void
 
   static let live = Issue122LaunchDependencies(
@@ -41,6 +42,7 @@ struct Issue122LaunchDependencies {
         .filter { !$0.isTerminated }
         .map(handle)
     },
+    nowNanoseconds: { DispatchTime.now().uptimeNanoseconds },
     sleep: { usleep($0) }
   )
 
@@ -75,6 +77,18 @@ struct Issue122LaunchedQualification {
 
 @MainActor
 struct Issue122QualificationWrapper {
+  private enum RetainedCandidateState {
+    case live(Issue121CandidateSnapshot)
+    case transitioning
+    case terminated
+  }
+
+  private enum ExactBundleScanState: Equatable {
+    case absent
+    case retained
+    case invalid
+  }
+
   let candidate: Issue121PreparedCandidate
   let dependencies: Issue122LaunchDependencies
   let controllerProcessIdentifier: Int32
@@ -172,18 +186,76 @@ struct Issue122QualificationWrapper {
     application: Issue122RunningApplicationHandle,
     retainedCandidate: Issue121RetainedCandidate
   ) -> Bool {
+    guard application.processIdentifier == retainedCandidate.processIdentifier else { return false }
+    let deadline = deadline(after: 5_000_000_000)
+    var terminationRequested = false
+    while dependencies.nowNanoseconds() < deadline {
+      guard
+        let retainedState = retainedCandidateState(
+          application: application,
+          retainedCandidate: retainedCandidate
+        )
+      else { return false }
+      let scanState = exactBundleScanState(retainedCandidate: retainedCandidate)
+      guard scanState != .invalid else { return false }
+
+      switch (retainedState, scanState) {
+      case (.terminated, .absent):
+        return true
+      case (.terminated, .retained):
+        break
+      case (let .live(snapshot), .retained):
+        do {
+          try Issue121CandidateIdentity.validateRetained(
+            retainedCandidate,
+            snapshot: snapshot
+          )
+        } catch {
+          return false
+        }
+        if !terminationRequested {
+          terminationRequested = true
+          _ = application.terminate()
+        }
+      case (.live(_), .absent), (.transitioning, .absent), (.transitioning, .retained):
+        break
+      case (_, .invalid):
+        return false
+      }
+      dependencies.sleep(10_000)
+    }
+    return false
+  }
+
+  private func retainedCandidateState(
+    application: Issue122RunningApplicationHandle,
+    retainedCandidate: Issue121RetainedCandidate
+  ) -> RetainedCandidateState? {
+    let snapshot = application.snapshot()
+    guard snapshot.processIdentifier == retainedCandidate.processIdentifier else { return nil }
+    let handleIsTerminated = application.isTerminated()
+    if snapshot.isTerminated, handleIsTerminated { return .terminated }
+    if !snapshot.isTerminated, !handleIsTerminated { return .live(snapshot) }
+    return .transitioning
+  }
+
+  private func exactBundleScanState(
+    retainedCandidate: Issue121RetainedCandidate
+  ) -> ExactBundleScanState {
+    let running = dependencies.runningApplications(retainedCandidate.bundleIdentifier)
+    guard !running.isEmpty else { return .absent }
+    guard running.count == 1, let scanned = running.first,
+      scanned.processIdentifier == retainedCandidate.processIdentifier
+    else { return .invalid }
     do {
       try Issue121CandidateIdentity.validateRetained(
         retainedCandidate,
-        snapshot: application.snapshot()
+        snapshot: scanned.snapshot()
       )
+      return .retained
     } catch {
-      return false
+      return .invalid
     }
-    return terminateReturnedApplication(
-      application,
-      bundleIdentifier: retainedCandidate.bundleIdentifier
-    )
   }
 
   private func terminateReturnedApplication(
@@ -191,8 +263,8 @@ struct Issue122QualificationWrapper {
     bundleIdentifier: String
   ) -> Bool {
     guard application.terminate() else { return false }
-    let deadline = DispatchTime.now().uptimeNanoseconds + 5_000_000_000
-    while DispatchTime.now().uptimeNanoseconds < deadline {
+    let deadline = deadline(after: 5_000_000_000)
+    while dependencies.nowNanoseconds() < deadline {
       if application.isTerminated(), dependencies.runningApplications(bundleIdentifier).isEmpty {
         return true
       }
@@ -202,8 +274,8 @@ struct Issue122QualificationWrapper {
   }
 
   private func cleanupEndpointWhenAbsent(_ endpoint: Issue121PrivateEndpoint) -> Bool {
-    let deadline = DispatchTime.now().uptimeNanoseconds + 1_000_000_000
-    while DispatchTime.now().uptimeNanoseconds < deadline {
+    let deadline = deadline(after: 1_000_000_000)
+    while dependencies.nowNanoseconds() < deadline {
       var status = stat()
       errno = 0
       if lstat(endpoint.bootstrap.socketPath, &status) != 0, errno == ENOENT {
@@ -217,5 +289,10 @@ struct Issue122QualificationWrapper {
       dependencies.sleep(10_000)
     }
     return false
+  }
+
+  private func deadline(after duration: UInt64) -> UInt64 {
+    let (value, overflow) = dependencies.nowNanoseconds().addingReportingOverflow(duration)
+    return overflow ? UInt64.max : value
   }
 }

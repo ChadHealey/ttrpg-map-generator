@@ -1100,6 +1100,23 @@ measurement, code correction, issue #95 action, or issue #104 activity. Issue #1
 and **UNCONSUMED**; another attempt requires a separately authored successor. The sanitized record
 is in the [issue #124 qualification evidence](investigations/issue-124/README.md).
 
+### Issue #125 idempotent exact-candidate cleanup correction
+
+Issue #125 changes only issue #122's retained-candidate terminal cleanup and injected tests. An
+already-terminated retained handle is clean only when its PID relationship is unchanged and a
+fresh exact-bundle scan finds zero candidates. A live exact candidate retains full identity
+validation before one termination request; a false return may succeed only after bounded proof of
+retained termination and zero matching candidates. Replacement, multiple, wrong-PID or identity,
+nontermination, and deadline states fail closed, and endpoint cleanup remains ordered after the
+candidate cleanup decision.
+
+The 14-case no-launch suite and all #121/#123, #119, #120, protected Swift, root, deterministic,
+recovery, privacy, authorized-surface, product/fixture, protected-evidence, and diff gates pass. No
+packaged candidate was built or launched, no live endpoint or product operation ran, and no issue
+#95 or #104 action occurred. Issue #124 and all historical evidence remain byte-identical,
+**INVALID/CONSUMED**, and uninterpreted. Issue #104 remains blocked and **UNCONSUMED** pending a
+separately authorized fresh zero-command qualification after this correction integrates.
+
 ### Packaged generation-cancellation qualification stop
 
 Issue #98 added only a test observer and observer-enabled package wiring around the unchanged

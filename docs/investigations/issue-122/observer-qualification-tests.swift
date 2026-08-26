@@ -6,6 +6,9 @@ private final class Issue122FakeProcess {
   let processIdentifier: Int32
   var terminated = false
   var terminateResult = true
+  var terminatesWhenRequested = true
+  var terminateCallCount = 0
+  var snapshotProcessIdentifier: Int32?
 
   init(candidate: Issue121PreparedCandidate, processIdentifier: Int32) {
     self.candidate = candidate
@@ -17,7 +20,8 @@ private final class Issue122FakeProcess {
       processIdentifier: processIdentifier,
       snapshot: {
         Issue121CandidateSnapshot(
-          processIdentifier: snapshotProcessIdentifier ?? self.processIdentifier,
+          processIdentifier: snapshotProcessIdentifier ?? self.snapshotProcessIdentifier
+            ?? self.processIdentifier,
           applicationURL: self.candidate.applicationURL,
           executableURL: self.candidate.executableURL,
           bundleIdentifier: self.candidate.bundleIdentifier,
@@ -26,12 +30,25 @@ private final class Issue122FakeProcess {
         )
       },
       terminate: {
+        self.terminateCallCount += 1
         guard self.terminateResult else { return false }
-        self.terminated = true
+        if self.terminatesWhenRequested { self.terminated = true }
         return true
       },
       isTerminated: { self.terminated }
     )
+  }
+}
+
+private final class Issue122FakeClock {
+  var nowNanoseconds: UInt64 = 1
+  var sleepCount = 0
+  var onSleep: ((Int) -> Void)?
+
+  func sleep(_ useconds: useconds_t) {
+    sleepCount += 1
+    nowNanoseconds += UInt64(useconds) * 1_000
+    onSleep?(sleepCount)
   }
 }
 
@@ -68,12 +85,14 @@ private func issue122Candidate() -> Issue121PreparedCandidate {
 @MainActor
 private func issue122Dependencies(
   open: @escaping (NSWorkspace.OpenConfiguration) async throws -> Issue122RunningApplicationHandle,
-  running: @escaping () -> [Issue122RunningApplicationHandle]
+  running: @escaping () -> [Issue122RunningApplicationHandle],
+  clock: Issue122FakeClock = Issue122FakeClock()
 ) -> Issue122LaunchDependencies {
   Issue122LaunchDependencies(
     openApplication: { _, configuration in try await open(configuration) },
     runningApplications: { _ in running() },
-    sleep: { _ in }
+    nowNanoseconds: { clock.nowNanoseconds },
+    sleep: { clock.sleep($0) }
   )
 }
 
@@ -110,6 +129,7 @@ enum Issue122QualificationTests {
       try issue122Expect(context.retainedCandidate.processIdentifier == 41, "retained PID")
       try issue122Expect(wrapper.terminateAndCleanup(context), "termination and cleanup")
       try issue122Expect(process.terminated, "terminated")
+      try issue122Expect(process.terminateCallCount == 1, "one termination request")
       count += 1
     }
 
@@ -201,7 +221,157 @@ enum Issue122QualificationTests {
 
     do {
       let process = Issue122FakeProcess(candidate: candidate, processIdentifier: 48)
+      var launched = false
+      var endpointDirectoryPath: String?
+      var endpointExistedDuringAbsenceScan = false
+      let handle = process.handle()
+      let wrapper = Issue122QualificationWrapper(
+        candidate: candidate,
+        dependencies: issue122Dependencies(
+          open: { _ in
+            launched = true
+            return handle
+          },
+          running: {
+            if launched, process.terminated {
+              if let endpointDirectoryPath {
+                endpointExistedDuringAbsenceScan = FileManager.default.fileExists(
+                  atPath: endpointDirectoryPath
+                )
+              }
+              return []
+            }
+            return launched ? [handle] : []
+          }
+        )
+      )
+      let context = try await wrapper.launchExactCandidate()
+      endpointDirectoryPath = context.endpoint.bootstrap.directoryPath
+      process.terminated = true
+      try issue122Expect(wrapper.terminateAndCleanup(context), "idempotent terminated cleanup")
+      try issue122Expect(process.terminateCallCount == 0, "no redundant termination request")
+      try issue122Expect(endpointExistedDuringAbsenceScan, "absence precedes endpoint cleanup")
+      try issue122Expect(
+        !FileManager.default.fileExists(atPath: context.endpoint.bootstrap.directoryPath),
+        "endpoint cleaned after absence"
+      )
+      count += 1
+    }
+
+    do {
+      let process = Issue122FakeProcess(candidate: candidate, processIdentifier: 49)
       process.terminateResult = false
+      var launched = false
+      let handle = process.handle()
+      let clock = Issue122FakeClock()
+      clock.onSleep = { _ in process.terminated = true }
+      let wrapper = Issue122QualificationWrapper(
+        candidate: candidate,
+        dependencies: issue122Dependencies(
+          open: { _ in
+            launched = true
+            return handle
+          },
+          running: { launched && !process.terminated ? [handle] : [] },
+          clock: clock
+        )
+      )
+      let context = try await wrapper.launchExactCandidate()
+      try issue122Expect(wrapper.terminateAndCleanup(context), "false-return termination race")
+      try issue122Expect(process.terminateCallCount == 1, "one raced termination request")
+      try issue122Expect(clock.sleepCount == 1, "bounded race observation")
+      count += 1
+    }
+
+    do {
+      let process = Issue122FakeProcess(candidate: candidate, processIdentifier: 58)
+      let staleScan = Issue122FakeProcess(candidate: candidate, processIdentifier: 58)
+      var launched = false
+      var staleScanVisible = true
+      let retainedHandle = process.handle()
+      let staleScanHandle = staleScan.handle()
+      let clock = Issue122FakeClock()
+      clock.onSleep = { _ in staleScanVisible = false }
+      let wrapper = Issue122QualificationWrapper(
+        candidate: candidate,
+        dependencies: issue122Dependencies(
+          open: { _ in
+            launched = true
+            return retainedHandle
+          },
+          running: {
+            guard launched else { return [] }
+            if !process.terminated { return [retainedHandle] }
+            return staleScanVisible ? [staleScanHandle] : []
+          },
+          clock: clock
+        )
+      )
+      let context = try await wrapper.launchExactCandidate()
+      process.terminated = true
+      try issue122Expect(wrapper.terminateAndCleanup(context), "stale retained scan settles absent")
+      try issue122Expect(process.terminateCallCount == 0, "stale scan did not trigger terminate")
+      try issue122Expect(clock.sleepCount == 1, "stale scan waited within bound")
+      count += 1
+    }
+
+    do {
+      let process = Issue122FakeProcess(candidate: candidate, processIdentifier: 50)
+      process.terminated = true
+      let replacement = Issue122FakeProcess(candidate: candidate, processIdentifier: 51)
+      var launched = false
+      let launchHandle = process.handle()
+      let replacementHandle = replacement.handle()
+      let wrapper = Issue122QualificationWrapper(
+        candidate: candidate,
+        dependencies: issue122Dependencies(
+          open: { _ in
+            process.terminated = false
+            launched = true
+            return launchHandle
+          },
+          running: {
+            guard launched else { return [] }
+            return process.terminated ? [replacementHandle] : [launchHandle]
+          }
+        )
+      )
+      let context = try await wrapper.launchExactCandidate()
+      process.terminated = true
+      try issue122Expect(!wrapper.terminateAndCleanup(context), "replacement rejection")
+      try issue122Expect(process.terminateCallCount == 0, "replacement did not trigger terminate")
+      count += 1
+    }
+
+    do {
+      let process = Issue122FakeProcess(candidate: candidate, processIdentifier: 52)
+      let replacement = Issue122FakeProcess(candidate: candidate, processIdentifier: 53)
+      var launched = false
+      var includeReplacement = false
+      let handle = process.handle()
+      let replacementHandle = replacement.handle()
+      let wrapper = Issue122QualificationWrapper(
+        candidate: candidate,
+        dependencies: issue122Dependencies(
+          open: { _ in
+            launched = true
+            return handle
+          },
+          running: {
+            launched ? (includeReplacement ? [handle, replacementHandle] : [handle]) : []
+          }
+        )
+      )
+      let context = try await wrapper.launchExactCandidate()
+      includeReplacement = true
+      try issue122Expect(!wrapper.terminateAndCleanup(context), "multiple-candidate rejection")
+      try issue122Expect(process.terminateCallCount == 0, "ambiguous scan did not terminate")
+      process.terminated = true
+      count += 1
+    }
+
+    do {
+      let process = Issue122FakeProcess(candidate: candidate, processIdentifier: 54)
       var launched = false
       let handle = process.handle()
       let wrapper = Issue122QualificationWrapper(
@@ -211,14 +381,96 @@ enum Issue122QualificationTests {
             launched = true
             return handle
           },
-          running: { launched ? [handle] : [] }
+          running: { launched && !process.terminated ? [handle] : [] }
         )
       )
       let context = try await wrapper.launchExactCandidate()
-      try issue122Expect(!wrapper.terminateAndCleanup(context), "termination uncertainty")
-      process.terminateResult = true
-      _ = process.handle().terminate()
-      try? context.endpoint.cleanup()
+      process.snapshotProcessIdentifier = 999
+      process.terminated = true
+      try issue122Expect(!wrapper.terminateAndCleanup(context), "wrong retained PID rejection")
+      try issue122Expect(process.terminateCallCount == 0, "wrong PID did not terminate")
+      process.terminated = true
+      count += 1
+    }
+
+    do {
+      let process = Issue122FakeProcess(candidate: candidate, processIdentifier: 55)
+      let wrongCandidate = Issue121PreparedCandidate(
+        applicationURL: candidate.applicationURL,
+        executableURL: candidate.executableURL,
+        bundleIdentifier: candidate.bundleIdentifier,
+        executableSHA256: String(repeating: "b", count: 64)
+      )
+      let wrong = Issue122FakeProcess(candidate: wrongCandidate, processIdentifier: 55)
+      var launched = false
+      var useWrongScan = false
+      let handle = process.handle()
+      let wrongHandle = wrong.handle()
+      let wrapper = Issue122QualificationWrapper(
+        candidate: candidate,
+        dependencies: issue122Dependencies(
+          open: { _ in
+            launched = true
+            return handle
+          },
+          running: { launched ? [useWrongScan ? wrongHandle : handle] : [] }
+        )
+      )
+      let context = try await wrapper.launchExactCandidate()
+      useWrongScan = true
+      try issue122Expect(!wrapper.terminateAndCleanup(context), "wrong identity rejection")
+      try issue122Expect(process.terminateCallCount == 0, "wrong identity did not terminate")
+      process.terminated = true
+      count += 1
+    }
+
+    do {
+      let process = Issue122FakeProcess(candidate: candidate, processIdentifier: 56)
+      process.terminateResult = false
+      var launched = false
+      let handle = process.handle()
+      let clock = Issue122FakeClock()
+      let wrapper = Issue122QualificationWrapper(
+        candidate: candidate,
+        dependencies: issue122Dependencies(
+          open: { _ in
+            launched = true
+            return handle
+          },
+          running: { launched ? [handle] : [] },
+          clock: clock
+        )
+      )
+      let context = try await wrapper.launchExactCandidate()
+      try issue122Expect(!wrapper.terminateAndCleanup(context), "nontermination deadline")
+      try issue122Expect(process.terminateCallCount == 1, "no repeated termination request")
+      try issue122Expect(clock.nowNanoseconds == 5_000_000_001, "five-second deadline")
+      process.terminated = true
+      count += 1
+    }
+
+    do {
+      let process = Issue122FakeProcess(candidate: candidate, processIdentifier: 57)
+      process.terminatesWhenRequested = false
+      var launched = false
+      let handle = process.handle()
+      let clock = Issue122FakeClock()
+      let wrapper = Issue122QualificationWrapper(
+        candidate: candidate,
+        dependencies: issue122Dependencies(
+          open: { _ in
+            launched = true
+            return handle
+          },
+          running: { launched ? [handle] : [] },
+          clock: clock
+        )
+      )
+      let context = try await wrapper.launchExactCandidate()
+      try issue122Expect(!wrapper.terminateAndCleanup(context), "accepted request nontermination")
+      try issue122Expect(process.terminateCallCount == 1, "accepted request issued once")
+      try issue122Expect(clock.nowNanoseconds == 5_000_000_001, "accepted request deadline")
+      process.terminated = true
       count += 1
     }
 

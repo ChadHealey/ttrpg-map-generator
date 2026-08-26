@@ -1148,6 +1148,24 @@ action, or #104 activity occurred. Issue #104 remains blocked and **UNCONSUMED**
 requires a separately authored successor. The sanitized result is in the
 [issue #124 qualification evidence](investigations/issue-124/README.md).
 
+### Issue #125 idempotent exact-candidate cleanup correction
+
+Issue #125 corrects only issue #122's terminal cleanup state machine and injected no-launch tests.
+An already-terminated retained handle now requires its unchanged PID relationship plus a fresh zero
+exact-bundle scan. A live exact candidate retains full identity validation before one termination
+request; a false-return race is accepted only after bounded proof that the retained handle is
+terminated and the exact-bundle scan is empty. Replacement, multiple, wrong-PID or identity,
+nontermination, and deadline states remain terminal, with candidate cleanup evaluated before
+endpoint cleanup.
+
+All 14 focused cases, the #121/#123 39-test suite and both interoperability cases, #119's 26+2
+tests, #120's 71 tests, six protected Swift executables, the root gate, six deterministic PNGs,
+eight fixture sets, and 28 APFS recovery cases pass. Privacy and protected-surface checks pass. No
+packaged candidate, live endpoint, COMMAND frame, product operation, issue #95 action, or issue
+#104 activity occurred. Issue #124 and every historical evidence artifact remain byte-identical,
+**INVALID/CONSUMED**, and uninterpreted; issue #104 remains blocked and **UNCONSUMED** pending a
+separately authorized fresh qualification after integration.
+
 ## Remote CI and milestone state
 
 Issue #71 recorded fresh CI evidence for the exact remote release commit
