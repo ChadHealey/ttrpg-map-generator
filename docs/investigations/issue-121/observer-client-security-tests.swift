@@ -91,7 +91,7 @@ func issue121RunSecurityPlatformTests(_ runner: inout Issue121TestRunner) throws
       socketpair(AF_UNIX, SOCK_STREAM, 0, &timeoutDescriptors) == 0,
       "socketpair"
     )
-    let timeoutSocket = Issue121ConnectedSocket.adoptConnectedDescriptorForTesting(
+    let timeoutSocket = try Issue121ConnectedSocket.adoptConnectedDescriptorForTesting(
       timeoutDescriptors[0]
     )
     defer {
@@ -111,7 +111,7 @@ func issue121RunSecurityPlatformTests(_ runner: inout Issue121TestRunner) throws
       socketpair(AF_UNIX, SOCK_STREAM, 0, &disconnectDescriptors) == 0,
       "disconnect socketpair"
     )
-    let disconnectSocket = Issue121ConnectedSocket.adoptConnectedDescriptorForTesting(
+    let disconnectSocket = try Issue121ConnectedSocket.adoptConnectedDescriptorForTesting(
       disconnectDescriptors[0]
     )
     Darwin.close(disconnectDescriptors[1])
@@ -124,11 +124,43 @@ func issue121RunSecurityPlatformTests(_ runner: inout Issue121TestRunner) throws
       )
     }
   }
+  try runner.test("socket adoption installs and verifies per-descriptor no-SIGPIPE policy") {
+    var descriptors = [Int32](repeating: -1, count: 2)
+    try issue121Expect(socketpair(AF_UNIX, SOCK_STREAM, 0, &descriptors) == 0, "socketpair")
+    let socket = try Issue121ConnectedSocket.adoptConnectedDescriptorForTesting(descriptors[0])
+    defer {
+      socket.closeIfNeeded()
+      Darwin.close(descriptors[1])
+    }
+    var noSignal: Int32 = 0
+    var noSignalLength = socklen_t(MemoryLayout.size(ofValue: noSignal))
+    try issue121Expect(
+      getsockopt(descriptors[0], SOL_SOCKET, SO_NOSIGPIPE, &noSignal, &noSignalLength) == 0,
+      "getsockopt"
+    )
+    try issue121Expect(
+      noSignalLength == MemoryLayout.size(ofValue: noSignal) && noSignal == 1,
+      "SO_NOSIGPIPE"
+    )
+  }
+  try runner.test("socket adoption failure closes the descriptor with typed disconnect") {
+    var descriptors = [Int32](repeating: -1, count: 2)
+    try issue121Expect(pipe(&descriptors) == 0, "pipe")
+    defer { Darwin.close(descriptors[1]) }
+    try issue121ExpectFailure(.disconnect) {
+      _ = try Issue121ConnectedSocket.adoptConnectedDescriptorForTesting(descriptors[0])
+    }
+    errno = 0
+    try issue121Expect(
+      fcntl(descriptors[0], F_GETFD) == -1 && errno == EBADF,
+      "failed descriptor closed"
+    )
+  }
   try runner.test("socket retains coalesced frames without accepting unsolicited leftovers") {
     var descriptors = [Int32](repeating: -1, count: 2)
     try issue121Expect(socketpair(AF_UNIX, SOCK_STREAM, 0, &descriptors) == 0, "socketpair")
-    let reader = Issue121ConnectedSocket.adoptConnectedDescriptorForTesting(descriptors[0])
-    let writer = Issue121ConnectedSocket.adoptConnectedDescriptorForTesting(descriptors[1])
+    let reader = try Issue121ConnectedSocket.adoptConnectedDescriptorForTesting(descriptors[0])
+    let writer = try Issue121ConnectedSocket.adoptConnectedDescriptorForTesting(descriptors[1])
     defer {
       reader.closeIfNeeded()
       writer.closeIfNeeded()
@@ -157,8 +189,8 @@ func issue121RunSecurityPlatformTests(_ runner: inout Issue121TestRunner) throws
   try runner.test("qualification rejects buffered available input and disconnect") {
     var descriptors = [Int32](repeating: -1, count: 2)
     try issue121Expect(socketpair(AF_UNIX, SOCK_STREAM, 0, &descriptors) == 0, "socketpair")
-    let reader = Issue121ConnectedSocket.adoptConnectedDescriptorForTesting(descriptors[0])
-    let writer = Issue121ConnectedSocket.adoptConnectedDescriptorForTesting(descriptors[1])
+    let reader = try Issue121ConnectedSocket.adoptConnectedDescriptorForTesting(descriptors[0])
+    let writer = try Issue121ConnectedSocket.adoptConnectedDescriptorForTesting(descriptors[1])
     var decoder = Issue121FrameStreamDecoder()
     try reader.requireNoUnsolicitedInput(decoder: decoder)
     try writer.writeAll(try Issue121Codec.encode(issue121Frame(.started, sequence: 1)))
@@ -181,10 +213,10 @@ func issue121RunSecurityPlatformTests(_ runner: inout Issue121TestRunner) throws
       socketpair(AF_UNIX, SOCK_STREAM, 0, &bufferedDescriptors) == 0,
       "buffered socketpair"
     )
-    let bufferedReader = Issue121ConnectedSocket.adoptConnectedDescriptorForTesting(
+    let bufferedReader = try Issue121ConnectedSocket.adoptConnectedDescriptorForTesting(
       bufferedDescriptors[0]
     )
-    let bufferedWriter = Issue121ConnectedSocket.adoptConnectedDescriptorForTesting(
+    let bufferedWriter = try Issue121ConnectedSocket.adoptConnectedDescriptorForTesting(
       bufferedDescriptors[1]
     )
     defer {
@@ -278,7 +310,7 @@ func issue121RunSecurityPlatformTests(_ runner: inout Issue121TestRunner) throws
   try runner.test("peer adapter checks effective UID and LOCAL_PEERPID") {
     var descriptors = [Int32](repeating: -1, count: 2)
     try issue121Expect(socketpair(AF_UNIX, SOCK_STREAM, 0, &descriptors) == 0, "socketpair")
-    let socket = Issue121ConnectedSocket.adoptConnectedDescriptorForTesting(descriptors[0])
+    let socket = try Issue121ConnectedSocket.adoptConnectedDescriptorForTesting(descriptors[0])
     defer {
       socket.closeIfNeeded()
       Darwin.close(descriptors[1])
@@ -299,5 +331,31 @@ func issue121RunSecurityPlatformTests(_ runner: inout Issue121TestRunner) throws
     for privateValue in ["/private/tmp", "TMOC", "TTRPG_", String(getpid())] {
       try issue121Expect(!rendered.contains(privateValue), "private value")
     }
+  }
+}
+
+func issue121RunClosedPeerWriteChild() -> Never {
+  _ = signal(SIGPIPE, SIG_DFL)
+  var descriptors = [Int32](repeating: -1, count: 2)
+  guard socketpair(AF_UNIX, SOCK_STREAM, 0, &descriptors) == 0 else { exit(3) }
+  do {
+    let socket = try Issue121ConnectedSocket.adoptConnectedDescriptorForTesting(descriptors[0])
+    Darwin.close(descriptors[1])
+    do {
+      try socket.writeAll(
+        [0x54, 0x4d, 0x4f, 0x43],
+        deadlineNanoseconds: DispatchTime.now().uptimeNanoseconds + 1_000_000_000
+      )
+      socket.closeIfNeeded()
+      exit(4)
+    } catch let failure as Issue121Failure {
+      socket.closeIfNeeded()
+      guard failure == .disconnect else { exit(5) }
+      print(failure.description)
+      exit(0)
+    }
+  } catch {
+    Darwin.close(descriptors[1])
+    exit(6)
   }
 }

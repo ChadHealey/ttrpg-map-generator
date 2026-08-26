@@ -1114,6 +1114,22 @@ and no code was corrected after the attempt began. Issue #104 remains blocked an
 The sanitized result is in the
 [issue #122 qualification evidence](investigations/issue-122/README.md).
 
+### Issue #123 SIGPIPE-safe observer client correction
+
+Issue #123 adds a single no-launch correction at the issue #121 Swift socket boundary. Construction
+now fails closed unless macOS `SO_NOSIGPIPE` can be set and read back on every live-connected or
+test-adopted descriptor. The focused child-process regression uses default `SIGPIPE` disposition,
+forces a closed-peer write, and requires normal exit with the existing
+`observer-client.disconnect` authority. Fragmented and zero-command Rust/Swift interoperability,
+the #119 native transport and absence boundary, the #120 frontend/dispatch boundary, and existing
+authentication, identity, deadline, lifecycle, and cleanup behavior remain unchanged.
+
+No packaged app or candidate was built or launched, no private endpoint or live qualification was
+created, and no fixture, product operation, artifact, sampler, measurement, issue #95 action, or
+#104 activity occurred. Issue #122's evidence remains byte-identical, **INVALID/CONSUMED**, and is
+not retried or reinterpreted. Issue #104 remains blocked and **UNCONSUMED** until a separately
+authorized fresh zero-command qualification passes.
+
 ## Remote CI and milestone state
 
 Issue #71 recorded fresh CI evidence for the exact remote release commit

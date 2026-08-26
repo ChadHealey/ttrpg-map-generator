@@ -222,10 +222,44 @@ final class Issue121ConnectedSocket {
   private var descriptor: Int32
   private var pendingFrames = [Issue121Frame]()
 
-  private init(descriptor: Int32) { self.descriptor = descriptor }
+  private init(descriptor: Int32) throws {
+    self.descriptor = descriptor
+    do {
+      try Self.configureWritesWithoutSignals(descriptor)
+    } catch {
+      Darwin.close(descriptor)
+      self.descriptor = -1
+      throw Issue121Failure.disconnect
+    }
+  }
 
-  static func adoptConnectedDescriptorForTesting(_ descriptor: Int32) -> Issue121ConnectedSocket {
-    Issue121ConnectedSocket(descriptor: descriptor)
+  private static func configureWritesWithoutSignals(_ descriptor: Int32) throws {
+    var noSignal: Int32 = 1
+    guard
+      setsockopt(
+        descriptor,
+        SOL_SOCKET,
+        SO_NOSIGPIPE,
+        &noSignal,
+        socklen_t(MemoryLayout.size(ofValue: noSignal))
+      ) == 0
+    else {
+      throw Issue121Failure.disconnect
+    }
+    noSignal = 0
+    var noSignalLength = socklen_t(MemoryLayout.size(ofValue: noSignal))
+    guard
+      getsockopt(descriptor, SOL_SOCKET, SO_NOSIGPIPE, &noSignal, &noSignalLength) == 0,
+      noSignalLength == MemoryLayout.size(ofValue: noSignal), noSignal == 1
+    else {
+      throw Issue121Failure.disconnect
+    }
+  }
+
+  static func adoptConnectedDescriptorForTesting(_ descriptor: Int32) throws
+    -> Issue121ConnectedSocket
+  {
+    try Issue121ConnectedSocket(descriptor: descriptor)
   }
 
   deinit { closeIfNeeded() }
@@ -267,7 +301,7 @@ final class Issue121ConnectedSocket {
       Darwin.close(descriptor)
       throw Issue121Failure.deadline
     }
-    return Issue121ConnectedSocket(descriptor: descriptor)
+    return try Issue121ConnectedSocket(descriptor: descriptor)
   }
 
   func validatePeer(expectedUID: uid_t, expectedPID: pid_t) throws {

@@ -1069,6 +1069,20 @@ the attempt began. The result is **INVALID**; issue #104 remains blocked and **U
 sanitized record is in the
 [issue #122 qualification evidence](investigations/issue-122/README.md).
 
+### Issue #123 SIGPIPE-safe observer client correction
+
+Issue #123 corrects only the standalone Swift client's connected-descriptor policy. Every live or
+test-adopted `Issue121ConnectedSocket` now installs and verifies macOS `SO_NOSIGPIPE` before the
+wrapper is returned; configuration failure closes the descriptor and returns the existing typed
+disconnect. A child-process regression restores default `SIGPIPE` disposition, closes the peer,
+and proves the writer exits normally with `observer-client.disconnect` instead of dying by signal.
+
+The correction and its focused, interoperability, predecessor, root, deterministic, privacy, and
+protected-surface gates require no packaged app, candidate build, candidate process, observer
+runtime node, product operation, fixture action, or target qualification. Issue #122 and its
+sanitized evidence remain byte-identical, **INVALID/CONSUMED**, and uninterpreted; issue #104 remains
+blocked and **UNCONSUMED** pending a separately authorized fresh zero-command qualification.
+
 ### Packaged generation-cancellation qualification stop
 
 Issue #98 added only a test observer and observer-enabled package wiring around the unchanged

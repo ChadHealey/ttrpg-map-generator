@@ -14,6 +14,9 @@ Accessibility action, input synthesis, focus operation, or reusable automation A
   identity validation.
 - `observer-client-ipc.swift` owns secure randomness, direct-`/private/tmp` namespace checks, future
   launch-configuration construction, Unix socket access, effective-UID checks, and `LOCAL_PEERPID`.
+  Every live-connected or test-adopted descriptor must pass centralized `SO_NOSIGPIPE` installation
+  and readback before the wrapper can be constructed; failure closes the descriptor and returns the
+  existing `observer-client.disconnect` authority.
 - `observer-client-controller.swift` binds the pure state machine to the macOS adapters. It verifies
   the connected peer and retained candidate again before sending `HELLO`, accepts no new command
   before matching `COMPLETE`, exposes a bounded READY-only zero-command qualification, and treats
@@ -23,7 +26,9 @@ Accessibility action, input synthesis, focus operation, or reusable automation A
   result.
 - `observer-client-test-support.swift`, `observer-client-codec-tests.swift`,
   `observer-client-security-tests.swift`, and `observer-client-tests.swift` form the focused Swift
-  security, codec, lifecycle, path, peer, privacy, deadline, disconnect, and cleanup suite.
+  security, codec, lifecycle, path, peer, privacy, deadline, disconnect, and cleanup suite. The
+  focused executable also starts one child with default `SIGPIPE` disposition, closes its peer, and
+  requires normal child exit with the typed disconnect instead of signal termination.
 - `apps/desktop/src-tauri/tests/observer_swift_interop.rs` directly imports the production #119
   Rust protocol and peer-credential sources. Its ignored focused tests are run explicitly with the
   freshly compiled Swift executable. The one-command test compares Swift's raw `HELLO` and
@@ -85,7 +90,9 @@ not authorize an app or package launch.
 ## Limitation and next boundary
 
 This issue proves the five-value `NSWorkspace.OpenConfiguration.environment` and its nonactivating
-flags by construction and provides the READY-only zero-command client lifecycle. Environment
-propagation and exact packaged-candidate qualification remain evidence-only work for the separately
-authorized successor; that successor must not invent or patch the client lifecycle. Issue #104
-remains unconsumed.
+flags by construction and provides the READY-only zero-command client lifecycle. Issue #123 adds
+only the per-socket macOS write hardening and signal-sensitive no-launch regression after issue
+#122 exposed the missing descriptor policy. Issue #122 remains immutable, **INVALID/CONSUMED**, and
+is not retried or reinterpreted. Environment propagation and a fresh exact packaged-candidate
+qualification remain evidence-only work for a separately authorized successor. Issue #104 remains
+**UNCONSUMED**.
