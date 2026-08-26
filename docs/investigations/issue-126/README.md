@@ -54,4 +54,27 @@ The sanitized machine-readable boundary is
 
 ## Phase B result
 
-Not yet launched from this Phase A boundary.
+**INVALID — CONTROLLER CLEANUP UNCERTAINTY.** Phase B began only from clean committed Phase A HEAD
+`f42319da40060f5859006141fd58f9015979f47f`. The exact controller, observer candidate, source,
+bundle, Info.plist, paired-gate surface, active GUI session, zero-process state, zero-runtime-node
+state, privacy, and protected surfaces all reproduced before target use.
+
+The exact controller was invoked once and launched one fresh nonactivating exact observer
+candidate/session. It emitted the sanitized terminal authority `observer-client.cleanup`, reported
+`commandCount: 0`, and did not qualify terminal cleanup. Cleanup uncertainty makes the complete
+attempt **INVALID/CONSUMED**; mutual authentication and frontend READY are not claimed or
+reinterpreted.
+
+The committed qualification path calls issue #121's READY-only `qualify()` with an empty command
+list. It has no call to `execute`, constructs no COMMAND frame, and invokes no product authority.
+The attempt therefore sent zero COMMAND frames and invoked zero product operations.
+
+Independent terminal scans found zero matching candidate processes, zero observer runtime
+directories, and zero observer socket nodes. No endpoint, session, capability, PID, path, user
+identity, raw diagnostic, or private receipt is recorded. There was no retry, fallback, activation,
+input, Accessibility action, fixture, sampler, artifact/destination, dispatch, measurement, issue
+#95 action, issue #104 activity, or code correction after Phase B began. Issue #104 remains
+**UNCONSUMED** and NOT READY. A future attempt requires separately authored authority.
+
+The sole sanitized result is
+[`qualification-2026-08-25/result.json`](qualification-2026-08-25/result.json).

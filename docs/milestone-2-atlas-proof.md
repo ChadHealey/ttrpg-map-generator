@@ -1117,6 +1117,25 @@ packaged candidate was built or launched, no live endpoint or product operation 
 **INVALID/CONSUMED**, and uninterpreted. Issue #104 remains blocked and **UNCONSUMED** pending a
 separately authorized fresh zero-command qualification after this correction integrates.
 
+### Issue #126 idempotent-cleanup zero-command qualification stop
+
+Issue #126 armed from exact integrated commit `fb5e259` and committed its complete focused,
+predecessor, root, deterministic, recovery, ordinary-absence, paired-gate package,
+exact-controller, identity, zero-state, privacy, and protected-surface evidence before target use.
+The integrated issue #121/#123 client and issue #122/#125 wrapper were reused unchanged.
+
+The exact controller was invoked once from that clean committed boundary with one fresh
+nonactivating exact observer candidate/session. It returned `observer-client.cleanup` with
+`commandCount: 0` and without qualified terminal cleanup. The result is
+**INVALID/CONSUMED**; mutual authentication and frontend READY are not claimed or reinterpreted.
+The immutable empty-command qualification path sends no COMMAND frame and invokes no product
+authority. Independent final scans found zero candidate processes, zero observer runtime
+directories, and zero socket nodes. There was no retry, fallback, activation, input, Accessibility
+action, fixture, sampler, artifact/destination, dispatch, measurement, code correction, issue #95
+action, or issue #104 activity. Issue #104 remains blocked and **UNCONSUMED**; a future attempt
+requires separately authored authority. The sanitized record is in the
+[issue #126 qualification evidence](investigations/issue-126/README.md).
+
 ### Packaged generation-cancellation qualification stop
 
 Issue #98 added only a test observer and observer-enabled package wiring around the unchanged

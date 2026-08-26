@@ -1166,6 +1166,24 @@ packaged candidate, live endpoint, COMMAND frame, product operation, issue #95 a
 **INVALID/CONSUMED**, and uninterpreted; issue #104 remains blocked and **UNCONSUMED** pending a
 separately authorized fresh qualification after integration.
 
+### Issue #126 idempotent-cleanup zero-command qualification stop
+
+Issue #126 committed a clean no-launch arming boundary from exact integrated commit `fb5e259`
+after all focused, predecessor, root, deterministic, recovery, package, privacy, and protected
+gates passed. One ordinary package proved complete observer absence; exactly one paired-gate
+observer package and the exact issue #125 controller reproduced their sanitized identities.
+
+The sole Phase B controller invocation launched one fresh nonactivating exact observer
+candidate/session and returned `observer-client.cleanup` with `commandCount: 0`. Because terminal
+cleanup was not qualified, the result is **INVALID/CONSUMED** and neither mutual authentication nor
+frontend READY is claimed. The unchanged empty-command path sends no COMMAND frame and invokes no
+product authority. Independent terminal checks proved zero candidate processes, zero runtime
+directories, and zero socket nodes. No retry, fallback, activation, input, Accessibility action,
+fixture, artifact, dispatch, measurement, code correction, issue #95 action, or #104 activity
+occurred. Issue #104 remains blocked and **UNCONSUMED** pending separately authored authority. The
+sanitized result is in the
+[issue #126 qualification evidence](investigations/issue-126/README.md).
+
 ## Remote CI and milestone state
 
 Issue #71 recorded fresh CI evidence for the exact remote release commit
