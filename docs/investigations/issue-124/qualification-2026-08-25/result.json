@@ -1,0 +1,17 @@
+{
+  "candidateLaunchCount": 1,
+  "commandCount": 0,
+  "controllerInvocationCount": 1,
+  "controllerTerminalCleanupSucceeded": false,
+  "frontendReadyQualified": false,
+  "independentCleanupSucceeded": true,
+  "invalidAuthority": "observer-client.cleanup",
+  "issue104Consumed": false,
+  "mutualAuthenticationQualified": false,
+  "postCleanupCandidateProcessCount": 0,
+  "postCleanupRuntimeDirectoryCount": 0,
+  "postCleanupSocketCount": 0,
+  "productOperationCount": 0,
+  "retryCount": 0,
+  "status": "invalid"
+}

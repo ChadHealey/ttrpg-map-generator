@@ -1130,6 +1130,24 @@ created, and no fixture, product operation, artifact, sampler, measurement, issu
 not retried or reinterpreted. Issue #104 remains blocked and **UNCONSUMED** until a separately
 authorized fresh zero-command qualification passes.
 
+### Issue #124 SIGPIPE-safe zero-command qualification stop
+
+Issue #124 completed and committed its full no-launch arming boundary from exact integrated commit
+`be26deb`: focused and predecessor tests, root and deterministic gates, ordinary observer-surface
+absence, exactly one paired-gate observer package, exact controller and candidate identities, zero
+process/runtime state, privacy, and protected evidence all passed before target use.
+
+The sole Phase B controller invocation launched one fresh nonactivating exact observer
+candidate/session, then returned `observer-client.cleanup` with `commandCount: 0` and without
+qualified terminal cleanup. The result is **INVALID/CONSUMED**. Cleanup uncertainty prevents any
+mutual-authentication or frontend-READY claim. The immutable empty-command qualification path sends
+no COMMAND frame and invokes no product operation. Independent final scans found zero candidate
+processes, zero observer runtime directories, and zero socket nodes. No retry, fallback, activation,
+input, fixture, sampler, artifact/destination, dispatch, measurement, code correction, issue #95
+action, or #104 activity occurred. Issue #104 remains blocked and **UNCONSUMED**; a future attempt
+requires a separately authored successor. The sanitized result is in the
+[issue #124 qualification evidence](investigations/issue-124/README.md).
+
 ## Remote CI and milestone state
 
 Issue #71 recorded fresh CI evidence for the exact remote release commit
