@@ -293,14 +293,14 @@ Power Mode off, no debugger/developer tools, and no network dependency. After on
 measure five fresh processes. Sample aggregate additional RSS for the complete application process
 tree at intervals no greater than 20 ms and report every run plus median and worst.
 
-| Operation                            | Fixed limit                                                                     | Required evidence status                                                                                          |
-| ------------------------------------ | ------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| Coarse preview                       | ≤900 ms and ≤256 MiB additional process-tree RSS; report ≤750 ms stretch target | **PASS** — all 15 final fresh runs passed; worst time 809.40 ms, worst RSS 157.72 MiB                             |
-| Full generation                      | ≤10 s and ≤768 MiB additional process-tree RSS                                  | **NOT RUN** — issue #95 stopped on observer-authority drift before measured dispatch                              |
-| SVG export                           | ≤3 s, ≤512 MiB, destination ≤32 MiB                                             | **NOT RUN** — completion path qualified by #101; #95 matrix remains unrun                                         |
-| PNG export                           | ≤15 s, ≤1 GiB, destination ≤64 MiB                                              | **NOT RUN** — completion path qualified by #101; #95 matrix remains unrun                                         |
-| Preview cancellation                 | Acknowledgement ≤100 ms                                                         | **OUTSTANDING** — #98/#102/#103 rows remain invalid/consumed; #104 replacement remains unconsumed after #115 stop |
-| Full-generation/SVG/PNG cancellation | Acknowledgement ≤500 ms                                                         | **NOT RUN** — #103 stopped immediately after its consumed replacement preview invalidation                        |
+| Operation                            | Fixed limit                                                                     | Required evidence status                                                                                  |
+| ------------------------------------ | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| Coarse preview                       | ≤900 ms and ≤256 MiB additional process-tree RSS; report ≤750 ms stretch target | **PASS** — all 15 final fresh runs passed; worst time 809.40 ms, worst RSS 157.72 MiB                     |
+| Full generation                      | ≤10 s and ≤768 MiB additional process-tree RSS                                  | **NOT RUN** — issue #95 stopped on observer-authority drift before measured dispatch                      |
+| SVG export                           | ≤3 s, ≤512 MiB, destination ≤32 MiB                                             | **NOT RUN** — completion path qualified by #101; #95 matrix remains unrun                                 |
+| PNG export                           | ≤15 s, ≤1 GiB, destination ≤64 MiB                                              | **NOT RUN** — completion path qualified by #101; #95 matrix remains unrun                                 |
+| Preview cancellation                 | Acknowledgement ≤100 ms                                                         | **OUTSTANDING** — #98/#102/#103 rows remain invalid/consumed; #122 is invalid and #104 remains unconsumed |
+| Full-generation/SVG/PNG cancellation | Acknowledgement ≤500 ms                                                         | **NOT RUN** — #103 stopped immediately after its consumed replacement preview invalidation                |
 
 ### Issue #84 partial full-generation rerun (2026-08-23)
 
@@ -1094,6 +1094,25 @@ standard-library prototype passed without app launch, and the ordered implementa
 native transport, frontend binding, Swift client, and target qualification separate. No dependency
 review is required. No package, target process, fixture, dispatch, artifact, measurement, issue #95
 operation, or issue #104 activity occurred; #104 remains **UNCONSUMED**.
+
+### Issue #122 zero-command process-bound qualification stop
+
+Issues #119–#121 completed ADR-0020's native transport, compile-time frontend bridge, and exact-
+session Swift client. Issue #122's committed Phase A boundary added only the launch wrapper and
+passed the focused predecessor, ordinary-absence, paired-gate candidate, packaged-dispatch, root,
+deterministic, privacy, product/fixture, protected-evidence, and diff gates. The ordinary package
+contained no observer surface; exactly one observer package used both required compile-time gates.
+
+The sole Phase B invocation launched one fresh exact candidate without activation, then the
+controller terminated by signal before it emitted a sanitized mutual-authentication/frontend-READY
+receipt. The empty-command `qualify()` path emitted zero COMMAND frames and invoked zero product
+operations, but the missing receipt makes the result **INVALID**. Independent cleanup terminated
+the exact candidate, confirmed endpoint removal, removed the empty owner-only runtime directory,
+and proved zero candidate processes and zero runtime nodes. No retry, fallback, input, fixture,
+sampler, artifact/destination, dispatch, measurement, issue #95 action, or #104 activity occurred,
+and no code was corrected after the attempt began. Issue #104 remains blocked and **UNCONSUMED**.
+The sanitized result is in the
+[issue #122 qualification evidence](investigations/issue-122/README.md).
 
 ## Remote CI and milestone state
 

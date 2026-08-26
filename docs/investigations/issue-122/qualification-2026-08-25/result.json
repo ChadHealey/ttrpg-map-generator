@@ -1,0 +1,13 @@
+{
+  "candidateLaunchCount": 1,
+  "commandCount": 0,
+  "controllerInvocationCount": 1,
+  "frontendReadyQualified": false,
+  "invalidAuthority": "controller-signal-before-receipt",
+  "issue104Consumed": false,
+  "mutualAuthenticationQualified": false,
+  "productOperationCount": 0,
+  "retryCount": 0,
+  "status": "invalid",
+  "terminalCleanupSucceeded": true
+}

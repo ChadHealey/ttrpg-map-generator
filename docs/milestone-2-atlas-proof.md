@@ -1050,6 +1050,25 @@ drafts separate native transport, frontend authority binding, Swift client, and 
 target qualification. No production wiring, package build, target process, product action, or
 issue #104 activity occurred; #104 remains blocked and **UNCONSUMED**.
 
+### Issue #122 zero-command process-bound qualification stop
+
+Issues #119–#121 implemented the compile-time native transport, frontend authority binding, and
+standalone exact-session Swift client required by ADR-0020. Issue #122 then added only a launch
+wrapper around #121. All focused predecessor, ordinary-absence, paired-gate package,
+packaged-dispatch, root, deterministic, privacy, product/fixture, protected-evidence, and diff gates
+passed from a committed Phase A boundary before target use.
+
+The sole Phase B controller invocation launched exactly one fresh nonactivating observer candidate
+but terminated by signal before emitting a sanitized mutual-authentication/frontend-READY receipt.
+The committed path calls only #121's READY-only `qualify()` with an empty command list, so it emitted
+zero COMMAND frames and invoked zero product operations; without the receipt, the session is not
+qualified. Independent cleanup terminated the one exact candidate, removed its empty owner-only
+runtime directory after endpoint removal, and proved zero processes and zero runtime nodes. There
+was no retry, fallback, activation, input, fixture, dispatch, measurement, or code correction after
+the attempt began. The result is **INVALID**; issue #104 remains blocked and **UNCONSUMED**. The
+sanitized record is in the
+[issue #122 qualification evidence](investigations/issue-122/README.md).
+
 ### Packaged generation-cancellation qualification stop
 
 Issue #98 added only a test observer and observer-enabled package wiring around the unchanged

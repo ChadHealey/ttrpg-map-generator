@@ -58,5 +58,26 @@ matching candidate processes and no observer endpoint/runtime node. Issue #104 r
 
 ## Phase B result
 
-Not started. Exactly one target attempt is permitted only after every Phase A gate passes from the
-clean committed implementation boundary.
+**INVALID — CONTROLLER SIGNAL BEFORE RECEIPT.** Phase B began from clean committed Phase A HEAD
+`ddae9ba372f2463b51f2c6155bbee5fb8563a6a3` only after the controller, observer candidate,
+Info.plist, paired-gate surface, active GUI session, zero-process, zero-runtime-node, privacy, and
+protected-surface checks reproduced exactly.
+
+The controller was invoked once and `NSWorkspace` launched exactly one fresh nonactivating exact
+candidate. The controller then terminated by signal before it emitted a sanitized mutual-
+authentication/frontend-READY receipt or ran its own terminal cleanup. That absence cannot be
+reinterpreted as a qualified session, so the one attempt is INVALID. The committed wrapper calls
+only issue #121's `qualify()` with an empty command list; it has no call to `execute` and no product
+authority. Therefore it emitted zero COMMAND frames and invoked zero product operations, but it did
+not qualify mutual authentication or frontend READY.
+
+An independent terminal check found one exact-name candidate and one private runtime directory.
+One termination signal stopped that exact candidate. Its endpoint had been removed, leaving the
+owner-only runtime directory empty; the directory was then removed. Independent final checks found
+zero candidate processes and zero observer endpoint/runtime nodes. No private endpoint, session,
+capability, PID, local path, user identity, or raw diagnostic is recorded.
+
+There was no retry, fallback, activation, input, fixture, sampler, artifact/destination, product
+operation, #95 action, or #104 activity, and no code was corrected after Phase B began. Issue #104
+remains **UNCONSUMED** and NOT READY. The sole sanitized result is
+[`qualification-2026-08-25/result.json`](qualification-2026-08-25/result.json).
