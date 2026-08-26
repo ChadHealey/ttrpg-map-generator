@@ -1,0 +1,17 @@
+{
+  "activeGuiSession": true,
+  "candidateLaunchCount": 0,
+  "candidateProcessCount": 0,
+  "commandCount": 0,
+  "controllerInvocationCount": 0,
+  "controllerSha256": "44fc89949aaa4811b3e3b93a6e8f48a46f515a6a0e5c2b96709a0bcc9a35a9ef",
+  "issue104Consumed": false,
+  "observerExecutableSha256": "657e6cacad7499e6e5fd4f6e29bb7414a392f9e434ef2939dc5a47d26fefc13f",
+  "observerPackageBuildCount": 1,
+  "observerRuntimeNodeCount": 0,
+  "ordinaryExecutableSha256": "25686c85f7b92516202a55a5f2939aa24a66c7d39a059f4b91594e6926c104ab",
+  "ordinaryPackageBuildCount": 1,
+  "productOperationCount": 0,
+  "sourceCommit": "be26deb16cca44897b9d805de08d867e77c9a7d0",
+  "status": "armed-not-launched"
+}
