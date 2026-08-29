@@ -86,11 +86,23 @@ private func issue122Candidate() -> Issue121PreparedCandidate {
 private func issue122Dependencies(
   open: @escaping (NSWorkspace.OpenConfiguration) async throws -> Issue122RunningApplicationHandle,
   running: @escaping () -> [Issue122RunningApplicationHandle],
+  processSnapshot: ((Issue121RetainedCandidate) -> Issue121CandidateSnapshot)? = nil,
   clock: Issue122FakeClock = Issue122FakeClock()
 ) -> Issue122LaunchDependencies {
   Issue122LaunchDependencies(
     openApplication: { _, configuration in try await open(configuration) },
     runningApplications: { _ in running() },
+    processSnapshot: processSnapshot ?? { retainedCandidate in
+      running().first { $0.processIdentifier == retainedCandidate.processIdentifier }?.snapshot()
+        ?? Issue121CandidateSnapshot(
+          processIdentifier: retainedCandidate.processIdentifier,
+          applicationURL: nil,
+          executableURL: nil,
+          bundleIdentifier: nil,
+          executableSHA256: nil,
+          isTerminated: true
+        )
+    },
     nowNanoseconds: { clock.nowNanoseconds },
     sleep: { clock.sleep($0) }
   )
@@ -189,7 +201,7 @@ enum Issue122QualificationTests {
           running: { launched ? [firstHandle, secondHandle] : [] }
         )
       )
-      try await issue122ExpectFailure(.cleanup) {
+      try await issue122ExpectFailure(.cleanupCandidate) {
         _ = try await wrapper.launchExactCandidate()
       }
       try issue122Expect(first.terminated, "multiple-candidate cleanup")
@@ -212,7 +224,7 @@ enum Issue122QualificationTests {
           running: { launched ? [otherHandle] : [] }
         )
       )
-      try await issue122ExpectFailure(.cleanup) {
+      try await issue122ExpectFailure(.cleanupCandidate) {
         _ = try await wrapper.launchExactCandidate()
       }
       try issue122Expect(returned.terminated, "wrong-returned-identity cleanup")
@@ -304,6 +316,7 @@ enum Issue122QualificationTests {
             if !process.terminated { return [retainedHandle] }
             return staleScanVisible ? [staleScanHandle] : []
           },
+          processSnapshot: { _ in retainedHandle.snapshot() },
           clock: clock
         )
       )
@@ -381,7 +394,8 @@ enum Issue122QualificationTests {
             launched = true
             return handle
           },
-          running: { launched && !process.terminated ? [handle] : [] }
+          running: { launched && !process.terminated ? [handle] : [] },
+          processSnapshot: { _ in handle.snapshot() }
         )
       )
       let context = try await wrapper.launchExactCandidate()
@@ -471,6 +485,102 @@ enum Issue122QualificationTests {
       try issue122Expect(process.terminateCallCount == 1, "accepted request issued once")
       try issue122Expect(clock.nowNanoseconds == 5_000_000_001, "accepted request deadline")
       process.terminated = true
+      count += 1
+    }
+
+    do {
+      let process = Issue122FakeProcess(candidate: candidate, processIdentifier: 59)
+      var launched = false
+      var kernelTerminated = false
+      let frozenHandle = process.handle()
+      let wrapper = Issue122QualificationWrapper(
+        candidate: candidate,
+        dependencies: issue122Dependencies(
+          open: { _ in
+            launched = true
+            return frozenHandle
+          },
+          running: { launched && !kernelTerminated ? [frozenHandle] : [] },
+          processSnapshot: { retainedCandidate in
+            if kernelTerminated {
+              return Issue121CandidateSnapshot(
+                processIdentifier: retainedCandidate.processIdentifier,
+                applicationURL: nil,
+                executableURL: nil,
+                bundleIdentifier: nil,
+                executableSHA256: nil,
+                isTerminated: true
+              )
+            }
+            return frozenHandle.snapshot()
+          }
+        )
+      )
+      let context = try await wrapper.launchExactCandidate()
+      kernelTerminated = true
+      try issue122Expect(!frozenHandle.isTerminated(), "retained handle remains frozen live")
+      try issue122Expect(wrapper.terminateAndCleanup(context), "kernel termination wins")
+      try issue122Expect(process.terminateCallCount == 0, "no redundant termination request")
+      count += 1
+    }
+
+    do {
+      let process = Issue122FakeProcess(candidate: candidate, processIdentifier: 60)
+      var launched = false
+      var scanAbsent = false
+      let handle = process.handle()
+      let clock = Issue122FakeClock()
+      let wrapper = Issue122QualificationWrapper(
+        candidate: candidate,
+        dependencies: issue122Dependencies(
+          open: { _ in
+            launched = true
+            return handle
+          },
+          running: { launched && !scanAbsent ? [handle] : [] },
+          processSnapshot: { _ in handle.snapshot() },
+          clock: clock
+        )
+      )
+      let context = try await wrapper.launchExactCandidate()
+      scanAbsent = true
+      try issue122Expect(!wrapper.terminateAndCleanup(context), "kernel-live absence fails closed")
+      try issue122Expect(
+        process.terminateCallCount == 0, "absence does not terminate unknown state")
+      try issue122Expect(clock.nowNanoseconds == 5_000_000_001, "kernel-live deadline")
+      process.terminated = true
+      count += 1
+    }
+
+    do {
+      let candidateOnly =
+        Issue121ObserverController.terminalError(
+          operationError: nil,
+          candidateCleanupSucceeded: false,
+          endpointCleanupSucceeded: true
+        ) as? Issue121Failure
+      let endpointOnly =
+        Issue121ObserverController.terminalError(
+          operationError: nil,
+          candidateCleanupSucceeded: true,
+          endpointCleanupSucceeded: false
+        ) as? Issue121Failure
+      let both =
+        Issue121ObserverController.terminalError(
+          operationError: nil,
+          candidateCleanupSucceeded: false,
+          endpointCleanupSucceeded: false
+        ) as? Issue121Failure
+      let operationFirst =
+        Issue121ObserverController.terminalError(
+          operationError: Issue121Failure.deadline,
+          candidateCleanupSucceeded: false,
+          endpointCleanupSucceeded: false
+        ) as? Issue121Failure
+      try issue122Expect(candidateOnly == .cleanupCandidate, "candidate-only cleanup token")
+      try issue122Expect(endpointOnly == .cleanupEndpoint, "endpoint-only cleanup token")
+      try issue122Expect(both == .cleanupCandidateAndEndpoint, "combined cleanup token")
+      try issue122Expect(operationFirst == .deadline, "operation error is not masked")
       count += 1
     }
 

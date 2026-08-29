@@ -26,6 +26,7 @@ struct Issue122LaunchDependencies {
   let openApplication:
     (URL, NSWorkspace.OpenConfiguration) async throws -> Issue122RunningApplicationHandle
   let runningApplications: (String) -> [Issue122RunningApplicationHandle]
+  let processSnapshot: (Issue121RetainedCandidate) -> Issue121CandidateSnapshot
   let nowNanoseconds: () -> UInt64
   let sleep: (useconds_t) -> Void
 
@@ -42,6 +43,7 @@ struct Issue122LaunchDependencies {
         .filter { !$0.isTerminated }
         .map(handle)
     },
+    processSnapshot: { Issue121CandidateIdentity.processPathSnapshot(retained: $0) },
     nowNanoseconds: { DispatchTime.now().uptimeNanoseconds },
     sleep: { usleep($0) }
   )
@@ -79,7 +81,6 @@ struct Issue122LaunchedQualification {
 struct Issue122QualificationWrapper {
   private enum RetainedCandidateState {
     case live(Issue121CandidateSnapshot)
-    case transitioning
     case terminated
   }
 
@@ -168,7 +169,12 @@ struct Issue122QualificationWrapper {
           terminateReturnedApplication($0, bundleIdentifier: candidate.bundleIdentifier)
         } ?? true
       let endpointCleanup = cleanupEndpointWhenAbsent(endpoint)
-      guard candidateCleanup, endpointCleanup else { throw Issue121Failure.cleanup }
+      if let cleanupFailure = Issue121Failure.terminalCleanupFailure(
+        candidateSucceeded: candidateCleanup,
+        endpointSucceeded: endpointCleanup
+      ) {
+        throw cleanupFailure
+      }
       throw error
     }
   }
@@ -192,7 +198,6 @@ struct Issue122QualificationWrapper {
     while dependencies.nowNanoseconds() < deadline {
       guard
         let retainedState = retainedCandidateState(
-          application: application,
           retainedCandidate: retainedCandidate
         )
       else { return false }
@@ -217,7 +222,7 @@ struct Issue122QualificationWrapper {
           terminationRequested = true
           _ = application.terminate()
         }
-      case (.live(_), .absent), (.transitioning, .absent), (.transitioning, .retained):
+      case (.live(_), .absent):
         break
       case (_, .invalid):
         return false
@@ -228,15 +233,17 @@ struct Issue122QualificationWrapper {
   }
 
   private func retainedCandidateState(
-    application: Issue122RunningApplicationHandle,
     retainedCandidate: Issue121RetainedCandidate
   ) -> RetainedCandidateState? {
-    let snapshot = application.snapshot()
+    let snapshot = dependencies.processSnapshot(retainedCandidate)
     guard snapshot.processIdentifier == retainedCandidate.processIdentifier else { return nil }
-    let handleIsTerminated = application.isTerminated()
-    if snapshot.isTerminated, handleIsTerminated { return .terminated }
-    if !snapshot.isTerminated, !handleIsTerminated { return .live(snapshot) }
-    return .transitioning
+    if snapshot.isTerminated { return .terminated }
+    do {
+      try Issue121CandidateIdentity.validateRetained(retainedCandidate, snapshot: snapshot)
+      return .live(snapshot)
+    } catch {
+      return nil
+    }
   }
 
   private func exactBundleScanState(

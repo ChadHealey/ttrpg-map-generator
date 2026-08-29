@@ -10,6 +10,9 @@ enum Issue121Failure: Error, Equatable, CustomStringConvertible {
   case bootstrap
   case candidateIdentity
   case cleanup
+  case cleanupCandidate
+  case cleanupCandidateAndEndpoint
+  case cleanupEndpoint
   case deadline
   case disconnect
   case framing
@@ -29,6 +32,9 @@ enum Issue121Failure: Error, Equatable, CustomStringConvertible {
     case .bootstrap: "observer-client.bootstrap"
     case .candidateIdentity: "observer-client.candidate-identity"
     case .cleanup: "observer-client.cleanup"
+    case .cleanupCandidate: "observer-client.cleanup.candidate"
+    case .cleanupCandidateAndEndpoint: "observer-client.cleanup.candidate-endpoint"
+    case .cleanupEndpoint: "observer-client.cleanup.endpoint"
     case .deadline: "observer-client.deadline"
     case .disconnect: "observer-client.disconnect"
     case .framing: "observer-client.framing"
@@ -42,6 +48,18 @@ enum Issue121Failure: Error, Equatable, CustomStringConvertible {
     case .sequence: "observer-client.sequence"
     case .usage: "observer-client.usage"
     case .version: "observer-client.version"
+    }
+  }
+
+  static func terminalCleanupFailure(
+    candidateSucceeded: Bool,
+    endpointSucceeded: Bool
+  ) -> Issue121Failure? {
+    switch (candidateSucceeded, endpointSucceeded) {
+    case (true, true): nil
+    case (false, true): .cleanupCandidate
+    case (true, false): .cleanupEndpoint
+    case (false, false): .cleanupCandidateAndEndpoint
     }
   }
 }

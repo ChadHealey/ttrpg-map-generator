@@ -125,11 +125,26 @@ struct Issue121ObserverController {
     connectedSocket?.closeIfNeeded()
     let candidateCleanupSucceeded = terminalCandidateCleanup()
     let endpointCleanupSucceeded = waitForEndpointRemovalAndCleanup()
-    guard candidateCleanupSucceeded, endpointCleanupSucceeded else {
-      throw Issue121Failure.cleanup
+    if let terminalError = Self.terminalError(
+      operationError: operationError,
+      candidateCleanupSucceeded: candidateCleanupSucceeded,
+      endpointCleanupSucceeded: endpointCleanupSucceeded
+    ) {
+      throw terminalError
     }
-    if let operationError { throw operationError }
     return completed
+  }
+
+  static func terminalError(
+    operationError: (any Error)?,
+    candidateCleanupSucceeded: Bool,
+    endpointCleanupSucceeded: Bool
+  ) -> (any Error)? {
+    if let operationError { return operationError }
+    return Issue121Failure.terminalCleanupFailure(
+      candidateSucceeded: candidateCleanupSucceeded,
+      endpointSucceeded: endpointCleanupSucceeded
+    )
   }
 
   private func deadline(after duration: UInt64) -> UInt64 {

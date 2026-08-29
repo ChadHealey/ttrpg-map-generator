@@ -324,12 +324,18 @@ func issue121RunSecurityPlatformTests(_ runner: inout Issue121TestRunner) throws
     }
   }
   try runner.test("public results contain only sanitized fixed fields") {
-    let result = Issue121PublicResult.invalid(.candidateIdentity)
-    let data = try JSONEncoder().encode(result)
-    let rendered = String(decoding: data, as: UTF8.self)
-    try issue121Expect(rendered.contains("observer-client.candidate-identity"), "authority")
-    for privateValue in ["/private/tmp", "TMOC", "TTRPG_", String(getpid())] {
-      try issue121Expect(!rendered.contains(privateValue), "private value")
+    for failure in [
+      Issue121Failure.candidateIdentity,
+      .cleanupCandidate,
+      .cleanupEndpoint,
+      .cleanupCandidateAndEndpoint,
+    ] {
+      let data = try JSONEncoder().encode(Issue121PublicResult.invalid(failure))
+      let rendered = String(decoding: data, as: UTF8.self)
+      try issue121Expect(rendered.contains(failure.description), "authority")
+      for privateValue in ["/private/tmp", "TMOC", "TTRPG_", String(getpid())] {
+        try issue121Expect(!rendered.contains(privateValue), "private value")
+      }
     }
   }
 }
