@@ -1,5 +1,9 @@
+// The all-features Linux gate compiles the fail-closed unsupported-platform entry point, but only
+// the macOS server can drive these transport internals in a non-test build.
+#[cfg_attr(not(target_os = "macos"), allow(dead_code))]
 mod bridge;
 mod error;
+#[cfg_attr(not(target_os = "macos"), allow(dead_code))]
 mod protocol;
 
 #[cfg(target_os = "macos")]
