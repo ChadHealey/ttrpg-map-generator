@@ -21,6 +21,34 @@ import { segmentAtlasWaterBodies } from './atlas-semantic-water.js';
 import { analyzeAtlasSurfacePartition } from './atlas-surface-topology.js';
 
 const garbageCollector = (globalThis as { readonly gc?: () => void }).gc;
+let classifiedRecordsPromise: Promise<AtlasSemanticGeographyRecords> | undefined;
+const semanticInputChanges = [
+  ['controls identity', (records) => ({ ...records, controls: { ...records.controls } })],
+  [
+    'macro-elevation identity',
+    (records) => ({ ...records, macroElevation: { ...records.macroElevation } }),
+  ],
+  [
+    'land/water-classification identity',
+    (records) => ({
+      ...records,
+      landWaterClassification: { ...records.landWaterClassification },
+    }),
+  ],
+  ['landmass-array identity', (records) => ({ ...records, landmasses: [...records.landmasses] })],
+  ['landmass identity', changeFirstLandmassIdentity],
+  [
+    'island-group-array identity',
+    (records) => ({ ...records, islandGroups: [...records.islandGroups] }),
+  ],
+  [
+    'water-body-array identity',
+    (records) => ({ ...records, waterBodies: [...records.waterBodies] }),
+  ],
+] as const satisfies readonly (readonly [
+  string,
+  (records: AtlasSemanticGeographyRecords) => AtlasSemanticGeographyRecords,
+])[];
 
 describe('atlas semantic validation proof', () => {
   it('reuses policy validation for an exact immutable semantic graph', async () => {
@@ -34,43 +62,27 @@ describe('atlas semantic validation proof', () => {
     expect(reusedWithPoisonedAnalysis).toStrictEqual({ ok: true });
   }, 30_000);
 
-  it('never grants a cached success after a semantic input identity changes', async () => {
-    const records = await classifiedRecords();
-    expect(validateAtlasSemanticGeographyRecords(records)).toStrictEqual({ ok: true });
-    const firstLandmass = records.landmasses[0];
-    expect(firstLandmass).toBeDefined();
-    if (firstLandmass === undefined) return;
-
-    const changedInputs: readonly AtlasSemanticGeographyRecords[] = [
-      { ...records, controls: { ...records.controls } },
-      { ...records, macroElevation: { ...records.macroElevation } },
-      { ...records, landWaterClassification: { ...records.landWaterClassification } },
-      { ...records, landmasses: [...records.landmasses] },
-      { ...records, landmasses: [{ ...firstLandmass }, ...records.landmasses.slice(1)] },
-      { ...records, islandGroups: [...records.islandGroups] },
-      { ...records, waterBodies: [...records.waterBodies] },
-    ];
-    for (const changedRecords of changedInputs) {
+  it.each(semanticInputChanges)(
+    'never grants a cached success after the %s changes',
+    async (_name, changeIdentity) => {
+      const records = await classifiedRecords();
+      expect(validateAtlasSemanticGeographyRecords(records)).toStrictEqual({ ok: true });
       expect(() =>
-        validateAtlasSemanticGeographyRecordsWithAnalysis(changedRecords, poisonedAnalysis()),
+        validateAtlasSemanticGeographyRecordsWithAnalysis(
+          changeIdentity(records),
+          poisonedAnalysis(),
+        ),
       ).toThrow('Exact semantic validation should not read a redundant policy analysis.');
-    }
-  }, 30_000);
+    },
+    30_000,
+  );
 
   it('never reuses validation for a fully frozen graph with accessor-backed fields', async () => {
-    const generated = await generateFixedAtlasFull();
-    const classified = classifyAtlasSemanticGeography({
-      worldMapId: FIXED_ATLAS_WORLD_MAP_ID,
-      worldSurfaceEntityId: FIXED_ATLAS_WORLD_SURFACE_ENTITY_ID,
-      landWaterClassificationAspectId: FIXED_ATLAS_LAND_WATER_ASPECT_ID,
-      records: generated.patch.records,
-    });
-    expect(classified.ok).toBe(true);
-    if (!classified.ok) return;
+    const classified = await classifiedRecords();
 
-    let landWaterClassificationAspectId = classified.records.landWaterClassificationAspectId;
+    let landWaterClassificationAspectId = classified.landWaterClassificationAspectId;
     const records = Object.freeze({
-      ...classified.records,
+      ...classified,
       get landWaterClassificationAspectId() {
         return landWaterClassificationAspectId;
       },
@@ -83,23 +95,15 @@ describe('atlas semantic validation proof', () => {
   }, 30_000);
 
   it('never reuses validation for a semantic graph with mutable nested records', async () => {
-    const generated = await generateFixedAtlasFull();
-    const classified = classifyAtlasSemanticGeography({
-      worldMapId: FIXED_ATLAS_WORLD_MAP_ID,
-      worldSurfaceEntityId: FIXED_ATLAS_WORLD_SURFACE_ENTITY_ID,
-      landWaterClassificationAspectId: FIXED_ATLAS_LAND_WATER_ASPECT_ID,
-      records: generated.patch.records,
-    });
-    expect(classified.ok).toBe(true);
-    if (!classified.ok) return;
+    const classified = await classifiedRecords();
 
-    const firstLandmass = classified.records.landmasses[0];
+    const firstLandmass = classified.landmasses[0];
     expect(firstLandmass).toBeDefined();
     if (firstLandmass === undefined) return;
     const mutableLandmass = { ...firstLandmass };
     const records = Object.freeze({
-      ...classified.records,
-      landmasses: Object.freeze([mutableLandmass, ...classified.records.landmasses.slice(1)]),
+      ...classified,
+      landmasses: Object.freeze([mutableLandmass, ...classified.landmasses.slice(1)]),
     });
     expect(validateProvenAtlasSemanticGeographyRecords(records)).toStrictEqual({ ok: true });
 
@@ -110,20 +114,12 @@ describe('atlas semantic validation proof', () => {
   }, 30_000);
 
   it('reuses validation for the same exact snapshot-owned semantic graph', async () => {
-    const generated = await generateFixedAtlasFull();
-    const classified = classifyAtlasSemanticGeography({
-      worldMapId: FIXED_ATLAS_WORLD_MAP_ID,
-      worldSurfaceEntityId: FIXED_ATLAS_WORLD_SURFACE_ENTITY_ID,
-      landWaterClassificationAspectId: FIXED_ATLAS_LAND_WATER_ASPECT_ID,
-      records: generated.patch.records,
-    });
-    expect(classified.ok).toBe(true);
-    if (!classified.ok) return;
+    const classified = await classifiedRecords();
 
-    expect(validateProvenAtlasSemanticGeographyRecords(classified.records)).toStrictEqual({
+    expect(validateProvenAtlasSemanticGeographyRecords(classified)).toStrictEqual({
       ok: true,
     });
-    expect(validateProvenAtlasSemanticGeographyRecords(classified.records)).toStrictEqual({
+    expect(validateProvenAtlasSemanticGeographyRecords(classified)).toStrictEqual({
       ok: true,
     });
   }, 30_000);
@@ -214,6 +210,11 @@ describe('atlas semantic validation proof', () => {
 });
 
 async function classifiedRecords(): Promise<AtlasSemanticGeographyRecords> {
+  classifiedRecordsPromise ??= generateClassifiedRecords();
+  return classifiedRecordsPromise;
+}
+
+async function generateClassifiedRecords(): Promise<AtlasSemanticGeographyRecords> {
   const generated = await generateFixedAtlasFull();
   const classified = classifyAtlasSemanticGeography({
     worldMapId: FIXED_ATLAS_WORLD_MAP_ID,
@@ -224,6 +225,17 @@ async function classifiedRecords(): Promise<AtlasSemanticGeographyRecords> {
   expect(classified.ok).toBe(true);
   if (!classified.ok) throw new Error('Expected fixed atlas semantic classification.');
   return classified.records;
+}
+
+function changeFirstLandmassIdentity(
+  records: AtlasSemanticGeographyRecords,
+): AtlasSemanticGeographyRecords {
+  const firstLandmass = records.landmasses[0];
+  if (firstLandmass === undefined) throw new Error('Expected at least one fixed-atlas landmass.');
+  return {
+    ...records,
+    landmasses: [{ ...firstLandmass }, ...records.landmasses.slice(1)],
+  };
 }
 
 function mutableReader<Value>(values: Value[]): AtlasSampleReader<Value> {
