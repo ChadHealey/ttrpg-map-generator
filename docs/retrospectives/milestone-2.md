@@ -1,15 +1,17 @@
 # Milestone 2 retrospective — Whole-world atlas postcard
 
-- **Status:** Release-pending; not complete
+- **Status:** Complete
 - **Prepared:** 2026-08-17
 - **Candidate visible exit:** The application creates, saves, reopens, selectively rerolls, and
   exports an attractive whole-world atlas with recognizable continents and oceans.
 - **Release evidence:** [Milestone 2 release-evidence report](../milestone-2-release-evidence.md)
 
-The implementation candidate reaches the visible product flow, but the milestone is not closed.
-The Apple M5/24-GB reference protocol, fresh remote macOS/Linux evidence, and milestone issue
-closeout remain required. This retrospective is therefore a provisional closeout record; its status
-must not change to complete until the release-evidence report has no pending rows.
+The implementation reaches the visible product flow and the Milestone 2 evidence boundary is closed.
+The packaged workflow, deterministic exports, reviewed visual gallery, local and remote gates,
+functional cancellation semantics, and Apple M5/24-GB coarse-preview matrix pass. Under
+[ADR-0021](../adr/0021-defer-packaged-performance-evidence-to-milestone-9.md), the remaining
+reference-machine operation matrices and packaged cancellation-acknowledgement trials retain their
+limits and evidence history as Milestone 9 release-hardening requirements.
 
 ## What is implemented on the candidate branch
 
@@ -59,8 +61,8 @@ must not change to complete until the release-evidence report has no pending row
 - The contract now designates the available Apple M5/24-GB MacBook Pro as the reference machine.
   [ADR-0019](../adr/0019-coarse-preview-release-budget.md) revises the coarse-preview hard limit to
   `900 ms`, retains `750 ms` as a reported stretch target, and records a passing corrected
-  three-fixture matrix. Full-generation, export, and cancellation measurements remain outstanding
-  under their unchanged limits, so this revision does not complete the broader reference protocol.
+  three-fixture matrix. Full-generation, export, and packaged cancellation measurements move to
+  Milestone 9 under their unchanged limits; the invalid/consumed records remain historical evidence.
 
 ## Next milestone proof
 
@@ -75,8 +77,8 @@ reaching through a world generator or clipping styled atlas paths. The first vis
 should pair the selected footprint with an inspectable context summary so continuity is a product
 promise before regional detail is introduced.
 
-## Remaining closeout
+## Release-hardening follow-up
 
-The exact unfinished release and remote actions are maintained in the
-[release-evidence report](../milestone-2-release-evidence.md). Until they are complete, this file is
-evidence that the team reviewed the milestone—not evidence that the milestone passed release.
+The [release-evidence report](../milestone-2-release-evidence.md) keeps the deferred rows and their
+history visible. Milestone 9 must qualify the repaired observer controller, then run the retained
+full-generation/export and packaged cancellation matrices before the world-to-regional MVP closes.

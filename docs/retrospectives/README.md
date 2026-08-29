@@ -15,4 +15,4 @@ Current retrospectives:
 
 - [Milestone 0 — App and rendering proof](milestone-0.md)
 - [Milestone 1 — Deterministic kernel](milestone-1.md)
-- [Milestone 2 — Whole-world atlas postcard (release-pending)](milestone-2.md)
+- [Milestone 2 — Whole-world atlas postcard](milestone-2.md)

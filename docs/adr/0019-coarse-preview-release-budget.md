@@ -5,6 +5,7 @@
 - **Decision owners:** Project maintainers
 - **Supersedes:** The `750 ms` coarse-preview wall-clock limit in the Milestone 2 proof contract
 - **Superseded by:** None
+- **Amended by:** [ADR-0021](0021-defer-packaged-performance-evidence-to-milestone-9.md)
 
 ## Context
 
@@ -107,8 +108,8 @@ requirements, and all non-preview budgets remain unchanged.
 
 - Historical observations remain evaluated against the contract in force when they were recorded;
   they are not retroactively converted into passing issue #84 evidence.
-- The broader Milestone 2 reference protocol remains incomplete until the full-generation, export,
-  and cancellation lanes are run under their unchanged limits.
+- The Milestone 2 coarse-preview evidence is complete. The full-generation, export, and packaged
+  cancellation lanes retain their unchanged limits as Milestone 9 release-hardening requirements.
 
 ## Compatibility and migration
 

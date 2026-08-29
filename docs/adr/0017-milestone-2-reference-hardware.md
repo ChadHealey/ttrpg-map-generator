@@ -5,10 +5,11 @@
 - **Decision owners:** Project maintainers
 - **Supersedes:** The base Apple M1/8-GB reference-hardware requirement in the Milestone 2 proof contract
 - **Superseded by:** None
+- **Amended by:** [ADR-0021](0021-defer-packaged-performance-evidence-to-milestone-9.md)
 
 ## Context
 
-Milestone 2 requires a repeatable five-fresh-process protocol for wall-clock time, aggregate
+The original Milestone 2 contract required a repeatable five-fresh-process protocol for wall-clock time, aggregate
 process-tree memory, and cancellation acknowledgement. The original contract designated a base
 Apple M1 Mac with 8 GB unified memory, but the project has no access to that hardware. The available
 development machine is a MacBook Pro `Mac17,2` with an Apple M5 processor, 10 cores, 24 GB unified
@@ -45,7 +46,8 @@ the Milestone 2 contract.
 
 ## Decision
 
-Designate the Apple M5/24-GB MacBook Pro `Mac17,2` as the Milestone 2 reference environment. The
+Designate the Apple M5/24-GB MacBook Pro `Mac17,2` as the reference environment for the retained
+whole-world atlas performance and cancellation workloads. The
 existing workload limits remain unchanged. The formal reference result must consist of one untimed
 warm-up followed by five fresh processes, with application process-tree RSS sampled at intervals no
 greater than 20 ms and median/worst results reported. The exact packaged release configuration,
@@ -63,12 +65,13 @@ power, Low Power Mode, debugger, developer-tool, and network conditions remain p
 
 - The Apple M5/24-GB machine is not performance-equivalent to the former M1/8-GB target, so historical
   comparisons must not mix the two environments.
-- The current full-generation observation exceeds the contract limit, leaving the release gate open.
+- The current full-generation observation exceeds the contract limit, leaving the Milestone 9
+  release-hardening gate open.
 
 ### Neutral or follow-up
 
-- Rerun the complete protocol and record every run, median, worst case, aggregate RSS, and cancellation
-  acknowledgement result in the Milestone 2 release-evidence report.
+- Rerun the complete protocol in Milestone 9 and record every run, median, worst case, aggregate RSS,
+  and cancellation acknowledgement result in the release-hardening evidence.
 - Revisit the numeric budgets only through a separate measured decision; this ADR does not change them.
 
 ## Compatibility and migration
@@ -78,11 +81,12 @@ power, Low Power Mode, debugger, developer-tool, and network conditions remain p
 - **Generator, seed, parameter, context, or style versions:** None.
 - **Canonical semantic/SVG/visual fixtures:** None; fixture bytes remain unchanged.
 - **macOS and Linux determinism:** Unchanged; Linux CI remains required.
-- **Parent and child maps:** None; the decision is limited to Milestone 2 release measurement.
+- **Parent and child maps:** None; the decision is limited to release measurement.
 
 ## Validation
 
-Run the exact Milestone 2 reference protocol on the designated Apple M5/24-GB host for the three
+Run the retained whole-world reference protocol during Milestone 9 on the designated Apple
+M5/24-GB host for the three
 gated atlas fixtures, including five fresh processes, RSS sampling, five cancellation trials at each
 required safe-point class, and the existing timing, memory, and output ceilings. Record failures
 instead of substituting narrower local commands.

@@ -12,11 +12,14 @@ entity/aspect, one feature with its declared dependents, or a selected region. T
 boundaries below must not prevent operations such as rerolling one future `forest.boundary` or
 rerolling its `forest.motifShapes` while preserving that boundary and every other forest.
 
-> **Release status (2026-08-17):** The implementation candidate is release-pending. The
-> [Milestone 2 release-evidence report](milestone-2-release-evidence.md) records local, packaged,
-> visual, reference-hardware, CI, and issue-closeout status. That report does not alter this
-> contract: the designated Apple M5/24-GB reference protocol and every other acceptance requirement
-> below remain in force until their evidence is complete.
+> **Release status (2026-08-29):** The Milestone 2 product proof is complete. The
+> [Milestone 2 release-evidence report](milestone-2-release-evidence.md) records the passing visible
+> workflow, deterministic exports, reviewed gallery, local/remote gates, functional cancellation,
+> and Apple M5/24-GB coarse-preview matrix. Under
+> [ADR-0021](adr/0021-defer-packaged-performance-evidence-to-milestone-9.md), the remaining packaged
+> full-generation/export reference matrices and cancellation-acknowledgement latency trials retain
+> their workloads and limits but are Milestone 9 release-hardening requirements, not Milestone 2
+> closure gates.
 
 ## Fixed proof composition
 
@@ -501,7 +504,13 @@ discontinuity. A favorable screenshot cannot substitute for the registered galle
 
 ## Performance, progress, cancellation, and resource budgets
 
-Wall-clock release budgets are measured on the designated Apple M5 MacBook Pro with 24 GB unified
+Milestone 2 requires the passing coarse-preview budget, deterministic resource gates, observable
+progress, cooperative cancellation, unchanged accepted state after cancellation, and no
+post-acknowledgement commit or destination replacement. The remaining packaged full-generation,
+SVG, PNG, and cancellation-acknowledgement measurements in this section are retained unchanged as
+Milestone 9 release-hardening requirements under [ADR-0021](adr/0021-defer-packaged-performance-evidence-to-milestone-9.md).
+
+Reference wall-clock budgets are measured on the designated Apple M5 MacBook Pro with 24 GB unified
 memory, an idle release build, packaged local assets, power connected, Low Power Mode off, and no debugger,
 developer tools, or network dependency. The report records application and operating-system
 versions. After one untimed warm-up, five fresh-process runs are measured; all five must meet the
@@ -511,6 +520,11 @@ greater than `20 ms`; the maximum sampled delta from the settled pre-operation b
 for every run. CI enforces deterministic output, dimensions, file-size ceilings, bounded
 tile/surface allocation, progress/cancellation semantics, and deterministic aftermath; it does not
 enforce shared-runner wall-clock or cancellation-acknowledgement latency.
+
+The observer-authority, qualification, stop, and consumed-attempt records below are preserved as
+historical evidence and as inputs to the Milestone 9 protocol. They no longer form a ratchet that
+blocks Milestone 2 after its visible and coarse-preview exits pass. No invalid record is converted
+to a pass, and no unconsumed row is treated as evidence.
 
 ### Approved packaged-preview measurement authorities
 
@@ -1233,8 +1247,8 @@ The measured rationale and unchanged boundaries are recorded in
 band/surface allocation, progress/cancellation state semantics, native replacement behavior, and
 deterministic aftermath. It is not the release benchmark. The designated Apple M5/24-GB
 coarse-preview time and aggregate-memory matrix is recorded as passing in the release evidence. The
-remaining operation measurements and 500-ms cancellation-acknowledgement proof remain outstanding
-to issue #68 until rerun under the protocol below.
+remaining operation measurements and packaged cancellation-acknowledgement proofs are deferred to
+Milestone 9 until rerun under the protocol below.
 
 Wall-clock and memory gates run for `milestone-2-atlas-proof`,
 `milestone-2-atlas-fragmented-islands`, and `milestone-2-atlas-control-max`; all six rows must meet
@@ -1253,23 +1267,24 @@ file size is exact destination length.
 An operation lasting over `250 ms` emits its first progress event within `250 ms`, has no interval
 greater than `250 ms` between successive progress events or between its last progress event and
 terminal event, never moves backward, and never reports completion before validation and the
-operation-specific output boundary. Preview cancellation is acknowledged within `100 ms`; full
-generation and either export acknowledge it within `500 ms`. Acknowledgement means costly work has
-stopped scheduling, the operation is terminally cancelled, no partial proposal or external export
-is presented as complete, and the previous accepted document remains unchanged. Latency limits
-use the same five-run maximum rule on the reference Mac.
+operation-specific output boundary. Functional cancellation must stop costly-work scheduling,
+terminally cancel the operation, present no partial proposal or external export as complete, and
+leave the previous accepted document unchanged. Milestone 2 proves those semantics in deterministic
+tests. Milestone 9 measures packaged preview acknowledgement within `100 ms` and packaged full
+generation and either export within `500 ms`, using the same five-run maximum rule on the reference
+Mac.
 
-Cancellation is exercised at early, middle, and late declared safe points five times each. No
-accepted commit or destination replacement may occur after acknowledgement, and cancellation or
-progress scheduling may not change a later completed operation's canonical output. Temporary
-exports remain recognizable and safely cleanable. Native package commit is not cancellable after
-its durable commit sequence begins. This contract requires observable progress/cancellation
-semantics but does not select a worker or other transport; issues #58 and #64 choose the smallest
-implementation that meets the budget and existing boundary rules.
+In Milestone 9, cancellation is exercised at early, middle, and late declared safe points five times
+each. In every milestone, no accepted commit or destination replacement may occur after
+acknowledgement, cancellation or progress scheduling may not change a later completed operation's
+canonical output, and temporary exports remain recognizable and safely cleanable. Native package
+commit is not cancellable after its durable commit sequence begins. This contract requires
+observable progress/cancellation semantics but does not select a worker or other transport; issues
+#58 and #64 chose the smallest implementation that meets the functional boundary rules.
 
 A budget adjustment is a deliberate product-contract change. It records the representative
 measurements, bottleneck, attempted bounded remedies, user-visible consequence, and updated limit
-in this document before the final proof can claim success. The coarse-preview limit was revised
+in this document before the owning milestone can claim success. The coarse-preview limit was revised
 from `750 ms` to `900 ms` by [ADR-0019](adr/0019-coarse-preview-release-budget.md) after the complete
 post-repair fixture matrix; `750 ms` remains a reported stretch target. A faster development machine
 or an unreported lower-resolution workload does not silently redefine a budget.

@@ -822,8 +822,12 @@ leaves every unrelated aspect byte-for-byte unchanged after save/reopen.
 
 **Visible exit:** the application creates, saves, reopens, rerolls, and exports an attractive
 whole-world atlas with recognizable continents and oceans. The exact composition, controls,
-isolation, budgets, evidence, and workflow are fixed by the
-[Milestone 2 atlas-proof contract](milestone-2-atlas-proof.md).
+isolation, deterministic evidence, reviewed appearance, coarse-preview budget, and visible workflow
+are fixed by the [Milestone 2 atlas-proof contract](milestone-2-atlas-proof.md). The remaining
+packaged full-generation/export reference-machine matrices and packaged cancellation-
+acknowledgement latency trials are release-hardening evidence owned by Milestone 9 under
+[ADR-0021](adr/0021-defer-packaged-performance-evidence-to-milestone-9.md); they do not block this
+product proof.
 
 ### Milestone 3 — Coherent world and regional handoff
 
@@ -902,7 +906,12 @@ across map scales, undo the changes, and regenerate unrelated art without losing
 ### Milestone 9 — World-to-regional MVP hardening
 
 - Complete save migration and recovery fixtures.
-- Test large SVG/PNG exports and memory limits.
+- Repair and qualify the process-bound observer controller before it is used for release evidence.
+- Run the designated-reference-machine five-fresh-process matrices for whole-world full generation,
+  SVG export, and PNG export under the retained Milestone 2 workloads and numeric limits.
+- Run packaged early, middle, and late cancellation-acknowledgement trials for preview, full
+  generation, SVG export, and PNG export under the retained `100 ms`/`500 ms` limits.
+- Test large SVG/PNG exports and memory limits, including the retained whole-world atlas ceilings.
 - Add accessibility and keyboard-pass review for the main workflow.
 - Add golden semantic, SVG, and visual fixtures.
 - Package and test the macOS application.
@@ -1037,6 +1046,14 @@ The MVP is complete when:
 - Preview work is cancellable and remains interactive through coarse level of detail.
 - SVG and PNG exports agree with the same render scene at the declared scale.
 - Very large PNG output is bounded or tiled rather than exhausting memory unexpectedly.
+- On the designated reference Mac, the retained whole-world full-generation, SVG-export, and
+  PNG-export workloads pass one untimed warm-up plus five fresh-process timing and aggregate-
+  process-tree-memory runs; every run meets its retained limit and median/worst results are
+  recorded.
+- Packaged preview cancellation is acknowledged within `100 ms`, and packaged full-generation,
+  SVG-export, and PNG-export cancellation is acknowledged within `500 ms`, in five early, middle,
+  and late trials per declared safe-point class without a post-acknowledgement commit or destination
+  replacement.
 - Core tests and deterministic fixtures run successfully on macOS and the Linux development
   server.
 - The application is packaged and usable as a macOS desktop application.

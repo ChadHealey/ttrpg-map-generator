@@ -7,20 +7,19 @@ style.
 
 ## Status
 
-Milestones 0 and 1 are complete. The current Milestone 2 candidate implements the first geographic
+Milestones 0, 1, and 2 are complete. Milestone 2 implements the first geographic
 whole-world atlas workflow: a registered seed and validated atlas controls produce a disposable
 coarse preview and a separately generated accepted atlas; geography and appearance can be rerolled
 with different isolation boundaries; accepted state can be saved, unloaded, reopened without
 generation, and exported as deterministic SVG and 8192 by 4096 PNG.
 
-Milestone 2 is **release-pending**, not complete. The formal five-process timing, aggregate-memory,
-and cancellation-latency protocol must be rerun on the designated Apple M5/24-GB reference Mac;
-the current evidence is not yet a passing reference run. Local implementation, fixture,
-packaged-workflow, export, and visual evidence is recorded, but the exact branch tip still needs a
-fresh macOS/Linux CI matrix and every included GitHub issue must be closed or explicitly moved out.
-The [Milestone 2 release-evidence
-report](docs/milestone-2-release-evidence.md) is the auditable status record and lists the exact
-remaining closeout actions.
+The packaged workflow, deterministic exports, reviewed visual gallery, local and remote gates,
+functional cancellation semantics, and Apple M5/24-GB coarse-preview matrix pass. The remaining
+packaged full-generation/export reference matrices and cancellation-acknowledgement latency trials
+retain their workloads and limits as Milestone 9 release-hardening requirements under
+[ADR-0021](docs/adr/0021-defer-packaged-performance-evidence-to-milestone-9.md). The
+[Milestone 2 release-evidence report](docs/milestone-2-release-evidence.md) preserves the complete
+evidence and deferral record. Milestone 3 is the current product target.
 
 ## Planned Stack
 
@@ -38,7 +37,7 @@ not currently grant an open-source license.
 
 - [Consolidated project plan](docs/PROJECT_PLAN.md)
 - [Milestone 2 whole-world atlas-proof contract](docs/milestone-2-atlas-proof.md)
-- [Milestone 2 release evidence and remaining actions](docs/milestone-2-release-evidence.md)
+- [Milestone 2 release evidence](docs/milestone-2-release-evidence.md)
 - [Engineering rules and document ownership](docs/README.md)
 - [Architecture](docs/01-architecture.md)
 - [Naming and vocabulary](docs/02-naming-and-vocabulary.md)

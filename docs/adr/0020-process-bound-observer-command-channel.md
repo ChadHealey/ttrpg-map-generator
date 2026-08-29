@@ -5,6 +5,7 @@
 - **Decision owners:** Project maintainer
 - **Supersedes:** None
 - **Superseded by:** None
+- **Amended by:** [ADR-0021](0021-defer-packaged-performance-evidence-to-milestone-9.md)
 
 ## Context
 
@@ -225,7 +226,12 @@ does not treat a compromised user session as a secure execution environment.
 
 - Existing keyboard observers remain unchanged until ordered implementation children replace their
   qualification use; they are not removed by this decision.
-- #104 remains **UNCONSUMED**. This ADR authorizes neither a package build nor a target operation.
+- #104 remains **UNCONSUMED**. Under ADR-0021, it and any successor packaged measurement belong to
+  Milestone 9 and do not block Milestone 2. This ADR authorizes neither a package build nor a target
+  operation.
+- The process-bound channel is retained for release hardening, but the controller must prove typed
+  component cleanup, kernel-truth termination, operation-error precedence, and the frozen-handle
+  regression before another live qualification is authorized.
 
 ## Compatibility and migration
 
@@ -241,7 +247,8 @@ bounded framing, capability/session authentication, the allowlist, exact sequenc
 command, acknowledgement, replay rejection, and malformed/oversized/truncated fail-closed paths.
 Production children must add build-absence scans, macOS peer-credential/path-race tests, Rust/Svelte
 lifecycle tests, Swift-client interoperability, and a separate exact-candidate zero-operation
-qualification before #104 can resume.
+qualification before #104 can resume during Milestone 9. The controller-repair regressions required
+by ADR-0021 precede that qualification.
 
 ## Revisit conditions
 

@@ -1,11 +1,11 @@
 # Milestone 2 release evidence
 
-- **Status:** Release-pending; this document does not mark Milestone 2 complete
+- **Status:** Complete under ADR-0021's Milestone 2 evidence boundary
 - **Prepared:** 2026-08-22
-- **Updated:** 2026-08-23
+- **Updated:** 2026-08-29
 - **Issue:** [#68 — Prove the Milestone 2 whole-world atlas workflow end to end](https://github.com/ChadHealey/ttrpg-map-generator/issues/68)
 - **Normative contract:** [Milestone 2 whole-world atlas proof](milestone-2-atlas-proof.md)
-- **Retrospective:** [Milestone 2 release-pending retrospective](retrospectives/milestone-2.md)
+- **Retrospective:** [Milestone 2 retrospective](retrospectives/milestone-2.md)
 - **RSS attribution:** [Apple M5 / JavaScriptCore RSS investigation](milestone-2-javascriptcore-rss-investigation.md)
 
 This report keeps functional, semantic, package, render, visual, resource, and release-hardware
@@ -14,13 +14,15 @@ tree is named. `FAIL` records valid evidence that misses a contract requirement.
 downstream work prohibited by a stop condition. `PENDING` means the final command or review has not
 yet been recorded. `OUTSTANDING` means the required reference protocol has not yet passed.
 `EXTERNAL` means completion requires a remote action that was deliberately prohibited while
-preparing issue #68.
+preparing issue #68. `DEFERRED — M9` preserves an unrun or consumed release-hardening row under
+[ADR-0021](adr/0021-defer-packaged-performance-evidence-to-milestone-9.md); it is not a pass and does
+not block Milestone 2.
 
-Milestone 2 cannot be called complete while any contract row is `FAIL`, `NOT RUN`, `PENDING`,
-`OUTSTANDING`, or `EXTERNAL`. The current Apple M5/24-GB development machine is the designated
+Milestone 2 cannot be called complete while an M2-owned row is `FAIL`, `NOT RUN`, `PENDING`,
+`OUTSTANDING`, or `EXTERNAL`. The current Apple M5/24-GB development machine remains the designated
 reference environment. The issue #89 coarse-preview matrix passes the revised wall-clock and
-unchanged memory limits, but the other operation and cancellation lanes have not been rerun and the
-overall reference protocol remains outstanding.
+unchanged memory limits. ADR-0021 moves the other operation and packaged cancellation lanes, with
+their existing limits and history intact, to Milestone 9 release hardening.
 
 ## Candidate and environment
 
@@ -45,26 +47,26 @@ that evidence separately because a commit cannot contain its own hash.
 
 ## Acceptance matrix
 
-| Contract lane                | Required evidence                                                                                                                              | Status          | Evidence record                                                                          |
-| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------- | ---------------------------------------------------------------------------------------- |
-| Registered desktop inputs    | Seed `81985529216486895` and all nine validated default controls are visible in the packaged app                                               | **PASS**        | Packaged workflow steps 1–2 below                                                        |
-| Preview boundary             | Cancel and restart one labelled coarse preview; preview remains disposable and cannot become accepted bytes                                    | **PASS**        | Packaged workflow step 3 plus focused orchestration tests                                |
-| Full acceptance              | Full profile is generated separately, validated, and committed atomically; stable semantic identities are inspectable                          | **PASS**        | Packaged workflow step 4 and canonical fixture lane                                      |
-| Geography reroll             | Macro revision and declared dependents change while paper, user intent, seed, versions, locks, and unrelated revisions stay canonical          | **PASS**        | `baseline` → `geography-rerolled` canonical comparison                                   |
-| Appearance reroll            | Three appearance aspects/revisions and render composite change while all semantic geography and canonical coastline bytes stay fixed           | **PASS**        | `geography-rerolled` → `appearance-rerolled` canonical comparison                        |
-| Native save and unload       | Immutable accepted snapshot is committed atomically and accepted document plus scene are truly unloaded                                        | **PASS**        | Packaged workflow steps 7–8 and native recovery gate                                     |
-| Generator-free reopen        | Native package validates; accepted aspect/output bytes, package fingerprint, scene semantics, SVG, and PNG agree; generator call count is zero | **PASS**        | Packaged workflow step 9, tripwire test, and saved-project fixture                       |
-| Milestone 1 compatibility    | Released Milestone 1 projects and migrations reopen without drift or generator invocation                                                      | **PASS**        | Cross-platform, native-recovery, and end-to-end gates                                    |
-| Reopened SVG export          | `atlas-svg-v1`, 400 × 200 mm, deterministic bytes, native atomic receipt, accepted document unchanged                                          | **PASS**        | Packaged workflow step 10 and artifact record                                            |
-| Reopened PNG export          | `atlas-png-v1`, 8192 × 4096, deterministic repeat bytes, native atomic receipt, accepted document unchanged                                    | **PASS**        | Packaged workflow step 10, PNG gate, and artifact record                                 |
-| Evidence separation          | Canonical aspects, accepted outputs, package checksums, geometry, scene/SVG structure, PNG pixels, and performance remain distinct lanes       | **PASS**        | Fixture manifest/review records and sections below                                       |
-| Geometry                     | Closed/wound/non-self-intersecting rings; exact partition; identity/order; containment/connectivity; seam/pole and post-quantization validity  | **PASS**        | Root check, cross-platform fixtures, and geometry review                                 |
-| Visual gallery               | Six registered 1600 × 800 gallery rows plus full-size seam, pole, channel, island, echo, fine-ink, and raster-boundary crops inspected         | **PASS**        | Visual review table below                                                                |
-| Deterministic resource gates | PNG dimensions, file ceiling, bounded band/surface allocation, progress/cancellation semantics, and deterministic aftermath pass               | **PASS**        | `pnpm test:png-export`; this is not the release benchmark                                |
-| Packaged macOS app           | Unsigned `.app` builds and the complete visible workflow is exercised through that bundle                                                      | **PASS**        | Package and workflow records below                                                       |
-| Apple M5/24-GB budgets       | Prescribed warm-up/five-process timing, process-tree RSS, and cancellation acknowledgement protocol passes                                     | **OUTSTANDING** | Preview passes revised budget; remaining operation and cancellation lanes were not rerun |
-| macOS/Linux release matrix   | Exact final commit passes required CI on both platforms with filesystem evidence                                                               | **PASS**        | [Issue #71 matrix](#remote-ci-and-milestone-state)                                       |
-| Milestone issue state        | Every included issue is closed or explicitly moved out                                                                                         | **EXTERNAL**    | Eight milestone issues remain open; remote mutation was prohibited                       |
+| Contract lane                | Required evidence                                                                                                                              | Status            | Evidence record                                                              |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | ---------------------------------------------------------------------------- |
+| Registered desktop inputs    | Seed `81985529216486895` and all nine validated default controls are visible in the packaged app                                               | **PASS**          | Packaged workflow steps 1–2 below                                            |
+| Preview boundary             | Cancel and restart one labelled coarse preview; preview remains disposable and cannot become accepted bytes                                    | **PASS**          | Packaged workflow step 3 plus focused orchestration tests                    |
+| Full acceptance              | Full profile is generated separately, validated, and committed atomically; stable semantic identities are inspectable                          | **PASS**          | Packaged workflow step 4 and canonical fixture lane                          |
+| Geography reroll             | Macro revision and declared dependents change while paper, user intent, seed, versions, locks, and unrelated revisions stay canonical          | **PASS**          | `baseline` → `geography-rerolled` canonical comparison                       |
+| Appearance reroll            | Three appearance aspects/revisions and render composite change while all semantic geography and canonical coastline bytes stay fixed           | **PASS**          | `geography-rerolled` → `appearance-rerolled` canonical comparison            |
+| Native save and unload       | Immutable accepted snapshot is committed atomically and accepted document plus scene are truly unloaded                                        | **PASS**          | Packaged workflow steps 7–8 and native recovery gate                         |
+| Generator-free reopen        | Native package validates; accepted aspect/output bytes, package fingerprint, scene semantics, SVG, and PNG agree; generator call count is zero | **PASS**          | Packaged workflow step 9, tripwire test, and saved-project fixture           |
+| Milestone 1 compatibility    | Released Milestone 1 projects and migrations reopen without drift or generator invocation                                                      | **PASS**          | Cross-platform, native-recovery, and end-to-end gates                        |
+| Reopened SVG export          | `atlas-svg-v1`, 400 × 200 mm, deterministic bytes, native atomic receipt, accepted document unchanged                                          | **PASS**          | Packaged workflow step 10 and artifact record                                |
+| Reopened PNG export          | `atlas-png-v1`, 8192 × 4096, deterministic repeat bytes, native atomic receipt, accepted document unchanged                                    | **PASS**          | Packaged workflow step 10, PNG gate, and artifact record                     |
+| Evidence separation          | Canonical aspects, accepted outputs, package checksums, geometry, scene/SVG structure, PNG pixels, and performance remain distinct lanes       | **PASS**          | Fixture manifest/review records and sections below                           |
+| Geometry                     | Closed/wound/non-self-intersecting rings; exact partition; identity/order; containment/connectivity; seam/pole and post-quantization validity  | **PASS**          | Root check, cross-platform fixtures, and geometry review                     |
+| Visual gallery               | Six registered 1600 × 800 gallery rows plus full-size seam, pole, channel, island, echo, fine-ink, and raster-boundary crops inspected         | **PASS**          | Visual review table below                                                    |
+| Deterministic resource gates | PNG dimensions, file ceiling, bounded band/surface allocation, progress/cancellation semantics, and deterministic aftermath pass               | **PASS**          | `pnpm test:png-export`; this is not the release benchmark                    |
+| Packaged macOS app           | Unsigned `.app` builds and the complete visible workflow is exercised through that bundle                                                      | **PASS**          | Package and workflow records below                                           |
+| Apple M5/24-GB budgets       | M2 coarse preview passes; retained full-generation/export and packaged cancellation matrices remain visible                                    | **DEFERRED — M9** | Preview passes revised budget; ADR-0021 moves remaining lanes to Milestone 9 |
+| macOS/Linux release matrix   | Exact final commit passes required CI on both platforms with filesystem evidence                                                               | **PASS**          | [Issue #71 matrix](#remote-ci-and-milestone-state)                           |
+| Milestone issue state        | Every included issue is closed or explicitly moved out                                                                                         | **PASS**          | Retained release work moved to Milestone 9; superseded records closed        |
 
 ## Exact local command record
 
@@ -135,7 +137,7 @@ package fingerprint does not establish that the renderer used the accepted scene
 | Render structure / SVG     | Stable scene sources/order and canonical `atlas-svg-v1` bytes                                                   | **PASS** — scene checkpoints and four SVG checkpoints                           |
 | PNG visual/raster          | Production `atlas-png-v1` bytes, independently reconstructed rows, and reviewed images/crops                    | **PASS** — gallery, large-output gate, and human review below                   |
 | Resource semantics         | Bounded raster allocation and progress/cancellation/deterministic-aftermath assertions                          | **PASS** — PNG gate; distinct from process-tree RSS benchmark                   |
-| Reference performance      | Packaged base-M1 timing, process-tree RSS, and acknowledgement latency                                          | **OUTSTANDING**                                                                 |
+| Reference performance      | Packaged Apple M5 timing, process-tree RSS, and acknowledgement latency                                         | **DEFERRED — M9** — retained under ADR-0021                                     |
 
 ## Visual and large-export review
 
@@ -196,8 +198,9 @@ independent, append-only review record under [fixture conventions](07-fixture-co
 
 Results from this Apple M5/24-GB host establish the designated reference environment for release
 measurements as well as deterministic output, file ceilings, allocation bounds, and
-progress/cancellation state semantics. The formal protocol remains required; record it without
-replacing a failed result with a narrower command.
+progress/cancellation state semantics. The coarse-preview protocol is complete. The remaining
+formal protocol is required in Milestone 9 under ADR-0021; record it without replacing a failed
+result with a narrower command.
 
 Issue #76 attributes the full-generation failure in the
 [Apple M5 / JavaScriptCore RSS investigation](milestone-2-javascriptcore-rss-investigation.md).
@@ -293,14 +296,14 @@ Power Mode off, no debugger/developer tools, and no network dependency. After on
 measure five fresh processes. Sample aggregate additional RSS for the complete application process
 tree at intervals no greater than 20 ms and report every run plus median and worst.
 
-| Operation                            | Fixed limit                                                                     | Required evidence status                                                                                  |
-| ------------------------------------ | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| Coarse preview                       | ≤900 ms and ≤256 MiB additional process-tree RSS; report ≤750 ms stretch target | **PASS** — all 15 final fresh runs passed; worst time 809.40 ms, worst RSS 157.72 MiB                     |
-| Full generation                      | ≤10 s and ≤768 MiB additional process-tree RSS                                  | **NOT RUN** — issue #95 stopped on observer-authority drift before measured dispatch                      |
-| SVG export                           | ≤3 s, ≤512 MiB, destination ≤32 MiB                                             | **NOT RUN** — completion path qualified by #101; #95 matrix remains unrun                                 |
-| PNG export                           | ≤15 s, ≤1 GiB, destination ≤64 MiB                                              | **NOT RUN** — completion path qualified by #101; #95 matrix remains unrun                                 |
-| Preview cancellation                 | Acknowledgement ≤100 ms                                                         | **OUTSTANDING** — #98/#102/#103 rows remain invalid/consumed; #122 is invalid and #104 remains unconsumed |
-| Full-generation/SVG/PNG cancellation | Acknowledgement ≤500 ms                                                         | **NOT RUN** — #103 stopped immediately after its consumed replacement preview invalidation                |
+| Operation                            | Fixed limit                                                                     | Required evidence status                                                                         |
+| ------------------------------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Coarse preview                       | ≤900 ms and ≤256 MiB additional process-tree RSS; report ≤750 ms stretch target | **PASS** — all 15 final fresh runs passed; worst time 809.40 ms, worst RSS 157.72 MiB            |
+| Full generation                      | ≤10 s and ≤768 MiB additional process-tree RSS                                  | **DEFERRED — M9** — issue #95 stopped before measured dispatch                                   |
+| SVG export                           | ≤3 s, ≤512 MiB, destination ≤32 MiB                                             | **DEFERRED — M9** — completion path qualified by #101; matrix remains unrun                      |
+| PNG export                           | ≤15 s, ≤1 GiB, destination ≤64 MiB                                              | **DEFERRED — M9** — completion path qualified by #101; matrix remains unrun                      |
+| Preview cancellation                 | Acknowledgement ≤100 ms                                                         | **DEFERRED — M9** — #98/#102/#103 and #122/#124/#126 remain invalid/consumed; #104 is unconsumed |
+| Full-generation/SVG/PNG cancellation | Acknowledgement ≤500 ms                                                         | **DEFERRED — M9** — observer path remains unimplemented and trials remain unrun                  |
 
 ### Issue #84 partial full-generation rerun (2026-08-23)
 
@@ -1201,24 +1204,21 @@ The workflow publishes no upload artifacts. Its durable remote evidence is the l
 logs; the existing fixture review records and local packaged artifact hashes remain the authoritative
 artifact evidence for their respective lanes.
 
-The live audit on 2026-08-17 found eight open issues assigned to Milestone 2: `#9`, `#10`, `#11`,
-`#12`, `#65`, `#66`, `#67`, and `#68`. The current milestone cannot satisfy the definition-of-done
-rule that every included issue be closed or explicitly moved out.
+The 2026-08-29 closure audit reconciled the live milestone issue set. Superseded observer/focus
+records were closed, retained release-protocol work was moved to Milestone 9 with ADR-0021 pointers,
+and the Milestone 2 product/evidence owners were closed only after their acceptance criteria passed.
+The definition-of-done rule that every included issue be closed or explicitly moved out is therefore
+satisfied.
 
-The final release owner must perform these actions in order:
+Milestone 9 retains these final-owner actions:
 
-1. Treat issue #101's six packaged SVG/PNG completion qualifications as path authority only;
-   implement and qualify issue #95's two cancellation children, then revalidate and rerun the
-   complete successor protocol without changing fixtures, workload, production behavior, hardware,
-   or limits.
-2. Confirm this report names the exact tested implementation commit and the handoff names the
-   documentation-only commit, with complete command results, packaged receipts, artifact hashes,
-   and human visual review. Do not attribute costly gates to the documentation commit unless they
-   are rerun there.
-3. Review each of `#9`, `#10`, `#11`, `#12`, `#65`, `#66`, `#67`, and `#68`; close an issue only when
-   its acceptance criteria are satisfied, or explicitly move unfinished work out of Milestone 2.
-4. Only after every row in this report is closed may the milestone status and retrospective be
-   changed from release-pending to complete.
+1. Use the no-launch repaired observer controller recorded under
+   `investigations/milestone-9-observer-controller/`; grant a new packaged qualification only under
+   separately reviewed Milestone 9 authority.
+2. Treat issue #101's six packaged SVG/PNG completion qualifications as path authority only and
+   preserve issue #104 as unconsumed until new authority is explicitly granted.
+3. Run the complete successor reference protocol without changing fixtures, workloads, production
+   behavior, hardware, or limits; record every run and every invalidation.
 
-Unsigned local packaging is sufficient for the issue #68 exercise. Signing, notarization, pushing,
-merging, creating a pull request, and modifying GitHub state are outside this local proof task.
+Unsigned local packaging remains sufficient for this proof. Signing, notarization, and distribution
+automation remain later release concerns.

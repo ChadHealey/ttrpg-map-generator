@@ -15,22 +15,24 @@ for historical context. They are not current requirements or decision records.
 
 ## Read before changing code
 
-| Document                                                    | Owns                                                                                                 |
-| ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| [Project plan](PROJECT_PLAN.md)                             | Product scope, architecture, roadmap, risks, and MVP acceptance criteria                             |
-| [Milestone 1 kernel proof](milestone-1-kernel-proof.md)     | Fixed synthetic proof composition, reroll boundary, canonical comparisons, and visible workflow      |
-| [Milestone 2 atlas proof](milestone-2-atlas-proof.md)       | Whole-world aspects, controls, rerolls, budgets, fixture matrix, comparisons, and visible workflow   |
-| [01 — Architecture](01-architecture.md)                     | Package boundaries, data layers, generation, identity, coordinates, persistence, and cross-map rules |
-| [02 — Naming and vocabulary](02-naming-and-vocabulary.md)   | Identifier conventions, units, events, files, and the canonical domain language                      |
-| [03 — Code style and tooling](03-code-style-and-tooling.md) | TypeScript, Svelte, Rust, formatting, linting, module size, comments, and enforcement                |
-| [04 — Testing](04-testing.md)                               | Test tiers, determinism, geometry, persistence, fixtures, snapshots, and visual review               |
-| [05 — Git workflow](05-git-workflow.md)                     | Branches, commits, generated files, versions, dependencies, and ADRs                                 |
-| [06 — Definition of done](06-definition-of-done.md)         | Completion checklists and named anti-patterns                                                        |
-| [07 — Fixture conventions](07-fixture-conventions.md)       | Durable fixture layout, provenance, hashing, updates, and evidence review                            |
-| [`.mapworld` v1](mapworld-v1.md)                            | Released package/record versions, canonical JSON, file ordering, and authoritative checksums         |
-| [ADR template](adr/0000-template.md)                        | Durable technical decisions and their consequences                                                   |
-| [Dependency reviews](dependency-reviews/README.md)          | Required capability, maintenance, license, runtime, and determinism review for adopted dependencies  |
-| [Retrospectives](retrospectives/README.md)                  | Short milestone learnings, scope cuts, and the next visible proof                                    |
+| Document                                                        | Owns                                                                                                 |
+| --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| [Project plan](PROJECT_PLAN.md)                                 | Product scope, architecture, roadmap, risks, and MVP acceptance criteria                             |
+| [Milestone 1 kernel proof](milestone-1-kernel-proof.md)         | Fixed synthetic proof composition, reroll boundary, canonical comparisons, and visible workflow      |
+| [Milestone 2 atlas proof](milestone-2-atlas-proof.md)           | Whole-world aspects, controls, rerolls, budgets, fixture matrix, comparisons, and visible workflow   |
+| [Milestone 2 closure audit](milestone-2-closure-audit.md)       | Independent closure assessment, Path A/Path B tradeoff, issue disposition, and evidence diagnosis    |
+| [Milestone 2 release evidence](milestone-2-release-evidence.md) | Passing M2 lanes, preserved historical evidence, and deferred Milestone 9 release-hardening rows     |
+| [01 — Architecture](01-architecture.md)                         | Package boundaries, data layers, generation, identity, coordinates, persistence, and cross-map rules |
+| [02 — Naming and vocabulary](02-naming-and-vocabulary.md)       | Identifier conventions, units, events, files, and the canonical domain language                      |
+| [03 — Code style and tooling](03-code-style-and-tooling.md)     | TypeScript, Svelte, Rust, formatting, linting, module size, comments, and enforcement                |
+| [04 — Testing](04-testing.md)                                   | Test tiers, determinism, geometry, persistence, fixtures, snapshots, and visual review               |
+| [05 — Git workflow](05-git-workflow.md)                         | Branches, commits, generated files, versions, dependencies, and ADRs                                 |
+| [06 — Definition of done](06-definition-of-done.md)             | Completion checklists and named anti-patterns                                                        |
+| [07 — Fixture conventions](07-fixture-conventions.md)           | Durable fixture layout, provenance, hashing, updates, and evidence review                            |
+| [`.mapworld` v1](mapworld-v1.md)                                | Released package/record versions, canonical JSON, file ordering, and authoritative checksums         |
+| [ADR template](adr/0000-template.md)                            | Durable technical decisions and their consequences                                                   |
+| [Dependency reviews](dependency-reviews/README.md)              | Required capability, maintenance, license, runtime, and determinism review for adopted dependencies  |
+| [Retrospectives](retrospectives/README.md)                      | Short milestone learnings, scope cuts, and the next visible proof                                    |
 
 ## Authority and conflicts
 

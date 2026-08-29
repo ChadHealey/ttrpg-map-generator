@@ -5,6 +5,7 @@
 - **Decision owners:** Project maintainers
 - **Supersedes:** None
 - **Superseded by:** None
+- **Amended by:** [ADR-0021](0021-defer-packaged-performance-evidence-to-milestone-9.md)
 
 ## Context
 
@@ -208,9 +209,9 @@ The production work is ordered as three executable children of issue #75:
    full-profile storage. This child owns the atomic representation cutover, exact old-package
    rollback, the live-buffer inventory, unchanged canonical fixtures, and one clean packaged Apple
    M5 preflight below 640 MiB additional RSS.
-3. Run the unchanged issue #70 Apple M5 release protocol. This child owns the warm-up plus five
-   fresh processes for all three gated fixtures, export and cancellation evidence, and the release-
-   evidence update. It does not authorize another production fix.
+3. Run the unchanged Apple M5 release protocol during Milestone 9 hardening. This child owns the
+   warm-up plus five fresh processes for all three gated fixtures, export and cancellation evidence,
+   and the release-evidence update. It does not authorize another production fix.
 
 The first child remains `NOT READY` until this ADR is accepted and the issue #76 evidence commit is
 available from the repository. Each later child remains `NOT READY` until its immediate predecessor
@@ -233,7 +234,7 @@ Implementation proceeds in an ordered, fail-closed sequence:
 4. Run `corepack pnpm check`, `corepack pnpm test:cross-platform`, `corepack pnpm test:e2e`, and the
    relevant persistence and visual gates.
 5. Build the packaged release candidate on the designated Apple M5 host. A clean proof-fixture
-   preflight must complete below 640 MiB additional process-tree RSS using the issue #70 sampler
+   preflight must complete below 640 MiB additional process-tree RSS using the retained release sampler
    accounting before the full unchanged warm-up-plus-five-fresh-process protocol runs for all three
    gated fixtures. The final acceptance limit remains 768 MiB; 640 MiB is implementation headroom,
    not a product-contract change.
