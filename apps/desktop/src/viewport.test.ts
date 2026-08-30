@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import { findTopmostNodeAt } from './scene-selection.js';
 import {
+  canvasBackingStoreDimensions,
   INITIAL_VIEWPORT,
   panViewport,
   scaleClientDeltaToCanvas,
@@ -11,6 +12,17 @@ import {
 } from './viewport.js';
 
 describe('desktop viewport interactions', () => {
+  it('uses the accepted scene dimensions for the Canvas backing store', () => {
+    const atlasScene: Pick<RenderScene, 'widthPx' | 'heightPx'> = {
+      widthPx: 2_048,
+      heightPx: 1_024,
+    };
+    const previewDimensions = { widthPx: 1_600, heightPx: 800 };
+
+    expect(canvasBackingStoreDimensions(atlasScene, previewDimensions)).toEqual(atlasScene);
+    expect(canvasBackingStoreDimensions(undefined, previewDimensions)).toBe(previewDimensions);
+  });
+
   it('converts responsive drag deltas into Canvas backing-store pixels', () => {
     expect(scaleClientDeltaToCanvas(100, 50, 960, 600, 480, 300)).toEqual({
       xPx: 200,

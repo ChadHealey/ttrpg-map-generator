@@ -22,6 +22,10 @@ import {
   PLANET_LATITUDE_MAX_TICKS,
   PLANET_LONGITUDE_MIN_TICKS,
   PLANET_TICKS_PER_TURN,
+  type PlanetPoint,
+  type RenderPoint,
+  type RenderScene,
+  roundTiesAwayFromZero,
 } from '@ttrpg-map/core';
 
 declare const ATLAS_DISPLAY_POINT_BRAND: unique symbol;
@@ -74,6 +78,13 @@ export type AtlasDisplayPoint = Readonly<{
   readonly [ATLAS_DISPLAY_POINT_BRAND]: true;
 }>;
 
+/** One seam-safe disposable display path derived from canonical planet-native points. */
+export interface AtlasProjectedDisplayPath {
+  /** Closed paths repeat their first point exactly; seam-split paths remain open. */
+  readonly isClosed: boolean;
+  readonly points: readonly AtlasDisplayPoint[];
+}
+
 /** Stable identity of one derived path within a source ring and projection version. */
 export type AtlasProjectedPathId = string & { readonly [ATLAS_PROJECTED_PATH_ID_BRAND]: true };
 
@@ -100,6 +111,7 @@ export interface AtlasProjectedCoastline {
 }
 
 export const ATLAS_PROJECTION_DIAGNOSTIC_CODES = {
+  invalidDisplayPoint: 'atlas-projection.display-point.invalid',
   invalidSourceIdentity: 'atlas-projection.source-identity.invalid',
   invalidSourceRing: 'atlas-projection.source-ring.invalid',
   unsupportedGeometry: 'atlas-projection.geometry.unsupported',
@@ -113,6 +125,10 @@ export interface AtlasProjectionDiagnostic {
   readonly message: string;
   readonly sourceRingId?: string;
 }
+
+export type AtlasDisplayPointResult =
+  | { readonly ok: true; readonly value: PlanetPoint }
+  | { readonly ok: false; readonly diagnostic: AtlasProjectionDiagnostic };
 
 export type AtlasProjectionResult =
   | { readonly ok: true; readonly value: AtlasProjectedCoastline }
@@ -141,6 +157,125 @@ export function projectAtlasCanonicalCoastline(
       paths: Object.freeze(paths),
     }),
   };
+}
+
+/** Convert one canonical planet point into the disposable atlas display coordinate system. */
+export function atlasDisplayPointFromPlanetPoint(point: PlanetPoint): AtlasDisplayPoint {
+  return projectPoint(point);
+}
+
+/**
+ * Convert one integer atlas-display location into a canonical planet point.
+ *
+ * The right display edge is the same canonical longitude as the left seam. Display coordinates
+ * remain disposable and are never returned as part of the authoritative result.
+ */
+export function planetPointFromAtlasDisplayPoint(input: {
+  readonly xDisplayTicks: number;
+  readonly yDisplayTicks: number;
+}): AtlasDisplayPointResult {
+  if (
+    !Number.isSafeInteger(input.xDisplayTicks) ||
+    !Number.isSafeInteger(input.yDisplayTicks) ||
+    input.xDisplayTicks < 0 ||
+    input.xDisplayTicks > ATLAS_DISPLAY_WIDTH_TICKS ||
+    input.yDisplayTicks < 0 ||
+    input.yDisplayTicks > ATLAS_DISPLAY_HEIGHT_TICKS
+  ) {
+    return invalidDisplayPoint();
+  }
+  const latitudeTicks = PLANET_LATITUDE_MAX_TICKS - input.yDisplayTicks;
+  const longitudeTicks =
+    input.xDisplayTicks === ATLAS_DISPLAY_WIDTH_TICKS
+      ? PLANET_LONGITUDE_MIN_TICKS
+      : input.xDisplayTicks + PLANET_LONGITUDE_MIN_TICKS;
+  const result = parsePlanetPoint({
+    longitudeTicks: Math.abs(latitudeTicks) === PLANET_LATITUDE_MAX_TICKS ? 0 : longitudeTicks,
+    latitudeTicks,
+  });
+  return result.ok ? { ok: true, value: result.value } : invalidDisplayPoint();
+}
+
+/** Convert a render-scene location through the version-1 disposable atlas display projection. */
+export function planetPointFromAtlasScenePoint(
+  point: RenderPoint,
+  scene: Pick<RenderScene, 'widthPx' | 'heightPx'>,
+): AtlasDisplayPointResult {
+  if (
+    !Number.isFinite(point.xPx) ||
+    !Number.isFinite(point.yPx) ||
+    !Number.isFinite(scene.widthPx) ||
+    !Number.isFinite(scene.heightPx) ||
+    scene.widthPx <= 0 ||
+    scene.heightPx <= 0 ||
+    point.xPx < 0 ||
+    point.xPx > scene.widthPx ||
+    point.yPx < 0 ||
+    point.yPx > scene.heightPx
+  ) {
+    return invalidDisplayPoint();
+  }
+  return planetPointFromAtlasDisplayPoint({
+    xDisplayTicks: roundTiesAwayFromZero((point.xPx * ATLAS_DISPLAY_WIDTH_TICKS) / scene.widthPx),
+    yDisplayTicks: roundTiesAwayFromZero((point.yPx * ATLAS_DISPLAY_HEIGHT_TICKS) / scene.heightPx),
+  });
+}
+
+/** Convert one disposable display point into renderer-owned scene pixel coordinates. */
+export function atlasScenePointFromDisplayPoint(
+  point: AtlasDisplayPoint,
+  scene: Pick<RenderScene, 'widthPx' | 'heightPx'>,
+): RenderPoint {
+  return Object.freeze({
+    xPx: (point.xDisplayTicks * scene.widthPx) / ATLAS_DISPLAY_WIDTH_TICKS,
+    yPx: (point.yDisplayTicks * scene.heightPx) / ATLAS_DISPLAY_HEIGHT_TICKS,
+  });
+}
+
+/** Project an open or closed planet-native path without allowing a seam-spanning display edge. */
+export function projectAtlasPlanetPolyline(
+  points: readonly PlanetPoint[],
+  isClosed: boolean,
+): readonly AtlasProjectedDisplayPath[] {
+  const minimumLength = isClosed ? 3 : 2;
+  if (points.length < minimumLength) return Object.freeze([]);
+
+  const first = points[0];
+  if (first === undefined) return Object.freeze([]);
+  let current: AtlasDisplayPoint[] = [projectPoint(first)];
+  const completed: AtlasDisplayPoint[][] = [];
+  let crossingCount = 0;
+  const segmentCount = isClosed ? points.length : points.length - 1;
+
+  for (let index = 0; index < segmentCount; index += 1) {
+    const start = points[index];
+    const end = points[(index + 1) % points.length];
+    if (start === undefined || end === undefined) return Object.freeze([]);
+    const crossing = seamCrossing(start, end);
+    if (crossing === undefined) {
+      appendDistinct(current, projectPoint(end));
+      continue;
+    }
+
+    crossingCount += 1;
+    appendDistinct(current, displayPoint(crossing.sourceXDisplayTicks, crossing.yDisplayTicks));
+    completed.push(current);
+    current = [displayPoint(crossing.destinationXDisplayTicks, crossing.yDisplayTicks)];
+    appendDistinct(current, projectPoint(end));
+  }
+
+  const paths =
+    isClosed && crossingCount > 0
+      ? mergeClosedTraversal(current, completed).filter(hasDrawableLength)
+      : [...completed, current].filter(hasDrawableLength);
+  return Object.freeze(
+    paths.map((path) =>
+      Object.freeze({
+        isClosed: isClosed && crossingCount === 0,
+        points: Object.freeze(path),
+      }),
+    ),
+  );
 }
 
 function validateProjectionSource(
@@ -241,35 +376,9 @@ function validateProjectionRing(
 }
 
 function projectRing(ring: CanonicalWorldCoastlineRing): readonly AtlasProjectedCoastlinePath[] {
-  const first = ring.points[0];
-  if (first === undefined) return [];
-  let current: AtlasDisplayPoint[] = [projectPoint(first)];
-  const completed: AtlasDisplayPoint[][] = [];
-  let crossingCount = 0;
-
-  for (let index = 0; index < ring.points.length; index += 1) {
-    const start = ring.points[index];
-    const end = ring.points[(index + 1) % ring.points.length];
-    if (start === undefined || end === undefined) return [];
-    const crossing = seamCrossing(start, end);
-    if (crossing === undefined) {
-      appendDistinct(current, projectPoint(end));
-      continue;
-    }
-
-    crossingCount += 1;
-    appendDistinct(current, displayPoint(crossing.sourceXDisplayTicks, crossing.yDisplayTicks));
-    completed.push(current);
-    current = [displayPoint(crossing.destinationXDisplayTicks, crossing.yDisplayTicks)];
-    appendDistinct(current, projectPoint(end));
-  }
-
-  const pointPaths =
-    crossingCount === 0
-      ? [current]
-      : mergeClosedTraversal(current, completed).filter(hasDrawableLength);
+  const pointPaths = projectAtlasPlanetPolyline(ring.points, true);
   return Object.freeze(
-    pointPaths.map((points, sourcePathIndex) =>
+    pointPaths.map((path, sourcePathIndex) =>
       Object.freeze({
         pathId: projectedPathId(ring.ringId, sourcePathIndex),
         sourceRingId: ring.ringId,
@@ -278,8 +387,8 @@ function projectRing(ring: CanonicalWorldCoastlineRing): readonly AtlasProjected
         landmassId: ring.landmassId,
         waterBodyIds: Object.freeze([...ring.waterBodyIds]),
         sourcePathIndex,
-        isClosed: crossingCount === 0,
-        points: Object.freeze(points),
+        isClosed: path.isClosed,
+        points: path.points,
       }),
     ),
   );
@@ -353,6 +462,16 @@ function projectPoint(point: {
 
 function displayPoint(xDisplayTicks: number, yDisplayTicks: number): AtlasDisplayPoint {
   return Object.freeze({ xDisplayTicks, yDisplayTicks }) as AtlasDisplayPoint;
+}
+
+function invalidDisplayPoint(): AtlasDisplayPointResult {
+  return {
+    ok: false,
+    diagnostic: diagnostic(
+      ATLAS_PROJECTION_DIAGNOSTIC_CODES.invalidDisplayPoint,
+      'Atlas display coordinates must be canonical integer ticks inside the version-1 display bounds.',
+    ),
+  };
 }
 
 function appendDistinct(points: AtlasDisplayPoint[], point: AtlasDisplayPoint): void {

@@ -2,10 +2,19 @@
   import type { RenderNode, RenderPoint, RenderScene } from '@ttrpg-map/core';
   import type { AtlasLandWaterPreview } from '@ttrpg-map/generation';
   import { renderSceneToCanvas } from '@ttrpg-map/render';
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
 
+  import {
+    activateAtlasFootprintSelector,
+    ATLAS_FOOTPRINT_SELECTOR_CURSOR_STEP_PX,
+    type AtlasFootprintSelectorSource,
+    cancelAtlasFootprintSelector,
+    moveAtlasFootprintSelectorCursor,
+    selectAtlasFootprintAt,
+  } from './atlas-footprint-selector.js';
   import { findTopmostNodeAt } from './scene-selection.js';
   import {
+    canvasBackingStoreDimensions,
     INITIAL_VIEWPORT,
     panViewport,
     scaleClientDeltaToCanvas,
@@ -16,11 +25,18 @@
 
   export let scene: RenderScene | undefined;
   export let preview: AtlasLandWaterPreview | undefined = undefined;
+  export let footprintSelectorSource: AtlasFootprintSelectorSource | undefined = undefined;
 
   const PAN_STEP_PX = 64;
   const ZOOM_FACTOR = 1.2;
   const MIN_ZOOM_RATIO = 0.5;
   const MAX_ZOOM_RATIO = 3;
+  const PREVIEW_CANVAS_WIDTH_PX = 1_600;
+  const PREVIEW_CANVAS_HEIGHT_PX = 800;
+  const PREVIEW_CANVAS_DIMENSIONS = Object.freeze({
+    widthPx: PREVIEW_CANVAS_WIDTH_PX,
+    heightPx: PREVIEW_CANVAS_HEIGHT_PX,
+  });
 
   interface DragState {
     readonly pointerId: number;
@@ -35,19 +51,31 @@
   let selectedNodeId = 'milestone-one-proof-outline';
   let dragState: DragState | undefined;
   let hasDragged = false;
+  let footprintSelector = cancelAtlasFootprintSelector();
 
   $: selectedNode = scene?.nodes.find(({ id }) => id === selectedNodeId) ?? scene?.nodes[1];
-  $: if (canvasContext !== undefined) redrawCanvas(scene, preview);
+  $: footprintSelectionAvailable =
+    scene !== undefined && preview === undefined && footprintSelectorSource !== undefined;
+  $: if (!footprintSelectionAvailable && footprintSelector.mode !== 'inactive') {
+    footprintSelector = cancelAtlasFootprintSelector();
+  }
+
+  // Updating a canvas width or height clears its backing store. Draw only after Svelte applies those
+  // attributes so a newly accepted scene is not cleared after rendering.
+  $: if (canvasContext !== undefined) {
+    void redrawAfterCanvasResize(scene, preview, footprintSelector);
+  }
 
   onMount(() => {
     canvasContext = canvasElement.getContext('2d') ?? undefined;
     if (canvasContext === undefined) throw new Error('Canvas 2D rendering is not available');
-    redrawCanvas(scene, preview);
+    redrawCanvas(scene, preview, footprintSelector);
   });
 
   function redrawCanvas(
     nextScene: RenderScene | undefined,
     nextPreview: AtlasLandWaterPreview | undefined,
+    nextSelector: typeof footprintSelector,
   ): void {
     if (canvasContext === undefined) return;
     canvasContext.save();
@@ -65,13 +93,25 @@
         viewport.offsetYPx,
       );
       renderSceneToCanvas(canvasContext, nextScene);
+      drawFootprintSelector(canvasContext, nextSelector);
     }
     canvasContext.restore();
   }
 
+  async function redrawAfterCanvasResize(
+    nextScene: RenderScene | undefined,
+    nextPreview: AtlasLandWaterPreview | undefined,
+    nextSelector: typeof footprintSelector,
+  ): Promise<void> {
+    await tick();
+    if (nextScene !== scene || nextPreview !== preview || nextSelector !== footprintSelector)
+      return;
+    redrawCanvas(nextScene, nextPreview, nextSelector);
+  }
+
   function updateViewport(nextViewport: ViewportState): void {
     viewport = nextViewport;
-    redrawCanvas(scene, preview);
+    redrawCanvas(scene, preview, footprintSelector);
   }
 
   function panBy(deltaXPx: number, deltaYPx: number): void {
@@ -123,7 +163,10 @@
       canvasElement.releasePointerCapture(event.pointerId);
     }
     dragState = undefined;
-    if (!hasDragged) selectNodeAt(event);
+    if (!hasDragged) {
+      if (footprintSelector.mode === 'active') selectFootprintAtCanvasPoint(toCanvasPoint(event));
+      else selectNodeAt(event);
+    }
   }
 
   function onCanvasWheel(event: WheelEvent): void {
@@ -134,6 +177,37 @@
 
   function onCanvasKeyDown(event: KeyboardEvent): void {
     if (scene === undefined || preview !== undefined) return;
+    if (footprintSelector.mode === 'active') {
+      switch (event.key) {
+        case 'ArrowDown':
+          event.preventDefault();
+          moveFootprintCursor(0, ATLAS_FOOTPRINT_SELECTOR_CURSOR_STEP_PX);
+          return;
+        case 'ArrowLeft':
+          event.preventDefault();
+          moveFootprintCursor(-ATLAS_FOOTPRINT_SELECTOR_CURSOR_STEP_PX, 0);
+          return;
+        case 'ArrowRight':
+          event.preventDefault();
+          moveFootprintCursor(ATLAS_FOOTPRINT_SELECTOR_CURSOR_STEP_PX, 0);
+          return;
+        case 'ArrowUp':
+          event.preventDefault();
+          moveFootprintCursor(0, -ATLAS_FOOTPRINT_SELECTOR_CURSOR_STEP_PX);
+          return;
+        case 'Enter':
+        case ' ':
+          event.preventDefault();
+          if (footprintSelector.cursor !== undefined) {
+            selectFootprintAtScenePoint(footprintSelector.cursor);
+          }
+          return;
+        case 'Escape':
+          event.preventDefault();
+          cancelFootprintSelection();
+          return;
+      }
+    }
     switch (event.key) {
       case 'ArrowDown':
         event.preventDefault();
@@ -175,6 +249,40 @@
       scenePointFromCanvasPoint(toCanvasPoint(event), viewport),
     );
     if (selected !== undefined) selectedNodeId = selected.id;
+  }
+
+  function activateFootprintSelection(): void {
+    if (scene === undefined || footprintSelectorSource === undefined || preview !== undefined)
+      return;
+    footprintSelector = activateAtlasFootprintSelector(scene);
+  }
+
+  function cancelFootprintSelection(): void {
+    footprintSelector = cancelAtlasFootprintSelector();
+  }
+
+  function moveFootprintCursor(deltaXPx: number, deltaYPx: number): void {
+    if (scene === undefined) return;
+    footprintSelector = moveAtlasFootprintSelectorCursor(
+      footprintSelector,
+      deltaXPx,
+      deltaYPx,
+      scene,
+    );
+  }
+
+  function selectFootprintAtCanvasPoint(canvasPoint: RenderPoint): void {
+    selectFootprintAtScenePoint(scenePointFromCanvasPoint(canvasPoint, viewport));
+  }
+
+  function selectFootprintAtScenePoint(scenePoint: RenderPoint): void {
+    if (scene === undefined || footprintSelectorSource === undefined) return;
+    footprintSelector = selectAtlasFootprintAt(
+      footprintSelector,
+      footprintSelectorSource,
+      scene,
+      scenePoint,
+    );
   }
 
   function toCanvasPoint(event: PointerEvent): RenderPoint {
@@ -231,6 +339,42 @@
     context.imageSmoothingEnabled = false;
     context.drawImage(buffer, 0, 0, canvasElement.width, canvasElement.height);
   }
+
+  function drawFootprintSelector(
+    context: CanvasRenderingContext2D,
+    selector: typeof footprintSelector,
+  ): void {
+    if (selector.mode !== 'active') return;
+    const cursor = selector.cursor;
+    if (cursor !== undefined) {
+      context.save();
+      context.strokeStyle = '#2d6170';
+      context.lineWidth = 2 / viewport.zoomRatio;
+      context.beginPath();
+      context.moveTo(cursor.xPx - 12 / viewport.zoomRatio, cursor.yPx);
+      context.lineTo(cursor.xPx + 12 / viewport.zoomRatio, cursor.yPx);
+      context.moveTo(cursor.xPx, cursor.yPx - 12 / viewport.zoomRatio);
+      context.lineTo(cursor.xPx, cursor.yPx + 12 / viewport.zoomRatio);
+      context.stroke();
+      context.restore();
+    }
+    const candidate = selector.candidate;
+    if (candidate === undefined) return;
+    context.save();
+    context.strokeStyle = '#9f3d2d';
+    context.lineWidth = 3 / viewport.zoomRatio;
+    context.setLineDash([10 / viewport.zoomRatio, 6 / viewport.zoomRatio]);
+    for (const path of candidate.overlayPaths) {
+      const first = path.points[0];
+      if (first === undefined) continue;
+      context.beginPath();
+      context.moveTo(first.xPx, first.yPx);
+      for (const point of path.points.slice(1)) context.lineTo(point.xPx, point.yPx);
+      if (path.isClosed) context.closePath();
+      context.stroke();
+    }
+    context.restore();
+  }
 </script>
 
 <div class="viewport-card">
@@ -254,6 +398,16 @@
       >
     </div>
     <div class="zoom-controls">
+      <button
+        aria-pressed={footprintSelector.mode === 'active'}
+        disabled={!footprintSelectionAvailable}
+        onclick={activateFootprintSelection}
+        type="button">Select footprint</button
+      >
+      {#if footprintSelector.mode === 'active'}<button
+          onclick={cancelFootprintSelection}
+          type="button">Cancel selection</button
+        >{/if}
       <button
         aria-label="Zoom out"
         disabled={scene === undefined || preview !== undefined}
@@ -288,16 +442,18 @@
       bind:this={canvasElement}
       aria-describedby="viewport-instructions"
       aria-label={preview === undefined
-        ? 'Accepted whole-world ink atlas'
+        ? footprintSelector.mode === 'active'
+          ? 'Accepted whole-world ink atlas footprint selector'
+          : 'Accepted whole-world ink atlas'
         : 'Disposable coarse atlas preview'}
-      height={800}
+      height={canvasBackingStoreDimensions(scene, PREVIEW_CANVAS_DIMENSIONS).heightPx}
       onkeydown={onCanvasKeyDown}
       onpointerdown={onCanvasPointerDown}
       onpointermove={onCanvasPointerMove}
       onpointerup={onCanvasPointerUp}
       onwheel={onCanvasWheel}
       tabindex="0"
-      width={1600}
+      width={canvasBackingStoreDimensions(scene, PREVIEW_CANVAS_DIMENSIONS).widthPx}
     ></canvas>
     {#if scene === undefined && preview === undefined}<div
         class="closed-overlay"
@@ -306,7 +462,9 @@
         No accepted document or RenderScene is loaded.
       </div>{/if}
     <p class="sr-only" id="viewport-instructions">
-      Use arrow keys to pan, plus and minus to zoom, or zero to reset the map view.
+      {footprintSelector.mode === 'active'
+        ? 'Use arrow keys to move the footprint cursor, Enter or Space to select, Escape to cancel, and plus, minus, or zero to change the view.'
+        : 'Use arrow keys to pan, plus and minus to zoom, or zero to reset the map view.'}
     </p>
   </figure>
 </div>
@@ -328,7 +486,29 @@
       No accepted aspect IDs, revisions, semantic entities, or package paths exist in preview state.
     </p>
   {/if}
-  {#if preview === undefined && selectedNode !== undefined}
+  {#if footprintSelector.mode === 'active'}
+    <p class="selection-title">Footprint selector active</p>
+    {#if footprintSelector.candidate !== undefined}
+      <dl>
+        <div>
+          <dt>Transient footprint</dt>
+          <dd>{footprintSelector.candidate.entityId}</dd>
+        </div>
+        <div>
+          <dt>Origin ticks</dt>
+          <dd>
+            {footprintSelector.candidate.footprint.origin.longitudeTicks},
+            {footprintSelector.candidate.footprint.origin.latitudeTicks}
+          </dd>
+        </div>
+      </dl>
+    {:else if footprintSelector.diagnostic !== undefined}
+      <p><code>{footprintSelector.diagnostic.code}</code></p>
+      <p>{footprintSelector.diagnostic.message}</p>
+    {:else}
+      <p>Choose an atlas location with the pointer or keyboard cursor.</p>
+    {/if}
+  {:else if preview === undefined && selectedNode !== undefined}
     <p class="selection-title">{describeNode(selectedNode)}</p>
     <dl>
       <div>

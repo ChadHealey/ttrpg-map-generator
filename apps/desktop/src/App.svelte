@@ -1,11 +1,12 @@
 <script lang="ts">
-  import { type AtlasControls, DEFAULT_ATLAS_CONTROLS } from '@ttrpg-map/core';
+  import { type AtlasControls, DEFAULT_ATLAS_CONTROLS, type WorldDocument } from '@ttrpg-map/core';
   import { onMount } from 'svelte';
   import {
     installObserverCommandChannelBridge,
     OBSERVER_COMMAND_CHANNEL_COMPILED,
   } from 'virtual:observer-command-channel-entry';
 
+  import type { AtlasFootprintSelectorSource } from './atlas-footprint-selector.js';
   import {
     AtlasWorkflow,
     isAtlasEditingPhase,
@@ -117,6 +118,7 @@
 
   $: controlsAreAccepted = sameControls(controls, atlas.controls);
   $: editingIsEnabled = isAtlasEditingPhase(atlas.phase) && !atlas.isBusy;
+  $: footprintSelectorSource = atlasFootprintSelectorSource(atlas.accepted?.document);
   $: selectedEntity =
     atlas.inspectionEntities.find(({ entityId }) => entityId === selectedEntityId) ??
     atlas.inspectionEntities[0];
@@ -429,6 +431,17 @@
       left.oceanConnectivity === right.oceanConnectivity &&
       left.polarCharacter === right.polarCharacter
     );
+  }
+
+  function atlasFootprintSelectorSource(
+    document: WorldDocument | undefined,
+  ): AtlasFootprintSelectorSource | undefined {
+    const coordinateSystem = document?.maps[0]?.coordinateSystem;
+    if (coordinateSystem?.kind !== 'planet-sphere') return undefined;
+    return Object.freeze({
+      rootSurfaceId: coordinateSystem.rootSurfaceId,
+      worldRadius: coordinateSystem.radius,
+    });
   }
 </script>
 
@@ -766,7 +779,9 @@
     <AtlasWorkflowEvidencePanel {atlas} />
 
     <div class="proof-grid">
-      <div class="map-stack"><ProofViewport preview={atlas.preview} scene={atlas.scene} /></div>
+      <div class="map-stack">
+        <ProofViewport {footprintSelectorSource} preview={atlas.preview} scene={atlas.scene} />
+      </div>
       <aside aria-labelledby="semantic-inspector-heading" class="evidence-card semantic-inspector">
         <p class="eyebrow">Semantic inspection</p>
         <h2 id="semantic-inspector-heading">Landmass or water body</h2>

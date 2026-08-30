@@ -9,6 +9,7 @@ import {
   type CanonicalWorldCoastline,
   type CanonicalWorldCoastlineRing,
   type CoastlineRingId,
+  createPlanetPoint,
   type EntityId,
   parsePlanetPoint,
   parseStableId,
@@ -21,10 +22,75 @@ import {
   ATLAS_DISPLAY_PROJECTION_METADATA,
   ATLAS_DISPLAY_WIDTH_TICKS,
   ATLAS_PROJECTION_DIAGNOSTIC_CODES,
+  atlasDisplayPointFromPlanetPoint,
+  planetPointFromAtlasDisplayPoint,
+  planetPointFromAtlasScenePoint,
   projectAtlasCanonicalCoastline,
+  projectAtlasPlanetPolyline,
 } from './atlas-display-projection.js';
 
 describe('atlas equirectangular display projection', () => {
+  it('round-trips canonical display locations and canonicalizes the seam and poles', () => {
+    const source = value(createPlanetPoint(0.75, -0.5));
+    const display = atlasDisplayPointFromPlanetPoint(source);
+
+    expect(display).toEqual({ xDisplayTicks: 2_660_157_605, yDisplayTicks: 1_415_524_462 });
+    expect(value(planetPointFromAtlasDisplayPoint(display))).toEqual(source);
+    const seam = planetPointFromAtlasDisplayPoint({
+      xDisplayTicks: ATLAS_DISPLAY_WIDTH_TICKS,
+      yDisplayTicks: ATLAS_DISPLAY_HEIGHT_TICKS / 2,
+    });
+    expect(seam).toMatchObject({
+      ok: true,
+      value: { longitudeTicks: -(2 ** 31), latitudeTicks: 0 },
+    });
+    expect(
+      value(
+        planetPointFromAtlasDisplayPoint({
+          xDisplayTicks: Math.floor(ATLAS_DISPLAY_WIDTH_TICKS / 3),
+          yDisplayTicks: 0,
+        }),
+      ),
+    ).toMatchObject({ longitudeTicks: 0, latitudeTicks: 2 ** 30 });
+  });
+
+  it('converts render points without exposing render coordinates as geography', () => {
+    const scene = { widthPx: 2_048, heightPx: 1_024 };
+    const result = planetPointFromAtlasScenePoint({ xPx: 1_024, yPx: 512 }, scene);
+
+    expect(result).toMatchObject({ ok: true, value: { longitudeTicks: 0, latitudeTicks: 0 } });
+    expect(planetPointFromAtlasScenePoint({ xPx: -0.01, yPx: 0 }, scene)).toEqual({
+      ok: false,
+      diagnostic: {
+        code: ATLAS_PROJECTION_DIAGNOSTIC_CODES.invalidDisplayPoint,
+        message:
+          'Atlas display coordinates must be canonical integer ticks inside the version-1 display bounds.',
+      },
+    });
+  });
+
+  it('splits a seam-crossing footprint boundary into display-safe paths', () => {
+    const points = [
+      value(createPlanetPoint(Math.PI - 0.01, -0.01)),
+      value(createPlanetPoint(-Math.PI + 0.01, -0.01)),
+      value(createPlanetPoint(-Math.PI + 0.01, 0.01)),
+      value(createPlanetPoint(Math.PI - 0.01, 0.01)),
+    ];
+    const paths = projectAtlasPlanetPolyline(points, true);
+
+    expect(paths).toHaveLength(2);
+    expect(paths.every(({ isClosed }) => !isClosed)).toBe(true);
+    for (const path of paths) {
+      for (let index = 1; index < path.points.length; index += 1) {
+        const prior = required(path.points[index - 1], 'Expected prior path point.');
+        const point = required(path.points[index], 'Expected path point.');
+        expect(Math.abs(point.xDisplayTicks - prior.xDisplayTicks)).toBeLessThanOrEqual(
+          ATLAS_DISPLAY_WIDTH_TICKS / 2,
+        );
+      }
+    }
+  });
+
   it.each(fixtureSource.cases)(
     'projects adversarial case $caseId without a world-spanning edge',
     (fixture) => {
@@ -183,4 +249,11 @@ function compareText(left: string, right: string): -1 | 0 | 1 {
 function required<Value>(value: Value | undefined, message: string): Value {
   if (value === undefined) throw new Error(message);
   return value;
+}
+
+function value<Value>(
+  result: { readonly ok: true; readonly value: Value } | { readonly ok: false },
+): Value {
+  if (!result.ok) throw new Error('Expected a successful coordinate conversion.');
+  return result.value;
 }

@@ -9,6 +9,16 @@ export interface ViewportState {
 
 export const INITIAL_VIEWPORT: ViewportState = { offsetXPx: 0, offsetYPx: 0, zoomRatio: 1 };
 
+/** Canvas backing-store dimensions, kept in the same render-pixel space as an accepted scene. */
+export function canvasBackingStoreDimensions(
+  scene: Pick<RenderScene, 'widthPx' | 'heightPx'> | undefined,
+  fallback: Readonly<{ widthPx: number; heightPx: number }>,
+): Readonly<{ widthPx: number; heightPx: number }> {
+  return scene === undefined
+    ? fallback
+    : Object.freeze({ widthPx: scene.widthPx, heightPx: scene.heightPx });
+}
+
 /** Moves the rendered scene by a delta measured in Canvas backing-store pixels. */
 export function panViewport(
   viewport: ViewportState,
