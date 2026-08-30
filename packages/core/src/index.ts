@@ -351,6 +351,23 @@ export {
   isImmutableDomainSnapshot,
 } from './immutable-domain-snapshot.js';
 export {
+  deriveRegionalFootprintEntityId,
+  encodeRegionalFootprintIdentityInput,
+} from './regional-footprint-identity.js';
+export {
+  REGIONAL_FOOTPRINT_DIAGNOSTIC_CODES,
+  REGIONAL_RECTANGLE_FOOTPRINT_SHAPE_VERSION,
+  type RegionalFootprintDiagnostic,
+  type RegionalFootprintDiagnosticCode,
+  type RegionalFootprintParseResult,
+  type RegionalRectangleFootprint,
+} from './regional-footprint-model.js';
+export {
+  createRegionalFootprintTransform,
+  parseRegionalRectangleFootprint,
+  validateRegionalRectangleFootprint,
+} from './regional-footprint-validation.js';
+export {
   type DerivedSeed,
   deriveSeed,
   encodeSeedInput,
