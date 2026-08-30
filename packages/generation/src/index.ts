@@ -87,6 +87,17 @@ export {
   type SampledAtlasMacroElevationField,
 } from './atlas-macro-elevation-field.js';
 export {
+  ATLAS_MOUNTAIN_SYSTEMS_DIAGNOSTIC_CODES,
+  ATLAS_MOUNTAIN_SYSTEMS_GENERATOR_MANIFEST,
+  ATLAS_MOUNTAIN_SYSTEMS_GENERATOR_MANIFEST_VERSION,
+  ATLAS_MOUNTAIN_SYSTEMS_PARAMETER_SCHEMA_VERSION,
+  type AtlasMountainSystemsAspectProposal,
+  type AtlasMountainSystemsGenerationInput,
+  type AtlasMountainSystemsGenerationResult,
+  type AtlasMountainSystemsParameters,
+  generateAtlasMountainSystems,
+} from './atlas-mountain-systems-generator.js';
+export {
   ATLAS_FIELD_ALGORITHM_VERSION,
   ATLAS_FIELD_QUANTIZATION_SCALE,
   ATLAS_FIELD_QUANTUM,
