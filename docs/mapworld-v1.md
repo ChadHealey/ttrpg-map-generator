@@ -178,3 +178,5 @@ adapter implements [ADR-0008](adr/0008-mapworld-directory-commit-recovery.md) wi
 artifacts around this unchanged byte contract. Autosave, migration UI, binary chunks, SQLite,
 imported assets, generator upgrades, and a production headless CLI remain excluded. Future
 capabilities must compose around this byte contract without weakening accepted-state restoration.
+The accepted [version-2 design](mapworld-v2.md) adds external binary fields without reinterpreting
+or rewriting version-1 packages.

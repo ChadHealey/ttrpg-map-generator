@@ -4,7 +4,7 @@
 - **Date:** 2026-08-30
 - **Decision owners:** Project maintainers
 - **Supersedes:** None
-- **Superseded by:** None
+- **Superseded by:** [ADR-0027](0027-mapworld-v2-external-aspects-and-binary-fields.md)
 - **Resolves:** [Issue #133](https://github.com/ChadHealey/ttrpg-map-generator/issues/133)
 
 ## Context

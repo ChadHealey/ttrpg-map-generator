@@ -1,0 +1,524 @@
+{
+  "issue": 152,
+  "measurementSchemaVersion": 1,
+  "candidateCommit": "8f5eaa029d93f9904af19c656bd1e57c4f51b6e0",
+  "host": {
+    "platform": "darwin",
+    "architecture": "arm64",
+    "osRelease": "25.5.0",
+    "kernelDescription": "Darwin 25.5.0 arm64",
+    "processor": "Apple M5",
+    "logicalCpuCount": 10,
+    "memoryBytes": 25769803776,
+    "repositoryFilesystem": "APFS",
+    "macosVersion": "26.5.1",
+    "macosBuild": "25F80",
+    "modelIdentifier": "Mac17,2"
+  },
+  "toolchain": {
+    "node": "24.11.0",
+    "pnpm": "11.19.0"
+  },
+  "measurementSources": [
+    {
+      "path": "docs/investigations/issue-152/storage-measurement.mjs",
+      "sha256": "f1064a007f775636f78bf8ed3e00f31e772ce51c532d576eaf9a08a333586533"
+    },
+    {
+      "path": "docs/investigations/issue-152/storage-source.test.mjs",
+      "sha256": "6c9d2229f137a5bedf9adbfd1f57e73973943c3bd6d6ebe1837ec6764f893fba"
+    }
+  ],
+  "memoryMeasurement": {
+    "source": "process.resourceUsage().maxRSS",
+    "sourceUnit": "KiB",
+    "receiptUnit": "bytes",
+    "peakIncludesInputLoadAndOutputWrite": true
+  },
+  "source": {
+    "fixtureId": "milestone-2-atlas-proof",
+    "sampleCount": 2095106,
+    "m2PackageBytes": 82483532,
+    "m2AcceptedMapBytes": 82482435,
+    "watershedValuesLowerBoundBytes": 81709135,
+    "issueLowerBoundMapBytes": 164191570,
+    "perFileLimitBytes": 134217728,
+    "packageLimitBytes": 201326592
+  },
+  "measurements": [
+    {
+      "option": "binary-chunks",
+      "packageBytes": 136842422,
+      "packageHeadroomBytes": 64484170,
+      "withinPackageLimit": true,
+      "largestFile": {
+        "path": "maps/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7.json",
+        "bytes": 82484875,
+        "sha256": "dac7b5ad3571f8142c934cd3fc0cfda8b4dc8e99ca85a45ad92257db41b8745d"
+      },
+      "perFileHeadroomBytes": 51732853,
+      "withinPerFileLimit": true,
+      "fileCount": 21,
+      "packageFingerprint": "f6a9423c3533a5d4bb30b6851073672fb961f160df2acca52ce854e8ae922f92",
+      "fileSetFingerprint": "3e5f61779dff8461614d1a477ee3bf8333141cdb67968f14a066c58cbfd0a35b",
+      "logicalFieldSetFingerprint": "598e92f5ba1bda4f55d891fccb37e751f76da14a44cbcb883102c15f78a47dc8",
+      "files": [
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/098b5448-209c-55b0-96fe-9bd397c6f314.json",
+          "bytes": 3083,
+          "sha256": "690ab7f778f839062fdcf37f9b9b996044a47359b9479f3a266196d1ae359bdc"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/47d4f799-fc0a-5818-ac6f-7827374d0a0c.json",
+          "bytes": 5265,
+          "sha256": "043bc559ad25e26ed159776f44cef2f35874a5ab5b6eee81e209b6cc87feb618"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/5ad53f4f-728c-54ce-9a7f-7d0acd384287.json",
+          "bytes": 2360,
+          "sha256": "79c6b5430c69e40faf88ed5ff175d20a4c4bd1bc0b4428b43bbdb4260a10504f"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/8433b981-ad06-5714-a49f-e454ef265279.json",
+          "bytes": 2420,
+          "sha256": "b56debb60796240f3196fff1b3804e798e9e8e2aaa03a0db1a279f874855a0ba"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/91f1b126-70e2-5812-83b2-4c6373a863d5.json",
+          "bytes": 3021,
+          "sha256": "b72f3be133207231436bf06d4935a1f792697c0acdd7f085588560ac28187cfd"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/b255be89-ad89-582a-bc1e-801aac7255e8.json",
+          "bytes": 2788,
+          "sha256": "e08373dac5b3bd0e2a6b59a700f95eb15157308a135d2895ca36408f52452d78"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/de179f75-8d50-5b99-af48-d9699ae292cf.json",
+          "bytes": 7481,
+          "sha256": "6a0c1e51feda7e103c8a48f057cc00fb91b906569371c8e8a8ff3be875316444"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/e88989ae-89de-5a41-9102-5018199a96e6.json",
+          "bytes": 3577,
+          "sha256": "06994c561842be8ea45df78deaf776000e750c7c01a091dcb2acc5433fdbe62f"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/ef0cc4d3-e6f5-510c-9dc0-92792f48427a.json",
+          "bytes": 6134225,
+          "sha256": "978288045455c6fbc69f11eaaabb2a341919cdb013849016df06759b1e3c010d"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/098b5448-209c-55b0-96fe-9bd397c6f314.moisture.mwf",
+          "bytes": 8380456,
+          "sha256": "2c5bae0cfeed21e25a850cb4880c614dedbef5c4eb20c3f856c11ef70fa08b13"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/47d4f799-fc0a-5818-ac6f-7827374d0a0c.watersheds.mwf",
+          "bytes": 2095138,
+          "sha256": "b4dbd94120c6368ba49aa60042d0bc98bf0f7df91c60e422d29ace38681d57a3"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/91f1b126-70e2-5812-83b2-4c6373a863d5.temperature.mwf",
+          "bytes": 4190244,
+          "sha256": "8adae2903faf3c1293122b1600887d750fb3552ec3466a511061c6967b800159"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/de179f75-8d50-5b99-af48-d9699ae292cf.prevailing-winds-speed.mwf",
+          "bytes": 4190244,
+          "sha256": "71961bad006f149ff1bafc2392704fc91a518f31a61521b130040342d40440a8"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/de179f75-8d50-5b99-af48-d9699ae292cf.prevailing-winds-x.mwf",
+          "bytes": 8380456,
+          "sha256": "91c10d71b00eee086e5ec1f213c1637d331356c4fe403e9c433b1e606a789275"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/de179f75-8d50-5b99-af48-d9699ae292cf.prevailing-winds-y.mwf",
+          "bytes": 8380456,
+          "sha256": "2c65af7772d5b63a210a97d9c1092d681eab4ed3221e3e375db5060785ab694c"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/de179f75-8d50-5b99-af48-d9699ae292cf.prevailing-winds-z.mwf",
+          "bytes": 8380456,
+          "sha256": "c551a07a6cd9db36c508847dc52a2b1d2b1519bb4d3feae1950463245a614917"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/e88989ae-89de-5a41-9102-5018199a96e6.climate-zones.mwf",
+          "bytes": 2095138,
+          "sha256": "3d76f694669e998d00535f3d1f8ea376b911c9884f4797a4213e4ea73253266a"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/ef0cc4d3-e6f5-510c-9dc0-92792f48427a.biome-belts.mwf",
+          "bytes": 2095138,
+          "sha256": "3d76f694669e998d00535f3d1f8ea376b911c9884f4797a4213e4ea73253266a"
+        },
+        {
+          "path": "manifest.json",
+          "bytes": 5187,
+          "sha256": "f6a9423c3533a5d4bb30b6851073672fb961f160df2acca52ce854e8ae922f92"
+        },
+        {
+          "path": "maps/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7.json",
+          "bytes": 82484875,
+          "sha256": "dac7b5ad3571f8142c934cd3fc0cfda8b4dc8e99ca85a45ad92257db41b8745d"
+        },
+        {
+          "path": "world.json",
+          "bytes": 414,
+          "sha256": "a573cd7d55d414ae247a252f2b4427ac10891b5c7b7ca3ebf912d8bb7f96257b"
+        }
+      ],
+      "repeats": [
+        {
+          "repeat": 1,
+          "encodeElapsedMs": 2396.623,
+          "encodeWallMs": 2427.635,
+          "encodePeakRssBytes": 1070383104,
+          "packageFingerprint": "f6a9423c3533a5d4bb30b6851073672fb961f160df2acca52ce854e8ae922f92",
+          "fileSetFingerprint": "3e5f61779dff8461614d1a477ee3bf8333141cdb67968f14a066c58cbfd0a35b",
+          "encodedLogicalFieldSetFingerprint": "598e92f5ba1bda4f55d891fccb37e751f76da14a44cbcb883102c15f78a47dc8",
+          "decodeElapsedMs": 2047.03,
+          "decodeWallMs": 2083.155,
+          "decodePeakRssBytes": 885145600,
+          "decodedLogicalFieldSetFingerprint": "598e92f5ba1bda4f55d891fccb37e751f76da14a44cbcb883102c15f78a47dc8",
+          "decodedAspectCount": 9,
+          "decodedFieldCount": 9,
+          "generatorInvocations": 0
+        },
+        {
+          "repeat": 2,
+          "encodeElapsedMs": 2388.706,
+          "encodeWallMs": 2418.893,
+          "encodePeakRssBytes": 1069973504,
+          "packageFingerprint": "f6a9423c3533a5d4bb30b6851073672fb961f160df2acca52ce854e8ae922f92",
+          "fileSetFingerprint": "3e5f61779dff8461614d1a477ee3bf8333141cdb67968f14a066c58cbfd0a35b",
+          "encodedLogicalFieldSetFingerprint": "598e92f5ba1bda4f55d891fccb37e751f76da14a44cbcb883102c15f78a47dc8",
+          "decodeElapsedMs": 1947.164,
+          "decodeWallMs": 1975.777,
+          "decodePeakRssBytes": 885587968,
+          "decodedLogicalFieldSetFingerprint": "598e92f5ba1bda4f55d891fccb37e751f76da14a44cbcb883102c15f78a47dc8",
+          "decodedAspectCount": 9,
+          "decodedFieldCount": 9,
+          "generatorInvocations": 0
+        }
+      ]
+    },
+    {
+      "option": "canonical-json-files",
+      "packageBytes": 390190844,
+      "packageHeadroomBytes": -188864252,
+      "withinPackageLimit": false,
+      "largestFile": {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/47d4f799-fc0a-5818-ac6f-7827374d0a0c.watersheds.json",
+        "bytes": 92184771,
+        "sha256": "8c9502a94e21f0cccf1587a1793b309429c30b7c6d775f8a5c5699c611630684"
+      },
+      "perFileHeadroomBytes": 42032957,
+      "withinPerFileLimit": true,
+      "fileCount": 21,
+      "packageFingerprint": "fedce0acd5bb7737bf6c3079c9723f7f3d756648d41ee5050a1d1d9a5d89d38f",
+      "fileSetFingerprint": "c3e4d0c0711b67e895ab1f002e27604b7ef33a2e2200b49fd09055059e8a2a6a",
+      "logicalFieldSetFingerprint": "598e92f5ba1bda4f55d891fccb37e751f76da14a44cbcb883102c15f78a47dc8",
+      "files": [
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/098b5448-209c-55b0-96fe-9bd397c6f314.json",
+          "bytes": 3059,
+          "sha256": "58cd83969d7e6afeea5612466508a39f1a3730345e05d0695dd523376e56201a"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/47d4f799-fc0a-5818-ac6f-7827374d0a0c.json",
+          "bytes": 4961,
+          "sha256": "4bb3a975e00ae66d443c2c147cfd8e6d488e45e04cdc46cea443fdef6f9f495e"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/5ad53f4f-728c-54ce-9a7f-7d0acd384287.json",
+          "bytes": 2360,
+          "sha256": "79c6b5430c69e40faf88ed5ff175d20a4c4bd1bc0b4428b43bbdb4260a10504f"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/8433b981-ad06-5714-a49f-e454ef265279.json",
+          "bytes": 2420,
+          "sha256": "b56debb60796240f3196fff1b3804e798e9e8e2aaa03a0db1a279f874855a0ba"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/91f1b126-70e2-5812-83b2-4c6373a863d5.json",
+          "bytes": 2997,
+          "sha256": "1e921f5a589ffac979362b19b17dd5e2768ebdeed411c8d695b2c3b674c1a154"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/b255be89-ad89-582a-bc1e-801aac7255e8.json",
+          "bytes": 2788,
+          "sha256": "e08373dac5b3bd0e2a6b59a700f95eb15157308a135d2895ca36408f52452d78"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/de179f75-8d50-5b99-af48-d9699ae292cf.json",
+          "bytes": 7377,
+          "sha256": "78fcd15b3e89155edd146a42ff86bc3ff9290eb96e411e78bf58ea719d971fd4"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/e88989ae-89de-5a41-9102-5018199a96e6.json",
+          "bytes": 3422,
+          "sha256": "f4a6bb19dc09aa202771ecd133555d98b3f1017345866665b1b0ed81a2c8de3c"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/ef0cc4d3-e6f5-510c-9dc0-92792f48427a.json",
+          "bytes": 6134038,
+          "sha256": "cd67867a4000cf525a725858b89b8aac1f1afebdbf1182622cae9d2cc1a733e2"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/098b5448-209c-55b0-96fe-9bd397c6f314.moisture.json",
+          "bytes": 28601046,
+          "sha256": "1d38fda8b2bbbdc01f7199a9fbe4b8d88ed2b4d856c5823b20add1ea04b74285"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/47d4f799-fc0a-5818-ac6f-7827374d0a0c.watersheds.json",
+          "bytes": 92184771,
+          "sha256": "8c9502a94e21f0cccf1587a1793b309429c30b7c6d775f8a5c5699c611630684"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/91f1b126-70e2-5812-83b2-4c6373a863d5.temperature.json",
+          "bytes": 18814552,
+          "sha256": "9f97b6a6018d2e2eace7473a123e39a82ec5b34a6fddb8dcfcbd8603f35a1f15"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/de179f75-8d50-5b99-af48-d9699ae292cf.prevailing-winds-speed.json",
+          "bytes": 16760953,
+          "sha256": "ee9662b34a281e57c62055ad347eb38d0dd3e7c21720422019b152ed6778e38a"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/de179f75-8d50-5b99-af48-d9699ae292cf.prevailing-winds-x.json",
+          "bytes": 29333954,
+          "sha256": "f38a2709e737f530fcfddfbcaf46560d53f90eca7cb3202264d7e1546e0c2bf8"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/de179f75-8d50-5b99-af48-d9699ae292cf.prevailing-winds-y.json",
+          "bytes": 29331487,
+          "sha256": "341683cba9d28e4d4b7a228412e605b327419a6ec3249f2a99c569aab069e7b5"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/de179f75-8d50-5b99-af48-d9699ae292cf.prevailing-winds-z.json",
+          "bytes": 28286598,
+          "sha256": "2ab85595770dd85f864f5749266b69ebcc22d7604063c8552dd9705ba446e63f"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/e88989ae-89de-5a41-9102-5018199a96e6.climate-zones.json",
+          "bytes": 26532314,
+          "sha256": "d2ac0960836abcad1f88ebdc19f841a7c0e2205193d30f36df1927c8edc8bd19"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/ef0cc4d3-e6f5-510c-9dc0-92792f48427a.biome-belts.json",
+          "bytes": 31691262,
+          "sha256": "ddc590b631182d946e64c8a4a437dcb49c606416f59090f5b6e6eb46286cfcd4"
+        },
+        {
+          "path": "manifest.json",
+          "bytes": 5196,
+          "sha256": "fedce0acd5bb7737bf6c3079c9723f7f3d756648d41ee5050a1d1d9a5d89d38f"
+        },
+        {
+          "path": "maps/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7.json",
+          "bytes": 82484875,
+          "sha256": "dac7b5ad3571f8142c934cd3fc0cfda8b4dc8e99ca85a45ad92257db41b8745d"
+        },
+        {
+          "path": "world.json",
+          "bytes": 414,
+          "sha256": "a573cd7d55d414ae247a252f2b4427ac10891b5c7b7ca3ebf912d8bb7f96257b"
+        }
+      ],
+      "repeats": [
+        {
+          "repeat": 1,
+          "encodeElapsedMs": 2874.233,
+          "encodeWallMs": 2905.104,
+          "encodePeakRssBytes": 1217265664,
+          "packageFingerprint": "fedce0acd5bb7737bf6c3079c9723f7f3d756648d41ee5050a1d1d9a5d89d38f",
+          "fileSetFingerprint": "c3e4d0c0711b67e895ab1f002e27604b7ef33a2e2200b49fd09055059e8a2a6a",
+          "encodedLogicalFieldSetFingerprint": "598e92f5ba1bda4f55d891fccb37e751f76da14a44cbcb883102c15f78a47dc8",
+          "decodeElapsedMs": 2755.611,
+          "decodeWallMs": 2786.328,
+          "decodePeakRssBytes": 1487224832,
+          "decodedLogicalFieldSetFingerprint": "598e92f5ba1bda4f55d891fccb37e751f76da14a44cbcb883102c15f78a47dc8",
+          "decodedAspectCount": 9,
+          "decodedFieldCount": 9,
+          "generatorInvocations": 0
+        },
+        {
+          "repeat": 2,
+          "encodeElapsedMs": 2908.116,
+          "encodeWallMs": 2940.292,
+          "encodePeakRssBytes": 1217118208,
+          "packageFingerprint": "fedce0acd5bb7737bf6c3079c9723f7f3d756648d41ee5050a1d1d9a5d89d38f",
+          "fileSetFingerprint": "c3e4d0c0711b67e895ab1f002e27604b7ef33a2e2200b49fd09055059e8a2a6a",
+          "encodedLogicalFieldSetFingerprint": "598e92f5ba1bda4f55d891fccb37e751f76da14a44cbcb883102c15f78a47dc8",
+          "decodeElapsedMs": 2812.945,
+          "decodeWallMs": 2843.933,
+          "decodePeakRssBytes": 1487552512,
+          "decodedLogicalFieldSetFingerprint": "598e92f5ba1bda4f55d891fccb37e751f76da14a44cbcb883102c15f78a47dc8",
+          "decodedAspectCount": 9,
+          "decodedFieldCount": 9,
+          "generatorInvocations": 0
+        }
+      ]
+    },
+    {
+      "option": "compact-dictionary-json",
+      "packageBytes": 189500644,
+      "packageHeadroomBytes": 11825948,
+      "withinPackageLimit": true,
+      "largestFile": {
+        "path": "maps/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7.json",
+        "bytes": 82484875,
+        "sha256": "dac7b5ad3571f8142c934cd3fc0cfda8b4dc8e99ca85a45ad92257db41b8745d"
+      },
+      "perFileHeadroomBytes": 51732853,
+      "withinPerFileLimit": true,
+      "fileCount": 21,
+      "packageFingerprint": "3f500022b4b29e2fc09a79cbd48a3835b6426592de77c1a109cc3bcb99ac91e4",
+      "fileSetFingerprint": "0c13438349de3db93f7319d2b5e78b49b419fd042ebafe28d05a7e1703a41ef1",
+      "logicalFieldSetFingerprint": "598e92f5ba1bda4f55d891fccb37e751f76da14a44cbcb883102c15f78a47dc8",
+      "files": [
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/098b5448-209c-55b0-96fe-9bd397c6f314.json",
+          "bytes": 3065,
+          "sha256": "14cfc4f46c64ab83cde3ce4490b8063d03876f7f62e9ba2f2858b14b2aac5b86"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/47d4f799-fc0a-5818-ac6f-7827374d0a0c.json",
+          "bytes": 4977,
+          "sha256": "c8b275b43853fd4b27a6b0a9209dbfbdfb26ef582fe233846131631335acd183"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/5ad53f4f-728c-54ce-9a7f-7d0acd384287.json",
+          "bytes": 2360,
+          "sha256": "79c6b5430c69e40faf88ed5ff175d20a4c4bd1bc0b4428b43bbdb4260a10504f"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/8433b981-ad06-5714-a49f-e454ef265279.json",
+          "bytes": 2420,
+          "sha256": "b56debb60796240f3196fff1b3804e798e9e8e2aaa03a0db1a279f874855a0ba"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/91f1b126-70e2-5812-83b2-4c6373a863d5.json",
+          "bytes": 3003,
+          "sha256": "111a6322ca6de5bba3fe3bd8c98c8781f52f1b7e5f163ebe8d2770bd905fea44"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/b255be89-ad89-582a-bc1e-801aac7255e8.json",
+          "bytes": 2788,
+          "sha256": "e08373dac5b3bd0e2a6b59a700f95eb15157308a135d2895ca36408f52452d78"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/de179f75-8d50-5b99-af48-d9699ae292cf.json",
+          "bytes": 7401,
+          "sha256": "62b5bc1ca12e4f295abd4d7e917e5ec174c68dd4d67a9ed70391906a287f5ba8"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/e88989ae-89de-5a41-9102-5018199a96e6.json",
+          "bytes": 3438,
+          "sha256": "bb8a4fb110f4feaac04eda222a3757c78bb53fd1e5983b2f37aea13337120bf8"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/ef0cc4d3-e6f5-510c-9dc0-92792f48427a.json",
+          "bytes": 6134054,
+          "sha256": "f9d0653025de11e03f37e144e1570a3ef0696141bf5a33de3d38a51fe54aecd2"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/098b5448-209c-55b0-96fe-9bd397c6f314.moisture.compact.json",
+          "bytes": 18125496,
+          "sha256": "39f1dad3f3dc530f805c32a96e1a2edf164febd955e4d7694ecacff8453f8361"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/47d4f799-fc0a-5818-ac6f-7827374d0a0c.watersheds.compact.json",
+          "bytes": 4190519,
+          "sha256": "5797d7fa27bd3be021fee1d2dbccabb5040e122600445cc01574f201bc8c158c"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/91f1b126-70e2-5812-83b2-4c6373a863d5.temperature.compact.json",
+          "bytes": 8339002,
+          "sha256": "ca2f5f9384d1c437544039dcae0f359c29797ee0c4baddff503a8bcfd1a7a3e7"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/de179f75-8d50-5b99-af48-d9699ae292cf.prevailing-winds-speed.compact.json",
+          "bytes": 6285403,
+          "sha256": "0388c95d2b834550a03ef5d681ff9f0682bdf65ef8f84a37659506fb488acd9f"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/de179f75-8d50-5b99-af48-d9699ae292cf.prevailing-winds-x.compact.json",
+          "bytes": 18858404,
+          "sha256": "20e5e5091c4d478d12793f1196c7d2f7de8627fffc8101d8797675006cddca9f"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/de179f75-8d50-5b99-af48-d9699ae292cf.prevailing-winds-y.compact.json",
+          "bytes": 18855937,
+          "sha256": "51e050f3ddf22304b859c418a2d2eaba7ef5c4772d724fd4f38cf6b70331c784"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/de179f75-8d50-5b99-af48-d9699ae292cf.prevailing-winds-z.compact.json",
+          "bytes": 17811048,
+          "sha256": "b04436eb79c29a3e93846f23d85249885e5c2ed102dbb95b71f74fde233d8e6b"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/e88989ae-89de-5a41-9102-5018199a96e6.climate-zones.compact.json",
+          "bytes": 4190370,
+          "sha256": "3dae02c53eb8b2144d1ffbb46168ae8e5773cdeead9a1154efa5216dddf934ae"
+        },
+        {
+          "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/ef0cc4d3-e6f5-510c-9dc0-92792f48427a.biome-belts.compact.json",
+          "bytes": 4190402,
+          "sha256": "6877926326eebafc15f4015cdfbb3aafe2eaad67873ac98c21305e4d7f7780ad"
+        },
+        {
+          "path": "manifest.json",
+          "bytes": 5268,
+          "sha256": "3f500022b4b29e2fc09a79cbd48a3835b6426592de77c1a109cc3bcb99ac91e4"
+        },
+        {
+          "path": "maps/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7.json",
+          "bytes": 82484875,
+          "sha256": "dac7b5ad3571f8142c934cd3fc0cfda8b4dc8e99ca85a45ad92257db41b8745d"
+        },
+        {
+          "path": "world.json",
+          "bytes": 414,
+          "sha256": "a573cd7d55d414ae247a252f2b4427ac10891b5c7b7ca3ebf912d8bb7f96257b"
+        }
+      ],
+      "repeats": [
+        {
+          "repeat": 1,
+          "encodeElapsedMs": 2607.79,
+          "encodeWallMs": 2638.928,
+          "encodePeakRssBytes": 1453932544,
+          "packageFingerprint": "3f500022b4b29e2fc09a79cbd48a3835b6426592de77c1a109cc3bcb99ac91e4",
+          "fileSetFingerprint": "0c13438349de3db93f7319d2b5e78b49b419fd042ebafe28d05a7e1703a41ef1",
+          "encodedLogicalFieldSetFingerprint": "598e92f5ba1bda4f55d891fccb37e751f76da14a44cbcb883102c15f78a47dc8",
+          "decodeElapsedMs": 2298.592,
+          "decodeWallMs": 2328.801,
+          "decodePeakRssBytes": 1028227072,
+          "decodedLogicalFieldSetFingerprint": "598e92f5ba1bda4f55d891fccb37e751f76da14a44cbcb883102c15f78a47dc8",
+          "decodedAspectCount": 9,
+          "decodedFieldCount": 9,
+          "generatorInvocations": 0
+        },
+        {
+          "repeat": 2,
+          "encodeElapsedMs": 2625.13,
+          "encodeWallMs": 2656.356,
+          "encodePeakRssBytes": 1454014464,
+          "packageFingerprint": "3f500022b4b29e2fc09a79cbd48a3835b6426592de77c1a109cc3bcb99ac91e4",
+          "fileSetFingerprint": "0c13438349de3db93f7319d2b5e78b49b419fd042ebafe28d05a7e1703a41ef1",
+          "encodedLogicalFieldSetFingerprint": "598e92f5ba1bda4f55d891fccb37e751f76da14a44cbcb883102c15f78a47dc8",
+          "decodeElapsedMs": 2266.984,
+          "decodeWallMs": 2296.872,
+          "decodePeakRssBytes": 1028341760,
+          "decodedLogicalFieldSetFingerprint": "598e92f5ba1bda4f55d891fccb37e751f76da14a44cbcb883102c15f78a47dc8",
+          "decodedAspectCount": 9,
+          "decodedFieldCount": 9,
+          "generatorInvocations": 0
+        }
+      ]
+    }
+  ]
+}

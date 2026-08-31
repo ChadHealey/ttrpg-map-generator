@@ -372,10 +372,14 @@ building-interior maps are not unrelated project files. Keeping them in one pack
 references and lets the user reopen one world before generating or editing a map at another
 scale.
 
-Start with canonical JSON. Move large numeric fields or geometry to versioned binary chunks
-only after representative projects demonstrate that JSON is a real size or performance
-problem. Do not introduce SQLite before spatial scale, query patterns, and recovery needs
-justify it.
+Start with canonical JSON. Representative M3 physical-context evidence has now demonstrated that
+the v2 single-map JSON candidate cannot fit the existing transport limits. The accepted
+[`mapworld` v2 contract](mapworld-v2.md) therefore keeps inspectable canonical aspect records while
+moving dense fields to strictly versioned authoritative binary chunks behind project-owned
+readers. Linux corroboration is explicitly deferred until an environment is available and remains
+required before production v2 writer release; it does not block implementation. V1 bytes and
+ADR-0008 atomic recovery do not change. Do not introduce SQLite before spatial scale, query
+patterns, and recovery needs justify it.
 
 ### 6.2 World, map, and parent-context records
 
@@ -449,7 +453,8 @@ accepted work across algorithm and dependency upgrades.
 Saving operates on an immutable snapshot of the world document:
 
 1. Validate all changed world, map, entity, geometry, and reference records.
-2. Serialize canonical JSON with stable key and collection ordering.
+2. Serialize canonical JSON and any declared versioned binary fields with stable key, collection,
+   path, and byte ordering.
 3. Write a complete temporary sibling package and calculate authoritative checksums.
 4. Flush and verify the temporary package before committing it in place of the old package.
 5. Retain enough backup or commit-marker information to recover if the replacement is
@@ -1086,7 +1091,7 @@ These should be settled with representative code or assets, not abstract debate:
 - the planet-native topology, wrap/pole behavior, and initial world-atlas projection;
 - the supported shapes and limits of regional footprints, especially near seams and poles;
 - grid, Voronoi, or hybrid representation for specific terrain tasks;
-- whether large authoritative numeric fields need binary chunks;
+- deferred Linux corroboration of the accepted ADR-0027 binary-field contract before v2 release;
 - the scene-message format sent to workers;
 - the threshold for adding an R-tree or WebGL viewport;
 - the hand-lettering font and license;
