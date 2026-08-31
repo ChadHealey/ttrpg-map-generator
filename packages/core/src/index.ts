@@ -351,6 +351,49 @@ export {
   isImmutableDomainSnapshot,
 } from './immutable-domain-snapshot.js';
 export {
+  computeInheritedContextSemanticChecksum,
+  encodeInheritedContextSemanticChecksumInput,
+  inheritedContextSnapshotContent,
+  isInheritedContextSemanticChecksum,
+} from './inherited-context-checksum.js';
+export {
+  INHERITED_CONTEXT_COLLAR_VERSION,
+  INHERITED_CONTEXT_CONTRACT_VERSION,
+  INHERITED_CONTEXT_DIAGNOSTIC_CODES,
+  INHERITED_CONTEXT_PORTAL_ORDER,
+  INHERITED_CONTEXT_ROOT_REFINEMENT_NAMESPACE_VERSION,
+  INHERITED_CONTEXT_SEMANTIC_CHECKSUM_ALGORITHM,
+  INHERITED_CONTEXT_SEMANTIC_CHECKSUM_VERSION,
+  type InheritedContextBoundaryPortal,
+  type InheritedContextBoundaryPortalKind,
+  type InheritedContextCollar,
+  type InheritedContextDiagnostic,
+  type InheritedContextDiagnosticCode,
+  type InheritedContextField,
+  type InheritedContextFieldComponent,
+  type InheritedContextFieldKind,
+  type InheritedContextFieldSample,
+  type InheritedContextFieldSampleValue,
+  type InheritedContextFieldValueEncoding,
+  type InheritedContextGeometryAnchor,
+  type InheritedContextGeometryAnchorKind,
+  type InheritedContextLandWaterClass,
+  type InheritedContextNamedAnchor,
+  type InheritedContextNameKind,
+  type InheritedContextParseResult,
+  type InheritedContextRootRefinementNamespace,
+  type InheritedContextSemanticChecksum,
+  type InheritedContextSemanticChecksumRecord,
+  type InheritedContextSnapshot,
+  type InheritedContextSnapshotContent,
+  type InheritedContextSourceAspectVersion,
+  type InheritedContextSourceLineage,
+} from './inherited-context-model.js';
+export {
+  parseInheritedContextSnapshot,
+  validateInheritedContextSnapshot,
+} from './inherited-context-validation.js';
+export {
   deriveRegionalFootprintEntityId,
   encodeRegionalFootprintIdentityInput,
 } from './regional-footprint-identity.js';
