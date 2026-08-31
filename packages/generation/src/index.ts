@@ -1,5 +1,18 @@
 /** Pure generator contracts and implementations with no UI, persistence, or renderer access. */
 
+export {
+  ATLAS_ATMOSPHERE_DIAGNOSTIC_CODES,
+  ATLAS_ATMOSPHERE_GENERATOR_MANIFEST,
+  ATLAS_ATMOSPHERE_GENERATOR_MANIFEST_VERSION,
+  ATLAS_ATMOSPHERE_PARAMETER_SCHEMA_VERSION,
+  type AtlasAtmosphereGenerationInput,
+  type AtlasAtmosphereGenerationResult,
+  type AtlasAtmosphereParameters,
+  type AtlasAtmosphereProposedPatch,
+  type AtlasPrevailingWindsAspectProposal,
+  type AtlasTemperatureAspectProposal,
+  generateAtlasAtmosphere,
+} from './atlas-atmosphere-generator.js';
 export { atlasPlanetContourExtractionAdapter } from './atlas-coastline-contours.js';
 export {
   ATLAS_COASTLINE_DIAGNOSTIC_CODES,

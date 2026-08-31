@@ -575,6 +575,7 @@ export {
   validateWorldPhysicalContextAspectDefinitions,
   validateWorldPhysicalContextControls,
   validateWorldPhysicalContextRecords,
+  validateWorldPhysicalMountainSystems,
   WORLD_PHYSICAL_CONTEXT_DIAGNOSTIC_CODES,
   type WorldPhysicalContextDiagnostic,
   type WorldPhysicalContextDiagnosticCode,

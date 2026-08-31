@@ -138,7 +138,7 @@ export function validateWorldPhysicalContextRecords(
     ...validateClimateZoneField(records.climateZones, records.worldSurfaceEntityId),
     ...validateBiomeBeltField(records.biomeBelts, records.worldSurfaceEntityId),
     ...validateWatersheds(records.watersheds, records.worldSurfaceEntityId, records.worldMapId),
-    ...validateMountainSystems(
+    ...validateWorldPhysicalMountainSystems(
       records.mountainSystems,
       records.worldSurfaceEntityId,
       records.worldMapId,
@@ -347,7 +347,8 @@ function validateBiomeBeltField(
   return diagnostics;
 }
 
-function validateMountainSystems(
+/** Validate structural invariants of a mountain-systems aspect without mutating or repairing it. */
+export function validateWorldPhysicalMountainSystems(
   records: MountainSystems,
   worldSurfaceEntityId: EntityId,
   worldMapId: MapId,
