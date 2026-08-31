@@ -7,6 +7,7 @@ import {
   type WorldPhysicalContextAspectKind,
 } from './world-physical-context-aspects.js';
 import {
+  deriveWorldPhysicalBiomeBeltEntityId,
   deriveWorldPhysicalContextAspectId,
   deriveWorldPhysicalFeatureEntityId,
   fingerprintWorldPhysicalField,
@@ -127,16 +128,14 @@ export function validateWorldPhysicalContextRecords(
 ): WorldPhysicalContextValidationResult {
   const diagnostics = [
     ...validateWorldPhysicalContextControls(records.controls),
-    ...validateField(
-      records.temperature,
-      'temperature',
-      isCanonicalInteger,
+    ...validateWorldPhysicalTemperatureField(records.temperature, records.worldSurfaceEntityId),
+    ...validateWorldPhysicalPrevailingWindField(
+      records.prevailingWinds,
       records.worldSurfaceEntityId,
     ),
-    ...validateWindField(records.prevailingWinds, records.worldSurfaceEntityId),
     ...validateMoistureField(records.moisture, records.worldSurfaceEntityId),
     ...validateClimateZoneField(records.climateZones, records.worldSurfaceEntityId),
-    ...validateBiomeBeltField(records.biomeBelts, records.worldSurfaceEntityId),
+    ...validateBiomeBeltField(records.biomeBelts, records.worldSurfaceEntityId, records.worldMapId),
     ...validateWatersheds(records.watersheds, records.worldSurfaceEntityId, records.worldMapId),
     ...validateWorldPhysicalMountainSystems(
       records.mountainSystems,
@@ -153,6 +152,24 @@ export function validateWorldPhysicalContextRecords(
   ];
   const ordered = orderDiagnostics(diagnostics);
   return ordered.length === 0 ? { ok: true } : { ok: false, diagnostics: ordered };
+}
+
+/** Validate one accepted temperature field without requiring unrelated later-M3 records. */
+export function validateWorldPhysicalTemperatureField(
+  field: QuantizedScalarField<'temperature', number>,
+  worldSurfaceEntityId: EntityId,
+): readonly WorldPhysicalContextDiagnostic[] {
+  return orderDiagnostics(
+    validateField(field, 'temperature', isCanonicalInteger, worldSurfaceEntityId),
+  );
+}
+
+/** Validate one accepted prevailing-wind field without requiring unrelated later-M3 records. */
+export function validateWorldPhysicalPrevailingWindField(
+  field: PrevailingWindField,
+  worldSurfaceEntityId: EntityId,
+): readonly WorldPhysicalContextDiagnostic[] {
+  return orderDiagnostics(validateWindField(field, worldSurfaceEntityId));
 }
 
 function validateField<Kind extends WorldPhysicalFieldKind, Value>(
@@ -320,6 +337,7 @@ function validateClimateZoneField(
 function validateBiomeBeltField(
   field: BiomeBeltField,
   worldSurfaceEntityId: EntityId,
+  worldMapId: MapId,
 ): readonly WorldPhysicalContextDiagnostic[] {
   const definitions = new Set(field.definitions.map((definition) => definition.key));
   const diagnostics = [
@@ -337,7 +355,13 @@ function validateBiomeBeltField(
         !definitions.has(summary.biomeKey) ||
         !isVersionOne(summary.geometryVersion) ||
         summary.boundaryPoints.length < 3 ||
-        summary.boundaryPoints.some((point) => !parsePlanetPoint(point).ok),
+        summary.boundaryPoints.some((point) => !parsePlanetPoint(point).ok) ||
+        !hasExpectedBiomeBeltIdentity(
+          worldMapId,
+          summary.entityId,
+          summary.biomeKey,
+          summary.boundaryPoints,
+        ),
     )
   ) {
     diagnostics.push(
@@ -345,6 +369,25 @@ function validateBiomeBeltField(
     );
   }
   return diagnostics;
+}
+
+function hasExpectedBiomeBeltIdentity(
+  worldMapId: MapId,
+  entityId: EntityId,
+  biomeKey: BiomeBeltField['beltSummaries'][number]['biomeKey'],
+  points: readonly unknown[],
+): boolean {
+  const parsed = points.map((point) => parsePlanetPoint(point));
+  if (parsed.length === 0 || parsed.some((point) => !point.ok)) return false;
+  const canonicalPoints = parsed.flatMap((point) => (point.ok ? [point.value] : []));
+  return (
+    entityId ===
+    deriveWorldPhysicalBiomeBeltEntityId(
+      worldMapId,
+      biomeKey,
+      fingerprintWorldPhysicalRootSignature(canonicalPoints),
+    )
+  );
 }
 
 /** Validate structural invariants of a mountain-systems aspect without mutating or repairing it. */

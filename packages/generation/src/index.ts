@@ -40,6 +40,20 @@ export {
   unwrapPlanetRing,
 } from './atlas-coastline-topology.js';
 export {
+  ATLAS_ECOLOGY_DIAGNOSTIC_CODES,
+  ATLAS_ECOLOGY_GENERATOR_MANIFEST,
+  ATLAS_ECOLOGY_GENERATOR_MANIFEST_VERSION,
+  ATLAS_ECOLOGY_PARAMETER_SCHEMA_VERSION,
+  type AtlasBiomeBeltsAspectProposal,
+  type AtlasClimateZonesAspectProposal,
+  type AtlasEcologyGenerationInput,
+  type AtlasEcologyGenerationResult,
+  type AtlasEcologyParameters,
+  type AtlasEcologyProposedPatch,
+  type AtlasMoistureAspectProposal,
+  generateAtlasEcology,
+} from './atlas-ecology-generator.js';
+export {
   type AtlasClassificationCooperation,
   type AtlasClassificationOutput,
   type AtlasClassificationResult,

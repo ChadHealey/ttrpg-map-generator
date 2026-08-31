@@ -42,6 +42,15 @@ export function deriveWorldPhysicalContextAspectId(
 
 export type WorldPhysicalFeatureKind = 'lake' | 'mountain-system' | 'river' | 'watershed';
 
+/** Derive one biome-belt identity from its canonical class key and representative root. */
+export function deriveWorldPhysicalBiomeBeltEntityId(
+  worldMapId: MapId,
+  biomeKey: BiomeKey,
+  signature: WorldPhysicalRootSignature,
+): EntityId {
+  return deriveAtlasFeatureEntityId(worldMapId, semanticKey(`biome-belt-${biomeKey}-${signature}`));
+}
+
 /** Hash the lexicographically first canonical root coordinate, independent of geometry ordering. */
 export function fingerprintWorldPhysicalRootSignature(
   points: readonly PlanetPoint[],

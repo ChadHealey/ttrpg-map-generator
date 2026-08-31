@@ -10,6 +10,7 @@ import {
   type WorldPhysicalContextAspectKind,
 } from './world-physical-context-aspects.js';
 import {
+  deriveWorldPhysicalBiomeBeltEntityId,
   deriveWorldPhysicalContextAspectId,
   deriveWorldPhysicalFeatureEntityId,
   fingerprintWorldPhysicalField,
@@ -185,6 +186,36 @@ describe('Milestone 3 world physical-context contracts', () => {
 
   it('accepts a frozen synthetic physical-context contract without generation or clipping', () => {
     expect(validateWorldPhysicalContextRecords(validRecords())).toStrictEqual({ ok: true });
+  });
+
+  it('requires canonical biome-belt identities derived from their biome key and root points', () => {
+    const records = validRecords();
+    const points = [PLANET_POINT, PLANET_POINT, PLANET_POINT];
+    const summary = {
+      entityId: deriveWorldPhysicalBiomeBeltEntityId(
+        WORLD_MAP_ID,
+        BIOME,
+        fingerprintWorldPhysicalRootSignature(points),
+      ),
+      biomeKey: BIOME,
+      geometryVersion: 1 as const,
+      boundaryPoints: points,
+    };
+    const withSummary = {
+      ...records,
+      biomeBelts: { ...records.biomeBelts, beltSummaries: [summary] },
+    };
+
+    expect(validateWorldPhysicalContextRecords(withSummary)).toStrictEqual({ ok: true });
+    expect(
+      diagnosticCodes({
+        ...withSummary,
+        biomeBelts: {
+          ...withSummary.biomeBelts,
+          beltSummaries: [{ ...summary, entityId: RIVER_ID }],
+        },
+      }),
+    ).toContain(WORLD_PHYSICAL_CONTEXT_DIAGNOSTIC_CODES.invalidGeometry);
   });
 
   it('returns stable diagnostics for invalid versions, readers, values, ordering, and references', () => {

@@ -501,6 +501,7 @@ export {
   type WorldPhysicalEnumControlDefinition,
 } from './world-physical-context-aspects.js';
 export {
+  deriveWorldPhysicalBiomeBeltEntityId,
   deriveWorldPhysicalContextAspectId,
   deriveWorldPhysicalFeatureEntityId,
   fingerprintWorldPhysicalField,
@@ -576,6 +577,8 @@ export {
   validateWorldPhysicalContextControls,
   validateWorldPhysicalContextRecords,
   validateWorldPhysicalMountainSystems,
+  validateWorldPhysicalPrevailingWindField,
+  validateWorldPhysicalTemperatureField,
   WORLD_PHYSICAL_CONTEXT_DIAGNOSTIC_CODES,
   type WorldPhysicalContextDiagnostic,
   type WorldPhysicalContextDiagnosticCode,
