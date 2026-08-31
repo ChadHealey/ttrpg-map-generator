@@ -1,12 +1,13 @@
 /** Validated canonical project-package boundaries around project-owned core domain records. */
 
 export { decodedBase64ByteLength, encodeBase64Bytes } from './base64-bytes.js';
-export { decodeMapworld } from './mapworld-decode.js';
+export { decodeMapworld, decodeMapworldV1 } from './mapworld-decode.js';
 export {
   canonicalAspectBytes,
   canonicalAspectOutputBytes,
   encodeMapworld,
 } from './mapworld-encode.js';
+export type { MapworldFieldDescriptor, MapworldFieldEncoding } from './mapworld-field-codec.js';
 export { classifyMapworldRecoverySnapshot } from './mapworld-recovery-classification.js';
 export { planConfirmedMapworldRecovery } from './mapworld-recovery-confirmation.js';
 export { decideMapworldRecovery } from './mapworld-recovery-decision.js';
@@ -55,6 +56,7 @@ export {
   validateMapworldNativeSaveRequestDto,
   validateParsedMapworldNativeSaveRequestDto,
 } from './mapworld-recovery-native-dto.js';
+export { encodeMapworldV2 } from './mapworld-v2-codec.js';
 export {
   ACCEPTED_ASPECT_SCHEMA_VERSION,
   type CanonicalJsonPrimitive,
@@ -62,8 +64,14 @@ export {
   MAP_DOCUMENT_SCHEMA_VERSION,
   MAPWORLD_APPLICATION_COMPATIBILITY,
   MAPWORLD_CHECKSUM_ALGORITHM,
+  MAPWORLD_FIELD_FILE_SCHEMA_VERSION,
   MAPWORLD_PACKAGE_VERSION,
   MAPWORLD_SCHEMA_VERSION,
+  MAPWORLD_V2_ACCEPTED_ASPECT_SCHEMA_VERSION,
+  MAPWORLD_V2_APPLICATION_COMPATIBILITY,
+  MAPWORLD_V2_MAP_DOCUMENT_SCHEMA_VERSION,
+  MAPWORLD_V2_PACKAGE_VERSION,
+  MAPWORLD_V2_SCHEMA_VERSION,
   type MapworldPackage,
   type MapworldPackageFile,
   PERSISTENCE_DIAGNOSTIC_CODES,

@@ -12,6 +12,7 @@ export function validateDto<Value>(
   schema: z.ZodType<Value>,
   input: unknown,
   filePath: string,
+  schemaVersion: 'v1' | 'v2' = 'v1',
 ): PersistenceResult<Value> {
   const parsed = schema.safeParse(input);
   if (parsed.success) return persistenceSuccess(parsed.data);
@@ -22,8 +23,8 @@ export function validateDto<Value>(
         PERSISTENCE_DIAGNOSTIC_CODES.schemaInvalid,
         filePath,
         formatZodPath(issue.path),
-        `The persisted record does not match the strict v1 schema: ${issue.message}`,
-        'Restore a compatible v1 record without unknown, missing, or malformed fields.',
+        `The persisted record does not match the strict ${schemaVersion} schema: ${issue.message}`,
+        `Restore a compatible ${schemaVersion} record without unknown, missing, or malformed fields.`,
       ),
     )
     .sort(comparePersistenceDiagnostics);

@@ -5,6 +5,16 @@ export const MAPWORLD_SCHEMA_VERSION = 1 as const;
 export const WORLD_INDEX_SCHEMA_VERSION = 1 as const;
 export const MAP_DOCUMENT_SCHEMA_VERSION = 1 as const;
 export const ACCEPTED_ASPECT_SCHEMA_VERSION = 1 as const;
+export const MAPWORLD_V2_PACKAGE_VERSION = 2 as const;
+export const MAPWORLD_V2_SCHEMA_VERSION = 2 as const;
+export const MAPWORLD_V2_MAP_DOCUMENT_SCHEMA_VERSION = 2 as const;
+export const MAPWORLD_V2_ACCEPTED_ASPECT_SCHEMA_VERSION = 2 as const;
+export const MAPWORLD_FIELD_FILE_SCHEMA_VERSION = 1 as const;
+
+export const MAPWORLD_V2_APPLICATION_COMPATIBILITY = Object.freeze({
+  minimumVersion: '0.2.0',
+  maximumVersionExclusive: '0.3.0',
+});
 
 export const MAPWORLD_APPLICATION_COMPATIBILITY = Object.freeze({
   minimumVersion: '0.1.0',
@@ -21,10 +31,12 @@ export const PERSISTENCE_DIAGNOSTIC_CODES = {
   fileMissing: 'persistence.file.missing',
   filePathInvalid: 'persistence.file.path-invalid',
   fileUnexpected: 'persistence.file.unexpected',
+  fieldInvalid: 'persistence.field.invalid',
   immutableSnapshotInvalid: 'persistence.snapshot.invalid',
   jsonMalformed: 'persistence.json.malformed',
   jsonNoncanonical: 'persistence.json.noncanonical',
   jsonUtf8Invalid: 'persistence.json.utf8-invalid',
+  limitExceeded: 'persistence.limit.exceeded',
   ownershipInvalid: 'persistence.ownership.invalid',
   proofInvalid: 'persistence.proof.invalid',
   referenceInvalid: 'persistence.reference.invalid',

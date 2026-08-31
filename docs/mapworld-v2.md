@@ -68,6 +68,35 @@ All JSON retains the version-1 canonical rules: UTF-8 without BOM, LF, one final
 indentation, recursively ASCII/code-point-sorted object keys, safe integers, and explicit semantic
 array order. No v2 path uses compact JSON.
 
+The two domain outputs whose in-memory quantum is `0.1` use exact fixed rational DTOs so no binary
+floating-point number enters canonical JSON:
+
+```json
+{
+  "quantumCelsius": {
+    "denominator": 10,
+    "numerator": 1
+  }
+}
+```
+
+```json
+{
+  "speedQuantumMetersPerSecond": {
+    "denominator": 10,
+    "numerator": 1
+  }
+}
+```
+
+These are strict literal objects, not a generic rational-number facility. The encoder accepts only
+the corresponding domain constant `0.1`, writes exactly the objects above, and never serializes the
+domain number directly. The decoder accepts only integer numerator `1` and denominator `10`, then
+reconstructs the existing domain constant `0.1`. Missing fields, extra fields, reversed values,
+alternate equivalent fractions such as `2/20`, decimal numbers, strings, and default insertion all
+fail strict schema validation. This lossless DTO conversion does not change field provenance,
+logical-value fingerprints, `.mwf` payloads, or the safe-integer JSON rule.
+
 Each `.mwf` file is a 32-byte header plus exactly one dense payload:
 
 | Offset | Size | Value                                                                       |

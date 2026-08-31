@@ -1,4 +1,5 @@
 import { sha256Hex } from './canonical-json.js';
+import { MAPWORLD_NATIVE_LIMITS } from './mapworld-recovery-model.js';
 import { type MapworldManifestDto } from './package-dto-schemas.js';
 import {
   comparePersistenceDiagnostics,
@@ -15,6 +16,9 @@ import {
 
 const MAP_FILE_PATTERN =
   /^maps\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.json$/u;
+const DATA_FILE_PATTERN =
+  /^data\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/(?:aspects\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.json|fields\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.[a-z0-9-]+\.mwf)$/u;
+const UTF8_ENCODER = new TextEncoder();
 
 export function validatePackageContainer(
   input: unknown,
@@ -38,8 +42,12 @@ export function validatePackageContainer(
     );
   }
   const inputFiles = (input as { readonly files: readonly unknown[] }).files;
-  const files: MapworldPackageFile[] = [];
+  if (inputFiles.length === 0 || inputFiles.length > MAPWORLD_NATIVE_LIMITS.maximumPackageFiles) {
+    return limitFailure('$package', '$.files', 'Package file count exceeds the native limit.');
+  }
+  const validatedFiles: { readonly path: string; readonly bytes: Uint8Array }[] = [];
   const seenPaths = new Set<string>();
+  let aggregateBytes = 0;
   for (const [index, candidate] of inputFiles.entries()) {
     if (
       typeof candidate !== 'object' ||
@@ -57,6 +65,28 @@ export function validatePackageContainer(
     ) {
       return invalidContainerFile(index);
     }
+    if (!isPathWithinNativeLimits(file.path)) {
+      return limitFailure(
+        file.path,
+        `$.files[${String(index)}].path`,
+        'Package path exceeds the native path or component limit.',
+      );
+    }
+    if (file.bytes.byteLength > MAPWORLD_NATIVE_LIMITS.maximumFileBytes) {
+      return limitFailure(
+        file.path,
+        `$.files[${String(index)}].bytes`,
+        'Package entry exceeds the native per-file byte limit.',
+      );
+    }
+    aggregateBytes += file.bytes.byteLength;
+    if (aggregateBytes > MAPWORLD_NATIVE_LIMITS.maximumPackageBytes) {
+      return limitFailure(
+        '$package',
+        '$.files',
+        'Package exceeds the native aggregate byte limit.',
+      );
+    }
     if (seenPaths.has(file.path)) {
       return persistenceFailure(
         persistenceDiagnostic(
@@ -69,8 +99,11 @@ export function validatePackageContainer(
       );
     }
     seenPaths.add(file.path);
-    files.push(Object.freeze({ path: file.path, bytes: file.bytes.slice() }));
+    validatedFiles.push({ path: file.path, bytes: file.bytes });
   }
+  const files: MapworldPackageFile[] = validatedFiles.map(({ path, bytes }) =>
+    Object.freeze({ path, bytes: bytes.slice() }),
+  );
   return persistenceSuccess(Object.freeze(files));
 }
 
@@ -148,7 +181,43 @@ function invalidContainerFile(index: number): PersistenceResult<never> {
 }
 
 function isAllowedPackagePath(path: string): boolean {
-  return path === 'manifest.json' || path === 'world.json' || MAP_FILE_PATTERN.test(path);
+  return (
+    path === 'manifest.json' ||
+    path === 'world.json' ||
+    MAP_FILE_PATTERN.test(path) ||
+    DATA_FILE_PATTERN.test(path)
+  );
+}
+
+function isPathWithinNativeLimits(path: string): boolean {
+  const components = path.split('/');
+  return (
+    UTF8_ENCODER.encode(path).byteLength <= MAPWORLD_NATIVE_LIMITS.maximumRelativePathBytes &&
+    components.length - 1 <= MAPWORLD_NATIVE_LIMITS.maximumDirectoryDepth &&
+    components.every(
+      (component) =>
+        component.length > 0 &&
+        component !== '.' &&
+        component !== '..' &&
+        UTF8_ENCODER.encode(component).byteLength <= MAPWORLD_NATIVE_LIMITS.maximumBasenameBytes,
+    )
+  );
+}
+
+function limitFailure<Value>(
+  filePath: string,
+  fieldPath: string,
+  message: string,
+): PersistenceResult<Value> {
+  return persistenceFailure(
+    persistenceDiagnostic(
+      PERSISTENCE_DIAGNOSTIC_CODES.limitExceeded,
+      filePath,
+      fieldPath,
+      message,
+      'Reduce the bounded package or restore an in-limit package before opening it.',
+    ),
+  );
 }
 
 function missingFileDiagnostic(path: string): PersistenceDiagnostic {

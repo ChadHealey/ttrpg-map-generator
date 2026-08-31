@@ -26,11 +26,13 @@ import {
   type NormalizedFieldTicks,
   type PrevailingWindField,
   type QuantizedScalarField,
+  type TemperatureField,
   type WatershedRecords,
   WORLD_PHYSICAL_CONTEXT_CONTRACT_VERSION,
   WORLD_PHYSICAL_FIELD_BEHAVIOR_VERSION,
   WORLD_PHYSICAL_FIELD_ENCODING_VERSION,
   WORLD_PHYSICAL_NORMALIZED_QUANTIZATION_SCALE,
+  WORLD_PHYSICAL_TEMPERATURE_QUANTUM_CELSIUS,
   WORLD_PHYSICAL_WIND_SPEED_QUANTUM_METERS_PER_SECOND,
   type WorldPhysicalContextControls,
   type WorldPhysicalContextRecords,
@@ -133,17 +135,29 @@ export function validateWorldPhysicalContextRecords(
       records.prevailingWinds,
       records.worldSurfaceEntityId,
     ),
-    ...validateMoistureField(records.moisture, records.worldSurfaceEntityId),
-    ...validateClimateZoneField(records.climateZones, records.worldSurfaceEntityId),
-    ...validateBiomeBeltField(records.biomeBelts, records.worldSurfaceEntityId, records.worldMapId),
-    ...validateWatersheds(records.watersheds, records.worldSurfaceEntityId, records.worldMapId),
+    ...validateWorldPhysicalMoistureField(records.moisture, records.worldSurfaceEntityId),
+    ...validateWorldPhysicalClimateZoneField(records.climateZones, records.worldSurfaceEntityId),
+    ...validateWorldPhysicalBiomeBeltField(
+      records.biomeBelts,
+      records.worldSurfaceEntityId,
+      records.worldMapId,
+    ),
+    ...validateWorldPhysicalWatersheds(
+      records.watersheds,
+      records.worldSurfaceEntityId,
+      records.worldMapId,
+    ),
     ...validateWorldPhysicalMountainSystems(
       records.mountainSystems,
       records.worldSurfaceEntityId,
       records.worldMapId,
     ),
-    ...validateRivers(records.majorRivers, records.watersheds.watersheds, records.worldMapId),
-    ...validateLakes(
+    ...validateWorldPhysicalMajorRivers(
+      records.majorRivers,
+      records.watersheds.watersheds,
+      records.worldMapId,
+    ),
+    ...validateWorldPhysicalMajorLakes(
       records.majorLakes,
       records.watersheds.watersheds,
       records.majorRivers,
@@ -156,12 +170,16 @@ export function validateWorldPhysicalContextRecords(
 
 /** Validate one accepted temperature field without requiring unrelated later-M3 records. */
 export function validateWorldPhysicalTemperatureField(
-  field: QuantizedScalarField<'temperature', number>,
+  field: TemperatureField,
   worldSurfaceEntityId: EntityId,
 ): readonly WorldPhysicalContextDiagnostic[] {
-  return orderDiagnostics(
-    validateField(field, 'temperature', isCanonicalInteger, worldSurfaceEntityId),
-  );
+  const diagnostics = [
+    ...validateField(field, 'temperature', isCanonicalInteger, worldSurfaceEntityId),
+  ];
+  if (!hasExactNumber(field.quantumCelsius, WORLD_PHYSICAL_TEMPERATURE_QUANTUM_CELSIUS)) {
+    diagnostics.push(invalid('invalidFieldMetadata', 'Temperature quantum must be 0.1 C.'));
+  }
+  return orderDiagnostics(diagnostics);
 }
 
 /** Validate one accepted prevailing-wind field without requiring unrelated later-M3 records. */
@@ -279,7 +297,7 @@ function validateWindField(
   return diagnostics;
 }
 
-function validateMoistureField(
+export function validateWorldPhysicalMoistureField(
   field: MoistureField,
   worldSurfaceEntityId: EntityId,
 ): readonly WorldPhysicalContextDiagnostic[] {
@@ -303,7 +321,7 @@ function validateMoistureField(
   return diagnostics;
 }
 
-function validateClimateZoneField(
+export function validateWorldPhysicalClimateZoneField(
   field: ClimateZoneField,
   worldSurfaceEntityId: EntityId,
 ): readonly WorldPhysicalContextDiagnostic[] {
@@ -334,7 +352,7 @@ function validateClimateZoneField(
   return diagnostics;
 }
 
-function validateBiomeBeltField(
+export function validateWorldPhysicalBiomeBeltField(
   field: BiomeBeltField,
   worldSurfaceEntityId: EntityId,
   worldMapId: MapId,
@@ -437,7 +455,7 @@ export function validateWorldPhysicalMountainSystems(
   return diagnostics;
 }
 
-function validateWatersheds(
+export function validateWorldPhysicalWatersheds(
   records: WatershedRecords,
   worldSurfaceEntityId: EntityId,
   worldMapId: MapId,
@@ -476,7 +494,7 @@ function validateWatersheds(
   return diagnostics;
 }
 
-function validateRivers(
+export function validateWorldPhysicalMajorRivers(
   rivers: readonly MajorRiver[],
   watersheds: readonly { readonly entityId: string }[],
   worldMapId: MapId,
@@ -509,7 +527,7 @@ function validateRivers(
   return [];
 }
 
-function validateLakes(
+export function validateWorldPhysicalMajorLakes(
   lakes: readonly MajorLake[],
   watersheds: readonly { readonly entityId: string }[],
   rivers: readonly MajorRiver[],

@@ -13,6 +13,7 @@ import {
   worldIndexRaw,
 } from './domain-to-dto.js';
 import { orderManifestDto, orderWorldIndexDto } from './dto-ordering.js';
+import { canonicalV2AspectBytes, isMapworldV2ExternalAspectName } from './mapworld-v2-codec.js';
 import { mapworldManifestDtoSchema, worldIndexDtoSchema } from './package-dto-schemas.js';
 import {
   persistenceDiagnostic,
@@ -90,6 +91,9 @@ export function encodeMapworld(document: WorldDocument): PersistenceResult<Mapwo
 }
 
 export function canonicalAspectBytes(aspect: AcceptedAspectRecord): PersistenceResult<Uint8Array> {
+  if (isMapworldV2ExternalAspectName(aspect.aspectName)) {
+    return canonicalV2AspectBytes(aspect, false);
+  }
   const snapshot = createImmutableDomainSnapshot(aspect);
   if (!snapshot.ok) return invalidEncodingSnapshot('$aspect');
   const dto = acceptedAspectToDto(snapshot.value, '$aspect');
@@ -99,6 +103,9 @@ export function canonicalAspectBytes(aspect: AcceptedAspectRecord): PersistenceR
 export function canonicalAspectOutputBytes(
   aspect: AcceptedAspectRecord,
 ): PersistenceResult<Uint8Array> {
+  if (isMapworldV2ExternalAspectName(aspect.aspectName)) {
+    return canonicalV2AspectBytes(aspect, true);
+  }
   const snapshot = createImmutableDomainSnapshot(aspect);
   if (!snapshot.ok) return invalidEncodingSnapshot('$aspect-output');
   const dto = acceptedAspectToDto(snapshot.value, '$aspect-output');

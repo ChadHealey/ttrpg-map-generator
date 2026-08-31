@@ -28,7 +28,12 @@ import {
   type WorldPhysicalContextRecords,
   type WorldPhysicalFieldKind,
 } from './world-physical-context-model.js';
-import { createConstantWorldPhysicalFieldReader } from './world-physical-context-readers.js';
+import {
+  createConstantWorldPhysicalFieldReader,
+  createDictionaryWorldPhysicalFieldReader,
+  createNumericWorldPhysicalFieldReader,
+  getWorldPhysicalFieldReaderValueFingerprint,
+} from './world-physical-context-readers.js';
 import {
   getCanonicalWorldPhysicalContextAspectTraversal,
   validateWorldPhysicalContextAspectDefinitions,
@@ -186,6 +191,34 @@ describe('Milestone 3 world physical-context contracts', () => {
 
   it('accepts a frozen synthetic physical-context contract without generation or clipping', () => {
     expect(validateWorldPhysicalContextRecords(validRecords())).toStrictEqual({ ok: true });
+  });
+
+  it('constructs immutable compact readers without exposing or aliasing typed storage', () => {
+    const values = new Int16Array([3, 3, 7]);
+    const reader = createNumericWorldPhysicalFieldReader(values);
+    const indices = new Uint8Array([0, 1, 0]);
+    const dictionary = ['arid', 'polar'];
+    const dictionaryReader = createDictionaryWorldPhysicalFieldReader(indices, dictionary);
+    values[0] = 99;
+    indices[0] = 1;
+    dictionary[0] = 'changed';
+    const collected: number[] = [];
+    reader.forEach((value) => collected.push(value));
+
+    expect(collected).toStrictEqual([3, 3, 7]);
+    expect(dictionaryReader.at(0)).toBe('arid');
+    expect(reader.at(-1)).toBeUndefined();
+    expect(reader.at(values.length)).toBeUndefined();
+    expect(Object.keys(reader).sort()).toStrictEqual(['at', 'forEach', 'length']);
+    expect(Symbol.iterator in reader).toBe(false);
+    expect(getWorldPhysicalFieldReaderValueFingerprint(reader)).toMatch(/^[a-f0-9]{64}$/u);
+    expect(
+      getWorldPhysicalFieldReaderValueFingerprint(createConstantWorldPhysicalFieldReader(3, 4)),
+    ).toBe(
+      getWorldPhysicalFieldReaderValueFingerprint(
+        createNumericWorldPhysicalFieldReader(new Int16Array([4, 4, 4])),
+      ),
+    );
   });
 
   it('requires canonical biome-belt identities derived from their biome key and root points', () => {

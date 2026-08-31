@@ -47,6 +47,7 @@ export function acceptedAspectFromDto(
   dto: AcceptedAspectDto,
   filePath: string,
   index: number,
+  acceptedOutputOverride?: unknown,
 ): PersistenceResult<AcceptedAspectRecord> {
   const rootPath = `$.aspects[${String(index)}]`;
   const mapId = parseCoreValue(parseStableId('map', dto.mapId), filePath, `${rootPath}.mapId`);
@@ -116,7 +117,10 @@ export function acceptedAspectFromDto(
   if (!dependencies.ok) return dependencies;
   const diagnostics = generationDiagnostics(dto, filePath, rootPath);
   if (!diagnostics.ok) return diagnostics;
-  const output = acceptedOutput(dto, filePath, rootPath);
+  const output =
+    acceptedOutputOverride === undefined
+      ? acceptedOutput(dto, filePath, rootPath)
+      : persistenceSuccess(acceptedOutputOverride);
   if (!output.ok) return output;
   const parameters = atlasAcceptedParametersFromDto(dto, filePath, rootPath);
   if (!parameters.ok) return parameters;

@@ -2,6 +2,7 @@
 
 - **Status:** Accepted — Linux corroboration deferred
 - **Date:** 2026-08-31
+- **Amended:** 2026-08-31 — fixed rational JSON DTOs for the two `0.1` field quantums
 - **Decision owners:** Project maintainers
 - **Supersedes:** ADR-0026
 - **Superseded by:** None
@@ -112,6 +113,38 @@ World, map, manifest, external aspect, and dictionary/descriptor values use the 
 canonical JSON rules: UTF-8, LF, one final newline, two-space indentation, recursively sorted object
 keys, safe integers, semantic array order, and no coercion or default insertion. Package-v2
 ordering adds only the path and external-aspect rules above.
+
+Two accepted domain outputs expose an exact `0.1` quantum in memory. Their v2 DTOs preserve that
+value without admitting a non-integer JSON number:
+
+```json
+{
+  "quantumCelsius": {
+    "denominator": 10,
+    "numerator": 1
+  }
+}
+```
+
+```json
+{
+  "speedQuantumMetersPerSecond": {
+    "denominator": 10,
+    "numerator": 1
+  }
+}
+```
+
+Each property is a strict fixed-shape literal object. Encode accepts only the corresponding domain
+constant `0.1` and emits integer numerator `1` plus denominator `10`; decode accepts only those
+literal integer values and reconstructs `0.1`. Equivalent fractions, decimal JSON, strings, omitted
+members, extra members, coercion, and defaults are invalid. This is a field-specific lossless DTO
+mapping, not a generic rational type, and it changes neither core field fingerprints nor `.mwf`
+payloads.
+
+Package v2 is not released, so this pre-release clarification does not consume a new package,
+record, or field-file version. Any released implementation that used a different quantum encoding
+would instead require an explicit compatibility decision.
 
 An external accepted aspect retains the complete v2 envelope selected by ADR-0026. A dense field's
 former `values` property becomes this strict descriptor:
@@ -327,6 +360,12 @@ The representative inline inherited-context snapshot remains implementation-stag
 #138 because its supplied #144/#145 fixture does not yet exist. #138 must repeat the complete
 physical/context package measurement when that fixture is available; its absence does not reopen
 the already-proven single-file JSON failure or block the storage-codec child.
+
+The issue-152 prototype receipt remains authoritative sizing and storage-option evidence, not a v2
+golden-byte fixture. Its prototype JSON serialization predated the strict fixed-rational quantum
+DTOs above. The codec implementation establishes the amended aspect bytes and checksums; the
+deferred Linux gate compares against that checked-in implementation proof rather than treating the
+prototype receipt's aspect checksums as production format bytes.
 
 The implementation children then prove strict header/encoding/path/version failures, per-file and
 package limits before allocation, byte-identical repeated and insertion-order-varied encodes,
