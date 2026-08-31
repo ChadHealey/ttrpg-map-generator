@@ -54,6 +54,20 @@ export {
   generateAtlasEcology,
 } from './atlas-ecology-generator.js';
 export {
+  ATLAS_HYDROLOGY_DIAGNOSTIC_CODES,
+  ATLAS_HYDROLOGY_GENERATOR_MANIFEST,
+  ATLAS_HYDROLOGY_GENERATOR_MANIFEST_VERSION,
+  ATLAS_HYDROLOGY_PARAMETER_SCHEMA_VERSION,
+  type AtlasHydrologyGenerationInput,
+  type AtlasHydrologyGenerationResult,
+  type AtlasHydrologyParameters,
+  type AtlasHydrologyProposedPatch,
+  type AtlasMajorLakesAspectProposal,
+  type AtlasMajorRiversAspectProposal,
+  type AtlasWatershedsAspectProposal,
+  generateAtlasHydrology,
+} from './atlas-hydrology-generator.js';
+export {
   type AtlasClassificationCooperation,
   type AtlasClassificationOutput,
   type AtlasClassificationResult,
