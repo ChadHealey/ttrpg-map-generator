@@ -58,11 +58,16 @@ export {
   ATLAS_DOCUMENT_COMMAND_KIND,
   ATLAS_DOCUMENT_OPERATION_MODES,
   ATLAS_DOCUMENT_TRANSACTION_DIAGNOSTIC_CODES,
+  ATLAS_LABEL_DOCUMENT_COMMAND_KIND,
+  ATLAS_LABEL_DOCUMENT_OPERATION_MODES,
   ATLAS_PHYSICAL_DOCUMENT_COMMAND_KIND,
   ATLAS_PHYSICAL_DOCUMENT_OPERATION_MODES,
   type AtlasDocumentOperationMode,
   type AtlasDocumentTransactionDiagnostic,
+  type AtlasLabelDocumentOperationMode,
   type AtlasPhysicalDocumentOperationMode,
+  type CommitAtlasLabelProposalCommand,
+  type CommitAtlasLabelProposalResult,
   type CommitAtlasPhysicalProposalCommand,
   type CommitAtlasPhysicalProposalResult,
   type CommitAtlasProposalCommand,
@@ -209,6 +214,14 @@ export {
   validateAtlasGlyphMetricSnapshot,
   validateAtlasGlyphPack,
 } from './atlas-glyph-pack.js';
+export {
+  type AcceptedAtlasLabelRecords,
+  ATLAS_LABEL_ACCEPTED_ASPECT_NAMES,
+  isAtlasLabelAcceptedAspectName,
+  reconstructAcceptedAtlasLabels,
+  type ReconstructAcceptedAtlasLabelsResult,
+} from './atlas-label-accepted-state.js';
+export { commitAtlasLabelProposal } from './atlas-label-document-transactions.js';
 export {
   ATLAS_LABEL_MAX_CODE_POINTS,
   ATLAS_LABEL_MAX_VARIANTS,

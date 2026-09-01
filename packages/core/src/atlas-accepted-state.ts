@@ -25,6 +25,11 @@ import {
 } from './atlas-geography-model.js';
 import { parseAtlasControls, validateAtlasGeographyRecords } from './atlas-geography-validation.js';
 import {
+  type AcceptedAtlasLabelRecords,
+  isAtlasLabelAcceptedAspectName,
+  reconstructAcceptedAtlasLabels,
+} from './atlas-label-accepted-state.js';
+import {
   isWorldPhysicalContextAspectName,
   reconstructAcceptedWorldPhysicalContext,
 } from './atlas-physical-accepted-state.js';
@@ -65,6 +70,7 @@ export interface ReconstructedAcceptedAtlas {
   readonly geography: AtlasGeographyRecords;
   readonly appearance: AtlasAppearanceRecords;
   readonly physical?: WorldPhysicalContextRecords;
+  readonly labels?: AcceptedAtlasLabelRecords;
 }
 
 export type ReconstructAcceptedAtlasResult =
@@ -94,7 +100,9 @@ export function reconstructAcceptedAtlas(document: WorldDocument): ReconstructAc
   if (
     root.aspects.some(
       ({ aspectName }) =>
-        !ATLAS_ASPECT_NAMES.has(aspectName) && !isWorldPhysicalContextAspectName(aspectName),
+        !ATLAS_ASPECT_NAMES.has(aspectName) &&
+        !isWorldPhysicalContextAspectName(aspectName) &&
+        !isAtlasLabelAcceptedAspectName(aspectName),
     )
   ) {
     return invalid(
@@ -184,13 +192,6 @@ export function reconstructAcceptedAtlas(document: WorldDocument): ReconstructAc
       'Restore accepted aspect diagnostics from the atlas transaction that produced their containing aspects.',
     );
   }
-  if (!hasExactAtlasOwnership(root, geography, appearance)) {
-    return invalid(
-      ACCEPTED_ATLAS_DIAGNOSTIC_CODES.referenceInvalid,
-      'The accepted atlas has inconsistent entity ownership, aspect identity, dependencies, or decoration references.',
-      'Restore the complete stable entity/aspect graph without renaming or dropping referenced records.',
-    );
-  }
   const physical = reconstructAcceptedWorldPhysicalContext(root);
   if (physical.status === 'invalid') {
     return invalid(
@@ -199,12 +200,39 @@ export function reconstructAcceptedAtlas(document: WorldDocument): ReconstructAc
       'Restore all nine physical aspects from one complete validated atlas transaction.',
     );
   }
+  const labels = reconstructAcceptedAtlasLabels(
+    root,
+    geography,
+    physical.status === 'accepted' ? physical.value : undefined,
+  );
+  if (labels.status === 'invalid') {
+    return invalid(
+      ACCEPTED_ATLAS_DIAGNOSTIC_CODES.invalid,
+      labels.message,
+      'Restore the complete accepted name and placement set from one validated atlas transaction.',
+    );
+  }
+  if (
+    !hasExactAtlasOwnership(
+      root,
+      geography,
+      appearance,
+      labels.status === 'accepted' ? labels.value : undefined,
+    )
+  ) {
+    return invalid(
+      ACCEPTED_ATLAS_DIAGNOSTIC_CODES.referenceInvalid,
+      'The accepted atlas has inconsistent entity ownership, aspect identity, dependencies, or decoration references.',
+      'Restore the complete stable entity/aspect graph without renaming or dropping referenced records.',
+    );
+  }
   return Object.freeze({
     status: 'accepted',
     value: Object.freeze({
       geography,
       appearance,
       ...(physical.status === 'accepted' ? { physical: physical.value } : {}),
+      ...(labels.status === 'accepted' ? { labels: labels.value } : {}),
     }),
   });
 }
@@ -252,6 +280,7 @@ function hasExactAtlasOwnership(
   map: WorldMap,
   geography: AtlasGeographyRecords,
   appearance: AtlasAppearanceRecords,
+  labels: AcceptedAtlasLabelRecords | undefined,
 ): boolean {
   const singletonIds = deriveAtlasSingletonEntityIds(map.mapId);
   const expectedEntityIds = new Set<EntityId>([
@@ -261,6 +290,7 @@ function hasExactAtlasOwnership(
     ...geography.landmasses.map(({ entityId }) => entityId),
     ...geography.islandGroups.map(({ entityId }) => entityId),
     ...geography.waterBodies.map(({ entityId }) => entityId),
+    ...(labels?.names.map(({ entityId }) => entityId) ?? []),
   ]);
   const actualEntityIds = map.entities.map(({ entityId }) => entityId);
   if (
@@ -303,6 +333,7 @@ function hasExactAtlasOwnership(
     deriveAtlasAspectId(singletonIds.atlasPresentationEntityId, 'atlas.coastlineAppearance'),
     deriveAtlasAspectId(singletonIds.atlasPresentationEntityId, 'atlas.paperTreatment'),
     deriveAtlasAspectId(singletonIds.atlasPresentationEntityId, 'atlas.waterDecoration'),
+    ...(labels?.placements.map(({ placementId }) => placementId) ?? []),
   ].sort();
   return (
     appearance.atlasPresentationEntityId === singletonIds.atlasPresentationEntityId &&

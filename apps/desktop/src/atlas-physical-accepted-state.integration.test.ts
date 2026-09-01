@@ -1,12 +1,19 @@
+import { ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_PACK } from '@ttrpg-map/assets';
 import {
   type AcceptedAspectRecord,
   ASPECT_DEPENDENCY_PROVENANCE_KINDS,
+  type AspectReplacementProposal,
+  ATLAS_LABEL_DOCUMENT_COMMAND_KIND,
+  ATLAS_LABEL_DOCUMENT_OPERATION_MODES,
   ATLAS_PHYSICAL_DOCUMENT_COMMAND_KIND,
   ATLAS_PHYSICAL_DOCUMENT_OPERATION_MODES,
+  type AtlasLabelPlacementProposal,
   collectWorldFeatureNameSources,
+  commitAtlasLabelProposal,
   commitAtlasPhysicalProposal,
   computeInheritedContextSemanticChecksum,
   createAspectDependencyGraph,
+  createAtlasGlyphMetricSnapshot,
   createBehaviorVersion,
   createParameterSchemaVersion,
   createVariantRevision,
@@ -31,6 +38,8 @@ import {
   parseSeedInput,
   parseStableId,
   reconstructAcceptedAtlas,
+  rerollWorldFeatureName,
+  resolveAtlasLabelPlacements,
   type WorldDocument,
   type WorldFeatureNameContent,
   type WorldFeatureNameParameters,
@@ -503,7 +512,267 @@ describe('accepted M3 physical atlas integration', () => {
     },
     300_000,
   );
+
+  it('accepts and reconstructs a complete deterministic name set and placement subset', () => {
+    const { physical } = requiredFixture();
+    const proposals = labelProposals(physical.document);
+    const accepted = commitAtlasLabelProposal(
+      physical.document,
+      labelCommand(physical.document, proposals),
+    );
+    expect(accepted.ok).toBe(true);
+    if (!accepted.ok) throw new Error(JSON.stringify(accepted.diagnostics));
+
+    const reconstructed = reconstructAcceptedAtlas(accepted.document);
+    expect(reconstructed.status).toBe('accepted');
+    if (reconstructed.status !== 'accepted' || reconstructed.value.labels === undefined) {
+      throw new Error('Expected accepted atlas names and placements.');
+    }
+    const before = reconstructAcceptedAtlas(physical.document);
+    if (before.status !== 'accepted' || before.value.physical === undefined) {
+      throw new Error('Expected accepted physical atlas source.');
+    }
+    expect(reconstructed.value.labels.names).toHaveLength(
+      collectWorldFeatureNameSources(before.value.geography, before.value.physical).length,
+    );
+    expect(reconstructed.value.labels.placements).toHaveLength(4);
+    expect(accepted.addedEntityIds.length).toBeGreaterThan(0);
+    expect(createAspectDependencyGraph(accepted.document).ok).toBe(true);
+
+    const reversed = commitAtlasLabelProposal(
+      physical.document,
+      labelCommand(physical.document, [...proposals].reverse()),
+    );
+    expect(reversed.ok).toBe(true);
+    if (!reversed.ok) throw new Error(JSON.stringify(reversed.diagnostics));
+    expect(reconstructAcceptedAtlas(reversed.document)).toStrictEqual(reconstructed);
+
+    const incomplete = commitAtlasLabelProposal(
+      physical.document,
+      labelCommand(
+        physical.document,
+        proposals.filter((proposal, index) =>
+          proposal.target.aspectName === 'worldFeature.nameContent' && index === 0 ? false : true,
+        ),
+      ),
+    );
+    expect(incomplete.ok).toBe(false);
+    if (incomplete.ok) throw new Error('Expected incomplete label proposal rejection.');
+    expect(incomplete.document).toBe(physical.document);
+
+    const placementIndexes = proposals
+      .map((proposal, index) => ({ proposal, index }))
+      .filter(({ proposal }) => proposal.target.aspectName === 'label.placement');
+    const mixedPack = [...proposals];
+    const mixedIndex = placementIndexes[1]?.index;
+    const placement = mixedIndex === undefined ? undefined : mixedPack[mixedIndex];
+    if (mixedIndex === undefined || placement === undefined) {
+      throw new Error('Expected two placement proposals.');
+    }
+    const typedPlacement = placement as AtlasLabelPlacementProposal;
+    mixedPack[mixedIndex] = {
+      ...typedPlacement,
+      parameters: { ...typedPlacement.parameters, glyphPackSha256: 'b'.repeat(64) },
+      output: { ...typedPlacement.output, glyphPackSha256: 'b'.repeat(64) },
+    };
+    const mixed = commitAtlasLabelProposal(
+      physical.document,
+      labelCommand(physical.document, mixedPack),
+    );
+    expect(mixed.ok).toBe(false);
+    if (mixed.ok) throw new Error('Expected mixed-pack label proposal rejection.');
+    expect(mixed.document).toBe(physical.document);
+
+    const stale = commitAtlasLabelProposal(physical.document, {
+      ...labelCommand(physical.document, proposals),
+      expectedAspectRevisions: [],
+    });
+    expect(stale.ok).toBe(false);
+    if (stale.ok) throw new Error('Expected stale label proposal rejection.');
+    expect(stale.document).toBe(physical.document);
+
+    const corruptDocument = {
+      ...accepted.document,
+      maps: accepted.document.maps.map((map) =>
+        map.mapId === accepted.document.rootMapId
+          ? {
+              ...map,
+              aspects: map.aspects.map((aspect) =>
+                aspect.aspectName === 'label.placement'
+                  ? { ...aspect, acceptedOutput: null }
+                  : aspect,
+              ),
+            }
+          : map,
+      ),
+    } as WorldDocument;
+    expect(() => reconstructAcceptedAtlas(corruptDocument)).not.toThrow();
+    expect(reconstructAcceptedAtlas(corruptDocument).status).toBe('invalid');
+
+    const acceptedMap = accepted.document.maps[0];
+    if (acceptedMap?.mapKind !== 'world') throw new Error('Expected accepted root world map.');
+    const currentLabels = reconstructed.value.labels;
+    const selected = currentLabels.names.find(
+      (name) =>
+        !currentLabels.placements.some(({ sourceEntityId }) => sourceEntityId === name.entityId),
+    );
+    if (selected === undefined) throw new Error('Expected one unplaced accepted name.');
+    const rerolled = rerollWorldFeatureName({
+      mapId: accepted.document.rootMapId,
+      worldSeed: accepted.document.worldSeed,
+      current: selected,
+      otherNames: currentLabels.names.filter(({ entityId }) => entityId !== selected.entityId),
+    });
+    if (!rerolled.ok) throw new Error(JSON.stringify(rerolled.diagnostics));
+    const selectedProposal = rerolled.proposals[0];
+    if (selectedProposal === undefined) throw new Error('Expected selected name proposal.');
+    const replacementProposals = acceptedMap.aspects
+      .filter(
+        ({ aspectName }) =>
+          aspectName === 'worldFeature.nameContent' || aspectName === 'label.placement',
+      )
+      .map((aspect) =>
+        aspect.aspectId === selectedProposal.target.aspect.aspectId
+          ? selectedProposal
+          : proposalFromAccepted(aspect),
+      );
+    const preserved = acceptedMap.aspects.find(
+      ({ aspectName }) => aspectName === 'worldTerrain.macroElevation',
+    );
+    const replaced = commitAtlasLabelProposal(
+      accepted.document,
+      labelCommand(accepted.document, replacementProposals, 'replacement', [
+        selectedProposal.target.aspect.aspectId,
+      ]),
+    );
+    expect(replaced.ok).toBe(true);
+    if (!replaced.ok) throw new Error(JSON.stringify(replaced.diagnostics));
+    expect(
+      replaced.document.maps[0]?.aspects.find(
+        ({ aspectName }) => aspectName === 'worldTerrain.macroElevation',
+      ),
+    ).toBe(preserved);
+
+    const placedName = currentLabels.names.find((name) =>
+      currentLabels.placements.some(({ sourceEntityId }) => sourceEntityId === name.entityId),
+    );
+    if (placedName === undefined) throw new Error('Expected one placed accepted name.');
+    const staleName = rerollWorldFeatureName({
+      mapId: accepted.document.rootMapId,
+      worldSeed: accepted.document.worldSeed,
+      current: placedName,
+      otherNames: currentLabels.names.filter(({ entityId }) => entityId !== placedName.entityId),
+    });
+    if (!staleName.ok) throw new Error(JSON.stringify(staleName.diagnostics));
+    const staleNameProposal = staleName.proposals[0];
+    if (staleNameProposal === undefined) throw new Error('Expected placed-name reroll proposal.');
+    const stalePlacement = commitAtlasLabelProposal(
+      accepted.document,
+      labelCommand(
+        accepted.document,
+        acceptedMap.aspects
+          .filter(
+            ({ aspectName }) =>
+              aspectName === 'worldFeature.nameContent' || aspectName === 'label.placement',
+          )
+          .map((aspect) =>
+            aspect.aspectId === staleNameProposal.target.aspect.aspectId
+              ? staleNameProposal
+              : proposalFromAccepted(aspect),
+          ),
+        'replacement',
+        [staleNameProposal.target.aspect.aspectId],
+      ),
+    );
+    expect(stalePlacement.ok).toBe(false);
+    if (stalePlacement.ok) throw new Error('Expected stale placement linkage rejection.');
+    expect(stalePlacement.document).toBe(accepted.document);
+  }, 300_000);
 });
+
+function labelProposals(document: WorldDocument) {
+  const accepted = reconstructAcceptedAtlas(document);
+  if (accepted.status !== 'accepted' || accepted.value.physical === undefined) {
+    throw new Error('Expected accepted physical atlas source.');
+  }
+  const names = createWorldFeatureNameProposals({
+    mapId: document.rootMapId,
+    worldSeed: document.worldSeed,
+    sources: collectWorldFeatureNameSources(accepted.value.geography, accepted.value.physical),
+  });
+  if (!names.ok) throw new Error(JSON.stringify(names.diagnostics));
+  const metrics = createAtlasGlyphMetricSnapshot(ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_PACK);
+  if (!metrics.ok) throw new Error(JSON.stringify(metrics.diagnostics));
+  const revision = required(createVariantRevision(0));
+  const placements = resolveAtlasLabelPlacements({
+    mapId: document.rootMapId,
+    worldSeed: document.worldSeed,
+    sceneExtent: {
+      minXTicks: 0,
+      minYTicks: 0,
+      maxXTicks: 2_048 * 1_024,
+      maxYTicks: 1_024 * 1_024,
+    },
+    metrics: metrics.value,
+    candidates: names.proposals.slice(0, 4).map((proposal, index) => ({
+      nameContent: proposal.output,
+      placementVariantRevision: revision,
+      glyphPackSha256: metrics.value.packSha256,
+      priority: 100 - index,
+      fontSizeTicks: 24 * 1_024,
+      anchor: { xTicks: (200 + index * 450) * 1_024, yTicks: 300 * 1_024 },
+      variants: [{ variantKey: 'center', baselineOffset: { xTicks: 0, yTicks: 0 } }],
+    })),
+  });
+  if (!placements.ok) throw new Error(JSON.stringify(placements.diagnostics));
+  return [...names.proposals, ...placements.proposals];
+}
+
+function labelCommand(
+  document: WorldDocument,
+  proposals: readonly AspectReplacementProposal[],
+  operation: 'initial' | 'replacement' = 'initial',
+  explicitlyIncrementedAspectIds: readonly AcceptedAspectRecord['aspectId'][] = [],
+) {
+  return {
+    kind: ATLAS_LABEL_DOCUMENT_COMMAND_KIND,
+    operationMode:
+      operation === 'initial'
+        ? ATLAS_LABEL_DOCUMENT_OPERATION_MODES.initial
+        : ATLAS_LABEL_DOCUMENT_OPERATION_MODES.replacement,
+    targetMapId: document.rootMapId,
+    expectedWorldSeed: document.worldSeed,
+    expectedAspectRevisions:
+      document.maps[0]?.aspects.map(({ aspectId, variantRevision }) => ({
+        aspectId,
+        variantRevision,
+      })) ?? [],
+    proposedAspects: proposals,
+    explicitlyIncrementedAspectIds,
+  } as const;
+}
+
+function proposalFromAccepted(aspect: AcceptedAspectRecord): AspectReplacementProposal {
+  return {
+    status: 'proposed',
+    target: {
+      mapId: aspect.mapId,
+      entityId: aspect.entityId,
+      aspect: { aspectId: aspect.aspectId },
+      aspectName: aspect.aspectName,
+      variantRevision: aspect.variantRevision,
+    },
+    generatorId: aspect.generatorId,
+    generatorVersion: aspect.generatorVersion,
+    parameterSchemaVersion: aspect.parameterSchemaVersion,
+    parameters: aspect.parameters,
+    seedScope: aspect.seedScope,
+    seedMetadata: aspect.seedMetadata,
+    dependencyAspects: aspect.dependencyAspects,
+    output: aspect.acceptedOutput,
+    diagnostics: aspect.diagnostics,
+  };
+}
 
 function physicalProposals(
   accepted: AcceptedAtlasState,
@@ -527,6 +796,7 @@ function physicalProposals(
     mountainCharacter: 'varied',
     records: accepted.geography,
   });
+
   if (mountain.status !== 'proposed') throw new Error(JSON.stringify(mountain.diagnostics));
   const atmosphere = generateAtlasAtmosphere({
     worldSeed: accepted.document.worldSeed,
