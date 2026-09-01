@@ -2,9 +2,9 @@
   "canonicalAspectDigestIndexVersion": 1,
   "canonicalByteOwner": "@ttrpg-map/persistence",
   "checkpoint": "baseline",
-  "aspectCount": 12,
-  "canonicalAspectSetSha256": "24ea927af4355fc5d44c1bba2cf49d7a4b47c27404d4c352267ed33ccecd90e2",
-  "canonicalAspectOutputSetSha256": "6b972a97afdb6e3284745596cf78edf834d6dc32d8bb99d6eac95cddd7438743",
+  "aspectCount": 21,
+  "canonicalAspectSetSha256": "9fad840c50ff83b2e527052e5a694f4cf412bcf53c06247256b1abc22029ee84",
+  "canonicalAspectOutputSetSha256": "b26ae0837efa1f8407ca92e6e1c80ec7d7ba38f606a625b5460fdba457f98c2f",
   "aspects": [
     {
       "aspectId": "04628f37-6408-5087-a139-bdd2bdff42d3",
@@ -16,6 +16,15 @@
       "canonicalAspectOutputSha256": "711da0ede01f88d9f5a1505527bf5a79e8b136e51cd0c279ba516093212beaa7"
     },
     {
+      "aspectId": "098b5448-209c-55b0-96fe-9bd397c6f314",
+      "aspectName": "worldClimate.moisture",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 8383523,
+      "canonicalAspectSha256": "dbb46eebeb5775c3b01539ad2fccf6dae3d208c65b315424448be9abe5dd6368",
+      "canonicalAspectOutputByteLength": 8381925,
+      "canonicalAspectOutputSha256": "9fccf293ba06c98e83f27c0d21ec0fd625b23361959da1c02caa65ba3d221945"
+    },
+    {
       "aspectId": "371a6a8c-9fe8-5cdb-adca-1a46ffa19645",
       "aspectName": "worldCoastline.geometry",
       "variantRevision": 0,
@@ -25,6 +34,24 @@
       "canonicalAspectOutputSha256": "641bcc8a9a962a2a7e9de14512e6bdfb70bdf98b5c87dda382aa8422b9c9d66c"
     },
     {
+      "aspectId": "47d4f799-fc0a-5818-ac6f-7827374d0a0c",
+      "aspectName": "worldHydrology.watersheds",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 2099625,
+      "canonicalAspectSha256": "9368f9da5a0bef2483fc80b12f906754f128ded4aefb8b7ed5b274d1b79ec5ab",
+      "canonicalAspectOutputByteLength": 2098053,
+      "canonicalAspectOutputSha256": "f5b938f7f1df888ea493ed8c95283724681eef966eb9bd36f799a4a28a8d9a8b"
+    },
+    {
+      "aspectId": "5ad53f4f-728c-54ce-9a7f-7d0acd384287",
+      "aspectName": "worldHydrology.majorLakes",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 2327,
+      "canonicalAspectSha256": "0a471a839061b36f9aec2d0214d9f11b271fbc3352a57423232c61e4086663e8",
+      "canonicalAspectOutputByteLength": 679,
+      "canonicalAspectOutputSha256": "61b3f6f68af792b58d15a791c17fee8a966cf31e56402357202d1aae7a6f8aad"
+    },
+    {
       "aspectId": "65c5113e-fd17-5f39-a65a-1bba5f21f0fe",
       "aspectName": "landmass.classification",
       "variantRevision": 0,
@@ -32,6 +59,15 @@
       "canonicalAspectSha256": "61ca0d706a7917a34f6a0d003c350bd5babde27131b1857f802dd1fe76527dd5",
       "canonicalAspectOutputByteLength": 5855,
       "canonicalAspectOutputSha256": "c1290cb16ab7a7c4034c2da2f04069f7ff34897fbd6e1ef288be38dacb6d8e63"
+    },
+    {
+      "aspectId": "8433b981-ad06-5714-a49f-e454ef265279",
+      "aspectName": "worldHydrology.majorRivers",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 2395,
+      "canonicalAspectSha256": "171a223db5306712915e5c30b8fb5ee327a107a6e188c5445f03d399ea330c65",
+      "canonicalAspectOutputByteLength": 803,
+      "canonicalAspectOutputSha256": "3f5badb600c5b12d41dd7fa0d0f50b5de6586ccf36d52d2dcb4d11899b4ffa3e"
     },
     {
       "aspectId": "8c312953-f749-52b5-83f3-717bde6901e5",
@@ -50,6 +86,15 @@
       "canonicalAspectSha256": "aa430d78391d9ae4ef4d1020633337c20d005a17561ccf7993ace981005edb2d",
       "canonicalAspectOutputByteLength": 66238,
       "canonicalAspectOutputSha256": "bb4b26512e0e0475222d04062697b6a1833d342b3b2ab8d83b5521713545031d"
+    },
+    {
+      "aspectId": "91f1b126-70e2-5812-83b2-4c6373a863d5",
+      "aspectName": "worldClimate.temperature",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 4193307,
+      "canonicalAspectSha256": "be29a0a443f26f8120ab8359d1277c0a5e537a1c15ac904be9fa5abcda892d52",
+      "canonicalAspectOutputByteLength": 4191703,
+      "canonicalAspectOutputSha256": "1519259b405119fdc086e9862646c22676a1901eb680d1f8aa45a254f0dc6137"
     },
     {
       "aspectId": "99b0095c-d97a-5891-8296-718774d0cf60",
@@ -79,6 +124,24 @@
       "canonicalAspectOutputSha256": "67e0cd84ebd53687837a9dad92014012b6b8d8614d734fd3d1a4eec3361a8168"
     },
     {
+      "aspectId": "b255be89-ad89-582a-bc1e-801aac7255e8",
+      "aspectName": "worldTerrain.mountainSystems",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 2908,
+      "canonicalAspectSha256": "512af054f0216924b2f627f9a2c9aa76cfc83c9c366dcbfcd1067c8b4e806b6d",
+      "canonicalAspectOutputByteLength": 1523,
+      "canonicalAspectOutputSha256": "7dc34da4f2aacbe188c69bdf7d7da94e7052f4ab7a5203192302153e00334c4f"
+    },
+    {
+      "aspectId": "de179f75-8d50-5b99-af48-d9699ae292cf",
+      "aspectName": "worldClimate.prevailingWinds",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 29339202,
+      "canonicalAspectSha256": "2629ea693aa232dfa9dd7fa1458826e0701cec50c17ff9bf897a4e0716d82231",
+      "canonicalAspectOutputByteLength": 29337446,
+      "canonicalAspectOutputSha256": "d4d6a0a608d0a83746b353f59b567801ee131739311c3682459656ea580576f7"
+    },
+    {
       "aspectId": "e588eb7f-d585-5c27-9ce5-81c2fb1ebc43",
       "aspectName": "worldTerrain.macroElevation",
       "variantRevision": 0,
@@ -88,6 +151,15 @@
       "canonicalAspectOutputSha256": "1891445a1cba70d1d5915b01a1dc324f268f7007552410040058b0aa4e431b17"
     },
     {
+      "aspectId": "e88989ae-89de-5a41-9102-5018199a96e6",
+      "aspectName": "worldClimate.zones",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 2098945,
+      "canonicalAspectSha256": "b41fc03ad6f8652e696cababaff1f805d9f9b237fae935ad67a7d200ab82a350",
+      "canonicalAspectOutputByteLength": 2097495,
+      "canonicalAspectOutputSha256": "073e6cca45ca178f5e08a9f4e1f53dac002af8e59b3e778958eeb64cc8612498"
+    },
+    {
       "aspectId": "edbe82c3-3e77-5e74-8bba-a1598b105b2f",
       "aspectName": "landmass.classification",
       "variantRevision": 0,
@@ -95,6 +167,15 @@
       "canonicalAspectSha256": "f54207aca2b3aee82a4a54f108662a58d13732c5751ffd4fa0376752d692015a",
       "canonicalAspectOutputByteLength": 5416,
       "canonicalAspectOutputSha256": "a1adce0a63e1c2532455591e3eed5a9d73c794ffc1e459544e50ceb09ee460a8"
+    },
+    {
+      "aspectId": "ef0cc4d3-e6f5-510c-9dc0-92792f48427a",
+      "aspectName": "worldEcology.biomeBelts",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 6321913,
+      "canonicalAspectSha256": "75a32e65d1b85611cfb44dca43a5841490dce8e359421ec7b5d49455aebca777",
+      "canonicalAspectOutputByteLength": 6002599,
+      "canonicalAspectOutputSha256": "9face7e7cf851290f82e3edf67e7ee41a0aa4a50e7ebdca894457a41b2ce43cc"
     },
     {
       "aspectId": "f3c00774-0182-5fca-83e6-454c70efc745",
