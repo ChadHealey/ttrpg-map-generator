@@ -497,6 +497,31 @@ export {
   type RetainedDocumentDependencyEffect,
 } from './world-document-transaction-model.js';
 export { commitAspectProposal } from './world-document-transactions.js';
+export { WORLD_FEATURE_NAME_LEXICON_V1 } from './world-feature-name-lexicon.js';
+export {
+  collectWorldFeatureNameSources,
+  createWorldFeatureNameProposals,
+  type CreateWorldFeatureNameProposalsInput,
+  deriveWorldFeatureNameAspectId,
+  parseWorldFeatureNameDisplayName,
+  rerollWorldFeatureName,
+  type RerollWorldFeatureNameInput,
+  validateWorldFeatureNameContent,
+  WORLD_FEATURE_NAME_ASPECT_NAME,
+  WORLD_FEATURE_NAME_BEHAVIOR_VERSION,
+  WORLD_FEATURE_NAME_DIAGNOSTIC_CODES,
+  WORLD_FEATURE_NAME_GENERATOR_ID,
+  WORLD_FEATURE_NAME_INITIAL_VARIANT_REVISION,
+  WORLD_FEATURE_NAME_PARAMETER_SCHEMA_VERSION,
+  type WorldFeatureNameContent,
+  type WorldFeatureNameGenerationResult,
+  type WorldFeatureNameKind,
+  type WorldFeatureNameLexicon,
+  type WorldFeatureNameOrigin,
+  type WorldFeatureNameParameters,
+  type WorldFeatureNameProposal,
+  type WorldFeatureNameSource,
+} from './world-feature-name-model.js';
 export {
   getWorldPhysicalContextControlInvalidationRoots,
   WORLD_PHYSICAL_CONTEXT_ASPECT_DEFINITIONS,
