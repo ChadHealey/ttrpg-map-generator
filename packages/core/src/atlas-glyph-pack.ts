@@ -90,6 +90,12 @@ export interface AtlasGlyphMetricSnapshot {
   readonly kerningPairs: readonly AtlasGlyphKerningPair[];
 }
 
+const ATLAS_GLYPH_METRIC_SNAPSHOT_BRAND: unique symbol = Symbol('atlas-glyph-metric-snapshot');
+
+export type ValidatedAtlasGlyphMetricSnapshot = AtlasGlyphMetricSnapshot & {
+  readonly [ATLAS_GLYPH_METRIC_SNAPSHOT_BRAND]: true;
+};
+
 export type AtlasGlyphPackDiagnosticCode =
   | 'atlas-glyph-pack.asset.invalid'
   | 'atlas-glyph-pack.digest.mismatch'
@@ -107,7 +113,7 @@ export type AtlasGlyphPackValidationResult =
   | { readonly ok: false; readonly diagnostics: readonly AtlasGlyphPackDiagnostic[] };
 
 export type AtlasGlyphMetricSnapshotResult =
-  | { readonly ok: true; readonly value: AtlasGlyphMetricSnapshot }
+  | { readonly ok: true; readonly value: ValidatedAtlasGlyphMetricSnapshot }
   | { readonly ok: false; readonly diagnostics: readonly AtlasGlyphPackDiagnostic[] };
 
 interface AtlasGlyphPackCandidate extends Omit<
@@ -151,10 +157,7 @@ export function validateAtlasGlyphPack(input: unknown): AtlasGlyphPackValidation
   }
   const glyphKeys = new Set(candidate.glyphs.map(({ glyphKey }) => glyphKey));
   if (
-    candidate.kerningPairs.some(
-      ({ leftGlyphKey, rightGlyphKey, adjustment }) =>
-        !glyphKeys.has(leftGlyphKey) || !glyphKeys.has(rightGlyphKey) || !isSafeInteger(adjustment),
-    ) ||
+    candidate.kerningPairs.some((pair) => !validMetricKerningPair(pair, glyphKeys)) ||
     !strictlyOrdered(
       candidate.kerningPairs,
       (pair) => `${pair.leftGlyphKey}\0${pair.rightGlyphKey}`,
@@ -198,32 +201,44 @@ export function createAtlasGlyphMetricSnapshot(
   const validated = validateAtlasGlyphPack(input);
   if (!validated.ok) return validated;
   const { value } = validated;
-  return {
-    ok: true,
-    value: Object.freeze({
-      assetId: value.assetId,
-      assetSchemaVersion: value.assetSchemaVersion,
-      glyphBehaviorVersion: value.glyphBehaviorVersion,
-      packSha256: value.canonicalPackSha256,
-      unitsPerEm: value.unitsPerEm,
-      ascender: value.ascender,
-      descender: value.descender,
-      lineGap: value.lineGap,
-      tracking: value.tracking,
-      spaceAdvance: value.spaceAdvance,
-      glyphs: Object.freeze(
-        value.glyphs.map(({ glyphKey, codePoint, advanceWidth, bounds }) =>
-          Object.freeze({
-            glyphKey,
-            codePoint,
-            advanceWidth,
-            bounds: Object.freeze({ ...bounds }),
-          }),
-        ),
+  const snapshot = {
+    assetId: value.assetId,
+    assetSchemaVersion: value.assetSchemaVersion,
+    glyphBehaviorVersion: value.glyphBehaviorVersion,
+    packSha256: value.canonicalPackSha256,
+    unitsPerEm: value.unitsPerEm,
+    ascender: value.ascender,
+    descender: value.descender,
+    lineGap: value.lineGap,
+    tracking: value.tracking,
+    spaceAdvance: value.spaceAdvance,
+    glyphs: Object.freeze(
+      value.glyphs.map(({ glyphKey, codePoint, advanceWidth, bounds }) =>
+        Object.freeze({
+          glyphKey,
+          codePoint,
+          advanceWidth,
+          bounds: Object.freeze({ ...bounds }),
+        }),
       ),
-      kerningPairs: Object.freeze(value.kerningPairs.map((pair) => Object.freeze({ ...pair }))),
-    }),
-  };
+    ),
+    kerningPairs: Object.freeze(value.kerningPairs.map((pair) => Object.freeze({ ...pair }))),
+  } satisfies AtlasGlyphMetricSnapshot;
+  Object.defineProperty(snapshot, ATLAS_GLYPH_METRIC_SNAPSHOT_BRAND, {
+    value: true,
+    enumerable: false,
+  });
+  return { ok: true, value: Object.freeze(snapshot) as ValidatedAtlasGlyphMetricSnapshot };
+}
+
+/** Validate a metric-only snapshot at a placement boundary without loading a source font or pack. */
+export function validateAtlasGlyphMetricSnapshot(input: unknown): AtlasGlyphMetricSnapshotResult {
+  if (!hasMetricSnapshotBrand(input))
+    return metricInvalid(
+      'atlas-glyph-pack.asset.invalid',
+      'Glyph metric snapshot was not created from a validated glyph pack.',
+    );
+  return { ok: true, value: input };
 }
 
 /** Return the SHA-256 digest of the canonical pack bytes with the digest field excluded. */
@@ -256,14 +271,28 @@ function validGlyph(glyph: AtlasGlyph, supported: ReadonlySet<number>): boolean 
   );
 }
 
-function validBounds(bounds: AtlasGlyphBounds): boolean {
+function validMetricKerningPair(value: unknown, glyphKeys: ReadonlySet<string>): boolean {
+  if (typeof value !== 'object' || value === null) return false;
+  const candidate = value as AtlasGlyphKerningPair;
   return (
-    isSafeInteger(bounds.minX) &&
-    isSafeInteger(bounds.minY) &&
-    isSafeInteger(bounds.maxX) &&
-    isSafeInteger(bounds.maxY) &&
-    bounds.minX <= bounds.maxX &&
-    bounds.minY <= bounds.maxY
+    typeof candidate.leftGlyphKey === 'string' &&
+    typeof candidate.rightGlyphKey === 'string' &&
+    glyphKeys.has(candidate.leftGlyphKey) &&
+    glyphKeys.has(candidate.rightGlyphKey) &&
+    isSafeInteger(candidate.adjustment)
+  );
+}
+
+function validBounds(bounds: unknown): bounds is AtlasGlyphBounds {
+  if (typeof bounds !== 'object' || bounds === null) return false;
+  const candidate = bounds as AtlasGlyphBounds;
+  return (
+    isSafeInteger(candidate.minX) &&
+    isSafeInteger(candidate.minY) &&
+    isSafeInteger(candidate.maxX) &&
+    isSafeInteger(candidate.maxY) &&
+    candidate.minX <= candidate.maxX &&
+    candidate.minY <= candidate.maxY
   );
 }
 
@@ -317,10 +346,27 @@ function isPack(value: unknown): value is AtlasGlyphPackCandidate {
   );
 }
 
+function hasMetricSnapshotBrand(input: unknown): input is ValidatedAtlasGlyphMetricSnapshot {
+  return (
+    typeof input === 'object' &&
+    input !== null &&
+    (input as { readonly [ATLAS_GLYPH_METRIC_SNAPSHOT_BRAND]?: unknown })[
+      ATLAS_GLYPH_METRIC_SNAPSHOT_BRAND
+    ] === true
+  );
+}
+
 function invalid(
   code: AtlasGlyphPackDiagnosticCode,
   message: string,
 ): AtlasGlyphPackValidationResult {
+  return { ok: false, diagnostics: Object.freeze([Object.freeze({ code, message })]) };
+}
+
+function metricInvalid(
+  code: AtlasGlyphPackDiagnosticCode,
+  message: string,
+): AtlasGlyphMetricSnapshotResult {
   return { ok: false, diagnostics: Object.freeze([Object.freeze({ code, message })]) };
 }
 

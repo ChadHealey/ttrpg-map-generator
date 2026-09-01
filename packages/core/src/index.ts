@@ -206,8 +206,32 @@ export {
   type AtlasGlyphPackValidationResult,
   type AtlasGlyphPoint,
   createAtlasGlyphMetricSnapshot,
+  validateAtlasGlyphMetricSnapshot,
   validateAtlasGlyphPack,
 } from './atlas-glyph-pack.js';
+export {
+  ATLAS_LABEL_MAX_CODE_POINTS,
+  ATLAS_LABEL_MAX_VARIANTS,
+  ATLAS_LABEL_PLACEMENT_ASPECT_NAME,
+  ATLAS_LABEL_PLACEMENT_BEHAVIOR_VERSION,
+  ATLAS_LABEL_PLACEMENT_DIAGNOSTIC_CODES,
+  ATLAS_LABEL_PLACEMENT_GENERATOR_ID,
+  ATLAS_LABEL_PLACEMENT_PARAMETER_SCHEMA_VERSION,
+  ATLAS_LABEL_RENDER_TICKS_PER_PIXEL,
+  type AtlasLabelGlyphOrigin,
+  type AtlasLabelPlacement,
+  type AtlasLabelPlacementCandidate,
+  type AtlasLabelPlacementParameters,
+  type AtlasLabelPlacementProposal,
+  type AtlasLabelPlacementResolution,
+  type AtlasLabelPlacementVariant,
+  type AtlasLabelSceneExtent,
+  type AtlasLabelTickBounds,
+  type AtlasLabelTickPoint,
+  deriveAtlasLabelPlacementAspectId,
+  resolveAtlasLabelPlacements,
+  roundHalfTowardPositiveInfinity,
+} from './atlas-label-placement.js';
 export { commitAtlasPhysicalProposal } from './atlas-physical-document-transactions.js';
 export {
   type AtlasLandWaterSample,
