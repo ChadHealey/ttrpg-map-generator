@@ -17,6 +17,7 @@ export {
   createInitialAtlasAppearanceRevisions,
   generateAtlasAppearance,
 } from './atlas-appearance-generator.js';
+export { ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_PACK } from './atlas-glyph-pack.js';
 export {
   RESTRAINED_INK_ATLAS_STYLE,
   RESTRAINED_INK_ATLAS_STYLE_BEHAVIOR_VERSION,

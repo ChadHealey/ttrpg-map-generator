@@ -30,6 +30,14 @@ jobs:
         with:
           node-version-file: .node-version
 
+      - name: Set up Python for deterministic glyph-pack verification
+        uses: actions/setup-python@v6.0.0
+        with:
+          python-version: '3.12'
+
+      - name: Install glyph-pack converter
+        run: python3 -m pip install --disable-pip-version-check --require-hashes -r tools/glyph-pack/requirements.txt
+
       - name: Install Linux system dependencies
         if: runner.os == 'Linux'
         run: |
@@ -61,6 +69,9 @@ jobs:
 
       - name: Verify deterministic fixtures
         run: pnpm test:cross-platform
+
+      - name: Verify deterministic glyph-pack reproduction
+        run: pnpm glyph-pack:check
 
       - name: Verify focused desktop workflows
         run: pnpm test:e2e

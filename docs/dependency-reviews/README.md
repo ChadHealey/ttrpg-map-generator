@@ -8,3 +8,4 @@ deterministic-output risk.
 - [0001 — Milestone 0 foundation](0001-milestone-0-foundation.md)
 - [0002 — Zod for Milestone 1 persistence boundaries](0002-zod-milestone-1-persistence-boundaries.md)
 - [0003 — Milestone 2 global geography algorithms](0003-milestone-2-global-geography-algorithms.md)
+- [0004 — FontTools glyph-pack converter](0004-fonttools-glyph-pack-converter.md)

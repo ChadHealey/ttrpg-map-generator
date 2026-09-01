@@ -188,6 +188,26 @@ export {
   type AtlasWaterSegmentationResult,
   segmentAtlasWaterBodies,
 } from './atlas-geography-water-policy.js';
+export {
+  ATLAS_GLYPH_PACK_MAX_POINTS,
+  ATLAS_GLYPH_PACK_SUPPORTED_CODE_POINTS,
+  ATLAS_GLYPH_PACK_UNITS_PER_EM,
+  type AtlasGlyph,
+  type AtlasGlyphBounds,
+  type AtlasGlyphContour,
+  type AtlasGlyphKerningPair,
+  type AtlasGlyphMetricSnapshot,
+  type AtlasGlyphMetricSnapshotResult,
+  type AtlasGlyphPack,
+  type AtlasGlyphPackDiagnostic,
+  type AtlasGlyphPackDiagnosticCode,
+  atlasGlyphPackDigest,
+  type AtlasGlyphPackSource,
+  type AtlasGlyphPackValidationResult,
+  type AtlasGlyphPoint,
+  createAtlasGlyphMetricSnapshot,
+  validateAtlasGlyphPack,
+} from './atlas-glyph-pack.js';
 export { commitAtlasPhysicalProposal } from './atlas-physical-document-transactions.js';
 export {
   type AtlasLandWaterSample,
