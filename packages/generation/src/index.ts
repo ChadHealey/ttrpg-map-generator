@@ -220,6 +220,14 @@ export {
   type QuantizedSphericalField,
 } from './geography-algorithm-adapters.js';
 export {
+  buildInheritedContext,
+  type BuildInheritedContextInput,
+  type BuildInheritedContextResult,
+  INHERITED_CONTEXT_BUILDER_DIAGNOSTIC_CODES,
+  type InheritedContextBuilderDiagnostic,
+  type InheritedContextBuilderDiagnosticCode,
+} from './inherited-context-builder.js';
+export {
   createMilestoneOneProofDocument,
   isMilestoneOneProofSeed,
   MILESTONE_ONE_CONSTRAINT_ID,

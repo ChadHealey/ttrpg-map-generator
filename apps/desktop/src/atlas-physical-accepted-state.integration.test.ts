@@ -3,12 +3,14 @@ import {
   ASPECT_DEPENDENCY_PROVENANCE_KINDS,
   ATLAS_PHYSICAL_DOCUMENT_COMMAND_KIND,
   ATLAS_PHYSICAL_DOCUMENT_OPERATION_MODES,
+  collectWorldFeatureNameSources,
   commitAtlasPhysicalProposal,
   computeInheritedContextSemanticChecksum,
   createAspectDependencyGraph,
   createBehaviorVersion,
   createParameterSchemaVersion,
   createVariantRevision,
+  createWorldFeatureNameProposals,
   DEFAULT_WORLD_PHYSICAL_CONTEXT_CONTROLS,
   deriveAtlasSingletonEntityIds,
   deriveRegionalFootprintEntityId,
@@ -25,13 +27,17 @@ import {
   parseGeneratorId,
   parsePlanetPoint,
   parseRegionalExtent,
+  parseRegionalRectangleFootprint,
   parseSeedInput,
   parseStableId,
   reconstructAcceptedAtlas,
   type WorldDocument,
+  type WorldFeatureNameContent,
+  type WorldFeatureNameParameters,
   type WorldPhysicalContextRecords,
 } from '@ttrpg-map/core';
 import {
+  buildInheritedContext,
   generateAtlasAtmosphere,
   generateAtlasEcology,
   generateAtlasHydrology,
@@ -132,6 +138,81 @@ describe('accepted M3 physical atlas integration', () => {
     expect(stale.document).toBe(m2.document);
     if (stale.ok) throw new Error('Stale physical proposal unexpectedly committed.');
     expect(stale.diagnostics.map(({ code }) => code)).toContain('atlas-transaction.input.stale');
+  }, 120_000);
+
+  it('builds inherited context through the public accepted-document gate without mutation', () => {
+    const { physical } = requiredFixture();
+    const reconstructed = reconstructAcceptedAtlas(physical.document);
+    if (reconstructed.status !== 'accepted' || reconstructed.value.physical === undefined) {
+      throw new Error('Expected accepted physical atlas state.');
+    }
+    const root = physical.document.maps.find(({ mapId }) => mapId === physical.document.rootMapId);
+    if (root?.mapKind !== MAP_KINDS.world) throw new Error('Expected accepted root world map.');
+    const names = createWorldFeatureNameProposals({
+      mapId: root.mapId,
+      worldSeed: physical.document.worldSeed,
+      sources: collectWorldFeatureNameSources(
+        reconstructed.value.geography,
+        reconstructed.value.physical,
+      ),
+    });
+    if (!names.ok) throw new Error(JSON.stringify(names.diagnostics));
+    const acceptedNames = names.proposals.map(
+      (proposal): AcceptedAspectRecord<WorldFeatureNameParameters, WorldFeatureNameContent> => ({
+        mapId: proposal.target.mapId,
+        entityId: proposal.target.entityId,
+        aspectId: proposal.target.aspect.aspectId,
+        aspectName: proposal.target.aspectName,
+        generatorId: proposal.generatorId,
+        generatorVersion: proposal.generatorVersion,
+        parameterSchemaVersion: proposal.parameterSchemaVersion,
+        parameters: proposal.parameters,
+        seedScope: proposal.seedScope,
+        seedMetadata: proposal.seedMetadata,
+        variantRevision: proposal.target.variantRevision,
+        dependencyAspects: proposal.dependencyAspects,
+        generationStatus: 'accepted',
+        diagnostics: proposal.diagnostics,
+        acceptedOutput: proposal.output,
+      }),
+    );
+    const footprint = required(
+      parseRegionalRectangleFootprint({
+        shapeVersion: 'regional-rectangle-v1',
+        rootSurfaceId: root.coordinateSystem.rootSurfaceId,
+        worldRadius: root.coordinateSystem.radius,
+        origin: required(parsePlanetPoint({ longitudeTicks: 0, latitudeTicks: -(2 ** 30) })),
+        extent: {
+          minXMillimeters: -100_000,
+          maxXMillimeters: 100_000,
+          minYMillimeters: -100_000,
+          maxYMillimeters: 100_000,
+        },
+        transformId: 'planet-regional-azimuthal-equidistant',
+        transformVersion: 1,
+      }),
+    );
+    const acceptedNameOrder = acceptedNames.map(({ aspectId }) => aspectId);
+    const documentMaps = physical.document.maps;
+    const rootAspects = root.aspects;
+    const acceptedAspectReferences = [...root.aspects];
+    const result = buildInheritedContext({
+      document: physical.document,
+      footprint,
+      collarPaddingMillimeters: 100_000,
+      acceptedNameAspects: acceptedNames,
+    });
+
+    expect(result.status).toBe('built');
+    if (result.status !== 'built') throw new Error(JSON.stringify(result.diagnostics));
+    expect(result.snapshot.fields.every(({ samples }) => samples.length > 0)).toBe(true);
+    expect(physical.document.maps).toBe(documentMaps);
+    expect(physical.document.maps.find(({ mapId }) => mapId === root.mapId)).toBe(root);
+    expect(root.aspects).toBe(rootAspects);
+    expect(root.aspects.every((aspect, index) => aspect === acceptedAspectReferences[index])).toBe(
+      true,
+    );
+    expect(acceptedNames.map(({ aspectId }) => aspectId)).toStrictEqual(acceptedNameOrder);
   }, 120_000);
 
   it('keeps every M2 aspect byte-identical across a focused physical reroll', () => {
