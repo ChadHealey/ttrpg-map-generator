@@ -1,3 +1,17 @@
+import {
+  type AcceptedAspectRecord,
+  ATLAS_FULL_SAMPLE_COUNT,
+  createBehaviorVersion,
+  createNumericWorldPhysicalFieldReader,
+  createParameterSchemaVersion,
+  createVariantRevision,
+  deriveWorldPhysicalContextAspectId,
+  fingerprintWorldPhysicalField,
+  parseAspectName,
+  parseGeneratorId,
+  parseSeedInput,
+  type WorldDocument,
+} from '@ttrpg-map/core';
 import { describe, expect, it } from 'vitest';
 
 import { decodeBase64Bytes } from './base64-bytes.js';
@@ -7,6 +21,7 @@ import { planConfirmedMapworldRecovery } from './mapworld-recovery-confirmation.
 import { decideMapworldRecovery } from './mapworld-recovery-decision.js';
 import {
   createMapworldSavePlan,
+  createMapworldV2SavePlan,
   deriveMapworldRecoveryArtifactNames,
 } from './mapworld-recovery-marker.js';
 import {
@@ -82,6 +97,26 @@ describe('mapworld recovery names, marker, and save plan', () => {
     expect(plan.files.every(({ bytesBase64 }) => typeof bytesBase64 === 'string')).toBe(true);
   });
 
+  it('does not read map discriminators before immutable save-plan validation', () => {
+    let accessorReads = 0;
+    const source = createProofDocument();
+    const map = { ...source.maps[0] };
+    Object.defineProperty(map, 'aspects', {
+      enumerable: true,
+      get: () => {
+        accessorReads += 1;
+        throw new Error('Map discriminator accessor must not execute.');
+      },
+    });
+    const result = createMapworldSavePlan({ ...source, maps: [map] } as unknown as typeof source, {
+      operation: 'first-save',
+      targetName: TARGET_NAME,
+      previousManifestSha256: null,
+    });
+    expect(result.ok).toBe(false);
+    expect(accessorReads).toBe(0);
+  });
+
   it('classifies canonical unknown marker versions separately from noncanonical bytes', () => {
     const plan = savePlan(createProofDocument(), {
       operation: 'first-save',
@@ -108,6 +143,54 @@ describe('mapworld recovery names, marker, and save plan', () => {
     expect(noncanonical.marker.classification).toBe('invalid');
     expect(noncanonical.marker.error?.code).toBe(MAPWORLD_RECOVERY_CODES.markerInvalid);
   });
+
+  it('rejects missing or corrupt external-aspect and field owners as whole v2 candidates', () => {
+    const plan = value(
+      createMapworldV2SavePlan(createExternalFieldDocument(), {
+        operation: 'first-save',
+        targetName: TARGET_NAME,
+        previousManifestSha256: null,
+      }),
+    );
+    const valid = classified(rawSnapshot({ temporary: directory('6', plan) }));
+    expect(valid.temporary.classification).toBe('valid');
+
+    const aspectPath = plan.files.find(({ path }) => path.includes('/aspects/'))?.path;
+    const fieldPath = plan.files.find(({ path }) => path.endsWith('.mwf'))?.path;
+    if (aspectPath === undefined || fieldPath === undefined) {
+      throw new Error('Expected an external aspect and field owner in the v2 save plan.');
+    }
+    expect(plan.files.map(({ path }) => path)).toEqual(
+      expect.arrayContaining([aspectPath, fieldPath]),
+    );
+
+    for (const [index, missingPath] of [aspectPath, fieldPath].entries()) {
+      const partial = directoryEntries(
+        String(7 + index),
+        plan.files
+          .filter(({ path }) => path !== missingPath)
+          .map(({ path, bytesBase64 }) => ({
+            path,
+            bytes: Array.from(requiredBase64(bytesBase64)),
+          })),
+      );
+      expect(classified(rawSnapshot({ temporary: partial })).temporary.classification).toBe(
+        'invalid',
+      );
+    }
+
+    const corrupt = directoryEntries(
+      '9',
+      plan.files.map(({ path, bytesBase64 }) => {
+        const bytes = Array.from(requiredBase64(bytesBase64));
+        if (path === fieldPath) bytes[bytes.length - 1] = (bytes.at(-1) ?? 0) ^ 1;
+        return { path, bytes };
+      }),
+    );
+    expect(classified(rawSnapshot({ temporary: corrupt })).temporary.classification).toBe(
+      'invalid',
+    );
+  }, 60_000);
 });
 
 describe('pure mapworld recovery decision', () => {
@@ -355,4 +438,86 @@ function requiredBase64(value: string): Uint8Array {
   const bytes = decodeBase64Bytes(value, Number.MAX_SAFE_INTEGER);
   if (bytes === null) throw new Error('Test save plan contains invalid canonical base64.');
   return bytes;
+}
+
+function createExternalFieldDocument(): WorldDocument {
+  const document = createProofDocument();
+  const map = document.maps[0];
+  const entity = map?.entities[0];
+  const sourceAspect = map?.aspects[0];
+  if (map === undefined || entity === undefined || sourceAspect === undefined) {
+    throw new Error('Expected a synthetic external-field owner.');
+  }
+  const aspectName = value(parseAspectName('worldClimate.temperature'));
+  const generatorId = value(parseGeneratorId('worldClimate.temperature'));
+  const generatorVersion = value(createBehaviorVersion(1));
+  const parameterSchemaVersion = value(createParameterSchemaVersion(1));
+  const variantRevision = value(createVariantRevision(0));
+  const aspectId = deriveWorldPhysicalContextAspectId(entity.entityId, 'worldClimate.temperature');
+  const values = createNumericWorldPhysicalFieldReader(new Int16Array(ATLAS_FULL_SAMPLE_COUNT));
+  const provenanceWithoutFingerprint = {
+    contractVersion: 1,
+    fieldKind: 'temperature',
+    ownerAspectId: aspectId,
+    sourceAspectIds: [sourceAspect.aspectId],
+    fieldBehaviorVersion: 1,
+    fieldEncodingVersion: 1,
+    valueEncoding: 'signed-integer-ticks',
+    quantizationScale: 10,
+    samplingProfileId: 'world-atlas-full-v1',
+    samplingPolicyVersion: 1,
+    longitudeCellCount: 2_048,
+    latitudeBandCount: 1_024,
+    canonicalTraversal: 'south-pole-then-rows-then-north-pole',
+  } as const;
+  const aspect: AcceptedAspectRecord = {
+    mapId: map.mapId,
+    entityId: entity.entityId,
+    aspectId,
+    aspectName,
+    generatorId,
+    generatorVersion,
+    parameterSchemaVersion,
+    parameters: { parameterSchemaVersion: 1, fieldEncodingVersion: 1, climateCharacter: 'varied' },
+    seedScope: 'map/entity',
+    seedMetadata: value(
+      parseSeedInput({
+        seedDerivationVersion: 1,
+        deterministicStreamVersion: 1,
+        seedScope: 'map/entity',
+        worldSeed: document.worldSeed.toString(),
+        generatorId,
+        generatorVersion,
+        aspectName,
+        variantRevision,
+        mapId: map.mapId,
+        entityId: entity.entityId,
+      }),
+    ),
+    variantRevision,
+    dependencyAspects: [],
+    generationStatus: 'accepted',
+    diagnostics: [],
+    acceptedOutput: {
+      provenance: {
+        ...provenanceWithoutFingerprint,
+        fingerprint: fingerprintWorldPhysicalField({
+          provenance: provenanceWithoutFingerprint,
+          minimumValue: 0,
+          maximumValue: 0,
+          values,
+        }),
+      },
+      minimumValue: 0,
+      maximumValue: 0,
+      values,
+      quantumCelsius: 0.1,
+    },
+  };
+  return {
+    ...document,
+    maps: document.maps.map((item) =>
+      item.mapId === map.mapId ? { ...item, aspects: [...item.aspects, aspect] } : item,
+    ),
+  };
 }

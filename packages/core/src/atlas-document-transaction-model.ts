@@ -5,8 +5,10 @@ import type { VariantRevision } from './compatibility.js';
 import type { AspectReplacementProposal } from './generated-aspects.js';
 import type { AspectId, EntityId, LockId, MapId } from './identity.js';
 import type { MapEntity, WorldDocument, WorldMapCoordinateSystem } from './world-document.js';
+import type { WorldPhysicalContextControls } from './world-physical-context-model.js';
 
 export const ATLAS_DOCUMENT_COMMAND_KIND = 'commit-atlas-proposal' as const;
+export const ATLAS_PHYSICAL_DOCUMENT_COMMAND_KIND = 'commit-atlas-physical-proposal' as const;
 
 export const ATLAS_DOCUMENT_OPERATION_MODES = Object.freeze({
   initial: 'initial-atlas',
@@ -17,6 +19,15 @@ export const ATLAS_DOCUMENT_OPERATION_MODES = Object.freeze({
 
 export type AtlasDocumentOperationMode =
   (typeof ATLAS_DOCUMENT_OPERATION_MODES)[keyof typeof ATLAS_DOCUMENT_OPERATION_MODES];
+
+export const ATLAS_PHYSICAL_DOCUMENT_OPERATION_MODES = Object.freeze({
+  initial: 'initial-physical-atlas',
+  controls: 'physical-control-driven-replacement',
+  aspectReroll: 'physical-aspect-reroll',
+} as const);
+
+export type AtlasPhysicalDocumentOperationMode =
+  (typeof ATLAS_PHYSICAL_DOCUMENT_OPERATION_MODES)[keyof typeof ATLAS_PHYSICAL_DOCUMENT_OPERATION_MODES];
 
 export const ATLAS_DOCUMENT_TRANSACTION_DIAGNOSTIC_CODES = Object.freeze({
   conflictingConstraint: 'atlas-transaction.constraint.conflict',
@@ -51,6 +62,18 @@ export interface CommitAtlasProposalCommand {
   readonly explicitlyIncrementedAspectIds: readonly AspectId[];
 }
 
+/** One complete nine-aspect M3 proposal assembled from the accepted M2 root atlas. */
+export interface CommitAtlasPhysicalProposalCommand {
+  readonly kind: typeof ATLAS_PHYSICAL_DOCUMENT_COMMAND_KIND;
+  readonly operationMode: AtlasPhysicalDocumentOperationMode;
+  readonly targetMapId: MapId;
+  readonly expectedWorldSeed: WorldDocument['worldSeed'];
+  readonly expectedAspectRevisions: readonly ExpectedAtlasAspectRevision[];
+  readonly controls: WorldPhysicalContextControls;
+  readonly proposedAspects: readonly AspectReplacementProposal[];
+  readonly explicitlyIncrementedAspectIds: readonly AspectId[];
+}
+
 export interface AtlasDocumentTransactionDiagnostic {
   readonly code: AtlasDocumentTransactionDiagnosticCode;
   readonly aspectIds: readonly AspectId[];
@@ -67,6 +90,19 @@ export type CommitAtlasProposalResult =
       readonly committedAspectIds: readonly AspectId[];
       readonly addedEntityIds: readonly EntityId[];
       readonly removedEntityIds: readonly EntityId[];
+    }
+  | {
+      readonly ok: false;
+      /** Rejection returns the exact accepted input reference. */
+      readonly document: WorldDocument;
+      readonly diagnostics: readonly AtlasDocumentTransactionDiagnostic[];
+    };
+
+export type CommitAtlasPhysicalProposalResult =
+  | {
+      readonly ok: true;
+      readonly document: WorldDocument;
+      readonly committedAspectIds: readonly AspectId[];
     }
   | {
       readonly ok: false;

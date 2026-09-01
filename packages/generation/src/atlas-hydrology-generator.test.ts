@@ -40,6 +40,7 @@ describe('whole-world hydrology generation', () => {
       deriveWorldPhysicalContextAspectId(input.worldSurfaceEntityId, 'worldHydrology.majorLakes'),
     );
     expect(patch.watersheds.seedScope).toBe('map/entity');
+    expect(patch.watersheds.output.provenance.valueEncoding).toBe('entity-id');
     expect(patch.watersheds.output.values.length).toBe(2_095_106);
     expect(patch.watersheds.output.watersheds.length).toBe(input.records.landmasses.length);
     expect(patch.majorRivers.output.length).toBeGreaterThan(0);

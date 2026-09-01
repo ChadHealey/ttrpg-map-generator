@@ -1,6 +1,7 @@
 import {
   type AcceptedAspectRecord,
   createImmutableDomainSnapshot,
+  type InheritedContextSnapshot,
   parseStableId,
   parseWorldSeed,
   type WorldDocument,
@@ -23,6 +24,7 @@ export function worldDocumentFromDtos(
   world: WorldIndexDto,
   mapDtos: readonly MapDocumentDto[],
   externalAspectsByMap: readonly (readonly AcceptedAspectRecord[])[] = [],
+  inheritedContextsByMap: readonly (InheritedContextSnapshot | undefined)[] = [],
 ): PersistenceResult<WorldDocument> {
   const worldDocumentId = parseCoreValue(
     parseStableId('world-document', world.worldDocumentId),
@@ -49,8 +51,12 @@ export function worldDocumentFromDtos(
     if (entry === undefined) return missingPackageFile('world.json');
     const map = mapDocumentFromDto(dto, entry.path);
     if (!map.ok) return map;
+    const inheritedContext = inheritedContextsByMap[index];
     maps.push({
       ...map.value,
+      ...(map.value.mapKind === 'regional' && inheritedContext !== undefined
+        ? { parent: { ...map.value.parent, inheritedContext } }
+        : {}),
       aspects: [...map.value.aspects, ...(externalAspectsByMap[index] ?? [])].sort((left, right) =>
         left.aspectId < right.aspectId ? -1 : left.aspectId > right.aspectId ? 1 : 0,
       ),

@@ -58,8 +58,13 @@ export {
   ATLAS_DOCUMENT_COMMAND_KIND,
   ATLAS_DOCUMENT_OPERATION_MODES,
   ATLAS_DOCUMENT_TRANSACTION_DIAGNOSTIC_CODES,
+  ATLAS_PHYSICAL_DOCUMENT_COMMAND_KIND,
+  ATLAS_PHYSICAL_DOCUMENT_OPERATION_MODES,
   type AtlasDocumentOperationMode,
   type AtlasDocumentTransactionDiagnostic,
+  type AtlasPhysicalDocumentOperationMode,
+  type CommitAtlasPhysicalProposalCommand,
+  type CommitAtlasPhysicalProposalResult,
   type CommitAtlasProposalCommand,
   type CommitAtlasProposalResult,
   type ExpectedAtlasAspectRevision,
@@ -183,6 +188,7 @@ export {
   type AtlasWaterSegmentationResult,
   segmentAtlasWaterBodies,
 } from './atlas-geography-water-policy.js';
+export { commitAtlasPhysicalProposal } from './atlas-physical-document-transactions.js';
 export {
   type AtlasLandWaterSample,
   type AtlasSampleReader,

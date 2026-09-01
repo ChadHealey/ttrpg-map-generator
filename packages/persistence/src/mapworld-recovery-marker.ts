@@ -1,4 +1,4 @@
-import type { WorldDocument } from '@ttrpg-map/core';
+import { createImmutableDomainSnapshot, type WorldDocument } from '@ttrpg-map/core';
 
 import { encodeBase64Bytes } from './base64-bytes.js';
 import {
@@ -24,6 +24,7 @@ import {
   mapworldRecoveryMarkerSchema,
   mapworldRecoveryMarkerVersionSchema,
 } from './mapworld-recovery-schemas.js';
+import { createMapworldV2Candidate, isMapworldV2ExternalAspectName } from './mapworld-v2-codec.js';
 
 const SHA256_PATTERN = /^[a-f0-9]{64}$/u;
 const UTF8_ENCODER = new TextEncoder();
@@ -62,6 +63,22 @@ export function createMapworldSavePlan(
   document: WorldDocument,
   intent: MapworldSaveIntent,
 ): MapworldRecoveryResult<MapworldSavePlan> {
+  return createMapworldSavePlanForVersion(document, intent, 'automatic');
+}
+
+/** Explicit v1-to-v2 candidate creation using the unchanged ADR-0008 staging protocol. */
+export function createMapworldV2SavePlan(
+  document: WorldDocument,
+  intent: MapworldSaveIntent,
+): MapworldRecoveryResult<MapworldSavePlan> {
+  return createMapworldSavePlanForVersion(document, intent, 'v2');
+}
+
+function createMapworldSavePlanForVersion(
+  document: WorldDocument,
+  intent: MapworldSaveIntent,
+  version: 'automatic' | 'v2',
+): MapworldRecoveryResult<MapworldSavePlan> {
   const names = deriveMapworldRecoveryArtifactNames(intent.targetName);
   if (!names.ok) return names;
   if (
@@ -75,7 +92,12 @@ export function createMapworldSavePlan(
       { expectedFingerprint: intent.previousManifestSha256 },
     );
   }
-  const encoded = encodeMapworld(document);
+  const snapshot = createImmutableDomainSnapshot(document);
+  const encoded = !snapshot.ok
+    ? encodeMapworld(document)
+    : version === 'v2' || requiresMapworldV2(snapshot.value)
+      ? createMapworldV2Candidate(snapshot.value)
+      : encodeMapworld(snapshot.value);
   if (!encoded.ok) {
     return recoveryFailure(
       MAPWORLD_RECOVERY_CODES.fingerprintMismatch,
@@ -138,6 +160,30 @@ export function createMapworldSavePlan(
       ),
     }),
   );
+}
+
+function requiresMapworldV2(document: WorldDocument): boolean {
+  const maps = (document as unknown as { readonly maps?: unknown }).maps;
+  if (!Array.isArray(maps)) return false;
+  return maps.some((map) => {
+    if (!isRecord(map) || !Array.isArray(map.aspects)) return false;
+    const hasExternalAspect = map.aspects.some(
+      (aspect) =>
+        isRecord(aspect) &&
+        typeof aspect.aspectName === 'string' &&
+        isMapworldV2ExternalAspectName(aspect.aspectName),
+    );
+    return (
+      hasExternalAspect ||
+      (map.mapKind === 'regional' &&
+        isRecord(map.parent) &&
+        map.parent.inheritedContext !== undefined)
+    );
+  });
+}
+
+function isRecord(value: unknown): value is Readonly<Record<string, unknown>> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
 export function parseMapworldRecoveryMarker(

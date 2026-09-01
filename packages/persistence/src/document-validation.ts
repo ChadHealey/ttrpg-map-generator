@@ -2,6 +2,7 @@ import {
   createAspectDependencyGraph,
   createPlanetRegionalTransform,
   type MapDocument,
+  parseInheritedContextSnapshot,
   reconstructAcceptedAtlas,
   validateRoundTripSafeRegionalExtent,
   validateWorldDocumentOwnership,
@@ -74,6 +75,7 @@ export function validateDocumentForPersistence(
           ),
         );
       }
+      diagnostics.push(...validateInheritedContextOwner(document, map));
     }
   }
 
@@ -93,6 +95,117 @@ export function validateDocumentForPersistence(
     );
   }
   return Object.freeze(diagnostics.sort(comparePersistenceDiagnostics));
+}
+
+function validateInheritedContextOwner(
+  document: WorldDocument,
+  map: Extract<MapDocument, { readonly mapKind: 'regional' }>,
+): readonly PersistenceDiagnostic[] {
+  const snapshot = map.parent.inheritedContext;
+  if (snapshot === undefined) return [];
+  const parsed = parseInheritedContextSnapshot(snapshot);
+  const path = mapFilePath(map.mapId);
+  if (!parsed.ok) {
+    return parsed.diagnostics.map((finding) =>
+      persistenceDiagnostic(
+        PERSISTENCE_DIAGNOSTIC_CODES.referenceInvalid,
+        path,
+        '$.parent.inheritedContext',
+        `${finding.code}: ${finding.message}`,
+        'Restore the exact supplied inherited-context snapshot without repair or defaulting.',
+      ),
+    );
+  }
+  const context = parsed.value;
+  const footprint = context.footprint;
+  const lineageKeys = context.sourceLineage.map(
+    ({ sourceMapId, sourceEntityId }) => `${sourceMapId}\n${sourceEntityId}`,
+  );
+  const sourceOwnerKeys = context.sourceAspectVersions.map(
+    ({ sourceMapId, sourceEntityId }) => `${sourceMapId}\n${sourceEntityId}`,
+  );
+  const lineageValid =
+    sameUniqueStrings(lineageKeys, sourceOwnerKeys) &&
+    context.sourceLineage.every((source) => {
+      const sourceMap = document.maps.find(({ mapId }) => mapId === source.sourceMapId);
+      return (
+        sourceMap?.entities.some(({ entityId }) => entityId === source.sourceEntityId) === true
+      );
+    });
+  const sourceAspectsValid = context.sourceAspectVersions.every((source) => {
+    const sourceMap = document.maps.find(({ mapId }) => mapId === source.sourceMapId);
+    const sourceAspect = sourceMap?.aspects.find(
+      ({ aspectId }) => aspectId === source.sourceAspectId,
+    );
+    return (
+      sourceMap !== undefined &&
+      sourceMap.entities.some(({ entityId }) => entityId === source.sourceEntityId) &&
+      sourceAspect?.entityId === source.sourceEntityId &&
+      sourceAspect.aspectName === source.aspectName
+    );
+  });
+  const contextStatus = map.aspects.find(
+    ({ aspectId }) => aspectId === map.parent.contextStatusAspectId,
+  );
+  const contextDependenciesValid =
+    contextStatus !== undefined &&
+    sameStrings(
+      contextStatus.dependencyAspects.map(({ aspectId }) => aspectId),
+      context.sourceAspectVersions.map(({ sourceAspectId }) => sourceAspectId),
+    ) &&
+    contextStatus.dependencyAspects.every(
+      ({ contextProvenance }) =>
+        contextProvenance?.kind === 'inherited-context' &&
+        contextProvenance.parentMapId === map.parent.parentMapId &&
+        contextProvenance.childMapId === map.mapId,
+    );
+  const exactOwner =
+    context.rootMapId === document.rootMapId &&
+    context.parentMapId === map.parent.parentMapId &&
+    map.parent.rootMapId === document.rootMapId &&
+    footprint.rootSurfaceId === map.coordinateSystem.rootSurfaceId &&
+    footprint.worldRadius.radiusMillimeters === map.coordinateSystem.radius.radiusMillimeters &&
+    footprint.origin.longitudeTicks === map.coordinateSystem.origin.longitudeTicks &&
+    footprint.origin.latitudeTicks === map.coordinateSystem.origin.latitudeTicks &&
+    footprint.extent.minXMillimeters === map.extent.minXMillimeters &&
+    footprint.extent.maxXMillimeters === map.extent.maxXMillimeters &&
+    footprint.extent.minYMillimeters === map.extent.minYMillimeters &&
+    footprint.extent.maxYMillimeters === map.extent.maxYMillimeters &&
+    lineageValid &&
+    sourceAspectsValid &&
+    contextDependenciesValid;
+  return exactOwner
+    ? []
+    : [
+        persistenceDiagnostic(
+          PERSISTENCE_DIAGNOSTIC_CODES.referenceInvalid,
+          path,
+          '$.parent.inheritedContext',
+          'Inherited context ownership, footprint, lineage, or source-aspect identity does not match its regional map.',
+          'Restore the exact snapshot supplied for this regional owner; parent version drift may remain stale.',
+        ),
+      ];
+}
+
+function sameUniqueStrings(left: readonly string[], right: readonly string[]): boolean {
+  const leftSet = [...new Set(left)].sort();
+  const rightSet = [...new Set(right)].sort();
+  return (
+    leftSet.length === left.length &&
+    leftSet.length === rightSet.length &&
+    leftSet.every((value, index) => value === rightSet[index])
+  );
+}
+
+function sameStrings(left: readonly string[], right: readonly string[]): boolean {
+  const leftSet = [...new Set(left)].sort();
+  const rightSet = [...new Set(right)].sort();
+  return (
+    leftSet.length === left.length &&
+    rightSet.length === right.length &&
+    leftSet.length === rightSet.length &&
+    leftSet.every((value, index) => value === rightSet[index])
+  );
 }
 
 function validateMapReferences(

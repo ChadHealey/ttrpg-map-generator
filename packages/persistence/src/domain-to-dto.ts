@@ -104,6 +104,15 @@ export function mapDocumentToDto(map: MapDocument): PersistenceResult<MapDocumen
       aspectReferences: map.layout.aspectReferences.map((reference) => ({ ...reference })),
     },
   };
+  const regionalParent =
+    map.mapKind === 'regional'
+      ? {
+          parentMapId: map.parent.parentMapId,
+          rootMapId: map.parent.rootMapId,
+          relationshipKind: map.parent.relationshipKind,
+          contextStatusAspectId: map.parent.contextStatusAspectId,
+        }
+      : undefined;
   const raw =
     map.mapKind === 'world'
       ? {
@@ -126,7 +135,7 @@ export function mapDocumentToDto(map: MapDocument): PersistenceResult<MapDocumen
           mapKind: map.mapKind,
           scaleClass: map.scaleClass,
           displayName: map.displayName,
-          parent: { ...map.parent },
+          parent: regionalParent,
           coordinateSystem: {
             ...map.coordinateSystem,
             origin: { ...map.coordinateSystem.origin },

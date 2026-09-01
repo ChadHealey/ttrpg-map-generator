@@ -102,6 +102,28 @@ describe('canonical mapworld v1 encoding', () => {
     }
   });
 
+  it('does not read an accepted-aspect discriminator accessor before immutable validation', () => {
+    let accessorReads = 0;
+    const source = proofAspect(createProofDocument(), TEST_OUTLINE_ASPECT_ID);
+    const candidate = { ...source } as AcceptedAspectRecord;
+    Object.defineProperty(candidate, 'aspectName', {
+      enumerable: true,
+      get: () => {
+        accessorReads += 1;
+        throw new Error('Aspect discriminator accessor must not execute.');
+      },
+    });
+
+    for (const result of [canonicalAspectBytes(candidate), canonicalAspectOutputBytes(candidate)]) {
+      expect(result.ok).toBe(false);
+      if (result.ok) throw new Error('Expected accessor-bearing aspect rejection.');
+      expect(result.diagnostics.map(({ code }) => code)).toContain(
+        PERSISTENCE_DIAGNOSTIC_CODES.immutableSnapshotInvalid,
+      );
+    }
+    expect(accessorReads).toBe(0);
+  });
+
   it('rejects an accepted generation diagnostic whose target does not exist', () => {
     const result = encodeMapworld(
       withDiagnosticTarget(createProofDocument(), '00000000-0000-4000-8000-000000000099'),

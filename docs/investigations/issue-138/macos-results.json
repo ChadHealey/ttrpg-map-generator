@@ -1,0 +1,291 @@
+{
+  "issue": 138,
+  "measurementSchemaVersion": 1,
+  "candidateBaseCommit": "385cbc5ee57f07f4ef475db40d3e42870ce985cf",
+  "host": {
+    "platform": "darwin",
+    "architecture": "arm64",
+    "osRelease": "25.5.0",
+    "processor": "Apple M5",
+    "logicalCpuCount": 10,
+    "memoryBytes": 25769803776,
+    "repositoryFilesystem": "unknown",
+    "macosVersion": "26.5.1",
+    "macosBuild": "25F80",
+    "modelIdentifier": "unknown"
+  },
+  "toolchain": {
+    "node": "24.11.0",
+    "pnpm": "11.19.0"
+  },
+  "measurementSources": [
+    {
+      "path": "apps/desktop/src/atlas-physical-accepted-state.integration.test.ts",
+      "sha256": "ea8618ab549cd76325e784c55089a110fa8c68c1c9d68eed0a59de334d72d9dc"
+    },
+    {
+      "path": "apps/desktop/src/atlas-physical-context-decode-measurement.test.ts",
+      "sha256": "28d5a8e641f2057c11d722f27eb98255b0aad520dafce1e37a22f44b22037cea"
+    },
+    {
+      "path": "docs/investigations/issue-138/physical-context-measurement.mjs",
+      "sha256": "c4a2884d3a1a07f7f7f3a980dd0febab98ff48783525c6f44e0820fcb3f9a05c"
+    },
+    {
+      "path": "packages/persistence/src/mapworld-v2-codec.ts",
+      "sha256": "775bebcf79c7f599596ae6b875cd9e8b878a1c1c63ed7429e14277baf8d63e2f"
+    }
+  ],
+  "memoryMeasurement": {
+    "source": "process.resourceUsage().maxRSS",
+    "sourceUnit": "KiB",
+    "receiptUnit": "bytes",
+    "encodePeakIncludesFullDeterministicM2AndM3SourceGeneration": true,
+    "decodeRunsInFreshGeneratorFreeProcess": true
+  },
+  "source": {
+    "fixtureId": "milestone-2-atlas-proof-plus-supplied-south-pole-context",
+    "physicalAspectCount": 9,
+    "logicalFieldCount": 9,
+    "inheritedContextContractVersion": 1,
+    "inheritedContextLocation": "regional parent.inheritedContext"
+  },
+  "limits": {
+    "perFileLimitBytes": 134217728,
+    "packageLimitBytes": 201326592,
+    "packageBytes": 134746661,
+    "packageHeadroomBytes": 66579931,
+    "withinPackageLimit": true,
+    "largestFile": {
+      "path": "maps/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7.json",
+      "bytes": 82279962,
+      "sha256": "de913b58d939057cd9e2452527d3f168263b86b1d163596a98fb44c63995b0c6"
+    },
+    "perFileHeadroomBytes": 51937766,
+    "withinPerFileLimit": true
+  },
+  "canonicalEvidence": {
+    "manifestSha256": "d4c51bee5745fa9bd3eb7f9516054c9377e35c6770b58459867166a76a5c9ef0",
+    "files": [
+      {
+        "path": "manifest.json",
+        "bytes": 5384,
+        "sha256": "d4c51bee5745fa9bd3eb7f9516054c9377e35c6770b58459867166a76a5c9ef0"
+      },
+      {
+        "path": "world.json",
+        "bytes": 635,
+        "sha256": "06b9e877f3db8ccad1b41f0a14011949f4691e2eddc9676b1be393b0275e40f6"
+      },
+      {
+        "path": "maps/71456929-0ee6-4142-84ed-4a777d8f63d3.json",
+        "bytes": 18617,
+        "sha256": "9c29c00589268b9181bafc7461f86039e5db1696d7ab6ba4da5029c98554d648"
+      },
+      {
+        "path": "maps/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7.json",
+        "bytes": 82279962,
+        "sha256": "de913b58d939057cd9e2452527d3f168263b86b1d163596a98fb44c63995b0c6"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/098b5448-209c-55b0-96fe-9bd397c6f314.json",
+        "bytes": 2842,
+        "sha256": "f92575aeaee8e17663023e1671bda4672397c7b32bc0f4d9d089bb15efcee4b9"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/47d4f799-fc0a-5818-ac6f-7827374d0a0c.json",
+        "bytes": 4260,
+        "sha256": "7c200158ec7f6f1f0494a76ab0d832ed14fdc166d0b2644c7df8244bb6fbad80"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/5ad53f4f-728c-54ce-9a7f-7d0acd384287.json",
+        "bytes": 2212,
+        "sha256": "1d3b9ec3644c87f402c054c70d1c2f28713024c4fcec8a642ca62ca0f91b7d7c"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/8433b981-ad06-5714-a49f-e454ef265279.json",
+        "bytes": 2280,
+        "sha256": "700d32f49536c6cd85adf5090c76ba150ee424ebee939ca4b8ec373aeeeb0722"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/91f1b126-70e2-5812-83b2-4c6373a863d5.json",
+        "bytes": 2835,
+        "sha256": "0b7dc67bbe4b0f924b9dd00afbf0f0b14ccdc59ecfab4142ab64a6560649ec09"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/b255be89-ad89-582a-bc1e-801aac7255e8.json",
+        "bytes": 2793,
+        "sha256": "dfeb07a25a474dbdcfe35d485093ad70087eee2b7b62bdba8f0d194148295be3"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/de179f75-8d50-5b99-af48-d9699ae292cf.json",
+        "bytes": 6991,
+        "sha256": "7e03a1fdd98c2c538c5d5eb9ce92de67640b214644e43cd68e46f0c55882196d"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/e88989ae-89de-5a41-9102-5018199a96e6.json",
+        "bytes": 3577,
+        "sha256": "529ed88ab2d5555361c12db9b775e2551f5c7343711b1f34e6e923bfaf8243aa"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/ef0cc4d3-e6f5-510c-9dc0-92792f48427a.json",
+        "bytes": 4226547,
+        "sha256": "34467db3b4a6c31074a0d21e7b8ccc73945fa2868c4cf32bff95d3432f5b0012"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/098b5448-209c-55b0-96fe-9bd397c6f314.moisture.mwf",
+        "bytes": 8380456,
+        "sha256": "7554ce1aadfb166c5e69af524a857ce8769a2f7dacb68de180601cdfbf7b8d88"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/47d4f799-fc0a-5818-ac6f-7827374d0a0c.watersheds.mwf",
+        "bytes": 2095138,
+        "sha256": "30a7283612a5fa0bbd55b8995d6cb8ed35d591bdb7f1a8b236a6ab8f2b656101"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/91f1b126-70e2-5812-83b2-4c6373a863d5.temperature.mwf",
+        "bytes": 4190244,
+        "sha256": "da65dbff3a9ee76574630679e3b497ed5c0e44d2deaeb548b0c8d5ea03a8d8f0"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/de179f75-8d50-5b99-af48-d9699ae292cf.prevailing-winds-speed.mwf",
+        "bytes": 4190244,
+        "sha256": "a3d1c5149043950047c9ae4590f9de50e4b8c09567690bca1d8849ed2649c087"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/de179f75-8d50-5b99-af48-d9699ae292cf.prevailing-winds-x.mwf",
+        "bytes": 8380456,
+        "sha256": "9264853e29309776b22be0da76bed1590461a47fcaef59ae7dd5c772a7144f5d"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/de179f75-8d50-5b99-af48-d9699ae292cf.prevailing-winds-y.mwf",
+        "bytes": 8380456,
+        "sha256": "6b49612b5b742a848a6a59988d0372a10b92eac9d09d2fd6cfd584df3e6a163e"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/de179f75-8d50-5b99-af48-d9699ae292cf.prevailing-winds-z.mwf",
+        "bytes": 8380456,
+        "sha256": "30f82761caba6b7d5caf88a6b21513b731121136fb7b999f8e022f677b64329e"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/e88989ae-89de-5a41-9102-5018199a96e6.climate-zones.mwf",
+        "bytes": 2095138,
+        "sha256": "b34684c56487f3ebeb076c5e5f712f5156855ba44fde586766c852e6db204e5a"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/ef0cc4d3-e6f5-510c-9dc0-92792f48427a.biome-belts.mwf",
+        "bytes": 2095138,
+        "sha256": "b34684c56487f3ebeb076c5e5f712f5156855ba44fde586766c852e6db204e5a"
+      }
+    ],
+    "framedAspects": [
+      {
+        "aspectId": "098b5448-209c-55b0-96fe-9bd397c6f314",
+        "completeBytes": 8383523,
+        "completeSha256": "dbb46eebeb5775c3b01539ad2fccf6dae3d208c65b315424448be9abe5dd6368",
+        "outputBytes": 8381925,
+        "outputSha256": "9fccf293ba06c98e83f27c0d21ec0fd625b23361959da1c02caa65ba3d221945"
+      },
+      {
+        "aspectId": "47d4f799-fc0a-5818-ac6f-7827374d0a0c",
+        "completeBytes": 2099625,
+        "completeSha256": "9368f9da5a0bef2483fc80b12f906754f128ded4aefb8b7ed5b274d1b79ec5ab",
+        "outputBytes": 2098053,
+        "outputSha256": "f5b938f7f1df888ea493ed8c95283724681eef966eb9bd36f799a4a28a8d9a8b"
+      },
+      {
+        "aspectId": "5ad53f4f-728c-54ce-9a7f-7d0acd384287",
+        "completeBytes": 2327,
+        "completeSha256": "0a471a839061b36f9aec2d0214d9f11b271fbc3352a57423232c61e4086663e8",
+        "outputBytes": 679,
+        "outputSha256": "61b3f6f68af792b58d15a791c17fee8a966cf31e56402357202d1aae7a6f8aad"
+      },
+      {
+        "aspectId": "8433b981-ad06-5714-a49f-e454ef265279",
+        "completeBytes": 2395,
+        "completeSha256": "171a223db5306712915e5c30b8fb5ee327a107a6e188c5445f03d399ea330c65",
+        "outputBytes": 803,
+        "outputSha256": "3f5badb600c5b12d41dd7fa0d0f50b5de6586ccf36d52d2dcb4d11899b4ffa3e"
+      },
+      {
+        "aspectId": "91f1b126-70e2-5812-83b2-4c6373a863d5",
+        "completeBytes": 4193307,
+        "completeSha256": "be29a0a443f26f8120ab8359d1277c0a5e537a1c15ac904be9fa5abcda892d52",
+        "outputBytes": 4191703,
+        "outputSha256": "1519259b405119fdc086e9862646c22676a1901eb680d1f8aa45a254f0dc6137"
+      },
+      {
+        "aspectId": "b255be89-ad89-582a-bc1e-801aac7255e8",
+        "completeBytes": 2908,
+        "completeSha256": "512af054f0216924b2f627f9a2c9aa76cfc83c9c366dcbfcd1067c8b4e806b6d",
+        "outputBytes": 1523,
+        "outputSha256": "7dc34da4f2aacbe188c69bdf7d7da94e7052f4ab7a5203192302153e00334c4f"
+      },
+      {
+        "aspectId": "de179f75-8d50-5b99-af48-d9699ae292cf",
+        "completeBytes": 29339202,
+        "completeSha256": "2629ea693aa232dfa9dd7fa1458826e0701cec50c17ff9bf897a4e0716d82231",
+        "outputBytes": 29337446,
+        "outputSha256": "d4d6a0a608d0a83746b353f59b567801ee131739311c3682459656ea580576f7"
+      },
+      {
+        "aspectId": "e88989ae-89de-5a41-9102-5018199a96e6",
+        "completeBytes": 2098945,
+        "completeSha256": "b41fc03ad6f8652e696cababaff1f805d9f9b237fae935ad67a7d200ab82a350",
+        "outputBytes": 2097495,
+        "outputSha256": "073e6cca45ca178f5e08a9f4e1f53dac002af8e59b3e778958eeb64cc8612498"
+      },
+      {
+        "aspectId": "ef0cc4d3-e6f5-510c-9dc0-92792f48427a",
+        "completeBytes": 6321913,
+        "completeSha256": "75a32e65d1b85611cfb44dca43a5841490dce8e359421ec7b5d49455aebca777",
+        "outputBytes": 6002599,
+        "outputSha256": "9face7e7cf851290f82e3edf67e7ee41a0aa4a50e7ebdca894457a41b2ce43cc"
+      }
+    ],
+    "logicalFingerprints": {
+      "biomeBelts": "9ff8dd0f9ce0095cfebef7ce76eece8f880287e41b950733a4c2f50a1337d70a",
+      "climateZones": "575dbe5cb677b06261855d85abe0f585a038c69d8d25ffcdafc17a53476f5001",
+      "moisture": "126b6e456da1a333dab08f61e0117f41d1a3665af9e024be607f53ba71cdb394",
+      "prevailingWindsSpeed": "132b76df6b19696aada2ea9e7ccbac6091aa23ec5bdab86cccf4f5348cac4c74",
+      "prevailingWindsX": "06a11b30ff81c8e4a93ad8d40378a04f6d25a58e158d1b2781206f565e43d024",
+      "prevailingWindsY": "cad93f8092158ed2e774933a7542871c168262a5f8f7674f8a1f3b97dfa8b5e0",
+      "prevailingWindsZ": "78ffcdd916a390c25b3a0c81f96ceff4d3fdbb02613594ed90393d64120cc80e",
+      "temperature": "bb22c8d1e5cd5fa45350aa5c7cac24aa2a72146d6f218df86545cd8cffae49c8",
+      "watersheds": "f54bf81fb891621a2169835e8ed36aba8eaa1dccc285ceb4b5db642757731bdd"
+    },
+    "inheritedContextChecksum": "d6ea3051c08269c96536652b99c4eeb39183d205f51a9fbba0f9a6fb8495c9dc"
+  },
+  "repeats": [
+    {
+      "repeat": 1,
+      "encodeElapsedMs": 31340.833,
+      "encodeWallMs": 66698.087,
+      "encodePeakRssBytes": 1879326720,
+      "decodeElapsedMs": 15562.383,
+      "decodeWallMs": 19906.686,
+      "decodePeakRssBytes": 1381941248,
+      "generatorInvocationsDuringDecode": 0,
+      "decodedAspectCount": 9,
+      "manifestSha256": "d4c51bee5745fa9bd3eb7f9516054c9377e35c6770b58459867166a76a5c9ef0",
+      "inheritedContextChecksum": "d6ea3051c08269c96536652b99c4eeb39183d205f51a9fbba0f9a6fb8495c9dc"
+    },
+    {
+      "repeat": 2,
+      "encodeElapsedMs": 32662.706,
+      "encodeWallMs": 69455.604,
+      "encodePeakRssBytes": 2456174592,
+      "decodeElapsedMs": 15876.664,
+      "decodeWallMs": 20278.755,
+      "decodePeakRssBytes": 1299202048,
+      "generatorInvocationsDuringDecode": 0,
+      "decodedAspectCount": 9,
+      "manifestSha256": "d4c51bee5745fa9bd3eb7f9516054c9377e35c6770b58459867166a76a5c9ef0",
+      "inheritedContextChecksum": "d6ea3051c08269c96536652b99c4eeb39183d205f51a9fbba0f9a6fb8495c9dc"
+    }
+  ],
+  "linuxCorroboration": {
+    "status": "deferred",
+    "requirement": "Matching canonical bytes, checksums, fingerprints, and limit results are required before production v2 writer release."
+  }
+}

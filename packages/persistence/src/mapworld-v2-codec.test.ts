@@ -20,10 +20,18 @@ import { describe, expect, it } from 'vitest';
 
 import { sha256Hex } from './canonical-json.js';
 import { decodeMapworld, decodeMapworldV1 } from './mapworld-decode.js';
-import { canonicalAspectBytes, canonicalAspectOutputBytes } from './mapworld-encode.js';
+import {
+  canonicalAspectBytes,
+  canonicalAspectOutputBytes,
+  encodeMapworld,
+} from './mapworld-encode.js';
 import { MAPWORLD_NATIVE_LIMITS } from './mapworld-recovery-model.js';
 import { createProofDocument } from './mapworld-test-support.js';
-import { encodeMapworldV2, validatePackageLimits } from './mapworld-v2-codec.js';
+import {
+  createMapworldV2Candidate,
+  encodeMapworldV2,
+  validatePackageLimits,
+} from './mapworld-v2-codec.js';
 import { type MapworldPackage, PERSISTENCE_DIAGNOSTIC_CODES } from './persistence-model.js';
 
 describe('mapworld v2 external-aspect codec', { timeout: 60_000 }, () => {
@@ -97,6 +105,33 @@ describe('mapworld v2 external-aspect codec', { timeout: 60_000 }, () => {
     expect(codes(decodeMapworld(unknown))).toStrictEqual([
       PERSISTENCE_DIAGNOSTIC_CODES.versionIncompatible,
     ]);
+  });
+
+  it('creates an explicit v1-to-v2 candidate without changing canonical v1 semantics', () => {
+    const source = createProofDocument();
+    const v1Before = encodedV1(source);
+    const candidate = createMapworldV2Candidate(source);
+    expect(candidate.ok).toBe(true);
+    if (!candidate.ok) throw new Error(JSON.stringify(candidate.diagnostics));
+    const reopened = decoded(candidate.value);
+    const v1After = encodedV1(reopened);
+
+    expect(packageEvidence(v1After)).toStrictEqual(packageEvidence(v1Before));
+  });
+
+  it('fails closed instead of dropping accepted physical state into v1 bytes', () => {
+    const source = createProofDocument();
+    const temperature = physicalAspect(source, 'worldClimate.temperature', [-1, 1]);
+    const document = {
+      ...source,
+      maps: source.maps.map((map) => ({ ...map, aspects: [...map.aspects, temperature] })),
+    };
+    const result = encodeMapworld(document);
+    expect(result.ok).toBe(false);
+    if (result.ok) throw new Error('Expected v1 physical-state rejection.');
+    expect(result.diagnostics.map(({ code }) => code)).toContain(
+      PERSISTENCE_DIAGNOSTIC_CODES.versionIncompatible,
+    );
   });
 
   it('frames v2 aspect and output evidence with owned paths and exact lengths', () => {
@@ -479,6 +514,12 @@ function encodedV2(
   aspects: readonly AcceptedAspectRecord[],
 ): MapworldPackage {
   const result = encodeMapworldV2(document, aspects);
+  if (!result.ok) throw new Error(JSON.stringify(result.diagnostics));
+  return result.value;
+}
+
+function encodedV1(document: WorldDocument): MapworldPackage {
+  const result = encodeMapworld(document);
   if (!result.ok) throw new Error(JSON.stringify(result.diagnostics));
   return result.value;
 }

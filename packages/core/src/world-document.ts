@@ -1,8 +1,8 @@
 /**
  * Minimal authoritative records for the Milestone 1 world-document ownership model.
  *
- * These records contain accepted domain state only. They deliberately contain no inherited
- * context, generator implementation, persistence DTO, render scene, or mutation capability.
+ * These records contain accepted domain state only. They deliberately contain no generator
+ * implementation, persistence DTO, render scene, or mutation capability.
  */
 
 import {
@@ -20,6 +20,7 @@ import type {
   RootSurfaceId,
   WorldDocumentId,
 } from './identity.js';
+import type { InheritedContextSnapshot } from './inherited-context-model.js';
 import type { WorldSeed } from './seed-input.js';
 
 export const MAP_KINDS = {
@@ -122,6 +123,11 @@ export interface RegionalMapParent {
   readonly relationshipKind: typeof MAP_RELATIONSHIP_KINDS.worldToRegional;
   /** Stable aspect whose query-time metadata reports whether inherited context is stale. */
   readonly contextStatusAspectId: AspectId;
+  /**
+   * Complete accepted parent snapshot for v2 regional maps. Released v1 regional records omit
+   * it; persistence never constructs or defaults this value while reopening either version.
+   */
+  readonly inheritedContext?: InheritedContextSnapshot;
 }
 
 /** The exactly-one root map kind in a valid world document. */

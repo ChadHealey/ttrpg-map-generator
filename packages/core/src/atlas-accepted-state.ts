@@ -24,10 +24,15 @@ import {
   type WaterBody,
 } from './atlas-geography-model.js';
 import { parseAtlasControls, validateAtlasGeographyRecords } from './atlas-geography-validation.js';
+import {
+  isWorldPhysicalContextAspectName,
+  reconstructAcceptedWorldPhysicalContext,
+} from './atlas-physical-accepted-state.js';
 import type { AcceptedAspectRecord } from './generated-aspects.js';
 import type { AspectId, EntityId } from './identity.js';
 import { createImmutableDomainSnapshot } from './immutable-domain-snapshot.js';
 import type { WorldDocument, WorldMap } from './world-document.js';
+import type { WorldPhysicalContextRecords } from './world-physical-context-model.js';
 
 const ATLAS_ASPECT_NAMES: ReadonlySet<string> = new Set<AtlasAspectKind>([
   'worldTerrain.macroElevation',
@@ -59,6 +64,7 @@ export interface AcceptedAtlasDiagnostic {
 export interface ReconstructedAcceptedAtlas {
   readonly geography: AtlasGeographyRecords;
   readonly appearance: AtlasAppearanceRecords;
+  readonly physical?: WorldPhysicalContextRecords;
 }
 
 export type ReconstructAcceptedAtlasResult =
@@ -71,24 +77,30 @@ export type ReconstructAcceptedAtlasResult =
  * generator, renderer, cache, projection, filesystem, or migration dependency.
  */
 export function reconstructAcceptedAtlas(document: WorldDocument): ReconstructAcceptedAtlasResult {
-  const atlasAspects = document.maps.flatMap((map) =>
-    map.aspects.filter(({ aspectName }) => ATLAS_ASPECT_NAMES.has(aspectName)),
-  );
-  if (atlasAspects.length === 0) return Object.freeze({ status: 'not-atlas' });
-
   const root = document.maps.find(({ mapId }) => mapId === document.rootMapId);
-  if (root?.mapKind !== 'world' || document.maps.length !== 1) {
+  if (root === undefined) return Object.freeze({ status: 'not-atlas' });
+  const m2AtlasAspects = root.aspects.filter(({ aspectName }) =>
+    ATLAS_ASPECT_NAMES.has(aspectName),
+  );
+  if (m2AtlasAspects.length === 0) return Object.freeze({ status: 'not-atlas' });
+
+  if (root.mapKind !== 'world') {
     return invalid(
       ACCEPTED_ATLAS_DIAGNOSTIC_CODES.incomplete,
       'A Milestone 2 atlas must be the complete accepted state of the one root WorldMap.',
       'Restore the complete accepted root atlas package without partial atlas records.',
     );
   }
-  if (root.aspects.some(({ aspectName }) => !ATLAS_ASPECT_NAMES.has(aspectName))) {
+  if (
+    root.aspects.some(
+      ({ aspectName }) =>
+        !ATLAS_ASPECT_NAMES.has(aspectName) && !isWorldPhysicalContextAspectName(aspectName),
+    )
+  ) {
     return invalid(
       ACCEPTED_ATLAS_DIAGNOSTIC_CODES.incomplete,
-      'A Milestone 2 atlas map contains an unsupported or mixed accepted aspect record.',
-      'Restore the complete version-1 atlas aspect set or open the package with a compatible application.',
+      'An accepted atlas map contains an unsupported or mixed accepted aspect record.',
+      'Restore the complete supported atlas aspect set or open the package with a compatible application.',
     );
   }
 
@@ -179,9 +191,21 @@ export function reconstructAcceptedAtlas(document: WorldDocument): ReconstructAc
       'Restore the complete stable entity/aspect graph without renaming or dropping referenced records.',
     );
   }
+  const physical = reconstructAcceptedWorldPhysicalContext(root);
+  if (physical.status === 'invalid') {
+    return invalid(
+      ACCEPTED_ATLAS_DIAGNOSTIC_CODES.invalid,
+      physical.message,
+      'Restore all nine physical aspects from one complete validated atlas transaction.',
+    );
+  }
   return Object.freeze({
     status: 'accepted',
-    value: Object.freeze({ geography, appearance }),
+    value: Object.freeze({
+      geography,
+      appearance,
+      ...(physical.status === 'accepted' ? { physical: physical.value } : {}),
+    }),
   });
 }
 
@@ -248,26 +272,29 @@ function hasExactAtlasOwnership(
 
   const expectedDependencies = expectedDependencyIds(geography);
   if (
-    map.aspects.length !== expectedDependencies.size ||
-    map.aspects.some((aspect) => {
-      const kind = aspect.aspectName as AtlasAspectKind;
-      return (
-        !expectedDependencies.has(aspect.aspectId) ||
-        aspect.mapId !== map.mapId ||
-        String(aspect.generatorId) !== String(aspect.aspectName) ||
-        aspect.generatorVersion !== 1 ||
-        aspect.parameterSchemaVersion !== 1 ||
-        aspect.seedScope !== 'map/entity' ||
-        aspect.seedMetadata.seedScope !== 'map/entity' ||
-        aspect.seedMetadata.mapId !== map.mapId ||
-        aspect.seedMetadata.entityId !== aspect.entityId ||
-        aspect.aspectId !== deriveAtlasAspectId(aspect.entityId, kind) ||
-        !sameIds(
-          aspect.dependencyAspects.map(({ aspectId }) => aspectId),
-          expectedDependencies.get(aspect.aspectId) ?? [],
-        )
-      );
-    })
+    map.aspects.filter(({ aspectName }) => ATLAS_ASPECT_NAMES.has(aspectName)).length !==
+      expectedDependencies.size ||
+    map.aspects
+      .filter(({ aspectName }) => ATLAS_ASPECT_NAMES.has(aspectName))
+      .some((aspect) => {
+        const kind = aspect.aspectName as AtlasAspectKind;
+        return (
+          !expectedDependencies.has(aspect.aspectId) ||
+          aspect.mapId !== map.mapId ||
+          String(aspect.generatorId) !== String(aspect.aspectName) ||
+          aspect.generatorVersion !== 1 ||
+          aspect.parameterSchemaVersion !== 1 ||
+          aspect.seedScope !== 'map/entity' ||
+          aspect.seedMetadata.seedScope !== 'map/entity' ||
+          aspect.seedMetadata.mapId !== map.mapId ||
+          aspect.seedMetadata.entityId !== aspect.entityId ||
+          aspect.aspectId !== deriveAtlasAspectId(aspect.entityId, kind) ||
+          !sameIds(
+            aspect.dependencyAspects.map(({ aspectId }) => aspectId),
+            expectedDependencies.get(aspect.aspectId) ?? [],
+          )
+        );
+      })
   ) {
     return false;
   }

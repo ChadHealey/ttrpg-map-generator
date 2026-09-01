@@ -499,7 +499,7 @@ function buildWatersheds(
     sourceAspectIds: watershedSourceAspectIds(input),
     fieldBehaviorVersion: WORLD_PHYSICAL_FIELD_BEHAVIOR_VERSION,
     fieldEncodingVersion: WORLD_PHYSICAL_FIELD_ENCODING_VERSION,
-    valueEncoding: 'semantic-key',
+    valueEncoding: 'entity-id',
     quantizationScale: 1,
     samplingProfileId: 'world-atlas-full-v1',
     samplingPolicyVersion: 1,

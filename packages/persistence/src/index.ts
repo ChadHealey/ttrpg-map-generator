@@ -13,6 +13,7 @@ export { planConfirmedMapworldRecovery } from './mapworld-recovery-confirmation.
 export { decideMapworldRecovery } from './mapworld-recovery-decision.js';
 export {
   createMapworldSavePlan,
+  createMapworldV2SavePlan,
   deriveMapworldRecoveryArtifactNames,
 } from './mapworld-recovery-marker.js';
 export {
@@ -56,7 +57,7 @@ export {
   validateMapworldNativeSaveRequestDto,
   validateParsedMapworldNativeSaveRequestDto,
 } from './mapworld-recovery-native-dto.js';
-export { encodeMapworldV2 } from './mapworld-v2-codec.js';
+export { createMapworldV2Candidate, encodeMapworldV2 } from './mapworld-v2-codec.js';
 export {
   ACCEPTED_ASPECT_SCHEMA_VERSION,
   type CanonicalJsonPrimitive,

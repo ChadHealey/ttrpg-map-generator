@@ -4,11 +4,13 @@ import {
   type ClimateZoneField,
   createImmutableDomainSnapshot,
   deriveWorldPhysicalContextAspectId,
+  type InheritedContextSnapshot,
   isWorldPhysicalFieldReader,
   type MajorLake,
   type MajorRiver,
   type MoistureField,
   type MountainSystems,
+  parseInheritedContextSnapshot,
   type PrevailingWindField,
   type TemperatureField,
   validateWorldPhysicalBiomeBeltField,
@@ -148,6 +150,7 @@ type ExternalReference = z.infer<typeof externalReferenceSchema>;
 export interface DecodedV2Map {
   readonly dto: MapDocumentDto;
   readonly externalAspects: readonly AcceptedAspectRecord[];
+  readonly inheritedContext?: InheritedContextSnapshot;
 }
 
 export interface DecodedV2Dtos {
@@ -178,12 +181,31 @@ const FIELD_SPECS = Object.freeze({
 
 export function encodeMapworldV2(
   document: WorldDocument,
-  externalAspects: readonly AcceptedAspectRecord[],
+  externalAspects?: readonly AcceptedAspectRecord[],
 ): PersistenceResult<MapworldPackage> {
-  const snapshot = createImmutableDomainSnapshot({ document, externalAspects });
+  const snapshot = createImmutableDomainSnapshot({
+    document,
+    externalAspects: externalAspects ?? [],
+  });
   if (!snapshot.ok) return invalidSnapshot('$document');
-  const safeDocument = snapshot.value.document;
-  const safeExternal = snapshot.value.externalAspects as readonly AcceptedAspectRecord[];
+  const inputDocument = snapshot.value.document;
+  const suppliedExternal = snapshot.value.externalAspects as readonly AcceptedAspectRecord[];
+  const safeExternal =
+    externalAspects === undefined
+      ? inputDocument.maps.flatMap((map) =>
+          map.aspects.filter(({ aspectName }) => M3_ASPECT_NAMES.has(aspectName)),
+        )
+      : suppliedExternal;
+  const safeDocument: WorldDocument =
+    externalAspects === undefined
+      ? {
+          ...inputDocument,
+          maps: inputDocument.maps.map((map) => ({
+            ...map,
+            aspects: map.aspects.filter(({ aspectName }) => !M3_ASPECT_NAMES.has(aspectName)),
+          })),
+        }
+      : inputDocument;
   const externalIds = new Set(safeExternal.map(({ aspectId }) => aspectId));
   if (externalIds.size !== safeExternal.length)
     return referenceFailure('External aspect IDs must be unique.');
@@ -253,7 +275,11 @@ export function encodeMapworldV2(
         path: aspectPath,
       }))
       .sort((left, right) => compareText(left.aspectId, right.aspectId));
-    const raw = v2MapFromV1(inline.value, references);
+    const inheritedContext = map.mapKind === 'regional' ? map.parent.inheritedContext : undefined;
+    if (map.mapKind === 'regional' && inheritedContext === undefined) {
+      return referenceFailure('A v2 regional map requires its complete inline inherited context.');
+    }
+    const raw = v2MapFromV1(inline.value, references, inheritedContext);
     const path = `maps/${map.mapId}.json`;
     const bytes = canonicalJsonBytes(raw, path);
     if (!bytes.ok) return bytes;
@@ -296,6 +322,13 @@ export function encodeMapworldV2(
   return reopened.ok ? persistenceSuccess(packageValue) : reopened;
 }
 
+/** Explicitly create and fully reopen-validate a v2 candidate from accepted document state. */
+export function createMapworldV2Candidate(
+  document: WorldDocument,
+): PersistenceResult<MapworldPackage> {
+  return encodeMapworldV2(document);
+}
+
 export function decodeMapworldV2Files(
   packageFiles: readonly MapworldPackageFile[],
 ): PersistenceResult<WorldDocument> {
@@ -323,6 +356,7 @@ export function decodeMapworldV2Files(
     decoded.value.world,
     mapDtos,
     decoded.value.maps.map(({ externalAspects }) => externalAspects),
+    decoded.value.maps.map(({ inheritedContext }) => inheritedContext),
   );
 }
 
@@ -416,7 +450,13 @@ export function decodeMapworldV2Dtos(
         ? []
         : validatePhysicalAspectSet(firstExternal.mapId, externalAspects);
     if (physicalDiagnostics.length > 0) return persistenceFailure(...physicalDiagnostics);
-    maps.push({ dto: decodedMap.value.dto, externalAspects: Object.freeze(externalAspects) });
+    maps.push({
+      dto: decodedMap.value.dto,
+      externalAspects: Object.freeze(externalAspects),
+      ...(decodedMap.value.inheritedContext === undefined
+        ? {}
+        : { inheritedContext: decodedMap.value.inheritedContext }),
+    });
   }
   const expectedPaths = new Set([
     'world.json',
@@ -784,6 +824,7 @@ function decodeV2Map(
 ): PersistenceResult<{
   readonly dto: MapDocumentDto;
   readonly references: readonly ExternalReference[];
+  readonly inheritedContext?: InheritedContextSnapshot;
 }> {
   const parsed = parseCanonicalJsonBytes(bytes, path);
   if (!parsed.ok) return parsed;
@@ -808,29 +849,56 @@ function decodeV2Map(
       : item,
   );
   const { externalAcceptedAspects: _externalAcceptedAspects, ...mapWithoutExternal } = parsed.value;
+  let inheritedContext: InheritedContextSnapshot | undefined;
+  let normalizedParent = mapWithoutExternal.parent;
+  if (mapWithoutExternal.mapKind === 'regional') {
+    if (!isRecord(mapWithoutExternal.parent)) {
+      return schemaFailure(path, 'A v2 regional parent must be a strict object.');
+    }
+    const parsedContext = parseInheritedContextSnapshot(mapWithoutExternal.parent.inheritedContext);
+    if (!parsedContext.ok) {
+      return referenceFailure(
+        parsedContext.diagnostics[0]?.message ?? 'Inherited context is invalid.',
+        path,
+      );
+    }
+    inheritedContext = parsedContext.value;
+    const { inheritedContext: _inheritedContext, ...parentWithoutContext } =
+      mapWithoutExternal.parent;
+    normalizedParent = parentWithoutContext;
+  }
   const normalizedRaw = {
     ...mapWithoutExternal,
+    ...(mapWithoutExternal.mapKind === 'regional' ? { parent: normalizedParent } : {}),
     mapDocumentSchemaVersion: 1,
     aspects: normalizedAspects,
   };
   const dto = validateDto(mapDocumentDtoSchema, normalizedRaw, path);
   if (!dto.ok) return dto;
-  const orderedV2 = v2MapFromV1(orderMapDocumentDto(dto.value), references.value);
+  const orderedV2 = v2MapFromV1(orderMapDocumentDto(dto.value), references.value, inheritedContext);
   const canonical = canonicalJsonBytes(orderedV2, path);
   if (!canonical.ok) return canonical;
   if (!bytesEqual(bytes, canonical.value)) return noncanonical(path);
   const inlineIds = new Set(dto.value.aspects.map(({ aspectId }) => aspectId));
   if (references.value.some(({ aspectId }) => inlineIds.has(aspectId)))
     return referenceFailure('Inline and external aspect IDs must be one unique logical set.', path);
-  return persistenceSuccess({ dto: dto.value, references: Object.freeze(references.value) });
+  return persistenceSuccess({
+    dto: dto.value,
+    references: Object.freeze(references.value),
+    ...(inheritedContext === undefined ? {} : { inheritedContext }),
+  });
 }
 
 function v2MapFromV1(
   dto: MapDocumentDto,
   references: readonly ExternalReference[],
+  inheritedContext?: InheritedContextSnapshot,
 ): Record<string, unknown> {
   return {
     ...dto,
+    ...(dto.mapKind === 'regional' && inheritedContext !== undefined
+      ? { parent: { ...dto.parent, inheritedContext } }
+      : {}),
     mapDocumentSchemaVersion: MAPWORLD_V2_MAP_DOCUMENT_SCHEMA_VERSION,
     aspects: dto.aspects.map((aspect) => ({
       ...aspect,

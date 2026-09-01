@@ -39,6 +39,23 @@ export function encodeMapworld(document: WorldDocument): PersistenceResult<Mapwo
   const snapshot = createImmutableDomainSnapshot(document);
   if (!snapshot.ok) return invalidEncodingSnapshot('$document');
   const safeDocument = snapshot.value;
+  if (
+    safeDocument.maps.some(
+      (map) =>
+        map.aspects.some(({ aspectName }) => isMapworldV2ExternalAspectName(aspectName)) ||
+        (map.mapKind === 'regional' && map.parent.inheritedContext !== undefined),
+    )
+  ) {
+    return persistenceFailure(
+      persistenceDiagnostic(
+        PERSISTENCE_DIAGNOSTIC_CODES.versionIncompatible,
+        'manifest.json',
+        '$.packageVersion',
+        'Accepted physical aspects and inherited context require a complete mapworld v2 candidate.',
+        'Create an explicit validated v2 candidate; never drop accepted M3 state into v1 bytes.',
+      ),
+    );
+  }
   const documentDiagnostics = validateDocumentForPersistence(safeDocument);
   if (documentDiagnostics.length > 0) return persistenceFailure(...documentDiagnostics);
 
@@ -91,11 +108,11 @@ export function encodeMapworld(document: WorldDocument): PersistenceResult<Mapwo
 }
 
 export function canonicalAspectBytes(aspect: AcceptedAspectRecord): PersistenceResult<Uint8Array> {
-  if (isMapworldV2ExternalAspectName(aspect.aspectName)) {
-    return canonicalV2AspectBytes(aspect, false);
-  }
   const snapshot = createImmutableDomainSnapshot(aspect);
   if (!snapshot.ok) return invalidEncodingSnapshot('$aspect');
+  if (isMapworldV2ExternalAspectName(snapshot.value.aspectName)) {
+    return canonicalV2AspectBytes(snapshot.value, false);
+  }
   const dto = acceptedAspectToDto(snapshot.value, '$aspect');
   return dto.ok ? canonicalJsonBytes(dto.value, '$aspect') : dto;
 }
@@ -103,11 +120,11 @@ export function canonicalAspectBytes(aspect: AcceptedAspectRecord): PersistenceR
 export function canonicalAspectOutputBytes(
   aspect: AcceptedAspectRecord,
 ): PersistenceResult<Uint8Array> {
-  if (isMapworldV2ExternalAspectName(aspect.aspectName)) {
-    return canonicalV2AspectBytes(aspect, true);
-  }
   const snapshot = createImmutableDomainSnapshot(aspect);
   if (!snapshot.ok) return invalidEncodingSnapshot('$aspect-output');
+  if (isMapworldV2ExternalAspectName(snapshot.value.aspectName)) {
+    return canonicalV2AspectBytes(snapshot.value, true);
+  }
   const dto = acceptedAspectToDto(snapshot.value, '$aspect-output');
   return dto.ok ? canonicalJsonBytes(dto.value.acceptedOutput, '$aspect-output') : dto;
 }
