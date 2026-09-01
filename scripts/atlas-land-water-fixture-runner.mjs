@@ -32,6 +32,7 @@ import {
   createRenderCheckpointEvidence,
   decodeAcceptedPackage,
   encodeAcceptedPackage,
+  encodePhysicalAcceptedPackage,
   makeReopenComparison,
 } from './atlas-persistence-fixture-support.mjs';
 import { projectionProof } from './atlas-projection-fixture-support.mjs';
@@ -226,6 +227,18 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
     scene,
     semantic,
   });
+  const physicalScene =
+    definition.physicalScene === true
+      ? physicalSceneProof(
+          core,
+          generation,
+          persistence,
+          render,
+          baselineAccepted,
+          appearance.style,
+          physicalControls(definition),
+        )
+      : undefined;
   let geographyRerolledAccepted;
   let appearanceRerolledAccepted;
   if (fixtureId === 'milestone-2-atlas-proof') {
@@ -378,7 +391,9 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
       outputRoot,
       fixtureId,
       'baseline',
-      baselineAccepted,
+      physicalScene === undefined
+        ? baselineAccepted
+        : { ...baselineAccepted, document: physicalScene.document },
       persistence,
       artifacts,
     ),
@@ -387,11 +402,12 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
     outputRoot,
     fixtureId,
     'baseline',
-    baselineAccepted.scene,
+    physicalScene?.scene ?? baselineAccepted.scene,
     appearance.style,
     render,
     artifacts,
     true,
+    physicalScene !== undefined,
   );
 
   let appearanceRender;
@@ -603,11 +619,13 @@ async function writeRenderCheckpoint(
   render,
   artifacts,
   includeScene,
+  physicalOverlay = false,
 ) {
   const evidence = await createRenderCheckpointEvidence({
     assertPngProgress,
     formatJson,
     includeScene,
+    physicalOverlay,
     render,
     scene,
     style,
@@ -646,6 +664,138 @@ async function writeRenderCheckpoint(
     ...evidence.pngMetadata,
   });
   return evidence;
+}
+
+function physicalSceneProof(core, generation, persistence, render, accepted, style, controls) {
+  const map = accepted.document.maps[0];
+  assert.equal(map?.mapKind, 'world');
+  if (map?.mapKind !== 'world')
+    throw new Error('Physical fixture requires an accepted world atlas.');
+  const macro = requiredAspectByName(map.aspects, 'worldTerrain.macroElevation');
+  const partition = requiredAspectByName(map.aspects, 'worldSurface.landWaterClassification');
+  const singleton = core.deriveAtlasSingletonEntityIds(map.mapId);
+  const revision = parsed(core.createVariantRevision(0));
+  const mountain = generation.generateAtlasMountainSystems({
+    worldSeed: accepted.document.worldSeed,
+    worldMapId: map.mapId,
+    worldSurfaceEntityId: singleton.worldSurfaceEntityId,
+    macroElevationAspectId: macro.aspectId,
+    landWaterClassificationAspectId: partition.aspectId,
+    mountainSystemsVariantRevision: revision,
+    mountainCharacter: controls.mountainCharacter,
+    records: accepted.geography,
+  });
+  assert.equal(mountain.status, 'proposed');
+  if (mountain.status !== 'proposed') throw new Error(JSON.stringify(mountain.diagnostics));
+  const atmosphere = generation.generateAtlasAtmosphere({
+    worldSeed: accepted.document.worldSeed,
+    worldMapId: map.mapId,
+    worldSurfaceEntityId: singleton.worldSurfaceEntityId,
+    macroElevationAspectId: macro.aspectId,
+    landWaterClassificationAspectId: partition.aspectId,
+    temperatureVariantRevision: revision,
+    prevailingWindsVariantRevision: revision,
+    climateCharacter: controls.climateCharacter,
+    records: accepted.geography,
+    mountainSystems: mountain.proposal.output,
+  });
+  assert.equal(atmosphere.status, 'proposed');
+  if (atmosphere.status !== 'proposed') throw new Error(JSON.stringify(atmosphere.diagnostics));
+  const ecology = generation.generateAtlasEcology({
+    worldSeed: accepted.document.worldSeed,
+    worldMapId: map.mapId,
+    worldSurfaceEntityId: singleton.worldSurfaceEntityId,
+    macroElevationAspectId: macro.aspectId,
+    landWaterClassificationAspectId: partition.aspectId,
+    moistureVariantRevision: revision,
+    climateZonesVariantRevision: revision,
+    biomeBeltsVariantRevision: revision,
+    records: accepted.geography,
+    mountainSystems: mountain.proposal.output,
+    atmosphere: atmosphere.patch,
+  });
+  assert.equal(ecology.status, 'proposed');
+  if (ecology.status !== 'proposed') throw new Error(JSON.stringify(ecology.diagnostics));
+  const hydrology = generation.generateAtlasHydrology({
+    worldSeed: accepted.document.worldSeed,
+    worldMapId: map.mapId,
+    worldSurfaceEntityId: singleton.worldSurfaceEntityId,
+    macroElevationAspectId: macro.aspectId,
+    landWaterClassificationAspectId: partition.aspectId,
+    watershedsVariantRevision: revision,
+    majorRiversVariantRevision: revision,
+    majorLakesVariantRevision: revision,
+    records: accepted.geography,
+    mountainSystems: mountain.proposal.output,
+    ecology: ecology.patch,
+  });
+  assert.equal(hydrology.status, 'proposed');
+  if (hydrology.status !== 'proposed') throw new Error(JSON.stringify(hydrology.diagnostics));
+  const committed = core.commitAtlasPhysicalProposal(accepted.document, {
+    kind: core.ATLAS_PHYSICAL_DOCUMENT_COMMAND_KIND,
+    operationMode: core.ATLAS_PHYSICAL_DOCUMENT_OPERATION_MODES.initial,
+    targetMapId: map.mapId,
+    expectedWorldSeed: accepted.document.worldSeed,
+    expectedAspectRevisions: map.aspects.map(({ aspectId, variantRevision }) => ({
+      aspectId,
+      variantRevision,
+    })),
+    controls,
+    proposedAspects: [
+      mountain.proposal,
+      atmosphere.patch.temperature,
+      atmosphere.patch.prevailingWinds,
+      ecology.patch.moisture,
+      ecology.patch.climateZones,
+      ecology.patch.biomeBelts,
+      hydrology.patch.watersheds,
+      hydrology.patch.majorRivers,
+      hydrology.patch.majorLakes,
+    ],
+    explicitlyIncrementedAspectIds: [],
+  });
+  assert.equal(
+    committed.ok,
+    true,
+    committed.ok ? undefined : JSON.stringify(committed.diagnostics),
+  );
+  if (!committed.ok) throw new Error(JSON.stringify(committed.diagnostics));
+  const encoded = encodePhysicalAcceptedPackage(persistence, committed.document);
+  const reopenedDocument = decodeAcceptedPackage(persistence, encoded);
+  const reconstructed = core.reconstructAcceptedAtlas(reopenedDocument);
+  assert.equal(reconstructed.status, 'accepted');
+  if (reconstructed.status !== 'accepted' || reconstructed.value.physical === undefined) {
+    throw new Error('Physical fixture failed to reconstruct accepted M3 records.');
+  }
+  const result = render.composeAtlasRenderScene(
+    reconstructed.value.geography,
+    reconstructed.value.appearance,
+    style,
+    { physical: reconstructed.value.physical },
+  );
+  assert.equal(result.ok, true, result.ok ? undefined : JSON.stringify(result.diagnostics));
+  if (!result.ok) throw new Error(JSON.stringify(result.diagnostics));
+  assert.ok(result.value.nodes.some(({ id }) => id.startsWith('atlas/physical/')));
+  return { document: reopenedDocument, scene: result.value };
+}
+
+function physicalControls(definition) {
+  const controls = definition.physicalControls;
+  assert.equal(typeof controls, 'object');
+  assert.notEqual(controls, null);
+  assert.equal(Array.isArray(controls), false);
+  assert.ok(['low', 'varied', 'rugged'].includes(controls.mountainCharacter));
+  assert.ok(['temperate', 'varied', 'extreme'].includes(controls.climateCharacter));
+  return Object.freeze({
+    mountainCharacter: controls.mountainCharacter,
+    climateCharacter: controls.climateCharacter,
+  });
+}
+
+function requiredAspectByName(aspects, aspectName) {
+  const value = aspects.find((aspect) => aspect.aspectName === aspectName);
+  if (value === undefined) throw new Error(`Missing accepted aspect ${aspectName}.`);
+  return value;
 }
 
 function workflowRuntime() {

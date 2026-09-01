@@ -14,7 +14,7 @@ import { inspectAtlasPngPixels } from './atlas-png-test-support.mjs';
 const REPOSITORY_ROOT = resolve(import.meta.dirname, '..');
 const GALLERY_DIMENSIONS = Object.freeze({ widthPx: 1_600, heightPx: 800 });
 
-describe('registered atlas-png-v1 gallery evidence', () => {
+describe('registered versioned atlas PNG gallery evidence', () => {
   it.each(ATLAS_PNG_FIXTURE_IDS)(
     'byte-matches %s from its complete canonical scene',
     async (fixtureId) => {

@@ -14,12 +14,14 @@ import {
   type AtlasWaterDecorationPath,
   deriveAtlasAspectId,
   deriveAtlasSingletonEntityIds,
+  deriveWorldPhysicalContextAspectId,
   type EntityId,
   type Landmass,
   type RenderCompoundPath,
   type RenderNode,
   type RenderPoint,
   type RenderScene,
+  type WorldPhysicalContextRecords,
 } from '@ttrpg-map/core';
 
 import {
@@ -30,6 +32,7 @@ import {
   projectAtlasCanonicalCoastline,
 } from './atlas-display-projection.js';
 import { deriveAtlasInkStrokeSegments } from './atlas-ink-path.js';
+import { composeAtlasPhysicalSceneNodes } from './atlas-physical-scene.js';
 import { createAtlasLandFillSubpaths } from './atlas-scene-fill.js';
 
 export const ATLAS_SCENE_COMPOSITION_VERSION = 3 as const;
@@ -58,6 +61,7 @@ export interface AtlasRenderScene extends RenderScene {
 export const ATLAS_SCENE_DIAGNOSTIC_CODES = Object.freeze({
   invalidAcceptedAppearance: 'atlas-scene.accepted-appearance.invalid',
   invalidAcceptedGeography: 'atlas-scene.accepted-geography.invalid',
+  invalidAcceptedPhysical: 'atlas-scene.accepted-physical.invalid',
   invalidProjectedFill: 'atlas-scene.projected-fill.invalid',
   projectionFailed: 'atlas-scene.projection.failed',
 } as const);
@@ -78,6 +82,8 @@ export type AtlasSceneCompositionResult =
 
 export interface AtlasSceneCompositionOptions {
   readonly levelOfDetail?: AtlasSceneLevelOfDetail;
+  /** Accepted M3 records to render into the v2 physical-overlay layer. */
+  readonly physical?: WorldPhysicalContextRecords;
 }
 
 /**
@@ -100,6 +106,8 @@ export function composeAtlasRenderScene(
   if (appearanceDiagnostics.length > 0) {
     return { ok: false, diagnostics: appearanceDiagnostics };
   }
+  const physicalDiagnostics = validateAtlasPhysicalSceneSource(records, options.physical);
+  if (physicalDiagnostics.length > 0) return { ok: false, diagnostics: physicalDiagnostics };
 
   const projection = projectAtlasCanonicalCoastline(records.coastline);
   if (!projection.ok) {
@@ -159,6 +167,15 @@ export function composeAtlasRenderScene(
     const fill = landFillNode(landmass, paths, style.colors.land);
     if (!fill.ok) return fill;
     nodes.push(fill.value);
+  }
+
+  if (options.physical !== undefined) {
+    nodes.push(
+      ...composeAtlasPhysicalSceneNodes(options.physical, style, {
+        widthPx: ATLAS_SCENE_WIDTH_PX,
+        heightPx: ATLAS_SCENE_HEIGHT_PX,
+      }),
+    );
   }
 
   if (levelOfDetail === ATLAS_SCENE_LEVELS_OF_DETAIL.normalAtlas) {
@@ -627,6 +644,75 @@ function validateAtlasAppearanceSource(
   );
 }
 
+function validateAtlasPhysicalSceneSource(
+  records: AtlasGeographyRecords,
+  physical: WorldPhysicalContextRecords | undefined,
+): readonly AtlasSceneDiagnostic[] {
+  if (physical === undefined) return Object.freeze([]);
+  const diagnostics: AtlasSceneDiagnostic[] = [];
+  if (physical.worldMapId !== records.worldMapId) {
+    diagnostics.push(
+      physicalDiagnostic(
+        physical.worldMapId,
+        'Physical scene records must belong to the accepted atlas world map.',
+      ),
+    );
+  }
+  if (physical.worldSurfaceEntityId !== records.worldSurfaceEntityId) {
+    diagnostics.push(
+      physicalDiagnostic(
+        physical.worldSurfaceEntityId,
+        'Physical scene records must retain the accepted atlas world-surface owner.',
+      ),
+    );
+  }
+  const expectedAspects = {
+    biome: deriveWorldPhysicalContextAspectId(
+      physical.worldSurfaceEntityId,
+      'worldEcology.biomeBelts',
+    ),
+    mountain: deriveWorldPhysicalContextAspectId(
+      physical.worldSurfaceEntityId,
+      'worldTerrain.mountainSystems',
+    ),
+    watershed: deriveWorldPhysicalContextAspectId(
+      physical.worldSurfaceEntityId,
+      'worldHydrology.watersheds',
+    ),
+  };
+  if (physical.biomeBelts.provenance.ownerAspectId !== expectedAspects.biome) {
+    diagnostics.push(
+      physicalDiagnostic(
+        physical.biomeBelts.provenance.ownerAspectId,
+        'Biome overlay provenance must retain its accepted owner aspect.',
+      ),
+    );
+  }
+  if (physical.mountainSystems.ownerAspectId !== expectedAspects.mountain) {
+    diagnostics.push(
+      physicalDiagnostic(
+        physical.mountainSystems.ownerAspectId,
+        'Mountain overlay provenance must retain its accepted owner aspect.',
+      ),
+    );
+  }
+  if (physical.watersheds.provenance.ownerAspectId !== expectedAspects.watershed) {
+    diagnostics.push(
+      physicalDiagnostic(
+        physical.watersheds.provenance.ownerAspectId,
+        'Watershed overlay provenance must retain its accepted owner aspect.',
+      ),
+    );
+  }
+  return Object.freeze(
+    diagnostics.sort(
+      (left, right) =>
+        compareText(left.sourceId ?? '', right.sourceId ?? '') ||
+        compareText(left.message, right.message),
+    ),
+  );
+}
+
 function validStyle(style: AtlasStyleTokens): boolean {
   const colors: readonly string[] = [
     style.colors.ink,
@@ -695,6 +781,14 @@ function sourceDiagnostic(sourceId: string, message: string): AtlasSceneDiagnost
 function appearanceDiagnostic(sourceId: string, message: string): AtlasSceneDiagnostic {
   return Object.freeze({
     code: ATLAS_SCENE_DIAGNOSTIC_CODES.invalidAcceptedAppearance,
+    message,
+    sourceId,
+  });
+}
+
+function physicalDiagnostic(sourceId: string, message: string): AtlasSceneDiagnostic {
+  return Object.freeze({
+    code: ATLAS_SCENE_DIAGNOSTIC_CODES.invalidAcceptedPhysical,
     message,
     sourceId,
   });

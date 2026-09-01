@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest';
 import {
   ATLAS_SVG_MAXIMUM_BYTES,
   exportAtlasSceneToSvg,
+  exportAtlasSceneToSvgWithPhysicalOverlays,
 } from '../packages/render/src/atlas-svg-export.ts';
 
 const REPOSITORY_ROOT = resolve(import.meta.dirname, '..');
@@ -23,7 +24,7 @@ const FIXTURE_IDS = [
   'milestone-2-atlas-seam-crossing',
 ];
 
-describe('registered atlas-svg-v1 evidence', () => {
+describe('registered versioned atlas SVG evidence', () => {
   it.each(FIXTURE_IDS)('byte-matches %s from its complete canonical scene', (fixtureId) => {
     const scene = JSON.parse(
       readFileSync(
@@ -38,7 +39,10 @@ describe('registered atlas-svg-v1 evidence', () => {
       resolve(REPOSITORY_ROOT, `fixtures/canonical-svg/${fixtureId}/baseline.svg`),
     );
 
-    const result = exportAtlasSceneToSvg({ scene, style: STYLE });
+    const request = { scene, style: STYLE };
+    const result = scene.nodes.some((node) => node.id.startsWith('atlas/physical/'))
+      ? exportAtlasSceneToSvgWithPhysicalOverlays(request)
+      : exportAtlasSceneToSvg(request);
 
     expect(result.ok, result.ok ? undefined : JSON.stringify(result.diagnostics)).toBe(true);
     if (!result.ok) return;

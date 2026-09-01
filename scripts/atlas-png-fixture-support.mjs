@@ -3,7 +3,10 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-import { exportAtlasSceneToPngAsync } from '../packages/render/src/atlas-png-export.ts';
+import {
+  exportAtlasSceneToPngAsync,
+  exportAtlasSceneToPngWithPhysicalOverlaysAsync,
+} from '../packages/render/src/atlas-png-export.ts';
 
 const REPOSITORY_ROOT = resolve(import.meta.dirname, '..');
 const STYLE = Object.freeze({
@@ -34,12 +37,13 @@ export function readCanonicalScene(fixtureId) {
 }
 
 export async function exportProductionPng(scene, dimensions) {
-  return exportAtlasSceneToPngAsync(
-    { scene, style: STYLE, dimensions },
-    {
-      isCancellationRequested: () => false,
-      reportProgress: () => undefined,
-      yieldControl: () => Promise.resolve(),
-    },
-  );
+  const request = { scene, style: STYLE, dimensions };
+  const runtime = {
+    isCancellationRequested: () => false,
+    reportProgress: () => undefined,
+    yieldControl: () => Promise.resolve(),
+  };
+  return scene.nodes.some((node) => node.id.startsWith('atlas/physical/'))
+    ? exportAtlasSceneToPngWithPhysicalOverlaysAsync(request, runtime)
+    : exportAtlasSceneToPngAsync(request, runtime);
 }

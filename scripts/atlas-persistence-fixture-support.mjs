@@ -90,25 +90,37 @@ export async function createRenderCheckpointEvidence({
   assertPngProgress,
   formatJson,
   includeScene,
+  physicalOverlay = false,
   render,
   scene,
   style,
 }) {
-  const svg = render.exportAtlasSceneToSvg({ scene, style });
+  const svg = physicalOverlay
+    ? render.exportAtlasSceneToSvgWithPhysicalOverlays({ scene, style })
+    : render.exportAtlasSceneToSvg({ scene, style });
   assert.equal(svg.ok, true, svg.ok ? undefined : JSON.stringify(svg.diagnostics));
   if (!svg.ok) throw new Error(JSON.stringify(svg.diagnostics));
   const pngProgress = [];
-  const png = await render.exportAtlasSceneToPngAsync(
-    { scene, style, dimensions: { widthPx: 1_600, heightPx: 800 } },
-    {
-      isCancellationRequested: () => false,
-      reportProgress: (value) => pngProgress.push(value),
-      yieldControl: () => Promise.resolve(),
-    },
-  );
+  const png = await (physicalOverlay
+    ? render.exportAtlasSceneToPngWithPhysicalOverlaysAsync(
+        { scene, style, dimensions: { widthPx: 1_600, heightPx: 800 } },
+        {
+          isCancellationRequested: () => false,
+          reportProgress: (value) => pngProgress.push(value),
+          yieldControl: () => Promise.resolve(),
+        },
+      )
+    : render.exportAtlasSceneToPngAsync(
+        { scene, style, dimensions: { widthPx: 1_600, heightPx: 800 } },
+        {
+          isCancellationRequested: () => false,
+          reportProgress: (value) => pngProgress.push(value),
+          yieldControl: () => Promise.resolve(),
+        },
+      ));
   assert.equal(png.ok, true, png.ok ? undefined : JSON.stringify(png.diagnostics));
   if (!png.ok) throw new Error(JSON.stringify(png.diagnostics));
-  assertPngProgress(render, pngProgress);
+  if (!physicalOverlay) assertPngProgress(render, pngProgress);
   assert.deepEqual(
     {
       profileId: png.value.profileId,
@@ -119,8 +131,8 @@ export async function createRenderCheckpointEvidence({
       maximumLiveBands: png.value.resources.maximumLiveBands,
     },
     {
-      profileId: 'atlas-png-v1',
-      profileVersion: 1,
+      profileId: physicalOverlay ? 'atlas-png-v2' : 'atlas-png-v1',
+      profileVersion: physicalOverlay ? 2 : 1,
       widthPx: 1_600,
       heightPx: 800,
       hasFullSizeRasterSurface: false,
@@ -155,6 +167,11 @@ export async function createRenderCheckpointEvidence({
 
 export function encodeAcceptedPackage(persistence, document) {
   return requiredPersistenceValue(persistence.encodeMapworld(document));
+}
+
+/** M3 physical aspects are external-only and therefore require the explicit v2 candidate. */
+export function encodePhysicalAcceptedPackage(persistence, document) {
+  return requiredPersistenceValue(persistence.createMapworldV2Candidate(document));
 }
 
 export function decodeAcceptedPackage(persistence, packageValue) {

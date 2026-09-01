@@ -296,7 +296,7 @@ describe('packaged full-atlas observer dispatch', () => {
       nextCompletionCanonicallyDeterministic: true,
       nextCompletion: {
         canonicalAspectSetSha256:
-          '24ea927af4355fc5d44c1bba2cf49d7a4b47c27404d4c352267ed33ccecd90e2',
+          '9fad840c50ff83b2e527052e5a694f4cf412bcf53c06247256b1abc22029ee84',
       },
     });
   });
@@ -439,8 +439,8 @@ function dispatchEvent(code: string): KeyboardEvent {
 const PROOF_AUTHORITY = {
   checkpoint: 'baseline' as const,
   aspects: [],
-  canonicalAspectSetSha256: '24ea927af4355fc5d44c1bba2cf49d7a4b47c27404d4c352267ed33ccecd90e2',
-  canonicalOutputSetSha256: '6b972a97afdb6e3284745596cf78edf834d6dc32d8bb99d6eac95cddd7438743',
+  canonicalAspectSetSha256: '9fad840c50ff83b2e527052e5a694f4cf412bcf53c06247256b1abc22029ee84',
+  canonicalOutputSetSha256: 'b26ae0837efa1f8407ca92e6e1c80ec7d7ba38f606a625b5460fdba457f98c2f',
   canonicalCoastlineOutputSha256:
     '641bcc8a9a962a2a7e9de14512e6bdfb70bdf98b5c87dda382aa8422b9c9d66c',
   renderSceneSha256: '0'.repeat(64),

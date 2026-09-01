@@ -1,6 +1,4 @@
 const PRODUCTION_ATLAS_PNG_METADATA = Object.freeze({
-  pngProfileId: 'atlas-png-v1',
-  pngProfileVersion: 1,
   widthPx: 1_600,
   heightPx: 800,
   bitDepth: 8,
@@ -11,16 +9,24 @@ const PRODUCTION_ATLAS_PNG_METADATA = Object.freeze({
   idatChunkBytes: 1_048_576,
 });
 
-/** Validate and retain the versioned production PNG profile recorded by M2 visual evidence. */
+/** Validate versioned production PNG evidence; M2 rows remain v1 unless explicitly upgraded. */
 export function validateAtlasPngArtifactMetadata(artifact, artifactPath) {
+  const profile = `${String(artifact.pngProfileId)}@${String(artifact.pngProfileVersion)}`;
+  if (profile !== 'atlas-png-v1@1' && profile !== 'atlas-png-v2@2') {
+    throw new Error(
+      `Artifact ${artifactPath} must declare either atlas-png-v1@1 or atlas-png-v2@2.`,
+    );
+  }
   for (const [field, expected] of Object.entries(PRODUCTION_ATLAS_PNG_METADATA)) {
     if (artifact[field] !== expected) {
       throw new Error(
-        `Artifact ${artifactPath} must declare atlas-png-v1 ${field} as ${String(expected)}.`,
+        `Artifact ${artifactPath} must declare supported production PNG ${field} as ${String(expected)}.`,
       );
     }
   }
   return Object.fromEntries(
-    Object.keys(PRODUCTION_ATLAS_PNG_METADATA).map((field) => [field, artifact[field]]),
+    ['pngProfileId', 'pngProfileVersion', ...Object.keys(PRODUCTION_ATLAS_PNG_METADATA)].map(
+      (field) => [field, artifact[field]],
+    ),
   );
 }

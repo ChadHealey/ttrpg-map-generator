@@ -2,6 +2,11 @@
   "fixtureDefinitionVersion": 2,
   "fixtureId": "milestone-2-atlas-control-max",
   "evidenceBoundary": "persistence-canonical-accepted-aspects-v1",
+  "physicalScene": true,
+  "physicalControls": {
+    "mountainCharacter": "rugged",
+    "climateCharacter": "extreme"
+  },
   "worldSeed": "16045690984503098046",
   "stableIds": {
     "atlasPresentationEntityId": "66b92789-9a5b-5760-b299-1d82700cf3a0",
