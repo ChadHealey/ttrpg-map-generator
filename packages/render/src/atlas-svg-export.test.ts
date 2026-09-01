@@ -12,11 +12,14 @@ import {
   ATLAS_SVG_DIAGNOSTIC_CODES,
   ATLAS_SVG_EXPORT_PROFILE_ID,
   ATLAS_SVG_MAXIMUM_BYTES,
+  ATLAS_SVG_PHYSICAL_OVERLAY_EXPORT_PROFILE_ID,
   ATLAS_SVG_SUPPORTED_STYLE_ID,
   type AtlasSvgSceneInput,
   type AtlasSvgStyleMetadata,
   exportAtlasSceneToSvg,
   exportAtlasSceneToSvgAsync,
+  exportAtlasSceneToSvgWithPhysicalOverlays,
+  exportAtlasSceneToSvgWithPhysicalOverlaysAsync,
 } from './atlas-svg-export.js';
 
 const STYLE: AtlasSvgStyleMetadata = {
@@ -31,6 +34,8 @@ const LAND_ENTITY_ID = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
 const PAPER_ASPECT_ID = '55555555-5555-4555-8555-555555555555';
 const WATER_ASPECT_ID = '66666666-6666-4666-8666-666666666666';
 const LAND_ASPECT_ID = '77777777-7777-4777-8777-777777777777';
+const PHYSICAL_ENTITY_ID = '88888888-8888-4888-8888-888888888888';
+const PHYSICAL_ASPECT_ID = '99999999-9999-4999-8999-999999999999';
 
 describe('atlas-svg-v1 export', () => {
   it('serializes physical units, metadata, stable IDs, definitions, references, and z-order', () => {
@@ -280,6 +285,98 @@ describe('atlas-svg-v1 export', () => {
   });
 });
 
+describe('atlas-svg-v2 physical-overlay export', () => {
+  it('requires an explicit profile, preserves v1 rejection, and serializes physical nodes below ink', () => {
+    const physical = physicalScene();
+    const v1 = exportAtlasSceneToSvg({ scene: physical, style: STYLE });
+    const first = exportAtlasSceneToSvgWithPhysicalOverlays({ scene: physical, style: STYLE });
+    const second = exportAtlasSceneToSvgWithPhysicalOverlays({ scene: physical, style: STYLE });
+
+    expect(failureCodes(v1)).toContain(ATLAS_SVG_DIAGNOSTIC_CODES.sceneUnsupported);
+    expect(v1.ok ? '' : v1.diagnostics.map(({ message }) => message).join('\n')).toContain(
+      'atlas-svg-v2',
+    );
+    expect(first).toEqual(second);
+    expect(first.ok).toBe(true);
+    if (!first.ok) return;
+    expect(first.value.profileId).toBe(ATLAS_SVG_PHYSICAL_OVERLAY_EXPORT_PROFILE_ID);
+    expect(first.value.svg).toContain('data-export-profile="atlas-svg-v2"');
+    expect(first.value.svg).toContain(`data-source-aspect-id="${PHYSICAL_ASPECT_ID}"`);
+    const svg = first.value.svg;
+    expect(svg.indexOf('atlas/land/land-1')).toBeLessThan(svg.indexOf('atlas/physical/biome/0000'));
+    expect(svg.indexOf('atlas/physical/biome/0000')).toBeLessThan(
+      svg.indexOf('atlas/paper/grain-0000'),
+    );
+    expect(svg.indexOf('atlas/paper/grain-0000')).toBeLessThan(
+      svg.indexOf('atlas-water/echo/0000'),
+    );
+    expect(svg.indexOf('atlas-water/echo/0000')).toBeLessThan(svg.indexOf('atlas/coastline/0000'));
+  });
+
+  it.each([
+    ['missing', scene(), ATLAS_SVG_DIAGNOSTIC_CODES.sceneUnsupported],
+    [
+      'malformed',
+      physicalScene([{ ...physicalOverlay(), id: 'atlas/physical/Bad' }]),
+      ATLAS_SVG_DIAGNOSTIC_CODES.zOrderInvalid,
+    ],
+    [
+      'duplicate',
+      physicalScene([physicalOverlay(), physicalOverlay()]),
+      ATLAS_SVG_DIAGNOSTIC_CODES.duplicateNodeId,
+    ],
+    [
+      'source-unlinked',
+      physicalScene([{ ...physicalOverlay(), sourceAspectId: 'physical-aspect' }]),
+      ATLAS_SVG_DIAGNOSTIC_CODES.sourceLinkInvalid,
+    ],
+    [
+      'unsorted',
+      physicalScene([
+        { ...physicalOverlay(), id: 'atlas/physical/biome/0001' },
+        { ...physicalOverlay(), id: 'atlas/physical/biome/0000' },
+      ]),
+      ATLAS_SVG_DIAGNOSTIC_CODES.zOrderInvalid,
+    ],
+    [
+      'misplaced',
+      physicalScene([physicalOverlay()], true),
+      ATLAS_SVG_DIAGNOSTIC_CODES.zOrderInvalid,
+    ],
+  ] as const)('rejects %s physical-overlay nodes', (_label, physical, expectedCode) => {
+    const result = exportAtlasSceneToSvgWithPhysicalOverlays({ scene: physical, style: STYLE });
+
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.diagnostics.map(({ code }) => code)).toContain(expectedCode);
+  });
+
+  it('retains bounded-batch cancellation without returning partial v2 bytes', async () => {
+    let isCancelled = false;
+    const overlays = Array.from({ length: 130 }, (_, index) => ({
+      ...physicalOverlay(),
+      id: `atlas/physical/biome/${String(index).padStart(4, '0')}`,
+    }));
+    const result = await exportAtlasSceneToSvgWithPhysicalOverlaysAsync(
+      { scene: physicalScene(overlays), style: STYLE },
+      {
+        isCancellationRequested: () => isCancelled,
+        reportProgress: () => undefined,
+        yieldControl: () => {
+          isCancelled = true;
+          return Promise.resolve();
+        },
+      },
+    );
+
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.diagnostics.map(({ code }) => code)).toEqual([
+      ATLAS_SVG_DIAGNOSTIC_CODES.cancelled,
+    ]);
+  });
+});
+
 function scene(nodes: readonly RenderNode[] = baseNodes()): AtlasRenderScene {
   return {
     authority: 'disposable-render-scene',
@@ -392,6 +489,39 @@ function baseNodes(): readonly RenderNode[] {
       strokeWidthPx: 1.25,
     },
   ];
+}
+
+function physicalOverlay(): RenderNode {
+  return {
+    id: 'atlas/physical/biome/0000',
+    kind: 'compoundPath',
+    sourceId: PHYSICAL_ENTITY_ID,
+    sourceAspectId: PHYSICAL_ASPECT_ID,
+    relatedSourceIds: [LAND_ENTITY_ID],
+    subpaths: [
+      {
+        points: [
+          { xPx: 1, yPx: 1 },
+          { xPx: 6, yPx: 1 },
+          { xPx: 4, yPx: 6 },
+        ],
+      },
+    ],
+    fillColor: '#718c8e',
+    fillRule: 'evenodd',
+  };
+}
+
+function physicalScene(
+  overlays: readonly RenderNode[] = [physicalOverlay()],
+  misplaced = false,
+): AtlasRenderScene {
+  const nodes = baseNodes();
+  return scene(
+    misplaced
+      ? [...nodes.slice(0, 4), ...overlays, ...nodes.slice(4)]
+      : [...nodes.slice(0, 3), ...overlays, ...nodes.slice(3)],
+  );
 }
 
 function replaceNode(index: number, node: RenderNode): readonly RenderNode[] {

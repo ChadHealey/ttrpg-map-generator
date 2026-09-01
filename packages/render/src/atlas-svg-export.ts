@@ -29,6 +29,8 @@ import {
 
 export const ATLAS_SVG_EXPORT_PROFILE_ID = 'atlas-svg-v1' as const;
 export const ATLAS_SVG_EXPORT_VERSION = 1 as const;
+export const ATLAS_SVG_PHYSICAL_OVERLAY_EXPORT_PROFILE_ID = 'atlas-svg-v2' as const;
+export const ATLAS_SVG_PHYSICAL_OVERLAY_EXPORT_VERSION = 2 as const;
 export const ATLAS_SVG_FONT_POLICY = 'no-rendered-text-v1' as const;
 export const ATLAS_SVG_SUPPORTED_STYLE_ID = 'atlas-style.restrained-ink' as const;
 export const ATLAS_SVG_MAXIMUM_BYTES = 32 * 1_024 * 1_024;
@@ -84,6 +86,9 @@ export interface AtlasSvgExportRequest {
   readonly dimensions?: AtlasSvgDimensions;
 }
 
+/** Explicit opt-in request for the SVG profile that admits source-linked physical overlays. */
+export type AtlasSvgPhysicalOverlayExportRequest = AtlasSvgExportRequest;
+
 export interface AtlasSvgExport {
   readonly profileId: typeof ATLAS_SVG_EXPORT_PROFILE_ID;
   readonly profileVersion: typeof ATLAS_SVG_EXPORT_VERSION;
@@ -94,8 +99,20 @@ export interface AtlasSvgExport {
   readonly bytes: Uint8Array;
 }
 
+export interface AtlasSvgPhysicalOverlayExport extends Omit<
+  AtlasSvgExport,
+  'profileId' | 'profileVersion'
+> {
+  readonly profileId: typeof ATLAS_SVG_PHYSICAL_OVERLAY_EXPORT_PROFILE_ID;
+  readonly profileVersion: typeof ATLAS_SVG_PHYSICAL_OVERLAY_EXPORT_VERSION;
+}
+
 export type AtlasSvgExportResult =
   | { readonly ok: true; readonly value: AtlasSvgExport }
+  | { readonly ok: false; readonly diagnostics: readonly AtlasSvgDiagnostic[] };
+
+export type AtlasSvgPhysicalOverlayExportResult =
+  | { readonly ok: true; readonly value: AtlasSvgPhysicalOverlayExport }
   | { readonly ok: false; readonly diagnostics: readonly AtlasSvgDiagnostic[] };
 
 export interface AtlasSvgExportProgress {
@@ -106,9 +123,22 @@ export interface AtlasSvgExportProgress {
   readonly isTerminal: boolean;
 }
 
+export interface AtlasSvgPhysicalOverlayExportProgress extends Omit<
+  AtlasSvgExportProgress,
+  'profileId'
+> {
+  readonly profileId: typeof ATLAS_SVG_PHYSICAL_OVERLAY_EXPORT_PROFILE_ID;
+}
+
 export interface AtlasSvgExportRuntime {
   readonly isCancellationRequested: () => boolean;
   readonly reportProgress: (progress: AtlasSvgExportProgress) => void;
+  readonly yieldControl: () => Promise<void>;
+}
+
+export interface AtlasSvgPhysicalOverlayExportRuntime {
+  readonly isCancellationRequested: () => boolean;
+  readonly reportProgress: (progress: AtlasSvgPhysicalOverlayExportProgress) => void;
   readonly yieldControl: () => Promise<void>;
 }
 
@@ -125,9 +155,26 @@ const SERIALIZATION_BATCH_SIZE = 128;
 
 /** Serialize the exact accepted atlas scene without consulting geography or generator state. */
 export function exportAtlasSceneToSvg(request: AtlasSvgExportRequest): AtlasSvgExportResult {
-  const validated = validateRequest(request);
+  const validated = validateRequest(request, false);
   if (!validated.ok) return validated;
   return finishExport(validated.value, serializeAtlasSvg(serializationInput(validated.value)));
+}
+
+/** Serialize the explicit v2 profile that admits canonical physical-overlay scene nodes. */
+export function exportAtlasSceneToSvgWithPhysicalOverlays(
+  request: AtlasSvgPhysicalOverlayExportRequest,
+): AtlasSvgPhysicalOverlayExportResult {
+  const validated = validateRequest(request, true);
+  if (!validated.ok) return validated;
+  return finishPhysicalOverlayExport(
+    validated.value,
+    serializeAtlasSvg(
+      serializationInput(validated.value, {
+        profileId: ATLAS_SVG_PHYSICAL_OVERLAY_EXPORT_PROFILE_ID,
+        profileVersion: ATLAS_SVG_PHYSICAL_OVERLAY_EXPORT_VERSION,
+      }),
+    ),
+  );
 }
 
 /**
@@ -140,7 +187,7 @@ export async function exportAtlasSceneToSvgAsync(
 ): Promise<AtlasSvgExportResult> {
   runtime.reportProgress(progress('validating', 0, request.scene.nodes.length, false));
   if (runtime.isCancellationRequested()) return cancelled(runtime, request.scene.nodes.length, 0);
-  const validated = validateRequest(request);
+  const validated = validateRequest(request, false);
   if (!validated.ok) {
     runtime.reportProgress(progress('failed', 0, request.scene.nodes.length, true));
     return validated;
@@ -172,8 +219,61 @@ export async function exportAtlasSceneToSvgAsync(
   return result;
 }
 
+/** Cancellable v2 serialization. It retains the v1 bounded-batch cancellation contract. */
+export async function exportAtlasSceneToSvgWithPhysicalOverlaysAsync(
+  request: AtlasSvgPhysicalOverlayExportRequest,
+  runtime: AtlasSvgPhysicalOverlayExportRuntime,
+): Promise<AtlasSvgPhysicalOverlayExportResult> {
+  runtime.reportProgress(
+    physicalOverlayProgress('validating', 0, request.scene.nodes.length, false),
+  );
+  if (runtime.isCancellationRequested()) {
+    return physicalOverlayCancelled(runtime, request.scene.nodes.length, 0);
+  }
+  const validated = validateRequest(request, true);
+  if (!validated.ok) {
+    runtime.reportProgress(physicalOverlayProgress('failed', 0, request.scene.nodes.length, true));
+    return validated;
+  }
+  const { scene } = validated.value;
+  const serialization = serializationInput(validated.value, {
+    profileId: ATLAS_SVG_PHYSICAL_OVERLAY_EXPORT_PROFILE_ID,
+    profileVersion: ATLAS_SVG_PHYSICAL_OVERLAY_EXPORT_VERSION,
+  });
+  const lines = atlasSvgHeaderLines(serialization);
+  for (let start = 0; start < scene.nodes.length; start += SERIALIZATION_BATCH_SIZE) {
+    if (runtime.isCancellationRequested())
+      return physicalOverlayCancelled(runtime, scene.nodes.length, start);
+    const end = Math.min(scene.nodes.length, start + SERIALIZATION_BATCH_SIZE);
+    for (let index = start; index < end; index += 1) {
+      const node = scene.nodes[index];
+      if (node !== undefined) lines.push(`    ${renderAtlasSvgNode(node)}`);
+    }
+    runtime.reportProgress(physicalOverlayProgress('serializing', end, scene.nodes.length, false));
+    await runtime.yieldControl();
+  }
+  if (runtime.isCancellationRequested()) {
+    return physicalOverlayCancelled(runtime, scene.nodes.length, scene.nodes.length);
+  }
+  lines.push(...atlasSvgFooterLines());
+  runtime.reportProgress(
+    physicalOverlayProgress('verifying', scene.nodes.length, scene.nodes.length, false),
+  );
+  const result = finishPhysicalOverlayExport(validated.value, `${lines.join('\n')}\n`);
+  runtime.reportProgress(
+    physicalOverlayProgress(
+      result.ok ? 'completed' : 'failed',
+      scene.nodes.length,
+      scene.nodes.length,
+      true,
+    ),
+  );
+  return result;
+}
+
 function validateRequest(
   request: AtlasSvgExportRequest,
+  requiresPhysicalOverlay: boolean,
 ):
   | { readonly ok: true; readonly value: ValidatedExport }
   | { readonly ok: false; readonly diagnostics: readonly AtlasSvgDiagnostic[] } {
@@ -221,6 +321,7 @@ function validateRequest(
   const populatedLayers = new Set<number>();
   let hasCoastalEcho = false;
   let hasWaterMark = false;
+  let hasPhysicalOverlay = false;
   let previousLayer = -1;
   for (const node of scene.nodes) {
     if (ids.has(node.id)) {
@@ -261,7 +362,7 @@ function validateRequest(
       );
       continue;
     }
-    const layer = nodeLayer(node);
+    const layer = nodeLayer(node, requiresPhysicalOverlay);
     if (!validNode(node, scene) || !validNodeKindForLayer(node, layer)) {
       diagnostics.push(
         diagnostic(
@@ -287,6 +388,16 @@ function validateRequest(
     }
     hasCoastalEcho ||= node.id.startsWith('atlas-water/echo/');
     hasWaterMark ||= node.id.startsWith('atlas-water/mark/');
+    hasPhysicalOverlay ||= isPhysicalOverlayNodeId(node.id);
+    if (node.id.startsWith('atlas/physical/') && !requiresPhysicalOverlay) {
+      diagnostics.push(
+        diagnostic(
+          ATLAS_SVG_DIAGNOSTIC_CODES.sceneUnsupported,
+          `${ATLAS_SVG_EXPORT_PROFILE_ID} rejects physical overlays; export this scene through ${ATLAS_SVG_PHYSICAL_OVERLAY_EXPORT_PROFILE_ID} version ${String(ATLAS_SVG_PHYSICAL_OVERLAY_EXPORT_VERSION)}.`,
+          node.id,
+        ),
+      );
+    }
     previousLayer = Math.max(previousLayer, layer);
   }
   if (
@@ -301,14 +412,18 @@ function validateRequest(
     );
   }
   if (
-    ![0, 1, 2, 3, 4, 5].every((layer) => populatedLayers.has(layer)) ||
+    !(requiresPhysicalOverlay
+      ? [0, 1, 2, 3, 4, 5, 6].every((layer) => populatedLayers.has(layer)) && hasPhysicalOverlay
+      : [0, 1, 2, 3, 4, 5].every((layer) => populatedLayers.has(layer))) ||
     !hasCoastalEcho ||
     !hasWaterMark
   ) {
     diagnostics.push(
       diagnostic(
         ATLAS_SVG_DIAGNOSTIC_CODES.sceneUnsupported,
-        'The complete normal-detail atlas scene must include backgrounds, land, paper treatment, coastal echoes, water marks, and coastline ink.',
+        requiresPhysicalOverlay
+          ? 'The complete atlas-svg-v2 scene must include backgrounds, land, source-linked physical overlays, paper treatment, coastal echoes, water marks, and coastline ink.'
+          : 'The complete normal-detail atlas scene must include backgrounds, land, paper treatment, coastal echoes, water marks, and coastline ink.',
       ),
     );
   }
@@ -323,12 +438,37 @@ function validateRequest(
   };
 }
 
-function serializationInput(input: ValidatedExport): AtlasSvgSerializationInput {
-  return {
-    ...input,
+function serializationInput(
+  input: ValidatedExport,
+  profile: {
+    readonly profileId: string;
+    readonly profileVersion: number;
+  } = {
     profileId: ATLAS_SVG_EXPORT_PROFILE_ID,
     profileVersion: ATLAS_SVG_EXPORT_VERSION,
+  },
+): AtlasSvgSerializationInput {
+  return {
+    ...input,
+    profileId: profile.profileId,
+    profileVersion: profile.profileVersion,
     fontPolicy: ATLAS_SVG_FONT_POLICY,
+  };
+}
+
+function finishPhysicalOverlayExport(
+  input: ValidatedExport,
+  svg: string,
+): AtlasSvgPhysicalOverlayExportResult {
+  const result = finishExport(input, svg);
+  if (!result.ok) return result;
+  return {
+    ok: true,
+    value: Object.freeze({
+      ...result.value,
+      profileId: ATLAS_SVG_PHYSICAL_OVERLAY_EXPORT_PROFILE_ID,
+      profileVersion: ATLAS_SVG_PHYSICAL_OVERLAY_EXPORT_VERSION,
+    } satisfies AtlasSvgPhysicalOverlayExport),
   };
 }
 
@@ -468,14 +608,19 @@ function validColor(value: string): boolean {
   return COLOR_PATTERN.test(value);
 }
 
-function nodeLayer(node: RenderNode): number {
+function nodeLayer(node: RenderNode, requiresPhysicalOverlay: boolean): number {
   if (node.id === 'atlas/background/paper') return 0;
   if (node.id === 'atlas/background/water') return 1;
   if (node.id.startsWith('atlas/land/')) return 2;
-  if (node.id.startsWith('atlas/paper/')) return 3;
-  if (node.id.startsWith('atlas-water/')) return 4;
-  if (node.id.startsWith('atlas/coastline/')) return 5;
+  if (requiresPhysicalOverlay && isPhysicalOverlayNodeId(node.id)) return 3;
+  if (node.id.startsWith('atlas/paper/')) return requiresPhysicalOverlay ? 4 : 3;
+  if (node.id.startsWith('atlas-water/')) return requiresPhysicalOverlay ? 5 : 4;
+  if (node.id.startsWith('atlas/coastline/')) return requiresPhysicalOverlay ? 6 : 5;
   return -1;
+}
+
+function isPhysicalOverlayNodeId(nodeId: string): boolean {
+  return /^atlas\/physical\/(?:[a-z0-9][a-z0-9._-]*)(?:\/[a-z0-9][a-z0-9._-]*)*$/u.test(nodeId);
 }
 
 function validNodeKindForLayer(node: RenderNode, layer: number): boolean {
@@ -489,7 +634,10 @@ function validNodeKindForLayer(node: RenderNode, layer: number): boolean {
     );
   }
   if (layer === 2) return node.kind === 'compoundPath';
-  if (layer === 3 || layer === 4 || layer === 5) return node.kind === 'polyline';
+  if (layer === 3 && isPhysicalOverlayNodeId(node.id)) {
+    return node.kind === 'compoundPath' || node.kind === 'polyline';
+  }
+  if (layer >= 3 && layer <= 6) return node.kind === 'polyline';
   return false;
 }
 
@@ -516,12 +664,44 @@ function progress(
   });
 }
 
+function physicalOverlayProgress(
+  stage: AtlasSvgPhysicalOverlayExportProgress['stage'],
+  completedNodes: number,
+  totalNodes: number,
+  isTerminal: boolean,
+): AtlasSvgPhysicalOverlayExportProgress {
+  return Object.freeze({
+    profileId: ATLAS_SVG_PHYSICAL_OVERLAY_EXPORT_PROFILE_ID,
+    stage,
+    completedNodes,
+    totalNodes,
+    isTerminal,
+  });
+}
+
 function cancelled(
   runtime: AtlasSvgExportRuntime,
   totalNodes: number,
   completedNodes: number,
 ): AtlasSvgExportResult {
   runtime.reportProgress(progress('cancelled', completedNodes, totalNodes, true));
+  return {
+    ok: false,
+    diagnostics: Object.freeze([
+      diagnostic(
+        ATLAS_SVG_DIAGNOSTIC_CODES.cancelled,
+        'Atlas SVG export was cancelled before any destination file was committed.',
+      ),
+    ]),
+  };
+}
+
+function physicalOverlayCancelled(
+  runtime: AtlasSvgPhysicalOverlayExportRuntime,
+  totalNodes: number,
+  completedNodes: number,
+): AtlasSvgPhysicalOverlayExportResult {
+  runtime.reportProgress(physicalOverlayProgress('cancelled', completedNodes, totalNodes, true));
   return {
     ok: false,
     diagnostics: Object.freeze([

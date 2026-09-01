@@ -26,6 +26,7 @@ export function serializeAtlasSvg(input: AtlasSvgSerializationInput): string {
 
 export function atlasSvgHeaderLines(input: AtlasSvgSerializationInput): string[] {
   const { dimensions, scene, style } = input;
+  const svgIdPrefix = input.profileId;
   const metadata = JSON.stringify({
     exportProfileId: input.profileId,
     exportProfileVersion: input.profileVersion,
@@ -45,15 +46,15 @@ export function atlasSvgHeaderLines(input: AtlasSvgSerializationInput): string[]
   });
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
-    `<svg xmlns="http://www.w3.org/2000/svg" width="${formatNumber(dimensions.widthMillimeters)}mm" height="${formatNumber(dimensions.heightMillimeters)}mm" viewBox="0 0 ${formatNumber(scene.widthPx)} ${formatNumber(scene.heightPx)}" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="atlas-svg-v1-title" data-export-profile="${input.profileId}" data-export-version="${String(input.profileVersion)}">`,
-    '  <title id="atlas-svg-v1-title">Whole-world atlas</title>',
-    `  <metadata id="atlas-svg-v1-metadata">${escapeXml(metadata)}</metadata>`,
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${formatNumber(dimensions.widthMillimeters)}mm" height="${formatNumber(dimensions.heightMillimeters)}mm" viewBox="0 0 ${formatNumber(scene.widthPx)} ${formatNumber(scene.heightPx)}" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="${svgIdPrefix}-title" data-export-profile="${input.profileId}" data-export-version="${String(input.profileVersion)}">`,
+    `  <title id="${svgIdPrefix}-title">Whole-world atlas</title>`,
+    `  <metadata id="${svgIdPrefix}-metadata">${escapeXml(metadata)}</metadata>`,
     '  <defs>',
-    '    <clipPath id="atlas-svg-v1-clip" clipPathUnits="userSpaceOnUse">',
+    `    <clipPath id="${svgIdPrefix}-clip" clipPathUnits="userSpaceOnUse">`,
     `      <rect x="0" y="0" width="${formatNumber(scene.widthPx)}" height="${formatNumber(scene.heightPx)}"/>`,
     '    </clipPath>',
     '  </defs>',
-    '  <g id="atlas-svg-v1-scene" clip-path="url(#atlas-svg-v1-clip)" shape-rendering="geometricPrecision">',
+    `  <g id="${svgIdPrefix}-scene" clip-path="url(#${svgIdPrefix}-clip)" shape-rendering="geometricPrecision">`,
   ];
 }
 

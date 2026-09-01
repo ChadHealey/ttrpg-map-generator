@@ -14,6 +14,9 @@ import {
 import {
   ATLAS_PNG_DEFAULT_DIMENSIONS,
   ATLAS_PNG_DIAGNOSTIC_CODES,
+  ATLAS_PNG_EXPORT_PROFILE_ID,
+  ATLAS_PNG_PHYSICAL_OVERLAY_EXPORT_PROFILE_ID,
+  ATLAS_PNG_PHYSICAL_OVERLAY_EXPORT_VERSION,
   ATLAS_PNG_SUPPORTED_DIMENSIONS,
   ATLAS_PNG_SUPPORTED_STYLE_ID,
   type AtlasPngDiagnostic,
@@ -53,6 +56,19 @@ const RENDER_NODE_ID_PATTERN = /^[\x20-\x7e]+$/u;
 
 export function validateAtlasPngExportRequest(
   request: AtlasPngExportRequest,
+): AtlasPngValidationResult {
+  return validateAtlasPngExportRequestForProfile(request, false);
+}
+
+export function validateAtlasPngPhysicalOverlayExportRequest(
+  request: AtlasPngExportRequest,
+): AtlasPngValidationResult {
+  return validateAtlasPngExportRequestForProfile(request, true);
+}
+
+function validateAtlasPngExportRequestForProfile(
+  request: AtlasPngExportRequest,
+  requiresPhysicalOverlay: boolean,
 ): AtlasPngValidationResult {
   const dimensions = request.dimensions ?? ATLAS_PNG_DEFAULT_DIMENSIONS;
   const diagnostics: AtlasPngDiagnostic[] = [];
@@ -106,7 +122,7 @@ export function validateAtlasPngExportRequest(
       ),
     );
   }
-  validateNodes(scene, diagnostics);
+  validateNodes(scene, diagnostics, requiresPhysicalOverlay);
   if (diagnostics.length > 0) return { ok: false, diagnostics: Object.freeze(diagnostics) };
 
   return {
@@ -134,12 +150,17 @@ export function atlasPngDiagnostic(
   return Object.freeze({ code, message, ...(sourceId === undefined ? {} : { sourceId }) });
 }
 
-function validateNodes(scene: AtlasPngSceneInput, diagnostics: AtlasPngDiagnostic[]): void {
+function validateNodes(
+  scene: AtlasPngSceneInput,
+  diagnostics: AtlasPngDiagnostic[],
+  requiresPhysicalOverlay: boolean,
+): void {
   const ids = new Set<string>();
   const previousIdsByLayer = new Map<number, string>();
   const populatedLayers = new Set<number>();
   let hasCoastalEcho = false;
   let hasWaterMark = false;
+  let hasPhysicalOverlay = false;
   let previousLayer = -1;
   let pointCount = 0;
 
@@ -175,7 +196,7 @@ function validateNodes(scene: AtlasPngSceneInput, diagnostics: AtlasPngDiagnosti
     }
 
     pointCount += nodePointCount(node);
-    const layer = nodeLayer(node);
+    const layer = nodeLayer(node, requiresPhysicalOverlay);
     if (!validNode(node, scene) || !validNodeKindForLayer(node, layer)) {
       diagnostics.push(
         atlasPngDiagnostic(
@@ -201,6 +222,16 @@ function validateNodes(scene: AtlasPngSceneInput, diagnostics: AtlasPngDiagnosti
     }
     hasCoastalEcho ||= node.id.startsWith('atlas-water/echo/');
     hasWaterMark ||= node.id.startsWith('atlas-water/mark/');
+    hasPhysicalOverlay ||= isPhysicalOverlayNodeId(node.id);
+    if (node.id.startsWith('atlas/physical/') && !requiresPhysicalOverlay) {
+      diagnostics.push(
+        atlasPngDiagnostic(
+          ATLAS_PNG_DIAGNOSTIC_CODES.sceneUnsupported,
+          `${ATLAS_PNG_EXPORT_PROFILE_ID} rejects physical overlays; export this scene through ${ATLAS_PNG_PHYSICAL_OVERLAY_EXPORT_PROFILE_ID} version ${String(ATLAS_PNG_PHYSICAL_OVERLAY_EXPORT_VERSION)}.`,
+          node.id,
+        ),
+      );
+    }
     previousLayer = Math.max(previousLayer, layer);
   }
 
@@ -212,11 +243,22 @@ function validateNodes(scene: AtlasPngSceneInput, diagnostics: AtlasPngDiagnosti
       ),
     );
   }
-  if (!hasCompleteAtlasLayers(scene, populatedLayers, hasCoastalEcho, hasWaterMark)) {
+  if (
+    !hasCompleteAtlasLayers(
+      scene,
+      populatedLayers,
+      hasCoastalEcho,
+      hasWaterMark,
+      requiresPhysicalOverlay,
+      hasPhysicalOverlay,
+    )
+  ) {
     diagnostics.push(
       atlasPngDiagnostic(
         ATLAS_PNG_DIAGNOSTIC_CODES.sceneUnsupported,
-        'The complete atlas scene must include canonical backgrounds, land, paper, water decoration, and coastline ink.',
+        requiresPhysicalOverlay
+          ? 'The complete atlas-png-v2 scene must include canonical backgrounds, land, source-linked physical overlays, paper, water decoration, and coastline ink.'
+          : 'The complete atlas scene must include canonical backgrounds, land, paper, water decoration, and coastline ink.',
       ),
     );
   }
@@ -315,7 +357,10 @@ function validNodeKindForLayer(node: RenderNode, layer: number): boolean {
     );
   }
   if (layer === 2) return node.kind === 'compoundPath';
-  if (layer === 3 || layer === 4 || layer === 5) return node.kind === 'polyline';
+  if (layer === 3 && isPhysicalOverlayNodeId(node.id)) {
+    return node.kind === 'compoundPath' || node.kind === 'polyline';
+  }
+  if (layer >= 3 && layer <= 6) return node.kind === 'polyline';
   return false;
 }
 
@@ -349,14 +394,19 @@ function hasEvenOddFill(node: RenderNode): boolean {
   return (node as unknown as { readonly fillRule?: unknown }).fillRule === 'evenodd';
 }
 
-function nodeLayer(node: RenderNode): number {
+function nodeLayer(node: RenderNode, requiresPhysicalOverlay: boolean): number {
   if (node.id === 'atlas/background/paper') return 0;
   if (node.id === 'atlas/background/water') return 1;
   if (node.id.startsWith('atlas/land/')) return 2;
-  if (node.id.startsWith('atlas/paper/')) return 3;
-  if (node.id.startsWith('atlas-water/')) return 4;
-  if (node.id.startsWith('atlas/coastline/')) return 5;
+  if (requiresPhysicalOverlay && isPhysicalOverlayNodeId(node.id)) return 3;
+  if (node.id.startsWith('atlas/paper/')) return requiresPhysicalOverlay ? 4 : 3;
+  if (node.id.startsWith('atlas-water/')) return requiresPhysicalOverlay ? 5 : 4;
+  if (node.id.startsWith('atlas/coastline/')) return requiresPhysicalOverlay ? 6 : 5;
   return -1;
+}
+
+function isPhysicalOverlayNodeId(nodeId: string): boolean {
+  return /^atlas\/physical\/(?:[a-z0-9][a-z0-9._-]*)(?:\/[a-z0-9][a-z0-9._-]*)*$/u.test(nodeId);
 }
 
 function hasCompleteAtlasLayers(
@@ -364,11 +414,15 @@ function hasCompleteAtlasLayers(
   populatedLayers: ReadonlySet<number>,
   hasCoastalEcho: boolean,
   hasWaterMark: boolean,
+  requiresPhysicalOverlay: boolean,
+  hasPhysicalOverlay: boolean,
 ): boolean {
   return (
     scene.nodes[0]?.id === 'atlas/background/paper' &&
     scene.nodes[1]?.id === 'atlas/background/water' &&
-    [0, 1, 2, 3, 4, 5].every((layer) => populatedLayers.has(layer)) &&
+    (requiresPhysicalOverlay
+      ? [0, 1, 2, 3, 4, 5, 6].every((layer) => populatedLayers.has(layer)) && hasPhysicalOverlay
+      : [0, 1, 2, 3, 4, 5].every((layer) => populatedLayers.has(layer))) &&
     hasCoastalEcho &&
     hasWaterMark
   );
