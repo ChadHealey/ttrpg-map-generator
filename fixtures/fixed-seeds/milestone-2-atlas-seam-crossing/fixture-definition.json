@@ -2,6 +2,11 @@
   "fixtureDefinitionVersion": 2,
   "fixtureId": "milestone-2-atlas-seam-crossing",
   "evidenceBoundary": "persistence-canonical-accepted-aspects-v1",
+  "physicalScene": true,
+  "physicalControls": {
+    "mountainCharacter": "varied",
+    "climateCharacter": "varied"
+  },
   "worldSeed": "12297829382473034410",
   "stableIds": {
     "atlasPresentationEntityId": "66b92789-9a5b-5760-b299-1d82700cf3a0",

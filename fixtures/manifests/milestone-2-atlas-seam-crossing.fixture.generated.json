@@ -3,10 +3,10 @@
   "fixtureId": "milestone-2-atlas-seam-crossing",
   "generated": true,
   "editPolicy": "regenerate-only",
-  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-seam-crossing --review-record fixed-seeds/milestone-2-atlas-seam-crossing/reviews/0011-canonical-pressure-widths.md",
+  "generatingCommand": "pnpm fixtures:update --fixture milestone-2-atlas-seam-crossing --review-record fixed-seeds/milestone-2-atlas-seam-crossing/reviews/0015-m3-physical-hierarchy.md",
   "sourceDefinition": {
     "path": "fixed-seeds/milestone-2-atlas-seam-crossing/fixture-definition.json",
-    "sha256": "f701b68a2fafe58b9834e6075dabf20c80ddb256c8aebf455f23780a2756fe2d"
+    "sha256": "6e84d1e70c6b34cda0cd4fb7ca452fb8664ecf6ce981e673e7e934e4feb95db3"
   },
   "worldSeed": "12297829382473034410",
   "stableIds": {
@@ -109,8 +109,8 @@
   ],
   "reviewPurpose": "Prove one Milestone 2 matrix row at the persistence-owned canonical accepted aspect/output boundary while retaining its separate geometry and visual evidence.",
   "reviewRecord": {
-    "path": "fixed-seeds/milestone-2-atlas-seam-crossing/reviews/0011-canonical-pressure-widths.md",
-    "sha256": "b09d634780623c9e41ba3846f1c144202b7a5471ec10eed868c76db6b067c94b"
+    "path": "fixed-seeds/milestone-2-atlas-seam-crossing/reviews/0015-m3-physical-hierarchy.md",
+    "sha256": "ca40d4296c2b94736fa3b71562104e13c2cc08bc633c4faef971b588e584156b"
   },
   "generatedRoots": [
     "canonical-svg/milestone-2-atlas-seam-crossing",
@@ -122,17 +122,17 @@
       "path": "canonical-svg/milestone-2-atlas-seam-crossing/baseline.svg",
       "kind": "canonical-svg",
       "checkpoint": "baseline",
-      "byteLength": 712010,
-      "canonicalSvgSha256": "52b9f3387502871a80926a686816c8007e0fdd7a245096ed5d6dd79e97696c1b",
-      "fixtureIntegritySha256": "52b9f3387502871a80926a686816c8007e0fdd7a245096ed5d6dd79e97696c1b"
+      "byteLength": 918821,
+      "canonicalSvgSha256": "3008aaff2e63adde188cffb10940ec9c3fbc35e6f8b3596feb7881314455e197",
+      "fixtureIntegritySha256": "3008aaff2e63adde188cffb10940ec9c3fbc35e6f8b3596feb7881314455e197"
     },
     {
       "path": "fixed-seeds/milestone-2-atlas-seam-crossing/expected/baseline/accepted-aspects.aspects.index.canonical",
       "kind": "canonical-aspect-digest-index",
       "checkpoint": "baseline",
-      "byteLength": 6097,
-      "canonicalAspectDigestIndexSha256": "e2be6a871ad46bac3a8287bd1ffa25896b2975e20912267d98b25f1b9e4bec68",
-      "fixtureIntegritySha256": "e2be6a871ad46bac3a8287bd1ffa25896b2975e20912267d98b25f1b9e4bec68"
+      "byteLength": 10077,
+      "canonicalAspectDigestIndexSha256": "f526ea20ebd166b35f1203748511fcfc01aa5b4ae2b68a5baf4d58c2df0b1c39",
+      "fixtureIntegritySha256": "f526ea20ebd166b35f1203748511fcfc01aa5b4ae2b68a5baf4d58c2df0b1c39"
     },
     {
       "path": "fixed-seeds/milestone-2-atlas-seam-crossing/expected/baseline/atlas-land-water.kernel.canonical",
@@ -146,19 +146,19 @@
       "path": "fixed-seeds/milestone-2-atlas-seam-crossing/expected/baseline/atlas-render-scene.scene.canonical",
       "kind": "canonical-render-scene",
       "checkpoint": "baseline",
-      "byteLength": 1261511,
-      "canonicalSceneSha256": "00f1945f6df31e5cf06a49cab63be06a1475b1f2fc22370331c4d20bdc35b2f5",
-      "fixtureIntegritySha256": "00f1945f6df31e5cf06a49cab63be06a1475b1f2fc22370331c4d20bdc35b2f5"
+      "byteLength": 1832704,
+      "canonicalSceneSha256": "0c1e321587a2dfafb443b5f58dc4bbd7f5ab72a9f5b4931d0d7f909afcf31db7",
+      "fixtureIntegritySha256": "0c1e321587a2dfafb443b5f58dc4bbd7f5ab72a9f5b4931d0d7f909afcf31db7"
     },
     {
       "path": "visual-gallery/milestone-2-atlas-seam-crossing/baseline.png",
       "kind": "visual-evidence",
       "checkpoint": "baseline",
-      "byteLength": 97161,
-      "visualEvidenceSha256": "b569d12144671332814da2ea57b244c1876f83f123e2cead87635d6dfbc6a7c8",
-      "fixtureIntegritySha256": "b569d12144671332814da2ea57b244c1876f83f123e2cead87635d6dfbc6a7c8",
-      "pngProfileId": "atlas-png-v1",
-      "pngProfileVersion": 1,
+      "byteLength": 141069,
+      "visualEvidenceSha256": "a73b6ca9749f16ca6f2fa599247e640e124ba05357009f1d3b70e8ba8dae849c",
+      "fixtureIntegritySha256": "a73b6ca9749f16ca6f2fa599247e640e124ba05357009f1d3b70e8ba8dae849c",
+      "pngProfileId": "atlas-png-v2",
+      "pngProfileVersion": 2,
       "widthPx": 1600,
       "heightPx": 800,
       "bitDepth": 8,
