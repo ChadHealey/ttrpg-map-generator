@@ -1,0 +1,95 @@
+{
+  "fixtureManifestVersion": 1,
+  "fixtureId": "atlas-label-profile-v3",
+  "generated": true,
+  "editPolicy": "regenerate-only",
+  "generatingCommand": "pnpm fixtures:update --fixture atlas-label-profile-v3 --review-record fixed-seeds/atlas-label-profile-v3/reviews/0001-outlined-label-evidence.md",
+  "sourceDefinition": {
+    "path": "fixed-seeds/atlas-label-profile-v3/fixture-definition.json",
+    "sha256": "a0f1945608a02963ef19e5e5bcf42143d97934d6deff9d87f6cdd35440c7dffc"
+  },
+  "worldSeed": "142",
+  "stableIds": {
+    "landAspectId": "77777777-7777-4777-8777-777777777777",
+    "landEntityId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+    "mapId": "11111111-1111-4111-8111-111111111111",
+    "physicalAspectId": "99999999-9999-4999-8999-999999999999",
+    "physicalEntityId": "88888888-8888-4888-8888-888888888888"
+  },
+  "versions": {
+    "atlasPngExportProfileVersion": 3,
+    "atlasSceneCompositionVersion": 4,
+    "atlasSvgExportProfileVersion": 3
+  },
+  "checkpointRevisions": {
+    "dense": { "atlas.vectorLabels": 3 },
+    "sparse": { "atlas.vectorLabels": 3 }
+  },
+  "expectedAssertions": [
+    {
+      "assertionId": "runner-validates-v3-label-profile-contract",
+      "operator": "runner-pass",
+      "reviewPurpose": "Prove v3 acceptance, source-linked accessibility titles, post-coastline order, exact repeated SVG/PNG bytes, and bounded large output."
+    }
+  ],
+  "reviewPurpose": "Provide sparse and dense canonical/visual evidence for exact outlined atlas labels without changing released v1/v2 contracts.",
+  "reviewRecord": {
+    "path": "fixed-seeds/atlas-label-profile-v3/reviews/0001-outlined-label-evidence.md",
+    "sha256": "9cc5d84ed11cc40cd5e25744428dbc6a168f5716b0ea305179d7f2a6c0e36bf2"
+  },
+  "generatedRoots": [
+    "canonical-svg/atlas-label-profile-v3",
+    "fixed-seeds/atlas-label-profile-v3/expected",
+    "visual-gallery/atlas-label-profile-v3"
+  ],
+  "artifacts": [
+    {
+      "path": "canonical-svg/atlas-label-profile-v3/dense.svg",
+      "kind": "canonical-svg",
+      "checkpoint": "dense",
+      "byteLength": 958115,
+      "fixtureIntegritySha256": "9b64f659ffc5b2931ad3641211c0a35eb56a2cec67e9cb1565c2978179a86a7a",
+      "canonicalSvgSha256": "9b64f659ffc5b2931ad3641211c0a35eb56a2cec67e9cb1565c2978179a86a7a"
+    },
+    {
+      "path": "canonical-svg/atlas-label-profile-v3/sparse.svg",
+      "kind": "canonical-svg",
+      "checkpoint": "sparse",
+      "byteLength": 145468,
+      "fixtureIntegritySha256": "4b1a1a353aac76ad01de0a1057405fa4ecffac727d1fb9a895fdbcee52f5c287",
+      "canonicalSvgSha256": "4b1a1a353aac76ad01de0a1057405fa4ecffac727d1fb9a895fdbcee52f5c287"
+    },
+    {
+      "path": "fixed-seeds/atlas-label-profile-v3/expected/dense/atlas-label.scene.canonical",
+      "kind": "canonical-render-scene",
+      "checkpoint": "dense",
+      "byteLength": 2447457,
+      "fixtureIntegritySha256": "a9760f76aa88222be7b11f5b15e07e794a338018848330bce74b86273a245d67",
+      "canonicalSceneSha256": "a9760f76aa88222be7b11f5b15e07e794a338018848330bce74b86273a245d67"
+    },
+    {
+      "path": "fixed-seeds/atlas-label-profile-v3/expected/sparse/atlas-label.scene.canonical",
+      "kind": "canonical-render-scene",
+      "checkpoint": "sparse",
+      "byteLength": 374961,
+      "fixtureIntegritySha256": "730a41739d6731db0152cac2810e21300bd157f4bee3f2659bb6f2df996c2f73",
+      "canonicalSceneSha256": "730a41739d6731db0152cac2810e21300bd157f4bee3f2659bb6f2df996c2f73"
+    },
+    {
+      "path": "visual-gallery/atlas-label-profile-v3/dense.png",
+      "kind": "visual-evidence",
+      "checkpoint": "dense",
+      "byteLength": 100368,
+      "fixtureIntegritySha256": "4c251b1712feb784a3c4146d0a212d7c8c797d94873af9b1401d1a3987be71e5",
+      "visualEvidenceSha256": "4c251b1712feb784a3c4146d0a212d7c8c797d94873af9b1401d1a3987be71e5"
+    },
+    {
+      "path": "visual-gallery/atlas-label-profile-v3/sparse.png",
+      "kind": "visual-evidence",
+      "checkpoint": "sparse",
+      "byteLength": 73546,
+      "fixtureIntegritySha256": "5abbffaef1789757b92ac4012ff86a496e0e354b9829b5621e210fdad7f19843",
+      "visualEvidenceSha256": "5abbffaef1789757b92ac4012ff86a496e0e354b9829b5621e210fdad7f19843"
+    }
+  ]
+}

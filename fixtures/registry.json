@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "fixtures": [
     {
+      "fixtureId": "atlas-label-profile-v3",
+      "manifestPath": "manifests/atlas-label-profile-v3.fixture.generated.json",
+      "runnerPath": "fixed-seeds/atlas-label-profile-v3/fixture-runner.mjs"
+    },
+    {
       "fixtureId": "atlas-physical-overlay-profile-v2",
       "manifestPath": "manifests/atlas-physical-overlay-profile-v2.fixture.generated.json",
       "runnerPath": "fixed-seeds/atlas-physical-overlay-profile-v2/fixture-runner.mjs"

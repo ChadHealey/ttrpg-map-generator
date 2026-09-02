@@ -19,6 +19,8 @@ export const ATLAS_PNG_EXPORT_PROFILE_ID = 'atlas-png-v1' as const;
 export const ATLAS_PNG_EXPORT_VERSION = 1 as const;
 export const ATLAS_PNG_PHYSICAL_OVERLAY_EXPORT_PROFILE_ID = 'atlas-png-v2' as const;
 export const ATLAS_PNG_PHYSICAL_OVERLAY_EXPORT_VERSION = 2 as const;
+export const ATLAS_PNG_LABEL_EXPORT_PROFILE_ID = 'atlas-png-v3' as const;
+export const ATLAS_PNG_LABEL_EXPORT_VERSION = 3 as const;
 export const ATLAS_PNG_FONT_POLICY = 'no-rendered-text-v1' as const;
 export const ATLAS_PNG_SUPPORTED_STYLE_ID = 'atlas-style.restrained-ink' as const;
 export const ATLAS_PNG_MAXIMUM_BYTES = 64 * 1_024 * 1_024;
@@ -136,12 +138,21 @@ export interface AtlasPngPhysicalOverlayExport extends Omit<
   readonly profileVersion: typeof ATLAS_PNG_PHYSICAL_OVERLAY_EXPORT_VERSION;
 }
 
+export interface AtlasPngLabelExport extends Omit<AtlasPngExport, 'profileId' | 'profileVersion'> {
+  readonly profileId: typeof ATLAS_PNG_LABEL_EXPORT_PROFILE_ID;
+  readonly profileVersion: typeof ATLAS_PNG_LABEL_EXPORT_VERSION;
+}
+
 export type AtlasPngExportResult =
   | { readonly ok: true; readonly value: AtlasPngExport }
   | { readonly ok: false; readonly diagnostics: readonly AtlasPngDiagnostic[] };
 
 export type AtlasPngPhysicalOverlayExportResult =
   | { readonly ok: true; readonly value: AtlasPngPhysicalOverlayExport }
+  | { readonly ok: false; readonly diagnostics: readonly AtlasPngDiagnostic[] };
+
+export type AtlasPngLabelExportResult =
+  | { readonly ok: true; readonly value: AtlasPngLabelExport }
   | { readonly ok: false; readonly diagnostics: readonly AtlasPngDiagnostic[] };
 
 export interface AtlasPngExportProgress {
@@ -160,6 +171,10 @@ export interface AtlasPngPhysicalOverlayExportProgress extends Omit<
   readonly profileId: typeof ATLAS_PNG_PHYSICAL_OVERLAY_EXPORT_PROFILE_ID;
 }
 
+export interface AtlasPngLabelExportProgress extends Omit<AtlasPngExportProgress, 'profileId'> {
+  readonly profileId: typeof ATLAS_PNG_LABEL_EXPORT_PROFILE_ID;
+}
+
 export interface AtlasPngExportRuntime {
   readonly isCancellationRequested: () => boolean;
   readonly reportProgress: (progress: AtlasPngExportProgress) => void;
@@ -169,5 +184,11 @@ export interface AtlasPngExportRuntime {
 export interface AtlasPngPhysicalOverlayExportRuntime {
   readonly isCancellationRequested: () => boolean;
   readonly reportProgress: (progress: AtlasPngPhysicalOverlayExportProgress) => void;
+  readonly yieldControl: () => Promise<void>;
+}
+
+export interface AtlasPngLabelExportRuntime {
+  readonly isCancellationRequested: () => boolean;
+  readonly reportProgress: (progress: AtlasPngLabelExportProgress) => void;
   readonly yieldControl: () => Promise<void>;
 }

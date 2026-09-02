@@ -34,12 +34,14 @@ import {
   ATLAS_PNG_REQUIRED_BAND_HALO_PX,
 } from './atlas-png-rasterizer.js';
 import {
+  ATLAS_LABEL_SCENE_COMPOSITION_VERSION,
   ATLAS_SCENE_COMPOSITION_VERSION,
   ATLAS_SCENE_HEIGHT_PX,
   ATLAS_SCENE_LEVELS_OF_DETAIL,
   ATLAS_SCENE_WIDTH_PX,
   type AtlasRenderScene,
 } from './atlas-scene.js';
+import { validateAndExpandAtlasVectorLabelLayer } from './atlas-vector-label.js';
 
 export interface ValidatedAtlasPngExport {
   readonly scene: AtlasRenderScene;
@@ -64,6 +66,113 @@ export function validateAtlasPngPhysicalOverlayExportRequest(
   request: AtlasPngExportRequest,
 ): AtlasPngValidationResult {
   return validateAtlasPngExportRequestForProfile(request, true);
+}
+
+export function validateAtlasPngLabelExportRequest(
+  request: AtlasPngExportRequest,
+): AtlasPngValidationResult {
+  const scene = request.scene as AtlasRenderScene;
+  if (
+    scene.sceneCompositionVersion !== ATLAS_LABEL_SCENE_COMPOSITION_VERSION ||
+    scene.vectorLabels === undefined
+  ) {
+    return {
+      ok: false,
+      diagnostics: Object.freeze([
+        atlasPngDiagnostic(
+          ATLAS_PNG_DIAGNOSTIC_CODES.sceneUnsupported,
+          'atlas-png-v3 requires a complete scene-version-4 outlined-label layer.',
+        ),
+      ]),
+    };
+  }
+  const labels = validateAndExpandAtlasVectorLabelLayer(scene.vectorLabels);
+  if (!labels.ok) {
+    const finding = labels.diagnostics[0];
+    return {
+      ok: false,
+      diagnostics: Object.freeze([
+        atlasPngDiagnostic(
+          finding?.code === 'atlas-vector-label.resource.exceeded'
+            ? ATLAS_PNG_DIAGNOSTIC_CODES.resourceLimitExceeded
+            : finding?.code === 'atlas-vector-label.geometry.invalid'
+              ? ATLAS_PNG_DIAGNOSTIC_CODES.nodeInvalid
+              : ATLAS_PNG_DIAGNOSTIC_CODES.sceneUnsupported,
+          finding?.message ?? 'The vector-label layer is invalid.',
+          finding?.sourceId,
+        ),
+      ]),
+    };
+  }
+  const { expanded } = labels.value;
+  const labelIds = new Set(labels.value.layer.nodes.map(({ id }) => id));
+  const actualLabelNodes = scene.nodes.slice(scene.nodes.length - expanded.length);
+  const baseNodes = scene.nodes.slice(0, scene.nodes.length - expanded.length);
+  if (
+    scene.nodes.length < expanded.length ||
+    new Set(scene.nodes.map(({ id }) => id)).size !== scene.nodes.length ||
+    baseNodes.some(({ id }) => labelIds.has(id)) ||
+    expanded.length !== labelIds.size ||
+    expanded.some((node, index) => !sameExpandedLabelNode(node, actualLabelNodes[index]))
+  ) {
+    return {
+      ok: false,
+      diagnostics: Object.freeze([
+        atlasPngDiagnostic(
+          ATLAS_PNG_DIAGNOSTIC_CODES.zOrderInvalid,
+          'Scene-version-4 label nodes must be the canonical expanded suffix after coastline ink.',
+        ),
+      ]),
+    };
+  }
+  const baseScene = {
+    ...scene,
+    sceneCompositionVersion: ATLAS_SCENE_COMPOSITION_VERSION,
+    nodes: baseNodes,
+  };
+  delete (baseScene as { vectorLabels?: unknown }).vectorLabels;
+  const base = validateAtlasPngExportRequestForProfile(
+    { ...request, scene: baseScene },
+    baseNodes.some(({ id }) => id.startsWith('atlas/physical/')),
+  );
+  if (!base.ok) return base;
+  const pointCount = scene.nodes.reduce(
+    (total, node) =>
+      total +
+      (node.kind === 'compoundPath'
+        ? node.subpaths.reduce((sum, path) => sum + path.points.length, 0)
+        : node.kind === 'polyline' || node.kind === 'polygon'
+          ? node.points.length
+          : 0),
+    0,
+  );
+  if (
+    scene.nodes.length > ATLAS_PNG_MAXIMUM_NODES ||
+    expanded.some((node) => !validNode(node, scene)) ||
+    pointCount + labels.value.definitionPointCount > ATLAS_PNG_MAXIMUM_POINTS
+  ) {
+    return {
+      ok: false,
+      diagnostics: Object.freeze([
+        atlasPngDiagnostic(
+          ATLAS_PNG_DIAGNOSTIC_CODES.resourceLimitExceeded,
+          'Expanded atlas labels exceed the PNG geometry or stored-point limits.',
+        ),
+      ]),
+    };
+  }
+  return {
+    ok: true,
+    value: Object.freeze({
+      scene,
+      style: Object.freeze({ ...request.style }),
+      dimensions: Object.freeze({ ...(request.dimensions ?? ATLAS_PNG_DEFAULT_DIMENSIONS) }),
+    }),
+  };
+}
+
+function sameExpandedLabelNode(expected: RenderNode, actual: RenderNode | undefined): boolean {
+  return actual !== undefined && JSON.stringify(expected) === JSON.stringify(actual);
 }
 
 function validateAtlasPngExportRequestForProfile(

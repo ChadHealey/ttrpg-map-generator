@@ -21,6 +21,7 @@ import {
   exportAtlasSceneToSvgWithPhysicalOverlays,
   exportAtlasSceneToSvgWithPhysicalOverlaysAsync,
 } from './atlas-svg-export.js';
+import { serializeAtlasSvgWithinByteLimit } from './atlas-svg-serialization.js';
 
 const STYLE: AtlasSvgStyleMetadata = {
   styleId: ATLAS_SVG_SUPPORTED_STYLE_ID as AtlasSvgStyleMetadata['styleId'],
@@ -79,6 +80,62 @@ describe('atlas-svg-v1 export', () => {
     const second = exportAtlasSceneToSvg(request);
 
     expect(first).toEqual(second);
+  });
+
+  it('measures UTF-8 incrementally and refuses to assemble output beyond its byte ceiling', () => {
+    const serialized = serializeAtlasSvgWithinByteLimit(
+      {
+        scene: scene(),
+        style: STYLE,
+        dimensions: ATLAS_SVG_DEFAULT_DIMENSIONS,
+        profileId: ATLAS_SVG_EXPORT_PROFILE_ID,
+        profileVersion: 1,
+        fontPolicy: 'no-rendered-text-v1',
+      },
+      ATLAS_SVG_MAXIMUM_BYTES,
+    );
+    expect(serialized.ok).toBe(true);
+    if (!serialized.ok) return;
+    expect(serialized.value.byteLength).toBe(
+      new TextEncoder().encode(serialized.value.svg).byteLength,
+    );
+    expect(
+      serializeAtlasSvgWithinByteLimit(
+        {
+          scene: scene(),
+          style: STYLE,
+          dimensions: ATLAS_SVG_DEFAULT_DIMENSIONS,
+          profileId: ATLAS_SVG_EXPORT_PROFILE_ID,
+          profileVersion: 1,
+          fontPolicy: 'no-rendered-text-v1',
+        },
+        serialized.value.byteLength - 1,
+      ).ok,
+    ).toBe(false);
+
+    const longPrintableId = `atlas/coastline/${'a'.repeat(1_100_000)}`;
+    const longIdScene = scene(
+      baseNodes().map((node) =>
+        node.id === 'atlas/coastline/0000' ? { ...node, id: longPrintableId } : node,
+      ),
+    );
+    const longIdResult = serializeAtlasSvgWithinByteLimit(
+      {
+        scene: longIdScene,
+        style: STYLE,
+        dimensions: ATLAS_SVG_DEFAULT_DIMENSIONS,
+        profileId: ATLAS_SVG_EXPORT_PROFILE_ID,
+        profileVersion: 1,
+        fontPolicy: 'no-rendered-text-v1',
+      },
+      ATLAS_SVG_MAXIMUM_BYTES,
+    );
+    expect(longIdResult.ok).toBe(true);
+    if (!longIdResult.ok) return;
+    expect(longIdResult.value.byteLength).toBeLessThan(ATLAS_SVG_MAXIMUM_BYTES);
+    expect(longIdResult.value.byteLength).toBe(
+      new TextEncoder().encode(longIdResult.value.svg).byteLength,
+    );
   });
 
   it('rejects unsupported dimensions, fonts, source links, nodes, and z-order actionably', () => {

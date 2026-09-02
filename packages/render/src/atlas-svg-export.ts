@@ -13,6 +13,7 @@ import {
   ATLAS_DISPLAY_PROJECTION_METADATA,
 } from './atlas-display-projection.js';
 import {
+  ATLAS_LABEL_SCENE_COMPOSITION_VERSION,
   ATLAS_SCENE_COMPOSITION_VERSION,
   ATLAS_SCENE_HEIGHT_PX,
   ATLAS_SCENE_LEVELS_OF_DETAIL,
@@ -25,12 +26,20 @@ import {
   type AtlasSvgSerializationInput,
   renderAtlasSvgNode,
   serializeAtlasSvg,
+  serializeAtlasSvgWithinByteLimit,
 } from './atlas-svg-serialization.js';
+import {
+  ATLAS_VECTOR_LABEL_FONT_POLICY,
+  ATLAS_VECTOR_LABEL_MAXIMUM_STORED_POINTS,
+  validateAndExpandAtlasVectorLabelLayer,
+} from './atlas-vector-label.js';
 
 export const ATLAS_SVG_EXPORT_PROFILE_ID = 'atlas-svg-v1' as const;
 export const ATLAS_SVG_EXPORT_VERSION = 1 as const;
 export const ATLAS_SVG_PHYSICAL_OVERLAY_EXPORT_PROFILE_ID = 'atlas-svg-v2' as const;
 export const ATLAS_SVG_PHYSICAL_OVERLAY_EXPORT_VERSION = 2 as const;
+export const ATLAS_SVG_LABEL_EXPORT_PROFILE_ID = 'atlas-svg-v3' as const;
+export const ATLAS_SVG_LABEL_EXPORT_VERSION = 3 as const;
 export const ATLAS_SVG_FONT_POLICY = 'no-rendered-text-v1' as const;
 export const ATLAS_SVG_SUPPORTED_STYLE_ID = 'atlas-style.restrained-ink' as const;
 export const ATLAS_SVG_MAXIMUM_BYTES = 32 * 1_024 * 1_024;
@@ -107,6 +116,15 @@ export interface AtlasSvgPhysicalOverlayExport extends Omit<
   readonly profileVersion: typeof ATLAS_SVG_PHYSICAL_OVERLAY_EXPORT_VERSION;
 }
 
+export interface AtlasSvgLabelExport extends Omit<AtlasSvgExport, 'profileId' | 'profileVersion'> {
+  readonly profileId: typeof ATLAS_SVG_LABEL_EXPORT_PROFILE_ID;
+  readonly profileVersion: typeof ATLAS_SVG_LABEL_EXPORT_VERSION;
+}
+
+export type AtlasSvgLabelExportResult =
+  | { readonly ok: true; readonly value: AtlasSvgLabelExport }
+  | { readonly ok: false; readonly diagnostics: readonly AtlasSvgDiagnostic[] };
+
 export type AtlasSvgExportResult =
   | { readonly ok: true; readonly value: AtlasSvgExport }
   | { readonly ok: false; readonly diagnostics: readonly AtlasSvgDiagnostic[] };
@@ -152,6 +170,7 @@ const UTF8_ENCODER = new TextEncoder();
 const COLOR_PATTERN = /^#[0-9a-f]{6}$/u;
 const RENDER_NODE_ID_PATTERN = /^[\x20-\x7e]+$/u;
 const SERIALIZATION_BATCH_SIZE = 128;
+const ATLAS_SVG_LABEL_MAXIMUM_NODES = 4_096;
 
 /** Serialize the exact accepted atlas scene without consulting geography or generator state. */
 export function exportAtlasSceneToSvg(request: AtlasSvgExportRequest): AtlasSvgExportResult {
@@ -175,6 +194,46 @@ export function exportAtlasSceneToSvgWithPhysicalOverlays(
       }),
     ),
   );
+}
+
+/** Serialize the append-only v3 profile for accepted outlined atlas labels. */
+export function exportAtlasSceneToSvgWithLabels(
+  request: AtlasSvgExportRequest,
+): AtlasSvgLabelExportResult {
+  const validated = validateLabelRequest(request);
+  if (!validated.ok) return validated;
+  const serialized = serializeAtlasSvgWithinByteLimit(
+    serializationInput(
+      validated.value,
+      {
+        profileId: ATLAS_SVG_LABEL_EXPORT_PROFILE_ID,
+        profileVersion: ATLAS_SVG_LABEL_EXPORT_VERSION,
+      },
+      ATLAS_VECTOR_LABEL_FONT_POLICY,
+    ),
+    ATLAS_SVG_MAXIMUM_BYTES,
+  );
+  if (!serialized.ok) {
+    return {
+      ok: false,
+      diagnostics: Object.freeze([
+        diagnostic(
+          ATLAS_SVG_DIAGNOSTIC_CODES.outputTooLarge,
+          `The canonical SVG exceeds the ${String(ATLAS_SVG_MAXIMUM_BYTES)}-byte atlas limit.`,
+        ),
+      ]),
+    };
+  }
+  const result = finishExport(validated.value, serialized.value.svg);
+  if (!result.ok) return result;
+  return {
+    ok: true,
+    value: Object.freeze({
+      ...result.value,
+      profileId: ATLAS_SVG_LABEL_EXPORT_PROFILE_ID,
+      profileVersion: ATLAS_SVG_LABEL_EXPORT_VERSION,
+    }),
+  };
 }
 
 /**
@@ -447,13 +506,140 @@ function serializationInput(
     profileId: ATLAS_SVG_EXPORT_PROFILE_ID,
     profileVersion: ATLAS_SVG_EXPORT_VERSION,
   },
+  fontPolicy: string = ATLAS_SVG_FONT_POLICY,
 ): AtlasSvgSerializationInput {
   return {
     ...input,
     profileId: profile.profileId,
     profileVersion: profile.profileVersion,
-    fontPolicy: ATLAS_SVG_FONT_POLICY,
+    fontPolicy,
   };
+}
+
+function validateLabelRequest(
+  request: AtlasSvgExportRequest,
+):
+  | { readonly ok: true; readonly value: ValidatedExport }
+  | { readonly ok: false; readonly diagnostics: readonly AtlasSvgDiagnostic[] } {
+  const scene = request.scene as AtlasRenderScene;
+  if (
+    scene.sceneCompositionVersion !== ATLAS_LABEL_SCENE_COMPOSITION_VERSION ||
+    scene.vectorLabels === undefined
+  ) {
+    return {
+      ok: false,
+      diagnostics: Object.freeze([
+        diagnostic(
+          ATLAS_SVG_DIAGNOSTIC_CODES.sceneUnsupported,
+          'atlas-svg-v3 requires a complete scene-version-4 outlined-label layer.',
+        ),
+      ]),
+    };
+  }
+  const labels = validateAndExpandAtlasVectorLabelLayer(scene.vectorLabels);
+  if (!labels.ok) {
+    const finding = labels.diagnostics[0];
+    return {
+      ok: false,
+      diagnostics: Object.freeze([
+        diagnostic(
+          finding?.code === 'atlas-vector-label.resource.exceeded'
+            ? ATLAS_SVG_DIAGNOSTIC_CODES.outputTooLarge
+            : finding?.code === 'atlas-vector-label.geometry.invalid'
+              ? ATLAS_SVG_DIAGNOSTIC_CODES.nodeInvalid
+              : ATLAS_SVG_DIAGNOSTIC_CODES.sceneUnsupported,
+          finding?.message ?? 'The vector-label layer is invalid.',
+          finding?.sourceId,
+        ),
+      ]),
+    };
+  }
+  const { expanded } = labels.value;
+  const labelIds = new Set(labels.value.layer.nodes.map(({ id }) => id));
+  const actualLabelNodes = scene.nodes.slice(scene.nodes.length - expanded.length);
+  const baseNodes = scene.nodes.slice(0, scene.nodes.length - expanded.length);
+  if (
+    scene.nodes.length < expanded.length ||
+    new Set(scene.nodes.map(({ id }) => id)).size !== scene.nodes.length ||
+    baseNodes.some(({ id }) => labelIds.has(id)) ||
+    expanded.length !== labelIds.size ||
+    expanded.some((node, index) => !sameExpandedLabelNode(node, actualLabelNodes[index]))
+  ) {
+    return {
+      ok: false,
+      diagnostics: Object.freeze([
+        diagnostic(
+          ATLAS_SVG_DIAGNOSTIC_CODES.sceneUnsupported,
+          'Scene-version-4 label nodes must be the canonical expanded suffix after coastline ink.',
+        ),
+      ]),
+    };
+  }
+  const storedPointCount = scene.nodes.reduce(
+    (total, node) => total + renderNodePointCount(node),
+    labels.value.definitionPointCount,
+  );
+  if (
+    scene.nodes.length > ATLAS_SVG_LABEL_MAXIMUM_NODES ||
+    storedPointCount > ATLAS_VECTOR_LABEL_MAXIMUM_STORED_POINTS
+  ) {
+    return {
+      ok: false,
+      diagnostics: Object.freeze([
+        diagnostic(
+          ATLAS_SVG_DIAGNOSTIC_CODES.outputTooLarge,
+          'The outlined-label scene exceeds its node or stored-point serialization budget.',
+        ),
+      ]),
+    };
+  }
+  const baseScene = {
+    ...scene,
+    sceneCompositionVersion: ATLAS_SCENE_COMPOSITION_VERSION,
+    nodes: baseNodes,
+  };
+  delete (baseScene as { vectorLabels?: unknown }).vectorLabels;
+  const base = validateRequest(
+    { ...request, scene: baseScene },
+    baseNodes.some(({ id }) => id.startsWith('atlas/physical/')),
+  );
+  if (!base.ok) return base;
+  if (expanded.some((node) => !validNode(node, scene))) {
+    return {
+      ok: false,
+      diagnostics: Object.freeze([
+        diagnostic(
+          ATLAS_SVG_DIAGNOSTIC_CODES.nodeInvalid,
+          'Expanded atlas label contours are invalid or outside the fixed scene extent.',
+        ),
+      ]),
+    };
+  }
+  return {
+    ok: true,
+    value: Object.freeze({
+      scene,
+      style: Object.freeze({ ...request.style }),
+      dimensions: Object.freeze({ ...(request.dimensions ?? ATLAS_SVG_DEFAULT_DIMENSIONS) }),
+    }),
+  };
+}
+
+function sameExpandedLabelNode(expected: RenderNode, actual: RenderNode | undefined): boolean {
+  return actual !== undefined && JSON.stringify(expected) === JSON.stringify(actual);
+}
+
+function renderNodePointCount(node: RenderNode): number {
+  switch (node.kind) {
+    case 'rectangle':
+    case 'label':
+      return 0;
+    case 'polygon':
+    case 'polyline':
+      return node.points.length;
+    case 'compoundPath':
+      return node.subpaths.reduce((total, subpath) => total + subpath.points.length, 0);
+  }
 }
 
 function finishPhysicalOverlayExport(

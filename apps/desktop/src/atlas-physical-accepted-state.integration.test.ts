@@ -1,4 +1,7 @@
-import { ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_PACK } from '@ttrpg-map/assets';
+import {
+  ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_PACK,
+  RESTRAINED_INK_ATLAS_STYLE,
+} from '@ttrpg-map/assets';
 import {
   type AcceptedAspectRecord,
   ASPECT_DEPENDENCY_PROVENANCE_KINDS,
@@ -58,6 +61,14 @@ import {
   createMapworldV2Candidate,
   decodeMapworld,
 } from '@ttrpg-map/persistence';
+import {
+  ATLAS_LABEL_SCENE_COMPOSITION_VERSION,
+  composeAtlasRenderScene,
+  exportAtlasSceneToPngWithLabelsAsync,
+  exportAtlasSceneToSvg,
+  exportAtlasSceneToSvgWithLabels,
+  exportAtlasSceneToSvgWithPhysicalOverlays,
+} from '@ttrpg-map/render';
 import { beforeAll, describe, expect, it } from 'vitest';
 
 import type { AcceptedAtlasState } from './atlas-workflow-generation.js';
@@ -513,7 +524,7 @@ describe('accepted M3 physical atlas integration', () => {
     300_000,
   );
 
-  it('accepts and reconstructs a complete deterministic name set and placement subset', () => {
+  it('accepts, reconstructs, and renders a complete deterministic name set and placement subset', async () => {
     const { physical } = requiredFixture();
     const proposals = labelProposals(physical.document);
     const accepted = commitAtlasLabelProposal(
@@ -538,6 +549,234 @@ describe('accepted M3 physical atlas integration', () => {
     expect(reconstructed.value.labels.placements).toHaveLength(4);
     expect(accepted.addedEntityIds.length).toBeGreaterThan(0);
     expect(createAspectDependencyGraph(accepted.document).ok).toBe(true);
+    if (reconstructed.value.physical === undefined) {
+      throw new Error('Expected accepted physical context for label rendering.');
+    }
+
+    const scene = composeAtlasRenderScene(
+      reconstructed.value.geography,
+      reconstructed.value.appearance,
+      RESTRAINED_INK_ATLAS_STYLE,
+      {
+        physical: reconstructed.value.physical,
+        labels: reconstructed.value.labels,
+        glyphPack: ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_PACK,
+      },
+    );
+    expect(scene.ok).toBe(true);
+    if (!scene.ok) throw new Error(JSON.stringify(scene.diagnostics));
+    expect(scene.value.sceneCompositionVersion).toBe(ATLAS_LABEL_SCENE_COMPOSITION_VERSION);
+    expect(
+      scene.value.vectorLabels?.nodes.map(({ accessibilityText }) => accessibilityText),
+    ).toEqual(
+      reconstructed.value.labels.placements
+        .slice()
+        .sort(
+          (left, right) =>
+            left.priority - right.priority ||
+            (left.placementId < right.placementId
+              ? -1
+              : left.placementId > right.placementId
+                ? 1
+                : 0),
+        )
+        .map(({ displayText }) => displayText),
+    );
+    const svg = exportAtlasSceneToSvgWithLabels({
+      scene: scene.value,
+      style: RESTRAINED_INK_ATLAS_STYLE,
+    });
+    expect(svg.ok).toBe(true);
+    if (!svg.ok) throw new Error(JSON.stringify(svg.diagnostics));
+    expect(svg.value.profileId).toBe('atlas-svg-v3');
+    expect(svg.value.svg).toContain('&quot;fontPolicy&quot;:&quot;outlined-ascii-glyphs-v1&quot;');
+    expect(svg.value.svg).not.toContain('<text');
+    for (const { displayText } of reconstructed.value.labels.placements) {
+      expect(svg.value.svg).toContain(`<title>${displayText}</title>`);
+    }
+    expect(
+      exportAtlasSceneToSvg({ scene: scene.value, style: RESTRAINED_INK_ATLAS_STYLE }).ok,
+    ).toBe(false);
+    expect(
+      exportAtlasSceneToSvgWithPhysicalOverlays({
+        scene: scene.value,
+        style: RESTRAINED_INK_ATLAS_STYLE,
+      }).ok,
+    ).toBe(false);
+    const tamperedScene = {
+      ...scene.value,
+      nodes: scene.value.nodes.map((node, index) =>
+        index === scene.value.nodes.length - 1 && node.kind === 'compoundPath'
+          ? { ...node, fillColor: '#ffffff' }
+          : node,
+      ),
+    };
+    expect(
+      exportAtlasSceneToSvgWithLabels({
+        scene: tamperedScene,
+        style: RESTRAINED_INK_ATLAS_STYLE,
+      }).ok,
+    ).toBe(false);
+    const labelLayer = scene.value.vectorLabels;
+    const firstExpandedLabel = scene.value.nodes.at(-(labelLayer?.nodes.length ?? 0));
+    if (labelLayer === undefined || firstExpandedLabel === undefined) {
+      throw new Error('Expected a canonical vector-label suffix.');
+    }
+    const duplicatePrefixScene = {
+      ...scene.value,
+      nodes: [firstExpandedLabel, ...scene.value.nodes],
+    };
+    const mismatchedPackScene = {
+      ...scene.value,
+      vectorLabels: {
+        ...labelLayer,
+        glyphAssetId: 'atlas-glyphs.forged-v9',
+      } as unknown as typeof labelLayer,
+    };
+    const missingDefinitionsScene = {
+      ...scene.value,
+      vectorLabels: { ...labelLayer, definitions: [] },
+    };
+    for (const invalidScene of [
+      duplicatePrefixScene,
+      mismatchedPackScene,
+      missingDefinitionsScene,
+    ]) {
+      expect(
+        exportAtlasSceneToSvgWithLabels({
+          scene: invalidScene,
+          style: RESTRAINED_INK_ATLAS_STYLE,
+        }).ok,
+      ).toBe(false);
+      const invalidPng = await exportAtlasSceneToPngWithLabelsAsync(
+        { scene: invalidScene, style: RESTRAINED_INK_ATLAS_STYLE },
+        {
+          isCancellationRequested: () => false,
+          reportProgress: () => undefined,
+          yieldControl: () => Promise.resolve(),
+        },
+      );
+      expect(invalidPng.ok).toBe(false);
+    }
+    const excessive = composeAtlasRenderScene(
+      reconstructed.value.geography,
+      reconstructed.value.appearance,
+      RESTRAINED_INK_ATLAS_STYLE,
+      {
+        physical: reconstructed.value.physical,
+        labels: {
+          names: reconstructed.value.labels.names,
+          placements: Array.from(
+            { length: 257 },
+            () => reconstructed.value.labels?.placements[0],
+          ).filter((placement) => placement !== undefined),
+        },
+        glyphPack: ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_PACK,
+      },
+    );
+    expect(excessive.ok).toBe(false);
+    const mismatchedAcceptedPack = composeAtlasRenderScene(
+      reconstructed.value.geography,
+      reconstructed.value.appearance,
+      RESTRAINED_INK_ATLAS_STYLE,
+      {
+        physical: reconstructed.value.physical,
+        labels: {
+          names: reconstructed.value.labels.names,
+          placements: reconstructed.value.labels.placements.map((placement, index) =>
+            index === 0
+              ? ({
+                  ...placement,
+                  glyphAssetId: 'atlas-glyphs.forged-v9',
+                } as unknown as typeof placement)
+              : placement,
+          ),
+        },
+        glyphPack: ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_PACK,
+      },
+    );
+    expect(mismatchedAcceptedPack.ok).toBe(false);
+    const pngRuntime = {
+      isCancellationRequested: () => false,
+      reportProgress: () => undefined,
+      yieldControl: () => Promise.resolve(),
+    };
+    const png = await exportAtlasSceneToPngWithLabelsAsync(
+      {
+        scene: scene.value,
+        style: RESTRAINED_INK_ATLAS_STYLE,
+        dimensions: { widthPx: 1_600, heightPx: 800 },
+      },
+      pngRuntime,
+    );
+    const repeated = await exportAtlasSceneToPngWithLabelsAsync(
+      {
+        scene: scene.value,
+        style: RESTRAINED_INK_ATLAS_STYLE,
+        dimensions: { widthPx: 1_600, heightPx: 800 },
+      },
+      pngRuntime,
+    );
+    expect(png.ok).toBe(true);
+    expect(repeated.ok).toBe(true);
+    if (!png.ok || !repeated.ok) throw new Error(JSON.stringify(png.ok ? repeated : png));
+    expect(png.value.profileId).toBe('atlas-png-v3');
+    expect(png.value.bytes).toEqual(repeated.value.bytes);
+    const denseAccepted = commitAtlasLabelProposal(
+      physical.document,
+      labelCommand(physical.document, labelProposals(physical.document, 256)),
+    );
+    expect(denseAccepted.ok).toBe(true);
+    if (!denseAccepted.ok) throw new Error(JSON.stringify(denseAccepted.diagnostics));
+    const denseRecords = reconstructAcceptedAtlas(denseAccepted.document);
+    if (
+      denseRecords.status !== 'accepted' ||
+      denseRecords.value.physical === undefined ||
+      denseRecords.value.labels === undefined
+    ) {
+      throw new Error('Expected dense accepted labels.');
+    }
+    expect(denseRecords.value.labels.placements.length).toBeGreaterThan(4);
+    const denseScene = composeAtlasRenderScene(
+      denseRecords.value.geography,
+      denseRecords.value.appearance,
+      RESTRAINED_INK_ATLAS_STYLE,
+      {
+        physical: denseRecords.value.physical,
+        labels: denseRecords.value.labels,
+        glyphPack: ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_PACK,
+      },
+    );
+    if (!denseScene.ok) throw new Error(JSON.stringify(denseScene.diagnostics));
+    const densePng = await exportAtlasSceneToPngWithLabelsAsync(
+      {
+        scene: denseScene.value,
+        style: RESTRAINED_INK_ATLAS_STYLE,
+        dimensions: { widthPx: 1_600, heightPx: 800 },
+      },
+      pngRuntime,
+    );
+    expect(densePng.ok).toBe(true);
+    if (!densePng.ok) throw new Error(JSON.stringify(densePng.diagnostics));
+    const visualOutput = process.env.ATLAS_LABEL_VISUAL_OUTPUT;
+    if (visualOutput !== undefined) {
+      const { mkdirSync, writeFileSync } = await import('node:fs');
+      mkdirSync(visualOutput, { recursive: true });
+      writeFileSync(`${visualOutput}/sparse-1600x800.png`, png.value.bytes);
+      writeFileSync(`${visualOutput}/dense-1600x800.png`, densePng.value.bytes);
+      if (process.env.ATLAS_LABEL_LARGE_EVIDENCE === '1') {
+        const large = await exportAtlasSceneToPngWithLabelsAsync(
+          {
+            scene: denseScene.value,
+            style: RESTRAINED_INK_ATLAS_STYLE,
+            dimensions: { widthPx: 8_192, heightPx: 4_096 },
+          },
+          pngRuntime,
+        );
+        if (!large.ok) throw new Error(JSON.stringify(large.diagnostics));
+        writeFileSync(`${visualOutput}/dense-8192x4096.png`, large.value.bytes);
+      }
+    }
 
     const reversed = commitAtlasLabelProposal(
       physical.document,
@@ -690,7 +929,7 @@ describe('accepted M3 physical atlas integration', () => {
   }, 300_000);
 });
 
-function labelProposals(document: WorldDocument) {
+function labelProposals(document: WorldDocument, placementCount = 4) {
   const accepted = reconstructAcceptedAtlas(document);
   if (accepted.status !== 'accepted' || accepted.value.physical === undefined) {
     throw new Error('Expected accepted physical atlas source.');
@@ -714,13 +953,16 @@ function labelProposals(document: WorldDocument) {
       maxYTicks: 1_024 * 1_024,
     },
     metrics: metrics.value,
-    candidates: names.proposals.slice(0, 4).map((proposal, index) => ({
+    candidates: names.proposals.slice(0, placementCount).map((proposal, index) => ({
       nameContent: proposal.output,
       placementVariantRevision: revision,
       glyphPackSha256: metrics.value.packSha256,
       priority: 100 - index,
-      fontSizeTicks: 24 * 1_024,
-      anchor: { xTicks: (200 + index * 450) * 1_024, yTicks: 300 * 1_024 },
+      fontSizeTicks: (placementCount > 4 ? 18 : 24) * 1_024,
+      anchor: {
+        xTicks: (120 + (index % 6) * 320) * 1_024,
+        yTicks: (140 + Math.floor(index / 6) * 150) * 1_024,
+      },
       variants: [{ variantKey: 'center', baselineOffset: { xTicks: 0, yTicks: 0 } }],
     })),
   });

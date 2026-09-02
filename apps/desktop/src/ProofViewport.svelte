@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { RenderNode, RenderPoint, RenderScene } from '@ttrpg-map/core';
   import type { AtlasLandWaterPreview } from '@ttrpg-map/generation';
-  import { renderSceneToCanvas } from '@ttrpg-map/render';
+  import { type AtlasRenderScene, renderSceneToCanvas } from '@ttrpg-map/render';
   import { onMount, tick } from 'svelte';
 
   import {
@@ -54,6 +54,7 @@
   let footprintSelector = cancelAtlasFootprintSelector();
 
   $: selectedNode = scene?.nodes.find(({ id }) => id === selectedNodeId) ?? scene?.nodes[1];
+  $: atlasLabels = (scene as AtlasRenderScene | undefined)?.vectorLabels?.nodes ?? [];
   $: footprintSelectionAvailable =
     scene !== undefined && preview === undefined && footprintSelectorSource !== undefined;
   $: if (!footprintSelectionAvailable && footprintSelector.mode !== 'inactive') {
@@ -466,6 +467,13 @@
         ? 'Use arrow keys to move the footprint cursor, Enter or Space to select, Escape to cancel, and plus, minus, or zero to change the view.'
         : 'Use arrow keys to pan, plus and minus to zoom, or zero to reset the map view.'}
     </p>
+    {#if preview === undefined && atlasLabels.length > 0}
+      <ul aria-label="Accepted atlas labels" class="sr-only">
+        {#each atlasLabels as label (label.placementId)}
+          <li data-placement-id={label.placementId}>{label.accessibilityText}</li>
+        {/each}
+      </ul>
+    {/if}
   </figure>
 </div>
 
