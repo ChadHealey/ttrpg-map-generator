@@ -7,6 +7,7 @@ import {
   ATLAS_LABEL_DOCUMENT_OPERATION_MODES,
   ATLAS_PHYSICAL_DOCUMENT_COMMAND_KIND,
   ATLAS_PHYSICAL_DOCUMENT_OPERATION_MODES,
+  type AtlasLabelPlacement,
   type AtlasLabelPlacementProposal,
   collectWorldFeatureNameSources,
   commitAtlasLabelProposal,
@@ -43,6 +44,7 @@ import {
   type WorldDocument,
   type WorldFeatureNameContent,
   type WorldFeatureNameParameters,
+  type WorldFeatureNameProposal,
   type WorldPhysicalContextRecords,
 } from '@ttrpg-map/core';
 import {
@@ -560,6 +562,109 @@ describe('accepted M3 physical atlas integration', () => {
     if (incomplete.ok) throw new Error('Expected incomplete label proposal rejection.');
     expect(incomplete.document).toBe(physical.document);
 
+    const nameProposals = proposals.filter(
+      ({ target }) => target.aspectName === 'worldFeature.nameContent',
+    ) as readonly WorldFeatureNameProposal[];
+    const duplicateSource = nameProposals.find((candidate, index) =>
+      nameProposals
+        .slice(index + 1)
+        .some(({ output }) => output.nameKind === candidate.output.nameKind),
+    );
+    const duplicateTarget =
+      duplicateSource === undefined
+        ? undefined
+        : nameProposals.find(
+            (candidate) =>
+              candidate !== duplicateSource &&
+              candidate.output.nameKind === duplicateSource.output.nameKind,
+          );
+    if (duplicateSource === undefined || duplicateTarget === undefined) {
+      throw new Error('Expected two names in one uniqueness domain.');
+    }
+    const duplicateNames = proposals.map((proposal) =>
+      proposal === duplicateTarget
+        ? {
+            ...duplicateTarget,
+            output: {
+              ...duplicateTarget.output,
+              displayName: duplicateSource.output.displayName,
+              comparisonKey: duplicateSource.output.comparisonKey,
+            },
+          }
+        : proposal,
+    );
+    const duplicate = commitAtlasLabelProposal(
+      physical.document,
+      labelCommand(physical.document, duplicateNames),
+    );
+    expect(duplicate.ok).toBe(false);
+    expect(duplicate.document).toBe(physical.document);
+
+    const badSeed: AspectReplacementProposal[] = [...proposals];
+    const seeded = badSeed[0];
+    if (seeded === undefined) throw new Error('Expected one label proposal.');
+    badSeed[0] = {
+      ...seeded,
+      seedMetadata: { ...seeded.seedMetadata, seedDerivationVersion: 999 },
+    } as unknown as AspectReplacementProposal;
+    const invalidSeed = commitAtlasLabelProposal(
+      physical.document,
+      labelCommand(physical.document, badSeed),
+    );
+    expect(invalidSeed.ok).toBe(false);
+    expect(invalidSeed.document).toBe(physical.document);
+
+    const malformedSeed = [...proposals] as AspectReplacementProposal[];
+    malformedSeed[0] = { ...seeded, seedMetadata: null } as unknown as AspectReplacementProposal;
+    const malformedSeedResult = commitAtlasLabelProposal(
+      physical.document,
+      labelCommand(physical.document, malformedSeed),
+    );
+    expect(malformedSeedResult.ok).toBe(false);
+    expect(malformedSeedResult.document).toBe(physical.document);
+
+    const ineligibleEntityId = required(
+      parseStableId('entity', '08ff4d2d-5403-4bad-98f5-4fb6bd02c980'),
+    );
+    const ineligible = [...proposals] as AspectReplacementProposal[];
+    ineligible[0] = {
+      ...seeded,
+      target: { ...seeded.target, entityId: ineligibleEntityId },
+    };
+    const ineligibleResult = commitAtlasLabelProposal(
+      physical.document,
+      labelCommand(physical.document, ineligible),
+    );
+    expect(ineligibleResult.ok).toBe(false);
+    expect(ineligibleResult.document).toBe(physical.document);
+
+    const invalidDependency = proposals.map((proposal) =>
+      proposal.target.aspectName === 'label.placement'
+        ? { ...proposal, dependencyAspects: [] }
+        : proposal,
+    );
+    const orphaned = commitAtlasLabelProposal(
+      physical.document,
+      labelCommand(physical.document, invalidDependency),
+    );
+    expect(orphaned.ok).toBe(false);
+    expect(orphaned.document).toBe(physical.document);
+
+    const unsafe = proposals.map((proposal) =>
+      proposal.target.aspectName === 'label.placement'
+        ? {
+            ...proposal,
+            output: { ...(proposal as AtlasLabelPlacementProposal).output, priority: Infinity },
+          }
+        : proposal,
+    );
+    const unsafeResult = commitAtlasLabelProposal(
+      physical.document,
+      labelCommand(physical.document, unsafe),
+    );
+    expect(unsafeResult.ok).toBe(false);
+    expect(unsafeResult.document).toBe(physical.document);
+
     const placementIndexes = proposals
       .map((proposal, index) => ({ proposal, index }))
       .filter(({ proposal }) => proposal.target.aspectName === 'label.placement');
@@ -606,8 +711,81 @@ describe('accepted M3 physical atlas integration', () => {
           : map,
       ),
     } as WorldDocument;
-    expect(() => reconstructAcceptedAtlas(corruptDocument)).not.toThrow();
     expect(reconstructAcceptedAtlas(corruptDocument).status).toBe('invalid');
+
+    const acceptedRoot = accepted.document.maps[0];
+    if (acceptedRoot?.mapKind !== 'world') throw new Error('Expected accepted root world map.');
+    const acceptedNameAspect = acceptedRoot.aspects.find(
+      ({ aspectName }) => aspectName === 'worldFeature.nameContent',
+    );
+    const acceptedPlacementAspect = acceptedRoot.aspects.find(
+      ({ aspectName }) => aspectName === 'label.placement',
+    );
+    if (acceptedNameAspect === undefined || acceptedPlacementAspect === undefined) {
+      throw new Error('Expected accepted name and placement aspects.');
+    }
+    const corruptions: readonly WorldDocument[] = [
+      replaceAcceptedAspect(accepted.document, acceptedNameAspect.aspectId, {
+        seedMetadata: null,
+      }),
+      replaceAcceptedAspect(accepted.document, acceptedNameAspect.aspectId, {
+        diagnostics: null,
+      }),
+      replaceAcceptedAspect(accepted.document, acceptedNameAspect.aspectId, {
+        dependencyAspects: null,
+      }),
+      replaceAcceptedAspect(accepted.document, acceptedNameAspect.aspectId, {
+        acceptedOutput: {
+          ...(acceptedNameAspect.acceptedOutput as WorldFeatureNameContent),
+          origin: 'imported',
+        },
+      }),
+      replaceAcceptedAspect(accepted.document, acceptedPlacementAspect.aspectId, {
+        acceptedOutput: {
+          ...(acceptedPlacementAspect.acceptedOutput as AtlasLabelPlacementProposal['output']),
+          glyphAssetId: 'atlas-glyphs.unreleased',
+        },
+      }),
+      replaceAcceptedAspect(accepted.document, acceptedPlacementAspect.aspectId, {
+        variantRevision: Infinity,
+        seedMetadata: { ...acceptedPlacementAspect.seedMetadata, variantRevision: Infinity },
+        acceptedOutput: {
+          ...(acceptedPlacementAspect.acceptedOutput as AtlasLabelPlacementProposal['output']),
+          variantRevision: Infinity,
+        },
+      }),
+    ];
+    for (const corrupted of corruptions) {
+      expect(reconstructAcceptedAtlas(corrupted).status).toBe('invalid');
+    }
+
+    const forgedFingerprint = 'b'.repeat(64);
+    const uniformlyForged = {
+      ...accepted.document,
+      maps: accepted.document.maps.map((map) =>
+        map.mapId === accepted.document.rootMapId
+          ? {
+              ...map,
+              aspects: map.aspects.map((aspect) =>
+                aspect.aspectName === 'label.placement'
+                  ? {
+                      ...aspect,
+                      parameters: {
+                        ...(aspect.parameters as Readonly<Record<string, unknown>>),
+                        glyphPackSha256: forgedFingerprint,
+                      },
+                      acceptedOutput: {
+                        ...(aspect.acceptedOutput as AtlasLabelPlacementProposal['output']),
+                        glyphPackSha256: forgedFingerprint,
+                      },
+                    }
+                  : aspect,
+              ),
+            }
+          : map,
+      ),
+    } as WorldDocument;
+    expect(reconstructAcceptedAtlas(uniformlyForged).status).toBe('invalid');
 
     const acceptedMap = accepted.document.maps[0];
     if (acceptedMap?.mapKind !== 'world') throw new Error('Expected accepted root world map.');
@@ -617,6 +795,63 @@ describe('accepted M3 physical atlas integration', () => {
         !currentLabels.placements.some(({ sourceEntityId }) => sourceEntityId === name.entityId),
     );
     if (selected === undefined) throw new Error('Expected one unplaced accepted name.');
+    const addedPlacementProposal = placementProposalForAcceptedName(
+      accepted.document,
+      selected,
+      currentLabels.placements,
+    );
+    const addedPlacement = commitAtlasLabelProposal(
+      accepted.document,
+      labelCommand(
+        accepted.document,
+        [
+          ...acceptedMap.aspects
+            .filter(
+              ({ aspectName }) =>
+                aspectName === 'worldFeature.nameContent' || aspectName === 'label.placement',
+            )
+            .map(proposalFromAccepted),
+          addedPlacementProposal,
+        ],
+        'replacement',
+        [addedPlacementProposal.target.aspect.aspectId],
+      ),
+    );
+    expect(addedPlacement.ok).toBe(true);
+    if (!addedPlacement.ok) throw new Error(JSON.stringify(addedPlacement.diagnostics));
+    const addedLabels = reconstructAcceptedAtlas(addedPlacement.document);
+    expect(addedLabels.status).toBe('accepted');
+    if (addedLabels.status !== 'accepted' || addedLabels.value.labels === undefined) {
+      throw new Error('Expected the added placement to reconstruct.');
+    }
+    expect(addedLabels.value.labels.placements).toHaveLength(currentLabels.placements.length + 1);
+
+    const addedMap = addedPlacement.document.maps[0];
+    if (addedMap?.mapKind !== 'world') throw new Error('Expected accepted root world map.');
+    const removedPlacement = commitAtlasLabelProposal(
+      addedPlacement.document,
+      labelCommand(
+        addedPlacement.document,
+        addedMap.aspects
+          .filter(
+            ({ aspectName, aspectId }) =>
+              (aspectName === 'worldFeature.nameContent' || aspectName === 'label.placement') &&
+              aspectId !== addedPlacementProposal.target.aspect.aspectId,
+          )
+          .map(proposalFromAccepted),
+        'replacement',
+        [addedPlacementProposal.target.aspect.aspectId],
+      ),
+    );
+    expect(removedPlacement.ok).toBe(true);
+    if (!removedPlacement.ok) throw new Error(JSON.stringify(removedPlacement.diagnostics));
+    const removedLabels = reconstructAcceptedAtlas(removedPlacement.document);
+    expect(removedLabels.status).toBe('accepted');
+    if (removedLabels.status !== 'accepted' || removedLabels.value.labels === undefined) {
+      throw new Error('Expected the removed placement set to reconstruct.');
+    }
+    expect(removedLabels.value.labels.placements).toHaveLength(currentLabels.placements.length);
+
     const rerolled = rerollWorldFeatureName({
       mapId: accepted.document.rootMapId,
       worldSeed: accepted.document.worldSeed,
@@ -639,6 +874,72 @@ describe('accepted M3 physical atlas integration', () => {
     const preserved = acceptedMap.aspects.find(
       ({ aspectName }) => aspectName === 'worldTerrain.macroElevation',
     );
+    const labelLockId = required(parseStableId('lock', '587f19b3-e3ed-4db5-845b-f9e0ae66ab5d'));
+    const lockedLabels = {
+      ...accepted.document,
+      maps: accepted.document.maps.map((map) =>
+        map.mapId === accepted.document.rootMapId
+          ? {
+              ...map,
+              locks: [
+                ...map.locks,
+                {
+                  lockId: labelLockId,
+                  target: { aspectId: selectedProposal.target.aspect.aspectId },
+                },
+              ],
+            }
+          : map,
+      ),
+    } as WorldDocument;
+    const lockedReplacement = commitAtlasLabelProposal(
+      lockedLabels,
+      labelCommand(lockedLabels, replacementProposals, 'replacement', [
+        selectedProposal.target.aspect.aspectId,
+      ]),
+    );
+    expect(lockedReplacement.ok).toBe(false);
+    expect(lockedReplacement.document).toBe(lockedLabels);
+    if (lockedReplacement.ok) throw new Error('Expected locked label rejection.');
+    expect(lockedReplacement.diagnostics.map(({ code }) => code)).toContain(
+      'atlas-transaction.lock.conflict',
+    );
+
+    const labelConstraintId = required(
+      parseStableId('constraint', 'e8351ce7-c1e1-45df-a477-035631f62c82'),
+    );
+    const constrainedLabels = {
+      ...accepted.document,
+      maps: accepted.document.maps.map((map) =>
+        map.mapId === accepted.document.rootMapId
+          ? {
+              ...map,
+              constraints: [
+                ...map.constraints,
+                {
+                  constraintId: labelConstraintId,
+                  constraintKind: 'proof.keep-within-extent' as const,
+                  target: { aspectId: selectedProposal.target.aspect.aspectId },
+                  parameters: {},
+                },
+              ],
+            }
+          : map,
+      ),
+    } as WorldDocument;
+    const constrainedReplacement = commitAtlasLabelProposal(
+      constrainedLabels,
+      labelCommand(constrainedLabels, replacementProposals, 'replacement', [
+        selectedProposal.target.aspect.aspectId,
+      ]),
+    );
+    expect(constrainedReplacement.ok).toBe(false);
+    expect(constrainedReplacement.document).toBe(constrainedLabels);
+    if (constrainedReplacement.ok) throw new Error('Expected constrained label rejection.');
+    expect(constrainedReplacement.diagnostics.map(({ code }) => code)).toContain(
+      'atlas-transaction.constraint.conflict',
+    );
+
     const replaced = commitAtlasLabelProposal(
       accepted.document,
       labelCommand(accepted.document, replacementProposals, 'replacement', [
@@ -687,6 +988,44 @@ describe('accepted M3 physical atlas integration', () => {
     expect(stalePlacement.ok).toBe(false);
     if (stalePlacement.ok) throw new Error('Expected stale placement linkage rejection.');
     expect(stalePlacement.document).toBe(accepted.document);
+
+    const removedForReroll = currentLabels.placements.find(
+      ({ sourceEntityId }) => sourceEntityId === placedName.entityId,
+    );
+    if (removedForReroll === undefined) throw new Error('Expected placed-name placement.');
+    const rerolledWithoutPlacement = commitAtlasLabelProposal(
+      accepted.document,
+      labelCommand(
+        accepted.document,
+        acceptedMap.aspects
+          .filter(
+            ({ aspectName, aspectId }) =>
+              (aspectName === 'worldFeature.nameContent' || aspectName === 'label.placement') &&
+              aspectId !== removedForReroll.placementId,
+          )
+          .map((aspect) =>
+            aspect.aspectId === staleNameProposal.target.aspect.aspectId
+              ? staleNameProposal
+              : proposalFromAccepted(aspect),
+          ),
+        'replacement',
+        [staleNameProposal.target.aspect.aspectId, removedForReroll.placementId],
+      ),
+    );
+    expect(rerolledWithoutPlacement.ok).toBe(true);
+    if (!rerolledWithoutPlacement.ok) {
+      throw new Error(JSON.stringify(rerolledWithoutPlacement.diagnostics));
+    }
+    const rerolledLabels = reconstructAcceptedAtlas(rerolledWithoutPlacement.document);
+    expect(rerolledLabels.status).toBe('accepted');
+    if (rerolledLabels.status !== 'accepted' || rerolledLabels.value.labels === undefined) {
+      throw new Error('Expected rerolled labels without the stale placement.');
+    }
+    expect(
+      rerolledLabels.value.labels.placements.some(
+        ({ sourceEntityId }) => sourceEntityId === placedName.entityId,
+      ),
+    ).toBe(false);
   }, 300_000);
 });
 
@@ -732,7 +1071,7 @@ function labelCommand(
   document: WorldDocument,
   proposals: readonly AspectReplacementProposal[],
   operation: 'initial' | 'replacement' = 'initial',
-  explicitlyIncrementedAspectIds: readonly AcceptedAspectRecord['aspectId'][] = [],
+  explicitlyChangedAspectIds: readonly AcceptedAspectRecord['aspectId'][] = [],
 ) {
   return {
     kind: ATLAS_LABEL_DOCUMENT_COMMAND_KIND,
@@ -748,8 +1087,64 @@ function labelCommand(
         variantRevision,
       })) ?? [],
     proposedAspects: proposals,
-    explicitlyIncrementedAspectIds,
+    explicitlyChangedAspectIds,
   } as const;
+}
+
+function placementProposalForAcceptedName(
+  document: WorldDocument,
+  nameContent: WorldFeatureNameContent,
+  acceptedPeerPlacements: readonly AtlasLabelPlacement[],
+): AtlasLabelPlacementProposal {
+  const metrics = createAtlasGlyphMetricSnapshot(ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_PACK);
+  if (!metrics.ok) throw new Error(JSON.stringify(metrics.diagnostics));
+  const placement = resolveAtlasLabelPlacements({
+    mapId: document.rootMapId,
+    worldSeed: document.worldSeed,
+    sceneExtent: {
+      minXTicks: 0,
+      minYTicks: 0,
+      maxXTicks: 2_048 * 1_024,
+      maxYTicks: 1_024 * 1_024,
+    },
+    metrics: metrics.value,
+    acceptedPeerPlacements,
+    candidates: [
+      {
+        nameContent,
+        placementVariantRevision: required(createVariantRevision(0)),
+        glyphPackSha256: metrics.value.packSha256,
+        priority: 50,
+        fontSizeTicks: 24 * 1_024,
+        anchor: { xTicks: 200 * 1_024, yTicks: 700 * 1_024 },
+        variants: [{ variantKey: 'center', baselineOffset: { xTicks: 0, yTicks: 0 } }],
+      },
+    ],
+  });
+  if (!placement.ok) throw new Error(JSON.stringify(placement.diagnostics));
+  const proposal = placement.proposals[0];
+  if (proposal === undefined) throw new Error('Expected one added placement proposal.');
+  return proposal;
+}
+
+function replaceAcceptedAspect(
+  document: WorldDocument,
+  aspectId: AcceptedAspectRecord['aspectId'],
+  replacement: Readonly<Record<string, unknown>>,
+): WorldDocument {
+  return {
+    ...document,
+    maps: document.maps.map((map) =>
+      map.mapId === document.rootMapId
+        ? {
+            ...map,
+            aspects: map.aspects.map((aspect) =>
+              aspect.aspectId === aspectId ? { ...aspect, ...replacement } : aspect,
+            ),
+          }
+        : map,
+    ),
+  };
 }
 
 function proposalFromAccepted(aspect: AcceptedAspectRecord): AspectReplacementProposal {

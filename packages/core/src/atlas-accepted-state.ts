@@ -202,6 +202,7 @@ export function reconstructAcceptedAtlas(document: WorldDocument): ReconstructAc
   }
   const labels = reconstructAcceptedAtlasLabels(
     root,
+    document.worldSeed,
     geography,
     physical.status === 'accepted' ? physical.value : undefined,
   );
@@ -238,11 +239,19 @@ export function reconstructAcceptedAtlas(document: WorldDocument): ReconstructAc
 }
 
 function hasValidAcceptedDiagnostics(map: WorldMap): boolean {
-  return map.aspects.every((aspect) =>
-    aspect.diagnostics.every(
-      ({ severity, target }) => severity !== 'error' && target.aspectId === aspect.aspectId,
-    ),
-  );
+  return map.aspects.every((aspect) => {
+    const diagnostics: unknown = aspect.diagnostics;
+    return (
+      Array.isArray(diagnostics) &&
+      diagnostics.every(
+        (diagnostic) =>
+          isRecord(diagnostic) &&
+          diagnostic.severity !== 'error' &&
+          isRecord(diagnostic.target) &&
+          diagnostic.target.aspectId === aspect.aspectId,
+      )
+    );
+  });
 }
 
 function appearanceParametersMatchOutputs(...aspects: readonly AcceptedAspectRecord[]): boolean {

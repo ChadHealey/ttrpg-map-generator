@@ -4,6 +4,12 @@ import { sha256 } from './sha-256.js';
 
 export const ATLAS_GLYPH_PACK_UNITS_PER_EM = 4_096 as const;
 export const ATLAS_GLYPH_PACK_MAX_POINTS = 50_000 as const;
+export const ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_ASSET_ID =
+  'atlas-glyphs.alegreya-medium-ascii-v1' as const;
+export const ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_ASSET_SCHEMA_VERSION = 1 as const;
+export const ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_BEHAVIOR_VERSION = 1 as const;
+export const ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_PACK_SHA256 =
+  'aafd639d37f5e6a9f4a2be8e773dd8a74bb96760486c800c28c827de624bb557' as const;
 const ATLAS_ALEGREYA_SOURCE_URL =
   'https://github.com/google/fonts/blob/40478177239cbf3bac07908ef0738afee0f72be7/ofl/alegreya/Alegreya%5Bwght%5D.ttf';
 const ATLAS_ALEGREYA_SOURCE_COMMIT = '40478177239cbf3bac07908ef0738afee0f72be7';
@@ -55,9 +61,9 @@ export interface AtlasGlyphPackSource {
 }
 
 export interface AtlasGlyphPack {
-  readonly assetId: 'atlas-glyphs.alegreya-medium-ascii-v1';
-  readonly assetSchemaVersion: 1;
-  readonly glyphBehaviorVersion: 1;
+  readonly assetId: typeof ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_ASSET_ID;
+  readonly assetSchemaVersion: typeof ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_ASSET_SCHEMA_VERSION;
+  readonly glyphBehaviorVersion: typeof ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_BEHAVIOR_VERSION;
   readonly unitsPerEm: typeof ATLAS_GLYPH_PACK_UNITS_PER_EM;
   readonly ascender: number;
   readonly descender: number;
@@ -133,9 +139,9 @@ export function validateAtlasGlyphPack(input: unknown): AtlasGlyphPackValidation
     return invalid('atlas-glyph-pack.asset.invalid', 'Glyph-pack shape is invalid.');
   const candidate = input;
   if (
-    candidate.assetId !== 'atlas-glyphs.alegreya-medium-ascii-v1' ||
-    candidate.assetSchemaVersion !== 1 ||
-    candidate.glyphBehaviorVersion !== 1 ||
+    candidate.assetId !== ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_ASSET_ID ||
+    candidate.assetSchemaVersion !== ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_ASSET_SCHEMA_VERSION ||
+    candidate.glyphBehaviorVersion !== ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_BEHAVIOR_VERSION ||
     candidate.unitsPerEm !== ATLAS_GLYPH_PACK_UNITS_PER_EM ||
     !isSafeInteger(candidate.ascender) ||
     !isSafeInteger(candidate.descender) ||

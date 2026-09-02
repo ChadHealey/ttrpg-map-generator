@@ -2,6 +2,12 @@
 
 import type { AtlasGeographyRecords } from './atlas-geography-model.js';
 import {
+  ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_ASSET_ID,
+  ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_ASSET_SCHEMA_VERSION,
+  ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_BEHAVIOR_VERSION,
+  ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_PACK_SHA256,
+} from './atlas-glyph-pack.js';
+import {
   ATLAS_LABEL_PLACEMENT_ASPECT_NAME,
   ATLAS_LABEL_PLACEMENT_BEHAVIOR_VERSION,
   ATLAS_LABEL_PLACEMENT_GENERATOR_ID,
@@ -9,7 +15,13 @@ import {
   type AtlasLabelPlacement,
   deriveAtlasLabelPlacementAspectId,
 } from './atlas-label-placement.js';
+import { createVariantRevision } from './compatibility.js';
 import type { AcceptedAspectRecord } from './generated-aspects.js';
+import {
+  DETERMINISTIC_STREAM_VERSION,
+  SEED_DERIVATION_VERSION,
+  type WorldSeed,
+} from './seed-input.js';
 import type { WorldMap } from './world-document.js';
 import {
   collectWorldFeatureNameSources,
@@ -45,6 +57,7 @@ export function isAtlasLabelAcceptedAspectName(value: string): boolean {
 /** Reconstruct accepted records without loading a glyph pack or invoking either producer. */
 export function reconstructAcceptedAtlasLabels(
   map: WorldMap,
+  worldSeed: WorldSeed,
   geography: AtlasGeographyRecords,
   physical: WorldPhysicalContextRecords | undefined,
 ): ReconstructAcceptedAtlasLabelsResult {
@@ -79,7 +92,7 @@ export function reconstructAcceptedAtlasLabels(
     if (
       source?.nameKind !== output.nameKind ||
       source.entityId !== output.entityId ||
-      !validNameEnvelope(aspect, output)
+      !validNameEnvelope(aspect, output, worldSeed)
     ) {
       return invalid('An accepted world-feature name has invalid ownership or provenance.');
     }
@@ -93,7 +106,7 @@ export function reconstructAcceptedAtlasLabels(
   }
 
   const placements: AtlasLabelPlacement[] = [];
-  let packFingerprint: string | undefined;
+  let packIdentity: string | undefined;
   for (const aspect of placementAspects) {
     const nameAspect = nameAspectByEntity.get(aspect.entityId);
     const name = nameAspect?.acceptedOutput as WorldFeatureNameContent | undefined;
@@ -104,14 +117,15 @@ export function reconstructAcceptedAtlasLabels(
     if (
       nameAspect === undefined ||
       name === undefined ||
-      !validPlacementEnvelope(aspect, output, name, nameAspect)
+      !validPlacementEnvelope(aspect, output, name, nameAspect, worldSeed)
     ) {
       return invalid('An accepted atlas placement has invalid name linkage or provenance.');
     }
-    if (packFingerprint !== undefined && packFingerprint !== output.glyphPackSha256) {
+    const identity = glyphPackIdentity(output);
+    if (packIdentity !== undefined && packIdentity !== identity) {
       return invalid('Accepted atlas placements reference more than one glyph pack.');
     }
-    packFingerprint = output.glyphPackSha256;
+    packIdentity = identity;
     placements.push(output);
   }
   if (new Set(placementAspects.map(({ entityId }) => entityId)).size !== placementAspects.length) {
@@ -131,18 +145,26 @@ export function reconstructAcceptedAtlasLabels(
   });
 }
 
-function validNameEnvelope(aspect: AcceptedAspectRecord, output: WorldFeatureNameContent): boolean {
+function validNameEnvelope(
+  aspect: AcceptedAspectRecord,
+  output: WorldFeatureNameContent,
+  worldSeed: WorldSeed,
+): boolean {
   const parameters = aspect.parameters as Readonly<Record<string, unknown>>;
+  const origin: unknown = output.origin;
   return (
     validateWorldFeatureNameContent(output) &&
+    (origin === 'generated' || origin === 'manual-override') &&
     aspect.aspectId === deriveWorldFeatureNameAspectId(output.entityId) &&
     aspect.aspectName === WORLD_FEATURE_NAME_ASPECT_NAME &&
     aspect.generatorId === WORLD_FEATURE_NAME_GENERATOR_ID &&
     aspect.generatorVersion === WORLD_FEATURE_NAME_BEHAVIOR_VERSION &&
     aspect.parameterSchemaVersion === WORLD_FEATURE_NAME_PARAMETER_SCHEMA_VERSION &&
     aspect.variantRevision === output.variantRevision &&
+    createVariantRevision(aspect.variantRevision).ok &&
     aspect.seedScope === 'map/entity' &&
-    validSeedEnvelope(aspect) &&
+    validSeedEnvelope(aspect, worldSeed) &&
+    Array.isArray(aspect.dependencyAspects) &&
     aspect.dependencyAspects.length === 0 &&
     parameters.parameterSchemaVersion === WORLD_FEATURE_NAME_PARAMETER_SCHEMA_VERSION &&
     parameters.nameContentBehaviorVersion === output.nameContentBehaviorVersion &&
@@ -156,8 +178,10 @@ function validPlacementEnvelope(
   output: AtlasLabelPlacement,
   name: WorldFeatureNameContent,
   nameAspect: AcceptedAspectRecord,
+  worldSeed: WorldSeed,
 ): boolean {
   const parameters = aspect.parameters as Readonly<Record<string, unknown>>;
+  const glyphAssetId: unknown = output.glyphAssetId;
   return (
     output.placementId === deriveAtlasLabelPlacementAspectId(name.entityId) &&
     aspect.aspectId === output.placementId &&
@@ -167,16 +191,21 @@ function validPlacementEnvelope(
     aspect.generatorVersion === ATLAS_LABEL_PLACEMENT_BEHAVIOR_VERSION &&
     aspect.parameterSchemaVersion === ATLAS_LABEL_PLACEMENT_PARAMETER_SCHEMA_VERSION &&
     aspect.variantRevision === output.variantRevision &&
+    createVariantRevision(aspect.variantRevision).ok &&
     aspect.seedScope === 'map/entity' &&
-    validSeedEnvelope(aspect) &&
+    validSeedEnvelope(aspect, worldSeed) &&
+    Array.isArray(aspect.dependencyAspects) &&
     aspect.dependencyAspects.length === 1 &&
-    aspect.dependencyAspects[0]?.aspectId === nameAspect.aspectId &&
+    isRecord(aspect.dependencyAspects[0]) &&
+    aspect.dependencyAspects[0].aspectId === nameAspect.aspectId &&
     output.sourceEntityId === name.entityId &&
     output.sourceNameAspectId === nameAspect.aspectId &&
     output.sourceNameVariantRevision === name.variantRevision &&
     output.displayText === name.displayName &&
-    output.glyphAssetSchemaVersion === 1 &&
-    output.glyphBehaviorVersion === 1 &&
+    glyphAssetId === ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_ASSET_ID &&
+    output.glyphAssetSchemaVersion === ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_ASSET_SCHEMA_VERSION &&
+    output.glyphBehaviorVersion === ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_BEHAVIOR_VERSION &&
+    output.glyphPackSha256 === ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_PACK_SHA256 &&
     output.placementBehaviorVersion === ATLAS_LABEL_PLACEMENT_BEHAVIOR_VERSION &&
     /^[a-f0-9]{64}$/u.test(output.glyphPackSha256) &&
     parameters.parameterSchemaVersion === ATLAS_LABEL_PLACEMENT_PARAMETER_SCHEMA_VERSION &&
@@ -255,10 +284,14 @@ function hasPlacementShape(value: unknown): value is AtlasLabelPlacement {
   );
 }
 
-function validSeedEnvelope(aspect: AcceptedAspectRecord): boolean {
-  const seed = aspect.seedMetadata;
+function validSeedEnvelope(aspect: AcceptedAspectRecord, worldSeed: WorldSeed): boolean {
+  const seed: unknown = aspect.seedMetadata;
+  if (!isRecord(seed)) return false;
   return (
+    seed.seedDerivationVersion === SEED_DERIVATION_VERSION &&
+    seed.deterministicStreamVersion === DETERMINISTIC_STREAM_VERSION &&
     seed.seedScope === 'map/entity' &&
+    seed.worldSeed === worldSeed &&
     seed.mapId === aspect.mapId &&
     seed.entityId === aspect.entityId &&
     seed.aspectName === aspect.aspectName &&
@@ -269,9 +302,26 @@ function validSeedEnvelope(aspect: AcceptedAspectRecord): boolean {
 }
 
 function validDiagnostics(aspect: AcceptedAspectRecord): boolean {
-  return aspect.diagnostics.every(
-    ({ severity, target }) => severity !== 'error' && target.aspectId === aspect.aspectId,
+  const diagnostics: unknown = aspect.diagnostics;
+  return (
+    Array.isArray(diagnostics) &&
+    diagnostics.every(
+      (diagnostic) =>
+        isRecord(diagnostic) &&
+        diagnostic.severity !== 'error' &&
+        isRecord(diagnostic.target) &&
+        diagnostic.target.aspectId === aspect.aspectId,
+    )
   );
+}
+
+function glyphPackIdentity(output: AtlasLabelPlacement): string {
+  return [
+    output.glyphAssetId,
+    String(output.glyphAssetSchemaVersion),
+    String(output.glyphBehaviorVersion),
+    output.glyphPackSha256,
+  ].join('\0');
 }
 
 function compareEntity(left: AcceptedAspectRecord, right: AcceptedAspectRecord): number {

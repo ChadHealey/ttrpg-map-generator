@@ -91,7 +91,8 @@ export interface CommitAtlasLabelProposalCommand {
   readonly expectedWorldSeed: WorldDocument['worldSeed'];
   readonly expectedAspectRevisions: readonly ExpectedAtlasAspectRevision[];
   readonly proposedAspects: readonly AspectReplacementProposal[];
-  readonly explicitlyIncrementedAspectIds: readonly AspectId[];
+  /** Replaced, added, or removed name/placement aspects selected by this operation. */
+  readonly explicitlyChangedAspectIds: readonly AspectId[];
 }
 
 export interface AtlasDocumentTransactionDiagnostic {

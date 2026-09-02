@@ -16,6 +16,7 @@ import { incrementVariantRevision } from './compatibility.js';
 import type { AcceptedAspectRecord, AspectReplacementProposal } from './generated-aspects.js';
 import { type AspectId, compareStableReferences, type EntityId } from './identity.js';
 import { createImmutableDomainSnapshot } from './immutable-domain-snapshot.js';
+import { DETERMINISTIC_STREAM_VERSION, SEED_DERIVATION_VERSION } from './seed-input.js';
 import type { MapEntity, WorldDocument, WorldMap } from './world-document.js';
 import { validateWorldDocumentOwnership } from './world-document-ownership.js';
 import { deepEqual } from './world-document-transaction-support.js';
@@ -226,12 +227,16 @@ function validProposalAddress(
   proposal: AspectReplacementProposal,
   sourceIds: ReadonlySet<EntityId>,
 ): boolean {
-  const seed = proposal.seedMetadata;
+  const seed: unknown = proposal.seedMetadata;
+  const proposalDiagnostics: unknown = proposal.diagnostics;
+  if (!isRecord(seed) || !Array.isArray(proposalDiagnostics)) return false;
   return (
     proposal.target.mapId === map.mapId &&
     sourceIds.has(proposal.target.entityId) &&
     isAtlasLabelAcceptedAspectName(proposal.target.aspectName) &&
     proposal.seedScope === 'map/entity' &&
+    seed.seedDerivationVersion === SEED_DERIVATION_VERSION &&
+    seed.deterministicStreamVersion === DETERMINISTIC_STREAM_VERSION &&
     seed.seedScope === 'map/entity' &&
     seed.worldSeed === document.worldSeed &&
     seed.mapId === map.mapId &&
@@ -240,9 +245,12 @@ function validProposalAddress(
     seed.generatorVersion === proposal.generatorVersion &&
     seed.aspectName === proposal.target.aspectName &&
     seed.variantRevision === proposal.target.variantRevision &&
-    proposal.diagnostics.every(
-      ({ severity, target }) =>
-        severity !== 'error' && target.aspectId === proposal.target.aspect.aspectId,
+    proposalDiagnostics.every(
+      (diagnostic) =>
+        isRecord(diagnostic) &&
+        diagnostic.severity !== 'error' &&
+        isRecord(diagnostic.target) &&
+        diagnostic.target.aspectId === proposal.target.aspect.aspectId,
     )
   );
 }
@@ -258,13 +266,19 @@ function validateOperation(
   );
   const currentById = new Map(current.map((aspect) => [aspect.aspectId, aspect]));
   const proposedById = new Map(proposed.map((aspect) => [aspect.aspectId, aspect]));
-  const explicit = [...new Set(command.explicitlyIncrementedAspectIds)].sort();
+  const explicit = [...new Set(command.explicitlyChangedAspectIds)].sort();
   const actualExplicit: AspectId[] = [];
-  let revisionsValid = true;
+  let revisionsValid = explicit.length === command.explicitlyChangedAspectIds.length;
   for (const aspect of proposed) {
     const previous = currentById.get(aspect.aspectId);
     if (previous === undefined) {
-      if (aspect.variantRevision !== 0) revisionsValid = false;
+      if (command.operationMode === ATLAS_LABEL_DOCUMENT_OPERATION_MODES.initial) {
+        if (aspect.variantRevision !== 0) revisionsValid = false;
+      } else if (aspect.aspectName !== 'label.placement' || aspect.variantRevision !== 0) {
+        revisionsValid = false;
+      } else {
+        actualExplicit.push(aspect.aspectId);
+      }
       continue;
     }
     const incremented = incrementVariantRevision(previous.variantRevision);
@@ -283,28 +297,34 @@ function validateOperation(
       revisionsValid = false;
     }
   }
-  const sameIds =
-    current.length === proposed.length &&
-    current.every(({ aspectId }) => proposedById.has(aspectId));
+  for (const aspect of current) {
+    if (proposedById.has(aspect.aspectId)) continue;
+    if (aspect.aspectName !== 'label.placement') revisionsValid = false;
+    else actualExplicit.push(aspect.aspectId);
+  }
+  const currentNameIds = current
+    .filter(({ aspectName }) => aspectName === 'worldFeature.nameContent')
+    .map(({ aspectId }) => aspectId)
+    .sort();
+  const proposedNameIds = proposed
+    .filter(({ aspectName }) => aspectName === 'worldFeature.nameContent')
+    .map(({ aspectId }) => aspectId)
+    .sort();
+  const sameNameIds = deepEqual(currentNameIds, proposedNameIds);
   const modeValid =
     command.operationMode === ATLAS_LABEL_DOCUMENT_OPERATION_MODES.initial
       ? current.length === 0 && explicit.length === 0
-      : current.length > 0 && sameIds && explicit.length > 0;
+      : current.length > 0 && sameNameIds && explicit.length > 0;
   const unchangedIsolated = current.every((before) => {
     if (explicit.includes(before.aspectId)) return true;
     const after = proposedById.get(before.aspectId);
     return after !== undefined && deepEqual(before, after);
   });
-  const visible =
-    current.length === 0 ||
-    current.some((before) => {
-      const after = proposedById.get(before.aspectId);
-      return explicit.includes(before.aspectId) && after !== undefined && !deepEqual(before, after);
-    });
+  const visible = current.length === 0 || actualExplicit.length > 0;
   if (
     !modeValid ||
     !revisionsValid ||
-    !deepEqual(explicit, actualExplicit.sort()) ||
+    !deepEqual(explicit, [...new Set(actualExplicit)].sort()) ||
     !unchangedIsolated
   ) {
     diagnostics.push(
@@ -339,7 +359,7 @@ function validateLocksAndConstraints(
   const changed = (aspectId: AspectId): boolean => {
     const before = current.get(aspectId);
     const after = next.get(aspectId);
-    return before !== undefined && after !== undefined && !deepEqual(before, after);
+    return before !== undefined && (after === undefined || !deepEqual(before, after));
   };
   const locks = map.locks.filter(({ target }) => changed(target.aspectId));
   const constraints = map.constraints.filter(({ target }) => changed(target.aspectId));
@@ -428,4 +448,8 @@ function compareRevision(
   right: CommitAtlasLabelProposalCommand['expectedAspectRevisions'][number],
 ): number {
   return compareStableReferences(left.aspectId, right.aspectId);
+}
+
+function isRecord(value: unknown): value is Readonly<Record<string, unknown>> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
