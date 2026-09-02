@@ -52,6 +52,25 @@ export interface AtlasFootprintSelectorState {
   readonly diagnostic: AtlasFootprintSelectorDiagnostic | undefined;
 }
 
+/** Project one canonical footprint for a disposable atlas overlay without changing accepted data. */
+export function projectAtlasFootprintOverlay(
+  footprint: RegionalRectangleFootprint,
+  scene: Pick<RenderScene, 'widthPx' | 'heightPx'>,
+): readonly AtlasFootprintOverlayPath[] {
+  const boundary = footprintBoundary(footprint);
+  if (!boundary.ok) return Object.freeze([]);
+  return Object.freeze(
+    projectAtlasPlanetPolyline(boundary.value, true).map((path) =>
+      Object.freeze({
+        isClosed: path.isClosed,
+        points: Object.freeze(
+          path.points.map((point) => atlasScenePointFromDisplayPoint(point, scene)),
+        ),
+      }),
+    ),
+  );
+}
+
 /** Start a transient selector at the current atlas centre without selecting a footprint. */
 export function activateAtlasFootprintSelector(
   scene: Pick<RenderScene, 'widthPx' | 'heightPx'>,
@@ -142,23 +161,15 @@ function createCandidate(
     transformVersion: 1,
   });
   if (!footprint.ok) return { ok: false, diagnostic: footprint.diagnostic };
-
   const boundary = footprintBoundary(footprint.value);
   if (!boundary.ok) return boundary;
-  const overlayPaths = projectAtlasPlanetPolyline(boundary.value, true).map((path) =>
-    Object.freeze({
-      isClosed: path.isClosed,
-      points: Object.freeze(
-        path.points.map((point) => atlasScenePointFromDisplayPoint(point, scene)),
-      ),
-    }),
-  );
+
   return {
     ok: true,
     value: Object.freeze({
       footprint: footprint.value,
       entityId: deriveRegionalFootprintEntityId(footprint.value),
-      overlayPaths: Object.freeze(overlayPaths),
+      overlayPaths: projectAtlasFootprintOverlay(footprint.value, scene),
     }),
   };
 }

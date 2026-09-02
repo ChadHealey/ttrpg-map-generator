@@ -780,7 +780,12 @@
 
     <div class="proof-grid">
       <div class="map-stack">
-        <ProofViewport {footprintSelectorSource} preview={atlas.preview} scene={atlas.scene} />
+        <ProofViewport
+          accepted={atlas.accepted}
+          {footprintSelectorSource}
+          preview={atlas.preview}
+          scene={atlas.scene}
+        />
       </div>
       <aside aria-labelledby="semantic-inspector-heading" class="evidence-card semantic-inspector">
         <p class="eyebrow">Semantic inspection</p>

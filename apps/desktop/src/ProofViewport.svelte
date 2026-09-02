@@ -12,6 +12,13 @@
     moveAtlasFootprintSelectorCursor,
     selectAtlasFootprintAt,
   } from './atlas-footprint-selector.js';
+  import {
+    type AtlasInheritedContextPreview,
+    type AtlasInheritedContextPreviewDiagnostic,
+    buildAtlasInheritedContextPreview,
+    isCurrentAtlasInheritedContextPreview,
+  } from './atlas-inherited-context-preview.js';
+  import type { AcceptedAtlasState } from './atlas-workflow-generation.js';
   import { findTopmostNodeAt } from './scene-selection.js';
   import {
     canvasBackingStoreDimensions,
@@ -26,6 +33,7 @@
   export let scene: RenderScene | undefined;
   export let preview: AtlasLandWaterPreview | undefined = undefined;
   export let footprintSelectorSource: AtlasFootprintSelectorSource | undefined = undefined;
+  export let accepted: AcceptedAtlasState | undefined = undefined;
 
   const PAN_STEP_PX = 64;
   const ZOOM_FACTOR = 1.2;
@@ -52,30 +60,44 @@
   let dragState: DragState | undefined;
   let hasDragged = false;
   let footprintSelector = cancelAtlasFootprintSelector();
+  let inheritedContextPreview: AtlasInheritedContextPreview | undefined;
+  let inheritedContextDiagnostic: AtlasInheritedContextPreviewDiagnostic | undefined;
 
   $: selectedNode = scene?.nodes.find(({ id }) => id === selectedNodeId) ?? scene?.nodes[1];
+  $: activeInheritedContextDiagnostic = inheritedContextDiagnostic ?? footprintSelector.diagnostic;
   $: footprintSelectionAvailable =
     scene !== undefined && preview === undefined && footprintSelectorSource !== undefined;
   $: if (!footprintSelectionAvailable && footprintSelector.mode !== 'inactive') {
     footprintSelector = cancelAtlasFootprintSelector();
   }
+  $: if (
+    inheritedContextPreview !== undefined &&
+    !isCurrentAtlasInheritedContextPreview(
+      inheritedContextPreview,
+      accepted,
+      footprintSelector.candidate,
+    )
+  ) {
+    dismissInheritedContextPreview();
+  }
 
   // Updating a canvas width or height clears its backing store. Draw only after Svelte applies those
   // attributes so a newly accepted scene is not cleared after rendering.
   $: if (canvasContext !== undefined) {
-    void redrawAfterCanvasResize(scene, preview, footprintSelector);
+    void redrawAfterCanvasResize(scene, preview, footprintSelector, inheritedContextPreview);
   }
 
   onMount(() => {
     canvasContext = canvasElement.getContext('2d') ?? undefined;
     if (canvasContext === undefined) throw new Error('Canvas 2D rendering is not available');
-    redrawCanvas(scene, preview, footprintSelector);
+    redrawCanvas(scene, preview, footprintSelector, inheritedContextPreview);
   });
 
   function redrawCanvas(
     nextScene: RenderScene | undefined,
     nextPreview: AtlasLandWaterPreview | undefined,
     nextSelector: typeof footprintSelector,
+    nextInheritedContextPreview: AtlasInheritedContextPreview | undefined,
   ): void {
     if (canvasContext === undefined) return;
     canvasContext.save();
@@ -94,6 +116,7 @@
       );
       renderSceneToCanvas(canvasContext, nextScene);
       drawFootprintSelector(canvasContext, nextSelector);
+      drawInheritedContextPreview(canvasContext, nextInheritedContextPreview);
     }
     canvasContext.restore();
   }
@@ -102,16 +125,22 @@
     nextScene: RenderScene | undefined,
     nextPreview: AtlasLandWaterPreview | undefined,
     nextSelector: typeof footprintSelector,
+    nextInheritedContextPreview: AtlasInheritedContextPreview | undefined,
   ): Promise<void> {
     await tick();
-    if (nextScene !== scene || nextPreview !== preview || nextSelector !== footprintSelector)
+    if (
+      nextScene !== scene ||
+      nextPreview !== preview ||
+      nextSelector !== footprintSelector ||
+      nextInheritedContextPreview !== inheritedContextPreview
+    )
       return;
-    redrawCanvas(nextScene, nextPreview, nextSelector);
+    redrawCanvas(nextScene, nextPreview, nextSelector, nextInheritedContextPreview);
   }
 
   function updateViewport(nextViewport: ViewportState): void {
     viewport = nextViewport;
-    redrawCanvas(scene, preview, footprintSelector);
+    redrawCanvas(scene, preview, footprintSelector, inheritedContextPreview);
   }
 
   function panBy(deltaXPx: number, deltaYPx: number): void {
@@ -259,6 +288,7 @@
 
   function cancelFootprintSelection(): void {
     footprintSelector = cancelAtlasFootprintSelector();
+    dismissInheritedContextPreview();
   }
 
   function moveFootprintCursor(deltaXPx: number, deltaYPx: number): void {
@@ -277,12 +307,29 @@
 
   function selectFootprintAtScenePoint(scenePoint: RenderPoint): void {
     if (scene === undefined || footprintSelectorSource === undefined) return;
+    const priorCandidate = footprintSelector.candidate;
     footprintSelector = selectAtlasFootprintAt(
       footprintSelector,
       footprintSelectorSource,
       scene,
       scenePoint,
     );
+    if (footprintSelector.candidate !== priorCandidate) dismissInheritedContextPreview();
+  }
+
+  function requestInheritedContextPreview(): void {
+    const result = buildAtlasInheritedContextPreview(accepted, footprintSelector.candidate);
+    if (result.status === 'built') {
+      inheritedContextPreview = result.preview;
+      inheritedContextDiagnostic = undefined;
+      return;
+    }
+    inheritedContextDiagnostic = result.diagnostic;
+  }
+
+  function dismissInheritedContextPreview(): void {
+    inheritedContextPreview = undefined;
+    inheritedContextDiagnostic = undefined;
   }
 
   function toCanvasPoint(event: PointerEvent): RenderPoint {
@@ -375,6 +422,26 @@
     }
     context.restore();
   }
+
+  function drawInheritedContextPreview(
+    context: CanvasRenderingContext2D,
+    value: AtlasInheritedContextPreview | undefined,
+  ): void {
+    if (value === undefined) return;
+    context.save();
+    context.strokeStyle = '#285f79';
+    context.lineWidth = 4 / viewport.zoomRatio;
+    for (const path of value.overlayPaths) {
+      const first = path.points[0];
+      if (first === undefined) continue;
+      context.beginPath();
+      context.moveTo(first.xPx, first.yPx);
+      for (const point of path.points.slice(1)) context.lineTo(point.xPx, point.yPx);
+      if (path.isClosed) context.closePath();
+      context.stroke();
+    }
+    context.restore();
+  }
 </script>
 
 <div class="viewport-card">
@@ -404,10 +471,19 @@
         onclick={activateFootprintSelection}
         type="button">Select footprint</button
       >
-      {#if footprintSelector.mode === 'active'}<button
-          onclick={cancelFootprintSelection}
-          type="button">Cancel selection</button
-        >{/if}
+      {#if footprintSelector.mode === 'active'}
+        <button onclick={cancelFootprintSelection} type="button">Cancel selection</button>
+      {/if}
+      <button
+        disabled={footprintSelector.candidate === undefined || preview !== undefined}
+        onclick={requestInheritedContextPreview}
+        type="button">Preview inherited context</button
+      >
+      {#if inheritedContextPreview !== undefined}
+        <button onclick={dismissInheritedContextPreview} type="button"
+          >Dismiss inherited context</button
+        >
+      {/if}
       <button
         aria-label="Zoom out"
         disabled={scene === undefined || preview !== undefined}
@@ -435,7 +511,9 @@
   <figure>
     <figcaption>
       {preview === undefined
-        ? 'Accepted atlas — canonical PlanetPoints mapped through one RenderScene.'
+        ? inheritedContextPreview === undefined
+          ? 'Accepted atlas — canonical PlanetPoints mapped through one RenderScene.'
+          : 'DISPOSABLE INHERITED CONTEXT — not accepted, saveable, or promotable.'
         : 'DISPOSABLE COARSE PREVIEW — not accepted, saveable, or promotable.'}
     </figcaption>
     <canvas
@@ -444,7 +522,9 @@
       aria-label={preview === undefined
         ? footprintSelector.mode === 'active'
           ? 'Accepted whole-world ink atlas footprint selector'
-          : 'Accepted whole-world ink atlas'
+          : inheritedContextPreview === undefined
+            ? 'Accepted whole-world ink atlas'
+            : 'Accepted whole-world ink atlas with inherited-context footprint'
         : 'Disposable coarse atlas preview'}
       height={canvasBackingStoreDimensions(scene, PREVIEW_CANVAS_DIMENSIONS).heightPx}
       onkeydown={onCanvasKeyDown}
@@ -471,7 +551,13 @@
 
 <aside aria-labelledby="selection-heading" class="selection-card">
   <p class="eyebrow">Render inspection</p>
-  <h2 id="selection-heading">{preview === undefined ? 'Scene node' : 'Preview boundary'}</h2>
+  <h2 id="selection-heading">
+    {preview === undefined
+      ? inheritedContextPreview === undefined
+        ? 'Scene node'
+        : 'Inherited context'
+      : 'Preview boundary'}
+  </h2>
   <label class="field-label" for="scene-node">Ordered node</label>
   <select
     bind:value={selectedNodeId}
@@ -486,7 +572,90 @@
       No accepted aspect IDs, revisions, semantic entities, or package paths exist in preview state.
     </p>
   {/if}
-  {#if footprintSelector.mode === 'active'}
+  {#if inheritedContextPreview !== undefined}
+    <p class="selection-title">Disposable inherited context</p>
+    <dl>
+      <div>
+        <dt>Footprint</dt>
+        <dd>{inheritedContextPreview.snapshot.footprintId}</dd>
+      </div>
+      <div>
+        <dt>Checksum</dt>
+        <dd>{inheritedContextPreview.snapshot.semanticChecksum.value}</dd>
+      </div>
+      <div>
+        <dt>Collar · mm</dt>
+        <dd>
+          {inheritedContextPreview.snapshot.collar.extent.minXMillimeters},
+          {inheritedContextPreview.snapshot.collar.extent.minYMillimeters} to
+          {inheritedContextPreview.snapshot.collar.extent.maxXMillimeters},
+          {inheritedContextPreview.snapshot.collar.extent.maxYMillimeters}
+        </dd>
+      </div>
+    </dl>
+    <h3>Source lineage</h3>
+    <ul>
+      {#each inheritedContextPreview.snapshot.sourceLineage as source (`${source.sourceMapId}:${source.sourceEntityId}`)}
+        <li>{source.sourceMapId} · {source.sourceEntityId}</li>
+      {/each}
+    </ul>
+    <h3>Source aspect versions</h3>
+    <ul>
+      {#each inheritedContextPreview.snapshot.sourceAspectVersions as source (source.sourceAspectId)}
+        <li>
+          {source.aspectName} · {source.sourceAspectId} · generator {source.generatorVersion} · schema
+          {source.parameterSchemaVersion} · revision {source.variantRevision}
+        </li>
+      {/each}
+    </ul>
+    <h3>Inherited fields</h3>
+    <ul>
+      {#each inheritedContextPreview.snapshot.fields as field (`${field.sourceAspectId}:${field.fieldKind}:${field.component}`)}
+        <li>
+          {field.fieldKind} · {field.component} · {field.valueEncoding} · {field.samples.length}
+          samples · {field.sourceMapId} · {field.sourceEntityId} · {field.sourceAspectId}
+        </li>
+      {/each}
+    </ul>
+    <h3>Clipped geometry anchors</h3>
+    <ul>
+      {#each inheritedContextPreview.snapshot.geometryAnchors as anchor (anchor.sourceAnchorId)}
+        <li>
+          {anchor.anchorKind} · {anchor.sourceAnchorId} · {anchor.paths.length} paths ·
+          {anchor.sourceMapId} · {anchor.sourceEntityId} · {anchor.sourceAspectId}
+        </li>
+      {/each}
+    </ul>
+    <h3>Boundary portals and water continuations</h3>
+    <ul>
+      {#each inheritedContextPreview.snapshot.boundaryPortals as portal (portal.portalId)}
+        <li>
+          {portal.portalKind} · {portal.portalId} · {portal.sourceMapId} ·
+          {portal.sourceEntityId} · {portal.sourceAspectId}
+        </li>
+      {/each}
+    </ul>
+    <h3>Named anchors</h3>
+    <ul>
+      {#each inheritedContextPreview.snapshot.namedAnchors as anchor (anchor.sourceAspectId)}
+        <li>
+          {anchor.nameKind} · {anchor.displayName} · {anchor.sourceMapId} ·
+          {anchor.sourceEntityId} · {anchor.sourceAspectId}
+        </li>
+      {/each}
+    </ul>
+    {#if activeInheritedContextDiagnostic !== undefined}
+      <section aria-live="polite" aria-label="Inherited context diagnostic">
+        <p><code>{activeInheritedContextDiagnostic.code}</code></p>
+        <p>{activeInheritedContextDiagnostic.message}</p>
+      </section>
+    {/if}
+  {:else if activeInheritedContextDiagnostic !== undefined}
+    <section aria-live="polite" aria-label="Inherited context diagnostic">
+      <p><code>{activeInheritedContextDiagnostic.code}</code></p>
+      <p>{activeInheritedContextDiagnostic.message}</p>
+    </section>
+  {:else if footprintSelector.mode === 'active'}
     <p class="selection-title">Footprint selector active</p>
     {#if footprintSelector.candidate !== undefined}
       <dl>
@@ -502,9 +671,6 @@
           </dd>
         </div>
       </dl>
-    {:else if footprintSelector.diagnostic !== undefined}
-      <p><code>{footprintSelector.diagnostic.code}</code></p>
-      <p>{footprintSelector.diagnostic.message}</p>
     {:else}
       <p>Choose an atlas location with the pointer or keyboard cursor.</p>
     {/if}
