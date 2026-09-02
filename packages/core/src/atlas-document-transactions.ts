@@ -1,6 +1,7 @@
 /** Atomic validation and acceptance of complete Milestone 2 atlas proposals. */
 
 import { createAspectDependencyGraph } from './aspect-dependency-graph.js';
+import { reconstructAcceptedAtlas } from './atlas-accepted-state.js';
 import {
   acceptAtlasProposals,
   invalidAtlasProposalDiagnostic,
@@ -77,12 +78,15 @@ export function commitAtlasProposal(
     .filter(({ aspectName }) => isAppearanceAspectName(aspectName))
     .map(({ aspectId }) => Object.freeze({ aspectId }))
     .sort((left, right) => compareStableReferences(left.aspectId, right.aspectId));
+  const proposedAspectIds = new Set(proposedAspects.map(({ aspectId }) => aspectId));
   const decorationReferences = [
     ...new Map(
-      [...currentMap.decoration.aspectReferences, ...appearanceReferences].map((reference) => [
-        reference.aspectId,
-        reference,
-      ]),
+      [
+        ...currentMap.decoration.aspectReferences.filter(({ aspectId }) =>
+          proposedAspectIds.has(aspectId),
+        ),
+        ...appearanceReferences,
+      ].map((reference) => [reference.aspectId, reference]),
     ).values(),
   ].sort((left, right) => compareStableReferences(left.aspectId, right.aspectId));
   const currentEntitiesById = new Map(
@@ -104,9 +108,26 @@ export function commitAtlasProposal(
       document.maps.map((map) => (map.mapId === proposedMap.mapId ? proposedMap : map)),
     ),
   });
+  let reconstructed: ReturnType<typeof reconstructAcceptedAtlas>;
+  try {
+    reconstructed = reconstructAcceptedAtlas(candidate);
+  } catch {
+    diagnostics.push(
+      diagnostic(
+        ATLAS_DOCUMENT_TRANSACTION_DIAGNOSTIC_CODES.invalidProposal,
+        proposedAspects.map(({ aspectId }) => aspectId),
+        command.proposedEntities.map(({ entityId }) => entityId),
+        [],
+        'The complete atlas proposal contains invalid accepted-state data.',
+        'Regenerate every proposal from the same accepted source snapshot and stable IDs.',
+      ),
+    );
+    return rejection(document, diagnostics);
+  }
   if (
     validateWorldDocumentOwnership(candidate).length > 0 ||
-    !createAspectDependencyGraph(candidate).ok
+    !createAspectDependencyGraph(candidate).ok ||
+    reconstructed.status !== 'accepted'
   ) {
     diagnostics.push(
       diagnostic(

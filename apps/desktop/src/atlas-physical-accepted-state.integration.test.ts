@@ -27,6 +27,7 @@ import {
   type InheritedContextField,
   type InheritedContextSnapshot,
   type InheritedContextSnapshotContent,
+  isAtlasLabelAcceptedAspectName,
   MAP_COORDINATE_SYSTEM_KINDS,
   MAP_KINDS,
   MAP_RELATIONSHIP_KINDS,
@@ -72,9 +73,21 @@ interface PhysicalFixture {
 
 let fixture: PhysicalFixture | undefined;
 
+const PHYSICAL_ASPECT_NAMES = new Set([
+  'worldTerrain.mountainSystems',
+  'worldClimate.temperature',
+  'worldClimate.prevailingWinds',
+  'worldClimate.moisture',
+  'worldClimate.zones',
+  'worldEcology.biomeBelts',
+  'worldHydrology.watersheds',
+  'worldHydrology.majorRivers',
+  'worldHydrology.majorLakes',
+]);
+
 describe('accepted M3 physical atlas integration', () => {
   beforeAll(async () => {
-    const m2 = await commitGeneratedAtlas('initial-atlas');
+    const m2 = m2Fixture(await commitGeneratedAtlas('initial-atlas'));
     const proposals = physicalProposals(m2, 0);
     const result = commitAtlasPhysicalProposal(m2.document, command(m2.document, proposals, []));
     if (!result.ok) throw new Error(JSON.stringify(result.diagnostics));
@@ -1245,6 +1258,31 @@ function physicalProposals(
     hydrology.patch.majorRivers,
     hydrology.patch.majorLakes,
   ] as const;
+}
+
+function m2Fixture(accepted: AcceptedAtlasState): AcceptedAtlasState {
+  const root = accepted.document.maps.find(({ mapId }) => mapId === accepted.document.rootMapId);
+  if (root?.mapKind !== 'world') throw new Error('Expected accepted world atlas.');
+  const aspects = root.aspects.filter(
+    ({ aspectName }) =>
+      !PHYSICAL_ASPECT_NAMES.has(aspectName) && !isAtlasLabelAcceptedAspectName(aspectName),
+  );
+  const aspectIds = new Set(aspects.map(({ aspectId }) => aspectId));
+  const ownerIds = new Set(aspects.map(({ entityId }) => entityId));
+  const m2Root = Object.freeze({
+    ...root,
+    entities: Object.freeze(root.entities.filter(({ entityId }) => ownerIds.has(entityId))),
+    aspects: Object.freeze(aspects),
+    decoration: Object.freeze({
+      aspectReferences: Object.freeze(
+        root.decoration.aspectReferences.filter(({ aspectId }) => aspectIds.has(aspectId)),
+      ),
+    }),
+  });
+  return Object.freeze({
+    ...accepted,
+    document: Object.freeze({ ...accepted.document, maps: Object.freeze([m2Root]) }),
+  });
 }
 
 function withSuppliedPoleContext(document: WorldDocument): WorldDocument {

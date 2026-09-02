@@ -43,6 +43,7 @@ import { compareStableReferences, type EntityId, parseSemanticKey } from './iden
 import { createImmutableDomainSnapshot } from './immutable-domain-snapshot.js';
 import { MAP_COORDINATE_SYSTEM_KINDS, type WorldMap } from './world-document.js';
 import { deepEqual } from './world-document-transaction-support.js';
+import { WORLD_FEATURE_NAME_ASPECT_NAME } from './world-feature-name-model.js';
 
 export function validateAtlasProposalShape(
   currentMap: WorldMap,
@@ -182,6 +183,19 @@ function hasValidAcceptedEnvelopes(
   command: CommitAtlasProposalCommand,
   geography: AtlasGeographyRecords,
 ): boolean {
+  const m2Aspects = aspects.filter(({ aspectName }) =>
+    [
+      'worldTerrain.macroElevation',
+      'worldSurface.landWaterClassification',
+      'landmass.classification',
+      'islandGroup.classification',
+      'waterBody.classification',
+      'worldCoastline.geometry',
+      'atlas.coastlineAppearance',
+      'atlas.paperTreatment',
+      'atlas.waterDecoration',
+    ].includes(aspectName),
+  );
   const singletonIds = deriveAtlasSingletonEntityIds(command.targetMapId);
   const expectedSingletonOwners = new Map<
     string,
@@ -217,7 +231,13 @@ function hasValidAcceptedEnvelopes(
       (value) => [value.entityId, value] as const,
     ),
   );
-  const expectedEntityIds = new Set([...singletonIdsToArray(singletonIds), ...semanticById.keys()]);
+  const expectedEntityIds = new Set([
+    ...singletonIdsToArray(singletonIds),
+    ...semanticById.keys(),
+    ...aspects
+      .filter(({ aspectName }) => aspectName === WORLD_FEATURE_NAME_ASPECT_NAME)
+      .map(({ entityId }) => entityId),
+  ]);
   const proposedEntityIds = new Set(command.proposedEntities.map(({ entityId }) => entityId));
   if (
     expectedEntityIds.size !== proposedEntityIds.size ||
@@ -225,7 +245,7 @@ function hasValidAcceptedEnvelopes(
   ) {
     return false;
   }
-  return aspects.every((aspect) => {
+  return m2Aspects.every((aspect) => {
     const singleton = expectedSingletonOwners.get(aspect.aspectName);
     if (singleton !== undefined) {
       return (

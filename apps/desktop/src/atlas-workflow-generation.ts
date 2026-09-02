@@ -1,6 +1,7 @@
 /** Production composition of the existing atlas proposal generators and atomic transaction. */
 
 import {
+  ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_PACK,
   createAtlasAppearanceSeedInputs,
   generateAtlasAppearance,
   RESTRAINED_INK_ATLAS_STYLE,
@@ -8,15 +9,28 @@ import {
 import {
   type AspectReplacementProposal,
   ATLAS_DOCUMENT_COMMAND_KIND,
+  ATLAS_LABEL_DOCUMENT_COMMAND_KIND,
+  ATLAS_LABEL_DOCUMENT_OPERATION_MODES,
+  ATLAS_PHYSICAL_DOCUMENT_COMMAND_KIND,
+  ATLAS_PHYSICAL_DOCUMENT_OPERATION_MODES,
   type AtlasAppearanceRecords,
   type AtlasControls,
   type AtlasGeographyRecords,
+  collectWorldFeatureNameSources,
+  commitAtlasLabelProposal,
+  commitAtlasPhysicalProposal,
   commitAtlasProposal,
+  createAtlasGlyphMetricSnapshot,
   createDeterministicRandomStream,
+  createVariantRevision,
+  createWorldFeatureNameProposals,
+  DEFAULT_WORLD_PHYSICAL_CONTEXT_CONTROLS,
   deriveAtlasAspectId,
   deriveAtlasSingletonEntityIds,
   formatWorldSeed,
   parseWorldSeed,
+  reconstructAcceptedAtlas,
+  resolveAtlasLabelPlacements,
   type WorldDocument,
   type WorldSeed,
 } from '@ttrpg-map/core';
@@ -27,9 +41,13 @@ import {
   type AtlasGenerationProgress,
   type AtlasLandWaterPreview,
   createAtlasLandWaterGenerationInput,
+  generateAtlasAtmosphere,
   generateAtlasCanonicalCoastline,
+  generateAtlasEcology,
+  generateAtlasHydrology,
   generateAtlasLandWaterFull,
   generateAtlasLandWaterPreview,
+  generateAtlasMountainSystems,
   generateAtlasSemanticGeography,
   WORLD_ATLAS_FULL_PROFILE,
 } from '@ttrpg-map/generation';
@@ -109,6 +127,13 @@ export const productionAtlasWorkflowGeneration: AtlasWorkflowGenerationPort = Ob
   commit: generateAndCommit,
 });
 
+const ATLAS_LABEL_SCENE_EXTENT = Object.freeze({
+  minXTicks: 0,
+  minYTicks: 0,
+  maxXTicks: 2_048 * 1_024,
+  maxYTicks: 1_024 * 1_024,
+});
+
 async function generatePreview(
   request: AtlasWorkflowGenerationRequest,
   runtime: AtlasWorkflowRuntime,
@@ -143,19 +168,13 @@ async function generateAndCommit(
     }
     await runtime.yieldControl();
     if (runtime.isCancellationRequested()) return cancelled();
-    const retainedGeography = previous.document.maps[0]?.aspects
-      .filter(({ aspectName }) => !aspectName.startsWith('atlas.'))
+    const retainedAspects = previous.document.maps[0]?.aspects
+      .filter(({ aspectName }) => !isAppearanceAspectName(aspectName))
       .map(retainedAspectProposal);
-    if (retainedGeography === undefined) {
+    if (retainedAspects === undefined) {
       return failure(['atlas.transaction.source.invalid'], 'The accepted root map is missing.');
     }
-    return generateAppearanceAndCommit(
-      request,
-      prepared,
-      previous.geography,
-      retainedGeography,
-      runtime,
-    );
+    return generateM2AndCommit(request, prepared, previous.geography, retainedAspects, runtime);
   }
   const full = await generateAtlasLandWaterFull(
     prepared.input,
@@ -201,7 +220,7 @@ async function generateAndCommit(
   if (runtime.isCancellationRequested()) return cancelled();
   await runtime.yieldControl();
 
-  return generateAppearanceAndCommit(
+  const m2 = await generateM2AndCommit(
     request,
     prepared,
     coastline.patch.records,
@@ -211,15 +230,21 @@ async function generateAndCommit(
       coastline.patch.replacement,
     ]),
     runtime,
+    false,
   );
+  if (!m2.ok) return m2;
+  const completed = await composeAcceptedM3Atlas(m2.accepted, runtime);
+  if (completed.ok) reportCompletedProgress(request.operationId, runtime);
+  return completed;
 }
 
-async function generateAppearanceAndCommit(
+async function generateM2AndCommit(
   request: AtlasWorkflowGenerationRequest,
   prepared: Extract<ReturnType<typeof prepareInput>, { readonly ok: true }>,
   geography: AtlasGeographyRecords,
   geographyProposals: readonly AspectReplacementProposal[],
   runtime: AtlasWorkflowRuntime,
+  reportCompletion = true,
 ): Promise<AtlasWorkflowCommitResult> {
   const previous = request.accepted;
   reportValidatingProgress(request.operationId, runtime);
@@ -269,7 +294,10 @@ async function generateAppearanceAndCommit(
       rootSurfaceId: ATLAS_PROOF_ROOT_SURFACE_ID,
       radius: requiredAtlasRadius(request.controls.worldCircumferenceKm),
     }),
-    proposedEntities: atlasEntities(prepared.singletonIds, geography),
+    proposedEntities:
+      request.operation === 'appearance-reroll'
+        ? (document.maps[0]?.entities ?? [])
+        : atlasEntities(prepared.singletonIds, geography),
     proposedAspects,
     explicitlyIncrementedAspectIds: explicitlyIncrementedIds(request, proposedAspects),
   });
@@ -289,10 +317,23 @@ async function generateAppearanceAndCommit(
       scene.diagnostics.map(({ code }) => code),
       scene.diagnostics[0]?.message,
     );
+  if (reportCompletion) reportCompletedProgress(request.operationId, runtime);
+  return Object.freeze({
+    ok: true,
+    accepted: Object.freeze({
+      document: transaction.document,
+      geography,
+      appearance: appearance.patch.appearance,
+      scene: scene.value,
+    }),
+  });
+}
+
+function reportCompletedProgress(operationId: string, runtime: AtlasWorkflowRuntime): void {
   runtime.reportProgress(
     Object.freeze({
       progressVersion: ATLAS_LAND_WATER_PROGRESS_VERSION,
-      operationId: request.operationId,
+      operationId,
       profileId: WORLD_ATLAS_FULL_PROFILE.profileId,
       stage: 'completed',
       completedWork: ATLAS_GENERATION_PROGRESS_TOTAL_WORK,
@@ -303,15 +344,196 @@ async function generateAppearanceAndCommit(
       isTerminal: true,
     }),
   );
-  return Object.freeze({
-    ok: true,
-    accepted: Object.freeze({
-      document: transaction.document,
-      geography,
-      appearance: appearance.patch.appearance,
-      scene: scene.value,
-    }),
+}
+
+async function composeAcceptedM3Atlas(
+  m2: AcceptedAtlasState,
+  runtime: AtlasWorkflowRuntime,
+): Promise<AtlasWorkflowCommitResult> {
+  if (runtime.isCancellationRequested()) return cancelled();
+  await runtime.yieldControl();
+  if (runtime.isCancellationRequested()) return cancelled();
+
+  const root = m2.document.maps.find(({ mapId }) => mapId === m2.document.rootMapId);
+  if (root?.mapKind !== 'world') {
+    return failure(['atlas.transaction.source.invalid'], 'The accepted root map is missing.');
+  }
+  const singletonIds = deriveAtlasSingletonEntityIds(root.mapId);
+  const macroElevation = root.aspects.find(
+    ({ aspectName }) => aspectName === 'worldTerrain.macroElevation',
+  );
+  const landWater = root.aspects.find(
+    ({ aspectName }) => aspectName === 'worldSurface.landWaterClassification',
+  );
+  if (macroElevation === undefined || landWater === undefined) {
+    return failure(
+      ['atlas.transaction.source.invalid'],
+      'The accepted M2 source aspects are missing.',
+    );
+  }
+  const initialRevision = createVariantRevision(0);
+  if (!initialRevision.ok) return failure(['atlas.transaction.source.invalid']);
+
+  const mountain = generateAtlasMountainSystems({
+    worldSeed: m2.document.worldSeed,
+    worldMapId: root.mapId,
+    worldSurfaceEntityId: singletonIds.worldSurfaceEntityId,
+    macroElevationAspectId: macroElevation.aspectId,
+    landWaterClassificationAspectId: landWater.aspectId,
+    mountainSystemsVariantRevision: initialRevision.value,
+    mountainCharacter: DEFAULT_WORLD_PHYSICAL_CONTEXT_CONTROLS.mountainCharacter,
+    records: m2.geography,
   });
+  if (mountain.status !== 'proposed') return generationFailure(mountain.diagnostics);
+  if (runtime.isCancellationRequested()) return cancelled();
+  await runtime.yieldControl();
+  if (runtime.isCancellationRequested()) return cancelled();
+
+  const atmosphere = generateAtlasAtmosphere({
+    worldSeed: m2.document.worldSeed,
+    worldMapId: root.mapId,
+    worldSurfaceEntityId: singletonIds.worldSurfaceEntityId,
+    macroElevationAspectId: macroElevation.aspectId,
+    landWaterClassificationAspectId: landWater.aspectId,
+    temperatureVariantRevision: initialRevision.value,
+    prevailingWindsVariantRevision: initialRevision.value,
+    climateCharacter: DEFAULT_WORLD_PHYSICAL_CONTEXT_CONTROLS.climateCharacter,
+    records: m2.geography,
+    mountainSystems: mountain.proposal.output,
+  });
+  if (atmosphere.status !== 'proposed') return generationFailure(atmosphere.diagnostics);
+  if (runtime.isCancellationRequested()) return cancelled();
+  await runtime.yieldControl();
+  if (runtime.isCancellationRequested()) return cancelled();
+
+  const ecology = generateAtlasEcology({
+    worldSeed: m2.document.worldSeed,
+    worldMapId: root.mapId,
+    worldSurfaceEntityId: singletonIds.worldSurfaceEntityId,
+    macroElevationAspectId: macroElevation.aspectId,
+    landWaterClassificationAspectId: landWater.aspectId,
+    moistureVariantRevision: initialRevision.value,
+    climateZonesVariantRevision: initialRevision.value,
+    biomeBeltsVariantRevision: initialRevision.value,
+    records: m2.geography,
+    mountainSystems: mountain.proposal.output,
+    atmosphere: atmosphere.patch,
+  });
+  if (ecology.status !== 'proposed') return generationFailure(ecology.diagnostics);
+  if (runtime.isCancellationRequested()) return cancelled();
+  await runtime.yieldControl();
+  if (runtime.isCancellationRequested()) return cancelled();
+
+  const hydrology = generateAtlasHydrology({
+    worldSeed: m2.document.worldSeed,
+    worldMapId: root.mapId,
+    worldSurfaceEntityId: singletonIds.worldSurfaceEntityId,
+    macroElevationAspectId: macroElevation.aspectId,
+    landWaterClassificationAspectId: landWater.aspectId,
+    watershedsVariantRevision: initialRevision.value,
+    majorRiversVariantRevision: initialRevision.value,
+    majorLakesVariantRevision: initialRevision.value,
+    records: m2.geography,
+    mountainSystems: mountain.proposal.output,
+    ecology: ecology.patch,
+  });
+  if (hydrology.status !== 'proposed') return generationFailure(hydrology.diagnostics);
+  if (runtime.isCancellationRequested()) return cancelled();
+  await runtime.yieldControl();
+  if (runtime.isCancellationRequested()) return cancelled();
+
+  const physical = commitAtlasPhysicalProposal(m2.document, {
+    kind: ATLAS_PHYSICAL_DOCUMENT_COMMAND_KIND,
+    operationMode: ATLAS_PHYSICAL_DOCUMENT_OPERATION_MODES.initial,
+    targetMapId: root.mapId,
+    expectedWorldSeed: m2.document.worldSeed,
+    expectedAspectRevisions: aspectRevisions(m2.document),
+    controls: DEFAULT_WORLD_PHYSICAL_CONTEXT_CONTROLS,
+    proposedAspects: Object.freeze([
+      mountain.proposal,
+      atmosphere.patch.temperature,
+      atmosphere.patch.prevailingWinds,
+      ecology.patch.moisture,
+      ecology.patch.climateZones,
+      ecology.patch.biomeBelts,
+      hydrology.patch.watersheds,
+      hydrology.patch.majorRivers,
+      hydrology.patch.majorLakes,
+    ]),
+    explicitlyIncrementedAspectIds: Object.freeze([]),
+  });
+  if (!physical.ok) return transactionFailure(physical.diagnostics);
+  if (runtime.isCancellationRequested()) return cancelled();
+  await runtime.yieldControl();
+  if (runtime.isCancellationRequested()) return cancelled();
+
+  const reconstructed = reconstructAcceptedAtlas(physical.document);
+  if (reconstructed.status !== 'accepted' || reconstructed.value.physical === undefined) {
+    return failure(
+      ['atlas.transaction.source.invalid'],
+      'The accepted physical atlas could not be reconstructed.',
+    );
+  }
+  const names = createWorldFeatureNameProposals({
+    mapId: root.mapId,
+    worldSeed: physical.document.worldSeed,
+    sources: collectWorldFeatureNameSources(
+      reconstructed.value.geography,
+      reconstructed.value.physical,
+    ),
+  });
+  if (!names.ok) return generationFailure(names.diagnostics);
+  const metrics = createAtlasGlyphMetricSnapshot(ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_PACK);
+  if (!metrics.ok) return generationFailure(metrics.diagnostics);
+  const placements = resolveAtlasLabelPlacements({
+    mapId: root.mapId,
+    worldSeed: physical.document.worldSeed,
+    sceneExtent: ATLAS_LABEL_SCENE_EXTENT,
+    metrics: metrics.value,
+    candidates: names.proposals.slice(0, 4).map((proposal, index) => ({
+      nameContent: proposal.output,
+      placementVariantRevision: initialRevision.value,
+      glyphPackSha256: metrics.value.packSha256,
+      priority: 100 - index,
+      fontSizeTicks: 24 * 1_024,
+      anchor: { xTicks: (200 + index * 450) * 1_024, yTicks: 300 * 1_024 },
+      variants: [{ variantKey: 'center', baselineOffset: { xTicks: 0, yTicks: 0 } }],
+    })),
+  });
+  if (!placements.ok) return generationFailure(placements.diagnostics);
+  if (runtime.isCancellationRequested()) return cancelled();
+  await runtime.yieldControl();
+  if (runtime.isCancellationRequested()) return cancelled();
+
+  const labels = commitAtlasLabelProposal(physical.document, {
+    kind: ATLAS_LABEL_DOCUMENT_COMMAND_KIND,
+    operationMode: ATLAS_LABEL_DOCUMENT_OPERATION_MODES.initial,
+    targetMapId: root.mapId,
+    expectedWorldSeed: physical.document.worldSeed,
+    expectedAspectRevisions: aspectRevisions(physical.document),
+    proposedAspects: Object.freeze([...names.proposals, ...placements.proposals]),
+    explicitlyChangedAspectIds: Object.freeze([]),
+  });
+  if (!labels.ok) return transactionFailure(labels.diagnostics);
+  if (runtime.isCancellationRequested()) return cancelled();
+
+  return Object.freeze({ ok: true, accepted: Object.freeze({ ...m2, document: labels.document }) });
+}
+
+function aspectRevisions(document: WorldDocument) {
+  return Object.freeze(
+    (document.maps[0]?.aspects ?? []).map(({ aspectId, variantRevision }) =>
+      Object.freeze({ aspectId, variantRevision }),
+    ),
+  );
+}
+
+function isAppearanceAspectName(aspectName: string): boolean {
+  return (
+    aspectName === 'atlas.coastlineAppearance' ||
+    aspectName === 'atlas.paperTreatment' ||
+    aspectName === 'atlas.waterDecoration'
+  );
 }
 
 function reportValidatingProgress(operationId: string, runtime: AtlasWorkflowRuntime): void {
@@ -421,6 +643,24 @@ function generatorFailure(
         diagnostics.map(({ code }) => code),
         diagnostics[0]?.message,
       );
+}
+
+function generationFailure(
+  diagnostics: readonly { readonly code: string; readonly message: string }[],
+): AtlasWorkflowGenerationFailure {
+  return failure(
+    diagnostics.map(({ code }) => code),
+    diagnostics[0]?.message,
+  );
+}
+
+function transactionFailure(
+  diagnostics: readonly { readonly code: string; readonly message: string }[],
+): AtlasWorkflowGenerationFailure {
+  return failure(
+    diagnostics.map(({ code }) => code),
+    diagnostics[0]?.message,
+  );
 }
 
 function cancelled(

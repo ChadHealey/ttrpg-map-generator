@@ -15,8 +15,8 @@ import {
 import {
   canonicalAspectBytes,
   createMapworldSavePlan,
+  createMapworldV2Candidate,
   decodeMapworld,
-  encodeMapworld,
   MAPWORLD_NATIVE_LIMITS,
   type MapworldPackage,
 } from '@ttrpg-map/persistence';
@@ -133,6 +133,16 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
     expect(controlled.document.maps[0]?.coordinateSystem.radius).not.toBeUndefined();
     expect(appearanceProgress).toStrictEqual(['validating-proposal', 'completed']);
 
+    for (const accepted of [baseline, controlled, geography, appearance]) {
+      expectCompleteM3Atlas(accepted);
+    }
+    expect(m3AcceptedRecords(controlled)).not.toStrictEqual(m3AcceptedRecords(baseline));
+    expect(m3AcceptedRecords(geography)).not.toStrictEqual(m3AcceptedRecords(baseline));
+    expect(m3AcceptedRecords(appearance)).toStrictEqual(m3AcceptedRecords(geography));
+    expect(appearance.document.maps[0]?.decoration).toStrictEqual(
+      geography.document.maps[0]?.decoration,
+    );
+
     const locked = protectPaperTreatment(appearance, 'lock');
     const lockedResult = await attemptAtlasGeneration(
       'appearance-reroll',
@@ -194,6 +204,40 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
     expect(recommitAppearance(appearance, (proposal) => proposal).ok).toBe(true);
   }, 15_000);
 
+  it('rejects malformed retained M3 state through the complete proposal boundary', () => {
+    const { appearance } = requiredGeneratedStates();
+    const result = recommitAppearance(appearance, (proposal) =>
+      proposal.target.aspectName === 'worldClimate.temperature'
+        ? { ...proposal, output: null }
+        : proposal,
+    );
+    expect(result.ok).toBe(false);
+    expect(result.document).toBe(appearance.document);
+  }, 15_000);
+
+  it('does not publish accepted state when an operation is cancelled before a commit', async () => {
+    const { baseline, changedControls } = requiredGeneratedStates();
+    const beforeDocument = baseline.document;
+    const beforeAspects = baseline.document.maps[0]?.aspects;
+    let cancellationRequested = false;
+    const result = await attemptAtlasGeneration(
+      'control-driven-replacement',
+      baseline,
+      changedControls,
+      {
+        isCancellationRequested: () => cancellationRequested,
+        reportProgress: () => undefined,
+        yieldControl: () => {
+          cancellationRequested = true;
+          return Promise.resolve();
+        },
+      },
+    );
+    expect(result).toMatchObject({ ok: false, isCancelled: true });
+    expect(baseline.document).toBe(beforeDocument);
+    expect(baseline.document.maps[0]?.aspects).toBe(beforeAspects);
+  }, 30_000);
+
   it.each([
     ['an unknown water-decoration kind', addUnknownDecorationKind],
     ['an invalid style semantic key', invalidStyleId],
@@ -217,12 +261,14 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
 
   it('round-trips every accepted atlas aspect and rebuilds the scene without generation', () => {
     const accepted = requiredGeneratedStates().appearance;
-    const encoded = required(encodeMapworld(accepted.document));
-    expect(encoded.files.map(({ path }) => path)).toStrictEqual([
-      'manifest.json',
-      'world.json',
-      `maps/${accepted.document.rootMapId}.json`,
-    ]);
+    const encoded = encodedAcceptedAtlas(accepted.document);
+    expect(encoded.files.map(({ path }) => path)).toEqual(
+      expect.arrayContaining([
+        'manifest.json',
+        'world.json',
+        `maps/${accepted.document.rootMapId}.json`,
+      ]),
+    );
     expect(
       encoded.files.some(({ path }) => /cache|preview|scene|raster|hit-test/u.test(path)),
     ).toBe(false);
@@ -277,9 +323,7 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
     expect(repeatedAppearanceSvg).toEqual(appearanceSvg);
     expect(appearanceSvg.byteLength).toBeLessThanOrEqual(ATLAS_SVG_MAXIMUM_BYTES);
 
-    const reopenedDocument = required(
-      decodeMapworld(required(encodeMapworld(appearance.document))),
-    );
+    const reopenedDocument = required(decodeMapworld(encodedAcceptedAtlas(appearance.document)));
     const reopened = reopenAcceptedAtlas(reopenedDocument);
     expect(reopened.ok, reopened.ok ? undefined : JSON.stringify(reopened)).toBe(true);
     if (!reopened.ok) return;
@@ -311,9 +355,7 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
     expect(appearance.geography.coastline).toBe(geography.geography.coastline);
     expect(equalBytes(repeatedAppearancePng, appearancePng)).toBe(true);
 
-    const reopenedDocument = required(
-      decodeMapworld(required(encodeMapworld(appearance.document))),
-    );
+    const reopenedDocument = required(decodeMapworld(encodedAcceptedAtlas(appearance.document)));
     const reopened = reopenAcceptedAtlas(reopenedDocument);
     expect(reopened.ok, reopened.ok ? undefined : JSON.stringify(reopened)).toBe(true);
     if (!reopened.ok) return;
@@ -341,11 +383,9 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
 
   it('produces identical authoritative bytes for repeated and insertion-varied snapshots', () => {
     const accepted = requiredGeneratedStates().appearance;
-    const first = required(encodeMapworld(accepted.document));
-    const repeated = required(encodeMapworld(accepted.document));
-    const reordered = required(
-      encodeMapworld(reverseOrderInsensitiveCollections(accepted.document)),
-    );
+    const first = encodedAcceptedAtlas(accepted.document);
+    const repeated = encodedAcceptedAtlas(accepted.document);
+    const reordered = encodedAcceptedAtlas(reverseOrderInsensitiveCollections(accepted.document));
 
     expect(equalPackages(repeated, first)).toBe(true);
     expect(equalPackages(reordered, first)).toBe(true);
@@ -368,7 +408,7 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
 
   it('rebuilds identical disposable state after scene/cache deletion', () => {
     const accepted = requiredGeneratedStates().appearance;
-    const decoded = required(decodeMapworld(required(encodeMapworld(accepted.document))));
+    const decoded = required(decodeMapworld(encodedAcceptedAtlas(accepted.document)));
     const first = reopenAcceptedAtlas(decoded);
     const rebuilt = reopenAcceptedAtlas(decoded);
     expect(first.ok).toBe(true);
@@ -391,7 +431,7 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
         },
       ],
     };
-    const encoded = encodeMapworld(incomplete);
+    const encoded = createMapworldV2Candidate(incomplete);
     expect(encoded.ok).toBe(false);
     if (encoded.ok) return;
     expect(encoded.diagnostics.map(({ code }) => code)).toContain('persistence.atlas.invalid');
@@ -441,7 +481,7 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
       expect(reconstructed.diagnostics.map(({ code }) => code)).toStrictEqual([
         ACCEPTED_ATLAS_DIAGNOSTIC_CODES.invalid,
       ]);
-      const encoded = encodeMapworld(document);
+      const encoded = createMapworldV2Candidate(document);
       expect(encoded.ok).toBe(false);
       if (encoded.ok) continue;
       expect(encoded.diagnostics.map(({ code }) => code)).toContain('persistence.atlas.invalid');
@@ -449,7 +489,7 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
   }, 60_000);
 
   it('rejects corrupted authoritative atlas bytes by checksum before reconstruction', () => {
-    const encoded = required(encodeMapworld(requiredGeneratedStates().appearance.document));
+    const encoded = encodedAcceptedAtlas(requiredGeneratedStates().appearance.document);
     const corrupted: MapworldPackage = {
       files: encoded.files.map((file) => {
         if (!file.path.startsWith('maps/')) return file;
@@ -473,7 +513,7 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
     });
     expect(planned.ok, planned.ok ? undefined : JSON.stringify(planned.error)).toBe(true);
     if (!planned.ok) return;
-    expect(planned.value.files).toHaveLength(3);
+    expect(planned.value.files.length).toBeGreaterThan(3);
     expect(planned.value.candidateManifestSha256).toMatch(/^[a-f0-9]{64}$/u);
   }, 90_000);
 });
@@ -518,6 +558,39 @@ function requiredVisibleWorkflowSnapshot(): VisibleAtlasWorkflowExercise['snapsh
     throw new Error('Visible atlas workflow setup did not complete.');
   }
   return visibleWorkflowSnapshot;
+}
+
+function expectCompleteM3Atlas(accepted: AcceptedAtlasState): void {
+  const reconstructed = reconstructAcceptedAtlas(accepted.document);
+  expect(reconstructed.status).toBe('accepted');
+  if (
+    reconstructed.status !== 'accepted' ||
+    reconstructed.value.physical === undefined ||
+    reconstructed.value.labels === undefined
+  ) {
+    throw new Error('Expected a complete accepted M3 atlas.');
+  }
+  expect(reconstructed.value.labels.names.length).toBeGreaterThan(0);
+  expect(reconstructed.value.labels.placements.length).toBeGreaterThan(0);
+  for (const record of m3AcceptedRecords(accepted)) {
+    expect(record.variantRevision).toBe(0);
+  }
+}
+
+function m3AcceptedRecords(accepted: AcceptedAtlasState) {
+  return (accepted.document.maps[0]?.aspects ?? []).filter(
+    ({ aspectName }) =>
+      aspectName.startsWith('worldClimate.') ||
+      aspectName.startsWith('worldEcology.') ||
+      aspectName.startsWith('worldHydrology.') ||
+      aspectName === 'worldTerrain.mountainSystems' ||
+      aspectName === 'worldFeature.nameContent' ||
+      aspectName === 'label.placement',
+  );
+}
+
+function encodedAcceptedAtlas(document: WorldDocument): MapworldPackage {
+  return required(createMapworldV2Candidate(document));
 }
 
 function canonicalSvg(accepted: Pick<AcceptedAtlasState, 'scene'>): Uint8Array {
