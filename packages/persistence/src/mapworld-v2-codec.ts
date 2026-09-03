@@ -1,9 +1,17 @@
 import {
   type AcceptedAspectRecord,
+  ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_ASSET_SCHEMA_VERSION,
+  ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_BEHAVIOR_VERSION,
+  ATLAS_LABEL_PLACEMENT_BEHAVIOR_VERSION,
+  ATLAS_LABEL_PLACEMENT_PARAMETER_SCHEMA_VERSION,
+  type AtlasLabelPlacement,
   type BiomeBeltField,
   type ClimateZoneField,
   createImmutableDomainSnapshot,
+  deriveAtlasLabelPlacementAspectId,
+  deriveWorldFeatureNameAspectId,
   deriveWorldPhysicalContextAspectId,
+  DETERMINISTIC_STREAM_VERSION,
   type InheritedContextSnapshot,
   isWorldPhysicalFieldReader,
   type MajorLake,
@@ -12,6 +20,7 @@ import {
   type MountainSystems,
   parseInheritedContextSnapshot,
   type PrevailingWindField,
+  SEED_DERIVATION_VERSION,
   type TemperatureField,
   validateWorldPhysicalBiomeBeltField,
   validateWorldPhysicalClimateZoneField,
@@ -23,9 +32,12 @@ import {
   validateWorldPhysicalTemperatureField,
   validateWorldPhysicalWatersheds,
   type WatershedRecords,
+  WORLD_FEATURE_NAME_BEHAVIOR_VERSION,
+  WORLD_FEATURE_NAME_PARAMETER_SCHEMA_VERSION,
   WORLD_PHYSICAL_TEMPERATURE_QUANTUM_CELSIUS,
   WORLD_PHYSICAL_WIND_SPEED_QUANTUM_METERS_PER_SECOND,
   type WorldDocument,
+  type WorldFeatureNameContent,
   type WorldPhysicalContextAspectKind,
   type WorldPhysicalContextDiagnostic,
   type WorldPhysicalFieldReader,
@@ -88,7 +100,7 @@ const UUID = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}';
 const MAP_PATH = new RegExp(`^maps/${UUID}\\.json$`, 'u');
 const ASPECT_PATH = new RegExp(`^data/(${UUID})/aspects/(${UUID})\\.json$`, 'u');
 const FIELD_PATH = new RegExp(`^data/(${UUID})/fields/(${UUID})\\.([a-z0-9-]+)\\.mwf$`, 'u');
-const M3_ASPECT_NAMES = new Set([
+const PHYSICAL_ASPECT_NAMES: ReadonlySet<string> = new Set([
   'worldTerrain.mountainSystems',
   'worldClimate.temperature',
   'worldClimate.prevailingWinds',
@@ -99,6 +111,84 @@ const M3_ASPECT_NAMES = new Set([
   'worldHydrology.majorRivers',
   'worldHydrology.majorLakes',
 ]);
+const M3_ASPECT_NAMES: ReadonlySet<string> = new Set([
+  ...PHYSICAL_ASPECT_NAMES,
+  'worldFeature.nameContent',
+  'label.placement',
+]);
+
+interface VersionExpectation {
+  readonly path: readonly string[];
+  readonly expected: number;
+}
+
+const COMMON_LABEL_VERSION_EXPECTATIONS = [
+  { path: ['seedMetadata', 'seedDerivationVersion'], expected: SEED_DERIVATION_VERSION },
+  {
+    path: ['seedMetadata', 'deterministicStreamVersion'],
+    expected: DETERMINISTIC_STREAM_VERSION,
+  },
+] as const satisfies readonly VersionExpectation[];
+
+const NAME_VERSION_EXPECTATIONS = [
+  ...COMMON_LABEL_VERSION_EXPECTATIONS,
+  { path: ['generatorVersion'], expected: WORLD_FEATURE_NAME_BEHAVIOR_VERSION },
+  { path: ['parameterSchemaVersion'], expected: WORLD_FEATURE_NAME_PARAMETER_SCHEMA_VERSION },
+  {
+    path: ['seedMetadata', 'generatorVersion'],
+    expected: WORLD_FEATURE_NAME_BEHAVIOR_VERSION,
+  },
+  {
+    path: ['parameters', 'parameterSchemaVersion'],
+    expected: WORLD_FEATURE_NAME_PARAMETER_SCHEMA_VERSION,
+  },
+  { path: ['parameters', 'lexiconVersion'], expected: WORLD_FEATURE_NAME_BEHAVIOR_VERSION },
+  {
+    path: ['parameters', 'nameContentBehaviorVersion'],
+    expected: WORLD_FEATURE_NAME_BEHAVIOR_VERSION,
+  },
+  {
+    path: ['acceptedOutput', 'nameContentBehaviorVersion'],
+    expected: WORLD_FEATURE_NAME_BEHAVIOR_VERSION,
+  },
+  {
+    path: ['acceptedOutput', 'lexiconVersion'],
+    expected: WORLD_FEATURE_NAME_BEHAVIOR_VERSION,
+  },
+] as const satisfies readonly VersionExpectation[];
+
+const PLACEMENT_VERSION_EXPECTATIONS = [
+  ...COMMON_LABEL_VERSION_EXPECTATIONS,
+  { path: ['generatorVersion'], expected: ATLAS_LABEL_PLACEMENT_BEHAVIOR_VERSION },
+  {
+    path: ['parameterSchemaVersion'],
+    expected: ATLAS_LABEL_PLACEMENT_PARAMETER_SCHEMA_VERSION,
+  },
+  {
+    path: ['seedMetadata', 'generatorVersion'],
+    expected: ATLAS_LABEL_PLACEMENT_BEHAVIOR_VERSION,
+  },
+  {
+    path: ['parameters', 'parameterSchemaVersion'],
+    expected: ATLAS_LABEL_PLACEMENT_PARAMETER_SCHEMA_VERSION,
+  },
+  {
+    path: ['parameters', 'placementBehaviorVersion'],
+    expected: ATLAS_LABEL_PLACEMENT_BEHAVIOR_VERSION,
+  },
+  {
+    path: ['acceptedOutput', 'glyphAssetSchemaVersion'],
+    expected: ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_ASSET_SCHEMA_VERSION,
+  },
+  {
+    path: ['acceptedOutput', 'glyphBehaviorVersion'],
+    expected: ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_BEHAVIOR_VERSION,
+  },
+  {
+    path: ['acceptedOutput', 'placementBehaviorVersion'],
+    expected: ATLAS_LABEL_PLACEMENT_BEHAVIOR_VERSION,
+  },
+] as const satisfies readonly VersionExpectation[];
 
 export function isMapworldV2ExternalAspectName(value: string): boolean {
   return M3_ASPECT_NAMES.has(value);
@@ -219,13 +309,21 @@ export function encodeMapworldV2(
       map.aspects.some(({ aspectName }) => M3_ASPECT_NAMES.has(aspectName)),
     )
   ) {
-    return referenceFailure('Milestone 3 physical aspects must be external in a v2 package.');
+    return referenceFailure('Milestone 3 accepted aspects must be external in a v2 package.');
   }
   for (const aspect of safeExternal) {
     const owner = safeDocument.maps.find(({ mapId }) => mapId === aspect.mapId);
     if (owner === undefined || !M3_ASPECT_NAMES.has(aspect.aspectName)) {
       return referenceFailure(
-        'Every external aspect must be a known M3 physical aspect owned by a package map.',
+        'Every external aspect must be a known M3 aspect owned by a package map.',
+      );
+    }
+    const labelVersionMismatch = findLabelVersionMismatch(aspect);
+    if (labelVersionMismatch !== undefined) {
+      return incompatible(
+        `data/${aspect.mapId}/aspects/${aspect.aspectId}.json`,
+        labelVersionMismatch.fieldPath,
+        labelVersionMismatch.actual,
       );
     }
   }
@@ -246,6 +344,13 @@ export function encodeMapworldV2(
     ),
   );
   if (physicalDiagnostics.length > 0) return persistenceFailure(...physicalDiagnostics);
+  const labelDiagnostics = safeDocument.maps.flatMap((map) =>
+    validateLabelAspectSet(
+      map.mapId,
+      safeExternal.filter(({ mapId }) => mapId === map.mapId),
+    ),
+  );
+  if (labelDiagnostics.length > 0) return persistenceFailure(...labelDiagnostics);
 
   const encodedAspects: EncodedExternalAspect[] = [];
   for (const aspect of [...safeExternal].sort((left, right) =>
@@ -450,6 +555,11 @@ export function decodeMapworldV2Dtos(
         ? []
         : validatePhysicalAspectSet(firstExternal.mapId, externalAspects);
     if (physicalDiagnostics.length > 0) return persistenceFailure(...physicalDiagnostics);
+    const labelDiagnostics =
+      firstExternal === undefined
+        ? []
+        : validateLabelAspectSet(firstExternal.mapId, externalAspects);
+    if (labelDiagnostics.length > 0) return persistenceFailure(...labelDiagnostics);
     maps.push({
       dto: decodedMap.value.dto,
       externalAspects: Object.freeze(externalAspects),
@@ -507,7 +617,7 @@ function encodeExternalAspect(
   aspect: AcceptedAspectRecord,
 ): PersistenceResult<EncodedExternalAspect> {
   if (!M3_ASPECT_NAMES.has(aspect.aspectName))
-    return referenceFailure('Only known M3 physical aspects can use external v2 ownership.');
+    return referenceFailure('Only known M3 aspects can use external v2 ownership.');
   const transformed = encodeAspectOutput(aspect);
   if (!transformed.ok) return transformed;
   const dto = acceptedAspectToDto(
@@ -615,8 +725,9 @@ function validatePhysicalAspectSet(
   aspects: readonly AcceptedAspectRecord[],
 ): readonly PersistenceDiagnostic[] {
   const diagnostics: PersistenceDiagnostic[] = [];
-  const byName = new Map(aspects.map((aspect) => [aspect.aspectName, aspect] as const));
-  if (byName.size !== aspects.length) {
+  const physicalAspects = aspects.filter(({ aspectName }) => PHYSICAL_ASPECT_NAMES.has(aspectName));
+  const byName = new Map(physicalAspects.map((aspect) => [aspect.aspectName, aspect] as const));
+  if (byName.size !== physicalAspects.length) {
     diagnostics.push(
       referenceDiagnostic(
         `maps/${mapId}.json`,
@@ -629,8 +740,7 @@ function validatePhysicalAspectSet(
     ?.acceptedOutput as WatershedRecords | undefined;
   const rivers = aspects.find(({ aspectName }) => aspectName === 'worldHydrology.majorRivers')
     ?.acceptedOutput as readonly MajorRiver[] | undefined;
-  for (const aspect of aspects) {
-    if (!isMapworldV2ExternalAspectName(aspect.aspectName)) continue;
+  for (const aspect of physicalAspects) {
     const aspectKind = aspect.aspectName as WorldPhysicalContextAspectKind;
     const expectedId = deriveWorldPhysicalContextAspectId(aspect.entityId, aspectKind);
     if (aspect.aspectId !== expectedId) {
@@ -748,6 +858,58 @@ function validatePhysicalAspectSet(
   return diagnostics.sort(comparePersistenceDiagnostics);
 }
 
+function validateLabelAspectSet(
+  mapId: AcceptedAspectRecord['mapId'],
+  aspects: readonly AcceptedAspectRecord[],
+): readonly PersistenceDiagnostic[] {
+  const labels = aspects.filter(
+    ({ aspectName }) =>
+      aspectName === 'worldFeature.nameContent' || aspectName === 'label.placement',
+  );
+  const names = new Map(
+    labels
+      .filter(({ aspectName }) => aspectName === 'worldFeature.nameContent')
+      .map((aspect) => [aspect.aspectId, aspect] as const),
+  );
+  const diagnostics: PersistenceDiagnostic[] = [];
+  for (const aspect of labels) {
+    const path = `data/${mapId}/aspects/${aspect.aspectId}.json`;
+    if (aspect.aspectName === 'worldFeature.nameContent') {
+      if (aspect.aspectId !== deriveWorldFeatureNameAspectId(aspect.entityId)) {
+        diagnostics.push(
+          referenceDiagnostic(
+            path,
+            '$.aspectId',
+            'Accepted name aspect ID must be derived from its source entity.',
+          ),
+        );
+      }
+      continue;
+    }
+    const placement = aspect.acceptedOutput as AtlasLabelPlacement;
+    const nameAspect = names.get(placement.sourceNameAspectId);
+    const name = nameAspect?.acceptedOutput as WorldFeatureNameContent | undefined;
+    if (
+      aspect.aspectId !== deriveAtlasLabelPlacementAspectId(aspect.entityId) ||
+      nameAspect === undefined ||
+      name === undefined ||
+      nameAspect.entityId !== aspect.entityId ||
+      name.entityId !== placement.sourceEntityId ||
+      name.variantRevision !== placement.sourceNameVariantRevision ||
+      name.displayName !== placement.displayText
+    ) {
+      diagnostics.push(
+        referenceDiagnostic(
+          path,
+          '$.acceptedOutput.sourceNameAspectId',
+          'Accepted placement must link to the exact same-map accepted name owner, revision, and text.',
+        ),
+      );
+    }
+  }
+  return diagnostics.sort(comparePersistenceDiagnostics);
+}
+
 function outputWithDescriptors(
   aspect: AcceptedAspectRecord,
   _files: readonly MapworldPackageFile[],
@@ -764,6 +926,24 @@ function decodeExternalAspect(
 ): PersistenceResult<AcceptedAspectRecord> {
   const parsed = parseCanonicalJsonBytes(bytes, reference.path);
   if (!parsed.ok) return parsed;
+  if (
+    isRecord(parsed.value) &&
+    'acceptedAspectSchemaVersion' in parsed.value &&
+    parsed.value.acceptedAspectSchemaVersion !== MAPWORLD_V2_ACCEPTED_ASPECT_SCHEMA_VERSION
+  )
+    return incompatible(
+      reference.path,
+      '$.acceptedAspectSchemaVersion',
+      parsed.value.acceptedAspectSchemaVersion,
+    );
+  const labelVersionMismatch = findLabelVersionMismatch(parsed.value);
+  if (labelVersionMismatch !== undefined) {
+    return incompatible(
+      reference.path,
+      labelVersionMismatch.fieldPath,
+      labelVersionMismatch.actual,
+    );
+  }
   const v2Dto = validateDto(mapworldV2AcceptedAspectDtoSchema, parsed.value, reference.path, 'v2');
   if (!v2Dto.ok) return v2Dto;
   const normalized = {
@@ -832,6 +1012,21 @@ function decodeV2Map(
   if (parsed.value.mapDocumentSchemaVersion !== MAPWORLD_V2_MAP_DOCUMENT_SCHEMA_VERSION)
     return incompatible(path, '$.mapDocumentSchemaVersion', parsed.value.mapDocumentSchemaVersion);
   const rawReferences = parsed.value.externalAcceptedAspects;
+  if (Array.isArray(rawReferences)) {
+    for (const [index, reference] of rawReferences.entries()) {
+      if (
+        isRecord(reference) &&
+        'acceptedAspectSchemaVersion' in reference &&
+        reference.acceptedAspectSchemaVersion !== MAPWORLD_V2_ACCEPTED_ASPECT_SCHEMA_VERSION
+      ) {
+        return incompatible(
+          path,
+          `$.externalAcceptedAspects[${String(index)}].acceptedAspectSchemaVersion`,
+          reference.acceptedAspectSchemaVersion,
+        );
+      }
+    }
+  }
   const references = validateDto(z.array(externalReferenceSchema), rawReferences, path);
   if (!references.ok) return references;
   if (!isStrictlyOrdered(references.value, (item) => item.aspectId))
@@ -842,7 +1037,7 @@ function decodeV2Map(
   const inline = parsed.value.aspects;
   if (!Array.isArray(inline)) return schemaFailure(path, 'Map aspects must be an array.');
   if (inline.some((item) => isRecord(item) && M3_ASPECT_NAMES.has(String(item.aspectName))))
-    return referenceFailure('M3 physical aspects cannot appear inline in a v2 map.', path);
+    return referenceFailure('M3 accepted aspects cannot appear inline in a v2 map.', path);
   const normalizedAspects: unknown[] = inline.map((item: unknown): unknown =>
     isRecord(item)
       ? { ...item, acceptedAspectSchemaVersion: ACCEPTED_ASPECT_SCHEMA_VERSION }
@@ -1056,6 +1251,26 @@ function valueAt(value: unknown, path: readonly string[]): unknown {
     current = current[segment];
   }
   return current;
+}
+
+function findLabelVersionMismatch(
+  value: unknown,
+): { readonly fieldPath: string; readonly actual: unknown } | undefined {
+  if (!isRecord(value)) return undefined;
+  const expectations =
+    value.aspectName === 'worldFeature.nameContent'
+      ? NAME_VERSION_EXPECTATIONS
+      : value.aspectName === 'label.placement'
+        ? PLACEMENT_VERSION_EXPECTATIONS
+        : undefined;
+  if (expectations === undefined) return undefined;
+  for (const expectation of expectations) {
+    const actual = valueAt(value, expectation.path);
+    if (actual !== undefined && actual !== expectation.expected) {
+      return { fieldPath: `$.${expectation.path.join('.')}`, actual };
+    }
+  }
+  return undefined;
 }
 
 function replaceAt(value: unknown, path: readonly string[], replacement: unknown): unknown {

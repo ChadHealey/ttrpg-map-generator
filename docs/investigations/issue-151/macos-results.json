@@ -1,0 +1,669 @@
+{
+  "issue": 151,
+  "measurementSchemaVersion": 1,
+  "candidateBaseCommit": "3325a2392a103c3eb8d0fe7ff17743d5f2bd5db3",
+  "command": "node docs/investigations/issue-151/complete-m3-measurement.mjs --output",
+  "host": {
+    "platform": "darwin",
+    "architecture": "arm64",
+    "osRelease": "25.5.0",
+    "processor": "Apple M5",
+    "logicalCpuCount": 10,
+    "memoryBytes": 25769803776,
+    "repositoryFilesystem": "APFS",
+    "macosVersion": "26.5.1",
+    "macosBuild": "25F80",
+    "modelIdentifier": "Mac17,2"
+  },
+  "toolchain": {
+    "node": "24.11.0",
+    "pnpm": "11.19.0"
+  },
+  "measurementSources": [
+    {
+      "path": "apps/desktop/src/atlas-physical-accepted-state.integration.test.ts",
+      "sha256": "289fe1b5777a75263d9cecf0e2de27f3c013b918a467ec8ee8ecb4b06f1ce86d"
+    },
+    {
+      "path": "apps/desktop/src/atlas-complete-m3-decode-measurement.test.ts",
+      "sha256": "83cbb4202ba46491cb51dc4f6ae7ee41222a0a2b549c4f4164a7430410693aa9"
+    },
+    {
+      "path": "docs/investigations/issue-138/macos-results.json",
+      "sha256": "75967846d26c7a4e60fd53dfa59e7b72d85e25e5a39b6a90dfe19492c0fb4702"
+    },
+    {
+      "path": "docs/investigations/issue-151/complete-m3-measurement.mjs",
+      "sha256": "b527dca14cef55bba7d7ab2b941202002c51d4ad8cf97331a0208954b7ad3455"
+    },
+    {
+      "path": "packages/persistence/src/mapworld-v2-aspect-dto-schema.ts",
+      "sha256": "c7349b8995b9190e4781f2be0a969bc764dfac6e70ab7dd6e27e211589e6ac38"
+    },
+    {
+      "path": "packages/persistence/src/mapworld-v2-codec.ts",
+      "sha256": "4f35c1f58c91912ef5eb5942b384323256336f6f5080b93f84ca47e4cf90929d"
+    },
+    {
+      "path": "packages/persistence/src/mapworld-v2-label-dto-schema.ts",
+      "sha256": "82dff38b50c8d877f4c07e8abc15214bd9d66972dd34d76e24fe36630c7ad2f0"
+    }
+  ],
+  "memoryMeasurement": {
+    "source": "process.resourceUsage().maxRSS",
+    "sourceUnit": "KiB",
+    "receiptUnit": "bytes",
+    "encodePeakIncludesFullDeterministicM2AndM3SourceGeneration": true,
+    "decodeRunsInFreshGeneratorFreeProcess": true
+  },
+  "source": {
+    "fixtureId": "complete-m3-atlas-plus-supplied-south-pole-context",
+    "physicalAspectCount": 9,
+    "logicalFieldCount": 9,
+    "nameCount": 13,
+    "placementCount": 13,
+    "manualOverrideCount": 1,
+    "inheritedContextContractVersion": 1,
+    "inheritedContextLocation": "regional parent.inheritedContext"
+  },
+  "limits": {
+    "perFileLimitBytes": 134217728,
+    "packageLimitBytes": 201326592,
+    "packageBytes": 134820435,
+    "packageHeadroomBytes": 66506157,
+    "withinPackageLimit": true,
+    "largestFile": {
+      "path": "maps/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7.json",
+      "bytes": 82288604,
+      "sha256": "dfe608a17aa813188ed16a0d332675ec8e164322d6af9e522cee6621df029da5"
+    },
+    "perFileHeadroomBytes": 51929124,
+    "withinPerFileLimit": true
+  },
+  "canonicalEvidence": {
+    "manifestSha256": "f2c3cc8dccfaa8443e9ca3e5290a665b8b59c94bc29bbf7a51e64d0180415cb5",
+    "files": [
+      {
+        "path": "manifest.json",
+        "bytes": 11676,
+        "sha256": "f2c3cc8dccfaa8443e9ca3e5290a665b8b59c94bc29bbf7a51e64d0180415cb5"
+      },
+      {
+        "path": "world.json",
+        "bytes": 635,
+        "sha256": "06b9e877f3db8ccad1b41f0a14011949f4691e2eddc9676b1be393b0275e40f6"
+      },
+      {
+        "path": "maps/71456929-0ee6-4142-84ed-4a777d8f63d3.json",
+        "bytes": 18617,
+        "sha256": "9c29c00589268b9181bafc7461f86039e5db1696d7ab6ba4da5029c98554d648"
+      },
+      {
+        "path": "maps/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7.json",
+        "bytes": 82288604,
+        "sha256": "dfe608a17aa813188ed16a0d332675ec8e164322d6af9e522cee6621df029da5"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/098b5448-209c-55b0-96fe-9bd397c6f314.json",
+        "bytes": 2842,
+        "sha256": "f92575aeaee8e17663023e1671bda4672397c7b32bc0f4d9d089bb15efcee4b9"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/1125bd82-6590-52bf-bd94-e3f1063e2e91.json",
+        "bytes": 3175,
+        "sha256": "3957bcec7f0710f0003ba0582c10a8e1d0592c8e5852ef85f613012393f9652a"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/1815db99-d16d-5db0-a6d2-0c9bbc5edb02.json",
+        "bytes": 1318,
+        "sha256": "bf539192bf874df10b9c5e037333e1670911f25610c13781207532550837ca5f"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/2f1360d6-780d-540a-97a9-0f8243d5aba5.json",
+        "bytes": 1305,
+        "sha256": "7c4d9520e67c4db70ca571dee294c1c8bed0a66aa770181799fbb188474b16d7"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/3bc9bb6d-2884-5446-8615-f6b679345d9a.json",
+        "bytes": 1311,
+        "sha256": "183efdc309663caeebf232769acb1aaef6aa5991bc70584b182df07c55f71ef6"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/3cab1c99-03b7-5d09-b032-cce96abfd3dd.json",
+        "bytes": 1308,
+        "sha256": "9d0227a92e2081bed6e453aa87130f68728d848ec8a92bd0bb9a5ad8bba8b4b3"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/47d4f799-fc0a-5818-ac6f-7827374d0a0c.json",
+        "bytes": 4260,
+        "sha256": "7c200158ec7f6f1f0494a76ab0d832ed14fdc166d0b2644c7df8244bb6fbad80"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/4da9a3b7-538c-5d5a-8bfb-7ef02d2d3427.json",
+        "bytes": 1313,
+        "sha256": "6d982c4e3d07f69f91e08eb134d52a263c68d305ede134bf5c983d668df3a6fb"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/4e79e1c8-2934-5980-a3c0-36aa007dfcfc.json",
+        "bytes": 1307,
+        "sha256": "a03b1e9d0af046d89f066f8d64291f6503771441867fdf8f303af98594b57a1c"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/51ab286b-a162-55d2-8fe8-21c556e1206a.json",
+        "bytes": 3402,
+        "sha256": "355e58785e554325807e74d1bdad8cfc2d4b9323948dbc6efcfa96bbaa118c27"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/5ad53f4f-728c-54ce-9a7f-7d0acd384287.json",
+        "bytes": 2212,
+        "sha256": "1d3b9ec3644c87f402c054c70d1c2f28713024c4fcec8a642ca62ca0f91b7d7c"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/60cc4e0d-8a91-54a8-825f-4412ef813a61.json",
+        "bytes": 3550,
+        "sha256": "5bad5586b5f24fa8f7877b63b8e06a8c10fa350b0e610c3f573b54b90979dec2"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/6637211f-8d5f-5e40-8b78-f39ac59c2b06.json",
+        "bytes": 1300,
+        "sha256": "7e615a58d4d7f995fb0b3644171c1ccc991bd93438fc6c7681b30ef328fa3ce3"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/6800d5c4-662d-5872-9dcd-17e9279518d6.json",
+        "bytes": 3176,
+        "sha256": "b6d932a9b33b48daa9b450167ff82f6df85a490e510210ab5f5aeb269226524f"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/6e895d86-e2ba-56be-8da1-827827516441.json",
+        "bytes": 3071,
+        "sha256": "4f77ccbf5c7f15d52e19d81365a7c32823aa1d3df5723712f5eabf09d1157951"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/8433b981-ad06-5714-a49f-e454ef265279.json",
+        "bytes": 2280,
+        "sha256": "700d32f49536c6cd85adf5090c76ba150ee424ebee939ca4b8ec373aeeeb0722"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/8bc2707e-c4fd-51fb-bec6-8df94d90ab9b.json",
+        "bytes": 1304,
+        "sha256": "9bff4fd9cda0ffbf18d6cbcd2017970e48fb7a91cee6fda16ca49e773d431b8c"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/8c5d34cc-07e0-5b6e-95a7-5fc868c1355a.json",
+        "bytes": 1316,
+        "sha256": "427486646299a2b68d45e23997e03cf015069df524917b8b3a9111b8f753f6f8"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/8cf3ce51-b075-5d48-939c-adbe995d0f19.json",
+        "bytes": 3047,
+        "sha256": "6174774d72a2a9249c00b1aad37bafd8fdbdc237ea9700fcf7e8bc685c770a8b"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/90ebf1c9-07e4-5bb9-a5ba-03b1fd628e5f.json",
+        "bytes": 3297,
+        "sha256": "97d8a6b511f72c0474c32bfbf53734c511546fdfa618f04abf832bf562c38a7d"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/91f1b126-70e2-5812-83b2-4c6373a863d5.json",
+        "bytes": 2835,
+        "sha256": "0b7dc67bbe4b0f924b9dd00afbf0f0b14ccdc59ecfab4142ab64a6560649ec09"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/96fff2ff-1722-53e8-b302-c96cbc0f025a.json",
+        "bytes": 1307,
+        "sha256": "26bf9821624181e9a9565992c4e0acff6aa23ea3b362831608361d2f960ce78a"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/9adc71e3-9928-5446-ac5c-9ecb9b8fe90a.json",
+        "bytes": 1307,
+        "sha256": "375a9f75fc42d81b7060253fcb2ba63ac86ea1bc9fdef88efa7095628e38e5ec"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/a08aa954-6a4a-5256-b703-f465a53358c0.json",
+        "bytes": 3070,
+        "sha256": "c28aff8144dcd8fcfed07972da5b89a440bb2def7e5cb36a71b5c0c6970ce74a"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/b255be89-ad89-582a-bc1e-801aac7255e8.json",
+        "bytes": 2793,
+        "sha256": "dfeb07a25a474dbdcfe35d485093ad70087eee2b7b62bdba8f0d194148295be3"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/c4a41756-1245-5636-9a19-6538a398f5ea.json",
+        "bytes": 1306,
+        "sha256": "6ba1d0356389f3a0f17f12e966dc842c6710275b530907059e94679cf8f8a209"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/c659c254-a26d-51ac-aa2b-0588dfe4cf1c.json",
+        "bytes": 1319,
+        "sha256": "d51afa21a280017cdb225765959587607d7bfa2049dce2f637a9d9771d0923d2"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/de179f75-8d50-5b99-af48-d9699ae292cf.json",
+        "bytes": 6991,
+        "sha256": "7e03a1fdd98c2c538c5d5eb9ce92de67640b214644e43cd68e46f0c55882196d"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/e1c060d3-a3a7-519d-99c7-f3517c48b67d.json",
+        "bytes": 3296,
+        "sha256": "5ffcc2f9dd26c839e10e599a01c7e8946683618d3790020f484c135c110110ff"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/e1e9fcfa-9c92-514c-82de-049da615764a.json",
+        "bytes": 2940,
+        "sha256": "b2f7e24635758ed26ff59ff9e6887bb9812c3575366412b4818e0cca7480ebd7"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/e88989ae-89de-5a41-9102-5018199a96e6.json",
+        "bytes": 3577,
+        "sha256": "529ed88ab2d5555361c12db9b775e2551f5c7343711b1f34e6e923bfaf8243aa"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/ea1fff2b-9d92-5f74-bc91-5ecceb880f88.json",
+        "bytes": 3311,
+        "sha256": "fc6b1466e676df7fe293a8b01d7751f9a2a28a8856178b9e2776c9348bf31104"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/eb02c2c3-2d59-5d2b-8f11-c2c4bad76797.json",
+        "bytes": 2950,
+        "sha256": "7b8505ec329803f3f538369ee7432c13d424a2eed16f99cb96f4543a69fa83d5"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/ebf368ff-198c-58a6-9ed1-e06f799a47cf.json",
+        "bytes": 3534,
+        "sha256": "c5c60362c90f0c07afde035da3a51fa41f0082c8cb5c2a8beca6c8a641d4ff2c"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/aspects/ef0cc4d3-e6f5-510c-9dc0-92792f48427a.json",
+        "bytes": 4226547,
+        "sha256": "34467db3b4a6c31074a0d21e7b8ccc73945fa2868c4cf32bff95d3432f5b0012"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/098b5448-209c-55b0-96fe-9bd397c6f314.moisture.mwf",
+        "bytes": 8380456,
+        "sha256": "7554ce1aadfb166c5e69af524a857ce8769a2f7dacb68de180601cdfbf7b8d88"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/47d4f799-fc0a-5818-ac6f-7827374d0a0c.watersheds.mwf",
+        "bytes": 2095138,
+        "sha256": "30a7283612a5fa0bbd55b8995d6cb8ed35d591bdb7f1a8b236a6ab8f2b656101"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/91f1b126-70e2-5812-83b2-4c6373a863d5.temperature.mwf",
+        "bytes": 4190244,
+        "sha256": "da65dbff3a9ee76574630679e3b497ed5c0e44d2deaeb548b0c8d5ea03a8d8f0"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/de179f75-8d50-5b99-af48-d9699ae292cf.prevailing-winds-speed.mwf",
+        "bytes": 4190244,
+        "sha256": "a3d1c5149043950047c9ae4590f9de50e4b8c09567690bca1d8849ed2649c087"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/de179f75-8d50-5b99-af48-d9699ae292cf.prevailing-winds-x.mwf",
+        "bytes": 8380456,
+        "sha256": "9264853e29309776b22be0da76bed1590461a47fcaef59ae7dd5c772a7144f5d"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/de179f75-8d50-5b99-af48-d9699ae292cf.prevailing-winds-y.mwf",
+        "bytes": 8380456,
+        "sha256": "6b49612b5b742a848a6a59988d0372a10b92eac9d09d2fd6cfd584df3e6a163e"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/de179f75-8d50-5b99-af48-d9699ae292cf.prevailing-winds-z.mwf",
+        "bytes": 8380456,
+        "sha256": "30f82761caba6b7d5caf88a6b21513b731121136fb7b999f8e022f677b64329e"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/e88989ae-89de-5a41-9102-5018199a96e6.climate-zones.mwf",
+        "bytes": 2095138,
+        "sha256": "b34684c56487f3ebeb076c5e5f712f5156855ba44fde586766c852e6db204e5a"
+      },
+      {
+        "path": "data/a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7/fields/ef0cc4d3-e6f5-510c-9dc0-92792f48427a.biome-belts.mwf",
+        "bytes": 2095138,
+        "sha256": "b34684c56487f3ebeb076c5e5f712f5156855ba44fde586766c852e6db204e5a"
+      }
+    ],
+    "framedAspects": [
+      {
+        "aspectId": "098b5448-209c-55b0-96fe-9bd397c6f314",
+        "aspectName": "worldClimate.moisture",
+        "completeBytes": 8383523,
+        "completeSha256": "dbb46eebeb5775c3b01539ad2fccf6dae3d208c65b315424448be9abe5dd6368",
+        "outputBytes": 8381925,
+        "outputSha256": "9fccf293ba06c98e83f27c0d21ec0fd625b23361959da1c02caa65ba3d221945"
+      },
+      {
+        "aspectId": "1125bd82-6590-52bf-bd94-e3f1063e2e91",
+        "aspectName": "label.placement",
+        "completeBytes": 3290,
+        "completeSha256": "713675e0086d1fa0a278231333b4dff4d54481bbf4ae82c8e473bc370927d875",
+        "outputBytes": 1903,
+        "outputSha256": "5bcd30d2dfbe1d7dd468f3a7d031978c29f46b3f4a7990227cbe4138ca3c82a9"
+      },
+      {
+        "aspectId": "1815db99-d16d-5db0-a6d2-0c9bbc5edb02",
+        "aspectName": "worldFeature.nameContent",
+        "completeBytes": 1433,
+        "completeSha256": "1a0994e1b63e839186ecc27e7cc95afff179badf917832181c8a5fb4dc228ac3",
+        "outputBytes": 312,
+        "outputSha256": "0d15d36bdc99ecfe7aa442445420e61cfc08e54d6475751a1fce22046d533790"
+      },
+      {
+        "aspectId": "2f1360d6-780d-540a-97a9-0f8243d5aba5",
+        "aspectName": "worldFeature.nameContent",
+        "completeBytes": 1420,
+        "completeSha256": "25f63073b13d103288f4269c7556967f4d2e85738b9c60627e753ac4c986ce27",
+        "outputBytes": 299,
+        "outputSha256": "4624ec1c3fdb7fb41e17a189034d0c7ee03fa6c6776fb6837fa6e63948f72365"
+      },
+      {
+        "aspectId": "3bc9bb6d-2884-5446-8615-f6b679345d9a",
+        "aspectName": "worldFeature.nameContent",
+        "completeBytes": 1426,
+        "completeSha256": "8a9e1f4c2b98903404b083daab25ab1607fd47b201d25e5b05339be603f2fab8",
+        "outputBytes": 305,
+        "outputSha256": "1cb02dd80186498fbd09488667d1f39603e1de8d9c96d1eccfe2ec3b6376dc58"
+      },
+      {
+        "aspectId": "3cab1c99-03b7-5d09-b032-cce96abfd3dd",
+        "aspectName": "worldFeature.nameContent",
+        "completeBytes": 1423,
+        "completeSha256": "bd0c51bfd11d057b63b69974e5e6dcb2541416ca7134c0f7ab8410a621d446e4",
+        "outputBytes": 302,
+        "outputSha256": "e0e9c6c86a4fe3744988b538b80e834460095f03f9556be4801493efbb5a1034"
+      },
+      {
+        "aspectId": "47d4f799-fc0a-5818-ac6f-7827374d0a0c",
+        "aspectName": "worldHydrology.watersheds",
+        "completeBytes": 2099625,
+        "completeSha256": "9368f9da5a0bef2483fc80b12f906754f128ded4aefb8b7ed5b274d1b79ec5ab",
+        "outputBytes": 2098053,
+        "outputSha256": "f5b938f7f1df888ea493ed8c95283724681eef966eb9bd36f799a4a28a8d9a8b"
+      },
+      {
+        "aspectId": "4da9a3b7-538c-5d5a-8bfb-7ef02d2d3427",
+        "aspectName": "worldFeature.nameContent",
+        "completeBytes": 1428,
+        "completeSha256": "272bd505734eec8d485fbb65b9c7211dcd02b6461fd38050b1079ba57bc2f7ef",
+        "outputBytes": 307,
+        "outputSha256": "48b07db46c14e4db6e89546774c692b523d60ff2e0ef6033b000aac1037b4732"
+      },
+      {
+        "aspectId": "4e79e1c8-2934-5980-a3c0-36aa007dfcfc",
+        "aspectName": "worldFeature.nameContent",
+        "completeBytes": 1422,
+        "completeSha256": "f378eb5fcdefe6796ff0d615fef5b698497315820b844f4888cde2098976530f",
+        "outputBytes": 301,
+        "outputSha256": "0c383a583a06fa53704d2ca4ccc031b62e92b82740a1aacd51538a7138254544"
+      },
+      {
+        "aspectId": "51ab286b-a162-55d2-8fe8-21c556e1206a",
+        "aspectName": "label.placement",
+        "completeBytes": 3517,
+        "completeSha256": "fa27da8883c804b4e1ed275bfde17eeaf70912ad9eddb5e4060302c8214452a5",
+        "outputBytes": 2106,
+        "outputSha256": "2e8869f94861fb2ba040dcb0dd98b8033c5d72f1f16fe1c306d40749d0677b05"
+      },
+      {
+        "aspectId": "5ad53f4f-728c-54ce-9a7f-7d0acd384287",
+        "aspectName": "worldHydrology.majorLakes",
+        "completeBytes": 2327,
+        "completeSha256": "0a471a839061b36f9aec2d0214d9f11b271fbc3352a57423232c61e4086663e8",
+        "outputBytes": 679,
+        "outputSha256": "61b3f6f68af792b58d15a791c17fee8a966cf31e56402357202d1aae7a6f8aad"
+      },
+      {
+        "aspectId": "60cc4e0d-8a91-54a8-825f-4412ef813a61",
+        "aspectName": "label.placement",
+        "completeBytes": 3665,
+        "completeSha256": "454fab727b2ae89482a35fa5060d5e4635b7fe22ab8e97b1bc5dca0116951229",
+        "outputBytes": 2242,
+        "outputSha256": "5ee83d79070f6cc10a70686f9c31f3226d16a4752e78f4b9b4362db9115ed461"
+      },
+      {
+        "aspectId": "6637211f-8d5f-5e40-8b78-f39ac59c2b06",
+        "aspectName": "worldFeature.nameContent",
+        "completeBytes": 1415,
+        "completeSha256": "40e3221a929d3ac4f7a9850dd1079fef12270f83258e6b95a03705110bf41520",
+        "outputBytes": 294,
+        "outputSha256": "5c68aeecd3804a66e7b9c56f3e624b608d778d114c6aa0f49c1afeff6183aa2c"
+      },
+      {
+        "aspectId": "6800d5c4-662d-5872-9dcd-17e9279518d6",
+        "aspectName": "label.placement",
+        "completeBytes": 3291,
+        "completeSha256": "fc76b309205b5b4de05dbf3ccdb528fb02c9e7c2425329ce747f0cf330629a0d",
+        "outputBytes": 1904,
+        "outputSha256": "3814d1f9625e38c6e315a38a85309df7d1983d0f308be573417ff9af71cbd7cd"
+      },
+      {
+        "aspectId": "6e895d86-e2ba-56be-8da1-827827516441",
+        "aspectName": "label.placement",
+        "completeBytes": 3186,
+        "completeSha256": "258c0bd0d2421727ebdf04b7b51f1e638b167f716be3ca4470ae684c504adda5",
+        "outputBytes": 1811,
+        "outputSha256": "c8c73dddccb5a6f87dee365e487a4aa00f8780f7f4a540f30a02e3601d19e31f"
+      },
+      {
+        "aspectId": "8433b981-ad06-5714-a49f-e454ef265279",
+        "aspectName": "worldHydrology.majorRivers",
+        "completeBytes": 2395,
+        "completeSha256": "171a223db5306712915e5c30b8fb5ee327a107a6e188c5445f03d399ea330c65",
+        "outputBytes": 803,
+        "outputSha256": "3f5badb600c5b12d41dd7fa0d0f50b5de6586ccf36d52d2dcb4d11899b4ffa3e"
+      },
+      {
+        "aspectId": "8bc2707e-c4fd-51fb-bec6-8df94d90ab9b",
+        "aspectName": "worldFeature.nameContent",
+        "completeBytes": 1419,
+        "completeSha256": "e7553ded0f58a0be7e70a9467cf57076632e343501d07f03d939b942aabeeef9",
+        "outputBytes": 298,
+        "outputSha256": "373d047b9f82f1443d839855de6508a77c89d568c28d49a0d371be46929c14b2"
+      },
+      {
+        "aspectId": "8c5d34cc-07e0-5b6e-95a7-5fc868c1355a",
+        "aspectName": "worldFeature.nameContent",
+        "completeBytes": 1431,
+        "completeSha256": "4f1d837865ccdd5bfa843e06ac41397758fbbe770aade5ca34b86bb1eb3e3589",
+        "outputBytes": 310,
+        "outputSha256": "b663b3c617c41641b3b2b11de74d58487de5d88eefffc9f8dae798f0b0b0766b"
+      },
+      {
+        "aspectId": "8cf3ce51-b075-5d48-939c-adbe995d0f19",
+        "aspectName": "label.placement",
+        "completeBytes": 3162,
+        "completeSha256": "abf85bbd8d2c6e6c3afac7d49d63cc3fa313bd152e00e1f21d395c3ef9a5f0f5",
+        "outputBytes": 1787,
+        "outputSha256": "6a185896c65ad1310cec228653c4f06ac24f4798e08a7ffb199d0f6bdacde086"
+      },
+      {
+        "aspectId": "90ebf1c9-07e4-5bb9-a5ba-03b1fd628e5f",
+        "aspectName": "label.placement",
+        "completeBytes": 3412,
+        "completeSha256": "6198e532fd8b1e56354d6d70e627aa3959ca3183bcaa45bc7c6b94bd9762af99",
+        "outputBytes": 2013,
+        "outputSha256": "a09791259eaf4e2f187392287d5a74fd1329ac6963213110bd41b83e9533eea4"
+      },
+      {
+        "aspectId": "91f1b126-70e2-5812-83b2-4c6373a863d5",
+        "aspectName": "worldClimate.temperature",
+        "completeBytes": 4193307,
+        "completeSha256": "be29a0a443f26f8120ab8359d1277c0a5e537a1c15ac904be9fa5abcda892d52",
+        "outputBytes": 4191703,
+        "outputSha256": "1519259b405119fdc086e9862646c22676a1901eb680d1f8aa45a254f0dc6137"
+      },
+      {
+        "aspectId": "96fff2ff-1722-53e8-b302-c96cbc0f025a",
+        "aspectName": "worldFeature.nameContent",
+        "completeBytes": 1422,
+        "completeSha256": "c4c280bda78d10e67b3f1e28e24adb774b0ac0b1942eef57399239c2e82fe245",
+        "outputBytes": 301,
+        "outputSha256": "f759d49ecc9dfddfb7896d0f63e5a947f6641dc0b85b5277db5ad7dec640a8e9"
+      },
+      {
+        "aspectId": "9adc71e3-9928-5446-ac5c-9ecb9b8fe90a",
+        "aspectName": "worldFeature.nameContent",
+        "completeBytes": 1422,
+        "completeSha256": "f5a29a1d6d44a8bc40a5e3e2ba2be96100dbdd279f44a0723ff24b5d520fa9d2",
+        "outputBytes": 301,
+        "outputSha256": "5f9274e79f2fdb91005e0ac29d043c38323b7893cd5019e515c8d7b6bb1b447f"
+      },
+      {
+        "aspectId": "a08aa954-6a4a-5256-b703-f465a53358c0",
+        "aspectName": "label.placement",
+        "completeBytes": 3185,
+        "completeSha256": "ed7a8fe574df8dfc2f7bb806d8ee0d96d397fc3c276d6fdc03fc0bc36d345aaf",
+        "outputBytes": 1810,
+        "outputSha256": "0914c6999489d804a9a8c765b59ea183ef5f516daa77da230ce472bcef08ece6"
+      },
+      {
+        "aspectId": "b255be89-ad89-582a-bc1e-801aac7255e8",
+        "aspectName": "worldTerrain.mountainSystems",
+        "completeBytes": 2908,
+        "completeSha256": "512af054f0216924b2f627f9a2c9aa76cfc83c9c366dcbfcd1067c8b4e806b6d",
+        "outputBytes": 1523,
+        "outputSha256": "7dc34da4f2aacbe188c69bdf7d7da94e7052f4ab7a5203192302153e00334c4f"
+      },
+      {
+        "aspectId": "c4a41756-1245-5636-9a19-6538a398f5ea",
+        "aspectName": "worldFeature.nameContent",
+        "completeBytes": 1421,
+        "completeSha256": "f0a2dfe10d9dbb84921e1085e055f21effe4af62d364e38c2ad95f94784d943d",
+        "outputBytes": 300,
+        "outputSha256": "f01c33aea233ca46a99824b082dc4ae7093a65435c8a04880ddb287a9dcbaba2"
+      },
+      {
+        "aspectId": "c659c254-a26d-51ac-aa2b-0588dfe4cf1c",
+        "aspectName": "worldFeature.nameContent",
+        "completeBytes": 1434,
+        "completeSha256": "8eed114d46070293ccea2a6389a70a451c0db647f2be3b82f463f70e161c9c9e",
+        "outputBytes": 313,
+        "outputSha256": "36aca039930a6a893de3f278d277a32a02456ac63928c739550ea5c1dbff4116"
+      },
+      {
+        "aspectId": "de179f75-8d50-5b99-af48-d9699ae292cf",
+        "aspectName": "worldClimate.prevailingWinds",
+        "completeBytes": 29339202,
+        "completeSha256": "2629ea693aa232dfa9dd7fa1458826e0701cec50c17ff9bf897a4e0716d82231",
+        "outputBytes": 29337446,
+        "outputSha256": "d4d6a0a608d0a83746b353f59b567801ee131739311c3682459656ea580576f7"
+      },
+      {
+        "aspectId": "e1c060d3-a3a7-519d-99c7-f3517c48b67d",
+        "aspectName": "label.placement",
+        "completeBytes": 3411,
+        "completeSha256": "a0dabb21849a16929d1a70680cf6dc9b3467aefb794a09ef08eba86d84e2f007",
+        "outputBytes": 2012,
+        "outputSha256": "cc8c7b9f2cdf6589593880c3dbd88edd70fdb75ea6223de9c1878b8a58eeb017"
+      },
+      {
+        "aspectId": "e1e9fcfa-9c92-514c-82de-049da615764a",
+        "aspectName": "label.placement",
+        "completeBytes": 3055,
+        "completeSha256": "58c85609e86c8ce97604b294b21149df5eea6f132c6673383346020c68640013",
+        "outputBytes": 1692,
+        "outputSha256": "aa8d2af9b189e0917bfdfca2f37d95592832744cf94d10b44fb45b850e53c133"
+      },
+      {
+        "aspectId": "e88989ae-89de-5a41-9102-5018199a96e6",
+        "aspectName": "worldClimate.zones",
+        "completeBytes": 2098945,
+        "completeSha256": "b41fc03ad6f8652e696cababaff1f805d9f9b237fae935ad67a7d200ab82a350",
+        "outputBytes": 2097495,
+        "outputSha256": "073e6cca45ca178f5e08a9f4e1f53dac002af8e59b3e778958eeb64cc8612498"
+      },
+      {
+        "aspectId": "ea1fff2b-9d92-5f74-bc91-5ecceb880f88",
+        "aspectName": "label.placement",
+        "completeBytes": 3426,
+        "completeSha256": "9bd1920a06565f9c3231fde25f99d0ee682a31f23b90767729b6b3fa83692ce2",
+        "outputBytes": 2027,
+        "outputSha256": "4d51bcdfff89736db380ae9e77202f37e32a05bf9ff96a00153ab1b85e32de1d"
+      },
+      {
+        "aspectId": "eb02c2c3-2d59-5d2b-8f11-c2c4bad76797",
+        "aspectName": "label.placement",
+        "completeBytes": 3065,
+        "completeSha256": "f5729e348d27898f4de92273a0488ce6d78e9321cfd0c20d574a73a7956aca8f",
+        "outputBytes": 1702,
+        "outputSha256": "c068491322bd86a523033990290c3eb8bd1efb6efe1971483275210ca3a6b882"
+      },
+      {
+        "aspectId": "ebf368ff-198c-58a6-9ed1-e06f799a47cf",
+        "aspectName": "label.placement",
+        "completeBytes": 3649,
+        "completeSha256": "99a36fbed705ecc6144dafc9575b52abb400d2a74ca646f1f6e1f4722f58da96",
+        "outputBytes": 2226,
+        "outputSha256": "6c6fa51fc44a92bc70268320c417de2285b1b56ec339395cc8999d82ba4c399d"
+      },
+      {
+        "aspectId": "ef0cc4d3-e6f5-510c-9dc0-92792f48427a",
+        "aspectName": "worldEcology.biomeBelts",
+        "completeBytes": 6321913,
+        "completeSha256": "75a32e65d1b85611cfb44dca43a5841490dce8e359421ec7b5d49455aebca777",
+        "outputBytes": 6002599,
+        "outputSha256": "9face7e7cf851290f82e3edf67e7ee41a0aa4a50e7ebdca894457a41b2ce43cc"
+      }
+    ],
+    "physicalFingerprints": {
+      "biomeBelts": "9ff8dd0f9ce0095cfebef7ce76eece8f880287e41b950733a4c2f50a1337d70a",
+      "climateZones": "575dbe5cb677b06261855d85abe0f585a038c69d8d25ffcdafc17a53476f5001",
+      "moisture": "126b6e456da1a333dab08f61e0117f41d1a3665af9e024be607f53ba71cdb394",
+      "prevailingWindsSpeed": "132b76df6b19696aada2ea9e7ccbac6091aa23ec5bdab86cccf4f5348cac4c74",
+      "prevailingWindsX": "06a11b30ff81c8e4a93ad8d40378a04f6d25a58e158d1b2781206f565e43d024",
+      "prevailingWindsY": "cad93f8092158ed2e774933a7542871c168262a5f8f7674f8a1f3b97dfa8b5e0",
+      "prevailingWindsZ": "78ffcdd916a390c25b3a0c81f96ceff4d3fdbb02613594ed90393d64120cc80e",
+      "temperature": "bb22c8d1e5cd5fa45350aa5c7cac24aa2a72146d6f218df86545cd8cffae49c8",
+      "watersheds": "f54bf81fb891621a2169835e8ed36aba8eaa1dccc285ceb4b5db642757731bdd"
+    },
+    "labelAcceptedStateSha256": "f9ed3b278819d859f32e84caf40cf8c6405588bb6c8366d54bb4f0e9b25e8cdf",
+    "inheritedContextChecksum": "d6ea3051c08269c96536652b99c4eeb39183d205f51a9fbba0f9a6fb8495c9dc"
+  },
+  "physicalContextV2Compatibility": {
+    "baselinePath": "docs/investigations/issue-138/macos-results.json",
+    "baselineManifestSha256": "d4c51bee5745fa9bd3eb7f9516054c9377e35c6770b58459867166a76a5c9ef0",
+    "manifestSha256": "d4c51bee5745fa9bd3eb7f9516054c9377e35c6770b58459867166a76a5c9ef0",
+    "fileCount": 22
+  },
+  "repeats": [
+    {
+      "repeat": 1,
+      "encodeElapsedMs": 30447.262,
+      "encodeWallMs": 146265.109,
+      "encodePeakRssBytes": 1899282432,
+      "decodeElapsedMs": 16978.143,
+      "decodeWallMs": 21803.956,
+      "decodePeakRssBytes": 1253048320,
+      "generatorInvocationsDuringDecode": 0,
+      "decodedAspectCount": 35,
+      "nameCount": 13,
+      "placementCount": 13,
+      "manualOverrideCount": 1,
+      "manifestSha256": "f2c3cc8dccfaa8443e9ca3e5290a665b8b59c94bc29bbf7a51e64d0180415cb5",
+      "labelAcceptedStateSha256": "f9ed3b278819d859f32e84caf40cf8c6405588bb6c8366d54bb4f0e9b25e8cdf",
+      "inheritedContextChecksum": "d6ea3051c08269c96536652b99c4eeb39183d205f51a9fbba0f9a6fb8495c9dc"
+    },
+    {
+      "repeat": 2,
+      "encodeElapsedMs": 30629.927,
+      "encodeWallMs": 154209.681,
+      "encodePeakRssBytes": 1949761536,
+      "decodeElapsedMs": 15810.465,
+      "decodeWallMs": 20296.773,
+      "decodePeakRssBytes": 1302167552,
+      "generatorInvocationsDuringDecode": 0,
+      "decodedAspectCount": 35,
+      "nameCount": 13,
+      "placementCount": 13,
+      "manualOverrideCount": 1,
+      "manifestSha256": "f2c3cc8dccfaa8443e9ca3e5290a665b8b59c94bc29bbf7a51e64d0180415cb5",
+      "labelAcceptedStateSha256": "f9ed3b278819d859f32e84caf40cf8c6405588bb6c8366d54bb4f0e9b25e8cdf",
+      "inheritedContextChecksum": "d6ea3051c08269c96536652b99c4eeb39183d205f51a9fbba0f9a6fb8495c9dc"
+    }
+  ],
+  "linuxCorroboration": {
+    "status": "deferred",
+    "requirement": "Matching canonical bytes, checksums, fingerprints, decoded state, and limit results are required before production v2 writer release."
+  }
+}

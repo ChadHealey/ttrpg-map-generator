@@ -353,7 +353,9 @@ describe('accepted M3 physical atlas integration', () => {
 
   it('round-trips a supplied pole context and reports source drift without mutating child state', () => {
     const { physical } = requiredFixture();
-    const supplied = withSuppliedPoleContext(physical.document);
+    const supplied = withSuppliedPoleContext(
+      acceptedLabelDocument(physical.document, labelProposals(physical.document)),
+    );
     const candidate = required(createMapworldV2Candidate(supplied));
     const reopened = required(decodeMapworld(candidate));
     const beforeRegion = regional(supplied);
@@ -365,6 +367,22 @@ describe('accepted M3 physical atlas integration', () => {
     if (reconstructed.status !== 'accepted' || reconstructed.value.physical === undefined) {
       throw new Error('Expected generator-free accepted physical reconstruction.');
     }
+    expect(labelAspectRecords(reopened)).toStrictEqual(labelAspectRecords(supplied));
+    expect(reopened.maps[0]?.decoration).toStrictEqual(supplied.maps[0]?.decoration);
+    const expectedLabels = reconstructAcceptedAtlas(supplied);
+    if (
+      expectedLabels.status !== 'accepted' ||
+      expectedLabels.value.labels === undefined ||
+      reconstructed.value.labels === undefined
+    ) {
+      throw new Error('Expected generator-free accepted sparse label reconstruction.');
+    }
+    expect(reconstructed.value.labels).toStrictEqual(expectedLabels.value.labels);
+    expect(
+      candidate.files.filter(({ path }) =>
+        labelAspectRecords(supplied).some(({ aspectId }) => path.includes(aspectId)),
+      ),
+    ).toHaveLength(labelAspectRecords(supplied).length);
     const sourcePhysical = reconstructAcceptedAtlas(physical.document);
     if (sourcePhysical.status !== 'accepted' || sourcePhysical.value.physical === undefined) {
       throw new Error('Expected source physical reconstruction.');
@@ -519,6 +537,121 @@ describe('accepted M3 physical atlas integration', () => {
             framedEvidence,
             logicalFingerprints: physicalFingerprints(accepted.value.physical),
             inheritedContextChecksum: snapshot.semanticChecksum.value,
+          },
+          null,
+          2,
+        )}\n`,
+      );
+    },
+    300_000,
+  );
+
+  it('accepts complete dense placement state with generated and manual names', () => {
+    const { physical } = requiredFixture();
+    const dense = acceptedLabelDocument(
+      physical.document,
+      completeM3MeasurementLabelProposals(physical.document),
+    );
+    const denseLabels = reconstructAcceptedAtlas(dense);
+    if (denseLabels.status !== 'accepted' || denseLabels.value.labels === undefined) {
+      throw new Error('Expected dense complete M3 label state.');
+    }
+    expect(denseLabels.value.labels.placements).toHaveLength(denseLabels.value.labels.names.length);
+    expect(denseLabels.value.labels.names.some(({ origin }) => origin === 'manual-override')).toBe(
+      true,
+    );
+    expect(denseLabels.value.labels.names.some(({ origin }) => origin === 'generated')).toBe(true);
+  }, 300_000);
+
+  it.skipIf(process.env.ISSUE_151_MEASUREMENT_MODE !== 'encode')(
+    'emits the issue 151 complete M3 measurement candidate',
+    async () => {
+      const candidateDirectory = process.env.ISSUE_151_CANDIDATE_DIRECTORY;
+      const resultPath = process.env.ISSUE_151_RESULT_PATH;
+      if (candidateDirectory === undefined || resultPath === undefined) {
+        throw new Error('Issue 151 measurement paths are required.');
+      }
+      const { createHash } = await import('node:crypto');
+      const { mkdirSync, readFileSync, writeFileSync } = await import('node:fs');
+      const sha256 = (bytes: Uint8Array) => createHash('sha256').update(bytes).digest('hex');
+      const physicalContextCompatibility = physicalV2Compatibility(
+        requiredFixture().physical.document,
+        readFileSync,
+        sha256,
+      );
+      const supplied = completeM3MeasurementDocument(requiredFixture().physical.document);
+      const started = performance.now();
+      const candidate = required(createMapworldV2Candidate(supplied));
+      const elapsedMs = performance.now() - started;
+      const files = candidate.files.map(({ path, bytes }) => ({
+        path,
+        bytes: bytes.byteLength,
+        sha256: sha256(bytes),
+      }));
+      for (const file of candidate.files) {
+        const target = `${candidateDirectory}/${file.path}`;
+        mkdirSync(target.slice(0, target.lastIndexOf('/')), { recursive: true });
+        writeFileSync(target, file.bytes);
+      }
+      const accepted = reconstructAcceptedAtlas(supplied);
+      if (
+        accepted.status !== 'accepted' ||
+        accepted.value.physical === undefined ||
+        accepted.value.labels === undefined
+      ) {
+        throw new Error('Expected accepted complete M3 measurement source.');
+      }
+      const externalAspects = supplied.maps
+        .flatMap(({ aspects }) => aspects)
+        .filter(
+          ({ aspectName }) =>
+            PHYSICAL_ASPECT_NAMES.has(aspectName) || isAtlasLabelAcceptedAspectName(aspectName),
+        );
+      const framedEvidence = externalAspects
+        .map((item) => {
+          const complete = required(canonicalAspectBytes(item));
+          const output = required(canonicalAspectOutputBytes(item));
+          return {
+            aspectId: item.aspectId,
+            aspectName: item.aspectName,
+            completeBytes: complete.byteLength,
+            completeSha256: sha256(complete),
+            outputBytes: output.byteLength,
+            outputSha256: sha256(output),
+          };
+        })
+        .sort((left, right) => compareCodePointText(left.aspectId, right.aspectId));
+      const snapshot = regional(supplied).parent.inheritedContext;
+      if (snapshot === undefined) throw new Error('Expected pole snapshot.');
+      const largestFile = [...files].sort((left, right) => right.bytes - left.bytes)[0];
+      writeFileSync(
+        resultPath,
+        `${JSON.stringify(
+          {
+            elapsedMs,
+            peakRssBytes: process.resourceUsage().maxRSS * 1024,
+            packageBytes: files.reduce((sum, file) => sum + file.bytes, 0),
+            fileCount: files.length,
+            largestFile,
+            manifestSha256: files.find(({ path }) => path === 'manifest.json')?.sha256,
+            files,
+            framedEvidence,
+            physicalFingerprints: physicalFingerprints(accepted.value.physical),
+            labelAcceptedStateSha256: sha256(
+              new TextEncoder().encode(
+                framedEvidence
+                  .filter(({ aspectName }) => isAtlasLabelAcceptedAspectName(aspectName))
+                  .map(({ aspectId, completeSha256 }) => `${aspectId}\0${completeSha256}`)
+                  .join('\n'),
+              ),
+            ),
+            inheritedContextChecksum: snapshot.semanticChecksum.value,
+            nameCount: accepted.value.labels.names.length,
+            placementCount: accepted.value.labels.placements.length,
+            manualOverrideCount: accepted.value.labels.names.filter(
+              ({ origin }) => origin === 'manual-override',
+            ).length,
+            physicalContextCompatibility,
           },
           null,
           2,
@@ -1080,6 +1213,119 @@ function labelProposals(document: WorldDocument) {
   return [...names.proposals, ...placements.proposals];
 }
 
+function completeM3MeasurementDocument(document: WorldDocument): WorldDocument {
+  return withSuppliedPoleContext(
+    acceptedLabelDocument(document, completeM3MeasurementLabelProposals(document)),
+  );
+}
+
+function physicalV2Compatibility(
+  document: WorldDocument,
+  readFile: (path: string, encoding: 'utf8') => string,
+  sha256: (bytes: Uint8Array) => string,
+) {
+  const baselinePath = 'docs/investigations/issue-138/macos-results.json';
+  const baseline = JSON.parse(readFile(baselinePath, 'utf8')) as {
+    readonly canonicalEvidence: {
+      readonly manifestSha256: string;
+      readonly files: readonly {
+        readonly path: string;
+        readonly bytes: number;
+        readonly sha256: string;
+      }[];
+    };
+  };
+  const candidate = required(createMapworldV2Candidate(withSuppliedPoleContext(document)));
+  const files = candidate.files.map(({ path, bytes }) => ({
+    path,
+    bytes: bytes.byteLength,
+    sha256: sha256(bytes),
+  }));
+  expect(files).toStrictEqual(baseline.canonicalEvidence.files);
+  const manifestSha256 = files.find(({ path }) => path === 'manifest.json')?.sha256;
+  expect(manifestSha256).toBe(baseline.canonicalEvidence.manifestSha256);
+  return {
+    baselinePath,
+    baselineManifestSha256: baseline.canonicalEvidence.manifestSha256,
+    manifestSha256,
+    fileCount: files.length,
+  };
+}
+
+function acceptedLabelDocument(
+  document: WorldDocument,
+  proposals: readonly AspectReplacementProposal[],
+): WorldDocument {
+  const accepted = commitAtlasLabelProposal(document, labelCommand(document, proposals));
+  if (!accepted.ok) throw new Error(JSON.stringify(accepted.diagnostics));
+  return accepted.document;
+}
+
+function completeM3MeasurementLabelProposals(document: WorldDocument) {
+  const accepted = reconstructAcceptedAtlas(document);
+  if (accepted.status !== 'accepted' || accepted.value.physical === undefined) {
+    throw new Error('Expected accepted physical atlas measurement source.');
+  }
+  const generated = createWorldFeatureNameProposals({
+    mapId: document.rootMapId,
+    worldSeed: document.worldSeed,
+    sources: collectWorldFeatureNameSources(accepted.value.geography, accepted.value.physical),
+  });
+  if (!generated.ok) throw new Error(JSON.stringify(generated.diagnostics));
+  const manualIndex = generated.proposals.length - 1;
+  const names: readonly WorldFeatureNameProposal[] = generated.proposals.map((proposal, index) => {
+    if (index !== manualIndex) return proposal;
+    const output: WorldFeatureNameContent = {
+      ...proposal.output,
+      origin: 'manual-override',
+      displayName: 'Codex Meridian',
+      comparisonKey: 'codex meridian',
+    };
+    return Object.freeze({ ...proposal, output: Object.freeze(output) });
+  });
+  const metrics = createAtlasGlyphMetricSnapshot(ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_PACK);
+  if (!metrics.ok) throw new Error(JSON.stringify(metrics.diagnostics));
+  const revision = required(createVariantRevision(0));
+  const placements = resolveAtlasLabelPlacements({
+    mapId: document.rootMapId,
+    worldSeed: document.worldSeed,
+    sceneExtent: {
+      minXTicks: 0,
+      minYTicks: 0,
+      maxXTicks: 2_048 * 1_024,
+      maxYTicks: 1_024 * 1_024,
+    },
+    metrics: metrics.value,
+    candidates: names.map((proposal, index) => ({
+      nameContent: proposal.output,
+      placementVariantRevision: revision,
+      glyphPackSha256: metrics.value.packSha256,
+      priority: 10_000 - index,
+      fontSizeTicks: 10 * 1_024,
+      anchor: {
+        xTicks: (32 + (index % 8) * 250) * 1_024,
+        yTicks: (32 + Math.floor(index / 8) * 48) * 1_024,
+      },
+      variants: [{ variantKey: 'dense-grid', baselineOffset: { xTicks: 0, yTicks: 0 } }],
+    })),
+  });
+  if (
+    !placements.ok ||
+    placements.diagnostics.length > 0 ||
+    placements.proposals.length !== names.length
+  ) {
+    throw new Error(JSON.stringify(placements));
+  }
+  return Object.freeze([...names, ...placements.proposals]);
+}
+
+function labelAspectRecords(document: WorldDocument): readonly AcceptedAspectRecord[] {
+  return document.maps
+    .flatMap(({ aspects }) => aspects)
+    .filter(({ aspectName }) => isAtlasLabelAcceptedAspectName(aspectName))
+    .sort((left, right) => compareCodePointText(left.aspectId, right.aspectId));
+}
+
 function labelCommand(
   document: WorldDocument,
   proposals: readonly AspectReplacementProposal[],
@@ -1633,6 +1879,10 @@ function physicalFingerprints(records: WorldPhysicalContextRecords) {
     temperature: records.temperature.provenance.fingerprint,
     watersheds: records.watersheds.provenance.fingerprint,
   };
+}
+
+function compareCodePointText(left: string, right: string): number {
+  return left < right ? -1 : left > right ? 1 : 0;
 }
 
 function command(

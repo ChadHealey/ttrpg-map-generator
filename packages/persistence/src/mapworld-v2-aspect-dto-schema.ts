@@ -12,6 +12,7 @@ import { z } from 'zod';
 
 import { commonAcceptedAspectFields } from './accepted-aspect-common-dto-schema.js';
 import { isMapworldFieldDescriptor, type MapworldFieldDescriptor } from './mapworld-field-codec.js';
+import { mapworldV2LabelAcceptedAspectDtoSchemas } from './mapworld-v2-label-dto-schema.js';
 import { MAPWORLD_V2_ACCEPTED_ASPECT_SCHEMA_VERSION } from './persistence-model.js';
 import {
   canonicalIntegerDtoSchema,
@@ -281,6 +282,7 @@ export const mapworldV2AcceptedAspectDtoSchema = z.discriminatedUnion('aspectNam
   aspectSchema('worldHydrology.watersheds', hydrologyParametersSchema, watershedsOutputSchema),
   aspectSchema('worldHydrology.majorRivers', hydrologyParametersSchema, majorRiversOutputSchema),
   aspectSchema('worldHydrology.majorLakes', hydrologyParametersSchema, majorLakesOutputSchema),
+  ...mapworldV2LabelAcceptedAspectDtoSchemas,
 ]);
 
 export type MapworldV2AcceptedAspectDto = z.infer<typeof mapworldV2AcceptedAspectDtoSchema>;

@@ -352,7 +352,7 @@ fn enumerate_directory(
         }
         match platform_ffi::open_directory_at(directory, os_name) {
             Ok(child) => {
-                if depth != 0 || name != "maps" {
+                if !is_package_directory(&path) {
                     return Err(OsContext::synthetic("unexpected-child-directory"));
                 }
                 enumerate_directory(&child, &path, depth + 1, entries, total_bytes)?;
@@ -389,6 +389,27 @@ fn enumerate_directory(
         entries.push(NativeFileEntry { path, bytes });
     }
     Ok(())
+}
+
+fn is_package_directory(path: &str) -> bool {
+    let segments = path.split('/').collect::<Vec<_>>();
+    match segments.as_slice() {
+        ["maps"] | ["data"] => true,
+        ["data", map_id] => is_canonical_uuid(map_id),
+        ["data", map_id, "aspects" | "fields"] => is_canonical_uuid(map_id),
+        _ => false,
+    }
+}
+
+fn is_canonical_uuid(value: &str) -> bool {
+    value.len() == 36
+        && value.bytes().enumerate().all(|(index, byte)| {
+            if matches!(index, 8 | 13 | 18 | 23) {
+                byte == b'-'
+            } else {
+                byte.is_ascii_digit() || (b'a'..=b'f').contains(&byte)
+            }
+        })
 }
 
 fn remove_children(
@@ -491,4 +512,26 @@ fn name_error(message: &'static str) -> NativeError {
         None,
         message,
     )
+}
+
+#[cfg(test)]
+mod tests {
+    use super::is_package_directory;
+
+    #[test]
+    fn recognizes_only_v1_and_v2_authoritative_directory_shapes() {
+        let map_id = "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7";
+        assert!(is_package_directory("maps"));
+        assert!(is_package_directory("data"));
+        assert!(is_package_directory(&format!("data/{map_id}")));
+        assert!(is_package_directory(&format!("data/{map_id}/aspects")));
+        assert!(is_package_directory(&format!("data/{map_id}/fields")));
+        assert!(!is_package_directory("cache"));
+        assert!(!is_package_directory("maps/nested"));
+        assert!(!is_package_directory("data/not-a-map"));
+        assert!(!is_package_directory(&format!("data/{map_id}/preview")));
+        assert!(!is_package_directory(&format!(
+            "data/{map_id}/aspects/nested"
+        )));
+    }
 }

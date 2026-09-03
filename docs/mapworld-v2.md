@@ -44,9 +44,16 @@ v2 M1/M2 compatibility aspects plus `externalAcceptedAspects`, sorted by `aspect
 reference contains exactly `acceptedAspectSchemaVersion`, `aspectId`, `aspectName`, and `path`.
 Inline and external IDs form one unique logical aspect set.
 
-Every M3 physical aspect is an external canonical JSON file. It stores the complete accepted-aspect
-v2 envelope, feature/vector values, provenance, dictionaries, and field descriptors. A dense
-`values` sequence is replaced by a descriptor containing:
+Every M3 physical aspect, accepted `worldFeature.nameContent`, and accepted `label.placement` is an
+external canonical JSON file. Generic accepted aspects cannot use this ownership arm, and these M3
+aspects cannot appear inline. Each file stores the complete accepted-aspect v2 envelope. Name and
+placement owners never use `.mwf` chunks. Their exact generated or manual text, comparison bytes,
+integer metrics, glyph identity, variant, revision, dependency, and semantic array order remain
+authoritative; decode does not normalize, regenerate, or reflow them. Placement decoration remains
+a separate reference to its accepted placement owner.
+
+Physical owners additionally store feature/vector values, provenance, dictionaries, and field
+descriptors. A dense `values` sequence is replaced by a descriptor containing:
 
 - `fieldFileSchemaVersion: 1`;
 - `storageKind: "mapworld-field-binary"`;
@@ -141,6 +148,11 @@ reserved bytes, encoding, count, payload length, dictionary, values, and logical
 core aspect/document invariants. Only then does it expose a deeply readonly document. Reader
 reconstruction imports no generator and exposes no backing buffer.
 
+Name and placement reconstruction additionally verifies derived aspect IDs and requires every
+placement to reference the exact same-map name owner, entity, revision, and display text. Missing,
+duplicate, stale, cross-map, mixed-pack, reordered, generic, inline, or undeclared owners fail
+before any accepted document is exposed.
+
 ## Migration, rollback, and recovery
 
 Opening v1 is read-only compatibility, not automatic migration. An explicit M3 acceptance creates
@@ -152,3 +164,21 @@ ADR-0008 roles, marker schema, P00–P17 operations, commit points, result codes
 cleanup rules do not change. Each `T`, `W`, or `B` role is valid only when its manifest-dispatched
 v1 or v2 package and every declared data file validate. A partial or corrupt chunk makes the whole
 candidate invalid; recovery never regenerates or repairs it.
+
+Native readback recognizes the existing v1 `maps/` tree plus only the v2
+`data/<map-id>/{aspects,fields}/` directory grammar. This closes the v2 read-after-write gap without
+changing recovery roles, markers, commit points, policy, limits, or protocol versions; other nested
+directory shapes remain invalid.
+
+## Complete M3 measurement evidence
+
+Issue 151's macOS receipt is checked in at
+[`investigations/issue-151/macos-results.json`](investigations/issue-151/macos-results.json), with
+reproduction instructions in [`investigations/issue-151/README.md`](investigations/issue-151/README.md).
+The measured candidate contains all nine physical aspects and fields, 13 accepted names including
+one manual override, 13 accepted placements, and one regional inherited-context snapshot. Two
+fresh encode/decode runs produced identical package bytes, manifest checksums, physical
+fingerprints, label state, context checksum, file order, framed evidence, and decoded counts with
+zero generator calls during decode. The 134,820,435-byte package and its largest 82,288,604-byte
+entry remain inside the unchanged native limits. Linux corroboration remains a pre-release gate,
+as recorded by the receipt; it is not an implementation blocker.

@@ -46,6 +46,11 @@ independently bounded geometry tests. The native bridges write actual sibling-di
 `.mapworld` packages across Node and Rust, exercise recovery, and arm generator-free reopen
 tripwires after unload. Milestone 1 remains in the command as the legacy compatibility lane.
 
+`pnpm test` likewise runs the accepted M3 physical-atlas integration file in a second, serial
+Vitest invocation after the general parallel pool. Its complete physical fixture and gated
+measurement setup must not consume the CPU budget of independently time-bounded preview tests;
+the tests and their original timeout contracts remain unchanged.
+
 The visible atlas state machine has one explicit edit boundary. `empty`, `preview`, and `accepted`
 may start generation; only clean `accepted` state may plan or commit rerolls. Once saved, the next
 action is unload; once unloaded, the next action is native reopen. The `reopened` proof checkpoint
