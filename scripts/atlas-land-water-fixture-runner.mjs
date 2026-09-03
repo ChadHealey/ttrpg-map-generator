@@ -239,6 +239,14 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
           physicalControls(definition),
         )
       : undefined;
+  const rerollBaseline =
+    physicalScene === undefined
+      ? baselineAccepted
+      : Object.freeze({
+          ...baselineAccepted,
+          document: physicalScene.document,
+          scene: physicalScene.scene,
+        });
   let geographyRerolledAccepted;
   let appearanceRerolledAccepted;
   if (fixtureId === 'milestone-2-atlas-proof') {
@@ -248,7 +256,7 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
         operation: 'geography-reroll',
         worldSeed: definition.worldSeed,
         controls: input.controls,
-        accepted: baselineAccepted,
+        accepted: rerollBaseline,
       },
       workflowRuntime(),
     );
@@ -258,16 +266,13 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
       geographyRerolled.ok ? undefined : JSON.stringify(geographyRerolled),
     );
     if (!geographyRerolled.ok) throw new Error(JSON.stringify(geographyRerolled));
-    geographyRerolledAccepted = geographyRerolled.accepted;
-    assertGeographyRerollIsolation(core, baselineAccepted, geographyRerolledAccepted);
-
     const appearanceRerolled = await desktopGeneration.productionAtlasWorkflowGeneration.commit(
       {
         operationId: `${fixtureId}:appearance-rerolled`,
         operation: 'appearance-reroll',
         worldSeed: definition.worldSeed,
         controls: input.controls,
-        accepted: geographyRerolledAccepted,
+        accepted: geographyRerolled.accepted,
       },
       workflowRuntime(),
     );
@@ -277,7 +282,19 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
       appearanceRerolled.ok ? undefined : JSON.stringify(appearanceRerolled),
     );
     if (!appearanceRerolled.ok) throw new Error(JSON.stringify(appearanceRerolled));
-    appearanceRerolledAccepted = appearanceRerolled.accepted;
+    geographyRerolledAccepted = withoutFixtureLabels(
+      core,
+      geographyRerolled.accepted,
+      rerollBaseline.document,
+    );
+    appearanceRerolledAccepted = withoutFixtureLabels(
+      core,
+      appearanceRerolled.accepted,
+      rerollBaseline.document,
+    );
+    assertGeographyRerollIsolation(core, rerollBaseline, geographyRerolledAccepted, {
+      physicalAspectsMayChange: physicalScene !== undefined,
+    });
     assertAppearanceRerollIsolation(geographyRerolledAccepted, appearanceRerolledAccepted);
   }
 
@@ -369,6 +386,7 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
       render,
       artifacts,
       true,
+      hasPhysicalOverlayNodes(geographyRerolledAccepted.scene),
     );
     const manifest = legacyFixtureManifest({
       artifacts,
@@ -433,6 +451,7 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
       render,
       artifacts,
       true,
+      hasPhysicalOverlayNodes(geographyRerolledAccepted.scene),
     );
     const appearanceIndex = await writeAcceptedAspectIndex(
       outputRoot,
@@ -452,6 +471,7 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
       render,
       artifacts,
       true,
+      hasPhysicalOverlayNodes(appearanceRerolledAccepted.scene),
     );
 
     const encodedPackage = encodeAcceptedPackage(persistence, appearanceRerolledAccepted.document);
@@ -512,6 +532,7 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
       render,
       artifacts,
       false,
+      hasPhysicalOverlayNodes(reopened.accepted.scene),
     );
     const reopenComparison = makeReopenComparison({
       appearanceIndex,
@@ -584,6 +605,45 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
     ),
   };
   write(outputRoot, `manifests/${fixtureId}.fixture.generated.json`, await formatJson(manifest));
+}
+
+function hasPhysicalOverlayNodes(scene) {
+  return scene.nodes.some(({ id }) => id.startsWith('atlas/physical/'));
+}
+
+/** The legacy M2 fixture retains physical context evidence but deliberately excludes M3 labels. */
+function withoutFixtureLabels(core, accepted, baselineDocument) {
+  const baselineMap = baselineDocument.maps[0];
+  const currentMap = accepted.document.maps[0];
+  assert.ok(baselineMap && currentMap);
+  if (baselineMap === undefined || currentMap === undefined) {
+    throw new Error('Fixture label filtering requires root atlas maps.');
+  }
+  const labelAspectIds = new Set(
+    currentMap.aspects
+      .filter(({ aspectName }) => core.isAtlasLabelAcceptedAspectName(aspectName))
+      .map(({ aspectId }) => aspectId),
+  );
+  const baselineEntityIds = new Set(baselineMap.entities.map(({ entityId }) => entityId));
+  const document = {
+    ...accepted.document,
+    maps: accepted.document.maps.map((map) =>
+      map.mapId !== currentMap.mapId
+        ? map
+        : {
+            ...map,
+            entities: map.entities.filter(({ entityId }) => baselineEntityIds.has(entityId)),
+            aspects: map.aspects.filter(({ aspectId }) => !labelAspectIds.has(aspectId)),
+            decoration: {
+              ...map.decoration,
+              aspectReferences: map.decoration.aspectReferences.filter(
+                ({ aspectId }) => !labelAspectIds.has(aspectId),
+              ),
+            },
+          },
+    ),
+  };
+  return Object.freeze({ ...accepted, document: Object.freeze(document) });
 }
 
 async function writeAcceptedAspectIndex(

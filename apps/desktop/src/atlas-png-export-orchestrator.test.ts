@@ -177,6 +177,27 @@ describe('accepted atlas PNG desktop export', () => {
       isTerminal: true,
     });
   });
+
+  it('selects the v2 physical-overlay profile from scene nodes and preserves v1 for M2 scenes', async () => {
+    const writes: Parameters<AtlasPngDestinationPort['write']>[0][] = [];
+    const physical = await exportAcceptedAtlasPng(
+      acceptedState(true),
+      '/exports/physical.png',
+      workflowRuntime([], () => undefined),
+      destinationPort(writes),
+      TEST_DIMENSIONS,
+    );
+    const m2 = await exportAcceptedAtlasPng(
+      acceptedState(),
+      '/exports/m2.png',
+      workflowRuntime([], () => undefined),
+      destinationPort(writes),
+      TEST_DIMENSIONS,
+    );
+
+    expect(physical).toMatchObject({ ok: true, receipt: { profileId: 'atlas-png-v2' } });
+    expect(m2).toMatchObject({ ok: true, receipt: { profileId: 'atlas-png-v1' } });
+  });
 });
 
 function destinationPort(
@@ -240,7 +261,7 @@ function expectProgress(progress: readonly AtlasPngWorkflowProgress[]): void {
   });
 }
 
-function acceptedState(): AcceptedAtlasState {
+function acceptedState(withPhysicalOverlay = false): AcceptedAtlasState {
   const scene: AcceptedAtlasState['scene'] = {
     authority: 'disposable-render-scene',
     sceneKind: 'whole-world-atlas',
@@ -272,6 +293,7 @@ function acceptedState(): AcceptedAtlasState {
         fillColor: '#c9c39a',
         fillRule: 'evenodd',
       },
+      ...(withPhysicalOverlay ? [physicalOverlayNode()] : []),
       polyline('atlas/paper/grain-0000', PAPER_ENTITY_ID, PAPER_ASPECT_ID, [], 30, '#d9c8a3', 0.55),
       polyline(
         'atlas-water/echo/0000',
@@ -306,6 +328,18 @@ function acceptedState(): AcceptedAtlasState {
     appearance: {} as AcceptedAtlasState['appearance'],
     scene,
   };
+}
+
+function physicalOverlayNode(): AcceptedAtlasState['scene']['nodes'][number] {
+  return polyline(
+    'atlas/physical/03-mountain/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa/0000',
+    LAND_ENTITY_ID,
+    LAND_ASPECT_ID,
+    [],
+    12,
+    '#805936',
+    1,
+  );
 }
 
 function rectangle(

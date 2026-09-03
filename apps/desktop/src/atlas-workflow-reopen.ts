@@ -45,6 +45,7 @@ export function reopenAcceptedAtlas(document: WorldDocument): ReopenAcceptedAtla
     reconstructed.value.geography,
     reconstructed.value.appearance,
     RESTRAINED_INK_ATLAS_STYLE,
+    reconstructed.value.physical === undefined ? {} : { physical: reconstructed.value.physical },
   );
   if (!scene.ok) {
     return Object.freeze({

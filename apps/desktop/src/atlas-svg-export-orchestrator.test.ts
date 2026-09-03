@@ -84,6 +84,28 @@ describe('accepted atlas SVG desktop export', () => {
     expect(changedWrites[0]?.bytes).not.toEqual(baselineWrites[0]?.bytes);
   });
 
+  it('selects the v2 physical-overlay profile from scene nodes and preserves v1 for M2 scenes', async () => {
+    const writes: Parameters<AtlasSvgDestinationPort['write']>[0][] = [];
+    const physical = await exportAcceptedAtlasSvg(
+      acceptedState(10, true),
+      '/exports/physical.svg',
+      runtime([]),
+      destinationPort(writes),
+    );
+    const m2 = await exportAcceptedAtlasSvg(
+      acceptedState(),
+      '/exports/m2.svg',
+      runtime([]),
+      destinationPort(writes),
+    );
+
+    expect(physical).toMatchObject({ ok: true, receipt: { profileId: 'atlas-svg-v2' } });
+    expect(m2).toMatchObject({ ok: true, receipt: { profileId: 'atlas-svg-v1' } });
+    expect(new TextDecoder().decode(writes[0]?.bytes)).toContain(
+      'data-export-profile="atlas-svg-v2"',
+    );
+  });
+
   it('cancels before starting a destination commit and returns no partial output', async () => {
     let isCancelled = false;
     let writes = 0;
@@ -177,7 +199,7 @@ function runtime(progress: string[]) {
   };
 }
 
-function acceptedState(landX = 10): AcceptedAtlasState {
+function acceptedState(landX = 10, withPhysicalOverlay = false): AcceptedAtlasState {
   const scene: AcceptedAtlasState['scene'] = {
     authority: 'disposable-render-scene',
     sceneKind: 'whole-world-atlas',
@@ -231,6 +253,7 @@ function acceptedState(landX = 10): AcceptedAtlasState {
         fillColor: '#c9c39a',
         fillRule: 'evenodd',
       },
+      ...(withPhysicalOverlay ? [physicalOverlayNode()] : []),
       ...decorationNodes(),
     ],
   };
@@ -245,6 +268,22 @@ function acceptedState(landX = 10): AcceptedAtlasState {
     geography: {} as AcceptedAtlasState['geography'],
     appearance: {} as AcceptedAtlasState['appearance'],
     scene,
+  };
+}
+
+function physicalOverlayNode(): AcceptedAtlasState['scene']['nodes'][number] {
+  return {
+    id: 'atlas/physical/03-mountain/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa/0000',
+    kind: 'polyline',
+    sourceId: LAND_ENTITY_ID,
+    sourceAspectId: LAND_ASPECT_ID,
+    relatedSourceIds: [],
+    points: [
+      { xPx: 12, yPx: 12 },
+      { xPx: 18, yPx: 18 },
+    ],
+    strokeColor: '#805936',
+    strokeWidthPx: 1,
   };
 }
 

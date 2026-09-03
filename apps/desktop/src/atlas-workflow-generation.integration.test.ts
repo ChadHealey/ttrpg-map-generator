@@ -24,7 +24,9 @@ import {
   ATLAS_PNG_MAXIMUM_BYTES,
   ATLAS_SVG_MAXIMUM_BYTES,
   exportAtlasSceneToPngAsync,
+  exportAtlasSceneToPngWithPhysicalOverlaysAsync,
   exportAtlasSceneToSvg,
+  exportAtlasSceneToSvgWithPhysicalOverlays,
 } from '@ttrpg-map/render';
 import { beforeAll, describe, expect, it } from 'vitest';
 
@@ -51,10 +53,7 @@ import {
   withAcceptedDiagnostic,
 } from './atlas-workflow-generation-integration-test-support.js';
 import { reopenAcceptedAtlas } from './atlas-workflow-reopen.js';
-import {
-  exerciseVisibleAtlasWorkflow,
-  type VisibleAtlasWorkflowExercise,
-} from './atlas-workflow-visible-proof-test-support.js';
+import { exerciseVisibleAtlasWorkflow } from './atlas-workflow-visible-proof-test-support.js';
 import { NATIVE_MAPWORLD_COMMANDS } from './mapworld-native-boundary.js';
 
 const PNG_INTEGRATION_DIMENSIONS = Object.freeze({ widthPx: 1_600, heightPx: 800 });
@@ -69,8 +68,6 @@ interface GeneratedAtlasStates {
 }
 
 let generatedStates: GeneratedAtlasStates | undefined;
-let visibleWorkflowSnapshot: VisibleAtlasWorkflowExercise['snapshot'] | undefined;
-let visibleWorkflowNativeCommands: readonly string[] | undefined;
 
 describe('complete Milestone 2 atlas proposal transaction', () => {
   beforeAll(async () => {
@@ -104,9 +101,6 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
       changedControls,
       appearanceProgress: Object.freeze(appearanceProgress),
     });
-    const visible = await exerciseVisibleAtlasWorkflow({ baseline, geography, appearance });
-    visibleWorkflowSnapshot = visible.snapshot;
-    visibleWorkflowNativeCommands = visible.nativeCommands;
   }, 300_000);
 
   it('accepts control replacement and proves geography/appearance reroll isolation', async () => {
@@ -139,6 +133,7 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
     expect(m3AcceptedRecords(controlled)).not.toStrictEqual(m3AcceptedRecords(baseline));
     expect(m3AcceptedRecords(geography)).not.toStrictEqual(m3AcceptedRecords(baseline));
     expect(m3AcceptedRecords(appearance)).toStrictEqual(m3AcceptedRecords(geography));
+    expect(physicalSceneNodes(appearance)).toStrictEqual(physicalSceneNodes(geography));
     expect(appearance.document.maps[0]?.decoration).toStrictEqual(
       geography.document.maps[0]?.decoration,
     );
@@ -168,8 +163,13 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
     expect(constrained.document.maps[0]?.constraints).toHaveLength(1);
   }, 30_000);
 
-  it('drives the exact visible proof through native save, true unload, generator-free reopen, and exports', () => {
-    const snapshot = requiredVisibleWorkflowSnapshot();
+  it('drives the exact visible proof through native save, true unload, generator-free reopen, and exports', async () => {
+    const { baseline, geography, appearance } = requiredGeneratedStates();
+    const { snapshot, nativeCommands } = await exerciseVisibleAtlasWorkflow({
+      baseline,
+      geography,
+      appearance,
+    });
     expect(snapshot).toMatchObject({
       phase: 'reopened',
       acceptedCheckpoint: 'reopened',
@@ -183,21 +183,21 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
       },
       reopenGenerationInvocationCount: 0,
       pngExportReceipt: {
-        profileId: 'atlas-png-v1',
+        profileId: 'atlas-png-v2',
         widthPx: 8_192,
         heightPx: 4_096,
       },
-      svgExportReceipt: { profileId: 'atlas-svg-v1' },
+      svgExportReceipt: { profileId: 'atlas-svg-v2' },
     });
     expect(snapshot.savedEvidence?.checkpoint).toBe('appearance-rerolled');
     expect(snapshot.reopenedEvidence?.checkpoint).toBe('reopened');
     expect(snapshot.savedEvidence?.aspects.length).toBeGreaterThan(9);
     expect(snapshot.targetPath).toBe('/proofs/Milestone-Two.mapworld');
-    expect(visibleWorkflowNativeCommands).toStrictEqual([
+    expect(nativeCommands).toStrictEqual([
       NATIVE_MAPWORLD_COMMANDS.save,
       NATIVE_MAPWORLD_COMMANDS.snapshot,
     ]);
-  });
+  }, 300_000);
 
   it('accepts a valid unchanged complete proposal through the exported core boundary', () => {
     const { appearance } = requiredGeneratedStates();
@@ -553,13 +553,6 @@ function requiredGeneratedStates(): GeneratedAtlasStates {
   return generatedStates;
 }
 
-function requiredVisibleWorkflowSnapshot(): VisibleAtlasWorkflowExercise['snapshot'] {
-  if (visibleWorkflowSnapshot === undefined) {
-    throw new Error('Visible atlas workflow setup did not complete.');
-  }
-  return visibleWorkflowSnapshot;
-}
-
 function expectCompleteM3Atlas(accepted: AcceptedAtlasState): void {
   const reconstructed = reconstructAcceptedAtlas(accepted.document);
   expect(reconstructed.status).toBe('accepted');
@@ -572,6 +565,7 @@ function expectCompleteM3Atlas(accepted: AcceptedAtlasState): void {
   }
   expect(reconstructed.value.labels.names.length).toBeGreaterThan(0);
   expect(reconstructed.value.labels.placements.length).toBeGreaterThan(0);
+  expect(physicalSceneNodes(accepted)).not.toHaveLength(0);
   for (const record of m3AcceptedRecords(accepted)) {
     expect(record.variantRevision).toBe(0);
   }
@@ -594,27 +588,39 @@ function encodedAcceptedAtlas(document: WorldDocument): MapworldPackage {
 }
 
 function canonicalSvg(accepted: Pick<AcceptedAtlasState, 'scene'>): Uint8Array {
-  const result = exportAtlasSceneToSvg({
+  const request = {
     scene: accepted.scene,
     style: RESTRAINED_INK_ATLAS_STYLE,
-  });
+  };
+  const result = hasPhysicalOverlayNodes(accepted.scene)
+    ? exportAtlasSceneToSvgWithPhysicalOverlays(request)
+    : exportAtlasSceneToSvg(request);
   if (!result.ok) throw new Error(JSON.stringify(result.diagnostics));
   return result.value.bytes;
 }
 
 async function canonicalPng(accepted: Pick<AcceptedAtlasState, 'scene'>): Promise<Uint8Array> {
-  const result = await exportAtlasSceneToPngAsync(
-    {
-      scene: accepted.scene,
-      style: RESTRAINED_INK_ATLAS_STYLE,
-      dimensions: PNG_INTEGRATION_DIMENSIONS,
-    },
-    {
-      isCancellationRequested: () => false,
-      reportProgress: () => undefined,
-      yieldControl: () => Promise.resolve(),
-    },
-  );
+  const request = {
+    scene: accepted.scene,
+    style: RESTRAINED_INK_ATLAS_STYLE,
+    dimensions: PNG_INTEGRATION_DIMENSIONS,
+  };
+  const runtime = {
+    isCancellationRequested: () => false,
+    reportProgress: () => undefined,
+    yieldControl: () => Promise.resolve(),
+  };
+  const result = hasPhysicalOverlayNodes(accepted.scene)
+    ? await exportAtlasSceneToPngWithPhysicalOverlaysAsync(request, runtime)
+    : await exportAtlasSceneToPngAsync(request, runtime);
   if (!result.ok) throw new Error(JSON.stringify(result.diagnostics));
   return result.value.bytes;
+}
+
+function physicalSceneNodes(accepted: Pick<AcceptedAtlasState, 'scene'>) {
+  return accepted.scene.nodes.filter(({ id }) => id.startsWith('atlas/physical/'));
+}
+
+function hasPhysicalOverlayNodes(scene: AcceptedAtlasState['scene']): boolean {
+  return physicalSceneNodes({ scene }).length > 0;
 }

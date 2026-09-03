@@ -732,7 +732,7 @@
 
     {#if atlas.pngExportReceipt !== undefined}
       <section aria-labelledby="png-export-heading" class="workflow-card">
-        <p class="eyebrow">atlas-png-v1 · verified native export</p>
+        <p class="eyebrow">{atlas.pngExportReceipt.profileId} · verified native export</p>
         <h2 id="png-export-heading">PNG export complete</h2>
         <p>{atlas.pngExportReceipt.targetPath}</p>
         <dl>
@@ -754,7 +754,7 @@
 
     {#if atlas.svgExportReceipt !== undefined}
       <section aria-labelledby="svg-export-heading" class="workflow-card">
-        <p class="eyebrow">atlas-svg-v1 · verified native export</p>
+        <p class="eyebrow">{atlas.svgExportReceipt.profileId} · verified native export</p>
         <h2 id="svg-export-heading">SVG export complete</h2>
         <p>{atlas.svgExportReceipt.targetPath}</p>
         <dl>

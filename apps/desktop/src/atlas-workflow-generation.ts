@@ -174,7 +174,18 @@ async function generateAndCommit(
     if (retainedAspects === undefined) {
       return failure(['atlas.transaction.source.invalid'], 'The accepted root map is missing.');
     }
-    return generateM2AndCommit(request, prepared, previous.geography, retainedAspects, runtime);
+    const m2 = await generateM2AndCommit(
+      request,
+      prepared,
+      previous.geography,
+      retainedAspects,
+      runtime,
+      false,
+    );
+    if (!m2.ok) return m2;
+    const completed = composeAcceptedM3Scene(m2.accepted);
+    if (completed.ok) reportCompletedProgress(request.operationId, runtime);
+    return completed;
   }
   const full = await generateAtlasLandWaterFull(
     prepared.input,
@@ -517,7 +528,31 @@ async function composeAcceptedM3Atlas(
   if (!labels.ok) return transactionFailure(labels.diagnostics);
   if (runtime.isCancellationRequested()) return cancelled();
 
-  return Object.freeze({ ok: true, accepted: Object.freeze({ ...m2, document: labels.document }) });
+  return composeAcceptedM3Scene(Object.freeze({ ...m2, document: labels.document }));
+}
+
+/** Compose disposable physical overlays only from the accepted document reconstruction. */
+function composeAcceptedM3Scene(accepted: AcceptedAtlasState): AtlasWorkflowCommitResult {
+  const reconstructed = reconstructAcceptedAtlas(accepted.document);
+  if (reconstructed.status !== 'accepted' || reconstructed.value.physical === undefined) {
+    return failure(
+      ['atlas.transaction.source.invalid'],
+      'The accepted physical atlas could not be reconstructed for scene composition.',
+    );
+  }
+  const scene = composeAtlasRenderScene(
+    accepted.geography,
+    accepted.appearance,
+    RESTRAINED_INK_ATLAS_STYLE,
+    { physical: reconstructed.value.physical },
+  );
+  if (!scene.ok) {
+    return failure(
+      scene.diagnostics.map(({ code }) => code),
+      scene.diagnostics[0]?.message,
+    );
+  }
+  return Object.freeze({ ok: true, accepted: Object.freeze({ ...accepted, scene: scene.value }) });
 }
 
 function aspectRevisions(document: WorldDocument) {

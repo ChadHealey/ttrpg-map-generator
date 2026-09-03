@@ -178,7 +178,12 @@ export function decodeAcceptedPackage(persistence, packageValue) {
   return requiredPersistenceValue(persistence.decodeMapworld(packageValue));
 }
 
-export function assertGeographyRerollIsolation(core, baseline, geographyRerolled) {
+export function assertGeographyRerollIsolation(
+  core,
+  baseline,
+  geographyRerolled,
+  { physicalAspectsMayChange = false } = {},
+) {
   const baselineById = aspectsById(baseline.document);
   const rerolledById = aspectsById(geographyRerolled.document);
   assertDocumentEnvelopeUnchanged(baseline.document, geographyRerolled.document, false);
@@ -221,11 +226,26 @@ export function assertGeographyRerollIsolation(core, baseline, geographyRerolled
   );
   for (const [aspectId, before] of baselineById) {
     const after = rerolledById.get(aspectId);
-    if (after === undefined || before.aspectName === 'worldTerrain.macroElevation') continue;
+    if (
+      after === undefined ||
+      before.aspectName === 'worldTerrain.macroElevation' ||
+      (physicalAspectsMayChange && isPhysicalContextAspect(before.aspectName))
+    ) {
+      continue;
+    }
     assert.equal(after.aspectId, before.aspectId);
     assert.equal(after.variantRevision, before.variantRevision);
   }
   assert.ok(baselineById.size > 0 && rerolledById.size > 0);
+}
+
+function isPhysicalContextAspect(aspectName) {
+  return (
+    aspectName === 'worldTerrain.mountainSystems' ||
+    aspectName.startsWith('worldClimate.') ||
+    aspectName.startsWith('worldEcology.') ||
+    aspectName.startsWith('worldHydrology.')
+  );
 }
 
 export function assertAppearanceRerollIsolation(geographyRerolled, appearanceRerolled) {

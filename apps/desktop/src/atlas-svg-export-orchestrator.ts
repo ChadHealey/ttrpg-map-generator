@@ -7,7 +7,9 @@ import {
   ATLAS_SVG_DEFAULT_DIMENSIONS,
   ATLAS_SVG_DIAGNOSTIC_CODES,
   type AtlasSvgExportProgress,
+  type AtlasSvgPhysicalOverlayExportProgress,
   exportAtlasSceneToSvgAsync,
+  exportAtlasSceneToSvgWithPhysicalOverlaysAsync,
 } from '@ttrpg-map/render';
 
 import {
@@ -56,8 +58,8 @@ export interface AtlasSvgDestinationPort {
 }
 
 export interface AtlasSvgWorkflowReceipt extends AtlasSvgNativeWriteReceipt {
-  readonly profileId: 'atlas-svg-v1';
-  readonly profileVersion: 1;
+  readonly profileId: 'atlas-svg-v1' | 'atlas-svg-v2';
+  readonly profileVersion: 1 | 2;
   readonly widthMillimeters: number;
   readonly heightMillimeters: number;
 }
@@ -112,20 +114,21 @@ export async function exportAcceptedAtlasSvg(
     );
   }
   const totalWork = accepted.scene.nodes.length + 1;
-  const svg = await exportAtlasSceneToSvgAsync(
-    {
-      scene: accepted.scene,
-      style: RESTRAINED_INK_ATLAS_STYLE,
-      dimensions: ATLAS_SVG_DEFAULT_DIMENSIONS,
+  const request = {
+    scene: accepted.scene,
+    style: RESTRAINED_INK_ATLAS_STYLE,
+    dimensions: ATLAS_SVG_DEFAULT_DIMENSIONS,
+  };
+  const exportRuntime = {
+    isCancellationRequested: runtime.isCancellationRequested,
+    reportProgress: (value: AtlasSvgExportProgress | AtlasSvgPhysicalOverlayExportProgress) => {
+      runtime.reportProgress(mapProgress(runtime, value, totalWork));
     },
-    {
-      isCancellationRequested: runtime.isCancellationRequested,
-      reportProgress: (value) => {
-        runtime.reportProgress(mapProgress(runtime, value, totalWork));
-      },
-      yieldControl: runtime.yieldControl,
-    },
-  );
+    yieldControl: runtime.yieldControl,
+  };
+  const svg = hasPhysicalOverlayNodes(accepted.scene)
+    ? await exportAtlasSceneToSvgWithPhysicalOverlaysAsync(request, exportRuntime)
+    : await exportAtlasSceneToSvgAsync(request, exportRuntime);
   if (!svg.ok) {
     const first = svg.diagnostics[0];
     return Object.freeze({
@@ -173,7 +176,7 @@ export async function exportAcceptedAtlasSvg(
 
 function mapProgress(
   runtime: AtlasSvgWorkflowRuntime,
-  value: AtlasSvgExportProgress,
+  value: AtlasSvgExportProgress | AtlasSvgPhysicalOverlayExportProgress,
   totalWork: number,
 ): AtlasSvgWorkflowProgress {
   return progress(
@@ -183,6 +186,10 @@ function mapProgress(
     totalWork,
     value.stage === 'cancelled' || value.stage === 'failed',
   );
+}
+
+function hasPhysicalOverlayNodes(scene: AcceptedAtlasState['scene']): boolean {
+  return scene.nodes.some(({ id }) => id.startsWith('atlas/physical/'));
 }
 
 function progress(
