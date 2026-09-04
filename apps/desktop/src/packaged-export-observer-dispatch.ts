@@ -33,15 +33,15 @@ interface NativeExportReceipt {
 }
 
 interface SvgExportReceipt extends NativeExportReceipt {
-  readonly profileId: 'atlas-svg-v1' | 'atlas-svg-v2';
-  readonly profileVersion: 1 | 2;
+  readonly profileId: 'atlas-svg-v1' | 'atlas-svg-v2' | 'atlas-svg-v3';
+  readonly profileVersion: 1 | 2 | 3;
   readonly widthMillimeters: number;
   readonly heightMillimeters: number;
 }
 
 interface PngExportReceipt extends NativeExportReceipt {
-  readonly profileId: 'atlas-png-v1' | 'atlas-png-v2';
-  readonly profileVersion: 1 | 2;
+  readonly profileId: 'atlas-png-v1' | 'atlas-png-v2' | 'atlas-png-v3';
+  readonly profileVersion: 1 | 2 | 3;
   readonly widthPx: number;
   readonly heightPx: number;
 }
@@ -73,8 +73,14 @@ export interface PackagedExportObserverCompletion {
   readonly sha256: string;
   readonly byteLength: number;
   readonly platform: 'macos' | 'linux';
-  readonly profileId: 'atlas-svg-v1' | 'atlas-svg-v2' | 'atlas-png-v1' | 'atlas-png-v2';
-  readonly profileVersion: 1 | 2;
+  readonly profileId:
+    | 'atlas-svg-v1'
+    | 'atlas-svg-v2'
+    | 'atlas-svg-v3'
+    | 'atlas-png-v1'
+    | 'atlas-png-v2'
+    | 'atlas-png-v3';
+  readonly profileVersion: 1 | 2 | 3;
   readonly dimensions: '400x200mm' | '8192x4096px';
   readonly nativeAtomicReceiptVerified: true;
   readonly acceptedStateUnchanged: true;

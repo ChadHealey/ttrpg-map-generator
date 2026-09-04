@@ -13,6 +13,7 @@ import {
   ATLAS_DISPLAY_PROJECTION_METADATA,
 } from './atlas-display-projection.js';
 import {
+  ATLAS_LABEL_SCENE_COMPOSITION_VERSION,
   ATLAS_SCENE_COMPOSITION_VERSION,
   ATLAS_SCENE_HEIGHT_PX,
   ATLAS_SCENE_LEVELS_OF_DETAIL,
@@ -22,15 +23,29 @@ import {
 import {
   atlasSvgFooterLines,
   atlasSvgHeaderLines,
+  atlasSvgHeaderPrefixLines,
+  atlasSvgHeaderSuffixLines,
   type AtlasSvgSerializationInput,
+  renderAtlasSvgGlyphDefinition,
+  renderAtlasSvgLabelNode,
   renderAtlasSvgNode,
   serializeAtlasSvg,
+  serializeAtlasSvgWithinByteLimit,
 } from './atlas-svg-serialization.js';
+import {
+  ATLAS_VECTOR_LABEL_FONT_POLICY,
+  ATLAS_VECTOR_LABEL_MAXIMUM_STORED_POINTS,
+  validateAndExpandAtlasVectorLabelLayer,
+  validateAndExpandAtlasVectorLabelLayerAsync,
+  type ValidatedAtlasVectorLabelLayer,
+} from './atlas-vector-label.js';
 
 export const ATLAS_SVG_EXPORT_PROFILE_ID = 'atlas-svg-v1' as const;
 export const ATLAS_SVG_EXPORT_VERSION = 1 as const;
 export const ATLAS_SVG_PHYSICAL_OVERLAY_EXPORT_PROFILE_ID = 'atlas-svg-v2' as const;
 export const ATLAS_SVG_PHYSICAL_OVERLAY_EXPORT_VERSION = 2 as const;
+export const ATLAS_SVG_LABEL_EXPORT_PROFILE_ID = 'atlas-svg-v3' as const;
+export const ATLAS_SVG_LABEL_EXPORT_VERSION = 3 as const;
 export const ATLAS_SVG_FONT_POLICY = 'no-rendered-text-v1' as const;
 export const ATLAS_SVG_SUPPORTED_STYLE_ID = 'atlas-style.restrained-ink' as const;
 export const ATLAS_SVG_MAXIMUM_BYTES = 32 * 1_024 * 1_024;
@@ -107,6 +122,15 @@ export interface AtlasSvgPhysicalOverlayExport extends Omit<
   readonly profileVersion: typeof ATLAS_SVG_PHYSICAL_OVERLAY_EXPORT_VERSION;
 }
 
+export interface AtlasSvgLabelExport extends Omit<AtlasSvgExport, 'profileId' | 'profileVersion'> {
+  readonly profileId: typeof ATLAS_SVG_LABEL_EXPORT_PROFILE_ID;
+  readonly profileVersion: typeof ATLAS_SVG_LABEL_EXPORT_VERSION;
+}
+
+export type AtlasSvgLabelExportResult =
+  | { readonly ok: true; readonly value: AtlasSvgLabelExport }
+  | { readonly ok: false; readonly diagnostics: readonly AtlasSvgDiagnostic[] };
+
 export type AtlasSvgExportResult =
   | { readonly ok: true; readonly value: AtlasSvgExport }
   | { readonly ok: false; readonly diagnostics: readonly AtlasSvgDiagnostic[] };
@@ -130,6 +154,10 @@ export interface AtlasSvgPhysicalOverlayExportProgress extends Omit<
   readonly profileId: typeof ATLAS_SVG_PHYSICAL_OVERLAY_EXPORT_PROFILE_ID;
 }
 
+export interface AtlasSvgLabelExportProgress extends Omit<AtlasSvgExportProgress, 'profileId'> {
+  readonly profileId: typeof ATLAS_SVG_LABEL_EXPORT_PROFILE_ID;
+}
+
 export interface AtlasSvgExportRuntime {
   readonly isCancellationRequested: () => boolean;
   readonly reportProgress: (progress: AtlasSvgExportProgress) => void;
@@ -139,6 +167,12 @@ export interface AtlasSvgExportRuntime {
 export interface AtlasSvgPhysicalOverlayExportRuntime {
   readonly isCancellationRequested: () => boolean;
   readonly reportProgress: (progress: AtlasSvgPhysicalOverlayExportProgress) => void;
+  readonly yieldControl: () => Promise<void>;
+}
+
+export interface AtlasSvgLabelExportRuntime {
+  readonly isCancellationRequested: () => boolean;
+  readonly reportProgress: (progress: AtlasSvgLabelExportProgress) => void;
   readonly yieldControl: () => Promise<void>;
 }
 
@@ -152,6 +186,8 @@ const UTF8_ENCODER = new TextEncoder();
 const COLOR_PATTERN = /^#[0-9a-f]{6}$/u;
 const RENDER_NODE_ID_PATTERN = /^[\x20-\x7e]+$/u;
 const SERIALIZATION_BATCH_SIZE = 128;
+const GLYPH_DEFINITION_BATCH_SIZE = 8;
+const ATLAS_SVG_LABEL_MAXIMUM_NODES = 4_096;
 
 /** Serialize the exact accepted atlas scene without consulting geography or generator state. */
 export function exportAtlasSceneToSvg(request: AtlasSvgExportRequest): AtlasSvgExportResult {
@@ -175,6 +211,149 @@ export function exportAtlasSceneToSvgWithPhysicalOverlays(
       }),
     ),
   );
+}
+
+/** Serialize the append-only v3 profile for accepted outlined atlas labels. */
+export function exportAtlasSceneToSvgWithLabels(
+  request: AtlasSvgExportRequest,
+): AtlasSvgLabelExportResult {
+  const validated = validateLabelRequest(request);
+  if (!validated.ok) return validated;
+  const serialized = serializeAtlasSvgWithinByteLimit(
+    serializationInput(
+      validated.value,
+      {
+        profileId: ATLAS_SVG_LABEL_EXPORT_PROFILE_ID,
+        profileVersion: ATLAS_SVG_LABEL_EXPORT_VERSION,
+      },
+      ATLAS_VECTOR_LABEL_FONT_POLICY,
+    ),
+    ATLAS_SVG_MAXIMUM_BYTES,
+  );
+  if (!serialized.ok) {
+    return {
+      ok: false,
+      diagnostics: Object.freeze([
+        diagnostic(
+          ATLAS_SVG_DIAGNOSTIC_CODES.outputTooLarge,
+          `The canonical SVG exceeds the ${String(ATLAS_SVG_MAXIMUM_BYTES)}-byte atlas limit.`,
+        ),
+      ]),
+    };
+  }
+  const result = finishExport(validated.value, serialized.value.svg);
+  if (!result.ok) return result;
+  return {
+    ok: true,
+    value: Object.freeze({
+      ...result.value,
+      profileId: ATLAS_SVG_LABEL_EXPORT_PROFILE_ID,
+      profileVersion: ATLAS_SVG_LABEL_EXPORT_VERSION,
+    }),
+  };
+}
+
+/** Cancellable v3 serialization with the same bytes and pre-allocation ceiling as the sync API. */
+export async function exportAtlasSceneToSvgWithLabelsAsync(
+  request: AtlasSvgExportRequest,
+  runtime: AtlasSvgLabelExportRuntime,
+): Promise<AtlasSvgLabelExportResult> {
+  runtime.reportProgress(labelProgress('validating', 0, request.scene.nodes.length, false));
+  if (runtime.isCancellationRequested()) {
+    return labelCancelled(runtime, request.scene.nodes.length, 0);
+  }
+  await runtime.yieldControl();
+  if (runtime.isCancellationRequested()) {
+    return labelCancelled(runtime, request.scene.nodes.length, 0);
+  }
+  const validated = await validateLabelRequestAsync(request, runtime);
+  if ('cancelled' in validated) {
+    return labelCancelled(runtime, request.scene.nodes.length, 0);
+  }
+  if (!validated.ok) {
+    runtime.reportProgress(labelProgress('failed', 0, request.scene.nodes.length, true));
+    return validated;
+  }
+  const { scene } = validated.value;
+  const serialization = serializationInput(
+    validated.value,
+    {
+      profileId: ATLAS_SVG_LABEL_EXPORT_PROFILE_ID,
+      profileVersion: ATLAS_SVG_LABEL_EXPORT_VERSION,
+    },
+    ATLAS_VECTOR_LABEL_FONT_POLICY,
+  );
+  const lines: string[] = [];
+  let byteLength = 0;
+  const appendLines = (batch: readonly string[]): boolean => {
+    for (const line of batch) {
+      byteLength += UTF8_ENCODER.encode(`${line}\n`).byteLength;
+      if (byteLength > ATLAS_SVG_MAXIMUM_BYTES) return false;
+      lines.push(line);
+    }
+    return true;
+  };
+  if (!appendLines(atlasSvgHeaderPrefixLines(serialization))) {
+    return labelOutputTooLarge(runtime, scene.nodes.length, 0);
+  }
+  const labels = new Map(scene.vectorLabels?.nodes.map((node) => [node.id, node] as const));
+  runtime.reportProgress(labelProgress('serializing', 0, scene.nodes.length, false));
+  await runtime.yieldControl();
+  const definitions = scene.vectorLabels?.definitions ?? [];
+  for (let start = 0; start < definitions.length; start += GLYPH_DEFINITION_BATCH_SIZE) {
+    if (runtime.isCancellationRequested()) {
+      return labelCancelled(runtime, scene.nodes.length, 0);
+    }
+    const end = Math.min(definitions.length, start + GLYPH_DEFINITION_BATCH_SIZE);
+    if (!appendLines(definitions.slice(start, end).map(renderAtlasSvgGlyphDefinition))) {
+      return labelOutputTooLarge(runtime, scene.nodes.length, 0);
+    }
+    await runtime.yieldControl();
+  }
+  if (runtime.isCancellationRequested()) return labelCancelled(runtime, scene.nodes.length, 0);
+  if (!appendLines(atlasSvgHeaderSuffixLines(serialization))) {
+    return labelOutputTooLarge(runtime, scene.nodes.length, 0);
+  }
+  for (let start = 0; start < scene.nodes.length; start += SERIALIZATION_BATCH_SIZE) {
+    if (runtime.isCancellationRequested())
+      return labelCancelled(runtime, scene.nodes.length, start);
+    const end = Math.min(scene.nodes.length, start + SERIALIZATION_BATCH_SIZE);
+    for (let index = start; index < end; index += 1) {
+      const node = scene.nodes[index];
+      if (node === undefined) continue;
+      const label = labels.get(node.id);
+      if (
+        !appendLines([
+          `    ${label === undefined ? renderAtlasSvgNode(node) : renderAtlasSvgLabelNode(node, label)}`,
+        ])
+      ) {
+        return labelOutputTooLarge(runtime, scene.nodes.length, index);
+      }
+    }
+    runtime.reportProgress(labelProgress('serializing', end, scene.nodes.length, false));
+    await runtime.yieldControl();
+  }
+  if (runtime.isCancellationRequested()) {
+    return labelCancelled(runtime, scene.nodes.length, scene.nodes.length);
+  }
+  if (!appendLines(atlasSvgFooterLines())) {
+    return labelOutputTooLarge(runtime, scene.nodes.length, scene.nodes.length);
+  }
+  runtime.reportProgress(labelProgress('verifying', scene.nodes.length, scene.nodes.length, false));
+  const result = finishExport(validated.value, lines.join('\n').concat('\n'));
+  if (!result.ok) {
+    runtime.reportProgress(labelProgress('failed', scene.nodes.length, scene.nodes.length, true));
+    return result;
+  }
+  runtime.reportProgress(labelProgress('completed', scene.nodes.length, scene.nodes.length, true));
+  return {
+    ok: true,
+    value: Object.freeze({
+      ...result.value,
+      profileId: ATLAS_SVG_LABEL_EXPORT_PROFILE_ID,
+      profileVersion: ATLAS_SVG_LABEL_EXPORT_VERSION,
+    }),
+  };
 }
 
 /**
@@ -447,13 +626,221 @@ function serializationInput(
     profileId: ATLAS_SVG_EXPORT_PROFILE_ID,
     profileVersion: ATLAS_SVG_EXPORT_VERSION,
   },
+  fontPolicy: string = ATLAS_SVG_FONT_POLICY,
 ): AtlasSvgSerializationInput {
   return {
     ...input,
     profileId: profile.profileId,
     profileVersion: profile.profileVersion,
-    fontPolicy: ATLAS_SVG_FONT_POLICY,
+    fontPolicy,
   };
+}
+
+function validateLabelRequest(request: AtlasSvgExportRequest): LabelRequestValidationResult {
+  const scene = request.scene as AtlasRenderScene;
+  if (
+    scene.sceneCompositionVersion !== ATLAS_LABEL_SCENE_COMPOSITION_VERSION ||
+    scene.vectorLabels === undefined
+  ) {
+    return {
+      ok: false,
+      diagnostics: Object.freeze([
+        diagnostic(
+          ATLAS_SVG_DIAGNOSTIC_CODES.sceneUnsupported,
+          'atlas-svg-v3 requires a complete scene-version-4 outlined-label layer.',
+        ),
+      ]),
+    };
+  }
+  const labels = validateAndExpandAtlasVectorLabelLayer(scene.vectorLabels);
+  if (!labels.ok) return labelLayerValidationFailure(labels.diagnostics[0]);
+  return consumeLabelRequestValidation(validateLabelRequestSteps(request, labels.value));
+}
+
+type LabelRequestValidationResult =
+  | { readonly ok: true; readonly value: ValidatedExport }
+  | { readonly ok: false; readonly diagnostics: readonly AtlasSvgDiagnostic[] };
+
+type AsyncLabelRequestValidationResult =
+  LabelRequestValidationResult | { readonly cancelled: true };
+
+async function validateLabelRequestAsync(
+  request: AtlasSvgExportRequest,
+  runtime: AtlasSvgLabelExportRuntime,
+): Promise<AsyncLabelRequestValidationResult> {
+  const scene = request.scene as AtlasRenderScene;
+  if (
+    scene.sceneCompositionVersion !== ATLAS_LABEL_SCENE_COMPOSITION_VERSION ||
+    scene.vectorLabels === undefined
+  ) {
+    return {
+      ok: false,
+      diagnostics: Object.freeze([
+        diagnostic(
+          ATLAS_SVG_DIAGNOSTIC_CODES.sceneUnsupported,
+          'atlas-svg-v3 requires a complete scene-version-4 outlined-label layer.',
+        ),
+      ]),
+    };
+  }
+  const labels = await validateAndExpandAtlasVectorLabelLayerAsync(scene.vectorLabels, runtime);
+  if ('cancelled' in labels) return labels;
+  if (!labels.ok) return labelLayerValidationFailure(labels.diagnostics[0]);
+
+  const steps = validateLabelRequestSteps(request, labels.value);
+  let step = steps.next();
+  while (!step.done) {
+    if (runtime.isCancellationRequested()) return { cancelled: true };
+    await runtime.yieldControl();
+    if (runtime.isCancellationRequested()) return { cancelled: true };
+    step = steps.next();
+  }
+  return step.value;
+}
+
+function consumeLabelRequestValidation(
+  steps: Generator<void, LabelRequestValidationResult>,
+): LabelRequestValidationResult {
+  let step = steps.next();
+  while (!step.done) step = steps.next();
+  return step.value;
+}
+
+function* validateLabelRequestSteps(
+  request: AtlasSvgExportRequest,
+  labels: ValidatedAtlasVectorLabelLayer,
+): Generator<void, LabelRequestValidationResult> {
+  const scene = request.scene as AtlasRenderScene;
+  const { expanded } = labels;
+  const labelIds = new Set(labels.layer.nodes.map(({ id }) => id));
+  const actualLabelNodes = scene.nodes.slice(scene.nodes.length - expanded.length);
+  const baseNodes = scene.nodes.slice(0, scene.nodes.length - expanded.length);
+  let invalidLabelSuffix =
+    scene.nodes.length < expanded.length || expanded.length !== labelIds.size;
+  const sceneNodeIds = new Set<string>();
+  let checkedNodes = 0;
+  for (const node of scene.nodes) {
+    invalidLabelSuffix ||= sceneNodeIds.has(node.id);
+    sceneNodeIds.add(node.id);
+    checkedNodes += 1;
+    if (checkedNodes % SERIALIZATION_BATCH_SIZE === 0) yield;
+  }
+  for (const node of baseNodes) {
+    invalidLabelSuffix ||= labelIds.has(node.id);
+    checkedNodes += 1;
+    if (checkedNodes % SERIALIZATION_BATCH_SIZE === 0) yield;
+  }
+  for (const [index, node] of expanded.entries()) {
+    invalidLabelSuffix ||= !sameExpandedLabelNode(node, actualLabelNodes[index]);
+    yield;
+  }
+  if (invalidLabelSuffix) {
+    return {
+      ok: false,
+      diagnostics: Object.freeze([
+        diagnostic(
+          ATLAS_SVG_DIAGNOSTIC_CODES.sceneUnsupported,
+          'Scene-version-4 label nodes must be the canonical expanded suffix after coastline ink.',
+        ),
+      ]),
+    };
+  }
+  let storedPointCount = labels.definitionPointCount;
+  checkedNodes = 0;
+  for (const node of scene.nodes) {
+    storedPointCount += renderNodePointCount(node);
+    checkedNodes += 1;
+    if (checkedNodes % SERIALIZATION_BATCH_SIZE === 0) yield;
+  }
+  if (
+    scene.nodes.length > ATLAS_SVG_LABEL_MAXIMUM_NODES ||
+    storedPointCount > ATLAS_VECTOR_LABEL_MAXIMUM_STORED_POINTS
+  ) {
+    return {
+      ok: false,
+      diagnostics: Object.freeze([
+        diagnostic(
+          ATLAS_SVG_DIAGNOSTIC_CODES.outputTooLarge,
+          'The outlined-label scene exceeds its node or stored-point serialization budget.',
+        ),
+      ]),
+    };
+  }
+  const baseScene = {
+    ...scene,
+    sceneCompositionVersion: ATLAS_SCENE_COMPOSITION_VERSION,
+    nodes: baseNodes,
+  };
+  delete (baseScene as { vectorLabels?: unknown }).vectorLabels;
+  const base = validateRequest(
+    { ...request, scene: baseScene },
+    baseNodes.some(({ id }) => id.startsWith('atlas/physical/')),
+  );
+  if (!base.ok) return base;
+  for (const node of expanded) {
+    if (!validNode(node, scene)) {
+      return {
+        ok: false,
+        diagnostics: Object.freeze([
+          diagnostic(
+            ATLAS_SVG_DIAGNOSTIC_CODES.nodeInvalid,
+            'Expanded atlas label contours are invalid or outside the fixed scene extent.',
+          ),
+        ]),
+      };
+    }
+    yield;
+  }
+  return {
+    ok: true,
+    value: Object.freeze({
+      scene,
+      style: Object.freeze({ ...request.style }),
+      dimensions: Object.freeze({ ...(request.dimensions ?? ATLAS_SVG_DEFAULT_DIMENSIONS) }),
+    }),
+  };
+}
+
+function labelLayerValidationFailure(
+  finding:
+    | {
+        readonly code: string;
+        readonly message: string;
+        readonly sourceId?: string;
+      }
+    | undefined,
+): LabelRequestValidationResult {
+  return {
+    ok: false,
+    diagnostics: Object.freeze([
+      diagnostic(
+        finding?.code === 'atlas-vector-label.resource.exceeded'
+          ? ATLAS_SVG_DIAGNOSTIC_CODES.outputTooLarge
+          : finding?.code === 'atlas-vector-label.geometry.invalid'
+            ? ATLAS_SVG_DIAGNOSTIC_CODES.nodeInvalid
+            : ATLAS_SVG_DIAGNOSTIC_CODES.sceneUnsupported,
+        finding?.message ?? 'The vector-label layer is invalid.',
+        finding?.sourceId,
+      ),
+    ]),
+  };
+}
+
+function sameExpandedLabelNode(expected: RenderNode, actual: RenderNode | undefined): boolean {
+  return actual !== undefined && JSON.stringify(expected) === JSON.stringify(actual);
+}
+
+function renderNodePointCount(node: RenderNode): number {
+  switch (node.kind) {
+    case 'rectangle':
+    case 'label':
+      return 0;
+    case 'polygon':
+    case 'polyline':
+      return node.points.length;
+    case 'compoundPath':
+      return node.subpaths.reduce((total, subpath) => total + subpath.points.length, 0);
+  }
 }
 
 function finishPhysicalOverlayExport(
@@ -679,6 +1066,21 @@ function physicalOverlayProgress(
   });
 }
 
+function labelProgress(
+  stage: AtlasSvgLabelExportProgress['stage'],
+  completedNodes: number,
+  totalNodes: number,
+  isTerminal: boolean,
+): AtlasSvgLabelExportProgress {
+  return Object.freeze({
+    profileId: ATLAS_SVG_LABEL_EXPORT_PROFILE_ID,
+    stage,
+    completedNodes,
+    totalNodes,
+    isTerminal,
+  });
+}
+
 function cancelled(
   runtime: AtlasSvgExportRuntime,
   totalNodes: number,
@@ -708,6 +1110,40 @@ function physicalOverlayCancelled(
       diagnostic(
         ATLAS_SVG_DIAGNOSTIC_CODES.cancelled,
         'Atlas SVG export was cancelled before any destination file was committed.',
+      ),
+    ]),
+  };
+}
+
+function labelCancelled(
+  runtime: AtlasSvgLabelExportRuntime,
+  totalNodes: number,
+  completedNodes: number,
+): AtlasSvgLabelExportResult {
+  runtime.reportProgress(labelProgress('cancelled', completedNodes, totalNodes, true));
+  return {
+    ok: false,
+    diagnostics: Object.freeze([
+      diagnostic(
+        ATLAS_SVG_DIAGNOSTIC_CODES.cancelled,
+        'Atlas SVG export was cancelled before any destination file was committed.',
+      ),
+    ]),
+  };
+}
+
+function labelOutputTooLarge(
+  runtime: AtlasSvgLabelExportRuntime,
+  totalNodes: number,
+  completedNodes: number,
+): AtlasSvgLabelExportResult {
+  runtime.reportProgress(labelProgress('failed', completedNodes, totalNodes, true));
+  return {
+    ok: false,
+    diagnostics: Object.freeze([
+      diagnostic(
+        ATLAS_SVG_DIAGNOSTIC_CODES.outputTooLarge,
+        `The canonical SVG exceeds the ${String(ATLAS_SVG_MAXIMUM_BYTES)}-byte atlas limit.`,
       ),
     ]),
   };

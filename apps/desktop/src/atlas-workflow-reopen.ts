@@ -1,6 +1,9 @@
 /** Generator-free accepted-atlas reconstruction after canonical package validation. */
 
-import { RESTRAINED_INK_ATLAS_STYLE } from '@ttrpg-map/assets';
+import {
+  ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_PACK,
+  RESTRAINED_INK_ATLAS_STYLE,
+} from '@ttrpg-map/assets';
 import {
   type AtlasAppearanceRecords,
   type AtlasGeographyRecords,
@@ -45,7 +48,17 @@ export function reopenAcceptedAtlas(document: WorldDocument): ReopenAcceptedAtla
     reconstructed.value.geography,
     reconstructed.value.appearance,
     RESTRAINED_INK_ATLAS_STYLE,
-    reconstructed.value.physical === undefined ? {} : { physical: reconstructed.value.physical },
+    {
+      ...(reconstructed.value.physical === undefined
+        ? {}
+        : { physical: reconstructed.value.physical }),
+      ...(reconstructed.value.labels === undefined
+        ? {}
+        : {
+            labels: reconstructed.value.labels,
+            glyphPack: ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_PACK,
+          }),
+    },
   );
   if (!scene.ok) {
     return Object.freeze({

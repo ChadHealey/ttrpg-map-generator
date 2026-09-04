@@ -282,19 +282,31 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
       appearanceRerolled.ok ? undefined : JSON.stringify(appearanceRerolled),
     );
     if (!appearanceRerolled.ok) throw new Error(JSON.stringify(appearanceRerolled));
-    geographyRerolledAccepted = withoutFixtureLabels(
+    geographyRerolledAccepted = legacyM2FixtureProjection(
       core,
+      desktopSupport,
+      render,
       geographyRerolled.accepted,
-      rerollBaseline.document,
+      appearance.style,
     );
-    appearanceRerolledAccepted = withoutFixtureLabels(
-      core,
-      appearanceRerolled.accepted,
-      rerollBaseline.document,
-    );
-    assertGeographyRerollIsolation(core, rerollBaseline, geographyRerolledAccepted, {
-      physicalAspectsMayChange: physicalScene !== undefined,
+    appearanceRerolledAccepted = Object.freeze({
+      ...legacyM2FixtureProjection(
+        core,
+        desktopSupport,
+        render,
+        appearanceRerolled.accepted,
+        appearance.style,
+      ),
+      geography: geographyRerolledAccepted.geography,
     });
+    const legacyRerollBaseline = legacyM2FixtureProjection(
+      core,
+      desktopSupport,
+      render,
+      rerollBaseline,
+      appearance.style,
+    );
+    assertGeographyRerollIsolation(core, legacyRerollBaseline, geographyRerolledAccepted);
     assertAppearanceRerollIsolation(geographyRerolledAccepted, appearanceRerolledAccepted);
   }
 
@@ -611,39 +623,68 @@ function hasPhysicalOverlayNodes(scene) {
   return scene.nodes.some(({ id }) => id.startsWith('atlas/physical/'));
 }
 
-/** The legacy M2 fixture retains physical context evidence but deliberately excludes M3 labels. */
-function withoutFixtureLabels(core, accepted, baselineDocument) {
-  const baselineMap = baselineDocument.maps[0];
-  const currentMap = accepted.document.maps[0];
-  assert.ok(baselineMap && currentMap);
-  if (baselineMap === undefined || currentMap === undefined) {
-    throw new Error('Fixture label filtering requires root atlas maps.');
+/** Project a completed M3 reroll back to the historical M2 document, scene, and v1 profile. */
+function legacyM2FixtureProjection(core, desktopSupport, render, accepted, style) {
+  const reconstructed = core.reconstructAcceptedAtlas(accepted.document);
+  assert.equal(reconstructed.status, 'accepted');
+  if (reconstructed.status !== 'accepted') {
+    throw new Error(JSON.stringify(reconstructed));
   }
-  const labelAspectIds = new Set(
-    currentMap.aspects
-      .filter(({ aspectName }) => core.isAtlasLabelAcceptedAspectName(aspectName))
-      .map(({ aspectId }) => aspectId),
+  const currentMap = accepted.document.maps[0];
+  assert.ok(currentMap);
+  if (currentMap === undefined) {
+    throw new Error('Fixture M2 projection requires a root atlas map.');
+  }
+  const aspects = currentMap.aspects.filter(
+    ({ aspectName }) =>
+      !core.isAtlasLabelAcceptedAspectName(aspectName) && !isPhysicalContextAspect(aspectName),
   );
-  const baselineEntityIds = new Set(baselineMap.entities.map(({ entityId }) => entityId));
-  const document = {
+  const aspectIds = new Set(aspects.map(({ aspectId }) => aspectId));
+  const singletonIds = core.deriveAtlasSingletonEntityIds(currentMap.mapId);
+  const document = Object.freeze({
     ...accepted.document,
-    maps: accepted.document.maps.map((map) =>
-      map.mapId !== currentMap.mapId
-        ? map
-        : {
-            ...map,
-            entities: map.entities.filter(({ entityId }) => baselineEntityIds.has(entityId)),
-            aspects: map.aspects.filter(({ aspectId }) => !labelAspectIds.has(aspectId)),
-            decoration: {
-              ...map.decoration,
-              aspectReferences: map.decoration.aspectReferences.filter(
-                ({ aspectId }) => !labelAspectIds.has(aspectId),
-              ),
-            },
-          },
+    maps: Object.freeze(
+      accepted.document.maps.map((map) =>
+        map.mapId !== currentMap.mapId
+          ? map
+          : Object.freeze({
+              ...map,
+              entities: desktopSupport.atlasEntities(singletonIds, reconstructed.value.geography),
+              aspects: Object.freeze(aspects),
+              decoration: Object.freeze({
+                ...map.decoration,
+                aspectReferences: Object.freeze(
+                  map.decoration.aspectReferences.filter(({ aspectId }) => aspectIds.has(aspectId)),
+                ),
+              }),
+            }),
+      ),
     ),
-  };
-  return Object.freeze({ ...accepted, document: Object.freeze(document) });
+  });
+  const m2 = core.reconstructAcceptedAtlas(document);
+  assert.equal(m2.status, 'accepted', JSON.stringify(m2));
+  if (m2.status !== 'accepted') throw new Error(JSON.stringify(m2));
+  assert.equal(m2.value.physical, undefined);
+  assert.equal(m2.value.labels, undefined);
+  const scene = render.composeAtlasRenderScene(m2.value.geography, m2.value.appearance, style);
+  assert.equal(scene.ok, true, scene.ok ? undefined : JSON.stringify(scene.diagnostics));
+  if (!scene.ok) throw new Error(JSON.stringify(scene.diagnostics));
+  return Object.freeze({
+    ...accepted,
+    document,
+    geography: m2.value.geography,
+    appearance: m2.value.appearance,
+    scene: scene.value,
+  });
+}
+
+function isPhysicalContextAspect(aspectName) {
+  return (
+    aspectName === 'worldTerrain.mountainSystems' ||
+    aspectName.startsWith('worldClimate.') ||
+    aspectName.startsWith('worldEcology.') ||
+    aspectName.startsWith('worldHydrology.')
+  );
 }
 
 async function writeAcceptedAspectIndex(

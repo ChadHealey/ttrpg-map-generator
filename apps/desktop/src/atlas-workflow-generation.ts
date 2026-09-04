@@ -531,20 +531,28 @@ async function composeAcceptedM3Atlas(
   return composeAcceptedM3Scene(Object.freeze({ ...m2, document: labels.document }));
 }
 
-/** Compose disposable physical overlays only from the accepted document reconstruction. */
+/** Compose disposable physical and label layers only from accepted document reconstruction. */
 function composeAcceptedM3Scene(accepted: AcceptedAtlasState): AtlasWorkflowCommitResult {
   const reconstructed = reconstructAcceptedAtlas(accepted.document);
-  if (reconstructed.status !== 'accepted' || reconstructed.value.physical === undefined) {
+  if (
+    reconstructed.status !== 'accepted' ||
+    reconstructed.value.physical === undefined ||
+    reconstructed.value.labels === undefined
+  ) {
     return failure(
       ['atlas.transaction.source.invalid'],
-      'The accepted physical atlas could not be reconstructed for scene composition.',
+      'The complete accepted M3 atlas could not be reconstructed for scene composition.',
     );
   }
   const scene = composeAtlasRenderScene(
     accepted.geography,
     accepted.appearance,
     RESTRAINED_INK_ATLAS_STYLE,
-    { physical: reconstructed.value.physical },
+    {
+      physical: reconstructed.value.physical,
+      labels: reconstructed.value.labels,
+      glyphPack: ATLAS_ALEGREYA_MEDIUM_ASCII_GLYPH_PACK,
+    },
   );
   if (!scene.ok) {
     return failure(

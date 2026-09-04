@@ -8,8 +8,10 @@ import {
   ATLAS_PNG_DIAGNOSTIC_CODES,
   type AtlasPngDimensions,
   type AtlasPngExportProgress,
+  type AtlasPngLabelExportProgress,
   type AtlasPngPhysicalOverlayExportProgress,
   exportAtlasSceneToPngAsync,
+  exportAtlasSceneToPngWithLabelsAsync,
   exportAtlasSceneToPngWithPhysicalOverlaysAsync,
 } from '@ttrpg-map/render';
 
@@ -60,8 +62,8 @@ export interface AtlasPngDestinationPort {
 }
 
 export interface AtlasPngWorkflowReceipt extends AtlasPngNativeWriteReceipt {
-  readonly profileId: 'atlas-png-v1' | 'atlas-png-v2';
-  readonly profileVersion: 1 | 2;
+  readonly profileId: 'atlas-png-v1' | 'atlas-png-v2' | 'atlas-png-v3';
+  readonly profileVersion: 1 | 2 | 3;
   readonly widthPx: number;
   readonly heightPx: number;
 }
@@ -121,15 +123,22 @@ export async function exportAcceptedAtlasPng(
   const request = { scene: accepted.scene, style: RESTRAINED_INK_ATLAS_STYLE, dimensions };
   const exportRuntime = {
     isCancellationRequested: runtime.isCancellationRequested,
-    reportProgress: (value: AtlasPngExportProgress | AtlasPngPhysicalOverlayExportProgress) => {
+    reportProgress: (
+      value:
+        | AtlasPngExportProgress
+        | AtlasPngPhysicalOverlayExportProgress
+        | AtlasPngLabelExportProgress,
+    ) => {
       exportTotalWork = value.totalWork;
       runtime.reportProgress(mapProgress(runtime, value));
     },
     yieldControl: runtime.yieldControl,
   };
-  const png = hasPhysicalOverlayNodes(accepted.scene)
-    ? await exportAtlasSceneToPngWithPhysicalOverlaysAsync(request, exportRuntime)
-    : await exportAtlasSceneToPngAsync(request, exportRuntime);
+  const png = hasOutlinedLabels(accepted.scene)
+    ? await exportAtlasSceneToPngWithLabelsAsync(request, exportRuntime)
+    : hasPhysicalOverlayNodes(accepted.scene)
+      ? await exportAtlasSceneToPngWithPhysicalOverlaysAsync(request, exportRuntime)
+      : await exportAtlasSceneToPngAsync(request, exportRuntime);
   if (!png.ok) {
     const first = png.diagnostics[0];
     return Object.freeze({
@@ -189,7 +198,8 @@ export async function exportAcceptedAtlasPng(
 
 function mapProgress(
   runtime: AtlasPngWorkflowRuntime,
-  value: AtlasPngExportProgress | AtlasPngPhysicalOverlayExportProgress,
+  value:
+    AtlasPngExportProgress | AtlasPngPhysicalOverlayExportProgress | AtlasPngLabelExportProgress,
 ): AtlasPngWorkflowProgress {
   return progress(
     runtime,
@@ -202,6 +212,10 @@ function mapProgress(
 
 function hasPhysicalOverlayNodes(scene: AcceptedAtlasState['scene']): boolean {
   return scene.nodes.some(({ id }) => id.startsWith('atlas/physical/'));
+}
+
+function hasOutlinedLabels(scene: AcceptedAtlasState['scene']): boolean {
+  return scene.vectorLabels !== undefined;
 }
 
 function progress(

@@ -1,6 +1,7 @@
 /** Deterministic whole-world atlas scene composition from accepted semantic geography. */
 
 import {
+  type AcceptedAtlasLabelRecords,
   type AspectId,
   ATLAS_COASTLINE_APPEARANCE_BEHAVIOR_VERSION,
   ATLAS_PAPER_TREATMENT_BEHAVIOR_VERSION,
@@ -9,6 +10,7 @@ import {
   type AtlasAppearanceRecords,
   type AtlasCoastlineInkDecision,
   type AtlasGeographyRecords,
+  type AtlasGlyphPack,
   type AtlasPaperTreatment,
   type AtlasStyleTokens,
   type AtlasWaterDecorationPath,
@@ -34,8 +36,14 @@ import {
 import { deriveAtlasInkStrokeSegments } from './atlas-ink-path.js';
 import { composeAtlasPhysicalSceneNodes } from './atlas-physical-scene.js';
 import { createAtlasLandFillSubpaths } from './atlas-scene-fill.js';
+import {
+  type AtlasVectorLabelLayer,
+  composeAtlasVectorLabelLayer,
+  expandAtlasVectorLabelLayer,
+} from './atlas-vector-label.js';
 
 export const ATLAS_SCENE_COMPOSITION_VERSION = 3 as const;
+export const ATLAS_LABEL_SCENE_COMPOSITION_VERSION = 4 as const;
 export const ATLAS_SCENE_WIDTH_PX = 2_048 as const;
 export const ATLAS_SCENE_HEIGHT_PX = 1_024 as const;
 
@@ -51,17 +59,20 @@ export type AtlasSceneLevelOfDetail =
 export interface AtlasRenderScene extends RenderScene {
   readonly authority: 'disposable-render-scene';
   readonly sceneKind: 'whole-world-atlas';
-  readonly sceneCompositionVersion: typeof ATLAS_SCENE_COMPOSITION_VERSION;
+  readonly sceneCompositionVersion:
+    typeof ATLAS_SCENE_COMPOSITION_VERSION | typeof ATLAS_LABEL_SCENE_COMPOSITION_VERSION;
   readonly levelOfDetail: AtlasSceneLevelOfDetail;
   readonly coordinateSpace: typeof ATLAS_DISPLAY_COORDINATE_SPACE;
   readonly sourceWorldMapId: string;
   readonly projection: AtlasDisplayProjectionMetadata;
+  readonly vectorLabels?: AtlasVectorLabelLayer;
 }
 
 export const ATLAS_SCENE_DIAGNOSTIC_CODES = Object.freeze({
   invalidAcceptedAppearance: 'atlas-scene.accepted-appearance.invalid',
   invalidAcceptedGeography: 'atlas-scene.accepted-geography.invalid',
   invalidAcceptedPhysical: 'atlas-scene.accepted-physical.invalid',
+  invalidAcceptedLabels: 'atlas-scene.accepted-labels.invalid',
   invalidProjectedFill: 'atlas-scene.projected-fill.invalid',
   projectionFailed: 'atlas-scene.projection.failed',
 } as const);
@@ -84,6 +95,9 @@ export interface AtlasSceneCompositionOptions {
   readonly levelOfDetail?: AtlasSceneLevelOfDetail;
   /** Accepted M3 records to render into the v2 physical-overlay layer. */
   readonly physical?: WorldPhysicalContextRecords;
+  /** Already accepted names/placements and their released pack; both are required together. */
+  readonly labels?: AcceptedAtlasLabelRecords;
+  readonly glyphPack?: AtlasGlyphPack;
 }
 
 /**
@@ -108,6 +122,20 @@ export function composeAtlasRenderScene(
   }
   const physicalDiagnostics = validateAtlasPhysicalSceneSource(records, options.physical);
   if (physicalDiagnostics.length > 0) return { ok: false, diagnostics: physicalDiagnostics };
+  if ((options.labels === undefined) !== (options.glyphPack === undefined)) {
+    return invalidLabels(
+      'Accepted labels and their released glyph pack must be supplied together.',
+    );
+  }
+  const vectorLabels =
+    options.labels === undefined || options.glyphPack === undefined
+      ? undefined
+      : composeAtlasVectorLabelLayer(options.labels, options.glyphPack, style.colors.ink);
+  if (vectorLabels !== undefined && !vectorLabels.ok) {
+    return invalidLabels(
+      vectorLabels.diagnostics[0]?.message ?? 'Accepted atlas labels are invalid.',
+    );
+  }
 
   const projection = projectAtlasCanonicalCoastline(records.coastline);
   if (!projection.ok) {
@@ -207,13 +235,17 @@ export function composeAtlasRenderScene(
       nodes.push(...coastlineNodes(path, decision, coastlineAspectId, style));
     }
   }
+  if (vectorLabels?.ok === true) nodes.push(...expandAtlasVectorLabelLayer(vectorLabels.value));
 
   return {
     ok: true,
     value: Object.freeze({
       authority: 'disposable-render-scene',
       sceneKind: 'whole-world-atlas',
-      sceneCompositionVersion: ATLAS_SCENE_COMPOSITION_VERSION,
+      sceneCompositionVersion:
+        vectorLabels?.ok === true
+          ? ATLAS_LABEL_SCENE_COMPOSITION_VERSION
+          : ATLAS_SCENE_COMPOSITION_VERSION,
       levelOfDetail,
       coordinateSpace: ATLAS_DISPLAY_COORDINATE_SPACE,
       sourceWorldMapId: records.worldMapId,
@@ -221,6 +253,7 @@ export function composeAtlasRenderScene(
       widthPx: ATLAS_SCENE_WIDTH_PX,
       heightPx: ATLAS_SCENE_HEIGHT_PX,
       nodes: Object.freeze(nodes),
+      ...(vectorLabels?.ok === true ? { vectorLabels: vectorLabels.value } : {}),
     }),
   };
 }
@@ -799,6 +832,21 @@ function invalidAppearance(
   message: string,
 ): { readonly ok: false; readonly diagnostics: readonly AtlasSceneDiagnostic[] } {
   return { ok: false, diagnostics: Object.freeze([appearanceDiagnostic(sourceId, message)]) };
+}
+
+function invalidLabels(message: string): {
+  readonly ok: false;
+  readonly diagnostics: readonly AtlasSceneDiagnostic[];
+} {
+  return {
+    ok: false,
+    diagnostics: Object.freeze([
+      Object.freeze({
+        code: ATLAS_SCENE_DIAGNOSTIC_CODES.invalidAcceptedLabels,
+        message,
+      }),
+    ]),
+  };
 }
 
 function invalidFill(

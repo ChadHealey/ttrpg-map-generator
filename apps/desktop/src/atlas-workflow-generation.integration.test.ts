@@ -21,11 +21,14 @@ import {
   type MapworldPackage,
 } from '@ttrpg-map/persistence';
 import {
+  ATLAS_LABEL_SCENE_COMPOSITION_VERSION,
   ATLAS_PNG_MAXIMUM_BYTES,
   ATLAS_SVG_MAXIMUM_BYTES,
   exportAtlasSceneToPngAsync,
+  exportAtlasSceneToPngWithLabelsAsync,
   exportAtlasSceneToPngWithPhysicalOverlaysAsync,
   exportAtlasSceneToSvg,
+  exportAtlasSceneToSvgWithLabels,
   exportAtlasSceneToSvgWithPhysicalOverlays,
 } from '@ttrpg-map/render';
 import { beforeAll, describe, expect, it } from 'vitest';
@@ -134,6 +137,7 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
     expect(m3AcceptedRecords(geography)).not.toStrictEqual(m3AcceptedRecords(baseline));
     expect(m3AcceptedRecords(appearance)).toStrictEqual(m3AcceptedRecords(geography));
     expect(physicalSceneNodes(appearance)).toStrictEqual(physicalSceneNodes(geography));
+    expect(labelSceneNodes(appearance)).toStrictEqual(labelSceneNodes(geography));
     expect(appearance.document.maps[0]?.decoration).toStrictEqual(
       geography.document.maps[0]?.decoration,
     );
@@ -183,11 +187,11 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
       },
       reopenGenerationInvocationCount: 0,
       pngExportReceipt: {
-        profileId: 'atlas-png-v2',
+        profileId: 'atlas-png-v3',
         widthPx: 8_192,
         heightPx: 4_096,
       },
-      svgExportReceipt: { profileId: 'atlas-svg-v2' },
+      svgExportReceipt: { profileId: 'atlas-svg-v3' },
     });
     expect(snapshot.savedEvidence?.checkpoint).toBe('appearance-rerolled');
     expect(snapshot.reopenedEvidence?.checkpoint).toBe('reopened');
@@ -404,7 +408,7 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
         ),
       ).toBe(true);
     }
-  }, 90_000);
+  }, 120_000);
 
   it('rebuilds identical disposable state after scene/cache deletion', () => {
     const accepted = requiredGeneratedStates().appearance;
@@ -503,7 +507,7 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
     expect(decoded.ok).toBe(false);
     if (decoded.ok) return;
     expect(decoded.diagnostics.map(({ code }) => code)).toContain('persistence.checksum.mismatch');
-  }, 30_000);
+  }, 60_000);
 
   it('creates one bounded immutable native save plan for the complete atlas', () => {
     const planned = createMapworldSavePlan(requiredGeneratedStates().appearance.document, {
@@ -566,6 +570,8 @@ function expectCompleteM3Atlas(accepted: AcceptedAtlasState): void {
   expect(reconstructed.value.labels.names.length).toBeGreaterThan(0);
   expect(reconstructed.value.labels.placements.length).toBeGreaterThan(0);
   expect(physicalSceneNodes(accepted)).not.toHaveLength(0);
+  expect(labelSceneNodes(accepted)).not.toHaveLength(0);
+  expect(accepted.scene.sceneCompositionVersion).toBe(ATLAS_LABEL_SCENE_COMPOSITION_VERSION);
   for (const record of m3AcceptedRecords(accepted)) {
     expect(record.variantRevision).toBe(0);
   }
@@ -592,9 +598,11 @@ function canonicalSvg(accepted: Pick<AcceptedAtlasState, 'scene'>): Uint8Array {
     scene: accepted.scene,
     style: RESTRAINED_INK_ATLAS_STYLE,
   };
-  const result = hasPhysicalOverlayNodes(accepted.scene)
-    ? exportAtlasSceneToSvgWithPhysicalOverlays(request)
-    : exportAtlasSceneToSvg(request);
+  const result = hasOutlinedLabels(accepted.scene)
+    ? exportAtlasSceneToSvgWithLabels(request)
+    : hasPhysicalOverlayNodes(accepted.scene)
+      ? exportAtlasSceneToSvgWithPhysicalOverlays(request)
+      : exportAtlasSceneToSvg(request);
   if (!result.ok) throw new Error(JSON.stringify(result.diagnostics));
   return result.value.bytes;
 }
@@ -610,9 +618,11 @@ async function canonicalPng(accepted: Pick<AcceptedAtlasState, 'scene'>): Promis
     reportProgress: () => undefined,
     yieldControl: () => Promise.resolve(),
   };
-  const result = hasPhysicalOverlayNodes(accepted.scene)
-    ? await exportAtlasSceneToPngWithPhysicalOverlaysAsync(request, runtime)
-    : await exportAtlasSceneToPngAsync(request, runtime);
+  const result = hasOutlinedLabels(accepted.scene)
+    ? await exportAtlasSceneToPngWithLabelsAsync(request, runtime)
+    : hasPhysicalOverlayNodes(accepted.scene)
+      ? await exportAtlasSceneToPngWithPhysicalOverlaysAsync(request, runtime)
+      : await exportAtlasSceneToPngAsync(request, runtime);
   if (!result.ok) throw new Error(JSON.stringify(result.diagnostics));
   return result.value.bytes;
 }
@@ -621,6 +631,14 @@ function physicalSceneNodes(accepted: Pick<AcceptedAtlasState, 'scene'>) {
   return accepted.scene.nodes.filter(({ id }) => id.startsWith('atlas/physical/'));
 }
 
+function labelSceneNodes(accepted: Pick<AcceptedAtlasState, 'scene'>) {
+  return accepted.scene.nodes.filter(({ id }) => id.startsWith('atlas/labels/'));
+}
+
 function hasPhysicalOverlayNodes(scene: AcceptedAtlasState['scene']): boolean {
   return physicalSceneNodes({ scene }).length > 0;
+}
+
+function hasOutlinedLabels(scene: AcceptedAtlasState['scene']): boolean {
+  return scene.vectorLabels !== undefined;
 }

@@ -9,6 +9,8 @@ import {
   ATLAS_PNG_DIAGNOSTIC_CODES,
   ATLAS_PNG_EXPORT_PROFILE_ID,
   ATLAS_PNG_EXPORT_VERSION,
+  ATLAS_PNG_LABEL_EXPORT_PROFILE_ID,
+  ATLAS_PNG_LABEL_EXPORT_VERSION,
   ATLAS_PNG_MAXIMUM_BYTES,
   ATLAS_PNG_MAXIMUM_COMPRESSED_ASSEMBLY_BYTES,
   ATLAS_PNG_MAXIMUM_CONCURRENT_ENCODED_BYTES,
@@ -21,6 +23,10 @@ import {
   type AtlasPngExportResources,
   type AtlasPngExportResult,
   type AtlasPngExportRuntime,
+  type AtlasPngLabelExport,
+  type AtlasPngLabelExportProgress,
+  type AtlasPngLabelExportResult,
+  type AtlasPngLabelExportRuntime,
   type AtlasPngPhysicalOverlayExport,
   type AtlasPngPhysicalOverlayExportProgress,
   type AtlasPngPhysicalOverlayExportRequest,
@@ -32,6 +38,7 @@ import {
   atlasPngDiagnostic,
   type AtlasPngValidationResult,
   validateAtlasPngExportRequest,
+  validateAtlasPngLabelExportRequest,
   validateAtlasPngPhysicalOverlayExportRequest,
 } from './atlas-png-validation.js';
 
@@ -66,6 +73,21 @@ export async function exportAtlasSceneToPngWithPhysicalOverlaysAsync(
       profileVersion: ATLAS_PNG_PHYSICAL_OVERLAY_EXPORT_VERSION,
       validate: validateAtlasPngPhysicalOverlayExportRequest,
       progress: pngV2Progress,
+    }),
+  );
+}
+
+/** Rasterize the append-only v3 contract for accepted outlined atlas labels. */
+export async function exportAtlasSceneToPngWithLabelsAsync(
+  request: AtlasPngExportRequest,
+  runtime: AtlasPngLabelExportRuntime,
+): Promise<AtlasPngLabelExportResult> {
+  return asLabelExport(
+    await exportAtlasSceneToPngForProfile(request, runtime, {
+      profileId: ATLAS_PNG_LABEL_EXPORT_PROFILE_ID,
+      profileVersion: ATLAS_PNG_LABEL_EXPORT_VERSION,
+      validate: validateAtlasPngLabelExportRequest,
+      progress: pngV3Progress,
     }),
   );
 }
@@ -249,6 +271,18 @@ function asPhysicalOverlayExport(
   };
 }
 
+function asLabelExport(result: AtlasPngInternalExportResult): AtlasPngLabelExportResult {
+  if (!result.ok) return result;
+  return {
+    ok: true,
+    value: Object.freeze({
+      ...result.value,
+      profileId: ATLAS_PNG_LABEL_EXPORT_PROFILE_ID,
+      profileVersion: ATLAS_PNG_LABEL_EXPORT_VERSION,
+    } satisfies AtlasPngLabelExport),
+  };
+}
+
 function failure(
   code: Parameters<typeof atlasPngDiagnostic>[0],
   message: string,
@@ -279,6 +313,21 @@ function pngV2Progress(
 ): AtlasPngPhysicalOverlayExportProgress {
   return Object.freeze({
     profileId: ATLAS_PNG_PHYSICAL_OVERLAY_EXPORT_PROFILE_ID,
+    stage,
+    completedWork,
+    totalWork,
+    isTerminal,
+  });
+}
+
+function pngV3Progress(
+  stage: AtlasPngLabelExportProgress['stage'],
+  completedWork: number,
+  totalWork: number,
+  isTerminal: boolean,
+): AtlasPngLabelExportProgress {
+  return Object.freeze({
+    profileId: ATLAS_PNG_LABEL_EXPORT_PROFILE_ID,
     stage,
     completedWork,
     totalWork,
