@@ -57,6 +57,11 @@
       "runnerPath": "fixed-seeds/milestone-2-atlas-v2-control-max/fixture-runner.mjs"
     },
     {
+      "fixtureId": "milestone-2-atlas-v2-control-min",
+      "manifestPath": "manifests/milestone-2-atlas-v2-control-min.fixture.generated.json",
+      "runnerPath": "fixed-seeds/milestone-2-atlas-v2-control-min/fixture-runner.mjs"
+    },
+    {
       "fixtureId": "seed-derivation-v1",
       "manifestPath": "manifests/seed-derivation-v1.fixture.generated.json",
       "runnerPath": "fixed-seeds/seed-derivation-v1/fixture-runner.mjs"

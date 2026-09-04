@@ -1,0 +1,247 @@
+{
+  "kernelVectorVersion": 1,
+  "canonicalJsonFormatting": "prettier-json-print-width-100-v1",
+  "evidenceBoundary": "pre-persistence-atlas-generator-kernel-v2",
+  "notCanonicalAspectBytes": true,
+  "notCanonicalAspectOutputBytes": true,
+  "fixtureId": "milestone-2-atlas-v2-control-min",
+  "worldSeed": "6148914691236517205",
+  "stableIds": {
+    "atlasPresentationEntityId": "66b92789-9a5b-5760-b299-1d82700cf3a0",
+    "coastlineAppearanceAspectId": "a200a1c0-c569-5615-80cd-89b15fbab600",
+    "landWaterClassificationAspectId": "04628f37-6408-5087-a139-bdd2bdff42d3",
+    "macroElevationAspectId": "e588eb7f-d585-5c27-9ce5-81c2fb1ebc43",
+    "paperTreatmentAspectId": "f435cc03-cc5f-59aa-9390-8693a9a8fcbd",
+    "waterDecorationAspectId": "90916e2f-286a-5722-984e-0981392bcfd8",
+    "worldMapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7",
+    "worldSurfaceEntityId": "eaa0cecc-8c5d-559f-b18a-bbd0c53248ac"
+  },
+  "controls": {
+    "worldCircumferenceKm": 10000,
+    "targetWaterCoveragePercent": 45,
+    "continentCountIntent": 1,
+    "continentDistribution": "balanced",
+    "fragmentationPercent": 0,
+    "islandAbundancePercent": 0,
+    "archipelagoAbundancePercent": 0,
+    "oceanConnectivity": "singleGlobal",
+    "polarCharacter": "landBiased"
+  },
+  "versions": {
+    "atlasAppearanceGeneratorManifestVersion": 1,
+    "atlasAppearanceParameterSchemaVersion": 1,
+    "atlasCoastlineAppearanceBehaviorVersion": 1,
+    "atlasCoastlineExtractionAlgorithmVersion": 1,
+    "atlasCoastlineGeneratorManifestVersion": 1,
+    "atlasCoastlineGeometryBehaviorVersion": 1,
+    "atlasCoastlineParameterSchemaVersion": 1,
+    "atlasCoastlineSimplificationPolicyVersion": 1,
+    "atlasCoastlineTopologyValidationVersion": 1,
+    "atlasDisplayProjectionVersion": 1,
+    "atlasDisplaySeamPolicyVersion": 1,
+    "atlasFieldBehaviorVersion": 2,
+    "atlasGeneratorManifestVersion": 2,
+    "atlasGeographyContractVersion": 1,
+    "atlasPaperTreatmentBehaviorVersion": 1,
+    "atlasParameterSchemaVersion": 1,
+    "atlasPreviewVersion": 1,
+    "atlasRealizationVersion": 1,
+    "atlasSamplingPolicyVersion": 1,
+    "atlasSceneCompositionVersion": 3,
+    "atlasSemanticClassificationVersion": 1,
+    "atlasSemanticGeneratorManifestVersion": 1,
+    "atlasSemanticParameterSchemaVersion": 1,
+    "atlasSemanticPolicyVersion": 1,
+    "atlasStyleBehaviorVersion": 1,
+    "atlasStyleTokenVersion": 1,
+    "atlasWaterDecorationBehaviorVersion": 1,
+    "deterministicStreamVersion": 1,
+    "landWaterClassificationBehaviorVersion": 1,
+    "landWaterClassificationGeneratorVersion": 1,
+    "macroElevationGeneratorVersion": 2,
+    "seedDerivationVersion": 1
+  },
+  "profiles": {
+    "full": {
+      "profileId": "world-atlas-full-v1",
+      "longitudeCellCount": 2048,
+      "latitudeBandCount": 1024,
+      "sampleCount": 2095106
+    },
+    "preview": {
+      "profileId": "world-atlas-preview-v1",
+      "longitudeCellCount": 512,
+      "latitudeBandCount": 256,
+      "sampleCount": 130562
+    }
+  },
+  "proposal": {
+    "replacementAspectNames": [
+      "worldTerrain.macroElevation",
+      "worldSurface.landWaterClassification"
+    ],
+    "classificationDependencyAspectIds": ["e588eb7f-d585-5c27-9ce5-81c2fb1ebc43"],
+    "seaLevelContourDoubledTicks": -30230801,
+    "macroFieldTicksSha256": "7ac0c7250d61f6d359470f9d5c1896530bd33710c15dd8a9af5c8e510894f084",
+    "landWaterPackedBitsSha256": "3fb7820d8621bd40f59e3630389b56c129e99a6e0c2ce86b7dba2c66cb07a217",
+    "primitiveTraversalSha256": "33f47610f0f5eb0ef051615f99d11aeda41b52f419deb9cac18d41b2c1557635",
+    "sampleCounts": { "land": 1173577, "water": 921529 },
+    "realization": {
+      "realizationVersion": 1,
+      "targetWaterCoveragePercent": 45,
+      "realizedWaterCoveragePercent": 44.984662,
+      "absoluteWaterCoverageErrorBasisPoints": 1.5338,
+      "waterComponentProxyCount": 1,
+      "largestWaterComponentProxyPercent": 100
+    },
+    "diagnosticCodes": ["atlas.land-water.ocean-connectivity-unverified"],
+    "macroSilhouette": {
+      "componentCount": 1,
+      "largestLandSharePercent": 100,
+      "retainedIslandGroupCount": 0
+    },
+    "semantic": {
+      "semanticClassificationVersion": 1,
+      "semanticPolicyVersion": 1,
+      "semanticParameterSchemaVersion": 1,
+      "replacementAspectNames": ["landmass.classification", "waterBody.classification"],
+      "removedAspectIds": [],
+      "explicitlyIncrementedAspectIds": [],
+      "kindCounts": {
+        "continent": 1,
+        "majorIsland": 0,
+        "island": 0,
+        "islandChain": 0,
+        "archipelago": 0,
+        "oceanBasin": 1,
+        "marginalSea": 0,
+        "enclosedSea": 0
+      },
+      "semanticPrimitiveTraversalSha256": "af18e9766e668e9af199e388112cb6a9af2f0632b5fa4bc369d878e3ce2e2190"
+    },
+    "coastline": {
+      "geometryBehaviorVersion": 1,
+      "extractionAlgorithmVersion": 1,
+      "simplificationPolicyVersion": 1,
+      "simplificationToleranceTicks": 524288,
+      "topologyValidationVersion": 1,
+      "winding": "land-on-left",
+      "repairPolicy": "reject-invalid-no-silent-repair",
+      "replacementAspectName": "worldCoastline.geometry",
+      "dependencyAspectIds": [
+        "04628f37-6408-5087-a139-bdd2bdff42d3",
+        "57b6c483-b4b8-5a5a-b2f1-3b8b4343d5c3",
+        "716f2154-9b28-519c-aba3-f8c6ae3e7206"
+      ],
+      "rawPointCount": 3798,
+      "canonicalPointCount": 2816,
+      "ringCount": 1,
+      "coastlinePrimitiveTraversalSha256": "e34f413ae2d8fdff6c8187cfe9a5c06a0cec1dcedb692808750d092aabd60624"
+    },
+    "projection": {
+      "projectionId": "atlas-equirectangular",
+      "projectionVersion": 1,
+      "seamPolicyVersion": 1,
+      "coordinateSpace": "atlas-display-equirectangular-v1",
+      "authority": "disposable-display",
+      "seamLongitudeTicks": -2147483648,
+      "widthDisplayTicks": 4294967296,
+      "heightDisplayTicks": 2147483648,
+      "logicalAspectRatio": 2,
+      "semanticToleranceTicks": 0,
+      "sourceGeometryBehaviorVersion": 1,
+      "pathCount": 1,
+      "pointCount": 2817,
+      "seamSplitRingCount": 0,
+      "seamEndpointCount": 2,
+      "projectedPrimitiveTraversalSha256": "a059e5fafbbcc7441028f28d40571bb4e3edcd381131e85d35a813b58b0740b6"
+    },
+    "appearance": {
+      "generatorManifestVersion": 1,
+      "parameterSchemaVersion": 1,
+      "styleId": "atlas-style.restrained-ink",
+      "styleBehaviorVersion": 1,
+      "styleTokenVersion": 1,
+      "ringDecisionCount": 1,
+      "coastalEchoCount": 30,
+      "waterMarkCount": 14,
+      "paperGrainDensityPermille": 806,
+      "appearancePrimitiveTraversalSha256": "581e886515ca92ef3d30923175ada3ca29317ad080d1bf67e97a281f868b8041",
+      "rerolledAppearancePrimitiveTraversalSha256": "8bb79c0c53a36e88772ba7572a172ca7d3802af4899ec57cf6251f5ea90e5226"
+    },
+    "scene": {
+      "sceneCompositionVersion": 3,
+      "sceneKind": "whole-world-atlas",
+      "levelOfDetail": "normal-atlas",
+      "widthPx": 2048,
+      "heightPx": 1024,
+      "nodeCount": 553,
+      "landFillNodeCount": 1,
+      "coastlineNodeCount": 168,
+      "coastalEchoNodeCount": 30,
+      "waterMarkNodeCount": 14,
+      "paperGrainNodeCount": 338,
+      "seamClosureCount": 1,
+      "sourceLinkedNodeCount": 553,
+      "coarseNodeCount": 3
+    }
+  },
+  "invariants": {
+    "validatedAcceptedOutputRecords": true,
+    "sharedAnchorCount": 130562,
+    "sharedAnchorFieldTickDifferences": 0,
+    "sharedAnchorClassificationDifferences": 0,
+    "sharedSeaLevelContourDoubledTicks": -30230801,
+    "southPole": { "sampleCount": 1, "fieldTicks": -8538218, "classification": "land" },
+    "northPole": { "sampleCount": 1, "fieldTicks": -15435039, "classification": "water" },
+    "canonicalSeamIdentityTicks": 0,
+    "adjacentSeamDeltaTicks": 0,
+    "progress": { "previewReportCount": 71, "fullReportCount": 234, "totalWork": 1000 },
+    "semantic": {
+      "exactOwnedSampleCount": 2095106,
+      "landmassCount": 1,
+      "islandGroupCount": 0,
+      "waterBodyCount": 1,
+      "stableEntityOrder": true,
+      "stableAspectOrder": true,
+      "validatedSemanticRecords": true
+    },
+    "coastline": {
+      "validatedCanonicalCoastlineRecords": true,
+      "exactSourceLinks": true,
+      "stableRingOrder": true,
+      "seamCrossingRingCount": 1,
+      "southPoleClassification": "land",
+      "northPoleClassification": "water"
+    },
+    "projection": {
+      "sourceCoastlineUnchanged": true,
+      "sourceIdentityAndProvenancePreserved": true,
+      "stablePathIdentityAndOrder": true,
+      "noWorldSpanningProjectedSegments": true,
+      "previewFullSemanticToleranceTicks": 0,
+      "canvasSvgSharedSceneCoveredByIntegrationTest": true
+    },
+    "appearance": {
+      "acceptedSourceUnchanged": true,
+      "deterministicRebuildEqual": true,
+      "independentAspectSeeds": true,
+      "appearanceRerollChangesAllThreeOutputs": true,
+      "appearanceRerollPreservesGeography": true,
+      "planetNativeDecorationPaths": true
+    },
+    "scene": {
+      "acceptedSourceUnchanged": true,
+      "cacheFreeRebuildEqual": true,
+      "equivalentInsertionOrderEqual": true,
+      "stableUniqueNodeIds": true,
+      "deterministicLayerOrder": true,
+      "sourceEntityAndAspectLinks": true,
+      "coarseLodPreservesFillGeometry": true,
+      "canvasSvgSharedSceneParity": true,
+      "projectedPointsWithinScene": true,
+      "acceptedAppearanceUnchanged": true,
+      "restrainedLimitedColorStyle": true
+    }
+  }
+}
