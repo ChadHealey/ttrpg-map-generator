@@ -173,7 +173,10 @@ export function assertSharedAnchors(generation, preview, records) {
 
 export function assertSeamAndPoleBehavior(core, generation, input, records) {
   const adapter = generation.createAtlasMacroElevationFieldAdapter(
-    generation.atlasMacroElevationParameters(input.controls),
+    generation.atlasMacroElevationParameters(
+      input.controls,
+      input.macroElevationFieldBehaviorVersion,
+    ),
     parsed(core.createDeterministicRandomStream(input.macroElevationSeedMetadata)),
   );
   const positiveSeam = parsed(core.createPlanetPoint(Math.PI, 0.31));

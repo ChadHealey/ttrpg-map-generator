@@ -286,6 +286,7 @@ async function generateAcceptedM2Source() {
     worldMapId: baseline.worldMapId,
     worldSurfaceEntityId: baseline.worldSurfaceEntityId,
     macroElevationAspectId: baseline.macroElevationAspectId,
+    macroElevationFieldBehaviorVersion: baseline.macroElevationFieldBehaviorVersion,
     landWaterClassificationAspectId: baseline.landWaterClassificationAspectId,
     macroElevationVariantRevision: 1,
     landWaterClassificationVariantRevision: 0,

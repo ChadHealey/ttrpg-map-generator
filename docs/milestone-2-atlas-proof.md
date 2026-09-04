@@ -109,8 +109,9 @@ variant revision `0`. All use the ADR-0006 `map/entity` seed scope with their ow
 owning entity, generator ID, aspect name, and revision. A generator that makes no random draw
 still records the scope and seed metadata; it does not borrow another aspect's stream.
 ADR-0029 additively supports macro-elevation generator/field behavior version `2`; version `1`
-remains the current catalog default until the separated-field implementation deliberately selects
-version `2`, and both accepted contracts remain valid independently of that default.
+remains available for accepted projects and explicit compatibility generation. New atlas generation
+deliberately selects version `2` at the generation-request boundary; both accepted contracts remain
+valid independently of that desktop selection.
 
 | Aspect                                       | Generator ID                           | Owner                        | Direct dependencies                                                                                               | Additional version           | Accepted output and invalidation                                                                                                                                                                                             |
 | -------------------------------------------- | -------------------------------------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -364,8 +365,8 @@ permission for a generator to mutate the document.
 
 ## Registered fixture matrix
 
-The matrix uses six planned registered fixture IDs because fixture-manifest version 1 owns exactly
-one world seed. Every fixture owns the conventional
+The original version-1 matrix uses six registered fixture IDs because fixture-manifest version 1
+owns exactly one world seed. Every fixture owns the conventional
 `fixed-seeds/<fixture-id>/fixture-runner.mjs`; those thin runner files may import one shared
 implementation module, but a manifest never hides a seed array or a second case. All seeds are
 canonical base-10 unsigned-64 strings. `milestone-2-atlas-proof` drives the complete visible
@@ -394,6 +395,20 @@ checkpoint revisions, assertions, and review purpose required by
 [07 — Deterministic Fixture Conventions](07-fixture-conventions.md). A fixture is added to
 `fixtures/registry.json` only with a working runner and complete first review record; placeholder
 registry entries are forbidden. Registry entries and generated artifact paths remain sorted.
+
+The additive separated-field version-2 cohort has 18 baseline-only rows. Twelve normal-control
+rows use world seeds `1` through `12`; they prove a varied but consistently broad, compact family
+of separated continents rather than narrow longitudinal or latitudinal ribbons. Six control rows
+reuse the version-1 proof, fragmented-islands, connected-majority, seam-crossing, control-min, and
+control-max seeds and controls under explicit macro-elevation generator/field behavior version `2`.
+Their reviewed evidence records component count, largest-landmass share, and retained island-group
+count beside the canonical semantic, coastline, scene, SVG, and PNG artifacts. The original six
+version-1 fixtures are not regenerated or replaced.
+
+In addition to those fixed rows, the version-2 invariant suite runs deterministic preview generation
+for 128 consecutive default-control seeds. Every successful proposal must satisfy the analytic
+inter-owner support gap and sampled broad-shape checks. A violation returns a stable invalid-result
+diagnostic and no proposal.
 
 ## Checkpoints and comparison boundary
 

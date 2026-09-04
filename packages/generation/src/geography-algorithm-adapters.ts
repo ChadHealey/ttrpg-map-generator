@@ -16,8 +16,8 @@ import type {
 
 /** Pointwise, planet-native scalar evaluation after canonical fixed-point quantization. */
 export interface QuantizedPlanetFieldAdapter {
-  readonly algorithmId: 'spherical-basis-field';
-  readonly algorithmVersion: 1;
+  readonly algorithmId: 'separated-continent-envelope-field' | 'spherical-basis-field';
+  readonly algorithmVersion: 1 | 2;
   readonly sample: (point: PlanetPoint) => AtlasFieldValueTicks;
 }
 

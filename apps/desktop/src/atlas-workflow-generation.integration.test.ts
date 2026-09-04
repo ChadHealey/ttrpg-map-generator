@@ -129,6 +129,15 @@ describe('complete Milestone 2 atlas proposal transaction', () => {
     expect(controlled.geography.controls.targetWaterCoveragePercent).toBe(66);
     expect(controlled.document.maps[0]?.coordinateSystem.radius).not.toBeUndefined();
     expect(appearanceProgress).toStrictEqual(['validating-proposal', 'completed']);
+    const macroAspect = baseline.document.maps[0]?.aspects.find(
+      ({ aspectName }) => aspectName === 'worldTerrain.macroElevation',
+    );
+    expect(macroAspect).toMatchObject({
+      generatorVersion: 2,
+      parameters: { fieldBehaviorVersion: 2 },
+      seedMetadata: { generatorVersion: 2 },
+      acceptedOutput: { provenance: { fieldBehaviorVersion: 2 } },
+    });
 
     for (const accepted of [baseline, controlled, geography, appearance]) {
       expectCompleteM3Atlas(accepted);

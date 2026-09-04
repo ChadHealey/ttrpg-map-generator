@@ -86,6 +86,12 @@ definition/version kernel. The same production path creates two byte-compared 81
 per row in a disposable verification directory; those large files are inspected but not checked
 into `visual-gallery/`.
 
+The additive Milestone 2 separated-field cohort uses explicit macro-elevation generator/field
+behavior version `2` while retaining the same `atlas-png-v1` export profile. Its 12 normal-control
+rows and six boundary/control rows are new fixture IDs with baseline-only evidence. They do not
+rewrite the six accepted version-1 atlas rows. Each version-2 row also records the component count,
+largest-landmass share, and retained island-group count used during human silhouette review.
+
 The Milestone 1 fixture ID is `milestone-1-kernel-proof`. Its checkpoint names are `baseline`,
 `rerolled`, and `reopened`. Persist the `rerolled` project as the v1 saved-project fixture;
 reopen assertions compare the decoded records with `rerolled` evidence rather than duplicating

@@ -19,6 +19,7 @@ import {
   type GeneratorId,
   type LandWaterClassification,
   type MacroElevationField,
+  type MacroElevationFieldBehaviorVersion,
   type MapEntitySeedInput,
   type MapId,
   orderGenerationDiagnostics,
@@ -28,6 +29,7 @@ import {
   parseVariantRevision,
   parseWorldSeed,
   SEED_DERIVATION_VERSION,
+  selectAtlasMacroElevationVersion,
   type VariantRevision,
   type WorldSeed,
 } from '@ttrpg-map/core';
@@ -43,7 +45,6 @@ import {
   ATLAS_WATER_COVERAGE_TOLERANCE_BASIS_POINTS,
 } from './atlas-land-water-generator-metadata.js';
 import {
-  ATLAS_FIELD_ALGORITHM_VERSION,
   ATLAS_SAMPLING_POLICY_VERSION,
   type AtlasFieldValueTicks,
   WORLD_ATLAS_FULL_PROFILE,
@@ -92,6 +93,7 @@ export interface AtlasLandWaterGenerationInputSource {
   readonly macroElevationAspectId: unknown;
   readonly landWaterClassificationAspectId: unknown;
   readonly macroElevationVariantRevision: unknown;
+  readonly macroElevationFieldBehaviorVersion: unknown;
   readonly landWaterClassificationVariantRevision: unknown;
   readonly controls: unknown;
 }
@@ -104,6 +106,7 @@ export interface AtlasLandWaterGenerationInput {
   readonly macroElevationAspectId: AspectId;
   readonly landWaterClassificationAspectId: AspectId;
   readonly macroElevationVariantRevision: VariantRevision;
+  readonly macroElevationFieldBehaviorVersion: MacroElevationFieldBehaviorVersion;
   readonly landWaterClassificationVariantRevision: VariantRevision;
   readonly controls: AtlasControls;
   readonly macroElevationSeedMetadata: MapEntitySeedInput;
@@ -120,7 +123,7 @@ export interface AtlasMacroElevationParameters {
   readonly parameterSchemaVersion: typeof ATLAS_LAND_WATER_PARAMETER_SCHEMA_VERSION;
   readonly samplingProfileId: typeof ATLAS_FULL_PROFILE_ID;
   readonly samplingPolicyVersion: typeof ATLAS_SAMPLING_POLICY_VERSION;
-  readonly fieldBehaviorVersion: typeof ATLAS_FIELD_ALGORITHM_VERSION;
+  readonly fieldBehaviorVersion: MacroElevationFieldBehaviorVersion;
   readonly worldCircumferenceKm: number;
   readonly continentCountIntent: number;
   readonly continentDistribution: AtlasControls['continentDistribution'];
@@ -253,8 +256,8 @@ export function createAtlasLandWaterGenerationInput(
   if (!isExactInputRecord(input)) {
     return inputFailure(
       ATLAS_LAND_WATER_INPUT_DIAGNOSTIC_CODES.invalidRecord,
-      'Atlas land/water input must contain exactly the eight declared fields.',
-      'Provide the canonical seed, map/surface/aspect IDs, revisions, and complete controls.',
+      'Atlas land/water input must contain exactly the nine declared fields.',
+      'Provide the canonical seed, map/surface/aspect IDs, revisions, macro field version, and complete controls.',
     );
   }
 
@@ -285,6 +288,15 @@ export function createAtlasLandWaterGenerationInput(
     return fieldFailure(
       'macroElevationVariantRevision',
       macroElevationVariantRevision.diagnostic.message,
+    );
+  }
+  if (
+    input.macroElevationFieldBehaviorVersion !== 1 &&
+    input.macroElevationFieldBehaviorVersion !== 2
+  ) {
+    return fieldFailure(
+      'macroElevationFieldBehaviorVersion',
+      'Macro-elevation field behavior version must be the supported literal 1 or 2.',
     );
   }
   const landWaterClassificationVariantRevision = parseVariantRevision(
@@ -331,12 +343,14 @@ export function createAtlasLandWaterGenerationInput(
 
   const orderedControls = freezeControls(controls.value);
   const macroDefinition = atlasAspectDefinition('worldTerrain.macroElevation');
+  const macroVersion = selectAtlasMacroElevationVersion(input.macroElevationFieldBehaviorVersion);
   const classificationDefinition = atlasAspectDefinition('worldSurface.landWaterClassification');
   const macroSeed = mapEntitySeed(
     worldSeed.value,
     worldMapId.value,
     worldSurfaceEntityId.value,
     macroDefinition.generatorId,
+    macroVersion.generatorVersion,
     macroDefinition.aspectName,
     macroElevationVariantRevision.value,
   );
@@ -345,6 +359,7 @@ export function createAtlasLandWaterGenerationInput(
     worldMapId.value,
     worldSurfaceEntityId.value,
     classificationDefinition.generatorId,
+    classificationDefinition.generatorVersion,
     classificationDefinition.aspectName,
     landWaterClassificationVariantRevision.value,
   );
@@ -358,6 +373,7 @@ export function createAtlasLandWaterGenerationInput(
       macroElevationAspectId: macroElevationAspectId.value,
       landWaterClassificationAspectId: landWaterClassificationAspectId.value,
       macroElevationVariantRevision: macroElevationVariantRevision.value,
+      macroElevationFieldBehaviorVersion: input.macroElevationFieldBehaviorVersion,
       landWaterClassificationVariantRevision: landWaterClassificationVariantRevision.value,
       controls: orderedControls,
       macroElevationSeedMetadata: macroSeed,
@@ -368,12 +384,13 @@ export function createAtlasLandWaterGenerationInput(
 
 export function atlasMacroElevationParameters(
   controls: DeepReadonly<AtlasControls>,
+  fieldBehaviorVersion: MacroElevationFieldBehaviorVersion,
 ): AtlasMacroElevationParameters {
   return Object.freeze({
     parameterSchemaVersion: ATLAS_LAND_WATER_PARAMETER_SCHEMA_VERSION,
     samplingProfileId: ATLAS_FULL_PROFILE_ID,
     samplingPolicyVersion: ATLAS_SAMPLING_POLICY_VERSION,
-    fieldBehaviorVersion: ATLAS_FIELD_ALGORITHM_VERSION,
+    fieldBehaviorVersion,
     worldCircumferenceKm: controls.worldCircumferenceKm,
     continentCountIntent: controls.continentCountIntent,
     continentDistribution: controls.continentDistribution,
@@ -418,6 +435,7 @@ function mapEntitySeed(
   mapId: MapId,
   entityId: EntityId,
   generatorId: GeneratorId,
+  generatorVersion: MapEntitySeedInput['generatorVersion'],
   aspectName: (typeof ATLAS_ASPECT_DEFINITIONS)[number]['aspectName'],
   variantRevision: VariantRevision,
 ): MapEntitySeedInput {
@@ -427,7 +445,7 @@ function mapEntitySeed(
     seedScope: 'map/entity',
     worldSeed: formatWorldSeed(worldSeed),
     generatorId,
-    generatorVersion: 1,
+    generatorVersion,
     aspectName,
     variantRevision,
     mapId,
@@ -461,6 +479,7 @@ function isExactInputRecord(input: unknown): input is Readonly<Record<string, un
     'landWaterClassificationAspectId',
     'landWaterClassificationVariantRevision',
     'macroElevationAspectId',
+    'macroElevationFieldBehaviorVersion',
     'macroElevationVariantRevision',
     'worldMapId',
     'worldSeed',

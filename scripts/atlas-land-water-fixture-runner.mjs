@@ -64,6 +64,7 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
   const includesProjection = definition.versions.atlasDisplayProjectionVersion !== undefined;
   const includesAppearance = definition.versions.atlasStyleBehaviorVersion !== undefined;
   const usesPersistenceEvidence = definition.fixtureDefinitionVersion === 2;
+  const macroFieldVersion = definition.versions.atlasFieldBehaviorVersion;
   assert.equal(includesProjection && !includesCoastline, false);
   assert.equal(includesAppearance && !includesProjection, false);
 
@@ -73,8 +74,8 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
   assert.equal(
     definition.evidenceBoundary,
     usesPersistenceEvidence
-      ? 'persistence-canonical-accepted-aspects-v1'
-      : 'pre-persistence-atlas-generator-kernel-v1',
+      ? `persistence-canonical-accepted-aspects-v${macroFieldVersion}`
+      : `pre-persistence-atlas-generator-kernel-v${macroFieldVersion}`,
   );
   assert.equal(Object.hasOwn(definition, 'notCanonicalAspectBytes'), !usesPersistenceEvidence);
   if (!usesPersistenceEvidence) assert.equal(definition.notCanonicalAspectBytes, true);
@@ -91,6 +92,7 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
           includesCoastline,
           includesProjection,
           includesAppearance,
+          definition.versions,
         )
       : expectedVersions(
           core,
@@ -102,13 +104,14 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
           includesCoastline,
           includesProjection,
           includesAppearance,
+          definition.versions,
         ),
   );
   assert.deepEqual(definition.stableIds, expectedStableIds(core, definition));
   const legacyVersions = withoutPersistenceVersions(definition.versions);
   const legacyDefinition = {
     ...definition,
-    evidenceBoundary: 'pre-persistence-atlas-generator-kernel-v1',
+    evidenceBoundary: `pre-persistence-atlas-generator-kernel-v${macroFieldVersion}`,
     versions: legacyVersions,
   };
 
@@ -118,6 +121,7 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
       worldMapId: definition.stableIds.worldMapId,
       worldSurfaceEntityId: definition.stableIds.worldSurfaceEntityId,
       macroElevationAspectId: definition.stableIds.macroElevationAspectId,
+      macroElevationFieldBehaviorVersion: definition.versions.atlasFieldBehaviorVersion,
       landWaterClassificationAspectId: definition.stableIds.landWaterClassificationAspectId,
       macroElevationVariantRevision: definition.checkpoints.baseline['worldTerrain.macroElevation'],
       landWaterClassificationVariantRevision:
@@ -147,6 +151,22 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
   assert.equal(fullResult.patch.replacements.length, 2);
   assert.equal(fullResult.patch.replacements[0].target.aspectName, 'worldTerrain.macroElevation');
   assert.deepEqual(fullResult.patch.replacements[0].dependencyAspects, []);
+  assert.equal(
+    fullResult.patch.replacements[0].generatorVersion,
+    definition.versions.macroElevationGeneratorVersion,
+  );
+  assert.equal(
+    fullResult.patch.replacements[0].parameters.fieldBehaviorVersion,
+    definition.versions.atlasFieldBehaviorVersion,
+  );
+  assert.equal(
+    fullResult.patch.replacements[0].seedMetadata.generatorVersion,
+    definition.versions.macroElevationGeneratorVersion,
+  );
+  assert.equal(
+    fullResult.patch.records.macroElevation.provenance.fieldBehaviorVersion,
+    definition.versions.atlasFieldBehaviorVersion,
+  );
   assert.equal(
     fullResult.patch.replacements[1].target.aspectName,
     'worldSurface.landWaterClassification',
@@ -185,6 +205,10 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
   const semantic = includesSemantic
     ? semanticProof(core, generation, definition, input, records)
     : undefined;
+  const macroSilhouette =
+    macroFieldVersion === 2 && semantic !== undefined
+      ? macroSilhouetteMeasurements(semantic.records)
+      : undefined;
   assert.equal(includesCoastline && semantic === undefined, false);
   const coastline =
     includesCoastline && semantic !== undefined
@@ -347,6 +371,7 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
       sampleCounts,
       realization: fullResult.realization,
       diagnosticCodes: fullResult.diagnostics.map(({ code }) => code),
+      ...(macroSilhouette === undefined ? {} : { macroSilhouette }),
       ...(semantic === undefined ? {} : { semantic: semantic.vector }),
       ...(coastline === undefined ? {} : { coastline: coastline.vector }),
       ...(projection === undefined ? {} : { projection: projection.vector }),
@@ -617,6 +642,17 @@ export async function runAtlasLandWaterFixture(expectedFixtureId) {
     ),
   };
   write(outputRoot, `manifests/${fixtureId}.fixture.generated.json`, await formatJson(manifest));
+}
+
+function macroSilhouetteMeasurements(records) {
+  const landWeights = records.landmasses.map(({ membership }) => membership.sphericalAreaWeight);
+  const totalLandWeight = landWeights.reduce((total, weight) => total + weight, 0);
+  const largestLandWeight = Math.max(...landWeights);
+  return {
+    componentCount: records.landmasses.length,
+    largestLandSharePercent: Number(((largestLandWeight / totalLandWeight) * 100).toFixed(6)),
+    retainedIslandGroupCount: records.islandGroups.length,
+  };
 }
 
 function hasPhysicalOverlayNodes(scene) {

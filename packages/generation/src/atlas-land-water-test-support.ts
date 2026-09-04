@@ -95,12 +95,22 @@ export const FIXED_ATLAS_GENERATOR_CASES: readonly FixedAtlasGeneratorCase[] = O
 export function fixedAtlasInput(
   fixed: FixedAtlasGeneratorCase = requiredCase('milestone-2-atlas-proof'),
   controls: FixedAtlasGeneratorCase['controls'] = fixed.controls,
+  macroElevationFieldBehaviorVersion: 1 | 2 = 1,
+): AtlasLandWaterGenerationInput {
+  return fixedAtlasInputForWorldSeed(fixed.worldSeed, controls, macroElevationFieldBehaviorVersion);
+}
+
+export function fixedAtlasInputForWorldSeed(
+  worldSeed: string,
+  controls: FixedAtlasGeneratorCase['controls'] = DEFAULT_ATLAS_CONTROLS,
+  macroElevationFieldBehaviorVersion: 1 | 2 = 1,
 ): AtlasLandWaterGenerationInput {
   const parsed = createAtlasLandWaterGenerationInput({
-    worldSeed: fixed.worldSeed,
+    worldSeed,
     worldMapId: FIXED_ATLAS_WORLD_MAP_ID,
     worldSurfaceEntityId: FIXED_ATLAS_WORLD_SURFACE_ENTITY_ID,
     macroElevationAspectId: FIXED_ATLAS_MACRO_ELEVATION_ASPECT_ID,
+    macroElevationFieldBehaviorVersion,
     landWaterClassificationAspectId: FIXED_ATLAS_LAND_WATER_ASPECT_ID,
     macroElevationVariantRevision: 0,
     landWaterClassificationVariantRevision: 0,

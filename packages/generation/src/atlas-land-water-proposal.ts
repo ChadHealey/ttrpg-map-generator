@@ -14,6 +14,7 @@ import {
   type LandWaterClassification,
   type MacroElevationField,
   type MapEntitySeedInput,
+  selectAtlasMacroElevationVersion,
 } from '@ttrpg-map/core';
 
 import type { AtlasClassificationOutput } from './atlas-land-water-classification.js';
@@ -30,7 +31,6 @@ import {
 } from './atlas-land-water-generator-metadata.js';
 import type { SampledAtlasMacroElevationField } from './atlas-macro-elevation-field.js';
 import {
-  ATLAS_FIELD_ALGORITHM_VERSION,
   ATLAS_SAMPLING_POLICY_VERSION,
   type AtlasContourLevel,
 } from './atlas-sampling-profiles.js';
@@ -50,7 +50,7 @@ export function createAtlasLandWaterRecords(
       longitudeCellCount: ATLAS_FULL_LONGITUDE_CELL_COUNT,
       latitudeBandCount: ATLAS_FULL_LATITUDE_BAND_COUNT,
       canonicalTraversal: ATLAS_CANONICAL_FIELD_TRAVERSAL,
-      fieldBehaviorVersion: ATLAS_FIELD_ALGORITHM_VERSION,
+      fieldBehaviorVersion: input.macroElevationFieldBehaviorVersion,
       quantizationScale: ATLAS_FIELD_QUANTIZATION_SCALE,
     }),
     values: field.compactValues(),
@@ -78,6 +78,7 @@ export function createAtlasLandWaterProposedPatch(
   diagnostics: readonly GenerationDiagnostic[],
 ): AtlasLandWaterProposedPatch {
   const macroDefinition = aspectDefinition('worldTerrain.macroElevation');
+  const macroVersion = selectAtlasMacroElevationVersion(input.macroElevationFieldBehaviorVersion);
   const classificationDefinition = aspectDefinition('worldSurface.landWaterClassification');
   const macroProposal: GenerationProposal<
     AtlasMacroElevationParameters,
@@ -93,7 +94,7 @@ export function createAtlasLandWaterProposedPatch(
       variantRevision: input.macroElevationVariantRevision,
     }),
     generatorId: macroDefinition.generatorId,
-    generatorVersion: macroDefinition.generatorVersion,
+    generatorVersion: macroVersion.generatorVersion,
     parameterSchemaVersion: macroDefinition.parameterSchemaVersion,
     parameters: macroParameters,
     seedScope: 'map/entity',

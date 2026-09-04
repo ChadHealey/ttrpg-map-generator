@@ -616,6 +616,8 @@ function prepareInput(
   const previousAspects = request.accepted?.document.maps[0]?.aspects ?? [];
   const macro = revisionFor(previousAspects, 'worldTerrain.macroElevation', incrementMacro);
   const partition = revisionFor(previousAspects, 'worldSurface.landWaterClassification', false);
+  const macroElevationFieldBehaviorVersion =
+    request.accepted?.geography.macroElevation.provenance.fieldBehaviorVersion ?? 2;
   const input = createAtlasLandWaterGenerationInput({
     worldSeed: formatWorldSeed(worldSeed.value),
     worldMapId: ATLAS_PROOF_WORLD_MAP_ID,
@@ -624,6 +626,7 @@ function prepareInput(
       singletonIds.worldSurfaceEntityId,
       'worldTerrain.macroElevation',
     ),
+    macroElevationFieldBehaviorVersion,
     landWaterClassificationAspectId: deriveAtlasAspectId(
       singletonIds.worldSurfaceEntityId,
       'worldSurface.landWaterClassification',

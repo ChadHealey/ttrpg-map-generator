@@ -19,6 +19,7 @@ import {
 import {
   FIXED_ATLAS_GENERATOR_CASES,
   fixedAtlasInput,
+  fixedAtlasInputForWorldSeed,
   fixedAtlasRuntime,
   generateFixedAtlasFull,
   requiredCase,
@@ -32,6 +33,52 @@ import {
 } from './atlas-sampling-profiles.js';
 
 describe('whole-world atlas land/water generation invariants', () => {
+  it('produces an accepted version-2 proposal with matching field, generator, and seed provenance', async () => {
+    const input = fixedAtlasInput(undefined, undefined, 2);
+    const preview = await generateAtlasLandWaterPreview(input, fixedAtlasRuntime(input));
+    const result = await generateAtlasLandWaterFull(input, fixedAtlasRuntime(input));
+    if (result.status !== 'proposed-full') {
+      throw new Error(
+        JSON.stringify({
+          preview: preview.status === 'preview' ? preview.realization : preview.diagnostics,
+          result: result.diagnostics,
+        }),
+      );
+    }
+    expect(result.patch.records.macroElevation.provenance.fieldBehaviorVersion).toBe(2);
+    expect(result.patch.replacements[0]).toMatchObject({
+      generatorVersion: 2,
+      parameters: { fieldBehaviorVersion: 2 },
+      seedMetadata: { generatorVersion: 2 },
+    });
+  }, 30_000);
+
+  it('produces valid version-2 proposals for all six distinct control rows', async () => {
+    for (const fixed of FIXED_ATLAS_GENERATOR_CASES) {
+      const input = fixedAtlasInput(fixed, fixed.controls, 2);
+      const result = await generateAtlasLandWaterFull(input, fixedAtlasRuntime(input));
+      if (result.status !== 'proposed-full') {
+        throw new Error(`${fixed.fixtureId}: ${JSON.stringify(result.diagnostics)}`);
+      }
+      expect(result.patch.records.macroElevation.provenance.fieldBehaviorVersion).toBe(2);
+      expect(validateAtlasLandWaterRecords(result.patch.records)).toEqual([]);
+    }
+  }, 120_000);
+
+  it('satisfies coverage, gap, and shape diagnostics for 128 ordinary version-2 previews', async () => {
+    for (let seed = 1; seed <= 128; seed += 1) {
+      const input = fixedAtlasInputForWorldSeed(String(seed), undefined, 2);
+      const result = await generateAtlasLandWaterPreview(input, fixedAtlasRuntime(input));
+      if (result.status !== 'preview') {
+        throw new Error(`seed ${String(seed)}: ${JSON.stringify(result.diagnostics)}`);
+      }
+      expect(result.realization.absoluteWaterCoverageErrorBasisPoints).toBeLessThanOrEqual(
+        ATLAS_WATER_COVERAGE_TOLERANCE_BASIS_POINTS,
+      );
+      expect(result.diagnostics.some(({ severity }) => severity === 'error')).toBe(false);
+    }
+  }, 120_000);
+
   it('produces valid accepted full-profile records for all six fixed seed/control rows', async () => {
     for (const fixed of FIXED_ATLAS_GENERATOR_CASES) {
       const result = await generateFixedAtlasFull(fixed);
@@ -104,7 +151,7 @@ describe('whole-world atlas land/water generation invariants', () => {
     const stream = createDeterministicRandomStream(input.macroElevationSeedMetadata);
     if (!stream.ok) throw new Error(stream.diagnostic.message);
     const adapter = createAtlasMacroElevationFieldAdapter(
-      atlasMacroElevationParameters(input.controls),
+      atlasMacroElevationParameters(input.controls, input.macroElevationFieldBehaviorVersion),
       stream.value,
     );
     const positiveSeam = createPlanetPoint(Math.PI, 0.31);

@@ -11,13 +11,22 @@ export function expectedVersions(
   includesCoastline = false,
   includesProjection = false,
   includesAppearance = false,
+  macroVersionProfile,
 ) {
+  const macroFieldBehaviorVersion =
+    macroVersionProfile?.atlasFieldBehaviorVersion ??
+    generation.ATLAS_LAND_WATER_GENERATOR_MANIFEST.versions.fieldBehaviorVersion;
+  const macroVersion = core.selectAtlasMacroElevationVersion(macroFieldBehaviorVersion);
+  const atlasGeneratorManifestVersion =
+    macroFieldBehaviorVersion === generation.ATLAS_SEPARATED_FIELD_BEHAVIOR_VERSION
+      ? generation.ATLAS_LAND_WATER_GENERATOR_MANIFEST_VERSION
+      : 1;
   return {
     ...(persistence === undefined
       ? {}
       : { acceptedAspectSchemaVersion: persistence.ACCEPTED_ASPECT_SCHEMA_VERSION }),
-    atlasFieldBehaviorVersion: generation.ATLAS_FIELD_ALGORITHM_VERSION,
-    atlasGeneratorManifestVersion: generation.ATLAS_LAND_WATER_GENERATOR_MANIFEST_VERSION,
+    atlasFieldBehaviorVersion: macroVersion.fieldBehaviorVersion,
+    atlasGeneratorManifestVersion,
     atlasGeographyContractVersion: core.ATLAS_GEOGRAPHY_CONTRACT_VERSION,
     atlasParameterSchemaVersion: generation.ATLAS_LAND_WATER_PARAMETER_SCHEMA_VERSION,
     atlasPreviewVersion: generation.ATLAS_LAND_WATER_PREVIEW_VERSION,
@@ -26,7 +35,7 @@ export function expectedVersions(
     deterministicStreamVersion: core.DETERMINISTIC_STREAM_VERSION,
     landWaterClassificationBehaviorVersion: generation.ATLAS_LAND_WATER_CLASSIFICATION_VERSION,
     landWaterClassificationGeneratorVersion: 1,
-    macroElevationGeneratorVersion: 1,
+    macroElevationGeneratorVersion: macroVersion.generatorVersion,
     ...(persistence === undefined
       ? {}
       : {
@@ -161,21 +170,31 @@ function indexedStableIds(prefix, values) {
 }
 
 function assertSemanticFixturePurpose(fixtureId, records) {
-  if (fixtureId === 'milestone-2-atlas-fragmented-islands') {
+  const isVersionTwoCounterpart = fixtureId.startsWith('milestone-2-atlas-v2-');
+  const purposeId = fixtureId.replace('milestone-2-atlas-v2-', 'milestone-2-atlas-');
+  if (purposeId === 'milestone-2-atlas-fragmented-islands') {
     assert.ok(records.landmasses.some(({ kind }) => kind === 'majorIsland'));
     assert.ok(records.landmasses.some(({ kind }) => kind === 'island'));
-    assert.deepEqual(records.islandGroups.map(({ kind }) => kind).sort(compareText), [
-      'archipelago',
-      'islandChain',
-    ]);
+    if (isVersionTwoCounterpart) {
+      assert.ok(records.islandGroups.length >= 1);
+    } else {
+      assert.deepEqual(records.islandGroups.map(({ kind }) => kind).sort(compareText), [
+        'archipelago',
+        'islandChain',
+      ]);
+    }
   }
-  if (fixtureId === 'milestone-2-atlas-control-max') {
+  if (purposeId === 'milestone-2-atlas-control-max') {
     assert.ok(records.waterBodies.filter(({ kind }) => kind === 'oceanBasin').length >= 2);
   }
-  if (fixtureId === 'milestone-2-atlas-control-min') {
+  if (purposeId === 'milestone-2-atlas-control-min') {
     assert.equal(records.landmasses.filter(({ kind }) => kind === 'continent').length, 1);
+    if (isVersionTwoCounterpart) {
+      assert.equal(records.landmasses.length, 1);
+      assert.equal(records.islandGroups.length, 0);
+    }
   }
-  if (fixtureId === 'milestone-2-atlas-seam-crossing') {
+  if (purposeId === 'milestone-2-atlas-seam-crossing') {
     assert.ok(records.landmasses.some((landmass) => membershipCrossesSeam(landmass.membership)));
   }
 }

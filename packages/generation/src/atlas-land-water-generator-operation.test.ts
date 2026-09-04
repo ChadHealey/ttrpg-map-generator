@@ -112,46 +112,68 @@ describe('atlas land/water determinism and isolation', () => {
   }, 30_000);
 
   it('changes preview macro ticks for every documented macro control and no classification control', async () => {
-    const baselineInput = fixedAtlasInput();
-    const baseline = await generateAtlasLandWaterPreview(
-      baselineInput,
-      fixedAtlasRuntime(baselineInput),
-    );
-    expect(baseline.status).toBe('preview');
-    if (baseline.status !== 'preview') return;
-    const baselineFingerprint = macroFingerprint(baseline.preview.macroElevationValues);
-    const macroChanges = [
-      { worldCircumferenceKm: 41_000 },
-      { continentCountIntent: 5 },
-      { continentDistribution: 'balanced' as const },
-      { fragmentationPercent: 36 },
-      { islandAbundancePercent: 36 },
-      { archipelagoAbundancePercent: 26 },
-      { polarCharacter: 'landBiased' as const },
-    ];
-    for (const change of macroChanges) {
-      const input = fixedAtlasInput(undefined, {
-        ...DEFAULT_ATLAS_CONTROLS,
-        ...change,
-      });
-      const result = await generateAtlasLandWaterPreview(input, fixedAtlasRuntime(input));
-      expect(result.status).toBe('preview');
-      if (result.status !== 'preview') return;
-      expect(macroFingerprint(result.preview.macroElevationValues)).not.toBe(baselineFingerprint);
-    }
+    for (const fieldBehaviorVersion of [1, 2] as const) {
+      const baselineInput = fixedAtlasInput(undefined, undefined, fieldBehaviorVersion);
+      const baseline = await generateAtlasLandWaterPreview(
+        baselineInput,
+        fixedAtlasRuntime(baselineInput),
+      );
+      expect(baseline.status).toBe('preview');
+      if (baseline.status !== 'preview') return;
+      const baselineFingerprint = macroFingerprint(baseline.preview.macroElevationValues);
+      const macroChanges = [
+        [
+          'worldCircumferenceKm',
+          { worldCircumferenceKm: fieldBehaviorVersion === 1 ? 41_000 : 50_000 },
+        ],
+        ['continentCountIntent', { continentCountIntent: 5 }],
+        ['continentDistribution', { continentDistribution: 'balanced' as const }],
+        ['fragmentationPercent', { fragmentationPercent: 36 }],
+        [
+          'islandAbundancePercent',
+          { islandAbundancePercent: fieldBehaviorVersion === 1 ? 36 : 67 },
+        ],
+        [
+          'archipelagoAbundancePercent',
+          { archipelagoAbundancePercent: fieldBehaviorVersion === 1 ? 26 : 51 },
+        ],
+        ['polarCharacter', { polarCharacter: 'landBiased' as const }],
+      ] as const;
+      for (const [controlName, change] of macroChanges) {
+        const input = fixedAtlasInput(
+          undefined,
+          { ...DEFAULT_ATLAS_CONTROLS, ...change },
+          fieldBehaviorVersion,
+        );
+        const result = await generateAtlasLandWaterPreview(input, fixedAtlasRuntime(input));
+        if (result.status !== 'preview') {
+          throw new Error(
+            `field v${String(fieldBehaviorVersion)} ${controlName}: ${JSON.stringify(result.diagnostics)}`,
+          );
+        }
+        expect(
+          macroFingerprint(result.preview.macroElevationValues),
+          `field v${String(fieldBehaviorVersion)} ignored ${controlName}`,
+        ).not.toBe(baselineFingerprint);
+      }
 
-    for (const change of [
-      { targetWaterCoveragePercent: 66 },
-      { oceanConnectivity: 'multipleBasins' as const },
-    ]) {
-      const input = fixedAtlasInput(undefined, {
-        ...DEFAULT_ATLAS_CONTROLS,
-        ...change,
-      });
-      const result = await generateAtlasLandWaterPreview(input, fixedAtlasRuntime(input));
-      expect(result.status).toBe('preview');
-      if (result.status !== 'preview') return;
-      expectExactArrays(baseline.preview.macroElevationValues, result.preview.macroElevationValues);
+      for (const change of [
+        { targetWaterCoveragePercent: 66 },
+        { oceanConnectivity: 'multipleBasins' as const },
+      ]) {
+        const input = fixedAtlasInput(
+          undefined,
+          { ...DEFAULT_ATLAS_CONTROLS, ...change },
+          fieldBehaviorVersion,
+        );
+        const result = await generateAtlasLandWaterPreview(input, fixedAtlasRuntime(input));
+        expect(result.status).toBe('preview');
+        if (result.status !== 'preview') return;
+        expectExactArrays(
+          baseline.preview.macroElevationValues,
+          result.preview.macroElevationValues,
+        );
+      }
     }
   }, 30_000);
 
@@ -271,6 +293,42 @@ describe('atlas land/water progress and cancellation', () => {
     expectEquivalentPatches(completed.patch, expected.patch);
   }, 30_000);
 
+  it('cancels version-2 full generation during late owner-shape inspection', async () => {
+    const input = fixedAtlasInput(undefined, undefined, 2);
+    const cancellation = cancellationController();
+    const events: AtlasGenerationProgress[] = [];
+    const result = await generateAtlasLandWaterFull(
+      input,
+      fixedAtlasRuntime(input, {
+        operationId: 'atlas-v2-cancel-during-shape-inspection',
+        cancellation,
+        progress: events,
+        observeProgress(progress) {
+          if (
+            !progress.isTerminal &&
+            progress.stage === 'validating-proposal' &&
+            progress.completedWork >= 940
+          ) {
+            cancellation.request();
+          }
+        },
+      }),
+    );
+    expect(result).toMatchObject({
+      status: 'cancelled',
+      diagnostics: [{ code: 'atlas.land-water.cancelled' }],
+    });
+    expect(result).not.toHaveProperty('patch');
+    expect(events.some(({ completedWork }) => completedWork >= 940 && completedWork < 980)).toBe(
+      true,
+    );
+    expect(events.at(-1)).toMatchObject({
+      stage: 'cancelled',
+      isCancellationRequested: true,
+      isTerminal: true,
+    });
+  }, 30_000);
+
   it('rejects a shared sequential stream with a stable diagnostic and no proposal', async () => {
     const input = fixedAtlasInput();
     const shared = required(createDeterministicRandomStream(input.macroElevationSeedMetadata));
@@ -329,6 +387,7 @@ function reversedInput() {
       worldMapId: FIXED_ATLAS_WORLD_MAP_ID,
       worldSurfaceEntityId: FIXED_ATLAS_WORLD_SURFACE_ENTITY_ID,
       macroElevationAspectId: FIXED_ATLAS_MACRO_ELEVATION_ASPECT_ID,
+      macroElevationFieldBehaviorVersion: 1,
       landWaterClassificationAspectId: FIXED_ATLAS_LAND_WATER_ASPECT_ID,
       macroElevationVariantRevision: 0,
       landWaterClassificationVariantRevision: 0,

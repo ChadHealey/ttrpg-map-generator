@@ -26,6 +26,7 @@ import {
   atlasLandWaterInvalidResult,
   atlasLandWaterInvalidRuntimeResult,
   mapAtlasLandWaterValidationDiagnostic,
+  mapSeparatedMacroFieldFinding,
   validateAtlasLandWaterRealization,
   validateAtlasLandWaterRuntime,
 } from './atlas-land-water-generator-diagnostics.js';
@@ -40,6 +41,10 @@ import {
   createAtlasMacroElevationFieldAdapter,
   sampleAtlasMacroElevationField,
 } from './atlas-macro-elevation-field.js';
+import {
+  inspectSeparatedAtlasMacroField,
+  type SeparatedAtlasMacroElevationFieldAdapter,
+} from './atlas-macro-elevation-field-v2.js';
 import {
   ATLAS_SAMPLING_POLICY_VERSION,
   WORLD_ATLAS_FULL_PROFILE,
@@ -65,7 +70,10 @@ export async function generateAtlasLandWaterFull(
       return atlasLandWaterCancelledResult(input, progress, 'macro');
     }
 
-    const macroParameters = atlasMacroElevationParameters(input.controls);
+    const macroParameters = atlasMacroElevationParameters(
+      input.controls,
+      input.macroElevationFieldBehaviorVersion,
+    );
     const classificationParameters = atlasLandWaterClassificationParameters(input.controls);
     const fieldAdapter = createAtlasMacroElevationFieldAdapter(
       macroParameters,
@@ -126,10 +134,29 @@ export async function generateAtlasLandWaterFull(
       threshold.selection.isConnectivityProxySupported,
       classification.output.absoluteWaterCoverageErrorBasisPoints,
     );
+    const macroInspection =
+      input.macroElevationFieldBehaviorVersion === 2
+        ? await inspectSeparatedAtlasMacroField(
+            fieldAdapter as SeparatedAtlasMacroElevationFieldAdapter,
+            full.field,
+            threshold.selection.contourLevel,
+            progress.cooperation('validating-proposal', 920, 980),
+          )
+        : undefined;
+    if (macroInspection?.status === 'cancelled') {
+      return atlasLandWaterCancelledResult(input, progress, 'macro');
+    }
+    const macroDiagnostics =
+      macroInspection?.status === 'completed'
+        ? macroInspection.report.findings.map((finding) =>
+            mapSeparatedMacroFieldFinding(input, finding),
+          )
+        : [];
     const mappedValidationDiagnostics = validationDiagnostics.map((diagnostic) =>
       mapAtlasLandWaterValidationDiagnostic(input, diagnostic),
     );
     const diagnostics = orderedAtlasLandWaterDiagnostics([
+      ...macroDiagnostics,
       ...generatorDiagnostics,
       ...mappedValidationDiagnostics,
     ]);
@@ -187,7 +214,10 @@ export async function generateAtlasLandWaterPreview(
       return atlasLandWaterCancelledResult(input, progress, 'macro');
     }
 
-    const macroParameters = atlasMacroElevationParameters(input.controls);
+    const macroParameters = atlasMacroElevationParameters(
+      input.controls,
+      input.macroElevationFieldBehaviorVersion,
+    );
     const classificationParameters = atlasLandWaterClassificationParameters(input.controls);
     const fieldAdapter = createAtlasMacroElevationFieldAdapter(
       macroParameters,
@@ -220,21 +250,47 @@ export async function generateAtlasLandWaterPreview(
       return atlasLandWaterCancelledResult(input, progress, 'classification');
     }
 
-    if (await progress.cooperateOnce('validating-proposal', 1, 1, 920, 999)) {
+    if (
+      await progress.cooperateOnce(
+        'validating-proposal',
+        input.macroElevationFieldBehaviorVersion === 2 ? 0 : 1,
+        1,
+        920,
+        999,
+      )
+    ) {
       return atlasLandWaterCancelledResult(input, progress, 'classification');
     }
-    const diagnostics = orderedAtlasLandWaterDiagnostics(
-      validateAtlasLandWaterRealization(
+    const macroInspection =
+      input.macroElevationFieldBehaviorVersion === 2
+        ? await inspectSeparatedAtlasMacroField(
+            fieldAdapter as SeparatedAtlasMacroElevationFieldAdapter,
+            sampled.field,
+            threshold.selection.contourLevel,
+            progress.cooperation('validating-proposal', 920, 999),
+          )
+        : undefined;
+    if (macroInspection?.status === 'cancelled') {
+      return atlasLandWaterCancelledResult(input, progress, 'macro');
+    }
+    const macroDiagnostics =
+      macroInspection?.status === 'completed'
+        ? macroInspection.report.findings.map((finding) =>
+            mapSeparatedMacroFieldFinding(input, finding),
+          )
+        : [];
+    const diagnostics = orderedAtlasLandWaterDiagnostics([
+      ...macroDiagnostics,
+      ...validateAtlasLandWaterRealization(
         input,
         classificationParameters,
         threshold.selection.isConnectivityProxySupported,
         classification.output.absoluteWaterCoverageErrorBasisPoints,
       ),
-    );
+    ]);
     if (diagnostics.some(({ severity }) => severity === 'error')) {
       return atlasLandWaterInvalidResult(progress, diagnostics);
     }
-
     const preview: AtlasLandWaterPreview = Object.freeze({
       previewKind: 'disposable-atlas-land-water',
       previewVersion: ATLAS_LAND_WATER_PREVIEW_VERSION,

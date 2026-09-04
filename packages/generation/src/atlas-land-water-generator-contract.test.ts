@@ -19,11 +19,12 @@ import {
 } from './atlas-land-water-test-support.js';
 
 describe('atlas land/water generator contract', () => {
-  it('declares exact v1 aspects, dependency, seed scopes, controls, profiles, and cost', () => {
+  it('declares exact v2 macro ownership, dependency, seed scopes, controls, profiles, and cost', () => {
     expect(ATLAS_LAND_WATER_GENERATOR_MANIFEST).toMatchObject({
-      manifestVersion: 1,
+      manifestVersion: 2,
       inputs: [
         'validated-atlas-controls',
+        'explicit-macro-field-behavior-version',
         'canonical-world-seed',
         'world-map-id',
         'world-surface-entity-id',
@@ -35,13 +36,13 @@ describe('atlas land/water generator contract', () => {
         {
           aspectName: 'worldTerrain.macroElevation',
           generatorId: 'worldTerrain.macroElevation',
-          generatorVersion: 1,
+          generatorVersion: 2,
           parameterSchemaVersion: 1,
-          additionalBehaviorVersion: 1,
+          additionalBehaviorVersion: 2,
           seedScope: 'map/entity',
           directDependencies: [],
           outputRecord: 'MacroElevationField',
-          randomDrawPolicy: 'finite-basis-parameters',
+          randomDrawPolicy: 'finite-separated-owners',
         },
         {
           aspectName: 'worldSurface.landWaterClassification',
@@ -64,7 +65,9 @@ describe('atlas land/water generator contract', () => {
       versions: {
         geographyContractVersion: 1,
         samplingPolicyVersion: 1,
-        fieldBehaviorVersion: 1,
+        fieldBehaviorVersion: 2,
+        gapPolicyVersion: 1,
+        shapePolicyVersion: 1,
         classificationBehaviorVersion: 1,
         parameterSchemaVersion: 1,
         realizationVersion: 1,
@@ -94,12 +97,14 @@ describe('atlas land/water generator contract', () => {
         canonicalSeamIdentityFieldTicks: 0,
         poleSamplesPerPole: 1,
         maximumWaterCoverageErrorBasisPoints: 25,
+        minimumOwnerOceanGapRad: 0.05,
       },
       expectedCost: {
         complexity: 'linear-in-profile-anchors',
         costClass: 'costly',
         fullReferenceWallClockBudgetMs: 10_000,
         fullReferencePeakAdditionalMemoryMiB: 768,
+        macroPlacementBudget: 8,
       },
     });
     expect(ATLAS_LAND_WATER_GENERATOR_MANIFEST.controlOwnership).toStrictEqual({
@@ -140,6 +145,7 @@ describe('atlas land/water generator contract', () => {
       generatorId: 'worldTerrain.macroElevation',
       mapId: FIXED_ATLAS_WORLD_MAP_ID,
       entityId: FIXED_ATLAS_WORLD_SURFACE_ENTITY_ID,
+      generatorVersion: 1,
     });
     expect(parsed.value.landWaterClassificationSeedMetadata).toMatchObject({
       seedScope: 'map/entity',
@@ -149,6 +155,20 @@ describe('atlas land/water generator contract', () => {
   });
 
   it('rejects extra fields, invalid controls, and non-derived identities with stable diagnostics', () => {
+    expect(
+      createAtlasLandWaterGenerationInput({
+        ...sourceWithControls(DEFAULT_ATLAS_CONTROLS),
+        macroElevationFieldBehaviorVersion: 3,
+      }),
+    ).toMatchObject({
+      ok: false,
+      diagnostics: [
+        {
+          code: ATLAS_LAND_WATER_INPUT_DIAGNOSTIC_CODES.invalidField,
+          field: 'macroElevationFieldBehaviorVersion',
+        },
+      ],
+    });
     expect(
       createAtlasLandWaterGenerationInput({
         ...sourceWithControls(DEFAULT_ATLAS_CONTROLS),
@@ -188,7 +208,7 @@ describe('atlas land/water generator contract', () => {
   });
 
   it('separates macro controls from classification-only parameters by construction', () => {
-    const macro = atlasMacroElevationParameters(DEFAULT_ATLAS_CONTROLS);
+    const macro = atlasMacroElevationParameters(DEFAULT_ATLAS_CONTROLS, 1);
     const classification = atlasLandWaterClassificationParameters(DEFAULT_ATLAS_CONTROLS);
     expect(macro).not.toHaveProperty('targetWaterCoveragePercent');
     expect(macro).not.toHaveProperty('oceanConnectivity');
@@ -232,6 +252,7 @@ function sourceWithControls(controls: unknown): Record<string, unknown> {
     worldMapId: FIXED_ATLAS_WORLD_MAP_ID,
     worldSurfaceEntityId: FIXED_ATLAS_WORLD_SURFACE_ENTITY_ID,
     macroElevationAspectId: FIXED_ATLAS_MACRO_ELEVATION_ASPECT_ID,
+    macroElevationFieldBehaviorVersion: 1,
     landWaterClassificationAspectId: FIXED_ATLAS_LAND_WATER_ASPECT_ID,
     macroElevationVariantRevision: 0,
     landWaterClassificationVariantRevision: 0,

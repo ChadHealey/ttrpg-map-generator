@@ -16,6 +16,22 @@ import {
   ATLAS_WATER_COVERAGE_TOLERANCE_BASIS_POINTS,
 } from './atlas-land-water-generator-metadata.js';
 import type { AtlasLandWaterProgressReporter } from './atlas-land-water-progress.js';
+import type { SeparatedAtlasMacroFieldFinding } from './atlas-macro-elevation-field-v2.js';
+
+export function mapSeparatedMacroFieldFinding(
+  input: AtlasLandWaterGenerationInput,
+  source: SeparatedAtlasMacroFieldFinding,
+): GenerationDiagnostic {
+  return diagnostic(
+    source.code === 'atlas.macro-v2.gap-unsatisfied'
+      ? ATLAS_LAND_WATER_DIAGNOSTIC_CODES.macroGapUnsatisfied
+      : ATLAS_LAND_WATER_DIAGNOSTIC_CODES.macroOwnerShapeUnsatisfied,
+    'error',
+    input.macroElevationAspectId,
+    source.message,
+    'Reject the partial result and adjust macro controls; version-2 invariants must not be weakened.',
+  );
+}
 
 export function validateAtlasLandWaterRealization(
   input: AtlasLandWaterGenerationInput,

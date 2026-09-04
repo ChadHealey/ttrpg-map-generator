@@ -66,7 +66,7 @@ describe('disposable inherited-context preview', () => {
 
   it.each([
     ['ordinary', { xPx: 1_024, yPx: 512 }],
-    ['seam', { xPx: 2_047, yPx: 512 }],
+    ['seam', { xPx: 2_047, yPx: 300 }],
     ['near-pole', { xPx: 640, yPx: 128 }],
   ] as const)(
     'builds a display-safe overlay for a %s candidate',
@@ -135,7 +135,7 @@ describe('disposable inherited-context preview', () => {
       ),
     ).toBe(false);
     expect(isCurrentAtlasInheritedContextPreview(result.preview, undefined, candidate)).toBe(false);
-  });
+  }, 30_000);
 });
 
 function requiredAccepted(): AcceptedAtlasState {

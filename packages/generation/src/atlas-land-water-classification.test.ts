@@ -35,7 +35,7 @@ describe('atlas land/water threshold classification', () => {
       const input = fixedAtlasInput(fixed);
       const runtime = fixedAtlasRuntime(input);
       const adapter = createAtlasMacroElevationFieldAdapter(
-        atlasMacroElevationParameters(input.controls),
+        atlasMacroElevationParameters(input.controls, input.macroElevationFieldBehaviorVersion),
         runtime.macroElevationRandom,
       );
       const sampled = await sampleAtlasMacroElevationField(WORLD_ATLAS_PREVIEW_PROFILE, adapter, {

@@ -18,6 +18,7 @@ import {
   ATLAS_GENERATION_COOPERATION_ROW_INTERVAL,
   type AtlasMacroElevationParameters,
 } from './atlas-land-water-generator-contract.js';
+import { createSeparatedAtlasMacroElevationFieldAdapter } from './atlas-macro-elevation-field-v2.js';
 import {
   type AtlasFieldValueTicks,
   type AtlasSamplingProfile,
@@ -108,10 +109,13 @@ class SampledMacroElevationField implements SampledAtlasMacroElevationField {
  * Construct finite seeded basis parameters from the macro aspect's explicit stream.
  * Classification-only controls cannot enter this function's parameter type.
  */
-export function createAtlasMacroElevationFieldAdapter(
+export function createAtlasMacroElevationFieldV1Adapter(
   parameters: DeepReadonly<AtlasMacroElevationParameters>,
   random: DeterministicRandomStream,
 ): QuantizedPlanetFieldAdapter {
+  if (parameters.fieldBehaviorVersion !== 1) {
+    throw new RangeError('Version-1 macro elevation requires field behavior version 1.');
+  }
   const circumferenceScale = Math.sqrt(40_000 / parameters.worldCircumferenceKm);
   const fragmentationRatio = parameters.fragmentationPercent / 100;
   const islandRatio = parameters.islandAbundancePercent / 100;
@@ -221,6 +225,16 @@ export function createAtlasMacroElevationFieldAdapter(
   return adapter;
 }
 
+/** Explicitly dispatch one supported macro-field behavior; production callers select v2. */
+export function createAtlasMacroElevationFieldAdapter(
+  parameters: DeepReadonly<AtlasMacroElevationParameters>,
+  random: DeterministicRandomStream,
+): QuantizedPlanetFieldAdapter {
+  return parameters.fieldBehaviorVersion === 1
+    ? createAtlasMacroElevationFieldV1Adapter(parameters, random)
+    : createSeparatedAtlasMacroElevationFieldAdapter(parameters, random);
+}
+
 /** Sample one complete profile and optionally reuse the exact nested preview evaluations. */
 export async function sampleAtlasMacroElevationField(
   profile: AtlasSamplingProfile,
@@ -233,7 +247,7 @@ export async function sampleAtlasMacroElevationField(
     (profile.profileId === WORLD_ATLAS_PREVIEW_PROFILE.profileId ||
       nestedPreview.profile.profileId !== WORLD_ATLAS_PREVIEW_PROFILE.profileId)
   ) {
-    throw new RangeError('Only the full profile may reuse the exact version-1 preview anchors.');
+    throw new RangeError('Only the full profile may reuse the exact preview anchors.');
   }
 
   const kernel = adapter as Partial<CartesianMacroElevationAdapter> & QuantizedPlanetFieldAdapter;
