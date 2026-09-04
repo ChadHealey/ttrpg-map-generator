@@ -1,6 +1,6 @@
 # ADR-0029 — Separated macro-landmass field
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-09-03
 - **Decision owners:** Project maintainers
 - **Supersedes:** None
@@ -26,8 +26,14 @@ generator-free reopening of already accepted v1 maps.
 
 - Make inter-continent water separation an explicit macro-field invariant rather than a fortunate
   outcome of parameter tuning.
+- Express that separation as a versioned, strictly positive angular ocean-corridor width at the
+  accepted contour, not merely disconnected components or a one-sample gap.
+- Prevent both inter-owner bridges and severely corridor-like single-owner silhouettes without
+  asking semantic classification or rendering to repair the field.
 - Keep the field project-owned, analytic, quantized, and unit-sphere native; do not introduce a
   geometry or noise dependency.
+- Resolve infeasible control combinations through bounded deterministic calibration or an explicit
+  no-proposal diagnostic, never unbounded retries or silent weakening of a declared control.
 - Bound the initial repair to M2 macro generation, compatibility dispatch, and evidence without
   redesigning semantic classification, coastline extraction, rendering, or M3 physical layers.
 - Preserve accepted v1 geography exactly and offer any changed output only through deliberate
@@ -61,10 +67,32 @@ deterministically placed owners on the unit sphere. Their maximum envelopes, loc
 and fragmentation are owner-scoped. The v2 field must enforce an explicit ocean-gap guard so two
 broad owners cannot become one landmass by additive overlap at the selected land/water contour.
 
+The gap guard has a versioned, strictly positive minimum angular width in planet space. It must be
+verified against the selected accepted contour on the canonical full profile; disconnected
+components separated only by quantization or one sampled water anchor do not satisfy it. The
+renderer and display projection cannot define, widen, or repair this corridor.
+
+Every positive land-forming contribution participates in the same support and separation policy.
+Broad envelopes, islands, archipelago members, local deformation, and a land-biased polar
+realization cannot raise a guarded corridor into land. A polar realization may be a bounded owner
+or an owner-scoped modifier, but it cannot remain an unrestricted global positive term that joins
+otherwise separated owners.
+
+Each broad owner also has bounded compact support and a versioned shape-quality diagnostic at the
+accepted contour. Elongation, peninsulas, bays, and fragmentation remain allowed, but an owner's
+retained land cannot principally be a long narrow corridor or a repeatedly necked chain between
+remote lobes. Failure is a macro-field proposal failure; semantic classification must not split a
+connected result and rendering must not disguise it.
+
 Islands and archipelagos remain deterministic but cannot silently bridge broad owners. The current
 `continentCountIntent`, distribution, fragmentation, island, archipelago, circumference, and polar
 controls retain their declared ownership; the implementation must document their v2 realization
-without exposing raw field parameters in the UI.
+without exposing raw field parameters in the UI. The finite placement and calibration procedure
+uses a fixed candidate budget, fixed traversal, and stable tie-breaking. For every declared control
+combination it either returns a field satisfying the gap, coverage, and shape invariants or returns
+an explicit deterministic diagnostic with no proposed patch. It cannot retry until a favorable
+random result appears, reinterpret an intent as a guaranteed component count, or silently reduce a
+requested control.
 
 This ADR chooses the family and compatibility boundary, not an unreviewed numerical calibration.
 The implementation child owns the finite placement rule, envelope formula, and concrete v2
@@ -75,6 +103,8 @@ parameters after it proves the silhouette matrix.
 ### Positive
 
 - Broad-owner separation becomes an explicit, testable property instead of a tuning outcome.
+- Single-owner degeneracy and positive polar/island bypasses are covered by the same field-level
+  contract rather than left to visual luck.
 - The existing project-owned field adapter, canonical sampler, quantization, seam/pole behavior,
   and coastline pipeline remain applicable.
 - The normal atlas cohort can receive a visible diversity proof without requiring a universal
@@ -88,6 +118,8 @@ parameters after it proves the silhouette matrix.
   handling, even though no silent package migration is allowed.
 - The first implementation may show that a contained envelope family cannot meet the visual matrix;
   that is a revisit condition, not permission to add uncontrolled field behavior.
+- Some extreme but syntactically valid control combinations may produce an explicit no-proposal
+  diagnostic when their land budget, owner count, and minimum ocean gap cannot coexist.
 
 ### Neutral or follow-up
 
@@ -120,17 +152,27 @@ parameters after it proves the silhouette matrix.
 - Focused macro-field, land/water, semantic, and coastline tests prove deterministic output,
   shared preview/full anchors, seam identity, one sample per pole, valid topology, and stable
   semantic ownership.
+- Focused v2 tests prove the versioned minimum angular corridor after the accepted contour is
+  selected; prove that broad, island, archipelago, deformation, and polar contributions cannot
+  bypass it; reject deliberately corridor-like single-owner fixtures; and prove deterministic
+  no-proposal behavior for infeasible controls.
 - A twelve-seed normal-control visual cohort, plus the existing six control rows, uses reviewed
   production atlas PNGs. The cohort must show broad-continent, separated-landmass, and fragmented
   island/archipelago families; no default row may be accepted as a ribbon-like connected form.
+- A deterministic preview-only sweep of at least 128 additional default-control seeds must produce
+  no placement/calibration failure, must meet existing preview water-coverage tolerances, and must
+  satisfy preview-profile counterparts of the gap and shape-quality diagnostics. This broad sweep
+  guards against tuning only the reviewed cohort; it does not claim the full-profile proof required
+  for registered rows, and its measurements do not replace human review.
 - The chosen v1 reopen/fixture lane proves no generator invocation and byte-identical accepted
   data after the v2 capability is added.
 - `pnpm check` and the read-only cross-platform fixture check pass before publication.
 
 ## Revisit conditions
 
-- A proposed v2 placement/envelope implementation cannot satisfy the visual matrix while retaining
-  its ocean-gap invariant and documented control ownership.
+- A proposed v2 placement/envelope implementation cannot satisfy the visual matrix or the broader
+  default-seed sweep while retaining its angular ocean-gap, owner-shape, and documented control
+  invariants.
 - The explicit version dispatch requires a third major package boundary or forces an accepted-data
   migration that cannot remain deliberate and reversible.
 - A cross-platform deterministic test finds a divergence attributable to the v2 numeric field.

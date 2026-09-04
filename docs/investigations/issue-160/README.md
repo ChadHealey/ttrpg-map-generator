@@ -2,15 +2,19 @@
 
 ## Decision
 
-Recommend the project-owned, deterministic **separated continent-envelope field v2** recorded in
-[ADR-0029](../../adr/0029-separated-macro-landmass-field.md). It remains an analytic spherical
-field over unit vectors and uses no new dependency, but broad continent envelopes must be placed
-and evaluated as distinct owners rather than as an unconstrained sum of overlapping positive caps.
+The project accepts the project-owned, deterministic **separated continent-envelope field v2**
+recorded in [ADR-0029](../../adr/0029-separated-macro-landmass-field.md). It remains an analytic
+spherical field over unit vectors and uses no new dependency, but broad continent envelopes must
+be placed and evaluated as distinct owners rather than as an unconstrained sum of overlapping
+positive caps.
 An explicit ocean-gap guard must prevent broad-owner envelopes from merging at the selected sea
 level. Local, owner-scoped shape variation and fragmentation may alter an envelope or split it into
-islands, but must not create an unintended bridge to a different broad owner.
+islands, but must not create an unintended bridge to a different broad owner. The accepted ADR
+strengthens that guard to a versioned, strictly positive angular width, applies it to every
+land-forming contribution including polar bias, rejects severely corridor-like single-owner
+results, and requires bounded deterministic failure for infeasible controls.
 
-This is a recommendation for the implementation child below, not a retroactive change to any
+This decision authorizes the implementation child below; it is not a retroactive change to any
 accepted M2 atlas. Existing accepted records remain version-1 geography and reopen as stored.
 
 ## Reproduction and reviewed evidence
@@ -138,21 +142,30 @@ packages, renderer rewrite, semantic-policy redesign, or M3 work.
 
 **Acceptance criteria:**
 
-1. V2 uses deterministic, finite seeded placement of broad owners on unit vectors and an explicit
-   gap rule that prevents broad owners from joining through additive overlap at the selected
-   contour. Local deformation and fragmentation remain owner-scoped and deterministic.
-2. Same v2 inputs, versions, IDs, revisions, and streams reproduce byte-identical output; seam
+1. V2 uses deterministic, finite seeded placement of broad owners on unit vectors and a versioned,
+   strictly positive minimum angular gap at the selected contour. The full-profile verifier rejects
+   quantization-only and one-sample separations.
+2. Broad, island, archipelago, deformation, and polar contributions cannot bypass the gap. Each
+   broad owner has bounded compact support and a versioned diagnostic that rejects a principally
+   corridor-like or repeatedly necked retained silhouette.
+3. The fixed-budget placement/calibration procedure uses stable traversal and tie-breaking. Every
+   declared control combination either satisfies gap, coverage, and shape invariants or returns an
+   explicit deterministic no-proposal diagnostic without weakening controls or retrying indefinitely.
+4. Same v2 inputs, versions, IDs, revisions, and streams reproduce byte-identical output; seam
    identity, pole behavior, quantization, fixed traversal, cancellation, and exact preview/full
    shared-anchor correspondence still pass.
-3. The existing semantic and coastline suites demonstrate that v2 land/water components retain
+5. The existing semantic and coastline suites demonstrate that v2 land/water components retain
    stable identity and valid seam-safe topology. No semantic or coast renderer is used to hide a
    v2 topology defect.
-4. The twelve-seed normal-control matrix meets the visual-diversity contract above in reviewed
-   production gallery PNGs, while existing six control proofs retain their required semantics.
-5. V1 accepted packages reopen without generator invocation or byte changes. V2 appears only via
+6. The twelve-seed normal-control matrix meets the visual-diversity contract above in reviewed
+   production gallery PNGs, while existing six control proofs retain their required semantics. A
+   preview-only sweep of at least 128 additional default-control seeds has no placement/calibration
+   failure and satisfies preview water-coverage plus preview-profile gap and shape-quality
+   diagnostics; registered rows retain the exact full-profile proof.
+7. V1 accepted packages reopen without generator invocation or byte changes. V2 appears only via
    a deliberate new-atlas or explicit geography replacement/upgrade action; the UI explains that
    it replaces downstream accepted geography.
-6. Fixture provenance records both version and review purpose. Any changed v2 fixed-seed outputs
+8. Fixture provenance records both version and review purpose. Any changed v2 fixed-seed outputs
    are generated through the targeted fixture command with new append-only review records.
 
 **Verification:** Focused macro-field, land/water, semantic, and coastline seam/pole/determinism
