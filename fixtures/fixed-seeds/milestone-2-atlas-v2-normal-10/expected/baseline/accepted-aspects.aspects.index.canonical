@@ -1,0 +1,289 @@
+{
+  "canonicalAspectDigestIndexVersion": 1,
+  "canonicalByteOwner": "@ttrpg-map/persistence",
+  "checkpoint": "baseline",
+  "aspectCount": 31,
+  "canonicalAspectSetSha256": "3311cf05e473ee55e58de035e8cc86d6fc5c610a465167fd5901724104f307c0",
+  "canonicalAspectOutputSetSha256": "cbc520abb6562339c5ce20deb83339bf127fe93db4e6efa35f28e7d13e195665",
+  "aspects": [
+    {
+      "aspectId": "04628f37-6408-5087-a139-bdd2bdff42d3",
+      "aspectName": "worldSurface.landWaterClassification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 30690012,
+      "canonicalAspectSha256": "23bfdf0fd68417144edd96067f15084b288bce233b2025116aede3f4a972ac54",
+      "canonicalAspectOutputByteLength": 26497522,
+      "canonicalAspectOutputSha256": "f58065f0570b6bdceb0d43aebe95211d4ba491e9f8c8290766142911682ac350"
+    },
+    {
+      "aspectId": "07b46749-8050-561d-bedd-6476395f1250",
+      "aspectName": "landmass.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 4029,
+      "canonicalAspectSha256": "a49bc1428bb1513aab169fc637a0ba965199b11c80a89c4ab0bac571b9c77d8b",
+      "canonicalAspectOutputByteLength": 2367,
+      "canonicalAspectOutputSha256": "2c0945538749e01f2f01b6903e346fd40c393424d00d7aeb934488e81d4607b2"
+    },
+    {
+      "aspectId": "122e4519-bd59-5874-b752-8e755a62fc13",
+      "aspectName": "landmass.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 3192,
+      "canonicalAspectSha256": "a6bbc65136ccddeaaeb57e158426cc85ccd6000f5956f486389710fb1f270844",
+      "canonicalAspectOutputByteLength": 1602,
+      "canonicalAspectOutputSha256": "f060e69d71523da11d3c526ea8715ffe2cf7267b4eaade39d9e96348af58d657"
+    },
+    {
+      "aspectId": "17366bd2-363a-5b8c-a7e5-e706a0bed75b",
+      "aspectName": "landmass.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 3285,
+      "canonicalAspectSha256": "75604b207ee3d7e22d03fa9f14e25b429833311e0e0cf6739f4db03488d84544",
+      "canonicalAspectOutputByteLength": 1687,
+      "canonicalAspectOutputSha256": "41880205e9a13f9992c9b2d267b56ab9f6f46fc5c2a6c385b3fa3900504e6e09"
+    },
+    {
+      "aspectId": "1c65b125-57d1-5362-8528-446ee5744ced",
+      "aspectName": "landmass.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 3259,
+      "canonicalAspectSha256": "78d6fef28a8d1d0b1cfd0a961d2d9b2e897b544d2d098acf7e37d29d0aae16d0",
+      "canonicalAspectOutputByteLength": 1661,
+      "canonicalAspectOutputSha256": "6f4ab3b114a1fb8245cebbe58c11d5b84d0c10c4b397a877aa1e53af9dcbbd32"
+    },
+    {
+      "aspectId": "259aab6f-4cf3-584e-9729-76c44d0a2201",
+      "aspectName": "landmass.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 3750,
+      "canonicalAspectSha256": "f7b926a2fd8cf22edcc41a8d6942625b0f2043462bb68f85b178f741809500a9",
+      "canonicalAspectOutputByteLength": 2112,
+      "canonicalAspectOutputSha256": "91845f349e1e9c5b05c85de168441796489e4ced53deff446cf89cc7fa12e70a"
+    },
+    {
+      "aspectId": "3601b546-5a8a-508f-9429-3f87247da527",
+      "aspectName": "landmass.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 3168,
+      "canonicalAspectSha256": "13b9238ce01a36a64894b50e035cd0a2753e6727c39161f746878f7073d11c06",
+      "canonicalAspectOutputByteLength": 1578,
+      "canonicalAspectOutputSha256": "bd3ad45747b135c7d8aab0f1dc6084fcdfeb24bdd0584430523011fb14a3e555"
+    },
+    {
+      "aspectId": "364d2ea5-fff8-5bde-af78-f5c4971b4646",
+      "aspectName": "landmass.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 3259,
+      "canonicalAspectSha256": "168184191dcbf42ef49b6bb52aecd101afdcb3799276ba42bc341ed936b11815",
+      "canonicalAspectOutputByteLength": 1661,
+      "canonicalAspectOutputSha256": "a536ded8b1395a9f602302b8b60893db79bc6addaf43b760e0c818cda0c558af"
+    },
+    {
+      "aspectId": "371a6a8c-9fe8-5cdb-adca-1a46ffa19645",
+      "aspectName": "worldCoastline.geometry",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 784460,
+      "canonicalAspectSha256": "a19101618020bdb958794df790712749b57a4ea38b7a9f1754739f39249c94c0",
+      "canonicalAspectOutputByteLength": 722957,
+      "canonicalAspectOutputSha256": "575e66396c1fa45746f97e5a7dd01c927c8d46749abe46154f277c87c85a8597"
+    },
+    {
+      "aspectId": "4ebe7250-c53f-5706-8b75-e11d3e30350c",
+      "aspectName": "landmass.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 3285,
+      "canonicalAspectSha256": "8d7924242210f4438589424eb1c177995539ba692c760466fbe7cfcb83ed6e53",
+      "canonicalAspectOutputByteLength": 1687,
+      "canonicalAspectOutputSha256": "b53fde6dcbc545c65c4582156aaaf2ef965209911791284b9c0693f7399027ca"
+    },
+    {
+      "aspectId": "6548b2bf-b50d-5632-8789-92ba73a02e15",
+      "aspectName": "landmass.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 3896,
+      "canonicalAspectSha256": "662339eb839df32d657e67da2b1be547db8caed49441da32f8829710f66d20e5",
+      "canonicalAspectOutputByteLength": 2242,
+      "canonicalAspectOutputSha256": "b40cc4bfc0f4d77296f9341d9f68db27ada4231e45b0db0a0464846b5d3601fa"
+    },
+    {
+      "aspectId": "6b075698-490f-56be-acba-9e21c8b674ef",
+      "aspectName": "landmass.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 3564,
+      "canonicalAspectSha256": "a485cfe1b964d800e520136e53a5cea46fd2a24e057f143eb5904ca8b5a6ca98",
+      "canonicalAspectOutputByteLength": 1942,
+      "canonicalAspectOutputSha256": "da405d2af4051cd9c9f50b0a4edb222829655aea4835d4d97c44f859a830002b"
+    },
+    {
+      "aspectId": "7959dcf8-f5d1-58ed-b5bc-38f7995a97d1",
+      "aspectName": "landmass.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 38234,
+      "canonicalAspectSha256": "ed9f253a90c3666aad32386ca67e95e9f4c3a1c3e48e7c254d6071e2bfdea4e5",
+      "canonicalAspectOutputByteLength": 33558,
+      "canonicalAspectOutputSha256": "7802f146d7b904a5d95d22178651a3823ada80ff1928015304ec57f776f6b329"
+    },
+    {
+      "aspectId": "878e81ba-35f2-5e5c-b0a5-7a7f477dfbb7",
+      "aspectName": "islandGroup.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 1825,
+      "canonicalAspectSha256": "fe09fd460ce730de516e05ee19f0a4f9d3bf3027cdc21fa6b489d80250db3787",
+      "canonicalAspectOutputByteLength": 199,
+      "canonicalAspectOutputSha256": "fb316368d8eb725d5372d03cca544e207788a98753e1e5790c3e1b6b7c8c6845"
+    },
+    {
+      "aspectId": "90916e2f-286a-5722-984e-0981392bcfd8",
+      "aspectName": "atlas.waterDecoration",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 87514,
+      "canonicalAspectSha256": "30d9bac632fda9f12956ce188d0985582a2027b8e31936f42457e4952e16fe57",
+      "canonicalAspectOutputByteLength": 80948,
+      "canonicalAspectOutputSha256": "d9a6c6b7912ae3ce47197ebd289d0dd18699120ffe6e5a7954f98978cd3bfff6"
+    },
+    {
+      "aspectId": "927ffea6-8b20-58a8-bde3-f5ccf360f862",
+      "aspectName": "landmass.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 3285,
+      "canonicalAspectSha256": "04bb16b3b2b3e6172cb05af152c485b3f8bdb51080675e779d572d87791c121e",
+      "canonicalAspectOutputByteLength": 1687,
+      "canonicalAspectOutputSha256": "b65aefccc253c538cd5c7c85087eeea4ead2adfe330d2668efc7eb2704227d50"
+    },
+    {
+      "aspectId": "9cb84202-7e12-52fc-bbd6-93459fab358b",
+      "aspectName": "landmass.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 40139,
+      "canonicalAspectSha256": "d4ef4d815eca98661d695a509bedb6bae7b26328fe800dcdcbc4f00cfbff3895",
+      "canonicalAspectOutputByteLength": 35309,
+      "canonicalAspectOutputSha256": "36dc6c5c9674be204f868dcad18a8a4f08c446a4b02ecd5b8a8787ac134b5679"
+    },
+    {
+      "aspectId": "9ebc8252-45ea-5cd8-8e87-83d940a9d6df",
+      "aspectName": "waterBody.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 3487,
+      "canonicalAspectSha256": "918a1bd4b429027349ec5366bdf8640068afcc916a876500d6fb9bdd23d4406c",
+      "canonicalAspectOutputByteLength": 1799,
+      "canonicalAspectOutputSha256": "47dc6f3d86777e022dae85b33e2d2793aa8cef777a0d07e63dd17b7a1e5401ff"
+    },
+    {
+      "aspectId": "a200a1c0-c569-5615-80cd-89b15fbab600",
+      "aspectName": "atlas.coastlineAppearance",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 9591,
+      "canonicalAspectSha256": "c54efdd2c2462f476169fa15dd4b6b8e0a4e2454bb9c1407bee6fd4e0077e9aa",
+      "canonicalAspectOutputByteLength": 8071,
+      "canonicalAspectOutputSha256": "34bbd447d92317d6561401d10951071f20ccdb44581503f94b39d207941338ee"
+    },
+    {
+      "aspectId": "a5623574-cfe1-56e5-bbd5-de6bbab46e32",
+      "aspectName": "islandGroup.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 1825,
+      "canonicalAspectSha256": "71261522ee35fd700102fff60e20e1959ccb53926d80554130223fa560d79399",
+      "canonicalAspectOutputByteLength": 199,
+      "canonicalAspectOutputSha256": "045ee0f98fa00fcfac51f76d3b14579a48ee9f87a4dbc8dfb065cc4ce1b4b98a"
+    },
+    {
+      "aspectId": "a56ea192-ff6f-5078-8685-1db180a568e2",
+      "aspectName": "landmass.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 4122,
+      "canonicalAspectSha256": "96b4d92b4cd5d336dd2b8330da06c907a36410e96b43a1dd0e030f82cf706d6f",
+      "canonicalAspectOutputByteLength": 2452,
+      "canonicalAspectOutputSha256": "3d518d01806274ec1e0216fe3f8a1e99f609d63eccd66dd53847fc1f4cd121c1"
+    },
+    {
+      "aspectId": "aff875ed-515e-5e32-b449-b37301b5ffc3",
+      "aspectName": "waterBody.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 6028,
+      "canonicalAspectSha256": "6849509b7dd2957ac5a4fe803c49a156f2654e1261101ebe96e3604b48478e2b",
+      "canonicalAspectOutputByteLength": 4124,
+      "canonicalAspectOutputSha256": "7b6ab3e8530d2b6d1efbe64e0ec1f45015468a86876cb2f59cdc234d459279dd"
+    },
+    {
+      "aspectId": "b68893f3-9b90-52e0-9e5d-043de0ca8012",
+      "aspectName": "waterBody.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 173878,
+      "canonicalAspectSha256": "ea869b7b1d0bc6482aba1397a18c0155ba23329de49e5514668362766976dfdd",
+      "canonicalAspectOutputByteLength": 156202,
+      "canonicalAspectOutputSha256": "d5d2a8713946cd59643dc19cc5e2e38d0ee61e8128560d91c9476e06f08dc459"
+    },
+    {
+      "aspectId": "c09073fa-1ee5-5fe9-87d4-9b7505ab565d",
+      "aspectName": "landmass.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 3843,
+      "canonicalAspectSha256": "bfb0fb1744c8aea59d3a39a8d1623a7305e35ce09ce0ea098c596c834501e0c5",
+      "canonicalAspectOutputByteLength": 2197,
+      "canonicalAspectOutputSha256": "64aabe760fbdb645d4dbb487880df5fdb097f024730a3b7add0749a38ffdd542"
+    },
+    {
+      "aspectId": "c5ff3025-8895-5074-aec0-0d4013f1a701",
+      "aspectName": "landmass.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 38751,
+      "canonicalAspectSha256": "96f6b3157f1bcd4f2997806328e56aea9446806a048a794ffd1a14900a30315d",
+      "canonicalAspectOutputByteLength": 34099,
+      "canonicalAspectOutputSha256": "621f59127f6e0ec26375c7686721c0ca77313505214759cacef4554aa042ffa3"
+    },
+    {
+      "aspectId": "d3bdde0a-daa6-5cbb-a855-ac31c1803520",
+      "aspectName": "landmass.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 3750,
+      "canonicalAspectSha256": "ecba60544a0fcabf400349f44a73c137bf9eba4750ab3adf4cfb55e85736250c",
+      "canonicalAspectOutputByteLength": 2112,
+      "canonicalAspectOutputSha256": "5729528846113e79abb84af746494327a305fdd3143cb859bbfa34d80a0b1607"
+    },
+    {
+      "aspectId": "d883cb96-7454-59c4-bb9d-723b31bbd3c2",
+      "aspectName": "landmass.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 42367,
+      "canonicalAspectSha256": "b9f8ac1e1afcea5fd14a5ac4b8aabf5eb4fe205cf7e6bad4971315fdbc571a8e",
+      "canonicalAspectOutputByteLength": 37393,
+      "canonicalAspectOutputSha256": "65ddd24ae769087ade83aa6b49478e8087ca7fba65ae15533cea5e74589763fa"
+    },
+    {
+      "aspectId": "df0e99f3-612a-5d19-ad91-95f6ee129a6a",
+      "aspectName": "landmass.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 3192,
+      "canonicalAspectSha256": "913ab6662c85e31b7e52c959014d674c7d0ad441df354b72b9f36eaa5278388a",
+      "canonicalAspectOutputByteLength": 1602,
+      "canonicalAspectOutputSha256": "ef60d093cc6ffa384e2ba5046909387fbcad56c4b40b26486eb88eb0bbc9fa20"
+    },
+    {
+      "aspectId": "e588eb7f-d585-5c27-9ce5-81c2fb1ebc43",
+      "aspectName": "worldTerrain.macroElevation",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 35192721,
+      "canonicalAspectSha256": "b2abc0a1ff4c4a97fc4035b3d37ea9c09ac10af8f64c320e78c2372f086c951d",
+      "canonicalAspectOutputByteLength": 31001161,
+      "canonicalAspectOutputSha256": "9bcbfee8b4cb1d99803f2a598f537b8753a0550fd878c8f43f98f84ad5f86411"
+    },
+    {
+      "aspectId": "e7248167-8486-58b7-a2e4-c40a62968cd6",
+      "aspectName": "landmass.classification",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 3590,
+      "canonicalAspectSha256": "2f98948674406ba44edd383a9e3259e46b2c67b31b90ff77e437c69d28f6de92",
+      "canonicalAspectOutputByteLength": 1960,
+      "canonicalAspectOutputSha256": "da16e5a09782e0d5b77b290fc096853bd1958e7029fcbd30ccaafa906ac9976c"
+    },
+    {
+      "aspectId": "f435cc03-cc5f-59aa-9390-8693a9a8fcbd",
+      "aspectName": "atlas.paperTreatment",
+      "variantRevision": 0,
+      "canonicalAspectByteLength": 1317,
+      "canonicalAspectSha256": "94d423744d8a24faeb36a6824ffaa391ac2ba30ca04413458665e7c489e4b3a6",
+      "canonicalAspectOutputByteLength": 279,
+      "canonicalAspectOutputSha256": "9a87a543c886053b1046c44aa9be1d006c3be63cee2b4a1a072ef27d154c17c6"
+    }
+  ]
+}
