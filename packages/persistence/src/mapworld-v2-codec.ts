@@ -46,6 +46,7 @@ import { z } from 'zod';
 
 import { acceptedAspectDtoSchema } from './accepted-aspect-dto-schema.js';
 import { acceptedAspectFromDto } from './accepted-aspect-from-dto.js';
+import { findUnsupportedAtlasMacroElevationVersion } from './atlas-macro-elevation-version-compatibility.js';
 import { decodeCanonicalDto } from './canonical-dto-decoding.js';
 import {
   bytesEqual,
@@ -1011,6 +1012,10 @@ function decodeV2Map(
   if (!isRecord(parsed.value)) return schemaFailure(path, 'Map document must be a strict object.');
   if (parsed.value.mapDocumentSchemaVersion !== MAPWORLD_V2_MAP_DOCUMENT_SCHEMA_VERSION)
     return incompatible(path, '$.mapDocumentSchemaVersion', parsed.value.mapDocumentSchemaVersion);
+  const unsupportedMacroVersion = findUnsupportedAtlasMacroElevationVersion(parsed.value);
+  if (unsupportedMacroVersion !== undefined) {
+    return incompatible(path, unsupportedMacroVersion.path, unsupportedMacroVersion.actual);
+  }
   const rawReferences = parsed.value.externalAcceptedAspects;
   if (Array.isArray(rawReferences)) {
     for (const [index, reference] of rawReferences.entries()) {

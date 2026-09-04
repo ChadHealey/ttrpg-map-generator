@@ -111,7 +111,7 @@ versions, parameter values, seed scope, dependencies, output shape, point counts
 Domain validation additionally checks the closed simple counterclockwise outline, exact derived
 marker IDs and order, and strict marker containment.
 
-The nine Milestone 2 atlas aspect kinds also use exact strict v1 arms. Their DTOs preserve the
+The nine Milestone 2 atlas aspect kinds also use exact strict package-v1 arms. Their DTOs preserve the
 accepted full-profile macro-elevation ticks and land/water samples; semantic component memberships,
 classification, containment, adjacency, and marine connectivity; canonical planet-native coastline
 rings and source fingerprints; canonical controls and generator parameters; and the three
@@ -121,6 +121,20 @@ surface-component, and coastline-ring IDs are parsed through `core`, as are ever
 reconstructor to validate the complete aspect graph, exact singleton/feature ownership, required
 dependencies, controls, semantic partition, coastline, and appearance provenance before exposing
 the document.
+
+The package and accepted-aspect schema versions do not select macro-elevation behavior. The
+`worldTerrain.macroElevation` arm additively accepts exactly two provenance tuples:
+
+| Generator version | Parameter field behavior | Output field behavior |
+| ----------------- | ------------------------ | --------------------- |
+| `1`               | `1`                      | `1`                   |
+| `2`               | `2`                      | `2`                   |
+
+Every other tuple, including an unknown version or a mismatch between the accepted aspect, its
+seed metadata, its persisted parameters, and its output provenance, fails closed. Version 2 does
+not migrate version 1: decode returns the exact materialized record, encode retains its selected
+tuple, and reopen invokes no generator. Supporting a later normal new-atlas default is therefore
+independent of keeping accepted version-1 records valid and byte-stable.
 
 Milestone 2 does not change the released package, map-document, or accepted-aspect schema version.
 Version 1 already reserved strict known-domain aspect arms beside its generic arm, and no released

@@ -23,6 +23,10 @@ owned by [`mapworld-v1.md`](mapworld-v1.md) and its bytes never change.
 Unknown package, record, aspect, field, encoding, footprint, context, or transform versions fail
 with `persistence.version.incompatible` before an accepted document is exposed.
 
+Inline Milestone 2 compatibility aspects retain the additive macro-elevation contract owned by
+[`mapworld-v1.md`](mapworld-v1.md): generator/parameter/output field versions must be exactly all
+`1` or all `2`. Package version 2 neither upgrades nor reinterprets either accepted tuple.
+
 ## Package shape and authoritative order
 
 ```text

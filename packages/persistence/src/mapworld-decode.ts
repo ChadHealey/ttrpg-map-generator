@@ -1,5 +1,6 @@
 import { type WorldDocument } from '@ttrpg-map/core';
 
+import { findUnsupportedAtlasMacroElevationVersion } from './atlas-macro-elevation-version-compatibility.js';
 import { decodeCanonicalDto } from './canonical-dto-decoding.js';
 import { parseCanonicalJsonBytes } from './canonical-json.js';
 import { orderManifestDto, orderMapDocumentDto, orderWorldIndexDto } from './dto-ordering.js';
@@ -115,14 +116,21 @@ function decodeMapworldV1Files(
   for (const entry of worldIndex.value.mapFiles) {
     const bytes = filesByPath.get(entry.path);
     if (bytes === undefined) return missingPackageFile(entry.path);
-    const dto = decodeCanonicalDto(bytes, entry.path, mapDocumentDtoSchema, orderMapDocumentDto, [
-      { path: ['mapDocumentSchemaVersion'], expected: MAP_DOCUMENT_SCHEMA_VERSION },
-      {
-        path: ['aspects', '*', 'acceptedAspectSchemaVersion'],
-        expected: ACCEPTED_ASPECT_SCHEMA_VERSION,
-      },
-      { path: ['coordinateSystem', 'transformVersion'], expected: 1 },
-    ]);
+    const dto = decodeCanonicalDto(
+      bytes,
+      entry.path,
+      mapDocumentDtoSchema,
+      orderMapDocumentDto,
+      [
+        { path: ['mapDocumentSchemaVersion'], expected: MAP_DOCUMENT_SCHEMA_VERSION },
+        {
+          path: ['aspects', '*', 'acceptedAspectSchemaVersion'],
+          expected: ACCEPTED_ASPECT_SCHEMA_VERSION,
+        },
+        { path: ['coordinateSystem', 'transformVersion'], expected: 1 },
+      ],
+      [findUnsupportedAtlasMacroElevationVersion],
+    );
     if (!dto.ok) return dto;
     const entryDiagnostic = validateMapIndexEntry(entry, dto.value);
     if (entryDiagnostic !== undefined) return persistenceFailure(entryDiagnostic);

@@ -32,7 +32,11 @@ import {
   type MacroElevationField,
   type WaterBody,
 } from './atlas-geography-model.js';
-import { parseAtlasControls, validateAtlasGeographyRecords } from './atlas-geography-validation.js';
+import {
+  parseAtlasControls,
+  validateAtlasGeographyRecords,
+  validateAtlasMacroElevationVersionPair,
+} from './atlas-geography-validation.js';
 import { parsePlanetPoint } from './coordinates.js';
 import {
   type AcceptedAspectRecord,
@@ -246,6 +250,7 @@ function hasValidAcceptedEnvelopes(
     return false;
   }
   return m2Aspects.every((aspect) => {
+    if (!hasSupportedAtlasAspectVersion(aspect)) return false;
     const singleton = expectedSingletonOwners.get(aspect.aspectName);
     if (singleton !== undefined) {
       return (
@@ -271,6 +276,24 @@ function hasValidAcceptedEnvelopes(
         semantic.sourceClassificationAspectId === geography.landWaterClassificationAspectId)
     );
   });
+}
+
+function hasSupportedAtlasAspectVersion(aspect: AcceptedAspectRecord): boolean {
+  if (aspect.aspectName !== 'worldTerrain.macroElevation') return aspect.generatorVersion === 1;
+  if (!isRecord(aspect.parameters) || !isRecord(aspect.acceptedOutput)) return false;
+  const provenance = aspect.acceptedOutput.provenance;
+  return (
+    isRecord(provenance) &&
+    validateAtlasMacroElevationVersionPair(
+      aspect.generatorVersion,
+      aspect.parameters.fieldBehaviorVersion,
+      provenance.fieldBehaviorVersion,
+    ).length === 0
+  );
+}
+
+function isRecord(value: unknown): value is Readonly<Record<string, unknown>> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
 function singletonIdsToArray(

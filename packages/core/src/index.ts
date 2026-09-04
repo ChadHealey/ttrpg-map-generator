@@ -79,10 +79,12 @@ export {
   ATLAS_ASPECT_DEFINITIONS,
   ATLAS_CONTROL_DEFINITIONS,
   ATLAS_CONTROL_INVALIDATION_ROOTS,
+  ATLAS_MACRO_ELEVATION_VERSION_DEFINITIONS,
   type AtlasAspectDefinition,
   type AtlasAspectKind,
   atlasControlsMatchWorldRadius,
   type AtlasEnumControlDefinition,
+  type AtlasMacroElevationVersionDefinition,
   type AtlasNumericControlDefinition,
   compareAtlasEntityIds,
   deriveAtlasAspectId,
@@ -92,6 +94,8 @@ export {
   deriveAtlasSurfaceComponentId,
   deriveAtlasWorldRadius,
   getAtlasControlInvalidationRoots,
+  isSupportedAtlasMacroElevationVersionPair,
+  selectAtlasMacroElevationVersion,
 } from './atlas-geography-aspects.js';
 export {
   type AtlasCoastlineBoundaryTransition,
@@ -149,6 +153,7 @@ export {
   type Landmass,
   type LandWaterClassification,
   type MacroElevationField,
+  type MacroElevationFieldBehaviorVersion,
   type MacroElevationFieldProvenance,
   type MacroElevationValueTicks,
   type WaterBody,
@@ -185,6 +190,7 @@ export {
   validateAtlasControls,
   validateAtlasGeographyRecords,
   validateAtlasLandWaterRecords,
+  validateAtlasMacroElevationVersionPair,
   validateAtlasSemanticGeographyRecords,
   validateAtlasSemanticGeographyRecordsWithAnalysis,
 } from './atlas-geography-validation.js';

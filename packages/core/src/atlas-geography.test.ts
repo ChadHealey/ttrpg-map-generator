@@ -10,12 +10,14 @@ import {
   ATLAS_FULL_SAMPLE_COUNT,
   ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES,
   ATLAS_LANDMASS_KINDS,
+  ATLAS_MACRO_ELEVATION_VERSION_DEFINITIONS,
   ATLAS_OCEAN_CONNECTIVITY,
   ATLAS_SEMANTIC_AREA_WEIGHT_SCALE,
   ATLAS_WATER_BODY_KINDS,
   atlasControlsMatchWorldRadius,
   type AtlasGeographyRecords,
   atlasSampleReaderToArray,
+  createBehaviorVersion,
   createLandWaterSampleReader,
   createMacroElevationSampleReader,
   DEFAULT_ATLAS_CONTROLS,
@@ -29,8 +31,10 @@ import {
   getAtlasControlInvalidationRoots,
   type MacroElevationValueTicks,
   parseAtlasControls,
+  selectAtlasMacroElevationVersion,
   validateAtlasGeographyRecords,
   validateAtlasLandWaterRecords,
+  validateAtlasMacroElevationVersionPair,
 } from './index.js';
 
 const WORLD_MAP_ID = value(parseStableId('map', '00000000-0000-4000-8000-000000000001'));
@@ -98,6 +102,44 @@ describe('Milestone 2 atlas geography contracts', () => {
         'waterBody.classification',
       ],
     });
+  });
+
+  it('selects the two supported macro-elevation version contracts independently of the v1 catalog default', () => {
+    expect(ATLAS_MACRO_ELEVATION_VERSION_DEFINITIONS).toStrictEqual([
+      { fieldBehaviorVersion: 1, generatorVersion: 1 },
+      { fieldBehaviorVersion: 2, generatorVersion: 2 },
+    ]);
+    expect(selectAtlasMacroElevationVersion(1)).toStrictEqual({
+      fieldBehaviorVersion: 1,
+      generatorVersion: 1,
+    });
+    expect(selectAtlasMacroElevationVersion(2)).toStrictEqual({
+      fieldBehaviorVersion: 2,
+      generatorVersion: 2,
+    });
+    expect(
+      ATLAS_ASPECT_DEFINITIONS.find(({ kind }) => kind === 'worldTerrain.macroElevation')
+        ?.generatorVersion,
+    ).toBe(1);
+  });
+
+  it('validates only exact macro-elevation generator, parameter, and output version tuples', () => {
+    const versionOne = value(createBehaviorVersion(1));
+    const versionTwo = value(createBehaviorVersion(2));
+    expect(validateAtlasMacroElevationVersionPair(versionOne, 1, 1)).toStrictEqual([]);
+    expect(validateAtlasMacroElevationVersionPair(versionTwo, 2, 2)).toStrictEqual([]);
+    for (const tuple of [
+      [versionOne, 1, 2],
+      [versionTwo, 1, 1],
+      [versionTwo, 2, 1],
+      [3, 3, 3],
+    ] as const) {
+      expect(validateAtlasMacroElevationVersionPair(tuple[0], tuple[1], tuple[2])).toStrictEqual([
+        expect.objectContaining({
+          code: ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidFieldVersionPair,
+        }),
+      ]);
+    }
   });
 
   it('derives all singleton, feature, aspect, component, and ring identities without names or positions', () => {
@@ -184,6 +226,19 @@ describe('Milestone 2 atlas geography contracts', () => {
       );
     },
   );
+
+  fullProfileIt('accepts macro-elevation field behavior versions 1 and 2 without widening', () => {
+    const versionOne = validRecords();
+    const versionTwo: AtlasGeographyRecords = {
+      ...versionOne,
+      macroElevation: {
+        ...versionOne.macroElevation,
+        provenance: { ...versionOne.macroElevation.provenance, fieldBehaviorVersion: 2 },
+      },
+    };
+    expect(validateAtlasGeographyRecords(versionOne)).toStrictEqual({ ok: true });
+    expect(validateAtlasGeographyRecords(versionTwo)).toStrictEqual({ ok: true });
+  });
 
   fullProfileIt(
     'rejects truncated full fields and partitions plus invalid versions and contour ranges',
@@ -273,13 +328,13 @@ describe('Milestone 2 atlas geography contracts', () => {
           rings: [{ ...ring, waterBodyIds: [LANDMASS_ID] }],
         },
       });
-      const invalidMetadata: AtlasGeographyRecords = {
+      const invalidMetadata = {
         ...metadata,
         macroElevation: {
           ...metadata.macroElevation,
-          provenance: { ...metadata.macroElevation.provenance, fieldBehaviorVersion: 2 as 1 },
+          provenance: { ...metadata.macroElevation.provenance, fieldBehaviorVersion: 3 },
         },
-      };
+      } as unknown as AtlasGeographyRecords;
 
       expect(diagnosticCodes(invalidMetadata)).toContain(
         ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidFieldMetadata,

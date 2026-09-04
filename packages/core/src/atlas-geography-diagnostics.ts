@@ -13,6 +13,7 @@ export const ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES = {
   invalidCoastlineVersion: 'atlas-geography.coastline.version.invalid',
   invalidControls: 'atlas-geography.controls.invalid',
   invalidFieldMetadata: 'atlas-geography.field.metadata.invalid',
+  invalidFieldVersionPair: 'atlas-geography.field.version-pair.invalid',
   invalidFieldValue: 'atlas-geography.field.value.invalid',
   invalidOrdering: 'atlas-geography.ordering.invalid',
   invalidRelationship: 'atlas-geography.relationship.invalid',

@@ -15,11 +15,26 @@ export function decodeCanonicalDto<Value>(
   schema: z.ZodType<Value>,
   order: (value: Value) => Value,
   versionFields: readonly VersionField[],
+  additionalVersionChecks: readonly AdditionalVersionCheck[] = [],
 ): PersistenceResult<Value> {
   const json = parseCanonicalJsonBytes(bytes, filePath);
   if (!json.ok) return json;
   const incompatible = findIncompatibleVersion(json.value, filePath, versionFields);
   if (incompatible !== undefined) return persistenceFailure(incompatible);
+  for (const check of additionalVersionChecks) {
+    const mismatch = check(json.value);
+    if (mismatch !== undefined) {
+      return persistenceFailure(
+        persistenceDiagnostic(
+          PERSISTENCE_DIAGNOSTIC_CODES.versionIncompatible,
+          filePath,
+          mismatch.path,
+          `Unsupported v1 compatibility value ${JSON.stringify(mismatch.actual)}; expected ${mismatch.expectedDescription}.`,
+          'Open the package with a compatible application or apply an explicit supported migration.',
+        ),
+      );
+    }
+  }
   const dto = validateDto(schema, json.value, filePath);
   if (!dto.ok) return dto;
   const ordered = order(dto.value);
@@ -43,6 +58,14 @@ export interface VersionField {
   readonly path: readonly string[];
   readonly expected: number | string;
 }
+
+export interface AdditionalVersionMismatch {
+  readonly actual: unknown;
+  readonly expectedDescription: string;
+  readonly path: string;
+}
+
+export type AdditionalVersionCheck = (value: unknown) => AdditionalVersionMismatch | undefined;
 
 function findIncompatibleVersion(
   value: unknown,

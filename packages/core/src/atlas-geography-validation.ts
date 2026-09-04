@@ -1,6 +1,9 @@
 /** Deterministic validation and ordering for accepted Milestone 2 atlas geography. */
 
-import { deriveAtlasSingletonEntityIds } from './atlas-geography-aspects.js';
+import {
+  deriveAtlasSingletonEntityIds,
+  isSupportedAtlasMacroElevationVersionPair,
+} from './atlas-geography-aspects.js';
 import {
   ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES,
   type AtlasGeographyDiagnostic,
@@ -286,6 +289,26 @@ export function validateAtlasLandWaterRecords(
   ]);
 }
 
+/** Validate the accepted aspect, parameter, and output versions as one compatibility tuple. */
+export function validateAtlasMacroElevationVersionPair(
+  generatorVersion: unknown,
+  parameterFieldBehaviorVersion: unknown,
+  outputFieldBehaviorVersion: unknown,
+): readonly AtlasGeographyDiagnostic[] {
+  if (
+    parameterFieldBehaviorVersion === outputFieldBehaviorVersion &&
+    isSupportedAtlasMacroElevationVersionPair(generatorVersion, outputFieldBehaviorVersion)
+  ) {
+    return Object.freeze([]);
+  }
+  return Object.freeze([
+    diagnostic(
+      ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidFieldVersionPair,
+      'Macro elevation requires matching generator, parameter-field, and output-field versions (1,1,1) or (2,2,2).',
+    ),
+  ]);
+}
+
 function validateField(records: AtlasLandWaterRecords): readonly AtlasGeographyDiagnostic[] {
   const diagnostics: AtlasGeographyDiagnostic[] = [];
   const provenance = records.macroElevation.provenance as unknown as Readonly<
@@ -298,13 +321,13 @@ function validateField(records: AtlasLandWaterRecords): readonly AtlasGeographyD
     provenance.longitudeCellCount !== ATLAS_FULL_LONGITUDE_CELL_COUNT ||
     provenance.latitudeBandCount !== ATLAS_FULL_LATITUDE_BAND_COUNT ||
     provenance.canonicalTraversal !== ATLAS_CANONICAL_FIELD_TRAVERSAL ||
-    provenance.fieldBehaviorVersion !== 1 ||
+    (provenance.fieldBehaviorVersion !== 1 && provenance.fieldBehaviorVersion !== 2) ||
     provenance.quantizationScale !== ATLAS_FIELD_QUANTIZATION_SCALE
   ) {
     diagnostics.push(
       diagnostic(
         ATLAS_GEOGRAPHY_DIAGNOSTIC_CODES.invalidFieldMetadata,
-        'Macro elevation provenance must use the accepted v1 full-profile, dimensions, traversal, sampling, field, and quantization metadata.',
+        'Macro elevation provenance must use supported field behavior version 1 or 2 with the accepted full-profile, dimensions, traversal, sampling, and quantization metadata.',
       ),
     );
   }

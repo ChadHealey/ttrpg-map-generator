@@ -5,6 +5,7 @@ import {
   ATLAS_OCEAN_CONNECTIVITY,
   ATLAS_POLAR_CHARACTERS,
   type AtlasControls,
+  type MacroElevationFieldBehaviorVersion,
 } from './atlas-geography-model.js';
 import {
   type BehaviorVersion,
@@ -60,6 +61,11 @@ export interface AtlasAspectDefinition {
   readonly additionalBehaviorVersion: 1;
 }
 
+export interface AtlasMacroElevationVersionDefinition {
+  readonly fieldBehaviorVersion: MacroElevationFieldBehaviorVersion;
+  readonly generatorVersion: BehaviorVersion;
+}
+
 export interface AtlasNumericControlDefinition {
   readonly kind: 'integer';
   readonly unit: 'count' | 'kilometers' | 'percentage-points';
@@ -78,8 +84,16 @@ export interface AtlasEnumControlDefinition<Value extends string> {
 }
 
 const VERSION_ONE = required(createBehaviorVersion(1));
+const VERSION_TWO = required(createBehaviorVersion(2));
 const PARAMETER_SCHEMA_ONE = required(createParameterSchemaVersion(1));
 const INITIAL_REVISION = required(createVariantRevision(0));
+
+/** Additive accepted-data compatibility; this is deliberately separate from generation defaults. */
+export const ATLAS_MACRO_ELEVATION_VERSION_DEFINITIONS: readonly AtlasMacroElevationVersionDefinition[] =
+  Object.freeze([
+    macroElevationVersionDefinition(VERSION_ONE, 1),
+    macroElevationVersionDefinition(VERSION_TWO, 2),
+  ]);
 
 const ATLAS_ASPECT_SEMANTIC_KEYS: Readonly<Record<AtlasAspectKind, string>> = Object.freeze({
   'worldTerrain.macroElevation': 'atlas-aspect.world-terrain.macro-elevation',
@@ -95,32 +109,76 @@ const ATLAS_ASPECT_SEMANTIC_KEYS: Readonly<Record<AtlasAspectKind, string>> = Ob
 
 /** The complete proof-owned aspect topology, expressed by names only for catalogue use. */
 export const ATLAS_ASPECT_DEFINITIONS: readonly AtlasAspectDefinition[] = Object.freeze([
-  definition('worldTerrain.macroElevation', 'world-surface', []),
-  definition('worldSurface.landWaterClassification', 'world-surface', [
-    'worldTerrain.macroElevation',
-  ]),
-  definition('landmass.classification', 'landmass', ['worldSurface.landWaterClassification']),
-  definition('islandGroup.classification', 'island-group', [
+  definition('worldTerrain.macroElevation', 'world-surface', [], VERSION_ONE),
+  definition(
     'worldSurface.landWaterClassification',
+    'world-surface',
+    ['worldTerrain.macroElevation'],
+    VERSION_ONE,
+  ),
+  definition(
     'landmass.classification',
-  ]),
-  definition('waterBody.classification', 'water-body', [
-    'worldSurface.landWaterClassification',
-    'landmass.classification',
-  ]),
-  definition('worldCoastline.geometry', 'world-coastline', [
-    'worldSurface.landWaterClassification',
-    'landmass.classification',
+    'landmass',
+    ['worldSurface.landWaterClassification'],
+    VERSION_ONE,
+  ),
+  definition(
+    'islandGroup.classification',
+    'island-group',
+    ['worldSurface.landWaterClassification', 'landmass.classification'],
+    VERSION_ONE,
+  ),
+  definition(
     'waterBody.classification',
-  ]),
-  definition('atlas.coastlineAppearance', 'atlas-presentation', ['worldCoastline.geometry']),
-  definition('atlas.waterDecoration', 'atlas-presentation', [
-    'worldSurface.landWaterClassification',
-    'waterBody.classification',
+    'water-body',
+    ['worldSurface.landWaterClassification', 'landmass.classification'],
+    VERSION_ONE,
+  ),
+  definition(
     'worldCoastline.geometry',
-  ]),
-  definition('atlas.paperTreatment', 'atlas-presentation', []),
+    'world-coastline',
+    ['worldSurface.landWaterClassification', 'landmass.classification', 'waterBody.classification'],
+    VERSION_ONE,
+  ),
+  definition(
+    'atlas.coastlineAppearance',
+    'atlas-presentation',
+    ['worldCoastline.geometry'],
+    VERSION_ONE,
+  ),
+  definition(
+    'atlas.waterDecoration',
+    'atlas-presentation',
+    ['worldSurface.landWaterClassification', 'waterBody.classification', 'worldCoastline.geometry'],
+    VERSION_ONE,
+  ),
+  definition('atlas.paperTreatment', 'atlas-presentation', [], VERSION_ONE),
 ]);
+
+/** Select one supported macro-elevation contract explicitly; no ambient default is applied. */
+export function selectAtlasMacroElevationVersion(
+  fieldBehaviorVersion: MacroElevationFieldBehaviorVersion,
+): AtlasMacroElevationVersionDefinition {
+  const definition = ATLAS_MACRO_ELEVATION_VERSION_DEFINITIONS.find(
+    (candidate) => candidate.fieldBehaviorVersion === fieldBehaviorVersion,
+  );
+  if (definition === undefined) {
+    throw new Error('Missing supported atlas macro-elevation version definition.');
+  }
+  return definition;
+}
+
+/** True only for the two accepted generator/field provenance pairs. */
+export function isSupportedAtlasMacroElevationVersionPair(
+  generatorVersion: unknown,
+  fieldBehaviorVersion: unknown,
+): boolean {
+  return ATLAS_MACRO_ELEVATION_VERSION_DEFINITIONS.some(
+    (definition) =>
+      definition.generatorVersion === generatorVersion &&
+      definition.fieldBehaviorVersion === fieldBehaviorVersion,
+  );
+}
 
 /** Control changes begin invalidation only at these proof-contract root aspects. */
 export const ATLAS_CONTROL_INVALIDATION_ROOTS: Readonly<
@@ -268,6 +326,7 @@ function definition(
   kind: AtlasAspectKind,
   owner: AtlasAspectDefinition['owner'],
   directDependencyKinds: readonly AtlasAspectKind[],
+  generatorVersion: BehaviorVersion,
 ): AtlasAspectDefinition {
   return Object.freeze({
     kind,
@@ -276,11 +335,18 @@ function definition(
     owner,
     directDependencyKinds: Object.freeze([...directDependencyKinds]),
     seedScope: 'map/entity',
-    generatorVersion: VERSION_ONE,
+    generatorVersion,
     parameterSchemaVersion: PARAMETER_SCHEMA_ONE,
     initialVariantRevision: INITIAL_REVISION,
     additionalBehaviorVersion: 1,
   });
+}
+
+function macroElevationVersionDefinition(
+  generatorVersion: BehaviorVersion,
+  fieldBehaviorVersion: MacroElevationFieldBehaviorVersion,
+): AtlasMacroElevationVersionDefinition {
+  return Object.freeze({ fieldBehaviorVersion, generatorVersion });
 }
 
 function numericControl(

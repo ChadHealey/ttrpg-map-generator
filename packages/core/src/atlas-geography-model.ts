@@ -107,6 +107,8 @@ export const DEFAULT_ATLAS_CONTROLS: AtlasControls = Object.freeze({
 });
 
 /** Versioned, project-owned provenance for accepted quantized macro elevation. */
+export type MacroElevationFieldBehaviorVersion = 1 | 2;
+
 export interface MacroElevationFieldProvenance {
   readonly contractVersion: typeof ATLAS_GEOGRAPHY_CONTRACT_VERSION;
   readonly samplingProfileId: typeof ATLAS_FULL_PROFILE_ID;
@@ -114,7 +116,7 @@ export interface MacroElevationFieldProvenance {
   readonly longitudeCellCount: typeof ATLAS_FULL_LONGITUDE_CELL_COUNT;
   readonly latitudeBandCount: typeof ATLAS_FULL_LATITUDE_BAND_COUNT;
   readonly canonicalTraversal: typeof ATLAS_CANONICAL_FIELD_TRAVERSAL;
-  readonly fieldBehaviorVersion: 1;
+  readonly fieldBehaviorVersion: MacroElevationFieldBehaviorVersion;
   readonly quantizationScale: typeof ATLAS_FIELD_QUANTIZATION_SCALE;
 }
 

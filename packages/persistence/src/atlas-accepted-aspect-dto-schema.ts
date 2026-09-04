@@ -43,46 +43,43 @@ export const ATLAS_ACCEPTED_ASPECT_NAMES: ReadonlySet<string> = new Set([
 const SHA256_PATTERN = /^[a-f0-9]{64}$/u;
 const fingerprintDtoSchema = z.string().regex(SHA256_PATTERN);
 const permilleDtoSchema = canonicalIntegerDtoSchema.min(0).max(1_000);
-const mapEntitySeedFields = {
-  ...commonAcceptedAspectFields,
-  generatorVersion: z.literal(1),
-  parameterSchemaVersion: z.literal(1),
-  seedScope: z.literal('map/entity'),
-} as const;
-
-const macroParametersDtoSchema = z.strictObject({
-  parameterSchemaVersion: z.literal(1),
-  samplingProfileId: z.literal(ATLAS_FULL_PROFILE_ID),
-  samplingPolicyVersion: z.literal(1),
-  fieldBehaviorVersion: z.literal(1),
-  worldCircumferenceKm: canonicalIntegerDtoSchema.min(10_000).max(80_000),
-  continentCountIntent: canonicalIntegerDtoSchema.min(1).max(8),
-  continentDistribution: z.enum(ATLAS_CONTINENT_DISTRIBUTIONS),
-  fragmentationPercent: canonicalIntegerDtoSchema.min(0).max(100),
-  islandAbundancePercent: canonicalIntegerDtoSchema.min(0).max(100),
-  archipelagoAbundancePercent: canonicalIntegerDtoSchema.min(0).max(100),
-  polarCharacter: z.enum(ATLAS_POLAR_CHARACTERS),
-});
-
-const macroOutputDtoSchema = z.strictObject({
-  provenance: z.strictObject({
-    contractVersion: z.literal(1),
+function macroParametersDtoSchema(fieldBehaviorVersion: 1 | 2) {
+  return z.strictObject({
+    parameterSchemaVersion: z.literal(1),
     samplingProfileId: z.literal(ATLAS_FULL_PROFILE_ID),
     samplingPolicyVersion: z.literal(1),
-    longitudeCellCount: z.literal(ATLAS_FULL_LONGITUDE_CELL_COUNT),
-    latitudeBandCount: z.literal(ATLAS_FULL_LATITUDE_BAND_COUNT),
-    canonicalTraversal: z.literal(ATLAS_CANONICAL_FIELD_TRAVERSAL),
-    fieldBehaviorVersion: z.literal(1),
-    quantizationScale: z.literal(ATLAS_FIELD_QUANTIZATION_SCALE),
-  }),
-  values: z
-    .array(
-      canonicalIntegerDtoSchema
-        .min(-ATLAS_FIELD_QUANTIZATION_SCALE)
-        .max(ATLAS_FIELD_QUANTIZATION_SCALE),
-    )
-    .length(ATLAS_FULL_SAMPLE_COUNT),
-});
+    fieldBehaviorVersion: z.literal(fieldBehaviorVersion),
+    worldCircumferenceKm: canonicalIntegerDtoSchema.min(10_000).max(80_000),
+    continentCountIntent: canonicalIntegerDtoSchema.min(1).max(8),
+    continentDistribution: z.enum(ATLAS_CONTINENT_DISTRIBUTIONS),
+    fragmentationPercent: canonicalIntegerDtoSchema.min(0).max(100),
+    islandAbundancePercent: canonicalIntegerDtoSchema.min(0).max(100),
+    archipelagoAbundancePercent: canonicalIntegerDtoSchema.min(0).max(100),
+    polarCharacter: z.enum(ATLAS_POLAR_CHARACTERS),
+  });
+}
+
+function macroOutputDtoSchema(fieldBehaviorVersion: 1 | 2) {
+  return z.strictObject({
+    provenance: z.strictObject({
+      contractVersion: z.literal(1),
+      samplingProfileId: z.literal(ATLAS_FULL_PROFILE_ID),
+      samplingPolicyVersion: z.literal(1),
+      longitudeCellCount: z.literal(ATLAS_FULL_LONGITUDE_CELL_COUNT),
+      latitudeBandCount: z.literal(ATLAS_FULL_LATITUDE_BAND_COUNT),
+      canonicalTraversal: z.literal(ATLAS_CANONICAL_FIELD_TRAVERSAL),
+      fieldBehaviorVersion: z.literal(fieldBehaviorVersion),
+      quantizationScale: z.literal(ATLAS_FIELD_QUANTIZATION_SCALE),
+    }),
+    values: z
+      .array(
+        canonicalIntegerDtoSchema
+          .min(-ATLAS_FIELD_QUANTIZATION_SCALE)
+          .max(ATLAS_FIELD_QUANTIZATION_SCALE),
+      )
+      .length(ATLAS_FULL_SAMPLE_COUNT),
+  });
+}
 
 const partitionParametersDtoSchema = z.strictObject({
   parameterSchemaVersion: z.literal(1),
@@ -246,19 +243,23 @@ const paperTreatmentOutputDtoSchema = z.strictObject({
 
 function atlasAspectSchema<
   Name extends string,
+  Version extends 1 | 2,
   Parameters extends z.ZodType,
   Output extends z.ZodType,
->(aspectName: Name, parameters: Parameters, acceptedOutput: Output) {
+>(aspectName: Name, generatorVersion: Version, parameters: Parameters, acceptedOutput: Output) {
   return z.strictObject({
-    ...mapEntitySeedFields,
+    ...commonAcceptedAspectFields,
     aspectName: z.literal(aspectName),
     generatorId: z.literal(aspectName),
+    generatorVersion: z.literal(generatorVersion),
+    parameterSchemaVersion: z.literal(1),
+    seedScope: z.literal('map/entity'),
     seedMetadata: z.strictObject({
       seedDerivationVersion: z.literal(1),
       deterministicStreamVersion: z.literal(1),
       worldSeed: canonicalWorldSeedDtoSchema,
       generatorId: z.literal(aspectName),
-      generatorVersion: z.literal(1),
+      generatorVersion: z.literal(generatorVersion),
       aspectName: z.literal(aspectName),
       variantRevision: nonnegativeIntegerDtoSchema,
       seedScope: z.literal('map/entity'),
@@ -271,44 +272,63 @@ function atlasAspectSchema<
 }
 
 export const atlasAcceptedAspectDtoSchemas = [
-  atlasAspectSchema('worldTerrain.macroElevation', macroParametersDtoSchema, macroOutputDtoSchema),
+  atlasAspectSchema(
+    'worldTerrain.macroElevation',
+    1,
+    macroParametersDtoSchema(1),
+    macroOutputDtoSchema(1),
+  ),
+  atlasAspectSchema(
+    'worldTerrain.macroElevation',
+    2,
+    macroParametersDtoSchema(2),
+    macroOutputDtoSchema(2),
+  ),
   atlasAspectSchema(
     'worldSurface.landWaterClassification',
+    1,
     partitionParametersDtoSchema,
     partitionOutputDtoSchema,
   ),
   atlasAspectSchema(
     'landmass.classification',
+    1,
     semanticParametersDtoSchema,
     landmassOutputDtoSchema,
   ),
   atlasAspectSchema(
     'islandGroup.classification',
+    1,
     semanticParametersDtoSchema,
     islandGroupOutputDtoSchema,
   ),
   atlasAspectSchema(
     'waterBody.classification',
+    1,
     semanticParametersDtoSchema,
     waterBodyOutputDtoSchema,
   ),
   atlasAspectSchema(
     'worldCoastline.geometry',
+    1,
     coastlineParametersDtoSchema,
     coastlineOutputDtoSchema,
   ),
   atlasAspectSchema(
     'atlas.coastlineAppearance',
+    1,
     appearanceParametersDtoSchema,
     coastlineAppearanceOutputDtoSchema,
   ),
   atlasAspectSchema(
     'atlas.waterDecoration',
+    1,
     appearanceParametersDtoSchema,
     waterDecorationOutputDtoSchema,
   ),
   atlasAspectSchema(
     'atlas.paperTreatment',
+    1,
     appearanceParametersDtoSchema,
     paperTreatmentOutputDtoSchema,
   ),

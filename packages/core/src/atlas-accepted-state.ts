@@ -23,7 +23,11 @@ import {
   type MacroElevationField,
   type WaterBody,
 } from './atlas-geography-model.js';
-import { parseAtlasControls, validateAtlasGeographyRecords } from './atlas-geography-validation.js';
+import {
+  parseAtlasControls,
+  validateAtlasGeographyRecords,
+  validateAtlasMacroElevationVersionPair,
+} from './atlas-geography-validation.js';
 import {
   type AcceptedAtlasLabelRecords,
   isAtlasLabelAcceptedAspectName,
@@ -139,7 +143,14 @@ export function reconstructAcceptedAtlas(document: WorldDocument): ReconstructAc
     return invalid(
       ACCEPTED_ATLAS_DIAGNOSTIC_CODES.invalid,
       'Accepted atlas control provenance cannot be reconstructed from the macro and classification parameters.',
-      'Restore the exact version-1 parameter records without defaults or coercion.',
+      'Restore exact supported parameter records without defaults or coercion.',
+    );
+  }
+  if (!hasSupportedMacroElevationVersion(macro)) {
+    return invalid(
+      ACCEPTED_ATLAS_DIAGNOSTIC_CODES.invalid,
+      'Accepted macro-elevation generator and field provenance versions are unsupported or mismatched.',
+      'Restore an exact accepted macro-elevation version 1 or version 2 record without conversion.',
     );
   }
 
@@ -321,10 +332,15 @@ function hasExactAtlasOwnership(
           !expectedDependencies.has(aspect.aspectId) ||
           aspect.mapId !== map.mapId ||
           String(aspect.generatorId) !== String(aspect.aspectName) ||
-          aspect.generatorVersion !== 1 ||
+          (aspect.aspectName === 'worldTerrain.macroElevation'
+            ? !hasSupportedMacroElevationVersion(aspect)
+            : aspect.generatorVersion !== 1) ||
           aspect.parameterSchemaVersion !== 1 ||
           aspect.seedScope !== 'map/entity' ||
           aspect.seedMetadata.seedScope !== 'map/entity' ||
+          aspect.seedMetadata.generatorId !== aspect.generatorId ||
+          aspect.seedMetadata.generatorVersion !== aspect.generatorVersion ||
+          aspect.seedMetadata.aspectName !== aspect.aspectName ||
           aspect.seedMetadata.mapId !== map.mapId ||
           aspect.seedMetadata.entityId !== aspect.entityId ||
           aspect.aspectId !== deriveAtlasAspectId(aspect.entityId, kind) ||
@@ -350,6 +366,19 @@ function hasExactAtlasOwnership(
       map.decoration.aspectReferences.map(({ aspectId }) => aspectId),
       expectedAppearanceIds,
     )
+  );
+}
+
+function hasSupportedMacroElevationVersion(aspect: AcceptedAspectRecord): boolean {
+  if (!isRecord(aspect.parameters) || !isRecord(aspect.acceptedOutput)) return false;
+  const provenance = aspect.acceptedOutput.provenance;
+  if (!isRecord(provenance)) return false;
+  return (
+    validateAtlasMacroElevationVersionPair(
+      aspect.generatorVersion,
+      aspect.parameters.fieldBehaviorVersion,
+      provenance.fieldBehaviorVersion,
+    ).length === 0
   );
 }
 
