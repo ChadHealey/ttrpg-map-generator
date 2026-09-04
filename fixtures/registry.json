@@ -102,6 +102,11 @@
       "runnerPath": "fixed-seeds/milestone-2-atlas-v2-normal-07/fixture-runner.mjs"
     },
     {
+      "fixtureId": "milestone-2-atlas-v2-normal-08",
+      "manifestPath": "manifests/milestone-2-atlas-v2-normal-08.fixture.generated.json",
+      "runnerPath": "fixed-seeds/milestone-2-atlas-v2-normal-08/fixture-runner.mjs"
+    },
+    {
       "fixtureId": "seed-derivation-v1",
       "manifestPath": "manifests/seed-derivation-v1.fixture.generated.json",
       "runnerPath": "fixed-seeds/seed-derivation-v1/fixture-runner.mjs"
