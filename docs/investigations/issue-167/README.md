@@ -1,7 +1,7 @@
 # Issue 167 — proposed continental feature requirements
 
 **Recommendation: adopt the targets below for a subsequent bounded design investigation of
-the same separated spherical envelope policy. Maintainer adoption: PENDING.** These are explicit
+the same separated spherical envelope policy. Maintainer adoption: ACCEPTED for design investigation.** These are explicit
 product-design judgments, not measured survival limits, an achievable construction, an accepted
 architecture, or human visual approval. This proposal supplies the decision requested by
 [issue 167](https://github.com/ChadHealey/ttrpg-map-generator/issues/167), following the reviewed
@@ -91,7 +91,7 @@ need containment and protected water, not continent anatomy.
 
 ## Candidate requirements table
 
-All values in this table are **proposed targets**. Lower and upper bounds are inclusive.
+All values in this table are **adopted targets for the design investigation**, following the decision below. Lower and upper bounds are inclusive.
 Measure the surviving geometry at every allowed contour value; the nominal construction alone
 cannot pass. `Q` is the body's actual land area at that value. Algorithmic proofs remain unresolved.
 
@@ -215,10 +215,13 @@ and [validateAtlasControls](../../../packages/core/src/atlas-geography-validatio
 conflict with the existing requirements has been established; spatial realizability and visual
 sufficiency remain open. The exact maintainer decision is whether to adopt the role/applicability
 rules, numeric table, reserve ledger and conditional no-proposal policy as the next investigation's
-requirements. **Adoption is PENDING: the instruction to execute issue 167 authorizes a proposal,
-not a product decision.** No accepted ADR changes here, including ADR-0029.
+requirements. **Adoption is ACCEPTED for design investigation:** after completion and review, the maintainer
+explicitly instructed, “Adopt the proposed targets for the design investigation.” The same
+instruction authorizes continuing v3 work with agents and local commits, without pushing.
+This adopts the targets, role/applicability rules, reserve ledger and no-proposal policy as
+investigation requirements; it does not establish constructibility or human visual acceptance. No accepted ADR changes here, including ADR-0029.
 
-Adoption would permit drafting a bounded construction/certificate **design** issue for this same
+This adoption permits a bounded construction/certificate **design** issue for this same
 policy: specify deterministic witnesses, spherical placement with fixed quotas, area/topology and
 contour certificates, finite budgets, ties and explicit failure diagnostics. It would not make a
 comparison READY. Only a sufficiently justified later specification may support a draft comparison

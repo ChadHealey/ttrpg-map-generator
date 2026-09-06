@@ -1,8 +1,7 @@
 # Issue 167 — arithmetic, verification and decision record
 
-Proposal: [README.md](README.md). **Targets proposed; adoption PENDING; dedicated user-run
-acceptance review COMPLETED with no actionable findings.** No maintainer adoption evidence has
-been received. The issue is a
+Proposal: [README.md](README.md). **Targets adopted for design investigation; adoption ACCEPTED; dedicated user-run
+acceptance review COMPLETED with no actionable findings.** The subsequent maintainer decision is recorded below. The issue is a
 READY discovery; new issue-owned Markdown is the complete authorized change surface.
 
 ## Source trace and scope
@@ -118,7 +117,7 @@ envelope family. No recalibration, rendering or parameter search was run.
 | Reproducible arithmetic and mandatory failure                        | Equations and passing/failing thresholds above; retained cap rejection; adequate area explicitly insufficient                             |
 | Nine controls, tolerances and valid-input failure policy             | README nine-row control table and no-proposal policy; no measured success/failure rate claimed                                            |
 | Six positives and R1–R6                                              | README twelve-row cross-check; all historical human failures remain failures                                                              |
-| One recommendation; independent adoption status                      | Adopt for design investigation; PENDING with no adoption evidence; no architecture or public contract amendment                           |
+| One recommendation; independent adoption status                      | Adopted for design investigation by subsequent explicit instruction; no production or visual acceptance                                   |
 | Conditional next task and later gates                                | README decision: design issue only after adoption, comparison not READY, C1–C3 NOT READY, all production/compatibility gates retained     |
 | Focused/broader verification and dedicated review                    | Local results below; dedicated user-run review completed with no actionable findings                                                      |
 
@@ -186,4 +185,13 @@ review was needed.
 After review, the user explicitly authorized committing, pushing, closing issue 167 if appropriate,
 and updating tracking issue 161. The reviewed requirements proposal satisfies the discovery
 outcome. Publication and issue closure do not adopt the proposed targets, select v3, amend an ADR
-or make construction/comparison work or C1–C3 READY. Maintainer adoption remains **PENDING**.
+or make construction/comparison work or C1–C3 READY. At that publication, maintainer adoption remained pending.
+
+## Subsequent maintainer adoption
+
+After publication the maintainer explicitly instructed, “Adopt the proposed targets for the design
+investigation,” and authorized continued v3 iteration, agents, local commits, and issue updates,
+with **no pushes**. Adoption is now **ACCEPTED for design investigation**. This is a separate
+product decision after the completed discovery review. It does not retroactively prove geometry
+feasible, accept any image, select a production field, or alter accepted v1/v2 worlds. The next
+construction/certificate investigation proceeds against the unchanged numeric targets.
