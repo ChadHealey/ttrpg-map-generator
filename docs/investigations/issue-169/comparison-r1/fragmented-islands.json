@@ -1,0 +1,1719 @@
+{
+  "input": {
+    "id": "fragmented-islands",
+    "seed": "18364758544493064720",
+    "controls": {
+      "worldCircumferenceKm": 40000,
+      "targetWaterCoveragePercent": 70,
+      "continentCountIntent": 5,
+      "continentDistribution": "varied",
+      "fragmentationPercent": 90,
+      "islandAbundancePercent": 95,
+      "archipelagoAbundancePercent": 95,
+      "oceanConnectivity": "singleGlobal",
+      "polarCharacter": "neutral"
+    }
+  },
+  "stage": "construction-failed",
+  "numericEligible": false,
+  "construction": {
+    "ok": false,
+    "owners": [],
+    "failures": [
+      {
+        "code": "template-budget-exhausted",
+        "ownerId": "owner-0",
+        "quota": 0.08173584905660378,
+        "candidateCount": 8
+      },
+      {
+        "code": "template-budget-exhausted",
+        "ownerId": "owner-1",
+        "quota": 0.08173584905660378,
+        "candidateCount": 8
+      },
+      {
+        "code": "template-budget-exhausted",
+        "ownerId": "owner-2",
+        "quota": 0.08173584905660378,
+        "candidateCount": 8
+      },
+      {
+        "code": "template-budget-exhausted",
+        "ownerId": "owner-3",
+        "quota": 0.027396226415094344,
+        "candidateCount": 8
+      },
+      {
+        "code": "template-budget-exhausted",
+        "ownerId": "owner-4",
+        "quota": 0.027396226415094344,
+        "candidateCount": 8
+      }
+    ],
+    "receipts": [
+      {
+        "ownerId": "owner-0",
+        "templateIndex": 0,
+        "quota": 0.08173584905660378,
+        "ok": false,
+        "failures": [
+          {
+            "code": "bay-depth",
+            "featureId": "bay",
+            "actual": 0.13404038011345773,
+            "required": ">= 0.15 with numeric slack"
+          },
+          {
+            "code": "island-body-contact",
+            "featureId": "owner-0/island-3",
+            "actual": null,
+            "required": "detached from body"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-0",
+            "actual": "owner-0/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-1",
+            "actual": "owner-0/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-1",
+            "actual": "owner-0/archipelago-0",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-2",
+            "actual": "owner-0/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-2",
+            "actual": "owner-0/archipelago-1",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-0",
+        "templateIndex": 1,
+        "quota": 0.08173584905660378,
+        "ok": false,
+        "failures": [
+          {
+            "code": "first-disk",
+            "featureId": "owner-0/peninsula",
+            "actual": 0.03854103411659224,
+            "required": ">= 0.04 inside declared feature"
+          },
+          {
+            "code": "attachment-width",
+            "featureId": "owner-0/peninsula",
+            "actual": 0.07708206805041941,
+            "required": ">= 0.08 with numeric slack"
+          },
+          {
+            "code": "bay-depth",
+            "featureId": "bay",
+            "actual": 0.13405577084032094,
+            "required": ">= 0.15 with numeric slack"
+          },
+          {
+            "code": "island-body-contact",
+            "featureId": "owner-0/island-3",
+            "actual": null,
+            "required": "detached from body"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-0",
+            "actual": "owner-0/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-1",
+            "actual": "owner-0/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-1",
+            "actual": "owner-0/archipelago-0",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-2",
+            "actual": "owner-0/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-2",
+            "actual": "owner-0/archipelago-1",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-0",
+        "templateIndex": 2,
+        "quota": 0.08173584905660378,
+        "ok": false,
+        "failures": [
+          {
+            "code": "bay-depth",
+            "featureId": "bay",
+            "actual": 0.13402499431913276,
+            "required": ">= 0.15 with numeric slack"
+          },
+          {
+            "code": "island-body-contact",
+            "featureId": "owner-0/island-3",
+            "actual": null,
+            "required": "detached from body"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-0",
+            "actual": "owner-0/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-1",
+            "actual": "owner-0/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-1",
+            "actual": "owner-0/archipelago-0",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-2",
+            "actual": "owner-0/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-2",
+            "actual": "owner-0/archipelago-1",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-0",
+        "templateIndex": 3,
+        "quota": 0.08173584905660378,
+        "ok": false,
+        "failures": [
+          {
+            "code": "first-disk",
+            "featureId": "owner-0/peninsula",
+            "actual": 0.03686957078805241,
+            "required": ">= 0.04 inside declared feature"
+          },
+          {
+            "code": "attachment-width",
+            "featureId": "owner-0/peninsula",
+            "actual": 0.07373914139334467,
+            "required": ">= 0.08 with numeric slack"
+          },
+          {
+            "code": "bay-depth",
+            "featureId": "bay",
+            "actual": 0.13407116650200884,
+            "required": ">= 0.15 with numeric slack"
+          },
+          {
+            "code": "island-body-contact",
+            "featureId": "owner-0/island-3",
+            "actual": null,
+            "required": "detached from body"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-0",
+            "actual": "owner-0/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-1",
+            "actual": "owner-0/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-1",
+            "actual": "owner-0/archipelago-0",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-2",
+            "actual": "owner-0/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-2",
+            "actual": "owner-0/archipelago-1",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-0",
+        "templateIndex": 4,
+        "quota": 0.08173584905660378,
+        "ok": false,
+        "failures": [
+          {
+            "code": "peninsula-ratio",
+            "featureId": "owner-0/peninsula",
+            "actual": 1.9424755246021255,
+            "required": ">= 2 with numeric slack"
+          },
+          {
+            "code": "bay-depth",
+            "featureId": "bay",
+            "actual": 0.13400961345506063,
+            "required": ">= 0.15 with numeric slack"
+          },
+          {
+            "code": "island-body-contact",
+            "featureId": "owner-0/island-3",
+            "actual": null,
+            "required": "detached from body"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-0",
+            "actual": "owner-0/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-1",
+            "actual": "owner-0/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-1",
+            "actual": "owner-0/archipelago-0",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-2",
+            "actual": "owner-0/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-2",
+            "actual": "owner-0/archipelago-1",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-0",
+        "templateIndex": 5,
+        "quota": 0.08173584905660378,
+        "ok": false,
+        "failures": [
+          {
+            "code": "bay-depth",
+            "featureId": "bay",
+            "actual": 0.13404038011345773,
+            "required": ">= 0.15 with numeric slack"
+          },
+          {
+            "code": "island-body-contact",
+            "featureId": "owner-0/island-3",
+            "actual": null,
+            "required": "detached from body"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-0",
+            "actual": "owner-0/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-1",
+            "actual": "owner-0/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-1",
+            "actual": "owner-0/archipelago-0",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-2",
+            "actual": "owner-0/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-2",
+            "actual": "owner-0/archipelago-1",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-0",
+        "templateIndex": 6,
+        "quota": 0.08173584905660378,
+        "ok": false,
+        "failures": [
+          {
+            "code": "first-disk",
+            "featureId": "owner-0/peninsula",
+            "actual": 0.03854103411659224,
+            "required": ">= 0.04 inside declared feature"
+          },
+          {
+            "code": "attachment-width",
+            "featureId": "owner-0/peninsula",
+            "actual": 0.07708206805041941,
+            "required": ">= 0.08 with numeric slack"
+          },
+          {
+            "code": "bay-depth",
+            "featureId": "bay",
+            "actual": 0.13405577084032094,
+            "required": ">= 0.15 with numeric slack"
+          },
+          {
+            "code": "island-body-contact",
+            "featureId": "owner-0/island-3",
+            "actual": null,
+            "required": "detached from body"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-0",
+            "actual": "owner-0/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-1",
+            "actual": "owner-0/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-1",
+            "actual": "owner-0/archipelago-0",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-2",
+            "actual": "owner-0/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-2",
+            "actual": "owner-0/archipelago-1",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-0",
+        "templateIndex": 7,
+        "quota": 0.08173584905660378,
+        "ok": false,
+        "failures": [
+          {
+            "code": "bay-depth",
+            "featureId": "bay",
+            "actual": 0.13402499431913276,
+            "required": ">= 0.15 with numeric slack"
+          },
+          {
+            "code": "island-body-contact",
+            "featureId": "owner-0/island-3",
+            "actual": null,
+            "required": "detached from body"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-0",
+            "actual": "owner-0/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-1",
+            "actual": "owner-0/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-1",
+            "actual": "owner-0/archipelago-0",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-2",
+            "actual": "owner-0/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-0/archipelago-2",
+            "actual": "owner-0/archipelago-1",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-1",
+        "templateIndex": 0,
+        "quota": 0.08173584905660378,
+        "ok": false,
+        "failures": [
+          {
+            "code": "bay-depth",
+            "featureId": "bay",
+            "actual": 0.13404038011345773,
+            "required": ">= 0.15 with numeric slack"
+          },
+          {
+            "code": "island-body-contact",
+            "featureId": "owner-1/island-3",
+            "actual": null,
+            "required": "detached from body"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-0",
+            "actual": "owner-1/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-1",
+            "actual": "owner-1/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-1",
+            "actual": "owner-1/archipelago-0",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-2",
+            "actual": "owner-1/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-2",
+            "actual": "owner-1/archipelago-1",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-1",
+        "templateIndex": 1,
+        "quota": 0.08173584905660378,
+        "ok": false,
+        "failures": [
+          {
+            "code": "first-disk",
+            "featureId": "owner-1/peninsula",
+            "actual": 0.03854103411659224,
+            "required": ">= 0.04 inside declared feature"
+          },
+          {
+            "code": "attachment-width",
+            "featureId": "owner-1/peninsula",
+            "actual": 0.07708206805041941,
+            "required": ">= 0.08 with numeric slack"
+          },
+          {
+            "code": "bay-depth",
+            "featureId": "bay",
+            "actual": 0.13405577084032094,
+            "required": ">= 0.15 with numeric slack"
+          },
+          {
+            "code": "island-body-contact",
+            "featureId": "owner-1/island-3",
+            "actual": null,
+            "required": "detached from body"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-0",
+            "actual": "owner-1/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-1",
+            "actual": "owner-1/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-1",
+            "actual": "owner-1/archipelago-0",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-2",
+            "actual": "owner-1/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-2",
+            "actual": "owner-1/archipelago-1",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-1",
+        "templateIndex": 2,
+        "quota": 0.08173584905660378,
+        "ok": false,
+        "failures": [
+          {
+            "code": "bay-depth",
+            "featureId": "bay",
+            "actual": 0.13402499431913276,
+            "required": ">= 0.15 with numeric slack"
+          },
+          {
+            "code": "island-body-contact",
+            "featureId": "owner-1/island-3",
+            "actual": null,
+            "required": "detached from body"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-0",
+            "actual": "owner-1/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-1",
+            "actual": "owner-1/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-1",
+            "actual": "owner-1/archipelago-0",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-2",
+            "actual": "owner-1/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-2",
+            "actual": "owner-1/archipelago-1",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-1",
+        "templateIndex": 3,
+        "quota": 0.08173584905660378,
+        "ok": false,
+        "failures": [
+          {
+            "code": "first-disk",
+            "featureId": "owner-1/peninsula",
+            "actual": 0.03686957078805241,
+            "required": ">= 0.04 inside declared feature"
+          },
+          {
+            "code": "attachment-width",
+            "featureId": "owner-1/peninsula",
+            "actual": 0.07373914139334467,
+            "required": ">= 0.08 with numeric slack"
+          },
+          {
+            "code": "bay-depth",
+            "featureId": "bay",
+            "actual": 0.13407116650200884,
+            "required": ">= 0.15 with numeric slack"
+          },
+          {
+            "code": "island-body-contact",
+            "featureId": "owner-1/island-3",
+            "actual": null,
+            "required": "detached from body"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-0",
+            "actual": "owner-1/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-1",
+            "actual": "owner-1/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-1",
+            "actual": "owner-1/archipelago-0",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-2",
+            "actual": "owner-1/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-2",
+            "actual": "owner-1/archipelago-1",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-1",
+        "templateIndex": 4,
+        "quota": 0.08173584905660378,
+        "ok": false,
+        "failures": [
+          {
+            "code": "peninsula-ratio",
+            "featureId": "owner-1/peninsula",
+            "actual": 1.9424755246021255,
+            "required": ">= 2 with numeric slack"
+          },
+          {
+            "code": "bay-depth",
+            "featureId": "bay",
+            "actual": 0.13400961345506063,
+            "required": ">= 0.15 with numeric slack"
+          },
+          {
+            "code": "island-body-contact",
+            "featureId": "owner-1/island-3",
+            "actual": null,
+            "required": "detached from body"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-0",
+            "actual": "owner-1/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-1",
+            "actual": "owner-1/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-1",
+            "actual": "owner-1/archipelago-0",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-2",
+            "actual": "owner-1/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-2",
+            "actual": "owner-1/archipelago-1",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-1",
+        "templateIndex": 5,
+        "quota": 0.08173584905660378,
+        "ok": false,
+        "failures": [
+          {
+            "code": "bay-depth",
+            "featureId": "bay",
+            "actual": 0.13404038011345773,
+            "required": ">= 0.15 with numeric slack"
+          },
+          {
+            "code": "island-body-contact",
+            "featureId": "owner-1/island-3",
+            "actual": null,
+            "required": "detached from body"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-0",
+            "actual": "owner-1/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-1",
+            "actual": "owner-1/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-1",
+            "actual": "owner-1/archipelago-0",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-2",
+            "actual": "owner-1/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-2",
+            "actual": "owner-1/archipelago-1",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-1",
+        "templateIndex": 6,
+        "quota": 0.08173584905660378,
+        "ok": false,
+        "failures": [
+          {
+            "code": "first-disk",
+            "featureId": "owner-1/peninsula",
+            "actual": 0.03854103411659224,
+            "required": ">= 0.04 inside declared feature"
+          },
+          {
+            "code": "attachment-width",
+            "featureId": "owner-1/peninsula",
+            "actual": 0.07708206805041941,
+            "required": ">= 0.08 with numeric slack"
+          },
+          {
+            "code": "bay-depth",
+            "featureId": "bay",
+            "actual": 0.13405577084032094,
+            "required": ">= 0.15 with numeric slack"
+          },
+          {
+            "code": "island-body-contact",
+            "featureId": "owner-1/island-3",
+            "actual": null,
+            "required": "detached from body"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-0",
+            "actual": "owner-1/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-1",
+            "actual": "owner-1/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-1",
+            "actual": "owner-1/archipelago-0",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-2",
+            "actual": "owner-1/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-2",
+            "actual": "owner-1/archipelago-1",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-1",
+        "templateIndex": 7,
+        "quota": 0.08173584905660378,
+        "ok": false,
+        "failures": [
+          {
+            "code": "bay-depth",
+            "featureId": "bay",
+            "actual": 0.13402499431913276,
+            "required": ">= 0.15 with numeric slack"
+          },
+          {
+            "code": "island-body-contact",
+            "featureId": "owner-1/island-3",
+            "actual": null,
+            "required": "detached from body"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-0",
+            "actual": "owner-1/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-1",
+            "actual": "owner-1/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-1",
+            "actual": "owner-1/archipelago-0",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-2",
+            "actual": "owner-1/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-1/archipelago-2",
+            "actual": "owner-1/archipelago-1",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-2",
+        "templateIndex": 0,
+        "quota": 0.08173584905660378,
+        "ok": false,
+        "failures": [
+          {
+            "code": "bay-depth",
+            "featureId": "bay",
+            "actual": 0.13404038011345773,
+            "required": ">= 0.15 with numeric slack"
+          },
+          {
+            "code": "island-body-contact",
+            "featureId": "owner-2/island-3",
+            "actual": null,
+            "required": "detached from body"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-0",
+            "actual": "owner-2/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-1",
+            "actual": "owner-2/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-1",
+            "actual": "owner-2/archipelago-0",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-2",
+            "actual": "owner-2/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-2",
+            "actual": "owner-2/archipelago-1",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-2",
+        "templateIndex": 1,
+        "quota": 0.08173584905660378,
+        "ok": false,
+        "failures": [
+          {
+            "code": "first-disk",
+            "featureId": "owner-2/peninsula",
+            "actual": 0.03854103411659224,
+            "required": ">= 0.04 inside declared feature"
+          },
+          {
+            "code": "attachment-width",
+            "featureId": "owner-2/peninsula",
+            "actual": 0.07708206805041941,
+            "required": ">= 0.08 with numeric slack"
+          },
+          {
+            "code": "bay-depth",
+            "featureId": "bay",
+            "actual": 0.13405577084032094,
+            "required": ">= 0.15 with numeric slack"
+          },
+          {
+            "code": "island-body-contact",
+            "featureId": "owner-2/island-3",
+            "actual": null,
+            "required": "detached from body"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-0",
+            "actual": "owner-2/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-1",
+            "actual": "owner-2/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-1",
+            "actual": "owner-2/archipelago-0",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-2",
+            "actual": "owner-2/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-2",
+            "actual": "owner-2/archipelago-1",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-2",
+        "templateIndex": 2,
+        "quota": 0.08173584905660378,
+        "ok": false,
+        "failures": [
+          {
+            "code": "bay-depth",
+            "featureId": "bay",
+            "actual": 0.13402499431913276,
+            "required": ">= 0.15 with numeric slack"
+          },
+          {
+            "code": "island-body-contact",
+            "featureId": "owner-2/island-3",
+            "actual": null,
+            "required": "detached from body"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-0",
+            "actual": "owner-2/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-1",
+            "actual": "owner-2/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-1",
+            "actual": "owner-2/archipelago-0",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-2",
+            "actual": "owner-2/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-2",
+            "actual": "owner-2/archipelago-1",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-2",
+        "templateIndex": 3,
+        "quota": 0.08173584905660378,
+        "ok": false,
+        "failures": [
+          {
+            "code": "first-disk",
+            "featureId": "owner-2/peninsula",
+            "actual": 0.03686957078805241,
+            "required": ">= 0.04 inside declared feature"
+          },
+          {
+            "code": "attachment-width",
+            "featureId": "owner-2/peninsula",
+            "actual": 0.07373914139334467,
+            "required": ">= 0.08 with numeric slack"
+          },
+          {
+            "code": "bay-depth",
+            "featureId": "bay",
+            "actual": 0.13407116650200884,
+            "required": ">= 0.15 with numeric slack"
+          },
+          {
+            "code": "island-body-contact",
+            "featureId": "owner-2/island-3",
+            "actual": null,
+            "required": "detached from body"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-0",
+            "actual": "owner-2/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-1",
+            "actual": "owner-2/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-1",
+            "actual": "owner-2/archipelago-0",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-2",
+            "actual": "owner-2/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-2",
+            "actual": "owner-2/archipelago-1",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-2",
+        "templateIndex": 4,
+        "quota": 0.08173584905660378,
+        "ok": false,
+        "failures": [
+          {
+            "code": "peninsula-ratio",
+            "featureId": "owner-2/peninsula",
+            "actual": 1.9424755246021255,
+            "required": ">= 2 with numeric slack"
+          },
+          {
+            "code": "bay-depth",
+            "featureId": "bay",
+            "actual": 0.13400961345506063,
+            "required": ">= 0.15 with numeric slack"
+          },
+          {
+            "code": "island-body-contact",
+            "featureId": "owner-2/island-3",
+            "actual": null,
+            "required": "detached from body"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-0",
+            "actual": "owner-2/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-1",
+            "actual": "owner-2/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-1",
+            "actual": "owner-2/archipelago-0",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-2",
+            "actual": "owner-2/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-2",
+            "actual": "owner-2/archipelago-1",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-2",
+        "templateIndex": 5,
+        "quota": 0.08173584905660378,
+        "ok": false,
+        "failures": [
+          {
+            "code": "bay-depth",
+            "featureId": "bay",
+            "actual": 0.13404038011345773,
+            "required": ">= 0.15 with numeric slack"
+          },
+          {
+            "code": "island-body-contact",
+            "featureId": "owner-2/island-3",
+            "actual": null,
+            "required": "detached from body"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-0",
+            "actual": "owner-2/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-1",
+            "actual": "owner-2/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-1",
+            "actual": "owner-2/archipelago-0",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-2",
+            "actual": "owner-2/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-2",
+            "actual": "owner-2/archipelago-1",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-2",
+        "templateIndex": 6,
+        "quota": 0.08173584905660378,
+        "ok": false,
+        "failures": [
+          {
+            "code": "first-disk",
+            "featureId": "owner-2/peninsula",
+            "actual": 0.03854103411659224,
+            "required": ">= 0.04 inside declared feature"
+          },
+          {
+            "code": "attachment-width",
+            "featureId": "owner-2/peninsula",
+            "actual": 0.07708206805041941,
+            "required": ">= 0.08 with numeric slack"
+          },
+          {
+            "code": "bay-depth",
+            "featureId": "bay",
+            "actual": 0.13405577084032094,
+            "required": ">= 0.15 with numeric slack"
+          },
+          {
+            "code": "island-body-contact",
+            "featureId": "owner-2/island-3",
+            "actual": null,
+            "required": "detached from body"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-0",
+            "actual": "owner-2/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-1",
+            "actual": "owner-2/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-1",
+            "actual": "owner-2/archipelago-0",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-2",
+            "actual": "owner-2/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-2",
+            "actual": "owner-2/archipelago-1",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-2",
+        "templateIndex": 7,
+        "quota": 0.08173584905660378,
+        "ok": false,
+        "failures": [
+          {
+            "code": "bay-depth",
+            "featureId": "bay",
+            "actual": 0.13402499431913276,
+            "required": ">= 0.15 with numeric slack"
+          },
+          {
+            "code": "island-body-contact",
+            "featureId": "owner-2/island-3",
+            "actual": null,
+            "required": "detached from body"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-0",
+            "actual": "owner-2/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-1",
+            "actual": "owner-2/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-1",
+            "actual": "owner-2/archipelago-0",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-2",
+            "actual": "owner-2/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-2/archipelago-2",
+            "actual": "owner-2/archipelago-1",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-3",
+        "templateIndex": 0,
+        "quota": 0.027396226415094344,
+        "ok": false,
+        "failures": [
+          {
+            "code": "island-contact",
+            "featureId": "owner-3/archipelago-1",
+            "actual": "owner-3/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-3/archipelago-1",
+            "actual": "owner-3/archipelago-0",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-3",
+        "templateIndex": 1,
+        "quota": 0.027396226415094344,
+        "ok": false,
+        "failures": [
+          {
+            "code": "island-contact",
+            "featureId": "owner-3/archipelago-1",
+            "actual": "owner-3/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-3/archipelago-1",
+            "actual": "owner-3/archipelago-0",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-3",
+        "templateIndex": 2,
+        "quota": 0.027396226415094344,
+        "ok": false,
+        "failures": [
+          {
+            "code": "island-contact",
+            "featureId": "owner-3/archipelago-1",
+            "actual": "owner-3/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-3/archipelago-1",
+            "actual": "owner-3/archipelago-0",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-3",
+        "templateIndex": 3,
+        "quota": 0.027396226415094344,
+        "ok": false,
+        "failures": [
+          {
+            "code": "island-contact",
+            "featureId": "owner-3/archipelago-1",
+            "actual": "owner-3/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-3/archipelago-1",
+            "actual": "owner-3/archipelago-0",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-3",
+        "templateIndex": 4,
+        "quota": 0.027396226415094344,
+        "ok": false,
+        "failures": [
+          {
+            "code": "island-contact",
+            "featureId": "owner-3/archipelago-1",
+            "actual": "owner-3/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-3/archipelago-1",
+            "actual": "owner-3/archipelago-0",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-3",
+        "templateIndex": 5,
+        "quota": 0.027396226415094344,
+        "ok": false,
+        "failures": [
+          {
+            "code": "island-contact",
+            "featureId": "owner-3/archipelago-1",
+            "actual": "owner-3/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-3/archipelago-1",
+            "actual": "owner-3/archipelago-0",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-3",
+        "templateIndex": 6,
+        "quota": 0.027396226415094344,
+        "ok": false,
+        "failures": [
+          {
+            "code": "island-contact",
+            "featureId": "owner-3/archipelago-1",
+            "actual": "owner-3/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-3/archipelago-1",
+            "actual": "owner-3/archipelago-0",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-3",
+        "templateIndex": 7,
+        "quota": 0.027396226415094344,
+        "ok": false,
+        "failures": [
+          {
+            "code": "island-contact",
+            "featureId": "owner-3/archipelago-1",
+            "actual": "owner-3/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-3/archipelago-1",
+            "actual": "owner-3/archipelago-0",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-4",
+        "templateIndex": 0,
+        "quota": 0.027396226415094344,
+        "ok": false,
+        "failures": [
+          {
+            "code": "island-contact",
+            "featureId": "owner-4/archipelago-1",
+            "actual": "owner-4/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-4/archipelago-1",
+            "actual": "owner-4/archipelago-0",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-4",
+        "templateIndex": 1,
+        "quota": 0.027396226415094344,
+        "ok": false,
+        "failures": [
+          {
+            "code": "island-contact",
+            "featureId": "owner-4/archipelago-1",
+            "actual": "owner-4/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-4/archipelago-1",
+            "actual": "owner-4/archipelago-0",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-4",
+        "templateIndex": 2,
+        "quota": 0.027396226415094344,
+        "ok": false,
+        "failures": [
+          {
+            "code": "island-contact",
+            "featureId": "owner-4/archipelago-1",
+            "actual": "owner-4/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-4/archipelago-1",
+            "actual": "owner-4/archipelago-0",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-4",
+        "templateIndex": 3,
+        "quota": 0.027396226415094344,
+        "ok": false,
+        "failures": [
+          {
+            "code": "island-contact",
+            "featureId": "owner-4/archipelago-1",
+            "actual": "owner-4/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-4/archipelago-1",
+            "actual": "owner-4/archipelago-0",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-4",
+        "templateIndex": 4,
+        "quota": 0.027396226415094344,
+        "ok": false,
+        "failures": [
+          {
+            "code": "island-contact",
+            "featureId": "owner-4/archipelago-1",
+            "actual": "owner-4/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-4/archipelago-1",
+            "actual": "owner-4/archipelago-0",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-4",
+        "templateIndex": 5,
+        "quota": 0.027396226415094344,
+        "ok": false,
+        "failures": [
+          {
+            "code": "island-contact",
+            "featureId": "owner-4/archipelago-1",
+            "actual": "owner-4/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-4/archipelago-1",
+            "actual": "owner-4/archipelago-0",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-4",
+        "templateIndex": 6,
+        "quota": 0.027396226415094344,
+        "ok": false,
+        "failures": [
+          {
+            "code": "island-contact",
+            "featureId": "owner-4/archipelago-1",
+            "actual": "owner-4/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-4/archipelago-1",
+            "actual": "owner-4/archipelago-0",
+            "required": "disjoint retained components"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-4",
+        "templateIndex": 7,
+        "quota": 0.027396226415094344,
+        "ok": false,
+        "failures": [
+          {
+            "code": "island-contact",
+            "featureId": "owner-4/archipelago-1",
+            "actual": "owner-4/island-2",
+            "required": "disjoint retained components"
+          },
+          {
+            "code": "island-contact",
+            "featureId": "owner-4/archipelago-1",
+            "actual": "owner-4/archipelago-0",
+            "required": "disjoint retained components"
+          }
+        ]
+      }
+    ],
+    "recipe": {
+      "physicalKmPerRadian": 6366.197723675814,
+      "landFraction": 0.30000000000000004,
+      "ownerCount": 5,
+      "distribution": "varied",
+      "fragmentationBand": 3,
+      "islandCount": 4,
+      "archipelagoCount": 7,
+      "islandShare": 0.038,
+      "archipelagoShare": 0.038,
+      "oceanConnectivity": "singleGlobal",
+      "polarCharacter": "neutral",
+      "polarStretch": 1
+    },
+    "revision": "issue-169-explicit-r1"
+  },
+  "exactRepeat": true
+}

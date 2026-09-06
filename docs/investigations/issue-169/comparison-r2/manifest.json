@@ -1,0 +1,111 @@
+{
+  "revision": "issue-169-r2",
+  "sources": {
+    "experiment.md": "827e6e63f3bb81243df3bdbcc1ee77101457d6ea4100acce91c1ad63b6920aee",
+    "templates.mjs": "5ee22417d03d014ee2858fb8ecbb904c56288abbc1a0c9fa299e4337b0a7fdcc",
+    "certificates.mjs": "7a1cfacab789829249ceaf72454d212472cb59a49ca8d8e08eedc6442ba8213c",
+    "geometry.mjs": "bc54bf0c7e5b878d9d26f2fe96658d0818cddf1ae4a7b2f5997c965d98f463bc",
+    "placement.mjs": "c3fe7988cfff2fbc6391b062d39277cd376dfa9e9efe5cafb0be9d5fa14c5c52",
+    "field.mjs": "f6e0557ce3e786dae8c9789fd44c95f75bf2ca33fd36fa69145c7a31d854de54",
+    "run.mjs": "87b2645251f1a8d4fbabfb4ccb58ca35594571d4367de4c4ae0b2f9b04075ef7",
+    "../issue-164/morphology.mjs": "30d5597af6f999fdcdd9013288773f0bb0f445bac219b55cc94f0ebc37e70328",
+    "../issue-164/render-comparison.mjs": "9ef4249fe5525a61502ad4319262e05816e93e89bd7d6c9cab377ef9293d5004",
+    "../issue-165/run.mjs": "778b0fb0d3c858cde8a78ec793e64e327826b5dfbc0f566f64920ea09b6a777e",
+    "../issue-164/comparison/results.json": "a732cd4481b7c06e4faced73cad55c67bec0195dc4bdfb1d5d321038a2a72cc1",
+    "templates-r2.mjs": "eeaffbd2b070e110d1af754913f70878f2adaae7ccd193754dcf070799bf92dd",
+    "revision-r2.md": "2508f113a033dba3ad4f6be9a06200ccf2ab7283ad1913a3edd7fead90a4fc80"
+  },
+  "inputs": [
+    {
+      "id": "normal-01",
+      "seed": "1",
+      "controls": {
+        "worldCircumferenceKm": 40000,
+        "targetWaterCoveragePercent": 65,
+        "continentCountIntent": 4,
+        "continentDistribution": "varied",
+        "fragmentationPercent": 35,
+        "islandAbundancePercent": 35,
+        "archipelagoAbundancePercent": 25,
+        "oceanConnectivity": "singleGlobal",
+        "polarCharacter": "neutral"
+      }
+    },
+    {
+      "id": "normal-02",
+      "seed": "2",
+      "controls": {
+        "worldCircumferenceKm": 40000,
+        "targetWaterCoveragePercent": 65,
+        "continentCountIntent": 4,
+        "continentDistribution": "varied",
+        "fragmentationPercent": 35,
+        "islandAbundancePercent": 35,
+        "archipelagoAbundancePercent": 25,
+        "oceanConnectivity": "singleGlobal",
+        "polarCharacter": "neutral"
+      }
+    },
+    {
+      "id": "normal-03",
+      "seed": "3",
+      "controls": {
+        "worldCircumferenceKm": 40000,
+        "targetWaterCoveragePercent": 65,
+        "continentCountIntent": 4,
+        "continentDistribution": "varied",
+        "fragmentationPercent": 35,
+        "islandAbundancePercent": 35,
+        "archipelagoAbundancePercent": 25,
+        "oceanConnectivity": "singleGlobal",
+        "polarCharacter": "neutral"
+      }
+    },
+    {
+      "id": "normal-04",
+      "seed": "4",
+      "controls": {
+        "worldCircumferenceKm": 40000,
+        "targetWaterCoveragePercent": 65,
+        "continentCountIntent": 4,
+        "continentDistribution": "varied",
+        "fragmentationPercent": 35,
+        "islandAbundancePercent": 35,
+        "archipelagoAbundancePercent": 25,
+        "oceanConnectivity": "singleGlobal",
+        "polarCharacter": "neutral"
+      }
+    },
+    {
+      "id": "connected-majority",
+      "seed": "1085102592571150095",
+      "controls": {
+        "worldCircumferenceKm": 40000,
+        "targetWaterCoveragePercent": 60,
+        "continentCountIntent": 6,
+        "continentDistribution": "balanced",
+        "fragmentationPercent": 55,
+        "islandAbundancePercent": 55,
+        "archipelagoAbundancePercent": 50,
+        "oceanConnectivity": "connectedMajority",
+        "polarCharacter": "neutral"
+      }
+    },
+    {
+      "id": "fragmented-islands",
+      "seed": "18364758544493064720",
+      "controls": {
+        "worldCircumferenceKm": 40000,
+        "targetWaterCoveragePercent": 70,
+        "continentCountIntent": 5,
+        "continentDistribution": "varied",
+        "fragmentationPercent": 90,
+        "islandAbundancePercent": 95,
+        "archipelagoAbundancePercent": 95,
+        "oceanConnectivity": "singleGlobal",
+        "polarCharacter": "neutral"
+      }
+    }
+  ],
+  "kind": "comparison"
+}
