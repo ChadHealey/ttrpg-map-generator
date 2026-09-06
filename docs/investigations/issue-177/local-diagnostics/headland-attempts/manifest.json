@@ -1,0 +1,34 @@
+{
+  "scope": "Three rejected local follow-up variants, no second matrix",
+  "entry": "local-diagnostics/headland-attempts/concept.mjs",
+  "sources": {
+    "local-diagnostics/headland-attempts/concept.mjs": "source-00.mjs.txt",
+    "../issue-169/geometry.mjs": "source-01.mjs.txt",
+    "../issue-172/coast-partition.mjs": "source-02.mjs.txt",
+    "../issue-176/certificates.mjs": "source-03.mjs.txt",
+    "../issue-174/supporting-mouth.mjs": "source-04.mjs.txt",
+    "../issue-176/wedge-mouth.mjs": "source-05.mjs.txt",
+    "../issue-176/wedge-segment.mjs": "source-06.mjs.txt"
+  },
+  "artifacts": {
+    "source-00.mjs.txt": "b45533d69a3dd34d63553eaaaeeded75a01c91b45b6547887bdb114545fc889d",
+    "source-01.mjs.txt": "bc54bf0c7e5b878d9d26f2fe96658d0818cddf1ae4a7b2f5997c965d98f463bc",
+    "source-02.mjs.txt": "4489dd7f81c918a21ab0463782cc112dbd1e72767affc6dae317a533c43930c8",
+    "source-03.mjs.txt": "923248025960bf29070533b7216c823245c4dd4956098021b39700615bbe097f",
+    "source-04.mjs.txt": "030978a9df08402fb09673be759c878f1f5ca3ea307d1d29ae725c697db26bb8",
+    "source-05.mjs.txt": "3ae13e28c511e62fe7ddb9a6c7234eee8f46dff2b9fcd9642d8aea5c69cc051e",
+    "source-06.mjs.txt": "b6917fb8fff78c9314a56f10d491daa37ae29ac2fc2a647a6794cebe96e5ae78",
+    "concept.mjs": "b45533d69a3dd34d63553eaaaeeded75a01c91b45b6547887bdb114545fc889d",
+    "verify.mjs": "8da8327f70209cce061c574c8efbd4cce5c5a8ada8510f36100cc7cb1b647552",
+    "draw.py": "6106ab83206da9354fd0e2f6414cdb41cb1069bde2a8817680b0ff0eaf6568fc",
+    "report.json": "2bc51784327f8e96d63e3dd4c3a3fa3b6548dd0a9f09d0317ffd0b36a681853e",
+    "panel.png": "8d17936a2dce22a53d23900a7f9dd93644df49e35b37b11e0f519872c6711845"
+  },
+  "dependencies": {
+    "local-evidence.mjs": "a23c6f6fc48b06121b3be590aaed174eb14e739d664c1e1624c7b1615e612880"
+  },
+  "drawingDependencies": {
+    "pillowVersion": "12.3.0",
+    "fontSha256": "25eceb458d4baf628ee0b6a135a9f8ac5ec7b2826646720834bd2bf00dfc825a"
+  }
+}

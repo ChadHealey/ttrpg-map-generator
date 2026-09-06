@@ -97,3 +97,35 @@ stages. Their hashes are included in the relevant manifests. The focused common/
 six-row deterministic construction, exact payments, original size quotas, all role certificates,
 finite site/vertex limits, ordinary layout inventory, cyclic preferences, distinct subordinate
 coasts, invalid-input rejection and preserved wedge semantics. Human acceptance remains pending.
+
+## Rejected local headland follow-up
+
+After the frozen first comparison, three predeclared A variants tested a continuous upper body/P
+flank while keeping the .13 root, lobe cuts, bay and targets. The largest illustrative body area
+is the original rounded `1.631407882` sr; the other two use the exact retained body quota formulas,
+including the balanced control's `.016` detached fraction. These local trials do not replace the
+exact six-row comparison inputs. They are
+retained separately in [headland-attempts](local-diagnostics/headland-attempts/manifest.json);
+no frozen runtime or comparison was changed, and no second world matrix was run.
+
+Variant 1 passes the ten largest/intermediate quota cases, including all four anatomy corners.
+It fails all five balanced cases because the conservative peninsula width is .076214–.077022 rad,
+below .08. Its largest central P share is .055544, area .09061411 sr, width upper .148857 rad,
+extent upper .421832 rad and whole-disk lower radius .081314 rad. Variants 2 and 3 fail all fifteen
+cases each; their central P shares are .049142 and .048934, below .05. All 45 receipts are retained.
+
+The [labeled image](local-diagnostics/headland-attempts/panel.png) was inspected. The immediate upper
+neck is removed, but the projection still reads as a hanging club or pouch beside a deep concave
+waist, with a sharp lower slit. These are not an acceptable complete repair, and there was no
+fourth trial. A separate width-witness design investigation is outside this experiment.
+
+The rebound source uses public relative imports and reconstructs every original receipt exactly.
+The read-only verifier loads the captured source closure and regenerates the original PNG bytes
+in memory. The drawing uses Pillow 12.3.0 and the `Helvetica.ttc` family; the manifest records the
+exact font file hash without storing a machine path. Thus PNG replay requires that matching font
+and Pillow installation; this is not a cross-platform rendering claim. Supply a Python executable
+with those dependencies if it is not the default:
+
+```sh
+node docs/investigations/issue-177/local-diagnostics/headland-attempts/verify.mjs python3
+```
