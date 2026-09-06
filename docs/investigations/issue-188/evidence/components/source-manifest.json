@@ -1,0 +1,33 @@
+{
+  "revision": "issue-188-local-r1",
+  "stage": "components",
+  "entry": "docs/investigations/issue-188/fixtures.mjs",
+  "nodeVersion": "24.11.0",
+  "typescriptVersion": "6.0.2",
+  "prettierVersion": "3.9.6",
+  "sources": {
+    "docs/investigations/issue-169/geometry.mjs": "bc54bf0c7e5b878d9d26f2fe96658d0818cddf1ae4a7b2f5997c965d98f463bc",
+    "docs/investigations/issue-172/coast-partition.mjs": "4489dd7f81c918a21ab0463782cc112dbd1e72767affc6dae317a533c43930c8",
+    "docs/investigations/issue-174/supporting-mouth.mjs": "030978a9df08402fb09673be759c878f1f5ca3ea307d1d29ae725c697db26bb8",
+    "docs/investigations/issue-176/wedge-mouth.mjs": "3ae13e28c511e62fe7ddb9a6c7234eee8f46dff2b9fcd9642d8aea5c69cc051e",
+    "docs/investigations/issue-176/wedge-segment.mjs": "b6917fb8fff78c9314a56f10d491daa37ae29ac2fc2a647a6794cebe96e5ae78",
+    "docs/investigations/issue-178/certificates.mjs": "6ac1b753e2f680845c1a4ce22c9e5debe19b139b62ec6fb5b226f4166c796109",
+    "docs/investigations/issue-188/certificates.mjs": "e6f45925bfeb74801dd4e62e1b7a79efc771b4c236076510e3490140e5b77f78",
+    "docs/investigations/issue-188/coast-partition.mjs": "3fb32bb11518b502e2780a04d1688271b5e5bf83f7a0706cb5a66ca0eb1ec807",
+    "docs/investigations/issue-188/corpus.mjs": "269e3c3c92429cec8ad7e7ec221c78ac4acc46b6dfbcb41e7bcf36dec85a3616",
+    "docs/investigations/issue-188/design.md": "f420da47229d4a5a022c8f1cf16021882cc0ae7ce694f66b8c137f024931f79c",
+    "docs/investigations/issue-188/evaluate.mjs": "6e79cb97dd2833f104f7763866ae1fda3d98f619d840fc2d423be8ca9f313523",
+    "docs/investigations/issue-188/fixtures.mjs": "c9afee41c1a34e53f1a376753728d30493b253cd059a20d3df989f98394c10aa",
+    "docs/investigations/issue-188/harness-plan.md": "3f555cd8e4992ad4474917c7b48555f56c46004ec63bbeb8bb0b38882084193a",
+    "docs/investigations/issue-188/independent-design-review.md": "eac5cf213bdff4d470c0e33d75125fee5ad03732017dbdd200617a71b472ceaf",
+    "docs/investigations/issue-188/independent-source-review.md": "5e4e011003c403c1be5abd65161ca7f06b9c5fd6fdde542b30de53d4da31b4bf",
+    "docs/investigations/issue-188/render.mjs": "f0fafb6697b533147512c5611c0f97a0f6ac73dcf07027538f8d814739c8b9ba",
+    "docs/investigations/issue-188/run.mjs": "18f8d63d3fceb52526982a542751b38f79c3ed9685a371ddd240a56ed3fa5806",
+    "docs/investigations/issue-188/sources.mjs": "ea1ef47fb6d39454164ea33a4b5c99c8e5a83c35e7757bf1d5e07a6f57b3d8be",
+    "docs/investigations/issue-188/topology.mjs": "a950e3163f9ada8b14d8ad78a8c6bc1d481a09c1aaafc368d170f11942b18fe6",
+    "docs/investigations/issue-188/wedge-mouth.mjs": "585c127999d22494ab63f60a2afbed259217721a77ab7c7f02e7d99e0ad6a4e2",
+    "package.json": "31400a7caa86eb0c15d7e5dc7889cf8ddca8fb99eba95e6df3cd0829c0ebd08e",
+    "pnpm-lock.yaml": "12d550bd3230b5ea1bdae1c03fcac375aba9ae21c5ea3f5011fdadb2cf3d64c1"
+  },
+  "inputHash": "9fe5bc7ee0e8354ae9bc49600b713e83b156dad6b1450e2646ab0357748f9b2d"
+}

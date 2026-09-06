@@ -1,0 +1,15 @@
+{
+  "total": 2,
+  "passed": 2,
+  "constructionErrors": 0,
+  "panels": [
+    {
+      "id": "peninsula-bank",
+      "quota": 0.06824961847138203,
+      "rendered": true,
+      "certificateOk": true
+    },
+    { "id": "lobe-bank", "quota": 0.06911701291123286, "rendered": true, "certificateOk": true }
+  ],
+  "failures": []
+}

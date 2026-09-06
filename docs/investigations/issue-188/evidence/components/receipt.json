@@ -1,0 +1,13 @@
+{
+  "stage": "components",
+  "complete": true,
+  "cases": 2,
+  "passed": 2,
+  "constructionErrors": 0,
+  "artifacts": {
+    "reports.json.gz": "d56215a1eebdb6357f903921f537fc5ed15fb802306b46c2f9d4f04b0bca9fa8",
+    "summary.json": "166f0fb0f3479d144f6c41023ffd92c76ebd568ae9e2bacb76c54d8877f8ddf6",
+    "panel.png": "e6d0fa80fd1a3f88f6a44c1deab21a37c04c517f1890e414a422d96af16bd0e6",
+    "panel-half.png": "1dc84064c76a85a9fa4ae5e6b25ba5549341d34a0bd6b159f57fc3adefcc6e1f"
+  }
+}
