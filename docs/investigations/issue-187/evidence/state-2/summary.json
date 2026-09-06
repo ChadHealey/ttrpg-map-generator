@@ -1,0 +1,29 @@
+{
+  "scope": "60 local body-only cases, not 60 distinct shapes or complete detached owners",
+  "total": 60,
+  "passed": 60,
+  "constructionErrors": 0,
+  "panel": { "width": 900, "height": 320, "span": 2.5, "halfWidth": 450, "halfHeight": 160 },
+  "panels": [
+    {
+      "id": "quota-0/anatomy-0/variation-0",
+      "quota": 0.12982331431535268,
+      "rendered": true,
+      "certificateOk": true
+    },
+    {
+      "id": "quota-1/anatomy-0/variation-0",
+      "quota": 0.10394491279069766,
+      "rendered": true,
+      "certificateOk": true
+    },
+    {
+      "id": "quota-2/anatomy-0/variation-0",
+      "quota": 0.06559999999999999,
+      "rendered": true,
+      "certificateOk": true
+    }
+  ],
+  "options": { "nominalClearance": 0.05, "collarWidthUpperMode": "root-and-far" },
+  "failures": []
+}

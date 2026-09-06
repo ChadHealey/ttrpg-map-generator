@@ -1,0 +1,53 @@
+{
+  "revision": "issue-187-second-state-guard-r1",
+  "stage": "state-2",
+  "entry": "docs/investigations/issue-187/states/state-2/layout.mjs",
+  "nodeVersion": "24.11.0",
+  "typescriptVersion": "6.0.2",
+  "prettierVersion": "3.9.6",
+  "sources": {
+    "docs/investigations/issue-169/geometry.mjs": "bc54bf0c7e5b878d9d26f2fe96658d0818cddf1ae4a7b2f5997c965d98f463bc",
+    "docs/investigations/issue-172/coast-partition.mjs": "4489dd7f81c918a21ab0463782cc112dbd1e72767affc6dae317a533c43930c8",
+    "docs/investigations/issue-174/supporting-mouth.mjs": "030978a9df08402fb09673be759c878f1f5ca3ea307d1d29ae725c697db26bb8",
+    "docs/investigations/issue-176/wedge-mouth.mjs": "3ae13e28c511e62fe7ddb9a6c7234eee8f46dff2b9fcd9642d8aea5c69cc051e",
+    "docs/investigations/issue-176/wedge-segment.mjs": "b6917fb8fff78c9314a56f10d491daa37ae29ac2fc2a647a6794cebe96e5ae78",
+    "docs/investigations/issue-178/certificates.mjs": "6ac1b753e2f680845c1a4ce22c9e5debe19b139b62ec6fb5b226f4166c796109",
+    "docs/investigations/issue-187/corpus.mjs": "1146ed4d7e3e6391774192ef079d268a70170491664dc88d0cb9055da8316118",
+    "docs/investigations/issue-187/design.md": "f94dedf80f9e5212749123d2b58150fd942e458712067b0ac11b1d3390d318b1",
+    "docs/investigations/issue-187/evaluate.mjs": "f747d3eca9dbb96b82bf9949939c44074d3ad73046cf23b0ba47b18aeefa2b60",
+    "docs/investigations/issue-187/evidence/state-1/receipt.json": "80ad3cd81e13a714dd45cfc4ebec862db3cd61f7944fadbc3e693dcc1be691cd",
+    "docs/investigations/issue-187/evidence/state-1/source-manifest.json": "c7636062872336ae290c016406674026cecb5976f400939c8baf6c954a8f1d09",
+    "docs/investigations/issue-187/evidence/state-1/summary.json": "8dd5288fae94549ac29a10284df9b2f794b24c9ae68f5d536ad84873baaa77af",
+    "docs/investigations/issue-187/harness-plan.md": "4734cda07e7999fff9c5e5602324cc34613ac1de87919c7bfe9b5747b344de43",
+    "docs/investigations/issue-187/independent-design-review-state2.md": "b87886c83225e453ab8d12581e9cd3890bb800e99b03c519158402fabbb77ad3",
+    "docs/investigations/issue-187/independent-design-review.md": "afdb4a4661613355d0673d9cd9fcfa2ec6e8f2182fbd2b0a3bf8c160620638db",
+    "docs/investigations/issue-187/independent-local-review-state1.md": "46d71c65825cf2fd1262117b55b0b5e612c5b07638913bae1b82075888283b41",
+    "docs/investigations/issue-187/render.mjs": "b29c8453edcde80e5ee3eb03dca11c8f83ecb1b0ba0f3456404b21f3eddf70ed",
+    "docs/investigations/issue-187/run.mjs": "8bb6a106da04d09a4f2fa2323655285f9d5a9c06526b56dff45abe366992bff3",
+    "docs/investigations/issue-187/sources.mjs": "09d08add1ddf1a63152904d83bb1f6ea1862b637abd83377f3e4e00d5f474999",
+    "docs/investigations/issue-187/stage2.mjs": "89125fd5e79ef219dabe102df4b76fc94b4f08b294d662f35ca2a844d56aeec4",
+    "docs/investigations/issue-187/states/state-2/authorization.json": "c980a99715b804c8ccdc0010b58c4a58051833f1b7a818f9ac7b7eb50f591b20",
+    "docs/investigations/issue-187/states/state-2/design.md": "7ddbebfd45ed8c764acab1c8bae7de297e173dcace48aba3b073bcd5bf45cd76",
+    "docs/investigations/issue-187/states/state-2/layout.mjs": "d39ee0c94872f2de36209fb1e760536b6e77f670a85adfd7b50a179384f9651f",
+    "docs/investigations/issue-187/states/state-2/prior-disposition.md": "b8a3d1841c68e7a3e356813bf12b5e43b30e4a679ebce40ff2dcfef7e9566232",
+    "package.json": "31400a7caa86eb0c15d7e5dc7889cf8ddca8fb99eba95e6df3cd0829c0ebd08e",
+    "pnpm-lock.yaml": "12d550bd3230b5ea1bdae1c03fcac375aba9ae21c5ea3f5011fdadb2cf3d64c1"
+  },
+  "inputHash": "e1917566b682421d303b3a64d8ba851af10076cd67acd865aac47c666d9e5a29",
+  "declaration": {
+    "stage": "state-2",
+    "predecessor": "state-1",
+    "predecessorDisposition": "rejected-local-R3",
+    "assistantDesignReview": "cleared-for-fixed-60-case-local-experiment",
+    "hashes": {
+      "guard": "89125fd5e79ef219dabe102df4b76fc94b4f08b294d662f35ca2a844d56aeec4",
+      "design": "7ddbebfd45ed8c764acab1c8bae7de297e173dcace48aba3b073bcd5bf45cd76",
+      "review": "b87886c83225e453ab8d12581e9cd3890bb800e99b03c519158402fabbb77ad3",
+      "diagnosis": "b8a3d1841c68e7a3e356813bf12b5e43b30e4a679ebce40ff2dcfef7e9566232",
+      "priorReview": "46d71c65825cf2fd1262117b55b0b5e612c5b07638913bae1b82075888283b41",
+      "priorManifest": "c7636062872336ae290c016406674026cecb5976f400939c8baf6c954a8f1d09",
+      "priorReceipt": "80ad3cd81e13a714dd45cfc4ebec862db3cd61f7944fadbc3e693dcc1be691cd",
+      "priorSummary": "8dd5288fae94549ac29a10284df9b2f794b24c9ae68f5d536ad84873baaa77af"
+    }
+  }
+}

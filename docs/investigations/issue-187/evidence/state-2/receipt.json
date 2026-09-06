@@ -1,0 +1,15 @@
+{
+  "stage": "state-2",
+  "guardRevision": "issue-187-second-state-guard-r1",
+  "complete": true,
+  "cases": 60,
+  "passed": 60,
+  "constructionErrors": 0,
+  "sourceManifestSha256": "6ebe2acab7df9898da2b283a36f845295aa6fcbe6ff65be103fc80fb0bb28f93",
+  "artifacts": {
+    "reports.json.gz": "52e4bb81380b80719dc21d4885fb8ddb2d2f08127f76f9fad28425a448a14d8e",
+    "summary.json": "8dd5288fae94549ac29a10284df9b2f794b24c9ae68f5d536ad84873baaa77af",
+    "panel.png": "1cffc591192f62bb6031ab2d819827034adec4b9fee846a33f6d8f0e5c01d429",
+    "panel-half.png": "0446b57420471f81df8b570826055b6b16724d465ead98181db73e841bf5961f"
+  }
+}

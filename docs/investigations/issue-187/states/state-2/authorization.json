@@ -1,0 +1,16 @@
+{
+  "stage": "state-2",
+  "predecessor": "state-1",
+  "predecessorDisposition": "rejected-local-R3",
+  "assistantDesignReview": "cleared-for-fixed-60-case-local-experiment",
+  "hashes": {
+    "guard": "89125fd5e79ef219dabe102df4b76fc94b4f08b294d662f35ca2a844d56aeec4",
+    "design": "7ddbebfd45ed8c764acab1c8bae7de297e173dcace48aba3b073bcd5bf45cd76",
+    "review": "b87886c83225e453ab8d12581e9cd3890bb800e99b03c519158402fabbb77ad3",
+    "diagnosis": "b8a3d1841c68e7a3e356813bf12b5e43b30e4a679ebce40ff2dcfef7e9566232",
+    "priorReview": "46d71c65825cf2fd1262117b55b0b5e612c5b07638913bae1b82075888283b41",
+    "priorManifest": "c7636062872336ae290c016406674026cecb5976f400939c8baf6c954a8f1d09",
+    "priorReceipt": "80ad3cd81e13a714dd45cfc4ebec862db3cd61f7944fadbc3e693dcc1be691cd",
+    "priorSummary": "8dd5288fae94549ac29a10284df9b2f794b24c9ae68f5d536ad84873baaa77af"
+  }
+}

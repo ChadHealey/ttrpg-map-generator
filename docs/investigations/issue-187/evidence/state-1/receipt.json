@@ -1,0 +1,13 @@
+{
+  "stage": "state-1",
+  "complete": true,
+  "cases": 60,
+  "passed": 60,
+  "constructionErrors": 0,
+  "artifacts": {
+    "reports.json.gz": "234824ed647e15c412eb90cee1690ee16c5843421bb6160ae084051978ef3647",
+    "summary.json": "8dd5288fae94549ac29a10284df9b2f794b24c9ae68f5d536ad84873baaa77af",
+    "panel.png": "fad84352ddeba1b92b1cbc2d625f67657ea098992d059f6830c1ab65512248e9",
+    "panel-half.png": "c185947422b86ab588e804d5b1c3953289e13649e612ec8a76aa3847efd59957"
+  }
+}
