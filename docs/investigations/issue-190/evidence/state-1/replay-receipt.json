@@ -1,0 +1,17 @@
+{
+  "revision": "issue-190-phase-result-r1",
+  "stage": "state-1",
+  "phase": "replay",
+  "manifestSha256": "6647a27aa04465a6c373bb7a60a9ea9dd6ce4beb419acd80d908b75f64439a43",
+  "complete": true,
+  "match": true,
+  "reservedSlots": 60,
+  "constructorCalls": 60,
+  "certificateCalls": 60,
+  "outputHashes": {
+    "reports.json.gz": "dcb740b41b1e3c2b71d12ed2cf2bb3671ad0839871eafd16d52db28abc43a62e",
+    "summary.json": "e59f4c41038ca99fa7b622797af5864169423b50efac04ad7db1c0f9432905cb",
+    "panel.png": "cbfe9650d9f22cdd64f71df1ed7d814f45ded4f2ebd498c3fcfccfa2deaff5d1",
+    "panel-half.png": "0da94fdfd90f6ee448dfc46283cf2fbd6801b1f2d6fa67b661df4b20e3d87c58"
+  }
+}

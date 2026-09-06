@@ -1,0 +1,8 @@
+{
+  "revision": "issue-190-phase-r1",
+  "stage": "state-1",
+  "phase": "initial",
+  "reservedSlots": 60,
+  "manifestSha256": "6647a27aa04465a6c373bb7a60a9ea9dd6ce4beb419acd80d908b75f64439a43",
+  "inputHash": "e1917566b682421d303b3a64d8ba851af10076cd67acd865aac47c666d9e5a29"
+}
