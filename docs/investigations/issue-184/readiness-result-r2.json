@@ -1,0 +1,12 @@
+{
+  "recoveredRows": [
+    { "id": "default-001", "primaryLayouts": [3] },
+    { "id": "default-004", "primaryLayouts": [3] },
+    { "id": "default-006", "primaryLayouts": [3] }
+  ],
+  "recoveredLayouts": [3],
+  "readyForComparison": true,
+  "completeCohortPassed": true,
+  "failures": [],
+  "layouts": [0, 1, 2]
+}

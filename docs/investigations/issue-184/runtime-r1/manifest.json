@@ -1,0 +1,58 @@
+{
+  "scope": "Exact local source bytes archived before live state3 changes; complete transitive source closure remains in comparison-r1/source-snapshot.json",
+  "comparisonSourceSha256": "9f924e9647c6dab96f6d2ad2f4ede4b399733229c7cc7cc9792c416b1ef0a062",
+  "files": {
+    "run.mjs": {
+      "file": "source-00.txt",
+      "sha256": "12b598bd388f2c74430701547fcebf3d4359ec808f2b19c07380c4d2269ca624"
+    },
+    "experiment.md": {
+      "file": "source-01.txt",
+      "sha256": "588ccea6b0825205e2fdab2c31d7600dbed89a7a71743400a4ecd408ab942b24"
+    },
+    "local-findings.md": {
+      "file": "source-02.txt",
+      "sha256": "3282f8e4a15e00b2f7c7f3dc3920b17b6195342e7678e513408f9175241ad4d6"
+    },
+    "design.md": {
+      "file": "source-03.txt",
+      "sha256": "4521efa236bed9159bf858eb0ee84ff9036accf746779b8c5baf28f62cc67b9d"
+    },
+    "state-2.md": {
+      "file": "source-04.txt",
+      "sha256": "6a011823900a5d0cd98367d0e1dae5d92447d3435e232da4c7be4102f0dc4c76"
+    },
+    "corpus.mjs": {
+      "file": "source-05.txt",
+      "sha256": "2a4d66ebf53559243aca71d84ed4eeb7b5f5678255095829f2b862eea5ad033a"
+    },
+    "gate.mjs": {
+      "file": "source-06.txt",
+      "sha256": "f134015082c8dc4854ea71e7eb385d870c1496c51720ef2cfbc1e064c4766803"
+    },
+    "templates.mjs": {
+      "file": "source-07.txt",
+      "sha256": "f237c215561e9453b8bf27c8a61fcf41b5c563b85ec9c001920de46b6cee7ccb"
+    },
+    "base-templates.mjs": {
+      "file": "source-08.txt",
+      "sha256": "0d08496f87ec27aecfee5cba41e302418407d49d48de73df53c3e0b9d0bc5201"
+    },
+    "layout-large.mjs": {
+      "file": "source-09.txt",
+      "sha256": "1c2cb8c2418dbd680f8757ee5fe39bbb9369e2fc564652bcd3db9a38985060fa"
+    },
+    "layout-a.mjs": {
+      "file": "source-10.txt",
+      "sha256": "34625181e034cddc266485fce7d13d352d2bc5035d124c400a23384ae1a35f23"
+    },
+    "layout-b.mjs": {
+      "file": "source-11.txt",
+      "sha256": "3c85e8a445dbdd360fd1b1ab498334a50c313d2b606456db7d7a6b074dd920ac"
+    },
+    "splice.mjs": {
+      "file": "source-12.txt",
+      "sha256": "0352e5ace0fe875325d9171d776691d5db96f05158ca1f13a62c4cb325045874"
+    }
+  }
+}

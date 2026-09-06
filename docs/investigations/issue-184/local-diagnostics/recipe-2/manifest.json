@@ -1,0 +1,14 @@
+{
+  "stage": "recipe-2",
+  "entries": [
+    "../issue-184/recipes/recipe-2/layout-a.mjs",
+    "../issue-184/recipes/recipe-2/layout-b.mjs",
+    "../issue-184/recipes/recipe-2/layout-large.mjs"
+  ],
+  "artifacts": {
+    "sources.json": "755aa8df73e0bbb82810ec88d93ff7ef0e64642dcf9d136d026676bf52896a96",
+    "report.json": "5aa0ddb082f855336bc04a4e2b988bf77a101f72e169464a1ebca4b2f6030a6f",
+    "panel.png": "9b76969933f800b2f8736f90a410cdde3cd400686661279edb2a486a9c0ba402"
+  },
+  "writer": "6d9733e8fc02907cc18c84d32f0587f706458fbc35e8ccceb3a34686126af643"
+}
