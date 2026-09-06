@@ -1,0 +1,140 @@
+{
+  "scope": "Binary64 example corroboration, not a formal interval certificate or accepted constructor",
+  "positive": {
+    "a": [0.65, -0.12],
+    "b": [0.65, 0.12],
+    "witness": [0.42, 0],
+    "B": [
+      [-0.6, -0.45],
+      [0.85, -0.35],
+      [0.65, -0.12],
+      [0.38, -0.08],
+      [0.34, 0.09],
+      [0.65, 0.12],
+      [0.9, 0.4],
+      [-0.55, 0.5]
+    ],
+    "E": [
+      [0.65, -0.12],
+      [0.65, 0.12],
+      [0.34, 0.09],
+      [0.38, -0.08]
+    ],
+    "B0": [
+      [-0.6, -0.45],
+      [0.85, -0.35],
+      [0.65, -0.12],
+      [0.65, 0.12],
+      [0.9, 0.4],
+      [-0.55, 0.5]
+    ],
+    "bodyArea": 1.0624,
+    "pocketArea": 0.05934999999999999,
+    "precutArea": 1.1217499999999998,
+    "boundary": [
+      {
+        "u": [-0.6, -0.45],
+        "v": [0.85, -0.35],
+        "intersection": null
+      },
+      {
+        "u": [0.85, -0.35],
+        "v": [0.65, -0.12],
+        "intersection": [1, 1],
+        "structuralShoulder": [0.65, -0.12],
+        "activeFaceExclusion": true
+      },
+      {
+        "u": [0.65, -0.12],
+        "v": [0.38, -0.08],
+        "intersection": [0, 0],
+        "structuralShoulder": [0.65, -0.12],
+        "activeFaceExclusion": true
+      },
+      {
+        "u": [0.38, -0.08],
+        "v": [0.34, 0.09],
+        "intersection": null
+      },
+      {
+        "u": [0.34, 0.09],
+        "v": [0.65, 0.12],
+        "intersection": [1, 1],
+        "structuralShoulder": [0.65, 0.12],
+        "activeFaceExclusion": true
+      },
+      {
+        "u": [0.65, 0.12],
+        "v": [0.9, 0.4],
+        "intersection": [0, 0],
+        "structuralShoulder": [0.65, 0.12],
+        "activeFaceExclusion": true
+      },
+      {
+        "u": [0.9, 0.4],
+        "v": [-0.55, 0.5],
+        "intersection": null
+      },
+      {
+        "u": [-0.55, 0.5],
+        "v": [-0.6, -0.45],
+        "intersection": null
+      }
+    ],
+    "globalSupportFailures": [
+      {
+        "code": "bay-positive-support",
+        "featureId": "interior",
+        "actual": -0.19999999999999996,
+        "required": "> EPS on the origin side of the chord"
+      },
+      {
+        "code": "bay-positive-support",
+        "featureId": "interior",
+        "actual": -0.25,
+        "required": "> EPS on the origin side of the chord"
+      },
+      {
+        "code": "bay-positive-support",
+        "featureId": "body",
+        "actual": -0.19999999999999996,
+        "required": "> EPS on the origin side of the chord"
+      },
+      {
+        "code": "bay-positive-support",
+        "featureId": "body",
+        "actual": -0.25,
+        "required": "> EPS on the origin side of the chord"
+      }
+    ],
+    "sufficient": {
+      "angularRadius": 1.0297886775455745,
+      "openingLower": 0.2088827422263505,
+      "openingUpper": 0.27575279501828454,
+      "depthLower": 0.20017929463358594,
+      "removedAreaLower": 0.05934999999999999,
+      "ratioLower": 0.7259375
+    }
+  },
+  "negative": {
+    "crossingWithBothEndpointsOutside": {
+      "u": [0.8, -0.3],
+      "v": [0.8, 0.3],
+      "intersection": [0.25384615384615383, 0.7461538461538462]
+    },
+    "lensIntrusion": {
+      "u": [0.6505, -0.001],
+      "v": [0.651, 0.001],
+      "intersection": [0, 1]
+    },
+    "radialFaceContact": {
+      "u": [0.8, 0.14769230769230768],
+      "v": [0.9, 0.3],
+      "intersection": [0, 1.5951480238867188e-16]
+    }
+  },
+  "unboundedRay": {
+    "direction": [1.3, 0],
+    "unnormalizedFaceDerivatives": [0.156, 0.156, 0.312]
+  }
+}
