@@ -1,0 +1,476 @@
+[
+  {
+    "id": "quantizer-boundaries",
+    "normalized": [
+      -1, -1, -2.9802322387695312e-8, -1.4901161193847656e-8, 0, 0, 1.4901161193847656e-8,
+      2.9802322387695312e-8, 1, 1
+    ],
+    "ticks": [-16777216, -16777216, -1, 0, 0, 0, 0, 1, 16777216, 16777216],
+    "saturationCount": 2
+  },
+  {
+    "id": "plateau",
+    "classification": {
+      "realizedWaterCoveragePercent": 99.986374,
+      "absoluteWaterCoverageErrorBasisPoints": 4998.6374
+    },
+    "reference": {
+      "totalWeight": 87495254016,
+      "waterWeight": 87483332050,
+      "realizedWaterCoveragePercent": 99.986374,
+      "absoluteWaterCoverageErrorBasisPoints": 4998.6374
+    },
+    "policies": [
+      {
+        "policy": "Z",
+        "status": "no-proposal",
+        "preflight": { "zeros": 4, "firstZero": 51302, "ties": 0, "firstTie": null },
+        "failures": ["zero-anchor-degeneracy"],
+        "rawRingCount": null,
+        "rawVertexCount": null,
+        "simplifiedVertexCount": null,
+        "correspondence": null
+      },
+      {
+        "policy": "H",
+        "status": "extracted",
+        "preflight": null,
+        "failures": [],
+        "rawRingCount": 2,
+        "rawVertexCount": 24,
+        "simplifiedVertexCount": 18,
+        "correspondence": {
+          "components": [
+            {
+              "key": "private-anchor-component:c4523229e1c4865969da8e23a56ed5f5aa41f7425ab382e5aa4c470e9f8b71be",
+              "anchorCount": 12
+            }
+          ],
+          "rings": [
+            {
+              "rawIndex": 0,
+              "rawPredecessorKey": "private-raw-ring:0:06e1ac0773f43623ef21d419808dd4587adc9f20874f20632e154d6eddeb384f",
+              "componentKey": "private-anchor-component:c4523229e1c4865969da8e23a56ed5f5aa41f7425ab382e5aa4c470e9f8b71be",
+              "vertexCount": 16
+            },
+            {
+              "rawIndex": 1,
+              "rawPredecessorKey": "private-raw-ring:1:18bcaee071920795667de51e4b89bac3eb3033e5b2eb321e33836e3ff6c017ae",
+              "componentKey": "private-anchor-component:c4523229e1c4865969da8e23a56ed5f5aa41f7425ab382e5aa4c470e9f8b71be",
+              "vertexCount": 8
+            }
+          ],
+          "failures": []
+        }
+      }
+    ]
+  },
+  {
+    "id": "anchor-crossing",
+    "classification": {
+      "realizedWaterCoveragePercent": 99.9966,
+      "absoluteWaterCoverageErrorBasisPoints": 4999.66
+    },
+    "reference": {
+      "totalWeight": 87495254016,
+      "waterWeight": 87492279542,
+      "realizedWaterCoveragePercent": 99.9966,
+      "absoluteWaterCoverageErrorBasisPoints": 4999.66
+    },
+    "policies": [
+      {
+        "policy": "Z",
+        "status": "no-proposal",
+        "preflight": { "zeros": 3, "firstZero": 50790, "ties": 0, "firstTie": null },
+        "failures": ["zero-anchor-degeneracy"],
+        "rawRingCount": null,
+        "rawVertexCount": null,
+        "simplifiedVertexCount": null,
+        "correspondence": null
+      },
+      {
+        "policy": "H",
+        "status": "extracted",
+        "preflight": null,
+        "failures": [],
+        "rawRingCount": 1,
+        "rawVertexCount": 8,
+        "simplifiedVertexCount": 6,
+        "correspondence": {
+          "components": [
+            {
+              "key": "private-anchor-component:e0772f4201d70aab375059d04097c2b2f7192e0e915afb8863756b3b735e0fc6",
+              "anchorCount": 3
+            }
+          ],
+          "rings": [
+            {
+              "rawIndex": 0,
+              "rawPredecessorKey": "private-raw-ring:0:5c41ebd40cf33dd75e6e0dbbd0fc38b641585a72a48f53998b06b31be4cfe67a",
+              "componentKey": "private-anchor-component:e0772f4201d70aab375059d04097c2b2f7192e0e915afb8863756b3b735e0fc6",
+              "vertexCount": 8
+            }
+          ],
+          "failures": []
+        }
+      }
+    ]
+  },
+  {
+    "id": "saddles",
+    "classification": {
+      "realizedWaterCoveragePercent": 99.993215,
+      "absoluteWaterCoverageErrorBasisPoints": 4999.3215
+    },
+    "reference": {
+      "totalWeight": 87495254016,
+      "waterWeight": 87489317550,
+      "realizedWaterCoveragePercent": 99.993215,
+      "absoluteWaterCoverageErrorBasisPoints": 4999.3215
+    },
+    "policies": [
+      {
+        "policy": "Z",
+        "status": "no-proposal",
+        "preflight": { "zeros": 0, "firstZero": null, "ties": 1, "firstTie": [100, 100] },
+        "failures": ["zero-saddle-degeneracy"],
+        "rawRingCount": null,
+        "rawVertexCount": null,
+        "simplifiedVertexCount": null,
+        "correspondence": null
+      },
+      {
+        "policy": "H",
+        "status": "extracted",
+        "preflight": null,
+        "failures": [],
+        "rawRingCount": 4,
+        "rawVertexCount": 24,
+        "simplifiedVertexCount": 22,
+        "correspondence": {
+          "components": [
+            {
+              "key": "private-anchor-component:262e2f2ebcd851c915840edb93ba6336a9dd67d1579d953cbcddab87b77fc993",
+              "anchorCount": 1
+            },
+            {
+              "key": "private-anchor-component:2b727116cbdba18244370a0a8dc0f1d3475b63d49126ffabb9a596080ff0926b",
+              "anchorCount": 2
+            },
+            {
+              "key": "private-anchor-component:2ab1e637e7e5697bd8e4c71cfc5975a00e6d23f6d898a489b81a42c01a9489fa",
+              "anchorCount": 2
+            },
+            {
+              "key": "private-anchor-component:dfc70cba934548b7c610121772c0ae0eddc02cabaef72ee24851d592a1ee9cd0",
+              "anchorCount": 1
+            }
+          ],
+          "rings": [
+            {
+              "rawIndex": 0,
+              "rawPredecessorKey": "private-raw-ring:0:0908cfed5210014317781c6eda06b71a521f84d333923dc103c6483aaebaf153",
+              "componentKey": "private-anchor-component:262e2f2ebcd851c915840edb93ba6336a9dd67d1579d953cbcddab87b77fc993",
+              "vertexCount": 4
+            },
+            {
+              "rawIndex": 1,
+              "rawPredecessorKey": "private-raw-ring:1:b9c802a9cde9acb15f214a572d09808c9ec6b9fd134c586fdd7b8ab95a8dbdcf",
+              "componentKey": "private-anchor-component:dfc70cba934548b7c610121772c0ae0eddc02cabaef72ee24851d592a1ee9cd0",
+              "vertexCount": 4
+            },
+            {
+              "rawIndex": 2,
+              "rawPredecessorKey": "private-raw-ring:2:1ba09222462b8b10b3e76d4c8ca85ac57a73a94a088b5a3bc070f47d9880ddb2",
+              "componentKey": "private-anchor-component:2b727116cbdba18244370a0a8dc0f1d3475b63d49126ffabb9a596080ff0926b",
+              "vertexCount": 8
+            },
+            {
+              "rawIndex": 3,
+              "rawPredecessorKey": "private-raw-ring:3:4c43920def62d1d296f35f331138bb0a17215d9bc33a1199a82766d7486a2289",
+              "componentKey": "private-anchor-component:2ab1e637e7e5697bd8e4c71cfc5975a00e6d23f6d898a489b81a42c01a9489fa",
+              "vertexCount": 8
+            }
+          ],
+          "failures": []
+        }
+      }
+    ]
+  },
+  {
+    "id": "seam",
+    "classification": {
+      "realizedWaterCoveragePercent": 99.985619,
+      "absoluteWaterCoverageErrorBasisPoints": 4998.5619
+    },
+    "reference": {
+      "totalWeight": 87495254016,
+      "waterWeight": 87482671736,
+      "realizedWaterCoveragePercent": 99.985619,
+      "absoluteWaterCoverageErrorBasisPoints": 4998.5619
+    },
+    "policies": [
+      {
+        "policy": "Z",
+        "status": "extracted",
+        "preflight": { "zeros": 0, "firstZero": null, "ties": 0, "firstTie": null },
+        "failures": [],
+        "rawRingCount": 1,
+        "rawVertexCount": 14,
+        "simplifiedVertexCount": 12,
+        "correspondence": {
+          "components": [
+            {
+              "key": "private-anchor-component:28c166e6a93494db242118e3b3c07960e796b8adda6e8034b3552c003b0b0cf0",
+              "anchorCount": 12
+            }
+          ],
+          "rings": [
+            {
+              "rawIndex": 0,
+              "rawPredecessorKey": "private-raw-ring:0:95105606be51e7838f681b01627a3119380af799e5a1f47883e90eb7cb12d751",
+              "componentKey": "private-anchor-component:28c166e6a93494db242118e3b3c07960e796b8adda6e8034b3552c003b0b0cf0",
+              "vertexCount": 14
+            }
+          ],
+          "failures": []
+        }
+      },
+      {
+        "policy": "H",
+        "status": "extracted",
+        "preflight": null,
+        "failures": [],
+        "rawRingCount": 1,
+        "rawVertexCount": 14,
+        "simplifiedVertexCount": 12,
+        "correspondence": {
+          "components": [
+            {
+              "key": "private-anchor-component:28c166e6a93494db242118e3b3c07960e796b8adda6e8034b3552c003b0b0cf0",
+              "anchorCount": 12
+            }
+          ],
+          "rings": [
+            {
+              "rawIndex": 0,
+              "rawPredecessorKey": "private-raw-ring:0:ec87b6afbc20ef08463bc1d22c3cf2a10e98db8c40b2749720d0e97271fee8f2",
+              "componentKey": "private-anchor-component:28c166e6a93494db242118e3b3c07960e796b8adda6e8034b3552c003b0b0cf0",
+              "vertexCount": 14
+            }
+          ],
+          "failures": []
+        }
+      }
+    ]
+  },
+  {
+    "id": "poles",
+    "classification": {
+      "realizedWaterCoveragePercent": 99.954823,
+      "absoluteWaterCoverageErrorBasisPoints": 4995.4823
+    },
+    "reference": {
+      "totalWeight": 87495254016,
+      "waterWeight": 87455726592,
+      "realizedWaterCoveragePercent": 99.954823,
+      "absoluteWaterCoverageErrorBasisPoints": 4995.4823
+    },
+    "policies": [
+      {
+        "policy": "Z",
+        "status": "extracted",
+        "preflight": { "zeros": 0, "firstZero": null, "ties": 0, "firstTie": null },
+        "failures": [],
+        "rawRingCount": 2,
+        "rawVertexCount": 1024,
+        "simplifiedVertexCount": 1021,
+        "correspondence": {
+          "components": [
+            {
+              "key": "private-anchor-component:681510fc6a7d92cd97d3c9eb7a2293342f4f942ac819ea867dbee2683ad0ebe0",
+              "anchorCount": 1025
+            },
+            {
+              "key": "private-anchor-component:646bd8716de747cee5dd314cfd69053c77b240346db19eccc87fcfede9b02efb",
+              "anchorCount": 1025
+            }
+          ],
+          "rings": [
+            {
+              "rawIndex": 0,
+              "rawPredecessorKey": "private-raw-ring:0:9a25998aab48f7996dffce80322202cf168a9786294cb303a23455603523e58a",
+              "componentKey": "private-anchor-component:681510fc6a7d92cd97d3c9eb7a2293342f4f942ac819ea867dbee2683ad0ebe0",
+              "vertexCount": 512
+            },
+            {
+              "rawIndex": 1,
+              "rawPredecessorKey": "private-raw-ring:1:115cceda04517d5678e4843d80d0840a4735725000943a5f595c17359821cd72",
+              "componentKey": "private-anchor-component:646bd8716de747cee5dd314cfd69053c77b240346db19eccc87fcfede9b02efb",
+              "vertexCount": 512
+            }
+          ],
+          "failures": []
+        }
+      },
+      {
+        "policy": "H",
+        "status": "extracted",
+        "preflight": null,
+        "failures": [],
+        "rawRingCount": 2,
+        "rawVertexCount": 1024,
+        "simplifiedVertexCount": 1021,
+        "correspondence": {
+          "components": [
+            {
+              "key": "private-anchor-component:681510fc6a7d92cd97d3c9eb7a2293342f4f942ac819ea867dbee2683ad0ebe0",
+              "anchorCount": 1025
+            },
+            {
+              "key": "private-anchor-component:646bd8716de747cee5dd314cfd69053c77b240346db19eccc87fcfede9b02efb",
+              "anchorCount": 1025
+            }
+          ],
+          "rings": [
+            {
+              "rawIndex": 0,
+              "rawPredecessorKey": "private-raw-ring:0:90fd211c127f6bde68741f7a31fe534dd97a2afbed08df04fb9f569747cf3f69",
+              "componentKey": "private-anchor-component:681510fc6a7d92cd97d3c9eb7a2293342f4f942ac819ea867dbee2683ad0ebe0",
+              "vertexCount": 512
+            },
+            {
+              "rawIndex": 1,
+              "rawPredecessorKey": "private-raw-ring:1:7e767a9712a6a900b6e0d79f1db7da0248bf29e178b78c1773b1cb6ad120e70c",
+              "componentKey": "private-anchor-component:646bd8716de747cee5dd314cfd69053c77b240346db19eccc87fcfede9b02efb",
+              "vertexCount": 512
+            }
+          ],
+          "failures": []
+        }
+      }
+    ]
+  },
+  {
+    "id": "neck-and-island",
+    "classification": {
+      "realizedWaterCoveragePercent": 99.981869,
+      "absoluteWaterCoverageErrorBasisPoints": 4998.1869
+    },
+    "reference": {
+      "totalWeight": 87495254016,
+      "waterWeight": 87479389956,
+      "realizedWaterCoveragePercent": 99.981869,
+      "absoluteWaterCoverageErrorBasisPoints": 4998.1869
+    },
+    "policies": [
+      {
+        "policy": "Z",
+        "status": "extracted",
+        "preflight": { "zeros": 0, "firstZero": null, "ties": 0, "firstTie": null },
+        "failures": [],
+        "rawRingCount": 2,
+        "rawVertexCount": 28,
+        "simplifiedVertexCount": 22,
+        "correspondence": {
+          "components": [
+            {
+              "key": "private-anchor-component:432c4a0be9213ccf553997c88c3dc2e7a51463a04cacdadbbf09681010f5f3e8",
+              "anchorCount": 15
+            },
+            {
+              "key": "private-anchor-component:b77885ff2ba1eec166d021240a6a4ae8e5701497020bdf45be5f45f773f8d78a",
+              "anchorCount": 1
+            }
+          ],
+          "rings": [
+            {
+              "rawIndex": 0,
+              "rawPredecessorKey": "private-raw-ring:0:c444a141af59a6aaf66a7ff25d3e129e6a7887627c9b8f180b774ac78ff0fabc",
+              "componentKey": "private-anchor-component:432c4a0be9213ccf553997c88c3dc2e7a51463a04cacdadbbf09681010f5f3e8",
+              "vertexCount": 24
+            },
+            {
+              "rawIndex": 1,
+              "rawPredecessorKey": "private-raw-ring:1:68924c0bf0c1c2f13e7153bff4e327ec2b728e307889c43d2314c6fc681aadcd",
+              "componentKey": "private-anchor-component:b77885ff2ba1eec166d021240a6a4ae8e5701497020bdf45be5f45f773f8d78a",
+              "vertexCount": 4
+            }
+          ],
+          "failures": []
+        }
+      },
+      {
+        "policy": "H",
+        "status": "extracted",
+        "preflight": null,
+        "failures": [],
+        "rawRingCount": 2,
+        "rawVertexCount": 28,
+        "simplifiedVertexCount": 22,
+        "correspondence": {
+          "components": [
+            {
+              "key": "private-anchor-component:432c4a0be9213ccf553997c88c3dc2e7a51463a04cacdadbbf09681010f5f3e8",
+              "anchorCount": 15
+            },
+            {
+              "key": "private-anchor-component:b77885ff2ba1eec166d021240a6a4ae8e5701497020bdf45be5f45f773f8d78a",
+              "anchorCount": 1
+            }
+          ],
+          "rings": [
+            {
+              "rawIndex": 0,
+              "rawPredecessorKey": "private-raw-ring:0:9fd942478b8b5f4907721b6ff94d44ff49b6dd29485ce554f19c14635270c16e",
+              "componentKey": "private-anchor-component:432c4a0be9213ccf553997c88c3dc2e7a51463a04cacdadbbf09681010f5f3e8",
+              "vertexCount": 24
+            },
+            {
+              "rawIndex": 1,
+              "rawPredecessorKey": "private-raw-ring:1:642192b78d308933a2a4a284e499ba79c1ee81e57e62adc9ca7e91313aa2cead",
+              "componentKey": "private-anchor-component:b77885ff2ba1eec166d021240a6a4ae8e5701497020bdf45be5f45f773f8d78a",
+              "vertexCount": 4
+            }
+          ],
+          "failures": []
+        }
+      }
+    ]
+  },
+  {
+    "id": "tangent-contact",
+    "classification": {
+      "realizedWaterCoveragePercent": 100,
+      "absoluteWaterCoverageErrorBasisPoints": 5000
+    },
+    "reference": {
+      "totalWeight": 87495254016,
+      "waterWeight": 87495254016,
+      "realizedWaterCoveragePercent": 100,
+      "absoluteWaterCoverageErrorBasisPoints": 5000
+    },
+    "policies": [
+      {
+        "policy": "Z",
+        "status": "no-proposal",
+        "preflight": { "zeros": 1, "firstZero": 50789, "ties": 0, "firstTie": null },
+        "failures": ["zero-anchor-degeneracy"],
+        "rawRingCount": null,
+        "rawVertexCount": null,
+        "simplifiedVertexCount": null,
+        "correspondence": null
+      },
+      {
+        "policy": "H",
+        "status": "extracted",
+        "preflight": null,
+        "failures": [],
+        "rawRingCount": 0,
+        "rawVertexCount": 0,
+        "simplifiedVertexCount": 0,
+        "correspondence": { "components": [], "rings": [], "failures": [] }
+      }
+    ]
+  }
+]

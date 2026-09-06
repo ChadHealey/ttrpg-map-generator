@@ -1,0 +1,373 @@
+{
+  "revision": "issue-186-D1-r1",
+  "rows": 6,
+  "profiles": 2,
+  "plannedPolicyEvaluations": 24,
+  "policyEvaluations": 24,
+  "selectedProposal": null,
+  "disposition": "No policy selected: extracted-role certification is not established within this bounded adapter contract.",
+  "cases": [
+    {
+      "id": "normal-01",
+      "profile": "world-atlas-preview-v1",
+      "zeroCount": 0,
+      "coverage": {
+        "status": "completed",
+        "realizedWaterCoveragePercent": 65.011259,
+        "absoluteWaterCoverageErrorBasisPoints": 1.1259,
+        "totalCoveragePass": true
+      },
+      "shared": { "checked": 130562, "exact": true, "mismatches": 0, "firstMismatch": null },
+      "policies": [
+        {
+          "policy": "Z",
+          "status": "extracted",
+          "failures": [
+            "original-components-merged-or-ambiguous",
+            "extracted-role-certification-unproved"
+          ],
+          "proposalEligible": false
+        },
+        {
+          "policy": "H",
+          "status": "extracted",
+          "failures": [
+            "original-components-merged-or-ambiguous",
+            "extracted-role-certification-unproved"
+          ],
+          "proposalEligible": false
+        }
+      ]
+    },
+    {
+      "id": "normal-01",
+      "profile": "world-atlas-full-v1",
+      "zeroCount": 0,
+      "coverage": {
+        "status": "completed",
+        "realizedWaterCoveragePercent": 64.99951,
+        "absoluteWaterCoverageErrorBasisPoints": 0.049,
+        "totalCoveragePass": true
+      },
+      "shared": { "checked": 130562, "exact": true, "mismatches": 0, "firstMismatch": null },
+      "policies": [
+        {
+          "policy": "Z",
+          "status": "extracted",
+          "failures": ["extracted-role-certification-unproved"],
+          "proposalEligible": false
+        },
+        {
+          "policy": "H",
+          "status": "extracted",
+          "failures": ["extracted-role-certification-unproved"],
+          "proposalEligible": false
+        }
+      ]
+    },
+    {
+      "id": "normal-02",
+      "profile": "world-atlas-preview-v1",
+      "zeroCount": 0,
+      "coverage": {
+        "status": "completed",
+        "realizedWaterCoveragePercent": 65.021598,
+        "absoluteWaterCoverageErrorBasisPoints": 2.1598,
+        "totalCoveragePass": true
+      },
+      "shared": { "checked": 130562, "exact": true, "mismatches": 0, "firstMismatch": null },
+      "policies": [
+        {
+          "policy": "Z",
+          "status": "extracted",
+          "failures": [
+            "original-components-merged-or-ambiguous",
+            "extracted-role-certification-unproved"
+          ],
+          "proposalEligible": false
+        },
+        {
+          "policy": "H",
+          "status": "extracted",
+          "failures": [
+            "original-components-merged-or-ambiguous",
+            "extracted-role-certification-unproved"
+          ],
+          "proposalEligible": false
+        }
+      ]
+    },
+    {
+      "id": "normal-02",
+      "profile": "world-atlas-full-v1",
+      "zeroCount": 0,
+      "coverage": {
+        "status": "completed",
+        "realizedWaterCoveragePercent": 64.999748,
+        "absoluteWaterCoverageErrorBasisPoints": 0.0252,
+        "totalCoveragePass": true
+      },
+      "shared": { "checked": 130562, "exact": true, "mismatches": 0, "firstMismatch": null },
+      "policies": [
+        {
+          "policy": "Z",
+          "status": "extracted",
+          "failures": ["extracted-role-certification-unproved"],
+          "proposalEligible": false
+        },
+        {
+          "policy": "H",
+          "status": "extracted",
+          "failures": ["extracted-role-certification-unproved"],
+          "proposalEligible": false
+        }
+      ]
+    },
+    {
+      "id": "normal-03",
+      "profile": "world-atlas-preview-v1",
+      "zeroCount": 0,
+      "coverage": {
+        "status": "completed",
+        "realizedWaterCoveragePercent": 64.997663,
+        "absoluteWaterCoverageErrorBasisPoints": 0.2337,
+        "totalCoveragePass": true
+      },
+      "shared": { "checked": 130562, "exact": true, "mismatches": 0, "firstMismatch": null },
+      "policies": [
+        {
+          "policy": "Z",
+          "status": "extracted",
+          "failures": [
+            "original-components-merged-or-ambiguous",
+            "extracted-role-certification-unproved"
+          ],
+          "proposalEligible": false
+        },
+        {
+          "policy": "H",
+          "status": "extracted",
+          "failures": [
+            "original-components-merged-or-ambiguous",
+            "extracted-role-certification-unproved"
+          ],
+          "proposalEligible": false
+        }
+      ]
+    },
+    {
+      "id": "normal-03",
+      "profile": "world-atlas-full-v1",
+      "zeroCount": 0,
+      "coverage": {
+        "status": "completed",
+        "realizedWaterCoveragePercent": 64.999663,
+        "absoluteWaterCoverageErrorBasisPoints": 0.0337,
+        "totalCoveragePass": true
+      },
+      "shared": { "checked": 130562, "exact": true, "mismatches": 0, "firstMismatch": null },
+      "policies": [
+        {
+          "policy": "Z",
+          "status": "extracted",
+          "failures": ["extracted-role-certification-unproved"],
+          "proposalEligible": false
+        },
+        {
+          "policy": "H",
+          "status": "extracted",
+          "failures": ["extracted-role-certification-unproved"],
+          "proposalEligible": false
+        }
+      ]
+    },
+    {
+      "id": "normal-04",
+      "profile": "world-atlas-preview-v1",
+      "zeroCount": 0,
+      "coverage": {
+        "status": "completed",
+        "realizedWaterCoveragePercent": 64.989623,
+        "absoluteWaterCoverageErrorBasisPoints": 1.0377,
+        "totalCoveragePass": true
+      },
+      "shared": { "checked": 130562, "exact": true, "mismatches": 0, "firstMismatch": null },
+      "policies": [
+        {
+          "policy": "Z",
+          "status": "extracted",
+          "failures": [
+            "original-components-merged-or-ambiguous",
+            "extracted-role-certification-unproved"
+          ],
+          "proposalEligible": false
+        },
+        {
+          "policy": "H",
+          "status": "extracted",
+          "failures": [
+            "original-components-merged-or-ambiguous",
+            "extracted-role-certification-unproved"
+          ],
+          "proposalEligible": false
+        }
+      ]
+    },
+    {
+      "id": "normal-04",
+      "profile": "world-atlas-full-v1",
+      "zeroCount": 0,
+      "coverage": {
+        "status": "completed",
+        "realizedWaterCoveragePercent": 64.999865,
+        "absoluteWaterCoverageErrorBasisPoints": 0.0135,
+        "totalCoveragePass": true
+      },
+      "shared": { "checked": 130562, "exact": true, "mismatches": 0, "firstMismatch": null },
+      "policies": [
+        {
+          "policy": "Z",
+          "status": "extracted",
+          "failures": [
+            "original-components-merged-or-ambiguous",
+            "extracted-role-certification-unproved"
+          ],
+          "proposalEligible": false
+        },
+        {
+          "policy": "H",
+          "status": "extracted",
+          "failures": [
+            "original-components-merged-or-ambiguous",
+            "extracted-role-certification-unproved"
+          ],
+          "proposalEligible": false
+        }
+      ]
+    },
+    {
+      "id": "connected-majority",
+      "profile": "world-atlas-preview-v1",
+      "zeroCount": 0,
+      "coverage": {
+        "status": "completed",
+        "realizedWaterCoveragePercent": 59.99697,
+        "absoluteWaterCoverageErrorBasisPoints": 0.303,
+        "totalCoveragePass": true
+      },
+      "shared": { "checked": 130562, "exact": true, "mismatches": 0, "firstMismatch": null },
+      "policies": [
+        {
+          "policy": "Z",
+          "status": "extracted",
+          "failures": [
+            "original-components-merged-or-ambiguous",
+            "extracted-role-certification-unproved"
+          ],
+          "proposalEligible": false
+        },
+        {
+          "policy": "H",
+          "status": "extracted",
+          "failures": [
+            "original-components-merged-or-ambiguous",
+            "extracted-role-certification-unproved"
+          ],
+          "proposalEligible": false
+        }
+      ]
+    },
+    {
+      "id": "connected-majority",
+      "profile": "world-atlas-full-v1",
+      "zeroCount": 2,
+      "coverage": {
+        "status": "completed",
+        "realizedWaterCoveragePercent": 60.001787,
+        "absoluteWaterCoverageErrorBasisPoints": 0.1787,
+        "totalCoveragePass": true
+      },
+      "shared": { "checked": 130562, "exact": true, "mismatches": 0, "firstMismatch": null },
+      "policies": [
+        {
+          "policy": "Z",
+          "status": "no-proposal",
+          "failures": ["zero-anchor-degeneracy", "extracted-role-certification-unproved"],
+          "proposalEligible": false
+        },
+        {
+          "policy": "H",
+          "status": "extracted",
+          "failures": ["extracted-role-certification-unproved"],
+          "proposalEligible": false
+        }
+      ]
+    },
+    {
+      "id": "fragmented-islands",
+      "profile": "world-atlas-preview-v1",
+      "zeroCount": 0,
+      "coverage": {
+        "status": "completed",
+        "realizedWaterCoveragePercent": 70.001279,
+        "absoluteWaterCoverageErrorBasisPoints": 0.1279,
+        "totalCoveragePass": true
+      },
+      "shared": { "checked": 130562, "exact": true, "mismatches": 0, "firstMismatch": null },
+      "policies": [
+        {
+          "policy": "Z",
+          "status": "extracted",
+          "failures": [
+            "original-component-without-land-anchor",
+            "original-components-merged-or-ambiguous",
+            "extracted-role-certification-unproved"
+          ],
+          "proposalEligible": false
+        },
+        {
+          "policy": "H",
+          "status": "extracted",
+          "failures": [
+            "original-component-without-land-anchor",
+            "original-components-merged-or-ambiguous",
+            "extracted-role-certification-unproved"
+          ],
+          "proposalEligible": false
+        }
+      ]
+    },
+    {
+      "id": "fragmented-islands",
+      "profile": "world-atlas-full-v1",
+      "zeroCount": 0,
+      "coverage": {
+        "status": "completed",
+        "realizedWaterCoveragePercent": 70.000536,
+        "absoluteWaterCoverageErrorBasisPoints": 0.0536,
+        "totalCoveragePass": true
+      },
+      "shared": { "checked": 130562, "exact": true, "mismatches": 0, "firstMismatch": null },
+      "policies": [
+        {
+          "policy": "Z",
+          "status": "extracted",
+          "failures": [
+            "original-components-merged-or-ambiguous",
+            "extracted-role-certification-unproved"
+          ],
+          "proposalEligible": false
+        },
+        {
+          "policy": "H",
+          "status": "extracted",
+          "failures": [
+            "original-components-merged-or-ambiguous",
+            "extracted-role-certification-unproved"
+          ],
+          "proposalEligible": false
+        }
+      ]
+    }
+  ]
+}

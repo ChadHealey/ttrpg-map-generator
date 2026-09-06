@@ -1,0 +1,32 @@
+{
+  "complete": true,
+  "artifacts": {
+    "synthetics.json": "6f172f4bd4be8319d63978b11d2acc14d0b591d8bc8800b54b687120f03e6f51",
+    "normal-01-preview.json": "32cae522ef90170baa3a630eef12777bf36512063a5654fc82c8d6023479db18",
+    "normal-01-preview-rings.json.gz": "e47256440fe9f31313527310816dca0498f451795445cbee57eac1ca5e0eaf81",
+    "normal-01-full.json": "ca8273fcd855e61c3d75bab86ee676ccac734d0e2058516a0c0c231495e5a087",
+    "normal-01-full-rings.json.gz": "4f4a31912e6d8cc7a00baffe3f50264c551adc3c56869cda06cc7bf222fabc34",
+    "normal-02-preview.json": "2ada12a1ffc45ca6d8ad4cb27b3cab7abc35ec5bd8d52e0b87215696e3c64784",
+    "normal-02-preview-rings.json.gz": "0e2c17d10719e5a455ce23c57d1fecf48a12867427c7749e015b9fa62e5d5332",
+    "normal-02-full.json": "71651fbc121a073daa0545f4198e814c6d47e3f2c97af4225e3f59764fac9375",
+    "normal-02-full-rings.json.gz": "013e9483f1c1ec0dbe75a36dd312e222eac91f2060d3f7696a637ea2f9c1da8c",
+    "normal-03-preview.json": "9b5f064590aedbc1e0ed5a8daf271112c257d77fab91f26918ec606fcf657ff5",
+    "normal-03-preview-rings.json.gz": "621419b27f5d008c0cd5b6c89605b6fc2aa8144a112ffbe64f9d4c5f56506fc4",
+    "normal-03-full.json": "0f8b18ae09c8a03ae01244e41b88c7543e0911c513441029a809c4221f0b2e86",
+    "normal-03-full-rings.json.gz": "6705b7c9495bc89920aa663842447f655d355bfe58d6bae2cf33e6cc9ccf655b",
+    "normal-04-preview.json": "dc0fa1aacd37b86fc9438c42a11bb6ee8864db0916773e085c67e59bd3a1a61a",
+    "normal-04-preview-rings.json.gz": "5a87628bcfead419b1eb338a1b7f68880f70b9a8abcdff8d887e56f803962585",
+    "normal-04-full.json": "5a99799e1a1500d1d97207a176a663f1bdd29ff252fc0ac029a2657ce0b9cbb0",
+    "normal-04-full-rings.json.gz": "ad7ad3ed65f96967961f757940d2fba471a2ceef81ba1d5d0b09fe79e9566b4e",
+    "connected-majority-preview.json": "5a69c6686c4b9eb2efb406c2f590a194abbf3947392e16bcca658961fca02151",
+    "connected-majority-preview-rings.json.gz": "10bbee086a1115f9454ae45e21c372bd24fab7443169a42ecb3cc9e0abc0630e",
+    "connected-majority-full.json": "bea1229975af3edec080d4445356d7386f82ad0aa52bfd13b17b9e294769b866",
+    "connected-majority-full-rings.json.gz": "74a95d4fb2024448112158743b858c56e96ad80a3038d0371c94383641753e89",
+    "fragmented-islands-preview.json": "02d32827c809a72d30b98c162e6faf2629084f110fc6082ededb14f1fb69c291",
+    "fragmented-islands-preview-rings.json.gz": "98c5d77113907124996aa93ad0a39fadf1670a391a754130a28711d267b1585e",
+    "fragmented-islands-full.json": "18d001949649f1cc70c04880758209f84143f80e415ed930c4d2faeb8420e488",
+    "fragmented-islands-full-rings.json.gz": "5c3814c2cd21c5e62918481f70b64ec202b30772130cd5db49698088bad0fdec",
+    "decision.json": "a4121a3048b5b5810acd33792e0a99576bad4af150f581aa2c919b3a88810044"
+  },
+  "sourceManifestSha256": "cd1ffe9c03da9284f49c45faedac3d487adf023241635779c64eb0dd278ff478"
+}

@@ -1,0 +1,2460 @@
+{
+  "input": {
+    "id": "connected-majority",
+    "seed": "1085102592571150095",
+    "controls": {
+      "worldCircumferenceKm": 40000,
+      "targetWaterCoveragePercent": 60,
+      "continentCountIntent": 6,
+      "continentDistribution": "balanced",
+      "fragmentationPercent": 55,
+      "islandAbundancePercent": 55,
+      "archipelagoAbundancePercent": 50,
+      "oceanConnectivity": "connectedMajority",
+      "polarCharacter": "neutral"
+    }
+  },
+  "checkpointRowId": "connected-majority",
+  "profileId": "world-atlas-full-v1",
+  "uniqueAnchorCount": 2095106,
+  "normalizedFloat64LESha256": "d0fe1feb52bbdc6c545f1aaf283509b4d97459cef2196e005b7aec0344b65061",
+  "ticksInt32LESha256": "444e2de8718d6f818d1dc43ff23c5fce4365f3b7294fcbb33e15438a3f90fe6f",
+  "landUint8Sha256": "35f977b6a2e20cda8c712a8729f8e6c8a46011bef1577c76673e1efdde94077f",
+  "ownerInt8Sha256": "fc798c71dac970b06aa55b7a774555330ba0c51f20d2cfd0bca9fb8a9c6f1106",
+  "originalComponents": [
+    { "ownerId": "owner-0", "id": "owner-0/body", "kind": "body", "landAnchorCount": 117518 },
+    { "ownerId": "owner-0", "id": "owner-0/island-0", "kind": "island", "landAnchorCount": 670 },
+    { "ownerId": "owner-0", "id": "owner-0/island-1", "kind": "island", "landAnchorCount": 221 },
+    { "ownerId": "owner-0", "id": "owner-0/island-2", "kind": "island", "landAnchorCount": 130 },
+    {
+      "ownerId": "owner-0",
+      "id": "owner-0/archipelago-0",
+      "kind": "archipelago",
+      "landAnchorCount": 296
+    },
+    {
+      "ownerId": "owner-0",
+      "id": "owner-0/archipelago-1",
+      "kind": "archipelago",
+      "landAnchorCount": 109
+    },
+    {
+      "ownerId": "owner-0",
+      "id": "owner-0/archipelago-2",
+      "kind": "archipelago",
+      "landAnchorCount": 51
+    },
+    {
+      "ownerId": "owner-0",
+      "id": "owner-0/archipelago-3",
+      "kind": "archipelago",
+      "landAnchorCount": 34
+    },
+    { "ownerId": "owner-1", "id": "owner-1/body", "kind": "body", "landAnchorCount": 101361 },
+    { "ownerId": "owner-1", "id": "owner-1/island-0", "kind": "island", "landAnchorCount": 906 },
+    { "ownerId": "owner-1", "id": "owner-1/island-1", "kind": "island", "landAnchorCount": 214 },
+    { "ownerId": "owner-1", "id": "owner-1/island-2", "kind": "island", "landAnchorCount": 119 },
+    {
+      "ownerId": "owner-1",
+      "id": "owner-1/archipelago-0",
+      "kind": "archipelago",
+      "landAnchorCount": 311
+    },
+    {
+      "ownerId": "owner-1",
+      "id": "owner-1/archipelago-1",
+      "kind": "archipelago",
+      "landAnchorCount": 104
+    },
+    {
+      "ownerId": "owner-1",
+      "id": "owner-1/archipelago-2",
+      "kind": "archipelago",
+      "landAnchorCount": 49
+    },
+    {
+      "ownerId": "owner-1",
+      "id": "owner-1/archipelago-3",
+      "kind": "archipelago",
+      "landAnchorCount": 44
+    },
+    { "ownerId": "owner-2", "id": "owner-2/body", "kind": "body", "landAnchorCount": 125223 },
+    { "ownerId": "owner-2", "id": "owner-2/island-0", "kind": "island", "landAnchorCount": 661 },
+    { "ownerId": "owner-2", "id": "owner-2/island-1", "kind": "island", "landAnchorCount": 306 },
+    { "ownerId": "owner-2", "id": "owner-2/island-2", "kind": "island", "landAnchorCount": 158 },
+    {
+      "ownerId": "owner-2",
+      "id": "owner-2/archipelago-0",
+      "kind": "archipelago",
+      "landAnchorCount": 361
+    },
+    {
+      "ownerId": "owner-2",
+      "id": "owner-2/archipelago-1",
+      "kind": "archipelago",
+      "landAnchorCount": 125
+    },
+    {
+      "ownerId": "owner-2",
+      "id": "owner-2/archipelago-2",
+      "kind": "archipelago",
+      "landAnchorCount": 62
+    },
+    {
+      "ownerId": "owner-2",
+      "id": "owner-2/archipelago-3",
+      "kind": "archipelago",
+      "landAnchorCount": 30
+    },
+    { "ownerId": "owner-3", "id": "owner-3/body", "kind": "body", "landAnchorCount": 110548 },
+    { "ownerId": "owner-3", "id": "owner-3/island-0", "kind": "island", "landAnchorCount": 1174 },
+    { "ownerId": "owner-3", "id": "owner-3/island-1", "kind": "island", "landAnchorCount": 234 },
+    { "ownerId": "owner-3", "id": "owner-3/island-2", "kind": "island", "landAnchorCount": 118 },
+    {
+      "ownerId": "owner-3",
+      "id": "owner-3/archipelago-0",
+      "kind": "archipelago",
+      "landAnchorCount": 390
+    },
+    {
+      "ownerId": "owner-3",
+      "id": "owner-3/archipelago-1",
+      "kind": "archipelago",
+      "landAnchorCount": 163
+    },
+    {
+      "ownerId": "owner-3",
+      "id": "owner-3/archipelago-2",
+      "kind": "archipelago",
+      "landAnchorCount": 72
+    },
+    {
+      "ownerId": "owner-3",
+      "id": "owner-3/archipelago-3",
+      "kind": "archipelago",
+      "landAnchorCount": 64
+    },
+    { "ownerId": "owner-4", "id": "owner-4/body", "kind": "body", "landAnchorCount": 97279 },
+    { "ownerId": "owner-4", "id": "owner-4/island-0", "kind": "island", "landAnchorCount": 1142 },
+    { "ownerId": "owner-4", "id": "owner-4/island-1", "kind": "island", "landAnchorCount": 352 },
+    { "ownerId": "owner-4", "id": "owner-4/island-2", "kind": "island", "landAnchorCount": 214 },
+    {
+      "ownerId": "owner-4",
+      "id": "owner-4/archipelago-0",
+      "kind": "archipelago",
+      "landAnchorCount": 273
+    },
+    {
+      "ownerId": "owner-4",
+      "id": "owner-4/archipelago-1",
+      "kind": "archipelago",
+      "landAnchorCount": 94
+    },
+    {
+      "ownerId": "owner-4",
+      "id": "owner-4/archipelago-2",
+      "kind": "archipelago",
+      "landAnchorCount": 49
+    },
+    {
+      "ownerId": "owner-4",
+      "id": "owner-4/archipelago-3",
+      "kind": "archipelago",
+      "landAnchorCount": 33
+    },
+    { "ownerId": "owner-5", "id": "owner-5/body", "kind": "body", "landAnchorCount": 134002 },
+    { "ownerId": "owner-5", "id": "owner-5/island-0", "kind": "island", "landAnchorCount": 1354 },
+    { "ownerId": "owner-5", "id": "owner-5/island-1", "kind": "island", "landAnchorCount": 226 },
+    { "ownerId": "owner-5", "id": "owner-5/island-2", "kind": "island", "landAnchorCount": 120 },
+    {
+      "ownerId": "owner-5",
+      "id": "owner-5/archipelago-0",
+      "kind": "archipelago",
+      "landAnchorCount": 283
+    },
+    {
+      "ownerId": "owner-5",
+      "id": "owner-5/archipelago-1",
+      "kind": "archipelago",
+      "landAnchorCount": 105
+    },
+    {
+      "ownerId": "owner-5",
+      "id": "owner-5/archipelago-2",
+      "kind": "archipelago",
+      "landAnchorCount": 51
+    },
+    {
+      "ownerId": "owner-5",
+      "id": "owner-5/archipelago-3",
+      "kind": "archipelago",
+      "landAnchorCount": 36
+    }
+  ],
+  "componentInt32LESha256": "404b1b348abe8f802c440a1dba6ee21c115fce8590c10ee01e1b6faee45f88a9",
+  "zeroCount": 2,
+  "saturationNegative": 0,
+  "saturationPositive": 0,
+  "ambiguousOwners": 0,
+  "owners": [
+    {
+      "id": "owner-0",
+      "quota": 0.06666666666666667,
+      "weightedPercent": 6.666368,
+      "unroundedWeightedPercent": 6.666368070617937,
+      "errorPercentagePoints": 0.0002986666666666693,
+      "previewLimitPercentagePoints": 0.041666666666666664
+    },
+    {
+      "id": "owner-1",
+      "quota": 0.06666666666666667,
+      "weightedPercent": 6.665883,
+      "unroundedWeightedPercent": 6.665882582513623,
+      "errorPercentagePoints": 0.0007836666666669601,
+      "previewLimitPercentagePoints": 0.041666666666666664
+    },
+    {
+      "id": "owner-2",
+      "quota": 0.06666666666666667,
+      "weightedPercent": 6.666593,
+      "unroundedWeightedPercent": 6.666592772654384,
+      "errorPercentagePoints": 0.00007366666666719368,
+      "previewLimitPercentagePoints": 0.041666666666666664
+    },
+    {
+      "id": "owner-3",
+      "quota": 0.06666666666666667,
+      "weightedPercent": 6.667561,
+      "unroundedWeightedPercent": 6.667560525011906,
+      "errorPercentagePoints": 0.0008943333333331083,
+      "previewLimitPercentagePoints": 0.041666666666666664
+    },
+    {
+      "id": "owner-4",
+      "quota": 0.06666666666666667,
+      "weightedPercent": 6.666566,
+      "unroundedWeightedPercent": 6.6665659067998995,
+      "errorPercentagePoints": 0.0001006666666665268,
+      "previewLimitPercentagePoints": 0.041666666666666664
+    },
+    {
+      "id": "owner-5",
+      "quota": 0.06666666666666667,
+      "weightedPercent": 6.665243,
+      "unroundedWeightedPercent": 6.66524315980483,
+      "errorPercentagePoints": 0.001423666666666712,
+      "previewLimitPercentagePoints": 0.041666666666666664
+    }
+  ],
+  "classification": {
+    "status": "completed",
+    "realizedWaterCoveragePercent": 60.001787,
+    "absoluteWaterCoverageErrorBasisPoints": 0.1787,
+    "totalCoveragePass": true
+  },
+  "policies": [
+    {
+      "policy": "Z",
+      "attempted": true,
+      "versions": { "policy": "Z1", "geometry": 2, "extraction": 2 },
+      "extractionStatus": "no-proposal",
+      "proposalEligible": false,
+      "failures": ["zero-anchor-degeneracy", "extracted-role-certification-unproved"],
+      "preflight": { "zeros": 2, "firstZero": 687854, "ties": 0, "firstTie": null },
+      "rawSegmentCount": null,
+      "rawRingCount": null,
+      "rawVertexCount": null,
+      "simplifiedVertexCount": null,
+      "componentCount": null,
+      "ringDataSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "ownerProvenance": [],
+      "displacements": [],
+      "roleDiagnostics": [],
+      "errorLedger": {
+        "normalizationRealZeroSetDisplacement": 0,
+        "realArithmeticGlobalUpperLipschitz": 1.0768101170912323,
+        "scalarInverseClippingThreshold": 0.02,
+        "conditionalCellScalarResidualUpper": 0.006607255504882729,
+        "scalarResidualWithinInverseDomain": true,
+        "conditionalScalarAngularTransfer": 0.00711475957386446,
+        "rawToOriginalCoordinateAffineAngularUpper": 0.006135924614460644,
+        "rawToOriginalShortestGeodesicAngularUpper": 0.01227184776600321,
+        "originalToRawAngularUpper": null,
+        "coastDistanceTargetRad": 0.01,
+        "rawOneSidedBoundWithinTarget": true,
+        "genericSimplificationCoordinateAffineAngularUpper": 0.0010846882173238198,
+        "conditionalSimplifiedOneSidedAngularUpper": 0.007220612831784464,
+        "conditionalSimplifiedBoundWithinTarget": true,
+        "quantizerFieldErrorUpper": 2.9802322387695312e-8,
+        "contourFieldBias": 0,
+        "conservativeCellPathDiameterRad": 0.006135923151542565,
+        "planetCoordinateRoundingAngularSumUpper": 1.4629180792671596e-9,
+        "simplificationCoordinateToleranceTicks": 524288,
+        "owners": [
+          {
+            "id": "owner-0",
+            "primary": true,
+            "originalAngularRadius": 0.6835340021040521,
+            "guardRadius": 0.7335340021040522,
+            "localCosine": 0.9404763898768675,
+            "convexEvaluationCap": true,
+            "certifiedContainmentMargin": 0.050000000000000044,
+            "positiveHalfTickBelowGuardMargin": true,
+            "strictBandConditions": {
+              "clippingInactive": true,
+              "guardInactive": true,
+              "otherOwnersExcluded": true
+            },
+            "interiorDiskSlack": 0.030175968069430986,
+            "conditionalInteriorDiskAfterDelta": 0.17295535523764652,
+            "roleMargins": [
+              {
+                "id": "owner-0/lobe-0",
+                "kind": "lobe",
+                "originalShare": 0.24469979216237184,
+                "shareSlack": 0.16469979216237185,
+                "diskSlack": 0.05293070039023495,
+                "widthLowerSlack": 0.40231849571833267,
+                "widthUpperSlack": null,
+                "extentLowerSlack": null,
+                "extentUpperSlack": null,
+                "conditionalDiskSlackAfterDelta": 0.04571008755845049,
+                "conditionalWidthLowerSlackAfterDelta": 0.3878772700547637,
+                "conditionalWidthUpperSlackAfterDelta": null,
+                "conditionalExtentUpperSlackAfterDelta": null,
+                "conditionalExtentLowerSlackAfterDelta": null,
+                "conditionalRatioAfterDelta": null
+              },
+              {
+                "id": "owner-0/lobe-1",
+                "kind": "lobe",
+                "originalShare": 0.08662147765256874,
+                "shareSlack": 0.006621477652568736,
+                "diskSlack": 0.019190227279289707,
+                "widthLowerSlack": 0.17120074485325623,
+                "widthUpperSlack": null,
+                "extentLowerSlack": null,
+                "extentUpperSlack": null,
+                "conditionalDiskSlackAfterDelta": 0.011969614447505245,
+                "conditionalWidthLowerSlackAfterDelta": 0.1567595191896873,
+                "conditionalWidthUpperSlackAfterDelta": null,
+                "conditionalExtentUpperSlackAfterDelta": null,
+                "conditionalExtentLowerSlackAfterDelta": null,
+                "conditionalRatioAfterDelta": null
+              },
+              {
+                "id": "owner-0/peninsula-2",
+                "kind": "peninsula",
+                "originalShare": 0.07516651876418992,
+                "shareSlack": 0.02516651876418992,
+                "diskSlack": 0.02756598783760377,
+                "widthLowerSlack": 0.010087983846282664,
+                "widthUpperSlack": 0.058512178648150656,
+                "extentLowerSlack": 0.04023462409257447,
+                "extentUpperSlack": 0.17936581029447463,
+                "conditionalDiskSlackAfterDelta": 0.02034537500581931,
+                "conditionalWidthLowerSlackAfterDelta": -0.00435324181728626,
+                "conditionalWidthUpperSlackAfterDelta": 0.04407095298458173,
+                "conditionalExtentUpperSlackAfterDelta": 0.1649245846309057,
+                "conditionalExtentLowerSlackAfterDelta": 0.02579339842900555,
+                "conditionalRatioAfterDelta": 1.9476861428782004
+              }
+            ],
+            "bayOriginalSlacks": {
+              "openingLower": 0.03805563888259769,
+              "openingUpper": 0.1219438188023326,
+              "depth": 0.03827609098705376,
+              "removedShare": 0.010063508491244516
+            },
+            "roleCorrespondence": "not-established; perturbed metric rows are conditional, not new certificates"
+          },
+          {
+            "id": "owner-1",
+            "primary": true,
+            "originalAngularRadius": 0.6851033770882325,
+            "guardRadius": 0.7351033770882326,
+            "localCosine": 0.9402094172326915,
+            "convexEvaluationCap": true,
+            "certifiedContainmentMargin": 0.050000000000000044,
+            "positiveHalfTickBelowGuardMargin": true,
+            "strictBandConditions": {
+              "clippingInactive": true,
+              "guardInactive": true,
+              "otherOwnersExcluded": true
+            },
+            "interiorDiskSlack": 0.1266881440563071,
+            "conditionalInteriorDiskAfterDelta": 0.2694675312245226,
+            "roleMargins": [
+              {
+                "id": "owner-1/lobe-0",
+                "kind": "lobe",
+                "originalShare": 0.13496562138546425,
+                "shareSlack": 0.05496562138546425,
+                "diskSlack": 0.04942590561071129,
+                "widthLowerSlack": 0.21642816527884132,
+                "widthUpperSlack": null,
+                "extentLowerSlack": null,
+                "extentUpperSlack": null,
+                "conditionalDiskSlackAfterDelta": 0.04220529277892683,
+                "conditionalWidthLowerSlackAfterDelta": 0.2019869396152724,
+                "conditionalWidthUpperSlackAfterDelta": null,
+                "conditionalExtentUpperSlackAfterDelta": null,
+                "conditionalExtentLowerSlackAfterDelta": null,
+                "conditionalRatioAfterDelta": null
+              },
+              {
+                "id": "owner-1/lobe-1",
+                "kind": "lobe",
+                "originalShare": 0.0847295355740262,
+                "shareSlack": 0.004729535574026195,
+                "diskSlack": 0.00143894655833237,
+                "widthLowerSlack": 0.24236961289850487,
+                "widthUpperSlack": null,
+                "extentLowerSlack": null,
+                "extentUpperSlack": null,
+                "conditionalDiskSlackAfterDelta": -0.005781666273452092,
+                "conditionalWidthLowerSlackAfterDelta": 0.22792838723493594,
+                "conditionalWidthUpperSlackAfterDelta": null,
+                "conditionalExtentUpperSlackAfterDelta": null,
+                "conditionalExtentLowerSlackAfterDelta": null,
+                "conditionalRatioAfterDelta": null
+              },
+              {
+                "id": "owner-1/peninsula-2",
+                "kind": "peninsula",
+                "originalShare": 0.0836929869213555,
+                "shareSlack": 0.0336929869213555,
+                "diskSlack": 0.04555064050302043,
+                "widthLowerSlack": 0.0067307050850628075,
+                "widthUpperSlack": 0.062239662316970076,
+                "extentLowerSlack": 0.05549012324999747,
+                "extentUpperSlack": 0.16201893734632516,
+                "conditionalDiskSlackAfterDelta": 0.038330027671235965,
+                "conditionalWidthLowerSlackAfterDelta": -0.0077105205785061165,
+                "conditionalWidthUpperSlackAfterDelta": 0.04779843665340115,
+                "conditionalExtentUpperSlackAfterDelta": 0.14757771168275624,
+                "conditionalExtentLowerSlackAfterDelta": 0.041048897586428545,
+                "conditionalRatioAfterDelta": 2.1483559622231896
+              }
+            ],
+            "bayOriginalSlacks": {
+              "openingLower": 0.033568099826379844,
+              "openingUpper": 0.1269024883813902,
+              "depth": 0.016806729121757374,
+              "removedShare": 0.005568347078291534
+            },
+            "roleCorrespondence": "not-established; perturbed metric rows are conditional, not new certificates"
+          },
+          {
+            "id": "owner-2",
+            "primary": true,
+            "originalAngularRadius": 0.6869129475980008,
+            "guardRadius": 0.7369129475980009,
+            "localCosine": 0.9399008653723862,
+            "convexEvaluationCap": true,
+            "certifiedContainmentMargin": 0.050000000000000044,
+            "positiveHalfTickBelowGuardMargin": true,
+            "strictBandConditions": {
+              "clippingInactive": true,
+              "guardInactive": true,
+              "otherOwnersExcluded": true
+            },
+            "interiorDiskSlack": 0.078480555613504,
+            "conditionalInteriorDiskAfterDelta": 0.22125994278171954,
+            "roleMargins": [
+              {
+                "id": "owner-2/lobe-0",
+                "kind": "lobe",
+                "originalShare": 0.2378826465013918,
+                "shareSlack": 0.15788264650139178,
+                "diskSlack": 0.032828801462575524,
+                "widthLowerSlack": 0.5341366662992392,
+                "widthUpperSlack": null,
+                "extentLowerSlack": null,
+                "extentUpperSlack": null,
+                "conditionalDiskSlackAfterDelta": 0.025608188630791062,
+                "conditionalWidthLowerSlackAfterDelta": 0.5196954406356702,
+                "conditionalWidthUpperSlackAfterDelta": null,
+                "conditionalExtentUpperSlackAfterDelta": null,
+                "conditionalExtentLowerSlackAfterDelta": null,
+                "conditionalRatioAfterDelta": null
+              },
+              {
+                "id": "owner-2/lobe-1",
+                "kind": "lobe",
+                "originalShare": 0.10150664732870428,
+                "shareSlack": 0.021506647328704276,
+                "diskSlack": 0.015703409400461152,
+                "widthLowerSlack": 0.19766786038371262,
+                "widthUpperSlack": null,
+                "extentLowerSlack": null,
+                "extentUpperSlack": null,
+                "conditionalDiskSlackAfterDelta": 0.00848279656867669,
+                "conditionalWidthLowerSlackAfterDelta": 0.1832266347201437,
+                "conditionalWidthUpperSlackAfterDelta": null,
+                "conditionalExtentUpperSlackAfterDelta": null,
+                "conditionalExtentLowerSlackAfterDelta": null,
+                "conditionalRatioAfterDelta": null
+              },
+              {
+                "id": "owner-2/peninsula-2",
+                "kind": "peninsula",
+                "originalShare": 0.05814568925377845,
+                "shareSlack": 0.008145689253778447,
+                "diskSlack": 0.014725377885623545,
+                "widthLowerSlack": 0.006141953528611327,
+                "widthUpperSlack": 0.06284051846306729,
+                "extentLowerSlack": 0.037183842304177234,
+                "extentUpperSlack": 0.18248042211163468,
+                "conditionalDiskSlackAfterDelta": 0.0075047650538390825,
+                "conditionalWidthLowerSlackAfterDelta": -0.008299272134957597,
+                "conditionalWidthUpperSlackAfterDelta": 0.04839929279949837,
+                "conditionalExtentUpperSlackAfterDelta": 0.16803919644806575,
+                "conditionalExtentLowerSlackAfterDelta": 0.02274261664060831,
+                "conditionalRatioAfterDelta": 1.995888935008533
+              }
+            ],
+            "bayOriginalSlacks": {
+              "openingLower": 0.030884888225072377,
+              "openingUpper": 0.1298169840931291,
+              "depth": 0.014853016739640318,
+              "removedShare": 0.003207156294501714
+            },
+            "roleCorrespondence": "not-established; perturbed metric rows are conditional, not new certificates"
+          },
+          {
+            "id": "owner-3",
+            "primary": true,
+            "originalAngularRadius": 0.6899773411772723,
+            "guardRadius": 0.7399773411772723,
+            "localCosine": 0.9393765976174084,
+            "convexEvaluationCap": true,
+            "certifiedContainmentMargin": 0.050000000000000044,
+            "positiveHalfTickBelowGuardMargin": true,
+            "strictBandConditions": {
+              "clippingInactive": true,
+              "guardInactive": true,
+              "otherOwnersExcluded": true
+            },
+            "interiorDiskSlack": 0.029418447674050607,
+            "conditionalInteriorDiskAfterDelta": 0.17219783484226614,
+            "roleMargins": [
+              {
+                "id": "owner-3/lobe-0",
+                "kind": "lobe",
+                "originalShare": 0.2504694022201944,
+                "shareSlack": 0.1704694022201944,
+                "diskSlack": 0.062301259341322135,
+                "widthLowerSlack": 0.40020657974161133,
+                "widthUpperSlack": null,
+                "extentLowerSlack": null,
+                "extentUpperSlack": null,
+                "conditionalDiskSlackAfterDelta": 0.05508064650953767,
+                "conditionalWidthLowerSlackAfterDelta": 0.38576535407804236,
+                "conditionalWidthUpperSlackAfterDelta": null,
+                "conditionalExtentUpperSlackAfterDelta": null,
+                "conditionalExtentLowerSlackAfterDelta": null,
+                "conditionalRatioAfterDelta": null
+              },
+              {
+                "id": "owner-3/lobe-1",
+                "kind": "lobe",
+                "originalShare": 0.08495793464578923,
+                "shareSlack": 0.004957934645789225,
+                "diskSlack": 0.018899328282101988,
+                "widthLowerSlack": 0.170060525667681,
+                "widthUpperSlack": null,
+                "extentLowerSlack": null,
+                "extentUpperSlack": null,
+                "conditionalDiskSlackAfterDelta": 0.011678715450317526,
+                "conditionalWidthLowerSlackAfterDelta": 0.1556193000041121,
+                "conditionalWidthUpperSlackAfterDelta": null,
+                "conditionalExtentUpperSlackAfterDelta": null,
+                "conditionalExtentLowerSlackAfterDelta": null,
+                "conditionalRatioAfterDelta": null
+              },
+              {
+                "id": "owner-3/peninsula-2",
+                "kind": "peninsula",
+                "originalShare": 0.07470770776310853,
+                "shareSlack": 0.02470770776310853,
+                "diskSlack": 0.027281917689553133,
+                "widthLowerSlack": 0.00970922364880944,
+                "widthUpperSlack": 0.058705777985497865,
+                "extentLowerSlack": 0.03922459689873406,
+                "extentUpperSlack": 0.1798820751947196,
+                "conditionalDiskSlackAfterDelta": 0.02006130485776867,
+                "conditionalWidthLowerSlackAfterDelta": -0.004732002014759484,
+                "conditionalWidthUpperSlackAfterDelta": 0.04426455232192894,
+                "conditionalExtentUpperSlackAfterDelta": 0.16544084953115068,
+                "conditionalExtentLowerSlackAfterDelta": 0.024783371235165136,
+                "conditionalRatioAfterDelta": 1.9422171490658684
+              }
+            ],
+            "bayOriginalSlacks": {
+              "openingLower": 0.03739111979416801,
+              "openingUpper": 0.12228348082627727,
+              "depth": 0.03748451494939803,
+              "removedShare": 0.009880003006972171
+            },
+            "roleCorrespondence": "not-established; perturbed metric rows are conditional, not new certificates"
+          },
+          {
+            "id": "owner-4",
+            "primary": true,
+            "originalAngularRadius": 0.6868917295744417,
+            "guardRadius": 0.7368917295744417,
+            "localCosine": 0.9399044877395453,
+            "convexEvaluationCap": true,
+            "certifiedContainmentMargin": 0.050000000000000044,
+            "positiveHalfTickBelowGuardMargin": true,
+            "strictBandConditions": {
+              "clippingInactive": true,
+              "guardInactive": true,
+              "otherOwnersExcluded": true
+            },
+            "interiorDiskSlack": 0.12657538124182469,
+            "conditionalInteriorDiskAfterDelta": 0.2693547684100402,
+            "roleMargins": [
+              {
+                "id": "owner-4/lobe-0",
+                "kind": "lobe",
+                "originalShare": 0.13556461096864714,
+                "shareSlack": 0.055564610968647135,
+                "diskSlack": 0.04938538509982364,
+                "widthLowerSlack": 0.21629920662531946,
+                "widthUpperSlack": null,
+                "extentLowerSlack": null,
+                "extentUpperSlack": null,
+                "conditionalDiskSlackAfterDelta": 0.04216477226803918,
+                "conditionalWidthLowerSlackAfterDelta": 0.20185798096175053,
+                "conditionalWidthUpperSlackAfterDelta": null,
+                "conditionalExtentUpperSlackAfterDelta": null,
+                "conditionalExtentLowerSlackAfterDelta": null,
+                "conditionalRatioAfterDelta": null
+              },
+              {
+                "id": "owner-4/lobe-1",
+                "kind": "lobe",
+                "originalShare": 0.08426834277072807,
+                "shareSlack": 0.004268342770728073,
+                "diskSlack": 0.0014179828831004312,
+                "widthLowerSlack": 0.242230081942887,
+                "widthUpperSlack": null,
+                "extentLowerSlack": null,
+                "extentUpperSlack": null,
+                "conditionalDiskSlackAfterDelta": -0.005802629948684031,
+                "conditionalWidthLowerSlackAfterDelta": 0.22778885627931808,
+                "conditionalWidthUpperSlackAfterDelta": null,
+                "conditionalExtentUpperSlackAfterDelta": null,
+                "conditionalExtentLowerSlackAfterDelta": null,
+                "conditionalRatioAfterDelta": null
+              },
+              {
+                "id": "owner-4/peninsula-2",
+                "kind": "peninsula",
+                "originalShare": 0.08367820728209081,
+                "shareSlack": 0.03367820728209081,
+                "diskSlack": 0.04551577478428356,
+                "widthLowerSlack": 0.0066953584371412245,
+                "widthUpperSlack": 0.06221707523665257,
+                "extentLowerSlack": 0.055385999578676515,
+                "extentUpperSlack": 0.16195240063480354,
+                "conditionalDiskSlackAfterDelta": 0.038295161952499095,
+                "conditionalWidthLowerSlackAfterDelta": -0.0077458672264276995,
+                "conditionalWidthUpperSlackAfterDelta": 0.047775849573083645,
+                "conditionalExtentUpperSlackAfterDelta": 0.14751117497123462,
+                "conditionalExtentLowerSlackAfterDelta": 0.04094477391510759,
+                "conditionalRatioAfterDelta": 2.1469957491192404
+              }
+            ],
+            "bayOriginalSlacks": {
+              "openingLower": 0.03350551394576612,
+              "openingUpper": 0.1268624949905417,
+              "depth": 0.01673874790660798,
+              "removedShare": 0.005563831873848308
+            },
+            "roleCorrespondence": "not-established; perturbed metric rows are conditional, not new certificates"
+          },
+          {
+            "id": "owner-5",
+            "primary": true,
+            "originalAngularRadius": 0.684390468105132,
+            "guardRadius": 0.7343904681051321,
+            "localCosine": 0.940330764795331,
+            "convexEvaluationCap": true,
+            "certifiedContainmentMargin": 0.050000000000000044,
+            "positiveHalfTickBelowGuardMargin": true,
+            "strictBandConditions": {
+              "clippingInactive": true,
+              "guardInactive": true,
+              "otherOwnersExcluded": true
+            },
+            "interiorDiskSlack": 0.07777711542094046,
+            "conditionalInteriorDiskAfterDelta": 0.220556502589156,
+            "roleMargins": [
+              {
+                "id": "owner-5/lobe-0",
+                "kind": "lobe",
+                "originalShare": 0.24352216387938408,
+                "shareSlack": 0.16352216387938406,
+                "diskSlack": 0.03257379022958004,
+                "widthLowerSlack": 0.541736217824614,
+                "widthUpperSlack": null,
+                "extentLowerSlack": null,
+                "extentUpperSlack": null,
+                "conditionalDiskSlackAfterDelta": 0.02535317739779558,
+                "conditionalWidthLowerSlackAfterDelta": 0.527294992161045,
+                "conditionalWidthUpperSlackAfterDelta": null,
+                "conditionalExtentUpperSlackAfterDelta": null,
+                "conditionalExtentLowerSlackAfterDelta": null,
+                "conditionalRatioAfterDelta": null
+              },
+              {
+                "id": "owner-5/lobe-1",
+                "kind": "lobe",
+                "originalShare": 0.10051823416637154,
+                "shareSlack": 0.020518234166371538,
+                "diskSlack": 0.01550112339415971,
+                "widthLowerSlack": 0.19675140805533878,
+                "widthUpperSlack": null,
+                "extentLowerSlack": null,
+                "extentUpperSlack": null,
+                "conditionalDiskSlackAfterDelta": 0.008280510562375248,
+                "conditionalWidthLowerSlackAfterDelta": 0.18231018239176985,
+                "conditionalWidthUpperSlackAfterDelta": null,
+                "conditionalExtentUpperSlackAfterDelta": null,
+                "conditionalExtentLowerSlackAfterDelta": null,
+                "conditionalRatioAfterDelta": null
+              },
+              {
+                "id": "owner-5/peninsula-2",
+                "kind": "peninsula",
+                "originalShare": 0.05773620083838061,
+                "shareSlack": 0.007736200838380607,
+                "diskSlack": 0.014556890766855603,
+                "widthLowerSlack": 0.005876741846299438,
+                "widthUpperSlack": 0.06322681692056455,
+                "extentLowerSlack": 0.036453606651277115,
+                "extentUpperSlack": 0.18354405891634173,
+                "conditionalDiskSlackAfterDelta": 0.007336277935071141,
+                "conditionalWidthLowerSlackAfterDelta": -0.008564483817269486,
+                "conditionalWidthUpperSlackAfterDelta": 0.04878559125699562,
+                "conditionalExtentUpperSlackAfterDelta": 0.1691028332527728,
+                "conditionalExtentLowerSlackAfterDelta": 0.02201238098770819,
+                "conditionalRatioAfterDelta": 1.9962555526481927
+              }
+            ],
+            "bayOriginalSlacks": {
+              "openingLower": 0.030420347623168753,
+              "openingUpper": 0.13049361838166756,
+              "depth": 0.014345471414706074,
+              "removedShare": 0.0030437209344796115
+            },
+            "roleCorrespondence": "not-established; perturbed metric rows are conditional, not new certificates"
+          }
+        ],
+        "extractedRoleCertification": "unproved",
+        "limitingObligations": [
+          "original-to-extracted-direction-unproved",
+          "fixed-role-cut-correspondence-unproved",
+          "binary64-residual-unbounded"
+        ],
+        "boundScope": "Real arithmetic; coordinate-affine and shortest-geodesic interpretations are separately labelled. Metric perturbations require two-way role correspondence, which this ledger does not establish."
+      }
+    },
+    {
+      "policy": "H",
+      "attempted": true,
+      "versions": { "policy": "H1", "geometry": 1, "extraction": 1 },
+      "extractionStatus": "extracted",
+      "proposalEligible": false,
+      "failures": ["extracted-role-certification-unproved"],
+      "preflight": null,
+      "rawSegmentCount": 14760,
+      "rawRingCount": 48,
+      "rawVertexCount": 14760,
+      "simplifiedVertexCount": 10666,
+      "componentCount": 48,
+      "ringDataSha256": "c2edd2214f95e2926f9106d4c97b1aa97449a77669a70d8e3e39cfcd8ce5ae53",
+      "ownerProvenance": [
+        {
+          "rawIndex": 0,
+          "originalComponentIndices": [16],
+          "rawComponentKey": "private-anchor-component:af97ae461da254aefe14c65956f9d7c82e5fe12853adf8b3950790a008d2e37c",
+          "rawPredecessorKey": "private-raw-ring:0:e32b7933905f9b24a2ca920b166e86fc83c3a5697e870dba98ef3d2b7f3e795c",
+          "ownerIndices": [2],
+          "ownerIds": ["owner-2"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 1,
+          "originalComponentIndices": [1],
+          "rawComponentKey": "private-anchor-component:a9e6bf4b4fa077f8763746ba7165432712406ab5519bb8e015af4994fa39e126",
+          "rawPredecessorKey": "private-raw-ring:1:def21ea7ce2cd807224e6b820da415082e9f5f5b71ea42d2948f842dbc558431",
+          "ownerIndices": [0],
+          "ownerIds": ["owner-0"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 2,
+          "originalComponentIndices": [0],
+          "rawComponentKey": "private-anchor-component:625ab63bc7de8ef34df197f00dd78c1ab15e676b1b43a3137c41cc7b4b3f82ee",
+          "rawPredecessorKey": "private-raw-ring:2:8d6a2e03601f45f08556598006b132e444656d770682847e1fe374d928847288",
+          "ownerIndices": [0],
+          "ownerIds": ["owner-0"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 3,
+          "originalComponentIndices": [17],
+          "rawComponentKey": "private-anchor-component:f6d5d4c259685bfcf90abf81d743655d40650f2e576d4a3e1f21f8a0fc46e1c8",
+          "rawPredecessorKey": "private-raw-ring:3:eb53a24640be5ef99932de2703f3ea6256800fad943b23faa9cbb14f72da2d10",
+          "ownerIndices": [2],
+          "ownerIds": ["owner-2"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 4,
+          "originalComponentIndices": [23],
+          "rawComponentKey": "private-anchor-component:093e2c7d9a4954ee5150374c9c69ab69dd44555da787fc90dd7d8dd48e9bdf7e",
+          "rawPredecessorKey": "private-raw-ring:4:d15d4e7b94c5ef148147270eb5d31cde28af008c9b5f92cd2bb534234a39a8ef",
+          "ownerIndices": [2],
+          "ownerIds": ["owner-2"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 5,
+          "originalComponentIndices": [5],
+          "rawComponentKey": "private-anchor-component:72a6c0ecff8db9806f6c1c3f1b6b76dc16f797f9ad2820c5ffaf04eed43ae665",
+          "rawPredecessorKey": "private-raw-ring:5:2905173878862225d54140e6457ff4166a68e2ba4bff5ec382af539758f24f47",
+          "ownerIndices": [0],
+          "ownerIds": ["owner-0"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 6,
+          "originalComponentIndices": [32],
+          "rawComponentKey": "private-anchor-component:72a67cf8c9fd4f6f7874137016c8194b6a12f39e3814172c09ce5e64211b4322",
+          "rawPredecessorKey": "private-raw-ring:6:3c3174588ce1ea6266d36e0510fe9c9f174ea8e1b93255bc61cda68e3b8f1daa",
+          "ownerIndices": [4],
+          "ownerIds": ["owner-4"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 7,
+          "originalComponentIndices": [39],
+          "rawComponentKey": "private-anchor-component:5e4b0e64d34a5a8e4a4189dd761a7eb78721c55ef170a72ef4be103c3312a02b",
+          "rawPredecessorKey": "private-raw-ring:7:e54aece6363b0d803ba660d459f909e31c8df93073412ecbd5ff461032ac7aa6",
+          "ownerIndices": [4],
+          "ownerIds": ["owner-4"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 8,
+          "originalComponentIndices": [35],
+          "rawComponentKey": "private-anchor-component:d593a8e05c498c092c66055a27fb67f5ae0b15e960078109125d89a00144a8fc",
+          "rawPredecessorKey": "private-raw-ring:8:407305bc278fe1d63cf7fc1ad7573cb241bb8452a3c79bccee511f5ed7279ec8",
+          "ownerIndices": [4],
+          "ownerIds": ["owner-4"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 9,
+          "originalComponentIndices": [36],
+          "rawComponentKey": "private-anchor-component:01db993b458764229626bc6028a7e24859727a3fe78974cebe5ee3649e937f35",
+          "rawPredecessorKey": "private-raw-ring:9:ed5804dfe1352e4730f5031761a84e6bc6086ea985643fa02f4d1f5534f86a86",
+          "ownerIndices": [4],
+          "ownerIds": ["owner-4"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 10,
+          "originalComponentIndices": [38],
+          "rawComponentKey": "private-anchor-component:708125e9b7fd07dd2f197fed6d45a48c7174c6f7c583fffa9794fcdd1d546b44",
+          "rawPredecessorKey": "private-raw-ring:10:f4dd10fe168cedf9caaf71c81e0ad1f55d407746956c43e4f137212c0184917e",
+          "ownerIndices": [4],
+          "ownerIds": ["owner-4"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 11,
+          "originalComponentIndices": [34],
+          "rawComponentKey": "private-anchor-component:f5c65bd2db07a502e8d0f2b39edee8962aa44f23c8aa84b39526a69c52c6529d",
+          "rawPredecessorKey": "private-raw-ring:11:29225a54175dcbb6997717783af8e6471b257487aa34be687b3bb0a82008e1d0",
+          "ownerIndices": [4],
+          "ownerIds": ["owner-4"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 12,
+          "originalComponentIndices": [33],
+          "rawComponentKey": "private-anchor-component:0fa8a06d96bb936563a998261494b03cd4da42d2396c6ff832dc6dbfbc5b6845",
+          "rawPredecessorKey": "private-raw-ring:12:54f4b9c9b5ce971f592f145377cfe7b57b0a529b0d9e531daf94510009fe230c",
+          "ownerIndices": [4],
+          "ownerIds": ["owner-4"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 13,
+          "originalComponentIndices": [40],
+          "rawComponentKey": "private-anchor-component:91b903483b4891ca4b4c0ae6cf07e2c707879b25c50a611b0af95b9638f7fe0b",
+          "rawPredecessorKey": "private-raw-ring:13:e5d519798ba5aaa133e088c244919f4306d5f1feb8cc8a9f938ff837cf5c7add",
+          "ownerIndices": [5],
+          "ownerIds": ["owner-5"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 14,
+          "originalComponentIndices": [37],
+          "rawComponentKey": "private-anchor-component:2ad56cbbcb7721b0d9a700519eef036278475a025f101d817e3454fed0e846b4",
+          "rawPredecessorKey": "private-raw-ring:14:db81ace001287a70a6c36641a7256ad0098537c72da8ac6ef79d0a902e3f20e1",
+          "ownerIndices": [4],
+          "ownerIds": ["owner-4"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 15,
+          "originalComponentIndices": [30],
+          "rawComponentKey": "private-anchor-component:d26d974d450b8c49849e880da3e98cb1885439691d3b870c6cbe182b4b42c44d",
+          "rawPredecessorKey": "private-raw-ring:15:bf320fdfe60b8002c6d5edfb51300d1440a4f3333d7e6bfa6cbc7a764839626b",
+          "ownerIndices": [3],
+          "ownerIds": ["owner-3"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 16,
+          "originalComponentIndices": [28],
+          "rawComponentKey": "private-anchor-component:810ff9e9b8a3b16da90a6976a5f357da23f741039446647091704cbb0935d200",
+          "rawPredecessorKey": "private-raw-ring:16:04a4785ece411552eb1d4d396fca7dede995757c73a3978688f4c9e243b15410",
+          "ownerIndices": [3],
+          "ownerIds": ["owner-3"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 17,
+          "originalComponentIndices": [26],
+          "rawComponentKey": "private-anchor-component:91c507f7e8fdc14205491dfab40aa1476cb6c52131884a831aa1c463ea50e94e",
+          "rawPredecessorKey": "private-raw-ring:17:82f8e302fe81233586e1acbbe31b697f41333080ecacb0f0f291faa51df4d642",
+          "ownerIndices": [3],
+          "ownerIds": ["owner-3"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 18,
+          "originalComponentIndices": [24],
+          "rawComponentKey": "private-anchor-component:c1da2d610c32a3594940706478b3dbc2ad8aa8ded3a9ffe4dd89e8765c39f86f",
+          "rawPredecessorKey": "private-raw-ring:18:c781f6324adea2ab4f67f727c11da2084e35e2426341b144a142419c9f8e1f05",
+          "ownerIndices": [3],
+          "ownerIds": ["owner-3"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 19,
+          "originalComponentIndices": [27],
+          "rawComponentKey": "private-anchor-component:298656b52dfe596f536bd61d51c4e04a561369123633d5eb9e55792933d974fa",
+          "rawPredecessorKey": "private-raw-ring:19:fe1f173ba8af04962f0d92f2e00aa62444573e78446ad00c3fe8f6b1332c94d1",
+          "ownerIndices": [3],
+          "ownerIds": ["owner-3"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 20,
+          "originalComponentIndices": [43],
+          "rawComponentKey": "private-anchor-component:048b74db5f379fce9f1ec0f362235317f59096aaf8c6d64b2716b0ecec36f000",
+          "rawPredecessorKey": "private-raw-ring:20:3fed9dba2e7ffde34ef41f171188923073d5b0247e43b49720984c7eee3debc3",
+          "ownerIndices": [5],
+          "ownerIds": ["owner-5"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 21,
+          "originalComponentIndices": [44],
+          "rawComponentKey": "private-anchor-component:99b991cfa5148a07f8c197ff7e0b2444448422b62da940c4e766c7c375d767fb",
+          "rawPredecessorKey": "private-raw-ring:21:3716e14468f5a5eaf23e701ed672861064dd39e4291e9a2b719c2a9821035edf",
+          "ownerIndices": [5],
+          "ownerIds": ["owner-5"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 22,
+          "originalComponentIndices": [42],
+          "rawComponentKey": "private-anchor-component:edf8254e4d9c07a4ac8aebcdac0039070acdbeaae3db065c04eedd4d497d40f3",
+          "rawPredecessorKey": "private-raw-ring:22:7e8c4aabbf71c1501ec46dbe9dcdd5a6426603911da446c300775d59cbb6feab",
+          "ownerIndices": [5],
+          "ownerIds": ["owner-5"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 23,
+          "originalComponentIndices": [47],
+          "rawComponentKey": "private-anchor-component:bcfed08991e41082e3c72fbad14aea57bcf6fcb591a8d6e1d9f894566252bd6e",
+          "rawPredecessorKey": "private-raw-ring:23:c1022a9ef756a3ea0b6bc8c196fa91d61b7c678b2b6e2e0384bbfe6b7805a80b",
+          "ownerIndices": [5],
+          "ownerIds": ["owner-5"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 24,
+          "originalComponentIndices": [46],
+          "rawComponentKey": "private-anchor-component:c65862cbc38310440b7a94287d2758bfcf4c05ae2e68637814d300c0f710cacf",
+          "rawPredecessorKey": "private-raw-ring:24:c772934af39f15367daa9ea2aecfba78fb453789a961737f3fb5d79aadcae40e",
+          "ownerIndices": [5],
+          "ownerIds": ["owner-5"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 25,
+          "originalComponentIndices": [45],
+          "rawComponentKey": "private-anchor-component:57e2d75f09a44560fc437b784e52142d0139180c4c2d5a835923ac55c95523a6",
+          "rawPredecessorKey": "private-raw-ring:25:e776099cd6bf021b25fafb1ff7f360c937cb0e9f7b60f0ff9d1c981becc447d0",
+          "ownerIndices": [5],
+          "ownerIds": ["owner-5"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 26,
+          "originalComponentIndices": [41],
+          "rawComponentKey": "private-anchor-component:200609c8986f83301b20f547beeaf123bb70fe7d2ec89a6d8285326097054431",
+          "rawPredecessorKey": "private-raw-ring:26:f4281e6be4df441ae261f6a41eed615d52de67c2710e8016b2a0f5671297966f",
+          "ownerIndices": [5],
+          "ownerIds": ["owner-5"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 27,
+          "originalComponentIndices": [29],
+          "rawComponentKey": "private-anchor-component:c6cc2a8a72ac9511319e65e96c6965cf1e50eada4908f24764b24d6a6b2cabfb",
+          "rawPredecessorKey": "private-raw-ring:27:f999c35718c9a98fa92ea8aeeb19ab5c7fc05e0f8784dcdf1a2aef0138b2f078",
+          "ownerIndices": [3],
+          "ownerIds": ["owner-3"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 28,
+          "originalComponentIndices": [31],
+          "rawComponentKey": "private-anchor-component:764b94f16e6bca15a7ea2ba02a4b2228d38cc373ee450efa36d50fc0589c6c1b",
+          "rawPredecessorKey": "private-raw-ring:28:f776c320acce000200427ee0de71ad068e4638264582b0e1a7eed8abcdb84069",
+          "ownerIndices": [3],
+          "ownerIds": ["owner-3"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 29,
+          "originalComponentIndices": [25],
+          "rawComponentKey": "private-anchor-component:7df473ace5ed1feba4e7e97019566238455728cfd9fd8fe8b2d9cb09d36d1bb4",
+          "rawPredecessorKey": "private-raw-ring:29:2925a4233f65c0a7bae15c51a60cd7ace9687c940000e58dd08cfdb55f29dd18",
+          "ownerIndices": [3],
+          "ownerIds": ["owner-3"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 30,
+          "originalComponentIndices": [8],
+          "rawComponentKey": "private-anchor-component:b47ef83cc4e2908566be56dfb068dfb871685c6a8ead7c629fff0cdd0acf4b7c",
+          "rawPredecessorKey": "private-raw-ring:30:ebea3df37aabcb699ce1f79f6f641f6fe6e620b9c3a47354c4bf5ddc51fb559e",
+          "ownerIndices": [1],
+          "ownerIds": ["owner-1"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 31,
+          "originalComponentIndices": [15],
+          "rawComponentKey": "private-anchor-component:c3eba86cd2ed211678fc293aa7077b9b048ba64d4580bfd0ac23faeacb1ea619",
+          "rawPredecessorKey": "private-raw-ring:31:ac3b60ff6ead430bbe5748d667d1acfdf8f5e3075f5f42ee1ae142934970bc07",
+          "ownerIndices": [1],
+          "ownerIds": ["owner-1"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 32,
+          "originalComponentIndices": [14],
+          "rawComponentKey": "private-anchor-component:cf060df71474372e4a53f1a7d98d2e13d607edf52bd841b1ad8e9c25ab451a4b",
+          "rawPredecessorKey": "private-raw-ring:32:2f707087d9a75a6914bb3115af4b102c4afb01c3ef18056a92718c1ab33e0521",
+          "ownerIndices": [1],
+          "ownerIds": ["owner-1"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 33,
+          "originalComponentIndices": [10],
+          "rawComponentKey": "private-anchor-component:200a7b6ac290a029a9dfbf129be0f37de4093f23a8e8ac6f2821560dbcae2d5b",
+          "rawPredecessorKey": "private-raw-ring:33:088a6891aada8957ec98f87aa18dbf4ac3dfbd74cf68d337d0d1209c3fceef6e",
+          "ownerIndices": [1],
+          "ownerIds": ["owner-1"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 34,
+          "originalComponentIndices": [11],
+          "rawComponentKey": "private-anchor-component:c46d76aacc432840c4a6c7d8fbb05cd79634ff7543f44a31a46273b188210a4c",
+          "rawPredecessorKey": "private-raw-ring:34:df52fb00a5252c7e3d7cc4c3f4d2b253190d1ff4fa03f20752668291066aedda",
+          "ownerIndices": [1],
+          "ownerIds": ["owner-1"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 35,
+          "originalComponentIndices": [9],
+          "rawComponentKey": "private-anchor-component:c438b88df8de6c3a13adddff31df305ecc4c5c66c0b5b7b3c8a29b9704ca93d3",
+          "rawPredecessorKey": "private-raw-ring:35:6d9a0c208e11a68c52c936ffc6239a3efc99830f4112af82b5092f1d67370ea4",
+          "ownerIndices": [1],
+          "ownerIds": ["owner-1"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 36,
+          "originalComponentIndices": [12],
+          "rawComponentKey": "private-anchor-component:9760ba5ee65479e06e3a937205832927ab6f8990436d21c91b5b9f3e04067f13",
+          "rawPredecessorKey": "private-raw-ring:36:294351c798f918941a774d12ab94aa3b242a08bfa34282999322d69e31ed1969",
+          "ownerIndices": [1],
+          "ownerIds": ["owner-1"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 37,
+          "originalComponentIndices": [13],
+          "rawComponentKey": "private-anchor-component:eaed0d605a2f881cc5f068b9efc37fd76ff2afd410a12dcf345fd4e493d29d86",
+          "rawPredecessorKey": "private-raw-ring:37:0c714a7707bdf2d9b79f267fd49efbbbe5e015ce884b1fdd33b1fae64dfc17ee",
+          "ownerIndices": [1],
+          "ownerIds": ["owner-1"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 38,
+          "originalComponentIndices": [4],
+          "rawComponentKey": "private-anchor-component:8f6a8944d7569d340254761a0a69b428b988489529b3e261cef00c5bfa987cec",
+          "rawPredecessorKey": "private-raw-ring:38:834c35f0af0cd1f7a8afa8ee0d97304721b30b920f81e1d98689e54eae5c12eb",
+          "ownerIndices": [0],
+          "ownerIds": ["owner-0"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 39,
+          "originalComponentIndices": [3],
+          "rawComponentKey": "private-anchor-component:dfbf529a1be7ee141fc1857aacddbb7cf8ab5744e73a54765fea4a2fe8f54c08",
+          "rawPredecessorKey": "private-raw-ring:39:906862e9a4d41580176421e8f4e79abaf9b04651a5fa64019d12a94db91ec57f",
+          "ownerIndices": [0],
+          "ownerIds": ["owner-0"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 40,
+          "originalComponentIndices": [7],
+          "rawComponentKey": "private-anchor-component:14e14896a3cd4586caa2aa7ee95285ed379c6107d028816dbe725dbfc2396f43",
+          "rawPredecessorKey": "private-raw-ring:40:12346358cb7f06d98eb2ac0436ce6a864c01460de9d1bd03c1c57f9a7db605b3",
+          "ownerIndices": [0],
+          "ownerIds": ["owner-0"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 41,
+          "originalComponentIndices": [21],
+          "rawComponentKey": "private-anchor-component:2c023d3b31b927e41f284bb575ef8d7097a964081ba5e81be024e1cc3fee8e16",
+          "rawPredecessorKey": "private-raw-ring:41:5f47b63d66f2b22fb85f56f5913d0a6541387618322ec3e5ea629260c751c16c",
+          "ownerIndices": [2],
+          "ownerIds": ["owner-2"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 42,
+          "originalComponentIndices": [20],
+          "rawComponentKey": "private-anchor-component:98273f762f5fdc387a89ed4c732bf610c78d5299114c6c4c4ff22d0ce0553b12",
+          "rawPredecessorKey": "private-raw-ring:42:facd57d189ee9907a601267a8e764c61cb5951545f37cfa5cb42d6ca1cea58d2",
+          "ownerIndices": [2],
+          "ownerIds": ["owner-2"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 43,
+          "originalComponentIndices": [18],
+          "rawComponentKey": "private-anchor-component:d0d8dd55f722ede2fbb3a737a5f348feeddc21a63f1435a18282478ae746c0d9",
+          "rawPredecessorKey": "private-raw-ring:43:29e7e1d3c8263aff7cddaf44db538603aed9797e4446415b6e3a49ed9e793006",
+          "ownerIndices": [2],
+          "ownerIds": ["owner-2"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 44,
+          "originalComponentIndices": [19],
+          "rawComponentKey": "private-anchor-component:edf75f83e5b62787bfba942ae39bc7c1043b4f9fef180933614c7c6edf46e181",
+          "rawPredecessorKey": "private-raw-ring:44:3200368f6f019cc2f3abb887634e956d6b56ddbdafe0476d7ce68b910bcc5109",
+          "ownerIndices": [2],
+          "ownerIds": ["owner-2"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 45,
+          "originalComponentIndices": [22],
+          "rawComponentKey": "private-anchor-component:044847037efb123a1bf9fbff316e407e38bf5aece181042057971ac0e598b046",
+          "rawPredecessorKey": "private-raw-ring:45:bf8f3b4e6cace1bed4cadc61e70e1b5493a24a01c12f426fdf42ba0db15df11b",
+          "ownerIndices": [2],
+          "ownerIds": ["owner-2"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 46,
+          "originalComponentIndices": [2],
+          "rawComponentKey": "private-anchor-component:82c78f7d4ed5038efad3a40f77c20d9e3e77cfebdc4e1b0f454583f6bfcdfe0f",
+          "rawPredecessorKey": "private-raw-ring:46:6e9ae3c79bf7beeadd8b2d9a177499f5fd25df623fe8369d3e192273264fe611",
+          "ownerIndices": [0],
+          "ownerIds": ["owner-0"],
+          "unambiguous": true
+        },
+        {
+          "rawIndex": 47,
+          "originalComponentIndices": [6],
+          "rawComponentKey": "private-anchor-component:f5dd607809ee9638da6b32172d5dd84b2a97858b0b8d3c7dbc9a1764904df7ca",
+          "rawPredecessorKey": "private-raw-ring:47:cf3162a6f420a52dc2719bf5f166e76f0a79638c8458ca0b800654d4d719dc00",
+          "ownerIndices": [0],
+          "ownerIds": ["owner-0"],
+          "unambiguous": true
+        }
+      ],
+      "displacements": [
+        {
+          "valid": true,
+          "removedVertices": 559,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 244805.98555582773,
+          "coordinateAffineAngularUpper": 0.0005064738618140251,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 35,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 120530.75815159891,
+          "coordinateAffineAngularUpper": 0.00024936350477628,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 561,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 240754.75100900044,
+          "coordinateAffineAngularUpper": 0.0004980923494037491,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 33,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 193753.58124258727,
+          "coordinateAffineAngularUpper": 0.000400852635647064,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 6,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 45541.83414590881,
+          "coordinateAffineAngularUpper": 0.00009422052553822117,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 15,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 143508.71402035665,
+          "coordinateAffineAngularUpper": 0.0002969021056769839,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 529,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 194475.10936853715,
+          "coordinateAffineAngularUpper": 0.0004023453897377271,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 8,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 155270.14807518575,
+          "coordinateAffineAngularUpper": 0.00032123508476119764,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 19,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 256051.44022291305,
+          "coordinateAffineAngularUpper": 0.0005297393421909107,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 22,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 59215.82166712347,
+          "coordinateAffineAngularUpper": 0.00012251034553809623,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 8,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 44727.649705316384,
+          "coordinateAffineAngularUpper": 0.00009253607678211957,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 25,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 19104.725264946712,
+          "coordinateAffineAngularUpper": 0.000039525357036774425,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 44,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 1698.5281353927776,
+          "coordinateAffineAngularUpper": 0.000003514048491007888,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 566,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 256146.45286031556,
+          "coordinateAffineAngularUpper": 0.0005299359118020545,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 14,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 165474.58457604723,
+          "coordinateAffineAngularUpper": 0.0003423468249439093,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 12,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 346686.5073338997,
+          "coordinateAffineAngularUpper": 0.0007172522918896275,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 30,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 96959.75057064809,
+          "coordinateAffineAngularUpper": 0.00020059795188644123,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 21,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 245784.99797811965,
+          "coordinateAffineAngularUpper": 0.0005084993196522241,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 528,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 175054.83764370848,
+          "coordinateAffineAngularUpper": 0.00036216720538647626,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 14,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 236364.91865005184,
+          "coordinateAffineAngularUpper": 0.0004890103192299164,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 14,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 141285.45552554153,
+          "coordinateAffineAngularUpper": 0.00029230245378071497,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 20,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 62497.57674037462,
+          "coordinateAffineAngularUpper": 0.00012929989834132305,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 21,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 2296.1594127718886,
+          "coordinateAffineAngularUpper": 0.000004750475044500063,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 8,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 429465.99975914025,
+          "coordinateAffineAngularUpper": 0.0008885130113218954,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 8,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 1329.1855356141878,
+          "coordinateAffineAngularUpper": 0.00000274992349456398,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 13,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 1910.4739427484053,
+          "coordinateAffineAngularUpper": 0.000003952538633734469,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 61,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 320866.9303510109,
+          "coordinateAffineAngularUpper": 0.0006638347219097219,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 18,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 102846.930592035,
+          "coordinateAffineAngularUpper": 0.00021277781257839407,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 12,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 460753.56762972346,
+          "coordinateAffineAngularUpper": 0.0009532431905705925,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 46,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 492089.25601230405,
+          "coordinateAffineAngularUpper": 0.001018072925316221,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 530,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 338704.40739152196,
+          "coordinateAffineAngularUpper": 0.0007007382962288491,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 9,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 78565.79288970766,
+          "coordinateAffineAngularUpper": 0.00016254308668550387,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 8,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 77852.0221463608,
+          "coordinateAffineAngularUpper": 0.00016106638167760973,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 21,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 327823.0126115569,
+          "coordinateAffineAngularUpper": 0.0006782260115573002,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 14,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 65791.19537041365,
+          "coordinateAffineAngularUpper": 0.0001361139954031699,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 46,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 99006.90003856014,
+          "coordinateAffineAngularUpper": 0.00020483325558773695,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 24,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 229388.58499748702,
+          "coordinateAffineAngularUpper": 0.0004745771319110065,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 11,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 2721.640530229953,
+          "coordinateAffineAngularUpper": 0.000005630743818152206,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 21,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 89269.2735229415,
+          "coordinateAffineAngularUpper": 0.00018468728858831766,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 15,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 5461.004612875692,
+          "coordinateAffineAngularUpper": 0.000011298155514406761,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 7,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 16619.175894230793,
+          "coordinateAffineAngularUpper": 0.00003438305716343727,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 14,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 520428.3856393289,
+          "coordinateAffineAngularUpper": 0.0010767031438137765,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 22,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 45921.80636914421,
+          "coordinateAffineAngularUpper": 0.00009500664193503698,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 25,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 367398.1706867144,
+          "coordinateAffineAngularUpper": 0.0007601022087291808,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 16,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 56022.147016192444,
+          "coordinateAffineAngularUpper": 0.00011590302043465946,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 11,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 435547.8976840164,
+          "coordinateAffineAngularUpper": 0.0009010957197151437,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 21,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 233336.52984715468,
+          "coordinateAffineAngularUpper": 0.0004827449504784327,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        },
+        {
+          "valid": true,
+          "removedVertices": 9,
+          "maxConsecutiveRemoved": 1,
+          "rawVertexToPredecessorChordMaxTicks": 398859.29158659326,
+          "coordinateAffineAngularUpper": 0.0008251914481241294,
+          "scope": "Raw vertices to their actual replacement chord in unwrapped tick coordinates; no original-field or role correspondence claimed."
+        }
+      ],
+      "roleDiagnostics": [
+        {
+          "ownerId": "owner-0",
+          "sourceLandAnchorCount": 1746,
+          "originalRoleMembershipCounts": {
+            "owner-0/peninsula-2": 192,
+            "owner-0/island-0": 83,
+            "owner-0/island-1": 47,
+            "owner-0/archipelago-2": 22,
+            "interior": 539,
+            "owner-0/archipelago-0": 58,
+            "owner-0/archipelago-3": 17,
+            "owner-0/island-2": 34,
+            "owner-0/lobe-0": 421,
+            "owner-0/archipelago-1": 32,
+            "owner-0/lobe-1": 301
+          },
+          "multipleOrMissingRoleMemberships": 0,
+          "witnesses": [
+            {
+              "id": "interior",
+              "raw": { "chartChordBoundaryDistance": 0.27942311862372415, "evenOddLand": true },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.27942311862372415,
+                "evenOddLand": true
+              }
+            },
+            {
+              "id": "owner-0/lobe-0",
+              "raw": { "chartChordBoundaryDistance": 0.25432835804586723, "evenOddLand": true },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.25432835804586723,
+                "evenOddLand": true
+              }
+            },
+            {
+              "id": "owner-0/lobe-1",
+              "raw": { "chartChordBoundaryDistance": 0.1462683602810194, "evenOddLand": true },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.1462683602810194,
+                "evenOddLand": true
+              }
+            },
+            {
+              "id": "owner-0/peninsula-2",
+              "raw": { "chartChordBoundaryDistance": 0.11627367896652922, "evenOddLand": true },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.11627355237614607,
+                "evenOddLand": true
+              }
+            },
+            {
+              "id": "bay-water",
+              "raw": { "chartChordBoundaryDistance": 0.020523514497304905, "evenOddLand": false },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.020523514497304905,
+                "evenOddLand": false
+              }
+            }
+          ],
+          "scope": "Fixed original witnesses and role memberships only. Distances use vertex-mapped LAEA chords, omit internal collar cuts and do not certify extracted roles."
+        },
+        {
+          "ownerId": "owner-1",
+          "sourceLandAnchorCount": 1691,
+          "originalRoleMembershipCounts": {
+            "interior": 630,
+            "owner-1/lobe-1": 210,
+            "owner-1/island-0": 106,
+            "owner-1/lobe-0": 321,
+            "owner-1/archipelago-3": 20,
+            "owner-1/archipelago-0": 61,
+            "owner-1/archipelago-1": 32,
+            "owner-1/peninsula-2": 211,
+            "owner-1/island-1": 46,
+            "owner-1/archipelago-2": 21,
+            "owner-1/island-2": 33
+          },
+          "multipleOrMissingRoleMemberships": 0,
+          "witnesses": [
+            {
+              "id": "interior",
+              "raw": { "chartChordBoundaryDistance": 0.29480433853502147, "evenOddLand": true },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.29480433853502147,
+                "evenOddLand": true
+              }
+            },
+            {
+              "id": "owner-1/lobe-0",
+              "raw": { "chartChordBoundaryDistance": 0.18137488255516723, "evenOddLand": true },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.18137488255516723,
+                "evenOddLand": true
+              }
+            },
+            {
+              "id": "owner-1/lobe-1",
+              "raw": { "chartChordBoundaryDistance": 0.13950968379178957, "evenOddLand": true },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.13950969170091607,
+                "evenOddLand": true
+              }
+            },
+            {
+              "id": "owner-1/peninsula-2",
+              "raw": { "chartChordBoundaryDistance": 0.1234722141165795, "evenOddLand": true },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.1234722141165795,
+                "evenOddLand": true
+              }
+            },
+            {
+              "id": "bay-water",
+              "raw": { "chartChordBoundaryDistance": 0.019585424878968236, "evenOddLand": false },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.019585424878968236,
+                "evenOddLand": false
+              }
+            }
+          ],
+          "scope": "Fixed original witnesses and role memberships only. Distances use vertex-mapped LAEA chords, omit internal collar cuts and do not certify extracted roles."
+        },
+        {
+          "ownerId": "owner-2",
+          "sourceLandAnchorCount": 1808,
+          "originalRoleMembershipCounts": {
+            "owner-2/lobe-0": 504,
+            "interior": 561,
+            "owner-2/island-1": 56,
+            "owner-2/archipelago-1": 35,
+            "owner-2/island-2": 39,
+            "owner-2/archipelago-0": 61,
+            "owner-2/archipelago-2": 25,
+            "owner-2/lobe-1": 231,
+            "owner-2/peninsula-2": 190,
+            "owner-2/archipelago-3": 16,
+            "owner-2/island-0": 90
+          },
+          "multipleOrMissingRoleMemberships": 0,
+          "witnesses": [
+            {
+              "id": "interior",
+              "raw": { "chartChordBoundaryDistance": 0.24278431261760605, "evenOddLand": true },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.24278431261760605,
+                "evenOddLand": true
+              }
+            },
+            {
+              "id": "owner-2/lobe-0",
+              "raw": { "chartChordBoundaryDistance": 0.2112293673892345, "evenOddLand": true },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.2112293673892345,
+                "evenOddLand": true
+              }
+            },
+            {
+              "id": "owner-2/lobe-1",
+              "raw": { "chartChordBoundaryDistance": 0.14946413559023503, "evenOddLand": true },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.1494638714937499,
+                "evenOddLand": true
+              }
+            },
+            {
+              "id": "owner-2/peninsula-2",
+              "raw": { "chartChordBoundaryDistance": 0.09362445423919627, "evenOddLand": true },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.09362445423919627,
+                "evenOddLand": true
+              }
+            },
+            {
+              "id": "bay-water",
+              "raw": { "chartChordBoundaryDistance": 0.012166591731920145, "evenOddLand": false },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.012166592112337301,
+                "evenOddLand": false
+              }
+            }
+          ],
+          "scope": "Fixed original witnesses and role memberships only. Distances use vertex-mapped LAEA chords, omit internal collar cuts and do not certify extracted roles."
+        },
+        {
+          "ownerId": "owner-3",
+          "sourceLandAnchorCount": 1760,
+          "originalRoleMembershipCounts": {
+            "owner-3/lobe-1": 187,
+            "interior": 475,
+            "owner-3/island-2": 35,
+            "owner-3/island-1": 49,
+            "owner-3/lobe-0": 422,
+            "owner-3/archipelago-0": 68,
+            "owner-3/archipelago-2": 27,
+            "owner-3/peninsula-2": 297,
+            "owner-3/island-0": 130,
+            "owner-3/archipelago-1": 42,
+            "owner-3/archipelago-3": 28
+          },
+          "multipleOrMissingRoleMemberships": 0,
+          "witnesses": [
+            {
+              "id": "interior",
+              "raw": { "chartChordBoundaryDistance": 0.27856902588396987, "evenOddLand": true },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.27856902588396987,
+                "evenOddLand": true
+              }
+            },
+            {
+              "id": "owner-3/lobe-0",
+              "raw": { "chartChordBoundaryDistance": 0.2545052072798897, "evenOddLand": true },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.2545052063415119,
+                "evenOddLand": true
+              }
+            },
+            {
+              "id": "owner-3/lobe-1",
+              "raw": { "chartChordBoundaryDistance": 0.14349757275792388, "evenOddLand": true },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.1434975528877024,
+                "evenOddLand": true
+              }
+            },
+            {
+              "id": "owner-3/peninsula-2",
+              "raw": { "chartChordBoundaryDistance": 0.1159179834997542, "evenOddLand": true },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.1159179834997542,
+                "evenOddLand": true
+              }
+            },
+            {
+              "id": "bay-water",
+              "raw": { "chartChordBoundaryDistance": 0.020460776827041994, "evenOddLand": false },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.020460776827041994,
+                "evenOddLand": false
+              }
+            }
+          ],
+          "scope": "Fixed original witnesses and role memberships only. Distances use vertex-mapped LAEA chords, omit internal collar cuts and do not certify extracted roles."
+        },
+        {
+          "ownerId": "owner-4",
+          "sourceLandAnchorCount": 1688,
+          "originalRoleMembershipCounts": {
+            "owner-4/peninsula-2": 207,
+            "owner-4/archipelago-2": 20,
+            "owner-4/archipelago-0": 54,
+            "owner-4/lobe-0": 255,
+            "interior": 605,
+            "owner-4/archipelago-3": 16,
+            "owner-4/archipelago-1": 30,
+            "owner-4/lobe-1": 267,
+            "owner-4/island-1": 66,
+            "owner-4/island-0": 121,
+            "owner-4/island-2": 47
+          },
+          "multipleOrMissingRoleMemberships": 0,
+          "witnesses": [
+            {
+              "id": "interior",
+              "raw": { "chartChordBoundaryDistance": 0.294790234057347, "evenOddLand": true },
+              "simplified": { "chartChordBoundaryDistance": 0.294790234057347, "evenOddLand": true }
+            },
+            {
+              "id": "owner-4/lobe-0",
+              "raw": { "chartChordBoundaryDistance": 0.18124562180040896, "evenOddLand": true },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.18124562180040896,
+                "evenOddLand": true
+              }
+            },
+            {
+              "id": "owner-4/lobe-1",
+              "raw": { "chartChordBoundaryDistance": 0.13764620499841757, "evenOddLand": true },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.1376462136051556,
+                "evenOddLand": true
+              }
+            },
+            {
+              "id": "owner-4/peninsula-2",
+              "raw": { "chartChordBoundaryDistance": 0.12346125230297066, "evenOddLand": true },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.12346125230297066,
+                "evenOddLand": true
+              }
+            },
+            {
+              "id": "bay-water",
+              "raw": { "chartChordBoundaryDistance": 0.019583603933595754, "evenOddLand": false },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.019583603933595754,
+                "evenOddLand": false
+              }
+            }
+          ],
+          "scope": "Fixed original witnesses and role memberships only. Distances use vertex-mapped LAEA chords, omit internal collar cuts and do not certify extracted roles."
+        },
+        {
+          "ownerId": "owner-5",
+          "sourceLandAnchorCount": 1771,
+          "originalRoleMembershipCounts": {
+            "owner-5/peninsula-2": 356,
+            "interior": 466,
+            "owner-5/island-0": 151,
+            "owner-5/lobe-0": 337,
+            "owner-5/lobe-1": 251,
+            "owner-5/archipelago-1": 32,
+            "owner-5/archipelago-3": 17,
+            "owner-5/island-1": 52,
+            "owner-5/island-2": 33,
+            "owner-5/archipelago-2": 21,
+            "owner-5/archipelago-0": 55
+          },
+          "multipleOrMissingRoleMemberships": 0,
+          "witnesses": [
+            {
+              "id": "interior",
+              "raw": { "chartChordBoundaryDistance": 0.24184881078093776, "evenOddLand": true },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.24184881078093776,
+                "evenOddLand": true
+              }
+            },
+            {
+              "id": "owner-5/lobe-0",
+              "raw": { "chartChordBoundaryDistance": 0.22475456761699142, "evenOddLand": true },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.22475455328192545,
+                "evenOddLand": true
+              }
+            },
+            {
+              "id": "owner-5/lobe-1",
+              "raw": { "chartChordBoundaryDistance": 0.15092692595743942, "evenOddLand": true },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.15092692595743942,
+                "evenOddLand": true
+              }
+            },
+            {
+              "id": "owner-5/peninsula-2",
+              "raw": { "chartChordBoundaryDistance": 0.09329401130290958, "evenOddLand": true },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.09329401130290958,
+                "evenOddLand": true
+              }
+            },
+            {
+              "id": "bay-water",
+              "raw": { "chartChordBoundaryDistance": 0.012123703159461718, "evenOddLand": false },
+              "simplified": {
+                "chartChordBoundaryDistance": 0.012123703159461718,
+                "evenOddLand": false
+              }
+            }
+          ],
+          "scope": "Fixed original witnesses and role memberships only. Distances use vertex-mapped LAEA chords, omit internal collar cuts and do not certify extracted roles."
+        }
+      ],
+      "errorLedger": {
+        "normalizationRealZeroSetDisplacement": 0,
+        "realArithmeticGlobalUpperLipschitz": 1.0768101170912323,
+        "scalarInverseClippingThreshold": 0.02,
+        "conditionalCellScalarResidualUpper": 0.0066072853072051164,
+        "scalarResidualWithinInverseDomain": true,
+        "conditionalScalarAngularTransfer": 0.00711479166530672,
+        "rawToOriginalCoordinateAffineAngularUpper": 0.0061359567059029035,
+        "rawToOriginalShortestGeodesicAngularUpper": 0.01227187985744547,
+        "originalToRawAngularUpper": null,
+        "coastDistanceTargetRad": 0.01,
+        "rawOneSidedBoundWithinTarget": true,
+        "genericSimplificationCoordinateAffineAngularUpper": 0.0010846882173238198,
+        "conditionalSimplifiedOneSidedAngularUpper": 0.007220644923226723,
+        "conditionalSimplifiedBoundWithinTarget": true,
+        "quantizerFieldErrorUpper": 2.9802322387695312e-8,
+        "contourFieldBias": 2.9802322387695312e-8,
+        "conservativeCellPathDiameterRad": 0.006135923151542565,
+        "planetCoordinateRoundingAngularSumUpper": 1.4629180792671596e-9,
+        "simplificationCoordinateToleranceTicks": 524288,
+        "owners": [
+          {
+            "id": "owner-0",
+            "primary": true,
+            "originalAngularRadius": 0.6835340021040521,
+            "guardRadius": 0.7335340021040522,
+            "localCosine": 0.9404763898768675,
+            "convexEvaluationCap": true,
+            "certifiedContainmentMargin": 0.050000000000000044,
+            "positiveHalfTickBelowGuardMargin": true,
+            "strictBandConditions": {
+              "clippingInactive": true,
+              "guardInactive": true,
+              "otherOwnersExcluded": true
+            },
+            "interiorDiskSlack": 0.030175968069430986,
+            "conditionalInteriorDiskAfterDelta": 0.17295532314620427,
+            "roleMargins": [
+              {
+                "id": "owner-0/lobe-0",
+                "kind": "lobe",
+                "originalShare": 0.24469979216237184,
+                "shareSlack": 0.16469979216237185,
+                "diskSlack": 0.05293070039023495,
+                "widthLowerSlack": 0.40231849571833267,
+                "widthUpperSlack": null,
+                "extentLowerSlack": null,
+                "extentUpperSlack": null,
+                "conditionalDiskSlackAfterDelta": 0.04571005546700822,
+                "conditionalWidthLowerSlackAfterDelta": 0.38787720587187924,
+                "conditionalWidthUpperSlackAfterDelta": null,
+                "conditionalExtentUpperSlackAfterDelta": null,
+                "conditionalExtentLowerSlackAfterDelta": null,
+                "conditionalRatioAfterDelta": null
+              },
+              {
+                "id": "owner-0/lobe-1",
+                "kind": "lobe",
+                "originalShare": 0.08662147765256874,
+                "shareSlack": 0.006621477652568736,
+                "diskSlack": 0.019190227279289707,
+                "widthLowerSlack": 0.17120074485325623,
+                "widthUpperSlack": null,
+                "extentLowerSlack": null,
+                "extentUpperSlack": null,
+                "conditionalDiskSlackAfterDelta": 0.011969582356062984,
+                "conditionalWidthLowerSlackAfterDelta": 0.1567594550068028,
+                "conditionalWidthUpperSlackAfterDelta": null,
+                "conditionalExtentUpperSlackAfterDelta": null,
+                "conditionalExtentLowerSlackAfterDelta": null,
+                "conditionalRatioAfterDelta": null
+              },
+              {
+                "id": "owner-0/peninsula-2",
+                "kind": "peninsula",
+                "originalShare": 0.07516651876418992,
+                "shareSlack": 0.02516651876418992,
+                "diskSlack": 0.02756598783760377,
+                "widthLowerSlack": 0.010087983846282664,
+                "widthUpperSlack": 0.058512178648150656,
+                "extentLowerSlack": 0.04023462409257447,
+                "extentUpperSlack": 0.17936581029447463,
+                "conditionalDiskSlackAfterDelta": 0.02034534291437705,
+                "conditionalWidthLowerSlackAfterDelta": -0.004353306000170781,
+                "conditionalWidthUpperSlackAfterDelta": 0.04407088880169721,
+                "conditionalExtentUpperSlackAfterDelta": 0.16492452044802117,
+                "conditionalExtentLowerSlackAfterDelta": 0.025793334246121014,
+                "conditionalRatioAfterDelta": 1.9476845109240055
+              }
+            ],
+            "bayOriginalSlacks": {
+              "openingLower": 0.03805563888259769,
+              "openingUpper": 0.1219438188023326,
+              "depth": 0.03827609098705376,
+              "removedShare": 0.010063508491244516
+            },
+            "roleCorrespondence": "not-established; perturbed metric rows are conditional, not new certificates"
+          },
+          {
+            "id": "owner-1",
+            "primary": true,
+            "originalAngularRadius": 0.6851033770882325,
+            "guardRadius": 0.7351033770882326,
+            "localCosine": 0.9402094172326915,
+            "convexEvaluationCap": true,
+            "certifiedContainmentMargin": 0.050000000000000044,
+            "positiveHalfTickBelowGuardMargin": true,
+            "strictBandConditions": {
+              "clippingInactive": true,
+              "guardInactive": true,
+              "otherOwnersExcluded": true
+            },
+            "interiorDiskSlack": 0.1266881440563071,
+            "conditionalInteriorDiskAfterDelta": 0.2694674991330804,
+            "roleMargins": [
+              {
+                "id": "owner-1/lobe-0",
+                "kind": "lobe",
+                "originalShare": 0.13496562138546425,
+                "shareSlack": 0.05496562138546425,
+                "diskSlack": 0.04942590561071129,
+                "widthLowerSlack": 0.21642816527884132,
+                "widthUpperSlack": null,
+                "extentLowerSlack": null,
+                "extentUpperSlack": null,
+                "conditionalDiskSlackAfterDelta": 0.042205260687484564,
+                "conditionalWidthLowerSlackAfterDelta": 0.20198687543238789,
+                "conditionalWidthUpperSlackAfterDelta": null,
+                "conditionalExtentUpperSlackAfterDelta": null,
+                "conditionalExtentLowerSlackAfterDelta": null,
+                "conditionalRatioAfterDelta": null
+              },
+              {
+                "id": "owner-1/lobe-1",
+                "kind": "lobe",
+                "originalShare": 0.0847295355740262,
+                "shareSlack": 0.004729535574026195,
+                "diskSlack": 0.00143894655833237,
+                "widthLowerSlack": 0.24236961289850487,
+                "widthUpperSlack": null,
+                "extentLowerSlack": null,
+                "extentUpperSlack": null,
+                "conditionalDiskSlackAfterDelta": -0.005781698364894353,
+                "conditionalWidthLowerSlackAfterDelta": 0.22792832305205143,
+                "conditionalWidthUpperSlackAfterDelta": null,
+                "conditionalExtentUpperSlackAfterDelta": null,
+                "conditionalExtentLowerSlackAfterDelta": null,
+                "conditionalRatioAfterDelta": null
+              },
+              {
+                "id": "owner-1/peninsula-2",
+                "kind": "peninsula",
+                "originalShare": 0.0836929869213555,
+                "shareSlack": 0.0336929869213555,
+                "diskSlack": 0.04555064050302043,
+                "widthLowerSlack": 0.0067307050850628075,
+                "widthUpperSlack": 0.062239662316970076,
+                "extentLowerSlack": 0.05549012324999747,
+                "extentUpperSlack": 0.16201893734632516,
+                "conditionalDiskSlackAfterDelta": 0.0383299955797937,
+                "conditionalWidthLowerSlackAfterDelta": -0.0077105847613906375,
+                "conditionalWidthUpperSlackAfterDelta": 0.04779837247051663,
+                "conditionalExtentUpperSlackAfterDelta": 0.1475776474998717,
+                "conditionalExtentLowerSlackAfterDelta": 0.04104883340354401,
+                "conditionalRatioAfterDelta": 2.1483541612638666
+              }
+            ],
+            "bayOriginalSlacks": {
+              "openingLower": 0.033568099826379844,
+              "openingUpper": 0.1269024883813902,
+              "depth": 0.016806729121757374,
+              "removedShare": 0.005568347078291534
+            },
+            "roleCorrespondence": "not-established; perturbed metric rows are conditional, not new certificates"
+          },
+          {
+            "id": "owner-2",
+            "primary": true,
+            "originalAngularRadius": 0.6869129475980008,
+            "guardRadius": 0.7369129475980009,
+            "localCosine": 0.9399008653723862,
+            "convexEvaluationCap": true,
+            "certifiedContainmentMargin": 0.050000000000000044,
+            "positiveHalfTickBelowGuardMargin": true,
+            "strictBandConditions": {
+              "clippingInactive": true,
+              "guardInactive": true,
+              "otherOwnersExcluded": true
+            },
+            "interiorDiskSlack": 0.078480555613504,
+            "conditionalInteriorDiskAfterDelta": 0.22125991069027728,
+            "roleMargins": [
+              {
+                "id": "owner-2/lobe-0",
+                "kind": "lobe",
+                "originalShare": 0.2378826465013918,
+                "shareSlack": 0.15788264650139178,
+                "diskSlack": 0.032828801462575524,
+                "widthLowerSlack": 0.5341366662992392,
+                "widthUpperSlack": null,
+                "extentLowerSlack": null,
+                "extentUpperSlack": null,
+                "conditionalDiskSlackAfterDelta": 0.025608156539348795,
+                "conditionalWidthLowerSlackAfterDelta": 0.5196953764527857,
+                "conditionalWidthUpperSlackAfterDelta": null,
+                "conditionalExtentUpperSlackAfterDelta": null,
+                "conditionalExtentLowerSlackAfterDelta": null,
+                "conditionalRatioAfterDelta": null
+              },
+              {
+                "id": "owner-2/lobe-1",
+                "kind": "lobe",
+                "originalShare": 0.10150664732870428,
+                "shareSlack": 0.021506647328704276,
+                "diskSlack": 0.015703409400461152,
+                "widthLowerSlack": 0.19766786038371262,
+                "widthUpperSlack": null,
+                "extentLowerSlack": null,
+                "extentUpperSlack": null,
+                "conditionalDiskSlackAfterDelta": 0.00848276447723443,
+                "conditionalWidthLowerSlackAfterDelta": 0.1832265705372592,
+                "conditionalWidthUpperSlackAfterDelta": null,
+                "conditionalExtentUpperSlackAfterDelta": null,
+                "conditionalExtentLowerSlackAfterDelta": null,
+                "conditionalRatioAfterDelta": null
+              },
+              {
+                "id": "owner-2/peninsula-2",
+                "kind": "peninsula",
+                "originalShare": 0.05814568925377845,
+                "shareSlack": 0.008145689253778447,
+                "diskSlack": 0.014725377885623545,
+                "widthLowerSlack": 0.006141953528611327,
+                "widthUpperSlack": 0.06284051846306729,
+                "extentLowerSlack": 0.037183842304177234,
+                "extentUpperSlack": 0.18248042211163468,
+                "conditionalDiskSlackAfterDelta": 0.007504732962396822,
+                "conditionalWidthLowerSlackAfterDelta": -0.008299336317842118,
+                "conditionalWidthUpperSlackAfterDelta": 0.048399228616613846,
+                "conditionalExtentUpperSlackAfterDelta": 0.16803913226518122,
+                "conditionalExtentLowerSlackAfterDelta": 0.022742552457723775,
+                "conditionalRatioAfterDelta": 1.995887212038421
+              }
+            ],
+            "bayOriginalSlacks": {
+              "openingLower": 0.030884888225072377,
+              "openingUpper": 0.1298169840931291,
+              "depth": 0.014853016739640318,
+              "removedShare": 0.003207156294501714
+            },
+            "roleCorrespondence": "not-established; perturbed metric rows are conditional, not new certificates"
+          },
+          {
+            "id": "owner-3",
+            "primary": true,
+            "originalAngularRadius": 0.6899773411772723,
+            "guardRadius": 0.7399773411772723,
+            "localCosine": 0.9393765976174084,
+            "convexEvaluationCap": true,
+            "certifiedContainmentMargin": 0.050000000000000044,
+            "positiveHalfTickBelowGuardMargin": true,
+            "strictBandConditions": {
+              "clippingInactive": true,
+              "guardInactive": true,
+              "otherOwnersExcluded": true
+            },
+            "interiorDiskSlack": 0.029418447674050607,
+            "conditionalInteriorDiskAfterDelta": 0.1721978027508239,
+            "roleMargins": [
+              {
+                "id": "owner-3/lobe-0",
+                "kind": "lobe",
+                "originalShare": 0.2504694022201944,
+                "shareSlack": 0.1704694022201944,
+                "diskSlack": 0.062301259341322135,
+                "widthLowerSlack": 0.40020657974161133,
+                "widthUpperSlack": null,
+                "extentLowerSlack": null,
+                "extentUpperSlack": null,
+                "conditionalDiskSlackAfterDelta": 0.055080614418095405,
+                "conditionalWidthLowerSlackAfterDelta": 0.3857652898951579,
+                "conditionalWidthUpperSlackAfterDelta": null,
+                "conditionalExtentUpperSlackAfterDelta": null,
+                "conditionalExtentLowerSlackAfterDelta": null,
+                "conditionalRatioAfterDelta": null
+              },
+              {
+                "id": "owner-3/lobe-1",
+                "kind": "lobe",
+                "originalShare": 0.08495793464578923,
+                "shareSlack": 0.004957934645789225,
+                "diskSlack": 0.018899328282101988,
+                "widthLowerSlack": 0.170060525667681,
+                "widthUpperSlack": null,
+                "extentLowerSlack": null,
+                "extentUpperSlack": null,
+                "conditionalDiskSlackAfterDelta": 0.011678683358875265,
+                "conditionalWidthLowerSlackAfterDelta": 0.15561923582122758,
+                "conditionalWidthUpperSlackAfterDelta": null,
+                "conditionalExtentUpperSlackAfterDelta": null,
+                "conditionalExtentLowerSlackAfterDelta": null,
+                "conditionalRatioAfterDelta": null
+              },
+              {
+                "id": "owner-3/peninsula-2",
+                "kind": "peninsula",
+                "originalShare": 0.07470770776310853,
+                "shareSlack": 0.02470770776310853,
+                "diskSlack": 0.027281917689553133,
+                "widthLowerSlack": 0.00970922364880944,
+                "widthUpperSlack": 0.058705777985497865,
+                "extentLowerSlack": 0.03922459689873406,
+                "extentUpperSlack": 0.1798820751947196,
+                "conditionalDiskSlackAfterDelta": 0.02006127276632641,
+                "conditionalWidthLowerSlackAfterDelta": -0.004732066197644005,
+                "conditionalWidthUpperSlackAfterDelta": 0.04426448813904442,
+                "conditionalExtentUpperSlackAfterDelta": 0.16544078534826615,
+                "conditionalExtentLowerSlackAfterDelta": 0.0247833070522806,
+                "conditionalRatioAfterDelta": 1.9422155174146967
+              }
+            ],
+            "bayOriginalSlacks": {
+              "openingLower": 0.03739111979416801,
+              "openingUpper": 0.12228348082627727,
+              "depth": 0.03748451494939803,
+              "removedShare": 0.009880003006972171
+            },
+            "roleCorrespondence": "not-established; perturbed metric rows are conditional, not new certificates"
+          },
+          {
+            "id": "owner-4",
+            "primary": true,
+            "originalAngularRadius": 0.6868917295744417,
+            "guardRadius": 0.7368917295744417,
+            "localCosine": 0.9399044877395453,
+            "convexEvaluationCap": true,
+            "certifiedContainmentMargin": 0.050000000000000044,
+            "positiveHalfTickBelowGuardMargin": true,
+            "strictBandConditions": {
+              "clippingInactive": true,
+              "guardInactive": true,
+              "otherOwnersExcluded": true
+            },
+            "interiorDiskSlack": 0.12657538124182469,
+            "conditionalInteriorDiskAfterDelta": 0.26935473631859796,
+            "roleMargins": [
+              {
+                "id": "owner-4/lobe-0",
+                "kind": "lobe",
+                "originalShare": 0.13556461096864714,
+                "shareSlack": 0.055564610968647135,
+                "diskSlack": 0.04938538509982364,
+                "widthLowerSlack": 0.21629920662531946,
+                "widthUpperSlack": null,
+                "extentLowerSlack": null,
+                "extentUpperSlack": null,
+                "conditionalDiskSlackAfterDelta": 0.04216474017659691,
+                "conditionalWidthLowerSlackAfterDelta": 0.20185791677886603,
+                "conditionalWidthUpperSlackAfterDelta": null,
+                "conditionalExtentUpperSlackAfterDelta": null,
+                "conditionalExtentLowerSlackAfterDelta": null,
+                "conditionalRatioAfterDelta": null
+              },
+              {
+                "id": "owner-4/lobe-1",
+                "kind": "lobe",
+                "originalShare": 0.08426834277072807,
+                "shareSlack": 0.004268342770728073,
+                "diskSlack": 0.0014179828831004312,
+                "widthLowerSlack": 0.242230081942887,
+                "widthUpperSlack": null,
+                "extentLowerSlack": null,
+                "extentUpperSlack": null,
+                "conditionalDiskSlackAfterDelta": -0.005802662040126291,
+                "conditionalWidthLowerSlackAfterDelta": 0.22778879209643357,
+                "conditionalWidthUpperSlackAfterDelta": null,
+                "conditionalExtentUpperSlackAfterDelta": null,
+                "conditionalExtentLowerSlackAfterDelta": null,
+                "conditionalRatioAfterDelta": null
+              },
+              {
+                "id": "owner-4/peninsula-2",
+                "kind": "peninsula",
+                "originalShare": 0.08367820728209081,
+                "shareSlack": 0.03367820728209081,
+                "diskSlack": 0.04551577478428356,
+                "widthLowerSlack": 0.0066953584371412245,
+                "widthUpperSlack": 0.06221707523665257,
+                "extentLowerSlack": 0.055385999578676515,
+                "extentUpperSlack": 0.16195240063480354,
+                "conditionalDiskSlackAfterDelta": 0.03829512986105683,
+                "conditionalWidthLowerSlackAfterDelta": -0.007745931409312221,
+                "conditionalWidthUpperSlackAfterDelta": 0.047775785390199124,
+                "conditionalExtentUpperSlackAfterDelta": 0.14751111078835008,
+                "conditionalExtentLowerSlackAfterDelta": 0.040944709732223056,
+                "conditionalRatioAfterDelta": 2.1469939493003203
+              }
+            ],
+            "bayOriginalSlacks": {
+              "openingLower": 0.03350551394576612,
+              "openingUpper": 0.1268624949905417,
+              "depth": 0.01673874790660798,
+              "removedShare": 0.005563831873848308
+            },
+            "roleCorrespondence": "not-established; perturbed metric rows are conditional, not new certificates"
+          },
+          {
+            "id": "owner-5",
+            "primary": true,
+            "originalAngularRadius": 0.684390468105132,
+            "guardRadius": 0.7343904681051321,
+            "localCosine": 0.940330764795331,
+            "convexEvaluationCap": true,
+            "certifiedContainmentMargin": 0.050000000000000044,
+            "positiveHalfTickBelowGuardMargin": true,
+            "strictBandConditions": {
+              "clippingInactive": true,
+              "guardInactive": true,
+              "otherOwnersExcluded": true
+            },
+            "interiorDiskSlack": 0.07777711542094046,
+            "conditionalInteriorDiskAfterDelta": 0.22055647049771374,
+            "roleMargins": [
+              {
+                "id": "owner-5/lobe-0",
+                "kind": "lobe",
+                "originalShare": 0.24352216387938408,
+                "shareSlack": 0.16352216387938406,
+                "diskSlack": 0.03257379022958004,
+                "widthLowerSlack": 0.541736217824614,
+                "widthUpperSlack": null,
+                "extentLowerSlack": null,
+                "extentUpperSlack": null,
+                "conditionalDiskSlackAfterDelta": 0.02535314530635331,
+                "conditionalWidthLowerSlackAfterDelta": 0.5272949279781606,
+                "conditionalWidthUpperSlackAfterDelta": null,
+                "conditionalExtentUpperSlackAfterDelta": null,
+                "conditionalExtentLowerSlackAfterDelta": null,
+                "conditionalRatioAfterDelta": null
+              },
+              {
+                "id": "owner-5/lobe-1",
+                "kind": "lobe",
+                "originalShare": 0.10051823416637154,
+                "shareSlack": 0.020518234166371538,
+                "diskSlack": 0.01550112339415971,
+                "widthLowerSlack": 0.19675140805533878,
+                "widthUpperSlack": null,
+                "extentLowerSlack": null,
+                "extentUpperSlack": null,
+                "conditionalDiskSlackAfterDelta": 0.008280478470932988,
+                "conditionalWidthLowerSlackAfterDelta": 0.18231011820888535,
+                "conditionalWidthUpperSlackAfterDelta": null,
+                "conditionalExtentUpperSlackAfterDelta": null,
+                "conditionalExtentLowerSlackAfterDelta": null,
+                "conditionalRatioAfterDelta": null
+              },
+              {
+                "id": "owner-5/peninsula-2",
+                "kind": "peninsula",
+                "originalShare": 0.05773620083838061,
+                "shareSlack": 0.007736200838380607,
+                "diskSlack": 0.014556890766855603,
+                "widthLowerSlack": 0.005876741846299438,
+                "widthUpperSlack": 0.06322681692056455,
+                "extentLowerSlack": 0.036453606651277115,
+                "extentUpperSlack": 0.18354405891634173,
+                "conditionalDiskSlackAfterDelta": 0.00733624584362888,
+                "conditionalWidthLowerSlackAfterDelta": -0.008564548000154007,
+                "conditionalWidthUpperSlackAfterDelta": 0.0487855270741111,
+                "conditionalExtentUpperSlackAfterDelta": 0.16910276906988828,
+                "conditionalExtentLowerSlackAfterDelta": 0.022012316804823656,
+                "conditionalRatioAfterDelta": 1.9962538234818432
+              }
+            ],
+            "bayOriginalSlacks": {
+              "openingLower": 0.030420347623168753,
+              "openingUpper": 0.13049361838166756,
+              "depth": 0.014345471414706074,
+              "removedShare": 0.0030437209344796115
+            },
+            "roleCorrespondence": "not-established; perturbed metric rows are conditional, not new certificates"
+          }
+        ],
+        "extractedRoleCertification": "unproved",
+        "limitingObligations": [
+          "original-to-extracted-direction-unproved",
+          "fixed-role-cut-correspondence-unproved",
+          "binary64-residual-unbounded"
+        ],
+        "boundScope": "Real arithmetic; coordinate-affine and shortest-geodesic interpretations are separately labelled. Metric perturbations require two-way role correspondence, which this ledger does not establish."
+      }
+    }
+  ],
+  "sharedAnchors": { "checked": 130562, "exact": true, "mismatches": 0, "firstMismatch": null }
+}
