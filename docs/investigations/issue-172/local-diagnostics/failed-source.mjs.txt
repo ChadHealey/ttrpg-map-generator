@@ -1,0 +1,93 @@
+/** Investigation-only direct authoritative coast polygons with internal role witnesses. */
+import { stream } from '../issue-164/morphology.mjs';
+import { controlRecipe } from '../issue-170/templates.mjs';
+import { edges, polygonArea, pointLocation, segmentRelation, stitchBody } from '../issue-169/geometry.mjs';
+import { certifyCandidate } from './certificates.mjs';
+export { controlRecipe };
+export const TEMPLATE_REVISION='issue-172-direct-r1';
+export const TEMPLATE_LIMIT=12;
+const add=(a,b,s=1)=>[a[0]+s*b[0],a[1]+s*b[1]];
+function cubic(a,b,c,d,steps=4){return Array.from({length:steps},(_,i)=>{const t=(i+1)/steps,u=1-t;return i===steps-1?d:[0,1].map(k=>u*u*u*a[k]+3*u*u*t*b[k]+3*u*t*t*c[k]+t*t*t*d[k]);});}
+function mapCandidate(candidate,point){
+  const poly=p=>p.map(point);
+  return {...candidate,interior:poly(candidate.interior),interiorWitness:point(candidate.interiorWitness),bodyBoundary:poly(candidate.bodyBoundary),
+    attachments:candidate.attachments.map(a=>({...a,root:poly(a.root),polygon:poly(a.polygon),collar:{far:poly(a.collar.far),disk:point(a.collar.disk)}})),
+    bay:candidate.bay?{polygon:poly(candidate.bay.polygon),mouth:poly(candidate.bay.mouth),witness:point(candidate.bay.witness)}:null,islands:[]};
+}
+const scaleCandidate=(candidate,scale)=>mapCandidate(candidate,p=>p.map(x=>x*scale));
+function conflict(a,b){
+  return edges(a).some(([p,q])=>edges(b).some(([r,s])=>segmentRelation(p,q,r,s)!=='none'))||a.some(p=>pointLocation(p,b)>=0)||b.some(p=>pointLocation(p,a)>=0);
+}
+function islandPolygon(center,area,angle){
+  const raw=Array.from({length:7},(_,i)=>{const t=i*2*Math.PI/7,r=1+.13*Math.sin(i*2.3+angle);return [.4*r*Math.cos(t),1.2*r*Math.sin(t)];});
+  const s=Math.sqrt(area/polygonArea(raw)),cs=Math.cos(angle),sn=Math.sin(angle);
+  return raw.map(([x,y])=>[center[0]+s*(cs*x-sn*y),center[1]+s*(sn*x+cs*y)]);
+}
+export function constructTemplate({id='owner-0',primary=true,quota,recipe,seed='1',templateIndex=0}) {
+  const random=stream(seed,`issue-172-r1/anatomy/${id}`),first=Math.floor(random()*3);
+  const layoutIndex=(first+Math.floor(templateIndex/4))%3,variation=templateIndex%4;
+  const curveSkew=(random()-.5)*.025;
+  const pa=[.40,-.28],pb=[.466,-.192];
+  const l1a=[.58,.22],l1b=[-.16,.46],l1far0=[.67,.45],l1far1=[.02,.59];
+  const l2a=[-.40,.22],l2b=[-.50,-.18],l2far0=[-.61,.30],l2far1=[-.65,-.19];
+  const pfar0=[.55,-.40],pfar1=[.66,-.16];
+  const mouth=[[.42,0],[.66,0]];
+  const pocketTip=[.48,.225+recipe.fragmentationBand*.003];
+  const pocket=[mouth[0],...cubic(mouth[0],[.40,.06],[.36,.17],pocketTip,4),...cubic(pocketTip,[.60,pocketTip[1]+.01],[.65,.10],mouth[1],4)];
+  const lobe1=[l1a,...cubic(l1a,[.65,.26],[.68,.36],l1far0),...cubic(l1far0,[.66,.56],[.58,.64],[.49,.65]),...cubic([.49,.65],[.35,.69],[.15,.72],[.08,.68]),...cubic([.08,.68],[.04,.65],[.01,.62],l1far1,2),...cubic(l1far1,[-.05,.56],[-.12,.50],l1b,3)];
+  const lobe2=[l2a,...cubic(l2a,[-.47,.29],[-.56,.33],l2far0),...cubic(l2far0,[-.76,.26],[-.85,.10],[-.79,.06]),...cubic([-.79,.06],[-.76,-.06],[-.73,-.19],l2far1),...cubic(l2far1,[-.60,-.21],[-.53,-.20],l2b,3)];
+  const peninsula=[pa,...cubic(pa,[.41,-.34],[.48,-.40],pfar0),...cubic(pfar0,[.60,-.42],[.66,-.48],[.67,-.44]),...cubic([.67,-.44],[.75,-.42],[.75,-.35],[.73,-.32]),...cubic([.73,-.32],[.70,-.24],[.73,-.16],pfar1),...cubic(pfar1,[.57,-.16],[.51,-.17],pb,3)];
+  let interior=[pb,...cubic(pb,[.45,-.12],[.44,-.04],mouth[0]),...pocket.slice(1),...cubic(mouth[1],[.75,.04],[.81,.08],[.78,.13]),...cubic([.78,.13],[.72,.16],[.64,.22],l1a),l1b,...cubic(l1b,[-.22,.38],[-.35,.29],l2a),l2b,...cubic(l2b,[-.50,-.28],[-.47,-.39],[-.40,-.44]),...cubic([-.40,-.44],[-.3,-.57],[-.17,-.60],[-.08,-.58]),...cubic([-.08,-.58],[.04,-.55],[.12,-.43],[.2,-.4]),...cubic([.2,-.4],[.3,-.38],[.35,-.34],pa),pa];
+  // pa duplicated only when final cubic supplied it; the root edge pa->pb closes B.
+  interior.pop();
+  let attachments=[{id:`${id}/lobe-1`,kind:'lobe',root:[l1a,l1b],polygon:lobe1,collar:{far:[l1far0,l1far1],disk:[.2,.43]}},
+    {id:`${id}/lobe-2`,kind:'lobe',root:[l2a,l2b],polygon:lobe2,collar:{far:[l2far0,l2far1],disk:[-.53,.075]}},
+    {id:`${id}/peninsula`,kind:'peninsula',root:[pa,pb],polygon:peninsula,collar:{far:[pfar0,pfar1],disk:[.52,-.29]}}];
+  let bay={polygon:pocket,mouth,witness:[.49,.209]};
+  if(!primary){const anchors=[[.56,.08],[.4,.4],[-.1,.55],[-.5,.3],[-.6,-.1],[-.27,-.5],[.23,-.49]];interior=[];for(let i=0;i<anchors.length;i++){const a=anchors[i],b=anchors[(i+1)%anchors.length],prev=anchors[(i+6)%7],next=anchors[(i+2)%7];interior.push(...cubic(a,add(a,add(b,prev,-1),.14),add(b,add(next,a,-1),-.14),b,5));}attachments=[];bay=null;}
+  if(primary){
+    const shears=[[.30,-.15,-.10],[.12,.25,0],[.02,-.25,.10]][layoutIndex];
+    attachments=attachments.map((feature,index)=>{
+      const [a,b]=feature.root,w=Math.hypot(b[0]-a[0],b[1]-a[1]),t=[(b[0]-a[0])/w,(b[1]-a[1])/w],n=[t[1],-t[0]],k=shears[index]+curveSkew+(variation-1.5)*.015;
+      const move=p=>p===a||p===b?p:add(p,t,k*((p[0]-a[0])*n[0]+(p[1]-a[1])*n[1]));
+      return {...feature,polygon:feature.polygon.map(move),collar:{far:feature.collar.far.map(move),disk:move(feature.collar.disk)}};
+    });
+  }
+  let candidate={id,primary,layoutIndex,variation,curveSkew,interior,interiorWitness:[-.05,-.05],attachments,bay,islands:[],bodyBoundary:stitchBody(interior,attachments)};
+  const [stretch,slant]=[[1,0],[.92,0],[1.05,.12]][layoutIndex];
+  candidate=mapCandidate(candidate,([x,y])=>[stretch*x+slant*y,y/stretch*recipe.polarStretch]);
+  const bodyArea=polygonArea(candidate.bodyBoundary),f=recipe.islandShare+recipe.archipelagoShare;
+  const fitted=scaleCandidate(candidate,Math.sqrt(4*Math.PI*(1-f)*quota/bodyArea));
+  // Six localized actual coast edges and four outward offsets, all chosen before certification.
+  const coast=edges(fitted.bodyBoundary),lower=coast.filter(([a,b])=>a[1]<-.20&&b[1]<-.20&&Math.max(a[0],b[0])<.25);
+  const lengths=lower.map(([a,b])=>Math.hypot(b[0]-a[0],b[1]-a[1])),totalLength=lengths.reduce((a,b)=>a+b,0);
+  const anchors=[.03,.20,.39,.59,.77,.97].map(t=>{let distance=t*totalLength;for(let i=0;i<lower.length;i++){if(distance<=lengths[i])return lower[i];distance-=lengths[i];}return lower.at(-1);});
+  const siteReceipts=[];
+  for(const [kind,count,share]of[['island',recipe.islandCount,recipe.islandShare],['archipelago',recipe.archipelagoCount,recipe.archipelagoShare]]){
+    const weights=Array.from({length:count},(_,i)=>1/(1+i*.65)),total=weights.reduce((a,b)=>a+b,0);
+    for(let i=0;i<count;i++){
+      const area=4*Math.PI*quota*share*weights[i]/total,base=islandPolygon([0,0],area,0),bound=Math.max(...base.map(p=>Math.hypot(...p)));
+      const memberRandom=stream(seed,`issue-172-r1/island-sites/${id}/${kind}-${i}`),start=Math.floor(memberRandom()*6),direction=memberRandom()<.5?1:5;
+      let placed;
+      for(let j=0;j<24;j++){
+        const [a,b]=anchors[(start+direction*Math.floor(j/4))%6],w=Math.hypot(b[0]-a[0],b[1]-a[1]),n=[(b[1]-a[1])/w,-(b[0]-a[0])/w],offset=[.015,.03,.05,.08][j%4];
+        const center=add([(a[0]+b[0])/2,(a[1]+b[1])/2],n,bound+offset),polygon=islandPolygon(center,area,Math.atan2(n[1],n[0]));
+        if(!conflict(polygon,fitted.bodyBoundary)&&(!fitted.bay||!conflict(polygon,fitted.bay.polygon))&&fitted.islands.every(p=>!conflict(polygon,p.polygon))){placed={id:`${id}/${kind}-${i}`,kind,polygon};siteReceipts.push({id:placed.id,attempt:j+1,anchor:(start+direction*Math.floor(j/4))%6,offset});break;}
+      }
+      if(!placed)throw Object.assign(new Error(`island-site-budget-exhausted:${kind}-${i}`), {siteReceipts});
+      fitted.islands.push(placed);
+    }
+  }
+  return {...fitted,siteReceipts};
+}
+export function constructOwners(input){
+  let recipe;try{if(typeof input?.seed!=='string'||!input.seed)throw new Error('Invalid seed');recipe=controlRecipe(input.controls);}catch(error){return{ok:false,owners:[],failures:[{code:'invalid-input',message:error.message}],receipts:[]};}
+  const count=recipe.ownerCount,primaryCount=Math.min(count,1+Math.floor(stream(input.seed,'primary-count')()*3));
+  const sizes=Array.from({length:count},(_,i)=>recipe.distribution==='balanced'?.9:recipe.distribution==='oneDominant'?(i===0?1:.55):(i<primaryCount?.95:.55)),sum=sizes.reduce((s,x)=>s+x*x,0),owners=[],failures=[],receipts=[];
+  for(let i=0;i<count;i++){
+    const id=`owner-${i}`,quota=recipe.landFraction*sizes[i]**2/sum,primary=sizes[i]**2>=Math.max(...sizes)**2*.5;let accepted;
+    for(let index=0;index<TEMPLATE_LIMIT;index++){let candidate,certificate;try{candidate=constructTemplate({id,primary,quota,recipe,seed:input.seed,templateIndex:index});certificate=certifyCandidate(candidate,{quota,nominalClearance:.05});}catch(error){certificate={ok:false,failures:[{code:'construction',message:error.message,...(error.siteReceipts?{siteReceipts:error.siteReceipts}:{})}]};}receipts.push({ownerId:id,quota,templateIndex:index,ok:certificate.ok,failures:certificate.failures});if(certificate.ok){accepted={id,quota,primary,size:sizes[i],radius:certificate.metrics.guardRadius,candidate,certificate};break;}}
+    if(accepted)owners.push(accepted);else failures.push({code:'template-budget-exhausted',ownerId:id,quota,candidateCount:TEMPLATE_LIMIT});
+  }
+  return{ok:!failures.length,owners,failures,receipts,recipe,revision:TEMPLATE_REVISION};
+}

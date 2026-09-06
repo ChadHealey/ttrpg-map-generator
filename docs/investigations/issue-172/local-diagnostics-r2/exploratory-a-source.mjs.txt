@@ -1,0 +1,20 @@
+/** A single cyclic coast with a long northeast mass and westward fan peninsula. */
+import { partitionCoast, sampleCoast } from './coast-partition.mjs';
+
+export function buildCoast(id, {anatomy=[0,0], variation=0, fragmentationBand=1}={}) {
+  const [u,v]=anatomy;
+  const anchors=[
+    [.62,0], [.69,.25], [.53,.33], [.56+.025*u,.56+.025*v],
+    [.35+.04*u,.70+.04*v], [.08,.68+.025*v], [-.10,.38], [-.36,.31],
+    [-.46,.23], [-.64,.37], [-.76,.22], [-.70,.055], [-.48,.125],
+    [-.58,-.15], [-.40,-.35], [-.33-.025*v,-.57], [-.07-.03*v,-.69-.025*u],
+    [.17,-.50], [.15,-.31], [.55,-.25], [.40,0], [.32,.14],
+    [.42,.225+.003*fragmentationBand], [.60,.12],
+  ];
+  const coast=sampleCoast(anchors,{steps:3,tension:[.13,.15,.17,.19][variation]});
+  return partitionCoast(id,{coast,roles:[
+    {kind:'lobe',start:6,end:18,far:[9,15],disk:[.25,.48]},
+    {kind:'lobe',start:43,end:52,far:[46,50],disk:[-.10,-.52]},
+    {kind:'peninsula',start:24,end:36,far:[27,33],disk:[-.57,.205]},
+  ],bay:{start:60,end:0,witness:[.43,.209]},interiorWitness:[-.03,-.02],islandAnchors:[39,40,55,56,57,58]});
+}

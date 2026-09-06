@@ -1,0 +1,65 @@
+{
+  "scope": "Immutable local diagnostics, not a full-world comparison or human verdict",
+  "stages": [
+    {
+      "id": "first-retained-direct-coast-failure",
+      "sources": {
+        "templates.mjs": "failed-source.mjs.txt"
+      },
+      "report": "failed.json",
+      "image": "failed-planar.png"
+    },
+    {
+      "id": "rejected-shared-layout",
+      "sources": {
+        "templates.mjs": "rejected-shared-source.mjs.txt"
+      },
+      "report": "rejected-shared-results.json",
+      "image": "rejected-shared.png"
+    },
+    {
+      "id": "final-literal-local-gate",
+      "sources": {
+        "templates.mjs": "final-templates.mjs.txt",
+        "coast-utils.mjs": "final-coast-utils.mjs.txt",
+        "layout-a.mjs": "final-layout-a.mjs.txt",
+        "layout-b.mjs": "final-layout-b.mjs.txt",
+        "layout-c.mjs": "final-layout-c.mjs.txt",
+        "certificates.mjs": "final-certificates.mjs.txt"
+      },
+      "report": "final.json",
+      "image": "final.png",
+      "panels": true
+    }
+  ],
+  "dependencies": {
+    "../issue-164/morphology.mjs": "30d5597af6f999fdcdd9013288773f0bb0f445bac219b55cc94f0ebc37e70328",
+    "../issue-164/render-comparison.mjs": "9ef4249fe5525a61502ad4319262e05816e93e89bd7d6c9cab377ef9293d5004",
+    "../issue-169/geometry.mjs": "bc54bf0c7e5b878d9d26f2fe96658d0818cddf1ae4a7b2f5997c965d98f463bc",
+    "../issue-169/certificates.mjs": "7a1cfacab789829249ceaf72454d212472cb59a49ca8d8e08eedc6442ba8213c",
+    "../issue-170/templates.mjs": "566b4fbeb5e568bdfd1e87c2b55622d70614cf36d2fa1393686cb6f404a2f870",
+    "certificates.mjs": "906d00b570581650d09f9aaeb30f4a4454c6a1ae5efbcde9a8a2e40fb540691b"
+  },
+  "artifacts": {
+    "inputs.json": "03f857c575c5132331282569b26bdb0408173bbf532163898fef6974ffd031d9",
+    "verify.mjs": "b12b35171d6608fb7b41b4514d5bb9d6b72fed049c1cdf389334fdb63730c5f1",
+    "rejected-shared.json": "ed4cd235870e56baf69c22b68ba7810400cfc9555e2781e8a17b15b86a867af7",
+    "exploratory-a-before-tangents.mjs.txt": "bd5b73d8052bc93ca6da7ade65dca6cc35b8f840b0eac1735d227f090d8acdcd",
+    "exploratory-c-before-tangents.mjs.txt": "41beb2ccf471b64fc9f5e2f6f08932350c1c8999fbb428ca63b057b348c40a07",
+    "exploratory-c-tangents.mjs.txt": "47d2fdaabfcf83d330992553718ad4a6f141901a85f9cd0b22d1dc3f02770b29",
+    "failed-source.mjs.txt": "702fdeedc5c2d248d2963c6fce966f47d1bb650374a34bf2c7f17c61384d3cfe",
+    "failed.json": "b97ca166e8ad0ca8a5e1bfddbd923549ec60abe91de03bd5f5955a2466f635db",
+    "failed-planar.png": "f0bfb296468ea579d7fffcc8957201d80c137033a5fc4eac631cfcdcfe725ce3",
+    "rejected-shared-source.mjs.txt": "1832f69d7aaa531c5f45ad8f75044c77ae0bb6581f0122c5eb278e19665eb780",
+    "rejected-shared-results.json": "15dcdcafc6a5136fe56c62d569dc1ecdabfb18157f9ce45779dfa07e27de7e1c",
+    "rejected-shared.png": "c64a28f7e4e0fc1fcf91203b8cfda00030195b6f4d601b62a125dd446815f382",
+    "final-templates.mjs.txt": "0039a37518cbfa650429210554d2d942582db4661514170d526096a365d8cd15",
+    "final-coast-utils.mjs.txt": "c5f55bcbf46863feac1254bd232739ae09e6ad9344b6b279e76277920565a3b1",
+    "final-layout-a.mjs.txt": "0d4f599d1461b9bfbaccf048ab3d5cf8cf7acd49df99ca9a5098022cee97f291",
+    "final-layout-b.mjs.txt": "fc480cc89fd2671552314b35effa77f60d0b008718c0e0242adb931d88cd1307",
+    "final-layout-c.mjs.txt": "7337d31d28655db39e88196ddf65aece718f2da777398c6ab6a1ede12227f37c",
+    "final-certificates.mjs.txt": "906d00b570581650d09f9aaeb30f4a4454c6a1ae5efbcde9a8a2e40fb540691b",
+    "final.json": "bd3715a2d43b4c07b132cacede7f3b22b61a037bd9909f86276d1f2b2f52a11d",
+    "final.png": "1f0380edcd340991e3a35b1ef21897293a8e1f52698fa67b68ae1dfa56ebb752"
+  }
+}

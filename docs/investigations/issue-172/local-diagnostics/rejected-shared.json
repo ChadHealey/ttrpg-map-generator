@@ -1,0 +1,70 @@
+{
+  "scope": "Local planar diagnostic only; no world placement or human acceptance",
+  "sourceSha256": "1832f69d7aaa531c5f45ad8f75044c77ae0bb6581f0122c5eb278e19665eb780",
+  "imageSha256": "c64a28f7e4e0fc1fcf91203b8cfda00030195b6f4d601b62a125dd446815f382",
+  "width": 900,
+  "height": 300,
+  "span": 2.4,
+  "panels": [
+    {
+      "input": {
+        "id": "normal-01",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      },
+      "ownerId": "owner-0",
+      "quota": 0.13106846473029043,
+      "layoutIndex": 1
+    },
+    {
+      "input": {
+        "id": "normal-01",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      },
+      "ownerId": "owner-1",
+      "quota": 0.13106846473029043,
+      "layoutIndex": 0
+    },
+    {
+      "input": {
+        "id": "normal-02",
+        "seed": "2",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      },
+      "ownerId": "owner-2",
+      "quota": 0.10494186046511626,
+      "layoutIndex": 2
+    }
+  ]
+}
