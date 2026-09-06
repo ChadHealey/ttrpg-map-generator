@@ -1,0 +1,5998 @@
+{
+  "readyForComparison": true,
+  "completeCohortPassed": true,
+  "failures": [],
+  "layouts": [0, 1, 2],
+  "exactRepeat": true,
+  "rows": [
+    {
+      "id": "normal-01",
+      "seed": "1",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 2,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 3,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 4,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 5,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0340782628781353,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.055303588468252,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5792043593895533,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5813169510090324,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "normal-02",
+      "seed": "2",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9204312913021763,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9221003605050512,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9199396030039786,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5225673495765027,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "normal-03",
+      "seed": "3",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9215249217478391,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9449351101330816,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9226365104125133,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5273259658118145,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "normal-04",
+      "seed": "4",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9320493715490641,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9206561018257823,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9207544473576981,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5223327407091642,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "connected-majority",
+      "seed": "1085102592571150095",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.06666666666666667,
+          "radius": 0.7354392628585443,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.06666666666666667,
+          "radius": 0.7351033770882326,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.06666666666666667,
+          "radius": 0.7326395358925091,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.06666666666666667,
+          "radius": 0.7418818676223735,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-4",
+          "quota": 0.06666666666666667,
+          "radius": 0.7368917295744417,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-5",
+          "quota": 0.06666666666666667,
+          "radius": 0.7300706680680487,
+          "primary": true,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "fragmented-islands",
+      "seed": "18364758544493064720",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.08173584905660378,
+          "radius": 0.8594940197869644,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.08173584905660378,
+          "radius": 0.9017158682955152,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.08173584905660378,
+          "radius": 0.9026637352008601,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.027396226415094344,
+          "radius": 0.4854814647930579,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-4",
+          "quota": 0.027396226415094344,
+          "radius": 0.48828445232315465,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-001",
+      "seed": "180000000000000001",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2178902373941491,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.666054189079312,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.642969075047276,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6693447818353339,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-002",
+      "seed": "180000000000000002",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9207186255142247,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9219800075066016,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9225862835365409,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.508471684201936,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-003",
+      "seed": "180000000000000003",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-0",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9206986871900795,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9234598150846828,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9211814746029863,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.525215782777585,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-004",
+      "seed": "180000000000000004",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.243570933522182,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6486874269730722,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6663196084255509,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6600866881853386,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-005",
+      "seed": "180000000000000005",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0382602079181271,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0290820989034433,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.568290823165022,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5842165531727075,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-006",
+      "seed": "180000000000000006",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2465383684777747,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6637212397694778,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6627430137020772,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6436297695173168,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-007",
+      "seed": "180000000000000007",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 2,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 3,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 4,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 5,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 6,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9434268690291883,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9259318112387662,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9199022816060793,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5247094721697423,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-008",
+      "seed": "180000000000000008",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9177251990505336,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9306857949264914,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9202605180726618,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.522841191263446,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-009",
+      "seed": "180000000000000009",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 2,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 3,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2364639040703231,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6463463086587927,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6682752379647396,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6645736789146686,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-010",
+      "seed": "180000000000000010",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 2,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 3,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2366947490239129,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6531318826718332,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6666079074460313,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6610631941318152,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-011",
+      "seed": "180000000000000011",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-0",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9170853325351698,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9252331738559056,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9272827856956485,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5269891026768417,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-012",
+      "seed": "180000000000000012",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0340729522447663,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0493369410445255,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5793107964929036,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5801820962466209,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-013",
+      "seed": "180000000000000013",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0343488277322732,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0521145411509631,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5811478094070731,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5796620540678945,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-014",
+      "seed": "180000000000000014",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0404818433398446,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.027785037572147,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5722490070433198,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5805372882594283,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-015",
+      "seed": "180000000000000015",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2449110566334574,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6438848994778544,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6675276526947794,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6626411752496533,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-016",
+      "seed": "180000000000000016",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9198957189357466,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9215278694007465,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9352839672406286,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5178216794542762,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-017",
+      "seed": "180000000000000017",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 2,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 3,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9223567617991878,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9381027747355144,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9247227286777019,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5254401886059858,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-018",
+      "seed": "180000000000000018",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.23039075926252,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6662778451913037,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6668186369583374,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6433906971932412,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-019",
+      "seed": "180000000000000019",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9249562292514147,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9172316491632291,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9377630867239454,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5101154256052961,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-020",
+      "seed": "180000000000000020",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0463762999503718,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0356415352114752,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5840588560521798,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5726788563653092,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-021",
+      "seed": "180000000000000021",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9340453636108513,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9263209040513668,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9209718721140633,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5219362777133568,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-022",
+      "seed": "180000000000000022",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 2,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2282788405788072,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6632285802439936,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6425585216390813,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6667692496022302,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-023",
+      "seed": "180000000000000023",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0333023186475632,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.045511966922298,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5808781978724097,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5778523295522306,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-024",
+      "seed": "180000000000000024",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9247292436540213,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.923003488166286,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9417845245465679,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5100102881569328,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-025",
+      "seed": "180000000000000025",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-0",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 2,
+          "ownerId": "owner-0",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 3,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 4,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 5,
+          "ownerId": "owner-0",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 6,
+          "ownerId": "owner-0",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9169540812063027,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9375188743875738,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9283940044334188,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5248272590884394,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-026",
+      "seed": "180000000000000026",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0333336640392565,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.05784094246894,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5800824806080404,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5759537416240893,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-027",
+      "seed": "180000000000000027",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9344675974504904,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.92660206948248,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.920874682252466,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5226674811003198,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-028",
+      "seed": "180000000000000028",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9359308545506465,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9245730802172627,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.921109874659972,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.523312441427223,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-029",
+      "seed": "180000000000000029",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9400446790827193,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9237021834915586,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9210282739934629,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5231768176940199,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-030",
+      "seed": "180000000000000030",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2291313477623118,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6656761196974601,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.644200959563462,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6666591020613668,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-031",
+      "seed": "180000000000000031",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0336333669161586,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0367108052839538,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5820643410955187,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5604068488780496,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-032",
+      "seed": "180000000000000032",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9214244182457468,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9313959781371166,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9306461620919002,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5291017318501086,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-033",
+      "seed": "180000000000000033",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-0",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9195564862216645,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9314927991369029,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.925344457049206,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5242756365889069,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-034",
+      "seed": "180000000000000034",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 2,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9301909697787248,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9217724253157584,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9309776501655175,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5067023722482172,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-035",
+      "seed": "180000000000000035",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2320210747222058,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6656366760253695,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6431527384542494,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6688757130033794,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-036",
+      "seed": "180000000000000036",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9247950713453083,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9255549842225053,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9243467894958153,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5241790441411064,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-037",
+      "seed": "180000000000000037",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2158214291717828,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.664195558294233,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6687237320078643,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6390904239763291,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-038",
+      "seed": "180000000000000038",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.233062514071846,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6441897113672559,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6637869704259143,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6643963817225572,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-039",
+      "seed": "180000000000000039",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.025459594278769,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.040171749763561,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.579943091442964,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.57713833673151,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-040",
+      "seed": "180000000000000040",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2345991376959333,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6482791068730501,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6636018440507491,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6632731529275869,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-041",
+      "seed": "180000000000000041",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0291351619049525,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0280486410629737,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5745943203102551,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5802363870994217,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-042",
+      "seed": "180000000000000042",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9246635652755469,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9180043934416856,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9402092301364698,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5152259081412875,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-043",
+      "seed": "180000000000000043",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 2,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 3,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 4,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 5,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 6,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0463359059300734,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0382537393052447,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5815485079437224,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5629262639139022,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-044",
+      "seed": "180000000000000044",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9206551762477511,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9290761409315348,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9203277309925891,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5227814363725906,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-045",
+      "seed": "180000000000000045",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-0",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9194601773340735,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9299671281200572,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9206828229445311,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5279167913400125,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-046",
+      "seed": "180000000000000046",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0373040294618403,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0299158952744072,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5635237194363185,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5796978383978948,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-047",
+      "seed": "180000000000000047",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.232579954513923,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6645168377961469,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6627223298380415,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6388781500165449,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-048",
+      "seed": "180000000000000048",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0334745193994224,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.029213892878122,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5547563756083804,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.580640690099704,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-049",
+      "seed": "180000000000000049",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2317631892147047,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6363541600090338,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6649799896198999,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6629323403639367,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-050",
+      "seed": "180000000000000050",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9222367191470305,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9219724106329168,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9231545922839202,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5231365618609087,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-051",
+      "seed": "180000000000000051",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-0",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 2,
+          "ownerId": "owner-0",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 3,
+          "ownerId": "owner-0",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 4,
+          "ownerId": "owner-0",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 5,
+          "ownerId": "owner-0",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 6,
+          "ownerId": "owner-0",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 7,
+          "ownerId": "owner-0",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 8,
+          "ownerId": "owner-0",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 9,
+          "ownerId": "owner-0",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 10,
+          "ownerId": "owner-0",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 11,
+          "ownerId": "owner-0",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9210515201366382,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9227913267922818,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.944251535126803,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5134869538180481,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-052",
+      "seed": "180000000000000052",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2206244121195224,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6311307337629353,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.662976037930567,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6619854532417648,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-053",
+      "seed": "180000000000000053",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0355472584469265,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0258003028465053,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5693343758218148,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5819268086892733,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-054",
+      "seed": "180000000000000054",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0350055992115945,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0564548758333572,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5817158033046723,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5825042072315101,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-055",
+      "seed": "180000000000000055",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9327020103947806,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9269108193108897,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9156219069698486,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5268151912646255,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-056",
+      "seed": "180000000000000056",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 2,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 3,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 4,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2241647646878944,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6453203569503713,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.664085786520638,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6637161261307186,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-057",
+      "seed": "180000000000000057",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.238919287932619,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6654814302846876,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6508957206575079,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6658140955533244,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-058",
+      "seed": "180000000000000058",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9331304344185807,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9239263482421249,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9224773286651994,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5214070411626673,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-059",
+      "seed": "180000000000000059",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0335307175824857,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0494603546503067,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5797840167386902,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5824595833642328,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-060",
+      "seed": "180000000000000060",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2288260031623652,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6367260165058198,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6681037218914181,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6641373707419441,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-061",
+      "seed": "180000000000000061",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-0",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9218790188501086,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9242072485838454,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9254524357487809,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.504240593266224,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-062",
+      "seed": "180000000000000062",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-0",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9180963695744387,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9186154322224008,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9235331234932532,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5197388451736906,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-063",
+      "seed": "180000000000000063",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 2,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0359039354200275,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.028332450585197,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5529104688222647,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5831829579848353,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-064",
+      "seed": "180000000000000064",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2215330894899765,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6654078136781614,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6352743922327875,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6655309248727783,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-065",
+      "seed": "180000000000000065",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.934583893287099,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9280221513250226,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9181457026981553,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5225581527804263,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-066",
+      "seed": "180000000000000066",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-0",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9156205100982541,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9393980490979538,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9268820101486244,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5257343800479988,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-067",
+      "seed": "180000000000000067",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0364590354107035,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.035533784653713,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5719888655088737,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5845648808859916,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-068",
+      "seed": "180000000000000068",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.045321052461371,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0312107192504159,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5802831550474971,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5571013321675785,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-069",
+      "seed": "180000000000000069",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.034735158886903,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.029718268803544,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5610074048007974,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5811567133819677,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-070",
+      "seed": "180000000000000070",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9399477701969304,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9201018942943634,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9170839068623917,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5231733143567217,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-071",
+      "seed": "180000000000000071",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.225620104560836,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6681525703791336,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6601002717769194,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6542495890031866,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-072",
+      "seed": "180000000000000072",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0504086774359815,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0352590438151545,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5824509028774636,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5616395767999881,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-073",
+      "seed": "180000000000000073",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2119423099545157,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6620788696578308,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6532494829872413,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6637863109247426,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-074",
+      "seed": "180000000000000074",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 2,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 3,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 4,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0353407358860987,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0289913087329607,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5655344314380402,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5836419141229013,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-075",
+      "seed": "180000000000000075",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0332932247794762,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0346793512007173,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.569347131920303,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5814083017732893,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-076",
+      "seed": "180000000000000076",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.054531593274428,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0416025794488397,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5834571034037751,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5622217789851742,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-077",
+      "seed": "180000000000000077",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9198628605028596,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9386018049848399,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9232002379997775,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5232981662947043,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-078",
+      "seed": "180000000000000078",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.925540600244467,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9219866358504494,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9223972714050112,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5064579093762019,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-079",
+      "seed": "180000000000000079",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 2,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 3,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 4,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 5,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.026306238429871,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0370932931861299,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5811147922351502,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5803542531869115,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-080",
+      "seed": "180000000000000080",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 2,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.036329472304454,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0360437010471493,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.573956753376646,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5835113069123296,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-081",
+      "seed": "180000000000000081",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0337663434133002,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0350525633190648,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5629795115824525,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5808257518221939,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-082",
+      "seed": "180000000000000082",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9342101839579763,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9242559088654224,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9189646712998287,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5231361600028208,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-083",
+      "seed": "180000000000000083",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9317336048781819,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9212077684391738,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9234301025904788,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5246177035238653,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-084",
+      "seed": "180000000000000084",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9201487448776396,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9274345629492372,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9220786303501308,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5252176974418762,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-085",
+      "seed": "180000000000000085",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0290331831684927,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0480512430112423,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.579868115316712,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5822349700027031,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-086",
+      "seed": "180000000000000086",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 2,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2390920654404327,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6315115550729642,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6674651771141665,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6618718211215232,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-087",
+      "seed": "180000000000000087",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.031764431652907,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0422660464825788,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5853305290266985,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5762516539089211,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-088",
+      "seed": "180000000000000088",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9245066751919263,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9198201912322638,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9354011638649186,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.519113032614622,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-089",
+      "seed": "180000000000000089",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0378542045792252,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0327490294813975,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5548794794452518,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5824732524952557,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-090",
+      "seed": "180000000000000090",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 2,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.936996567775503,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9259200584855387,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9223480769158896,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5215644161345033,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-091",
+      "seed": "180000000000000091",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2248026402010062,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6359680723317799,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6649526609020182,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6635182197242933,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-092",
+      "seed": "180000000000000092",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-0",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 2,
+          "ownerId": "owner-0",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9180490695899737,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9372990089770246,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9317384000126528,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5257140457511842,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-093",
+      "seed": "180000000000000093",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2285996363097098,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6376881800635161,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6646573382057567,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6636120788087605,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-094",
+      "seed": "180000000000000094",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2203543669997123,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6635047420402868,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6556483527741773,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6704010587230814,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-095",
+      "seed": "180000000000000095",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2294579474908656,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6606778036576973,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6554929419588941,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6671461866768182,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-096",
+      "seed": "180000000000000096",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0444296245687985,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0271153404000248,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5599297118701259,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5794784559244418,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-097",
+      "seed": "180000000000000097",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 2,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.032078240193741,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.029356210423806,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5708098595467275,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5817598292067206,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-098",
+      "seed": "180000000000000098",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9357996825836951,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.923329730223574,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.918113361336693,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5204088670611983,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-099",
+      "seed": "180000000000000099",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.036080197441732,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.040862116182374,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5785469769669339,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5671514555337239,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-100",
+      "seed": "180000000000000100",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 2,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0352658976891633,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.034320598656433,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5791609241277893,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5554666605684736,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-101",
+      "seed": "180000000000000101",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9188557718774276,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9340518719771908,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9251426559912039,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5233636405053146,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-102",
+      "seed": "180000000000000102",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2420595714284892,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6416563536664395,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6666619354790506,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6628988370218775,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-103",
+      "seed": "180000000000000103",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 2,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 3,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.216270573248054,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6547769651830999,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6664427922931844,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6645922575722912,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-104",
+      "seed": "180000000000000104",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.031409816511581,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.032789664074905,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5655116409760647,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5853774805006389,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-105",
+      "seed": "180000000000000105",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0409878544153557,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.033756201205423,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5785244555906367,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5585746989688724,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-106",
+      "seed": "180000000000000106",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9188335226128772,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9323993834200442,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9253416677161901,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5233438213137968,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-107",
+      "seed": "180000000000000107",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0324796867213988,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.033961562770117,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5628623435474661,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5796647122946764,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-108",
+      "seed": "180000000000000108",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2233312296491305,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6661861925214356,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6607582696498441,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6424434679995656,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-109",
+      "seed": "180000000000000109",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2437422714403408,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6624532474169552,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6406289855630269,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6648901866288679,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-110",
+      "seed": "180000000000000110",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0290406574103834,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0532863785834592,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5798780713203177,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5785106952784329,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-111",
+      "seed": "180000000000000111",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0371638584695038,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0309368202126223,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5785312515909156,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.577323764776224,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-112",
+      "seed": "180000000000000112",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.922352690655581,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9226104218430117,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.915220689609329,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5226864478830416,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-113",
+      "seed": "180000000000000113",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.236755737275175,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6644874577416638,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6609424330908968,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6528862444883917,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-114",
+      "seed": "180000000000000114",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9254100956952834,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9244475172895938,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9229169476962392,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5259756584284878,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-115",
+      "seed": "180000000000000115",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 2,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 3,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 4,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2435145113972264,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6562402287970304,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6683049809635224,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6606834909020493,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-116",
+      "seed": "180000000000000116",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 2,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 3,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2202569881527607,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6275011316886581,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6677554198207832,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.663869072292381,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-117",
+      "seed": "180000000000000117",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0375747833990123,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0543895643408212,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5811277337264231,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5776823665772908,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-118",
+      "seed": "180000000000000118",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2239413394116314,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6629344481419015,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6471682646268572,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6681506920562533,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-119",
+      "seed": "180000000000000119",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9357421193800237,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9217192196292924,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9225285387501708,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5234152945961965,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-120",
+      "seed": "180000000000000120",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9192465982735954,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9395744677719784,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9275106307973956,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5247518021490377,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-121",
+      "seed": "180000000000000121",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.13106846473029043,
+          "radius": 1.0343058565847756,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.13106846473029043,
+          "radius": 1.0324800309776119,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.04393153526970955,
+          "radius": 0.5651326431389923,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.04393153526970955,
+          "radius": 0.5793577027316552,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-122",
+      "seed": "180000000000000122",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-1",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2262928641558426,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6381211470971173,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6667777706139606,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6624667407322373,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-123",
+      "seed": "180000000000000123",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2296196968374837,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.667726099802239,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6685608926051041,
+          "primary": false,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6431914700042687,
+          "primary": false,
+          "layoutIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "default-124",
+      "seed": "180000000000000124",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9227770448434014,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9411173384754914,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9216804081914611,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5257762770846904,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-125",
+      "seed": "180000000000000125",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9212872338549757,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9268234920668953,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9257998934279695,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5258418406284762,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-126",
+      "seed": "180000000000000126",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-3",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 2,
+          "ownerId": "owner-0",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9194571784174325,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9435019183046813,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9195239531643703,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5247926684424015,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "default-127",
+      "seed": "180000000000000127",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.17451657458563533,
+          "radius": 1.2225259490942986,
+          "primary": true,
+          "layoutIndex": 3
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.05849447513812155,
+          "radius": 0.6383598750921478,
+          "primary": false,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.05849447513812155,
+          "radius": 0.6670668265176556,
+          "primary": false,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.05849447513812155,
+          "radius": 0.6628820191933479,
+          "primary": false,
+          "layoutIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "default-128",
+      "seed": "180000000000000128",
+      "status": "geometry-and-placement-pass",
+      "issues": [],
+      "constructionFailures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-0",
+          "directionCount": 128
+        }
+      ],
+      "owners": [
+        {
+          "id": "owner-0",
+          "quota": 0.10494186046511626,
+          "radius": 0.9175106826279625,
+          "primary": true,
+          "layoutIndex": 0
+        },
+        {
+          "id": "owner-1",
+          "quota": 0.10494186046511626,
+          "radius": 0.9316608031667301,
+          "primary": true,
+          "layoutIndex": 1
+        },
+        {
+          "id": "owner-2",
+          "quota": 0.10494186046511626,
+          "radius": 0.9213497840861506,
+          "primary": true,
+          "layoutIndex": 2
+        },
+        {
+          "id": "owner-3",
+          "quota": 0.03517441860465116,
+          "radius": 0.5245626878591582,
+          "primary": false,
+          "layoutIndex": 0
+        }
+      ]
+    }
+  ]
+}

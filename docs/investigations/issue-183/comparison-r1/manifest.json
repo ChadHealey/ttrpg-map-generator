@@ -1,0 +1,197 @@
+{
+  "revision": "issue-183-world-r1-recipe3",
+  "sources": {
+    "run.mjs": "29cd105e67a969c0b1b7341586c00fc1ac157677890b94bd94aec5d570ab7c0e",
+    "experiment.md": "63394da3987e3d6458c62a784aadeebf8cf09917be0b2ce239da3e7ecba49fcd",
+    "local-findings.md": "2155839c1fb12d9abb8156d03924726eb39589dd296d01013a3f006bd4a4bda9",
+    "../issue-178/design.md": "e6da54a66ebb7a3092ce0409f62a3862994d15e4636f135db5d57dc54e818a6d",
+    "../issue-164/visual-contract.md": "79b55a8a3e8f0af52a7e9612388531be1caf846ae4afb6c061456ebf800659f7",
+    "../issue-164/comparison/results.json": "a732cd4481b7c06e4faced73cad55c67bec0195dc4bdfb1d5d321038a2a72cc1",
+    "../issue-172/run.mjs": "8b2c9f37fce2b9c6e358be023ff26dc0290d818a0c838fe19e155eed77413351",
+    "corpus.mjs": "4dfb0d7a6320a938adca6d4aa6a8ac828d5153c35f947c76a1d5aa8e5fa9e44a",
+    "gate.mjs": "bd035d47f5aed7704c978003109671fd679db20fe18b717a39f5f7fcb0983419",
+    "recipes/recipe-3/templates.mjs": "9cfa0b1d90abf338b1be4e766648b05ad10f24539a268f6340b14c4f590a4955",
+    "../issue-164/morphology.mjs": "30d5597af6f999fdcdd9013288773f0bb0f445bac219b55cc94f0ebc37e70328",
+    "../issue-164/render-comparison.mjs": "9ef4249fe5525a61502ad4319262e05816e93e89bd7d6c9cab377ef9293d5004",
+    "../issue-165/run.mjs": "778b0fb0d3c858cde8a78ec793e64e327826b5dfbc0f566f64920ea09b6a777e",
+    "../issue-169/field.mjs": "f6e0557ce3e786dae8c9789fd44c95f75bf2ca33fd36fa69145c7a31d854de54",
+    "../issue-170/placement.mjs": "3099ee459e7a280f9c6a3776036e81000506a3c51c4782c5b55f188aefb9d833",
+    "../issue-172/readiness.mjs": "af37ee2f12e85eab71028c76995645911c748cc2c937868ab73e0b1ac6753788",
+    "../issue-172/templates.mjs": "0039a37518cbfa650429210554d2d942582db4661514170d526096a365d8cd15",
+    "../issue-172/templates-r2.mjs": "d30a7873e85779948371582338eefea3e2d63ccf79fec18586d50bec2b58e786",
+    "../issue-180/corpus.mjs": "cf0127239f51301e01afb9d5039014e6aef97347210d340c9b0d79dce97adf36",
+    "../issue-169/geometry.mjs": "bc54bf0c7e5b878d9d26f2fe96658d0818cddf1ae4a7b2f5997c965d98f463bc",
+    "../issue-178/certificates.mjs": "6ac1b753e2f680845c1a4ce22c9e5debe19b139b62ec6fb5b226f4166c796109",
+    "../issue-180/audit-final.mjs": "80ae82a65c68fbb656bcffb40aad51703fee6ae5b05144558fdabc93d483184a",
+    "templates.mjs": "2fa85d6059d4655208dc273ebd1a3118abcede9399bf402a1e7862d1c3001af8",
+    "../issue-182/templates.mjs": "6fd318af6bcb213ae77e7ca3dcf07dd90103b13afa1fe8b233bc6df3074ece03",
+    "recipes/recipe-3/base-templates.mjs": "bed5a3cee050f1a3eb5863fc89d14def15736f4b01a62c63341931ddbd06864c",
+    "../issue-165/field.mjs": "ad082bae88a5f36e76d4179bfc24073c87edd686447c572900924bf787093381",
+    "../issue-165/measure.mjs": "507085e8aa6473eb1a22879052bb021a2233484a6a0377f2af1f76d7595c4102",
+    "../issue-169/placement.mjs": "c3fe7988cfff2fbc6391b062d39277cd376dfa9e9efe5cafb0be9d5fa14c5c52",
+    "../issue-170/templates.mjs": "566b4fbeb5e568bdfd1e87c2b55622d70614cf36d2fa1393686cb6f404a2f870",
+    "../issue-172/certificates.mjs": "906d00b570581650d09f9aaeb30f4a4454c6a1ae5efbcde9a8a2e40fb540691b",
+    "../issue-172/coast-utils.mjs": "c5f55bcbf46863feac1254bd232739ae09e6ad9344b6b279e76277920565a3b1",
+    "../issue-172/layout-a.mjs": "0d4f599d1461b9bfbaccf048ab3d5cf8cf7acd49df99ca9a5098022cee97f291",
+    "../issue-172/layout-b.mjs": "fc480cc89fd2671552314b35effa77f60d0b008718c0e0242adb931d88cd1307",
+    "../issue-172/layout-c.mjs": "7337d31d28655db39e88196ddf65aece718f2da777398c6ab6a1ede12227f37c",
+    "../issue-172/layout-r2-a.mjs": "ec3d712bbafb17982976abc7a85635cb7b5708fb4a5bc8805f9b88a928ae8c71",
+    "../issue-172/layout-r2-b.mjs": "6d24fc5248247279af5f3a7bce80ffe88dc3e1bfe0ad62227f0b30c3d4d115f5",
+    "../issue-172/layout-r2-c.mjs": "60a0622f044acf4467bab4d3d6cbbeac85b6237512ed472158c764da1586bb7d",
+    "../issue-174/supporting-mouth.mjs": "030978a9df08402fb09673be759c878f1f5ca3ea307d1d29ae725c697db26bb8",
+    "../issue-176/wedge-mouth.mjs": "3ae13e28c511e62fe7ddb9a6c7234eee8f46dff2b9fcd9642d8aea5c69cc051e",
+    "base-templates.mjs": "4942d1398f235c7fa3e0aa2f4dad725b5c3c16c1ad915b870d36b10dab8fab73",
+    "../issue-179/templates-r2.mjs": "a69964ae65e1a7a3308fe1d61a4506d1715c47e11cc940be0a146386e309ac0f",
+    "../issue-182/layout-large.mjs": "e2a6b60a597d3eb6a73c64ffbdd2f8be0cb9f6e1c5e3bb9ff61596fd574b48da",
+    "../issue-172/coast-partition.mjs": "4489dd7f81c918a21ab0463782cc112dbd1e72767affc6dae317a533c43930c8",
+    "recipes/recipe-3/layout-a.mjs": "726e7496e334d460a14b2a1bd4532d507e60faf98d68f55c5b80e0d433a7dd53",
+    "recipes/recipe-3/layout-b.mjs": "606e973c233c65f7491d097c2c76a1094d1497142043b05dd347513e5e3c62b9",
+    "recipes/recipe-3/layout-c.mjs": "7e8782f856661074f769912ef1df7a2defd5cd18044bb36cb7bfa5269b6cdee7",
+    "../issue-169/certificates.mjs": "7a1cfacab789829249ceaf72454d212472cb59a49ca8d8e08eedc6442ba8213c",
+    "../issue-176/wedge-segment.mjs": "b6917fb8fff78c9314a56f10d491daa37ae29ac2fc2a647a6794cebe96e5ae78",
+    "layout-a.mjs": "3d55902854f424aab1f65b3b9d5b6b6b0936f64b15c2efb0df3f27fb2d90757f",
+    "layout-b.mjs": "f49e78781c83fe6b737f4c8dd7eeabbcf5cc7bb8ee8cee0c456be4d1bab89c5c",
+    "layout-c.mjs": "2e815a05caaeda60bfe97e9c03498eedd7ee4dea44a7fe2f3959efc292eb19db",
+    "../issue-179/layout-b.mjs": "e7fa7731b7e6d01dc3f20308c834ae2792b1229e49d07d4c4170315abe799e7b",
+    "../issue-179/layout-c.mjs": "2e815a05caaeda60bfe97e9c03498eedd7ee4dea44a7fe2f3959efc292eb19db",
+    "../issue-179/layout-r2-a.mjs": "3d55902854f424aab1f65b3b9d5b6b6b0936f64b15c2efb0df3f27fb2d90757f"
+  },
+  "inputs": [
+    {
+      "id": "normal-01",
+      "seed": "1",
+      "controls": {
+        "worldCircumferenceKm": 40000,
+        "targetWaterCoveragePercent": 65,
+        "continentCountIntent": 4,
+        "continentDistribution": "varied",
+        "fragmentationPercent": 35,
+        "islandAbundancePercent": 35,
+        "archipelagoAbundancePercent": 25,
+        "oceanConnectivity": "singleGlobal",
+        "polarCharacter": "neutral"
+      }
+    },
+    {
+      "id": "normal-02",
+      "seed": "2",
+      "controls": {
+        "worldCircumferenceKm": 40000,
+        "targetWaterCoveragePercent": 65,
+        "continentCountIntent": 4,
+        "continentDistribution": "varied",
+        "fragmentationPercent": 35,
+        "islandAbundancePercent": 35,
+        "archipelagoAbundancePercent": 25,
+        "oceanConnectivity": "singleGlobal",
+        "polarCharacter": "neutral"
+      }
+    },
+    {
+      "id": "normal-03",
+      "seed": "3",
+      "controls": {
+        "worldCircumferenceKm": 40000,
+        "targetWaterCoveragePercent": 65,
+        "continentCountIntent": 4,
+        "continentDistribution": "varied",
+        "fragmentationPercent": 35,
+        "islandAbundancePercent": 35,
+        "archipelagoAbundancePercent": 25,
+        "oceanConnectivity": "singleGlobal",
+        "polarCharacter": "neutral"
+      }
+    },
+    {
+      "id": "normal-04",
+      "seed": "4",
+      "controls": {
+        "worldCircumferenceKm": 40000,
+        "targetWaterCoveragePercent": 65,
+        "continentCountIntent": 4,
+        "continentDistribution": "varied",
+        "fragmentationPercent": 35,
+        "islandAbundancePercent": 35,
+        "archipelagoAbundancePercent": 25,
+        "oceanConnectivity": "singleGlobal",
+        "polarCharacter": "neutral"
+      }
+    },
+    {
+      "id": "connected-majority",
+      "seed": "1085102592571150095",
+      "controls": {
+        "worldCircumferenceKm": 40000,
+        "targetWaterCoveragePercent": 60,
+        "continentCountIntent": 6,
+        "continentDistribution": "balanced",
+        "fragmentationPercent": 55,
+        "islandAbundancePercent": 55,
+        "archipelagoAbundancePercent": 50,
+        "oceanConnectivity": "connectedMajority",
+        "polarCharacter": "neutral"
+      }
+    },
+    {
+      "id": "fragmented-islands",
+      "seed": "18364758544493064720",
+      "controls": {
+        "worldCircumferenceKm": 40000,
+        "targetWaterCoveragePercent": 70,
+        "continentCountIntent": 5,
+        "continentDistribution": "varied",
+        "fragmentationPercent": 90,
+        "islandAbundancePercent": 95,
+        "archipelagoAbundancePercent": 95,
+        "oceanConnectivity": "singleGlobal",
+        "polarCharacter": "neutral"
+      }
+    },
+    {
+      "id": "default-001",
+      "seed": "180000000000000001",
+      "controls": {
+        "worldCircumferenceKm": 40000,
+        "targetWaterCoveragePercent": 65,
+        "continentCountIntent": 4,
+        "continentDistribution": "varied",
+        "fragmentationPercent": 35,
+        "islandAbundancePercent": 35,
+        "archipelagoAbundancePercent": 25,
+        "oceanConnectivity": "singleGlobal",
+        "polarCharacter": "neutral"
+      }
+    },
+    {
+      "id": "default-004",
+      "seed": "180000000000000004",
+      "controls": {
+        "worldCircumferenceKm": 40000,
+        "targetWaterCoveragePercent": 65,
+        "continentCountIntent": 4,
+        "continentDistribution": "varied",
+        "fragmentationPercent": 35,
+        "islandAbundancePercent": 35,
+        "archipelagoAbundancePercent": 25,
+        "oceanConnectivity": "singleGlobal",
+        "polarCharacter": "neutral"
+      }
+    },
+    {
+      "id": "default-006",
+      "seed": "180000000000000006",
+      "controls": {
+        "worldCircumferenceKm": 40000,
+        "targetWaterCoveragePercent": 65,
+        "continentCountIntent": 4,
+        "continentDistribution": "varied",
+        "fragmentationPercent": 35,
+        "islandAbundancePercent": 35,
+        "archipelagoAbundancePercent": 25,
+        "oceanConnectivity": "singleGlobal",
+        "polarCharacter": "neutral"
+      }
+    }
+  ],
+  "kind": "comparison"
+}

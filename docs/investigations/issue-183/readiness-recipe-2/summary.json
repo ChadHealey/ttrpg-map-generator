@@ -1,0 +1,19 @@
+{
+  "total": 134,
+  "cohorts": {
+    "retained-six": { "total": 6, "statuses": { "geometry-and-placement-pass": 6 } },
+    "additional-default": { "total": 128, "statuses": { "geometry-and-placement-pass": 128 } }
+  },
+  "statuses": { "geometry-and-placement-pass": 134 },
+  "constructionFailureCodes": {},
+  "placementFailureCodes": { "placement.attempt-exhausted": 127 },
+  "candidateFailureCodes": {
+    "construction": 89,
+    "peninsula-extent-max": 456,
+    "peninsula-width-max": 456,
+    "peninsula-ratio": 335,
+    "bay-opening-max": 456
+  },
+  "examples": {},
+  "controlFingerprints": []
+}

@@ -1,0 +1,14 @@
+{
+  "stage": "baseline",
+  "entries": [
+    "../issue-183/recipes/baseline/layout-a.mjs",
+    "../issue-183/recipes/baseline/layout-b.mjs",
+    "../issue-183/recipes/baseline/layout-c.mjs"
+  ],
+  "artifacts": {
+    "sources.json": "bf422ca78654f6046517eeb79325f6bacb198237ead2629ce10c66175f320214",
+    "report.json": "995d5b58c3b6a2fe433ed92b79c9f4f9a9c9e6c4133cc8ef7e5383268135aa07",
+    "panel.png": "b0f54fe24aff03695ccfb75a2819ac87b3096b43d800ab528edfa7dee68aa39b"
+  },
+  "writer": "afe2fa6771c59bdfef18940b0ca6b2f76dcd2e741767efe05474bd49772a227c"
+}
