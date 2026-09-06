@@ -1,0 +1,344 @@
+[
+  {
+    "row": "milestone-2-atlas-v2-connected-majority",
+    "path": "fixtures/visual-gallery/milestone-2-atlas-v2-connected-majority/baseline.png",
+    "commit": "736e1ddbbda804fa2c9e74e63d0d1ea3c99b83e1",
+    "sha256": "8354aec95effcf47c822cbf33dd233e62a1a68717606deed66a4484512595fd2",
+    "bytes": 110625,
+    "seed": "1085102592571150095",
+    "controls": {
+      "worldCircumferenceKm": 40000,
+      "targetWaterCoveragePercent": 60,
+      "continentCountIntent": 6,
+      "continentDistribution": "balanced",
+      "fragmentationPercent": 55,
+      "islandAbundancePercent": 55,
+      "archipelagoAbundancePercent": 50,
+      "oceanConnectivity": "connectedMajority",
+      "polarCharacter": "neutral"
+    }
+  },
+  {
+    "row": "milestone-2-atlas-v2-control-max",
+    "path": "fixtures/visual-gallery/milestone-2-atlas-v2-control-max/baseline.png",
+    "commit": "736e1ddbbda804fa2c9e74e63d0d1ea3c99b83e1",
+    "sha256": "fe976004c9b8034a6a7b6b42f046d8262d7f54182709f5e7435d34cc1b557603",
+    "bytes": 131594,
+    "seed": "16045690984503098046",
+    "controls": {
+      "worldCircumferenceKm": 80000,
+      "targetWaterCoveragePercent": 80,
+      "continentCountIntent": 8,
+      "continentDistribution": "oneDominant",
+      "fragmentationPercent": 100,
+      "islandAbundancePercent": 100,
+      "archipelagoAbundancePercent": 100,
+      "oceanConnectivity": "multipleBasins",
+      "polarCharacter": "oceanBiased"
+    }
+  },
+  {
+    "row": "milestone-2-atlas-v2-control-min",
+    "path": "fixtures/visual-gallery/milestone-2-atlas-v2-control-min/baseline.png",
+    "commit": "736e1ddbbda804fa2c9e74e63d0d1ea3c99b83e1",
+    "sha256": "c73d88286bdf0b5afffcb03e55d967d339ae8cbf34d84ecdd6f12daef376405a",
+    "bytes": 59782,
+    "seed": "6148914691236517205",
+    "controls": {
+      "worldCircumferenceKm": 10000,
+      "targetWaterCoveragePercent": 45,
+      "continentCountIntent": 1,
+      "continentDistribution": "balanced",
+      "fragmentationPercent": 0,
+      "islandAbundancePercent": 0,
+      "archipelagoAbundancePercent": 0,
+      "oceanConnectivity": "singleGlobal",
+      "polarCharacter": "landBiased"
+    }
+  },
+  {
+    "row": "milestone-2-atlas-v2-fragmented-islands",
+    "path": "fixtures/visual-gallery/milestone-2-atlas-v2-fragmented-islands/baseline.png",
+    "commit": "736e1ddbbda804fa2c9e74e63d0d1ea3c99b83e1",
+    "sha256": "1c38d79365ee723696c0d9d5c1f0099ad87b2c4ac733d10eb31e094599562dd5",
+    "bytes": 125374,
+    "seed": "18364758544493064720",
+    "controls": {
+      "worldCircumferenceKm": 40000,
+      "targetWaterCoveragePercent": 70,
+      "continentCountIntent": 5,
+      "continentDistribution": "varied",
+      "fragmentationPercent": 90,
+      "islandAbundancePercent": 95,
+      "archipelagoAbundancePercent": 95,
+      "oceanConnectivity": "singleGlobal",
+      "polarCharacter": "neutral"
+    }
+  },
+  {
+    "row": "milestone-2-atlas-v2-normal-01",
+    "path": "fixtures/visual-gallery/milestone-2-atlas-v2-normal-01/baseline.png",
+    "commit": "736e1ddbbda804fa2c9e74e63d0d1ea3c99b83e1",
+    "sha256": "fcf82ad2e115ee7cbd71d20461c6d6f4437f658481c648aec74686ab9f0d31b8",
+    "bytes": 96016,
+    "seed": "1",
+    "controls": {
+      "worldCircumferenceKm": 40000,
+      "targetWaterCoveragePercent": 65,
+      "continentCountIntent": 4,
+      "continentDistribution": "varied",
+      "fragmentationPercent": 35,
+      "islandAbundancePercent": 35,
+      "archipelagoAbundancePercent": 25,
+      "oceanConnectivity": "singleGlobal",
+      "polarCharacter": "neutral"
+    }
+  },
+  {
+    "row": "milestone-2-atlas-v2-normal-02",
+    "path": "fixtures/visual-gallery/milestone-2-atlas-v2-normal-02/baseline.png",
+    "commit": "736e1ddbbda804fa2c9e74e63d0d1ea3c99b83e1",
+    "sha256": "1f566ae63c66c6947205eef165d35a8dec67608232ce2cc7cd7f34ed28881486",
+    "bytes": 88473,
+    "seed": "2",
+    "controls": {
+      "worldCircumferenceKm": 40000,
+      "targetWaterCoveragePercent": 65,
+      "continentCountIntent": 4,
+      "continentDistribution": "varied",
+      "fragmentationPercent": 35,
+      "islandAbundancePercent": 35,
+      "archipelagoAbundancePercent": 25,
+      "oceanConnectivity": "singleGlobal",
+      "polarCharacter": "neutral"
+    }
+  },
+  {
+    "row": "milestone-2-atlas-v2-normal-03",
+    "path": "fixtures/visual-gallery/milestone-2-atlas-v2-normal-03/baseline.png",
+    "commit": "736e1ddbbda804fa2c9e74e63d0d1ea3c99b83e1",
+    "sha256": "9cd36a69cab7ad06ab49d2bd51b703f8df502dcab256b602d16884487d7975fb",
+    "bytes": 106729,
+    "seed": "3",
+    "controls": {
+      "worldCircumferenceKm": 40000,
+      "targetWaterCoveragePercent": 65,
+      "continentCountIntent": 4,
+      "continentDistribution": "varied",
+      "fragmentationPercent": 35,
+      "islandAbundancePercent": 35,
+      "archipelagoAbundancePercent": 25,
+      "oceanConnectivity": "singleGlobal",
+      "polarCharacter": "neutral"
+    }
+  },
+  {
+    "row": "milestone-2-atlas-v2-normal-04",
+    "path": "fixtures/visual-gallery/milestone-2-atlas-v2-normal-04/baseline.png",
+    "commit": "736e1ddbbda804fa2c9e74e63d0d1ea3c99b83e1",
+    "sha256": "2aa4f075a1d579d3fffa9abbd62af7a3530f13da32a838fdf05b50cec91d1d0a",
+    "bytes": 92915,
+    "seed": "4",
+    "controls": {
+      "worldCircumferenceKm": 40000,
+      "targetWaterCoveragePercent": 65,
+      "continentCountIntent": 4,
+      "continentDistribution": "varied",
+      "fragmentationPercent": 35,
+      "islandAbundancePercent": 35,
+      "archipelagoAbundancePercent": 25,
+      "oceanConnectivity": "singleGlobal",
+      "polarCharacter": "neutral"
+    }
+  },
+  {
+    "row": "milestone-2-atlas-v2-normal-05",
+    "path": "fixtures/visual-gallery/milestone-2-atlas-v2-normal-05/baseline.png",
+    "commit": "736e1ddbbda804fa2c9e74e63d0d1ea3c99b83e1",
+    "sha256": "c2549280ae217a09fb865d0292138ce2926ef3fae970db7aa4a35e1754af1ce7",
+    "bytes": 98341,
+    "seed": "5",
+    "controls": {
+      "worldCircumferenceKm": 40000,
+      "targetWaterCoveragePercent": 65,
+      "continentCountIntent": 4,
+      "continentDistribution": "varied",
+      "fragmentationPercent": 35,
+      "islandAbundancePercent": 35,
+      "archipelagoAbundancePercent": 25,
+      "oceanConnectivity": "singleGlobal",
+      "polarCharacter": "neutral"
+    }
+  },
+  {
+    "row": "milestone-2-atlas-v2-normal-06",
+    "path": "fixtures/visual-gallery/milestone-2-atlas-v2-normal-06/baseline.png",
+    "commit": "736e1ddbbda804fa2c9e74e63d0d1ea3c99b83e1",
+    "sha256": "093058833196b66b45508451ff3f9742c8fd663d7071bd5ae3f60e434a59facb",
+    "bytes": 95646,
+    "seed": "6",
+    "controls": {
+      "worldCircumferenceKm": 40000,
+      "targetWaterCoveragePercent": 65,
+      "continentCountIntent": 4,
+      "continentDistribution": "varied",
+      "fragmentationPercent": 35,
+      "islandAbundancePercent": 35,
+      "archipelagoAbundancePercent": 25,
+      "oceanConnectivity": "singleGlobal",
+      "polarCharacter": "neutral"
+    }
+  },
+  {
+    "row": "milestone-2-atlas-v2-normal-07",
+    "path": "fixtures/visual-gallery/milestone-2-atlas-v2-normal-07/baseline.png",
+    "commit": "736e1ddbbda804fa2c9e74e63d0d1ea3c99b83e1",
+    "sha256": "abb6da92e6748958f17173ba26d58f79aa5d878525fd4132917c52d7c2335b72",
+    "bytes": 101292,
+    "seed": "7",
+    "controls": {
+      "worldCircumferenceKm": 40000,
+      "targetWaterCoveragePercent": 65,
+      "continentCountIntent": 4,
+      "continentDistribution": "varied",
+      "fragmentationPercent": 35,
+      "islandAbundancePercent": 35,
+      "archipelagoAbundancePercent": 25,
+      "oceanConnectivity": "singleGlobal",
+      "polarCharacter": "neutral"
+    }
+  },
+  {
+    "row": "milestone-2-atlas-v2-normal-08",
+    "path": "fixtures/visual-gallery/milestone-2-atlas-v2-normal-08/baseline.png",
+    "commit": "736e1ddbbda804fa2c9e74e63d0d1ea3c99b83e1",
+    "sha256": "01de30670e6c3b5de2e77a62151f89464fa2f4771bbe4609afa3a15c756102ab",
+    "bytes": 101642,
+    "seed": "8",
+    "controls": {
+      "worldCircumferenceKm": 40000,
+      "targetWaterCoveragePercent": 65,
+      "continentCountIntent": 4,
+      "continentDistribution": "varied",
+      "fragmentationPercent": 35,
+      "islandAbundancePercent": 35,
+      "archipelagoAbundancePercent": 25,
+      "oceanConnectivity": "singleGlobal",
+      "polarCharacter": "neutral"
+    }
+  },
+  {
+    "row": "milestone-2-atlas-v2-normal-09",
+    "path": "fixtures/visual-gallery/milestone-2-atlas-v2-normal-09/baseline.png",
+    "commit": "736e1ddbbda804fa2c9e74e63d0d1ea3c99b83e1",
+    "sha256": "c457178f6d712a06524928e5303fcbfb98716076f82bdef09d927ca2fa757c9c",
+    "bytes": 99464,
+    "seed": "9",
+    "controls": {
+      "worldCircumferenceKm": 40000,
+      "targetWaterCoveragePercent": 65,
+      "continentCountIntent": 4,
+      "continentDistribution": "varied",
+      "fragmentationPercent": 35,
+      "islandAbundancePercent": 35,
+      "archipelagoAbundancePercent": 25,
+      "oceanConnectivity": "singleGlobal",
+      "polarCharacter": "neutral"
+    }
+  },
+  {
+    "row": "milestone-2-atlas-v2-normal-10",
+    "path": "fixtures/visual-gallery/milestone-2-atlas-v2-normal-10/baseline.png",
+    "commit": "736e1ddbbda804fa2c9e74e63d0d1ea3c99b83e1",
+    "sha256": "7808229da4e2d2d6a020103d79b1e7047086e81c78a9caee15f715a19fa0ec4b",
+    "bytes": 101384,
+    "seed": "10",
+    "controls": {
+      "worldCircumferenceKm": 40000,
+      "targetWaterCoveragePercent": 65,
+      "continentCountIntent": 4,
+      "continentDistribution": "varied",
+      "fragmentationPercent": 35,
+      "islandAbundancePercent": 35,
+      "archipelagoAbundancePercent": 25,
+      "oceanConnectivity": "singleGlobal",
+      "polarCharacter": "neutral"
+    }
+  },
+  {
+    "row": "milestone-2-atlas-v2-normal-11",
+    "path": "fixtures/visual-gallery/milestone-2-atlas-v2-normal-11/baseline.png",
+    "commit": "736e1ddbbda804fa2c9e74e63d0d1ea3c99b83e1",
+    "sha256": "e2cc3671c91a53924d443156e252ec12b69e43cd36399c76d8ced330f474b847",
+    "bytes": 98584,
+    "seed": "11",
+    "controls": {
+      "worldCircumferenceKm": 40000,
+      "targetWaterCoveragePercent": 65,
+      "continentCountIntent": 4,
+      "continentDistribution": "varied",
+      "fragmentationPercent": 35,
+      "islandAbundancePercent": 35,
+      "archipelagoAbundancePercent": 25,
+      "oceanConnectivity": "singleGlobal",
+      "polarCharacter": "neutral"
+    }
+  },
+  {
+    "row": "milestone-2-atlas-v2-normal-12",
+    "path": "fixtures/visual-gallery/milestone-2-atlas-v2-normal-12/baseline.png",
+    "commit": "736e1ddbbda804fa2c9e74e63d0d1ea3c99b83e1",
+    "sha256": "b2de3b1e812a89bf8facfc591e7a0e12b54420ba62611a2fdf5d764fca92e5dd",
+    "bytes": 94708,
+    "seed": "12",
+    "controls": {
+      "worldCircumferenceKm": 40000,
+      "targetWaterCoveragePercent": 65,
+      "continentCountIntent": 4,
+      "continentDistribution": "varied",
+      "fragmentationPercent": 35,
+      "islandAbundancePercent": 35,
+      "archipelagoAbundancePercent": 25,
+      "oceanConnectivity": "singleGlobal",
+      "polarCharacter": "neutral"
+    }
+  },
+  {
+    "row": "milestone-2-atlas-v2-proof",
+    "path": "fixtures/visual-gallery/milestone-2-atlas-v2-proof/baseline.png",
+    "commit": "736e1ddbbda804fa2c9e74e63d0d1ea3c99b83e1",
+    "sha256": "c7c00211f34fe5cfdb0c13120751db8e655b5dcfd3dd5fd72ea8eea4afbe5f6d",
+    "bytes": 96306,
+    "seed": "81985529216486895",
+    "controls": {
+      "worldCircumferenceKm": 40000,
+      "targetWaterCoveragePercent": 65,
+      "continentCountIntent": 4,
+      "continentDistribution": "varied",
+      "fragmentationPercent": 35,
+      "islandAbundancePercent": 35,
+      "archipelagoAbundancePercent": 25,
+      "oceanConnectivity": "singleGlobal",
+      "polarCharacter": "neutral"
+    }
+  },
+  {
+    "row": "milestone-2-atlas-v2-seam-crossing",
+    "path": "fixtures/visual-gallery/milestone-2-atlas-v2-seam-crossing/baseline.png",
+    "commit": "736e1ddbbda804fa2c9e74e63d0d1ea3c99b83e1",
+    "sha256": "5279b6240a5d8b2ae6fd5c261dfe972d2c2a04439d094de591734f98f07f1209",
+    "bytes": 94789,
+    "seed": "12297829382473034410",
+    "controls": {
+      "worldCircumferenceKm": 40000,
+      "targetWaterCoveragePercent": 65,
+      "continentCountIntent": 4,
+      "continentDistribution": "varied",
+      "fragmentationPercent": 35,
+      "islandAbundancePercent": 35,
+      "archipelagoAbundancePercent": 25,
+      "oceanConnectivity": "singleGlobal",
+      "polarCharacter": "neutral"
+    }
+  }
+]

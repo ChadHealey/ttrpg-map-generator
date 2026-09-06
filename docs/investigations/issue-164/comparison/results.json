@@ -1,0 +1,511 @@
+{
+  "generated": true,
+  "editPolicy": "regenerate-only",
+  "revision": "issue-164-r2",
+  "renderer": "diagnostic-rgb-v1",
+  "width": 1600,
+  "height": 800,
+  "sources": {
+    "morphology.mjs": "30d5597af6f999fdcdd9013288773f0bb0f445bac219b55cc94f0ebc37e70328",
+    "render-comparison.mjs": "9ef4249fe5525a61502ad4319262e05816e93e89bd7d6c9cab377ef9293d5004",
+    "v2-provenance.json": "3731d3764e5920a690b1bd40b0767ebbeedb1f667dc9065a1e0df5d317d165eb"
+  },
+  "reports": [
+    {
+      "family": "envelope",
+      "input": {
+        "id": "normal-01",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      },
+      "revision": "issue-164-r2",
+      "calibration": {
+        "status": "calibrated",
+        "threshold": -185266
+      },
+      "intendedPrimaryOwners": 2,
+      "previewWaterPercent": 64.99943848914165,
+      "fullWaterPercent": 65.01588307842694,
+      "previewComponentLandSharesPercent": [31.4942, 29.7624, 20.7877, 17.9557],
+      "minimumOceanGapRad": 0.05,
+      "geometry": {
+        "seamChecks": 201,
+        "poleChecks": 722,
+        "anchorChecks": 80400,
+        "seamLandAnchors": 47
+      },
+      "fullGridSha256": "388a9ca1990d7eca29f546033ed2b25af1cee38c06b210002e534fcf56745fb7",
+      "maskSha256": "a4111abe1389681a06df5f67bc89cf495f169d1ceba1526bf63df09f51a0c56a",
+      "pngSha256": "5e3a23cc8f47f852303a815e72473aaedcff7ab3641766f73a0d95aad179f734",
+      "pngBytes": 9221,
+      "exactRepeat": true
+    },
+    {
+      "family": "envelope",
+      "input": {
+        "id": "normal-02",
+        "seed": "2",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      },
+      "revision": "issue-164-r2",
+      "calibration": {
+        "status": "calibrated",
+        "threshold": -149536
+      },
+      "intendedPrimaryOwners": 3,
+      "previewWaterPercent": 65.00039601510161,
+      "fullWaterPercent": 64.9854841118613,
+      "previewComponentLandSharesPercent": [
+        33.6142, 26.3816, 23.8986, 16.0423, 0.0382, 0.0141, 0.0111
+      ],
+      "minimumOceanGapRad": 0.05,
+      "geometry": {
+        "seamChecks": 201,
+        "poleChecks": 722,
+        "anchorChecks": 80400,
+        "seamLandAnchors": 87
+      },
+      "fullGridSha256": "4dd2ce1d42673ecf7d1c39c562af7e64ba7f2164108c18c3d1914f7e15fd2bbb",
+      "maskSha256": "af5a92ff8efa9082647fff6be66c18cf1139a485d5aa6c7e9db17d1c3e1010d8",
+      "pngSha256": "31adb0a3fe9ce6df32b62b2651eb0b3cb857dc40cd2ae13afa377766e875b00a",
+      "pngBytes": 9204,
+      "exactRepeat": true
+    },
+    {
+      "family": "envelope",
+      "input": {
+        "id": "normal-03",
+        "seed": "3",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      },
+      "revision": "issue-164-r2",
+      "calibration": {
+        "status": "calibrated",
+        "threshold": -117296
+      },
+      "intendedPrimaryOwners": 3,
+      "previewWaterPercent": 64.99933298915406,
+      "fullWaterPercent": 64.98520916253472,
+      "previewComponentLandSharesPercent": [
+        32.8696, 31.1871, 24.6456, 11.2381, 0.0398, 0.0168, 0.0029
+      ],
+      "minimumOceanGapRad": 0.05,
+      "geometry": {
+        "seamChecks": 201,
+        "poleChecks": 722,
+        "anchorChecks": 80400,
+        "seamLandAnchors": 126
+      },
+      "fullGridSha256": "78194de60a5196be8f45dafdd77f1728954fe2679ffe955455190f00c78c66f9",
+      "maskSha256": "38fae1a432b2e7c2a8ccd7cc9612952c67c0144025fd857bdc75c74c1b6c744e",
+      "pngSha256": "bd2c72ec3967e159576fe67fdd1dcf1890b944b9fa350759f2bcd8b7af7796d8",
+      "pngBytes": 9508,
+      "exactRepeat": true
+    },
+    {
+      "family": "envelope",
+      "input": {
+        "id": "normal-04",
+        "seed": "4",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      },
+      "revision": "issue-164-r2",
+      "calibration": {
+        "status": "calibrated",
+        "threshold": -144552
+      },
+      "intendedPrimaryOwners": 3,
+      "previewWaterPercent": 65.00064556070845,
+      "fullWaterPercent": 65.00395325799346,
+      "previewComponentLandSharesPercent": [
+        27.5654, 26.9524, 26.7007, 18.6875, 0.0392, 0.0279, 0.0167, 0.0103
+      ],
+      "minimumOceanGapRad": 0.05,
+      "geometry": {
+        "seamChecks": 201,
+        "poleChecks": 722,
+        "anchorChecks": 80400,
+        "seamLandAnchors": 81
+      },
+      "fullGridSha256": "16685362faf05d80b09ce99980b339d26e368acab002560f03864897b4691d59",
+      "maskSha256": "89de5ada161ad1ccbff8ec7104f0cabb88559677efe63f489fdf0f6983b386eb",
+      "pngSha256": "ea9fb05840f6e906a726e653e50b4008db9179767dd5452c8b1b341696a854df",
+      "pngBytes": 9547,
+      "exactRepeat": true
+    },
+    {
+      "family": "envelope",
+      "input": {
+        "id": "connected-majority",
+        "seed": "1085102592571150095",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 60,
+          "continentCountIntent": 6,
+          "continentDistribution": "balanced",
+          "fragmentationPercent": 55,
+          "islandAbundancePercent": 55,
+          "archipelagoAbundancePercent": 50,
+          "oceanConnectivity": "connectedMajority",
+          "polarCharacter": "neutral"
+        }
+      },
+      "revision": "issue-164-r2",
+      "calibration": {
+        "status": "calibrated",
+        "threshold": -134501
+      },
+      "intendedPrimaryOwners": 1,
+      "previewWaterPercent": 60.0003277292894,
+      "fullWaterPercent": 60.03127625513693,
+      "previewComponentLandSharesPercent": [
+        19.4845, 19.2525, 17.4476, 16.4262, 13.5883, 13.1664, 0.1864, 0.1275, 0.1191, 0.0637,
+        0.0361, 0.0228, 0.021, 0.0196, 0.0147, 0.014, 0.0093
+      ],
+      "minimumOceanGapRad": 0.05,
+      "geometry": {
+        "seamChecks": 201,
+        "poleChecks": 722,
+        "anchorChecks": 80400,
+        "seamLandAnchors": 73
+      },
+      "fullGridSha256": "37cae01d13657e2dcb1b71c99f6d27eb3aa812808e54107efd595a7cda9b5ae0",
+      "maskSha256": "de3613b693df1abbe65e7e90ee9a3e63c0259bdc78d3aab72949cae1e6b3fede",
+      "pngSha256": "c5419c4b8dd897864d72acab6d581d88e7214bd4276e5b7ab6ec9eb31382a7a0",
+      "pngBytes": 10950,
+      "exactRepeat": true
+    },
+    {
+      "family": "envelope",
+      "input": {
+        "id": "fragmented-islands",
+        "seed": "18364758544493064720",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 70,
+          "continentCountIntent": 5,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 90,
+          "islandAbundancePercent": 95,
+          "archipelagoAbundancePercent": 95,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      },
+      "revision": "issue-164-r2",
+      "calibration": {
+        "status": "calibrated",
+        "threshold": -135249
+      },
+      "intendedPrimaryOwners": 3,
+      "previewWaterPercent": 70.00046114658105,
+      "fullWaterPercent": 70.00779250413186,
+      "previewComponentLandSharesPercent": [
+        33.1081, 27.5831, 16.7242, 11.1295, 11.0833, 0.1197, 0.0859, 0.0483, 0.0392, 0.0205, 0.0196,
+        0.0194, 0.0065, 0.0063, 0.0062
+      ],
+      "minimumOceanGapRad": 0.05,
+      "geometry": {
+        "seamChecks": 201,
+        "poleChecks": 722,
+        "anchorChecks": 80400,
+        "seamLandAnchors": 48
+      },
+      "fullGridSha256": "69d147434886e59fa6d19cd530c20fdf4c3216ea015f66fffdd9ad1d2cc99eb1",
+      "maskSha256": "7e8248cae4389ee9f6840f3ce0566ebf0c57caca622f576453606beb8514a045",
+      "pngSha256": "136e23395243e792b376b00e34176fed5e0cccabed8caefae6608ccf1e11e0d7",
+      "pngBytes": 9861,
+      "exactRepeat": true
+    },
+    {
+      "family": "cellular",
+      "input": {
+        "id": "normal-01",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      },
+      "revision": "issue-164-r2",
+      "calibration": {
+        "status": "calibrated",
+        "threshold": -21461
+      },
+      "intendedPrimaryOwners": 2,
+      "previewWaterPercent": 64.99988107581352,
+      "fullWaterPercent": 65.0151651182898,
+      "previewComponentLandSharesPercent": [
+        41.0465, 34.5282, 22.8296, 1.3461, 0.126, 0.0499, 0.0294, 0.0272, 0.0079, 0.0053, 0.0039
+      ],
+      "minimumOceanGapRad": 0.05,
+      "geometry": {
+        "seamChecks": 201,
+        "poleChecks": 722,
+        "anchorChecks": 80400,
+        "seamLandAnchors": 50
+      },
+      "fullGridSha256": "369986aae3b9817d23e61692f8bda08912e168b5552f9ac009052c72f5a7fc95",
+      "maskSha256": "0ab891053ec0ec377585fca12ca0da7926d349470bf3143d7251d2775e8778ff",
+      "pngSha256": "627d2ec278e988cc6f2bbeab1989afeff1804640b366ed13ea53d663080d41cd",
+      "pngBytes": 9354,
+      "exactRepeat": true
+    },
+    {
+      "family": "cellular",
+      "input": {
+        "id": "normal-02",
+        "seed": "2",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      },
+      "revision": "issue-164-r2",
+      "calibration": {
+        "status": "calibrated",
+        "threshold": 2345
+      },
+      "intendedPrimaryOwners": 3,
+      "previewWaterPercent": 65.00019067883093,
+      "fullWaterPercent": 65.0228116438923,
+      "previewComponentLandSharesPercent": [
+        40.0867, 29.6815, 14.332, 13.4883, 2.0677, 0.1665, 0.0708, 0.0408, 0.0382, 0.0165, 0.0111
+      ],
+      "minimumOceanGapRad": 0.05,
+      "geometry": {
+        "seamChecks": 201,
+        "poleChecks": 722,
+        "anchorChecks": 80400,
+        "seamLandAnchors": 87
+      },
+      "fullGridSha256": "39dfec7cb43bffcb4d2b60b044b45eb92480115cf1531f4d8db3990f2cdd8e24",
+      "maskSha256": "a850f9cc85d3b6cbbb227f78ebf93b6a5298d1f06c5e29bd1c1368beda561858",
+      "pngSha256": "034097ad3bab095013945cdbdbc8e63602066e292a4d996c39c1fc7622fb8fc0",
+      "pngBytes": 10030,
+      "exactRepeat": true
+    },
+    {
+      "family": "cellular",
+      "input": {
+        "id": "normal-03",
+        "seed": "3",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      },
+      "revision": "issue-164-r2",
+      "calibration": {
+        "status": "calibrated",
+        "threshold": 4463
+      },
+      "intendedPrimaryOwners": 3,
+      "previewWaterPercent": 64.99880366261934,
+      "fullWaterPercent": 65.00743056121098,
+      "previewComponentLandSharesPercent": [
+        48.8663, 23.8476, 22.8434, 3.75, 0.4154, 0.1294, 0.0651, 0.0269, 0.0223, 0.0168, 0.0168
+      ],
+      "minimumOceanGapRad": 0.05,
+      "geometry": {
+        "seamChecks": 201,
+        "poleChecks": 722,
+        "anchorChecks": 80400,
+        "seamLandAnchors": 142
+      },
+      "fullGridSha256": "8cd4f6e62d0aad0c2223a35e72c81e135e55174bdcca08d20498428f09125094",
+      "maskSha256": "b0efe3e52f743660ee7d688a877cd0ed565941570fcfc6f0b896cf57f6b3b691",
+      "pngSha256": "01ec7c7f4bcfd0317b35029dc2fd6cf2d2f62fd4dfdc32e04075d216d3138190",
+      "pngBytes": 9666,
+      "exactRepeat": true
+    },
+    {
+      "family": "cellular",
+      "input": {
+        "id": "normal-04",
+        "seed": "4",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      },
+      "revision": "issue-164-r2",
+      "calibration": {
+        "status": "calibrated",
+        "threshold": 36848
+      },
+      "intendedPrimaryOwners": 3,
+      "previewWaterPercent": 65.00089533007001,
+      "fullWaterPercent": 64.99994227668213,
+      "previewComponentLandSharesPercent": [
+        47.1363, 18.3023, 17.3038, 16.8902, 0.1011, 0.0549, 0.0465, 0.0392, 0.0386, 0.0319, 0.0279,
+        0.0167, 0.0103
+      ],
+      "minimumOceanGapRad": 0.05,
+      "geometry": {
+        "seamChecks": 201,
+        "poleChecks": 722,
+        "anchorChecks": 80400,
+        "seamLandAnchors": 14
+      },
+      "fullGridSha256": "c30283ccf2defc3d49477a0322fae584fc38304d82e30bb95d04349d20af07c1",
+      "maskSha256": "70af3c2392c714c022938075ca95d17a82b8a91f743b0398601503f9a95c705f",
+      "pngSha256": "6170d26e529942495b4be889b43efc12ae42ea9c806916db0a2ec2d6590aded7",
+      "pngBytes": 10407,
+      "exactRepeat": true
+    },
+    {
+      "family": "cellular",
+      "input": {
+        "id": "connected-majority",
+        "seed": "1085102592571150095",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 60,
+          "continentCountIntent": 6,
+          "continentDistribution": "balanced",
+          "fragmentationPercent": 55,
+          "islandAbundancePercent": 55,
+          "archipelagoAbundancePercent": 50,
+          "oceanConnectivity": "connectedMajority",
+          "polarCharacter": "neutral"
+        }
+      },
+      "revision": "issue-164-r2",
+      "calibration": {
+        "status": "calibrated",
+        "threshold": -18063
+      },
+      "intendedPrimaryOwners": 1,
+      "previewWaterPercent": 60.00028484303277,
+      "fullWaterPercent": 59.98564813550533,
+      "previewComponentLandSharesPercent": [
+        27.7966, 24.1412, 16.5206, 12.8735, 9.7522, 8.4761, 0.1297, 0.1275, 0.0533, 0.0489, 0.0294,
+        0.0147, 0.014, 0.0098, 0.0073, 0.0049
+      ],
+      "minimumOceanGapRad": 0.05,
+      "geometry": {
+        "seamChecks": 201,
+        "poleChecks": 722,
+        "anchorChecks": 80400,
+        "seamLandAnchors": 91
+      },
+      "fullGridSha256": "cdcad4ca8c781c2dac369a7d11baa8e9750f795e46f8d2fd53661b184a5b35a1",
+      "maskSha256": "b73d5f63a4353f6448c133fa05119b596f193c7cbe2382c4b9568ac15ad7c515",
+      "pngSha256": "997842340c177a375b2b22a6ffdfed2236349891c7b90d4f4f57ffe27c0d472c",
+      "pngBytes": 10918,
+      "exactRepeat": true
+    },
+    {
+      "family": "cellular",
+      "input": {
+        "id": "fragmented-islands",
+        "seed": "18364758544493064720",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 70,
+          "continentCountIntent": 5,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 90,
+          "islandAbundancePercent": 95,
+          "archipelagoAbundancePercent": 95,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      },
+      "revision": "issue-164-r2",
+      "calibration": {
+        "status": "calibrated",
+        "threshold": 96210
+      },
+      "intendedPrimaryOwners": 3,
+      "previewWaterPercent": 70.00002349323722,
+      "fullWaterPercent": 69.99300350770532,
+      "previewComponentLandSharesPercent": [
+        30.8223, 29.908, 26.9706, 7.3052, 3.8181, 0.1674, 0.1014, 0.1011, 0.1, 0.0986, 0.0931,
+        0.0876, 0.0873, 0.0859, 0.0452, 0.0343, 0.0301, 0.0262, 0.0251, 0.0237, 0.0228, 0.0155,
+        0.0098, 0.0094, 0.0062, 0.0051
+      ],
+      "minimumOceanGapRad": 0.05,
+      "geometry": {
+        "seamChecks": 201,
+        "poleChecks": 722,
+        "anchorChecks": 80400,
+        "seamLandAnchors": 80
+      },
+      "fullGridSha256": "f7db585d5c05a0da4ab34f1d16bd97ab8438976f6b9492fca990c87532a14d7b",
+      "maskSha256": "6a9bf12ab237d0033a09471f62810f33346a863ba1124be1aeb9b37aebdfc624",
+      "pngSha256": "5c9896cd231055c22ea6f7061e4671f8634830d92ca6f0a60eee5829a4cf2921",
+      "pngBytes": 10223,
+      "exactRepeat": true
+    }
+  ]
+}
