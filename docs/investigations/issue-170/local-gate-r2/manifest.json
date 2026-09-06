@@ -1,0 +1,113 @@
+{
+  "revision": "issue-170-r1",
+  "sources": {
+    "experiment.md": "81956b6d87550ef7185659c6a828f3499d3bc5f66707cc0554483debf9dcdfc8",
+    "templates.mjs": "566b4fbeb5e568bdfd1e87c2b55622d70614cf36d2fa1393686cb6f404a2f870",
+    "design.md": "8141e2da0a7aa9d0596f960048811222e7586c9d00a1cfdc866cfe755613171d",
+    "../issue-169/certificates.mjs": "7a1cfacab789829249ceaf72454d212472cb59a49ca8d8e08eedc6442ba8213c",
+    "../issue-169/geometry.mjs": "bc54bf0c7e5b878d9d26f2fe96658d0818cddf1ae4a7b2f5997c965d98f463bc",
+    "../issue-169/placement.mjs": "c3fe7988cfff2fbc6391b062d39277cd376dfa9e9efe5cafb0be9d5fa14c5c52",
+    "../issue-169/templates.mjs": "b37b208fbe23d549c1019986a130c858a6fdb1c454f9f2f890445affbd84ea1e",
+    "placement.mjs": "3099ee459e7a280f9c6a3776036e81000506a3c51c4782c5b55f188aefb9d833",
+    "readiness.mjs": "671f6d81e8aac605d03f63451ddbf06586553cd142b7b63d24556a6fcd1a2709",
+    "../issue-169/field.mjs": "f6e0557ce3e786dae8c9789fd44c95f75bf2ca33fd36fa69145c7a31d854de54",
+    "run.mjs": "51a4e841778c74e971a0b04dbe320e60766d58fb0214552331e0097f85a92c87",
+    "../issue-164/morphology.mjs": "30d5597af6f999fdcdd9013288773f0bb0f445bac219b55cc94f0ebc37e70328",
+    "../issue-164/render-comparison.mjs": "9ef4249fe5525a61502ad4319262e05816e93e89bd7d6c9cab377ef9293d5004",
+    "../issue-165/run.mjs": "778b0fb0d3c858cde8a78ec793e64e327826b5dfbc0f566f64920ea09b6a777e",
+    "../issue-164/comparison/results.json": "a732cd4481b7c06e4faced73cad55c67bec0195dc4bdfb1d5d321038a2a72cc1"
+  },
+  "inputs": [
+    {
+      "id": "normal-01",
+      "seed": "1",
+      "controls": {
+        "worldCircumferenceKm": 40000,
+        "targetWaterCoveragePercent": 65,
+        "continentCountIntent": 4,
+        "continentDistribution": "varied",
+        "fragmentationPercent": 35,
+        "islandAbundancePercent": 35,
+        "archipelagoAbundancePercent": 25,
+        "oceanConnectivity": "singleGlobal",
+        "polarCharacter": "neutral"
+      }
+    },
+    {
+      "id": "normal-02",
+      "seed": "2",
+      "controls": {
+        "worldCircumferenceKm": 40000,
+        "targetWaterCoveragePercent": 65,
+        "continentCountIntent": 4,
+        "continentDistribution": "varied",
+        "fragmentationPercent": 35,
+        "islandAbundancePercent": 35,
+        "archipelagoAbundancePercent": 25,
+        "oceanConnectivity": "singleGlobal",
+        "polarCharacter": "neutral"
+      }
+    },
+    {
+      "id": "normal-03",
+      "seed": "3",
+      "controls": {
+        "worldCircumferenceKm": 40000,
+        "targetWaterCoveragePercent": 65,
+        "continentCountIntent": 4,
+        "continentDistribution": "varied",
+        "fragmentationPercent": 35,
+        "islandAbundancePercent": 35,
+        "archipelagoAbundancePercent": 25,
+        "oceanConnectivity": "singleGlobal",
+        "polarCharacter": "neutral"
+      }
+    },
+    {
+      "id": "normal-04",
+      "seed": "4",
+      "controls": {
+        "worldCircumferenceKm": 40000,
+        "targetWaterCoveragePercent": 65,
+        "continentCountIntent": 4,
+        "continentDistribution": "varied",
+        "fragmentationPercent": 35,
+        "islandAbundancePercent": 35,
+        "archipelagoAbundancePercent": 25,
+        "oceanConnectivity": "singleGlobal",
+        "polarCharacter": "neutral"
+      }
+    },
+    {
+      "id": "connected-majority",
+      "seed": "1085102592571150095",
+      "controls": {
+        "worldCircumferenceKm": 40000,
+        "targetWaterCoveragePercent": 60,
+        "continentCountIntent": 6,
+        "continentDistribution": "balanced",
+        "fragmentationPercent": 55,
+        "islandAbundancePercent": 55,
+        "archipelagoAbundancePercent": 50,
+        "oceanConnectivity": "connectedMajority",
+        "polarCharacter": "neutral"
+      }
+    },
+    {
+      "id": "fragmented-islands",
+      "seed": "18364758544493064720",
+      "controls": {
+        "worldCircumferenceKm": 40000,
+        "targetWaterCoveragePercent": 70,
+        "continentCountIntent": 5,
+        "continentDistribution": "varied",
+        "fragmentationPercent": 90,
+        "islandAbundancePercent": 95,
+        "archipelagoAbundancePercent": 95,
+        "oceanConnectivity": "singleGlobal",
+        "polarCharacter": "neutral"
+      }
+    }
+  ],
+  "kind": "local-certificate-gate"
+}

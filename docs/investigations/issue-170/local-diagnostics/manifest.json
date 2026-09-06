@@ -1,0 +1,116 @@
+{
+  "kind": "rejected-local-planar-construction",
+  "status": "REJECTED",
+  "inputsSha256": "03f857c575c5132331282569b26bdb0408173bbf532163898fef6974ffd031d9",
+  "scope": "Continuous local polygons and planar previews only. No world placement, sampled coverage, full comparison, production selection, or human visual approval.",
+  "stages": [
+    {
+      "stage": "before-repair",
+      "sourceFile": "before-repair-source.mjs.txt",
+      "sourceSha256": "54e7b5ba7165560fa6fa1c18fe513035a13568e39b6d8c6523313bb46b1ad406",
+      "reportFile": "before-repair.json",
+      "reportSha256": "873d4d518aaf71f50d2ee149924267ea425e0c82d546fafdc797f8b04a2d927d",
+      "imageFile": "before-repair.png",
+      "imageSha256": "5bdb25cd6d8c5912a87b9d4b7d2630cab1f9f7f31138c0c7ae4b6564a402606b",
+      "exactLocalRepeat": true,
+      "width": 900,
+      "height": 300,
+      "panelSize": 300,
+      "chartSpan": 2.4,
+      "panels": [
+        {
+          "inputId": "normal-01",
+          "ownerId": "owner-0",
+          "layoutIndex": 2,
+          "quota": 0.13106846473029043,
+          "guardRadius": 1.0551561879622615
+        },
+        {
+          "inputId": "normal-02",
+          "ownerId": "owner-1",
+          "layoutIndex": 0,
+          "quota": 0.10494186046511626,
+          "guardRadius": 0.9394746895993409
+        },
+        {
+          "inputId": "normal-03",
+          "ownerId": "owner-0",
+          "layoutIndex": 1,
+          "quota": 0.10494186046511626,
+          "guardRadius": 0.9267048335832867
+        }
+      ],
+      "assessment": "Rejected in assistant local inspection: jigsaw/tab grammar despite passing local certificates."
+    },
+    {
+      "stage": "after-repair",
+      "sourceFile": "after-repair-source.mjs.txt",
+      "sourceSha256": "566b4fbeb5e568bdfd1e87c2b55622d70614cf36d2fa1393686cb6f404a2f870",
+      "reportFile": "after-repair.json",
+      "reportSha256": "1982f160b56b9b30239b86c4a6e754bb4e9a962d0ace67bedfa06cfd11ce2e2a",
+      "imageFile": "after-repair.png",
+      "imageSha256": "ee9c70be58ab9c4cc280eacf07892380c05dca59ae367fcb3b959996947d9d32",
+      "exactLocalRepeat": true,
+      "width": 600,
+      "height": 300,
+      "panelSize": 300,
+      "chartSpan": 2.4,
+      "panels": [
+        {
+          "inputId": "normal-01",
+          "ownerId": "owner-0",
+          "layoutIndex": 1,
+          "quota": 0.13106846473029043,
+          "guardRadius": 1.1614826212604645
+        },
+        {
+          "inputId": "normal-02",
+          "ownerId": "owner-0",
+          "layoutIndex": 2,
+          "quota": 0.10494186046511626,
+          "guardRadius": 1.0409005654469923
+        }
+      ],
+      "assessment": "Rejected: tab grammar persists; balanced caps exceed the necessary packing ceiling and accepted default layouts omit layout 0."
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "../../issue-164/morphology.mjs",
+      "sha256": "30d5597af6f999fdcdd9013288773f0bb0f445bac219b55cc94f0ebc37e70328"
+    },
+    {
+      "path": "../../issue-164/render-comparison.mjs",
+      "sha256": "9ef4249fe5525a61502ad4319262e05816e93e89bd7d6c9cab377ef9293d5004"
+    },
+    {
+      "path": "../../issue-169/geometry.mjs",
+      "sha256": "bc54bf0c7e5b878d9d26f2fe96658d0818cddf1ae4a7b2f5997c965d98f463bc"
+    },
+    {
+      "path": "../../issue-169/certificates.mjs",
+      "sha256": "7a1cfacab789829249ceaf72454d212472cb59a49ca8d8e08eedc6442ba8213c"
+    },
+    {
+      "path": "./generate.mjs",
+      "sha256": "3d7778817f9fd1f8b9d169bd005fa29e493cf4188070001d8228b95ea8165654"
+    }
+  ],
+  "exploratoryArtifacts": [
+    {
+      "path": "repair-draft.json",
+      "sha256": "7261f08530dfacfaec2b20eec13cd1fefe2e191ce43f3178afb7a675cc44bf86",
+      "scope": "Retained exploratory local artifact; intermediate image has no exact source snapshot. Reproducible final stage images and source pairs below own the canonical local evidence."
+    },
+    {
+      "path": "exploratory-before.png",
+      "sha256": "5cf98752f59d569e396a17eae2529e7183786c8b430e3ea63aa61bf6961e3e19",
+      "scope": "Retained exploratory local artifact; intermediate image has no exact source snapshot. Reproducible final stage images and source pairs below own the canonical local evidence."
+    },
+    {
+      "path": "exploratory-intermediate.png",
+      "sha256": "e783d195482c459ffa104fef75256eeb816792e6d3b032e4b779ea812b51df48",
+      "scope": "Retained exploratory local artifact; intermediate image has no exact source snapshot. Reproducible final stage images and source pairs below own the canonical local evidence."
+    }
+  ]
+}
