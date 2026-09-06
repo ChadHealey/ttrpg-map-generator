@@ -1,0 +1,67 @@
+{
+  "scope": "Binary64 equation corroboration only; not a continuous or interval certificate",
+  "known": {
+    "triangle": 0.1331363275516476,
+    "planarTriangle": 0.125,
+    "correction": 0.008136327551647587
+  },
+  "convergence": [
+    {
+      "count": 16,
+      "area": 0.13310420139009846
+    },
+    {
+      "count": 64,
+      "area": 0.13313431958715
+    },
+    {
+      "count": 256,
+      "area": 0.13313620205355647
+    }
+  ],
+  "positive": {
+    "a": [0.65, -0.12],
+    "b": [0.65, 0.12],
+    "witness": [0.42, 0],
+    "interior": [
+      [-0.6, -0.45],
+      [0.35, -0.5],
+      [0.65, -0.12],
+      [0.38, -0.08],
+      [0.34, 0.09],
+      [0.65, 0.12],
+      [0.35, 0.52],
+      [-0.55, 0.5]
+    ],
+    "pocket": [
+      [0.65, -0.12],
+      [0.65, 0.12],
+      [0.34, 0.09],
+      [0.38, -0.08]
+    ],
+    "opening": 0.22700117772687867,
+    "depth": 0.24234502747636563,
+    "projection": "interior",
+    "triangle": 0.07852529757753343,
+    "planarTriangle": 0.078,
+    "correction": 0.0005252975775334318,
+    "planarPocketArea": 0.05934999999999999,
+    "curvedPocketArea": 0.059875297577533425,
+    "positiveInteriorArea": 1.04115,
+    "sufficient": {
+      "angularCap": 0.7687935489912782,
+      "metricFactor": 0.9270248108869579,
+      "openingLower": 0.22248595461286988,
+      "openingUpper": 0.25889274718588495,
+      "depthLower": 0.21321570650400035,
+      "removedAreaLower": 0.05934999999999999,
+      "ratioLower": 0.8235677083333335
+    },
+    "requiredLargestRetainedRemovedArea": 0.03262815764142325
+  },
+  "endpointCase": {
+    "witness": [0.55, 0.4],
+    "depth": 0.2811900318433908,
+    "projection": "endpoint"
+  }
+}
