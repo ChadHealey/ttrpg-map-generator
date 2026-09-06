@@ -1,0 +1,625 @@
+{
+  "input": {
+    "id": "boundary-count1-water59",
+    "seed": "1",
+    "controls": {
+      "worldCircumferenceKm": 40000,
+      "targetWaterCoveragePercent": 59,
+      "continentCountIntent": 1,
+      "continentDistribution": "varied",
+      "fragmentationPercent": 35,
+      "islandAbundancePercent": 35,
+      "archipelagoAbundancePercent": 25,
+      "oceanConnectivity": "singleGlobal",
+      "polarCharacter": "neutral"
+    }
+  },
+  "stages": [
+    { "stage": "input-validation", "status": "completed" },
+    { "stage": "construction", "status": "attempted" }
+  ],
+  "failures": [],
+  "construction": {
+    "ok": false,
+    "owners": [],
+    "failures": [
+      {
+        "code": "template-budget-exhausted",
+        "ownerId": "owner-0",
+        "quota": 0.41000000000000003,
+        "candidateCount": 16
+      }
+    ],
+    "receipts": [
+      {
+        "ownerId": "owner-0",
+        "quota": 0.41000000000000003,
+        "templateIndex": 0,
+        "layoutPreference": 0,
+        "layoutIndex": 0,
+        "ok": false,
+        "certificateOk": false,
+        "failures": [
+          {
+            "code": "peninsula-extent-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 1.1623721654689367,
+            "required": "<= 0.45 with numeric slack"
+          },
+          {
+            "code": "peninsula-width-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.4221578012844555,
+            "required": "<= 0.16 with numeric slack"
+          },
+          {
+            "code": "peninsula-ratio",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.8063583253357642,
+            "required": ">= 2 with numeric slack"
+          },
+          {
+            "code": "bay-support-chart",
+            "featureId": "bay",
+            "actual": 1.997951414656232,
+            "required": "<= 1.4 radians"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-0",
+        "quota": 0.41000000000000003,
+        "templateIndex": 1,
+        "layoutPreference": 0,
+        "layoutIndex": 0,
+        "ok": false,
+        "certificateOk": false,
+        "failures": [
+          {
+            "code": "peninsula-extent-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 1.1607648153639505,
+            "required": "<= 0.45 with numeric slack"
+          },
+          {
+            "code": "peninsula-width-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.42157403353244,
+            "required": "<= 0.16 with numeric slack"
+          },
+          {
+            "code": "peninsula-ratio",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.8079373137663559,
+            "required": ">= 2 with numeric slack"
+          },
+          {
+            "code": "bay-support-chart",
+            "featureId": "bay",
+            "actual": 1.9966916131027803,
+            "required": "<= 1.4 radians"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-0",
+        "quota": 0.41000000000000003,
+        "templateIndex": 2,
+        "layoutPreference": 0,
+        "layoutIndex": 0,
+        "ok": false,
+        "certificateOk": false,
+        "failures": [
+          {
+            "code": "peninsula-extent-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 1.1580661085662687,
+            "required": "<= 0.45 with numeric slack"
+          },
+          {
+            "code": "peninsula-width-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.4205938998355283,
+            "required": "<= 0.16 with numeric slack"
+          },
+          {
+            "code": "peninsula-ratio",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.8105973990769293,
+            "required": ">= 2 with numeric slack"
+          },
+          {
+            "code": "bay-support-chart",
+            "featureId": "bay",
+            "actual": 1.9945708801820778,
+            "required": "<= 1.4 radians"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-0",
+        "quota": 0.41000000000000003,
+        "templateIndex": 3,
+        "layoutPreference": 0,
+        "layoutIndex": 0,
+        "ok": false,
+        "certificateOk": false,
+        "failures": [
+          {
+            "code": "peninsula-extent-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 1.1547958544744366,
+            "required": "<= 0.45 with numeric slack"
+          },
+          {
+            "code": "peninsula-width-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.4194061879152785,
+            "required": "<= 0.16 with numeric slack"
+          },
+          {
+            "code": "peninsula-ratio",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.8138360283428709,
+            "required": ">= 2 with numeric slack"
+          },
+          {
+            "code": "bay-support-chart",
+            "featureId": "bay",
+            "actual": 1.991991642085798,
+            "required": "<= 1.4 radians"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-0",
+        "quota": 0.41000000000000003,
+        "templateIndex": 4,
+        "layoutPreference": 0,
+        "layoutIndex": 1,
+        "ok": false,
+        "certificateOk": false,
+        "failures": [
+          {
+            "code": "peninsula-extent-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 1.1688248505705692,
+            "required": "<= 0.45 with numeric slack"
+          },
+          {
+            "code": "peninsula-width-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.43830931933518313,
+            "required": "<= 0.16 with numeric slack"
+          },
+          {
+            "code": "peninsula-ratio",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.7740465437393119,
+            "required": ">= 2 with numeric slack"
+          },
+          {
+            "code": "bay-support-chart",
+            "featureId": "bay",
+            "actual": 2.0036523122252583,
+            "required": "<= 1.4 radians"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-0",
+        "quota": 0.41000000000000003,
+        "templateIndex": 5,
+        "layoutPreference": 0,
+        "layoutIndex": 1,
+        "ok": false,
+        "certificateOk": false,
+        "failures": [
+          {
+            "code": "peninsula-extent-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 1.1688248505705692,
+            "required": "<= 0.45 with numeric slack"
+          },
+          {
+            "code": "peninsula-width-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.43830931933518313,
+            "required": "<= 0.16 with numeric slack"
+          },
+          {
+            "code": "peninsula-ratio",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.7740465437393119,
+            "required": ">= 2 with numeric slack"
+          },
+          {
+            "code": "bay-support-chart",
+            "featureId": "bay",
+            "actual": 2.0036523122252583,
+            "required": "<= 1.4 radians"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-0",
+        "quota": 0.41000000000000003,
+        "templateIndex": 6,
+        "layoutPreference": 0,
+        "layoutIndex": 1,
+        "ok": false,
+        "certificateOk": false,
+        "failures": [
+          {
+            "code": "peninsula-extent-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 1.1688248505705692,
+            "required": "<= 0.45 with numeric slack"
+          },
+          {
+            "code": "peninsula-width-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.43830931933518313,
+            "required": "<= 0.16 with numeric slack"
+          },
+          {
+            "code": "peninsula-ratio",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.7740465437393119,
+            "required": ">= 2 with numeric slack"
+          },
+          {
+            "code": "bay-support-chart",
+            "featureId": "bay",
+            "actual": 2.0036523122252583,
+            "required": "<= 1.4 radians"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-0",
+        "quota": 0.41000000000000003,
+        "templateIndex": 7,
+        "layoutPreference": 0,
+        "layoutIndex": 1,
+        "ok": false,
+        "certificateOk": false,
+        "failures": [
+          {
+            "code": "peninsula-extent-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 1.1688248505705692,
+            "required": "<= 0.45 with numeric slack"
+          },
+          {
+            "code": "peninsula-width-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.43830931933518313,
+            "required": "<= 0.16 with numeric slack"
+          },
+          {
+            "code": "peninsula-ratio",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.7740465437393119,
+            "required": ">= 2 with numeric slack"
+          },
+          {
+            "code": "bay-support-chart",
+            "featureId": "bay",
+            "actual": 2.0036523122252583,
+            "required": "<= 1.4 radians"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-0",
+        "quota": 0.41000000000000003,
+        "templateIndex": 8,
+        "layoutPreference": 0,
+        "layoutIndex": 2,
+        "ok": false,
+        "certificateOk": false,
+        "failures": [
+          {
+            "code": "peninsula-extent-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 1.2389037699608725,
+            "required": "<= 0.45 with numeric slack"
+          },
+          {
+            "code": "peninsula-width-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.42056810831497027,
+            "required": "<= 0.16 with numeric slack"
+          },
+          {
+            "code": "peninsula-ratio",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.8746281855542376,
+            "required": ">= 2 with numeric slack"
+          },
+          {
+            "code": "bay-support-chart",
+            "featureId": "bay",
+            "actual": 1.989069989194725,
+            "required": "<= 1.4 radians"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-0",
+        "quota": 0.41000000000000003,
+        "templateIndex": 9,
+        "layoutPreference": 0,
+        "layoutIndex": 2,
+        "ok": false,
+        "certificateOk": false,
+        "failures": [
+          {
+            "code": "peninsula-extent-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 1.2364938279189872,
+            "required": "<= 0.45 with numeric slack"
+          },
+          {
+            "code": "peninsula-width-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.4197500102590287,
+            "required": "<= 0.16 with numeric slack"
+          },
+          {
+            "code": "peninsula-ratio",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.8780378936034607,
+            "required": ">= 2 with numeric slack"
+          },
+          {
+            "code": "bay-support-chart",
+            "featureId": "bay",
+            "actual": 1.9865380400666037,
+            "required": "<= 1.4 radians"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-0",
+        "quota": 0.41000000000000003,
+        "templateIndex": 10,
+        "layoutPreference": 0,
+        "layoutIndex": 2,
+        "ok": false,
+        "certificateOk": false,
+        "failures": [
+          {
+            "code": "peninsula-extent-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 1.3010697096865491,
+            "required": "<= 0.45 with numeric slack"
+          },
+          {
+            "code": "peninsula-width-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.44167145169480193,
+            "required": "<= 0.16 with numeric slack"
+          },
+          {
+            "code": "peninsula-ratio",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.7930372944233837,
+            "required": ">= 2 with numeric slack"
+          },
+          {
+            "code": "bay-support-chart",
+            "featureId": "bay",
+            "actual": 2.050570131467774,
+            "required": "<= 1.4 radians"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-0",
+        "quota": 0.41000000000000003,
+        "templateIndex": 11,
+        "layoutPreference": 0,
+        "layoutIndex": 2,
+        "ok": false,
+        "certificateOk": false,
+        "failures": [
+          {
+            "code": "peninsula-extent-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 1.2447180632567492,
+            "required": "<= 0.45 with numeric slack"
+          },
+          {
+            "code": "peninsula-width-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.4225418744717365,
+            "required": "<= 0.16 with numeric slack"
+          },
+          {
+            "code": "peninsula-ratio",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.866462665287578,
+            "required": ">= 2 with numeric slack"
+          },
+          {
+            "code": "bay-support-chart",
+            "featureId": "bay",
+            "actual": 1.9951451105322957,
+            "required": "<= 1.4 radians"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-0",
+        "quota": 0.41000000000000003,
+        "templateIndex": 12,
+        "layoutPreference": 0,
+        "layoutIndex": 3,
+        "ok": false,
+        "certificateOk": false,
+        "failures": [
+          {
+            "code": "peninsula-extent-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 1.0405099309203396,
+            "required": "<= 0.45 with numeric slack"
+          },
+          {
+            "code": "peninsula-width-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.33216278603541116,
+            "required": "<= 0.16 with numeric slack"
+          },
+          {
+            "code": "peninsula-ratio",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.8012306473208588,
+            "required": ">= 2 with numeric slack"
+          },
+          {
+            "code": "bay-support-chart",
+            "featureId": "bay",
+            "actual": 2.0811032021121676,
+            "required": "<= 1.4 radians"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-0",
+        "quota": 0.41000000000000003,
+        "templateIndex": 13,
+        "layoutPreference": 0,
+        "layoutIndex": 3,
+        "ok": false,
+        "certificateOk": false,
+        "failures": [
+          {
+            "code": "peninsula-extent-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 1.0405099309203396,
+            "required": "<= 0.45 with numeric slack"
+          },
+          {
+            "code": "peninsula-width-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.33216278603541116,
+            "required": "<= 0.16 with numeric slack"
+          },
+          {
+            "code": "peninsula-ratio",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.8012306473208588,
+            "required": ">= 2 with numeric slack"
+          },
+          {
+            "code": "bay-support-chart",
+            "featureId": "bay",
+            "actual": 2.0811032021121676,
+            "required": "<= 1.4 radians"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-0",
+        "quota": 0.41000000000000003,
+        "templateIndex": 14,
+        "layoutPreference": 0,
+        "layoutIndex": 3,
+        "ok": false,
+        "certificateOk": false,
+        "failures": [
+          {
+            "code": "peninsula-extent-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 1.0405099309203396,
+            "required": "<= 0.45 with numeric slack"
+          },
+          {
+            "code": "peninsula-width-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.33216278603541116,
+            "required": "<= 0.16 with numeric slack"
+          },
+          {
+            "code": "peninsula-ratio",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.8012306473208588,
+            "required": ">= 2 with numeric slack"
+          },
+          {
+            "code": "bay-support-chart",
+            "featureId": "bay",
+            "actual": 2.0811032021121676,
+            "required": "<= 1.4 radians"
+          }
+        ]
+      },
+      {
+        "ownerId": "owner-0",
+        "quota": 0.41000000000000003,
+        "templateIndex": 15,
+        "layoutPreference": 0,
+        "layoutIndex": 3,
+        "ok": false,
+        "certificateOk": false,
+        "failures": [
+          {
+            "code": "peninsula-extent-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 1.0405099309203396,
+            "required": "<= 0.45 with numeric slack"
+          },
+          {
+            "code": "peninsula-width-max",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.33216278603541116,
+            "required": "<= 0.16 with numeric slack"
+          },
+          {
+            "code": "peninsula-ratio",
+            "featureId": "owner-0/peninsula-2",
+            "actual": 0.8012306473208588,
+            "required": ">= 2 with numeric slack"
+          },
+          {
+            "code": "bay-support-chart",
+            "featureId": "bay",
+            "actual": 2.0811032021121676,
+            "required": "<= 1.4 radians"
+          }
+        ]
+      }
+    ],
+    "recipe": {
+      "physicalKmPerRadian": 6366.197723675814,
+      "landFraction": 0.41000000000000003,
+      "ownerCount": 1,
+      "distribution": "varied",
+      "fragmentationBand": 1,
+      "islandCount": 2,
+      "archipelagoCount": 2,
+      "islandShare": 0.006999999999999999,
+      "archipelagoShare": 0.0025,
+      "oceanConnectivity": "singleGlobal",
+      "polarCharacter": "neutral",
+      "polarStretch": 1
+    },
+    "revision": "issue-184-curved-bays-r3",
+    "extension": {
+      "revision": "issue-184-large-bay-r3",
+      "revisedBaseCandidateCount": 12,
+      "revisedLargeCandidateCount": 4,
+      "totalCandidateLimit": 16
+    }
+  },
+  "placement": null,
+  "fieldKey": null,
+  "proposalPresent": false,
+  "geometryValid": false,
+  "inputValid": true,
+  "capacity": null,
+  "status": "construction-no-proposal",
+  "fieldSummary": null
+}

@@ -1,0 +1,40 @@
+{
+  "input": {
+    "id": "boundary-count1-water45",
+    "seed": "1",
+    "controls": {
+      "worldCircumferenceKm": 40000,
+      "targetWaterCoveragePercent": 45,
+      "continentCountIntent": 1,
+      "continentDistribution": "varied",
+      "fragmentationPercent": 35,
+      "islandAbundancePercent": 35,
+      "archipelagoAbundancePercent": 25,
+      "oceanConnectivity": "singleGlobal",
+      "polarCharacter": "neutral"
+    }
+  },
+  "stages": [
+    { "stage": "input-validation", "status": "completed" },
+    { "stage": "construction", "status": "not-attempted-analytic" }
+  ],
+  "failures": [],
+  "construction": null,
+  "placement": null,
+  "fieldKey": null,
+  "proposalPresent": false,
+  "geometryValid": false,
+  "inputValid": true,
+  "capacity": {
+    "reasonCode": "unsupported-family-capacity",
+    "theorem": "q <= (1-cos(1.4))/2",
+    "maximumOwnerFraction": 0.41501642854987947,
+    "requiredOwnerFraction": 0.55,
+    "deficit": 0.13498357145012058,
+    "includes": "whole primary body plus paid detached islands",
+    "constructorAttempted": false,
+    "targetImpossibilityClaim": false
+  },
+  "status": "unsupported-family-capacity",
+  "fieldSummary": null
+}

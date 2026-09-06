@@ -1,0 +1,913 @@
+{
+  "revision": "issue-189-D3-r1",
+  "selectedProposal": null,
+  "fullPublicDomainSupported": false,
+  "counts": {
+    "constructorCalls": 28,
+    "placementCalls": 24,
+    "templateAttempts": 328,
+    "uniqueFieldCalls": 13,
+    "scalarEvaluations": 27236378,
+    "partitions": 13,
+    "semanticCalls": 23
+  },
+  "dedupFailures": [],
+  "fields": [
+    "bcef2dbf3bd7e7afd928a278b496c8f0761ac7316b5f814adf7efe52f18c9c8c",
+    "65c80c848673252f325e65ba7690d0298b841b143e95465f6185d5c6e0e769bd",
+    "f4f94593d69210871c3c8c89368ba9ea7c04c1001cd1dba94656a28d4c1fa6d7",
+    "84b86829a8ff8abd40affc4ddfc9af8073a678e4b0525cd40b1b1224051cd30d",
+    "979f85a023f278ad7da217da2fedf3e2f5ed4342b548367c959c4d1e4091157d",
+    "a690efdf42792ea9a9f7965b4b981521cf3727f55cb6f1eda08fc1b170f2a168",
+    "bbb19c6ed8206fa2341e3a2725d53934393c73abe09294e8f0f6fa6cc3640637",
+    "e95b42950e5fddfab6120057f18541f9fbadaf6b385919b05af000083c187d9e",
+    "4a52d15fe99c4b764e20b5a1d6c752001e7f57d6aa5d944b8f5bdf466b188023",
+    "704508e3e6039e9764698307aeb0e00721f58a180bf57cbcfd72f3f0133c172b",
+    "58fae3c696e24e4ccf3d06883fe220559a85cf18434fd6c68344534032fb42ab",
+    "fdf5262591325604f76f097bd98bdfa41186e3b8d4d4f20d8ed6bf45675091cd",
+    "5ff1bc703e46ea486bea45ced4a1feb4d0edc8545ba08a3c8b4e696f91b11cae"
+  ],
+  "rows": [
+    {
+      "id": "paired-1-baseline",
+      "inputValid": true,
+      "status": "diagnostics-completed",
+      "fieldKey": "bcef2dbf3bd7e7afd928a278b496c8f0761ac7316b5f814adf7efe52f18c9c8c",
+      "failures": [],
+      "semantic": {
+        "status": "semantic-outcome-pass",
+        "pass": true,
+        "errors": [],
+        "allocatedOpenRegionCount": 1,
+        "clearanceCoreCount": { "exact": null, "possible": [0, 1] },
+        "enclosedRegionCount": 0,
+        "basinRootCount": 1,
+        "components": [{ "regionIndices": [0], "rootCount": 1, "areaWeight": 909951809261 }],
+        "largestOpenComponentShare": {
+          "numerator": "909951809261",
+          "denominator": "909951809261",
+          "fraction": 1
+        },
+        "scope": "Unchanged policy-1 allocated regions; no fabricated raw clearance labels or EntityIds"
+      }
+    },
+    {
+      "id": "paired-1-ocean-majority",
+      "inputValid": true,
+      "status": "diagnostics-completed",
+      "fieldKey": "bcef2dbf3bd7e7afd928a278b496c8f0761ac7316b5f814adf7efe52f18c9c8c",
+      "failures": [],
+      "semantic": {
+        "status": "semantic-outcome-pass",
+        "pass": true,
+        "errors": [],
+        "allocatedOpenRegionCount": 1,
+        "clearanceCoreCount": { "exact": null, "possible": [0, 1] },
+        "enclosedRegionCount": 0,
+        "basinRootCount": 1,
+        "components": [{ "regionIndices": [0], "rootCount": 1, "areaWeight": 909951809261 }],
+        "largestOpenComponentShare": {
+          "numerator": "909951809261",
+          "denominator": "909951809261",
+          "fraction": 1
+        },
+        "scope": "Unchanged policy-1 allocated regions; no fabricated raw clearance labels or EntityIds"
+      }
+    },
+    {
+      "id": "paired-1-ocean-multiple",
+      "inputValid": true,
+      "status": "control-no-proposal",
+      "fieldKey": "bcef2dbf3bd7e7afd928a278b496c8f0761ac7316b5f814adf7efe52f18c9c8c",
+      "failures": [],
+      "semantic": {
+        "status": "semantic-mode-unsupported",
+        "reason": "The version-1 open-marine clearance graph cannot realize two disconnected basin roots.",
+        "pass": false
+      }
+    },
+    {
+      "id": "paired-1-polar-ocean",
+      "inputValid": true,
+      "status": "diagnostics-completed",
+      "fieldKey": "65c80c848673252f325e65ba7690d0298b841b143e95465f6185d5c6e0e769bd",
+      "failures": [],
+      "semantic": {
+        "status": "semantic-outcome-pass",
+        "pass": true,
+        "errors": [],
+        "allocatedOpenRegionCount": 1,
+        "clearanceCoreCount": { "exact": null, "possible": [0, 1] },
+        "enclosedRegionCount": 0,
+        "basinRootCount": 1,
+        "components": [{ "regionIndices": [0], "rootCount": 1, "areaWeight": 909926594790 }],
+        "largestOpenComponentShare": {
+          "numerator": "909926594790",
+          "denominator": "909926594790",
+          "fraction": 1
+        },
+        "scope": "Unchanged policy-1 allocated regions; no fabricated raw clearance labels or EntityIds"
+      }
+    },
+    {
+      "id": "paired-1-polar-land",
+      "inputValid": true,
+      "status": "diagnostics-completed",
+      "fieldKey": "f4f94593d69210871c3c8c89368ba9ea7c04c1001cd1dba94656a28d4c1fa6d7",
+      "failures": [],
+      "semantic": {
+        "status": "semantic-outcome-pass",
+        "pass": true,
+        "errors": [],
+        "allocatedOpenRegionCount": 2,
+        "clearanceCoreCount": { "exact": 2 },
+        "enclosedRegionCount": 0,
+        "basinRootCount": 1,
+        "components": [{ "regionIndices": [0, 1], "rootCount": 1, "areaWeight": 909951487601 }],
+        "largestOpenComponentShare": {
+          "numerator": "909951487601",
+          "denominator": "909951487601",
+          "fraction": 1
+        },
+        "scope": "Unchanged policy-1 allocated regions; no fabricated raw clearance labels or EntityIds"
+      }
+    },
+    {
+      "id": "paired-1-fragmentation-0",
+      "inputValid": true,
+      "status": "diagnostics-completed",
+      "fieldKey": "bcef2dbf3bd7e7afd928a278b496c8f0761ac7316b5f814adf7efe52f18c9c8c",
+      "failures": [],
+      "semantic": {
+        "status": "semantic-outcome-pass",
+        "pass": true,
+        "errors": [],
+        "allocatedOpenRegionCount": 1,
+        "clearanceCoreCount": { "exact": null, "possible": [0, 1] },
+        "enclosedRegionCount": 0,
+        "basinRootCount": 1,
+        "components": [{ "regionIndices": [0], "rootCount": 1, "areaWeight": 909951809261 }],
+        "largestOpenComponentShare": {
+          "numerator": "909951809261",
+          "denominator": "909951809261",
+          "fraction": 1
+        },
+        "scope": "Unchanged policy-1 allocated regions; no fabricated raw clearance labels or EntityIds"
+      }
+    },
+    {
+      "id": "paired-1-fragmentation-100",
+      "inputValid": true,
+      "status": "diagnostics-completed",
+      "fieldKey": "bcef2dbf3bd7e7afd928a278b496c8f0761ac7316b5f814adf7efe52f18c9c8c",
+      "failures": [],
+      "semantic": {
+        "status": "semantic-outcome-pass",
+        "pass": true,
+        "errors": [],
+        "allocatedOpenRegionCount": 1,
+        "clearanceCoreCount": { "exact": null, "possible": [0, 1] },
+        "enclosedRegionCount": 0,
+        "basinRootCount": 1,
+        "components": [{ "regionIndices": [0], "rootCount": 1, "areaWeight": 909951809261 }],
+        "largestOpenComponentShare": {
+          "numerator": "909951809261",
+          "denominator": "909951809261",
+          "fraction": 1
+        },
+        "scope": "Unchanged policy-1 allocated regions; no fabricated raw clearance labels or EntityIds"
+      }
+    },
+    {
+      "id": "paired-2-baseline",
+      "inputValid": true,
+      "status": "diagnostics-completed",
+      "fieldKey": "84b86829a8ff8abd40affc4ddfc9af8073a678e4b0525cd40b1b1224051cd30d",
+      "failures": [],
+      "semantic": {
+        "status": "semantic-outcome-pass",
+        "pass": true,
+        "errors": [],
+        "allocatedOpenRegionCount": 1,
+        "clearanceCoreCount": { "exact": null, "possible": [0, 1] },
+        "enclosedRegionCount": 0,
+        "basinRootCount": 1,
+        "components": [{ "regionIndices": [0], "rootCount": 1, "areaWeight": 909942741155 }],
+        "largestOpenComponentShare": {
+          "numerator": "909942741155",
+          "denominator": "909942741155",
+          "fraction": 1
+        },
+        "scope": "Unchanged policy-1 allocated regions; no fabricated raw clearance labels or EntityIds"
+      }
+    },
+    {
+      "id": "paired-2-ocean-majority",
+      "inputValid": true,
+      "status": "diagnostics-completed",
+      "fieldKey": "84b86829a8ff8abd40affc4ddfc9af8073a678e4b0525cd40b1b1224051cd30d",
+      "failures": [],
+      "semantic": {
+        "status": "semantic-outcome-pass",
+        "pass": true,
+        "errors": [],
+        "allocatedOpenRegionCount": 1,
+        "clearanceCoreCount": { "exact": null, "possible": [0, 1] },
+        "enclosedRegionCount": 0,
+        "basinRootCount": 1,
+        "components": [{ "regionIndices": [0], "rootCount": 1, "areaWeight": 909942741155 }],
+        "largestOpenComponentShare": {
+          "numerator": "909942741155",
+          "denominator": "909942741155",
+          "fraction": 1
+        },
+        "scope": "Unchanged policy-1 allocated regions; no fabricated raw clearance labels or EntityIds"
+      }
+    },
+    {
+      "id": "paired-2-ocean-multiple",
+      "inputValid": true,
+      "status": "control-no-proposal",
+      "fieldKey": "84b86829a8ff8abd40affc4ddfc9af8073a678e4b0525cd40b1b1224051cd30d",
+      "failures": [],
+      "semantic": {
+        "status": "semantic-mode-unsupported",
+        "reason": "The version-1 open-marine clearance graph cannot realize two disconnected basin roots.",
+        "pass": false
+      }
+    },
+    {
+      "id": "paired-2-polar-ocean",
+      "inputValid": true,
+      "status": "diagnostics-completed",
+      "fieldKey": "979f85a023f278ad7da217da2fedf3e2f5ed4342b548367c959c4d1e4091157d",
+      "failures": [],
+      "semantic": {
+        "status": "semantic-outcome-pass",
+        "pass": true,
+        "errors": [],
+        "allocatedOpenRegionCount": 2,
+        "clearanceCoreCount": { "exact": 2 },
+        "enclosedRegionCount": 0,
+        "basinRootCount": 1,
+        "components": [{ "regionIndices": [0, 1], "rootCount": 1, "areaWeight": 909984650643 }],
+        "largestOpenComponentShare": {
+          "numerator": "909984650643",
+          "denominator": "909984650643",
+          "fraction": 1
+        },
+        "scope": "Unchanged policy-1 allocated regions; no fabricated raw clearance labels or EntityIds"
+      }
+    },
+    {
+      "id": "paired-2-polar-land",
+      "inputValid": true,
+      "status": "diagnostics-completed",
+      "fieldKey": "a690efdf42792ea9a9f7965b4b981521cf3727f55cb6f1eda08fc1b170f2a168",
+      "failures": [],
+      "semantic": {
+        "status": "semantic-outcome-pass",
+        "pass": true,
+        "errors": [],
+        "allocatedOpenRegionCount": 1,
+        "clearanceCoreCount": { "exact": null, "possible": [0, 1] },
+        "enclosedRegionCount": 0,
+        "basinRootCount": 1,
+        "components": [{ "regionIndices": [0], "rootCount": 1, "areaWeight": 909942153169 }],
+        "largestOpenComponentShare": {
+          "numerator": "909942153169",
+          "denominator": "909942153169",
+          "fraction": 1
+        },
+        "scope": "Unchanged policy-1 allocated regions; no fabricated raw clearance labels or EntityIds"
+      }
+    },
+    {
+      "id": "paired-2-fragmentation-0",
+      "inputValid": true,
+      "status": "diagnostics-completed",
+      "fieldKey": "84b86829a8ff8abd40affc4ddfc9af8073a678e4b0525cd40b1b1224051cd30d",
+      "failures": [],
+      "semantic": {
+        "status": "semantic-outcome-pass",
+        "pass": true,
+        "errors": [],
+        "allocatedOpenRegionCount": 1,
+        "clearanceCoreCount": { "exact": null, "possible": [0, 1] },
+        "enclosedRegionCount": 0,
+        "basinRootCount": 1,
+        "components": [{ "regionIndices": [0], "rootCount": 1, "areaWeight": 909942741155 }],
+        "largestOpenComponentShare": {
+          "numerator": "909942741155",
+          "denominator": "909942741155",
+          "fraction": 1
+        },
+        "scope": "Unchanged policy-1 allocated regions; no fabricated raw clearance labels or EntityIds"
+      }
+    },
+    {
+      "id": "paired-2-fragmentation-100",
+      "inputValid": true,
+      "status": "diagnostics-completed",
+      "fieldKey": "84b86829a8ff8abd40affc4ddfc9af8073a678e4b0525cd40b1b1224051cd30d",
+      "failures": [],
+      "semantic": {
+        "status": "semantic-outcome-pass",
+        "pass": true,
+        "errors": [],
+        "allocatedOpenRegionCount": 1,
+        "clearanceCoreCount": { "exact": null, "possible": [0, 1] },
+        "enclosedRegionCount": 0,
+        "basinRootCount": 1,
+        "components": [{ "regionIndices": [0], "rootCount": 1, "areaWeight": 909942741155 }],
+        "largestOpenComponentShare": {
+          "numerator": "909942741155",
+          "denominator": "909942741155",
+          "fraction": 1
+        },
+        "scope": "Unchanged policy-1 allocated regions; no fabricated raw clearance labels or EntityIds"
+      }
+    },
+    {
+      "id": "boundary-count1-water45",
+      "inputValid": true,
+      "status": "unsupported-family-capacity",
+      "fieldKey": null,
+      "failures": [],
+      "semantic": null
+    },
+    {
+      "id": "boundary-count1-water58",
+      "inputValid": true,
+      "status": "unsupported-family-capacity",
+      "fieldKey": null,
+      "failures": [],
+      "semantic": null
+    },
+    {
+      "id": "boundary-count1-water59",
+      "inputValid": true,
+      "status": "construction-no-proposal",
+      "fieldKey": null,
+      "failures": [],
+      "semantic": null
+    },
+    {
+      "id": "boundary-count1-water80",
+      "inputValid": true,
+      "status": "construction-no-proposal",
+      "fieldKey": null,
+      "failures": [],
+      "semantic": null
+    },
+    {
+      "id": "boundary-count8-water45",
+      "inputValid": true,
+      "status": "placement-no-proposal",
+      "fieldKey": null,
+      "failures": [],
+      "semantic": null
+    },
+    {
+      "id": "boundary-count8-water80",
+      "inputValid": true,
+      "status": "construction-no-proposal",
+      "fieldKey": null,
+      "failures": [],
+      "semantic": null
+    },
+    {
+      "id": "boundary-water45",
+      "inputValid": true,
+      "status": "construction-no-proposal",
+      "fieldKey": null,
+      "failures": [],
+      "semantic": null
+    },
+    {
+      "id": "boundary-water80",
+      "inputValid": true,
+      "status": "diagnostics-completed",
+      "fieldKey": "bbb19c6ed8206fa2341e3a2725d53934393c73abe09294e8f0f6fa6cc3640637",
+      "failures": [],
+      "semantic": {
+        "status": "semantic-outcome-pass",
+        "pass": true,
+        "errors": [],
+        "allocatedOpenRegionCount": 1,
+        "clearanceCoreCount": { "exact": null, "possible": [0, 1] },
+        "enclosedRegionCount": 0,
+        "basinRootCount": 1,
+        "components": [{ "regionIndices": [0], "rootCount": 1, "areaWeight": 1119960449744 }],
+        "largestOpenComponentShare": {
+          "numerator": "1119960449744",
+          "denominator": "1119960449744",
+          "fraction": 1
+        },
+        "scope": "Unchanged policy-1 allocated regions; no fabricated raw clearance labels or EntityIds"
+      }
+    },
+    {
+      "id": "boundary-distribution-balanced",
+      "inputValid": true,
+      "status": "diagnostics-completed",
+      "fieldKey": "e95b42950e5fddfab6120057f18541f9fbadaf6b385919b05af000083c187d9e",
+      "failures": [],
+      "semantic": {
+        "status": "semantic-outcome-pass",
+        "pass": true,
+        "errors": [],
+        "allocatedOpenRegionCount": 3,
+        "clearanceCoreCount": { "exact": 3 },
+        "enclosedRegionCount": 2,
+        "basinRootCount": 1,
+        "components": [{ "regionIndices": [0, 1, 2], "rootCount": 1, "areaWeight": 909965258852 }],
+        "largestOpenComponentShare": {
+          "numerator": "909965258852",
+          "denominator": "909965258852",
+          "fraction": 1
+        },
+        "scope": "Unchanged policy-1 allocated regions; no fabricated raw clearance labels or EntityIds"
+      }
+    },
+    {
+      "id": "boundary-distribution-dominant",
+      "inputValid": true,
+      "status": "diagnostics-completed",
+      "fieldKey": "4a52d15fe99c4b764e20b5a1d6c752001e7f57d6aa5d944b8f5bdf466b188023",
+      "failures": [],
+      "semantic": {
+        "status": "semantic-outcome-pass",
+        "pass": true,
+        "errors": [],
+        "allocatedOpenRegionCount": 10,
+        "clearanceCoreCount": { "exact": 10 },
+        "enclosedRegionCount": 0,
+        "basinRootCount": 1,
+        "components": [
+          {
+            "regionIndices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+            "rootCount": 1,
+            "areaWeight": 909967536772
+          }
+        ],
+        "largestOpenComponentShare": {
+          "numerator": "909967536772",
+          "denominator": "909967536772",
+          "fraction": 1
+        },
+        "scope": "Unchanged policy-1 allocated regions; no fabricated raw clearance labels or EntityIds"
+      }
+    },
+    {
+      "id": "boundary-islands-zero",
+      "inputValid": true,
+      "status": "diagnostics-completed",
+      "fieldKey": "704508e3e6039e9764698307aeb0e00721f58a180bf57cbcfd72f3f0133c172b",
+      "failures": [],
+      "semantic": {
+        "status": "semantic-outcome-pass",
+        "pass": true,
+        "errors": [],
+        "allocatedOpenRegionCount": 1,
+        "clearanceCoreCount": { "exact": null, "possible": [0, 1] },
+        "enclosedRegionCount": 0,
+        "basinRootCount": 1,
+        "components": [{ "regionIndices": [0], "rootCount": 1, "areaWeight": 909959541977 }],
+        "largestOpenComponentShare": {
+          "numerator": "909959541977",
+          "denominator": "909959541977",
+          "fraction": 1
+        },
+        "scope": "Unchanged policy-1 allocated regions; no fabricated raw clearance labels or EntityIds"
+      }
+    },
+    {
+      "id": "boundary-archipelagos-zero",
+      "inputValid": true,
+      "status": "diagnostics-completed",
+      "fieldKey": "58fae3c696e24e4ccf3d06883fe220559a85cf18434fd6c68344534032fb42ab",
+      "failures": [],
+      "semantic": {
+        "status": "semantic-outcome-pass",
+        "pass": true,
+        "errors": [],
+        "allocatedOpenRegionCount": 1,
+        "clearanceCoreCount": { "exact": null, "possible": [0, 1] },
+        "enclosedRegionCount": 0,
+        "basinRootCount": 1,
+        "components": [{ "regionIndices": [0], "rootCount": 1, "areaWeight": 909979919269 }],
+        "largestOpenComponentShare": {
+          "numerator": "909979919269",
+          "denominator": "909979919269",
+          "fraction": 1
+        },
+        "scope": "Unchanged policy-1 allocated regions; no fabricated raw clearance labels or EntityIds"
+      }
+    },
+    {
+      "id": "boundary-both-zero",
+      "inputValid": true,
+      "status": "diagnostics-completed",
+      "fieldKey": "fdf5262591325604f76f097bd98bdfa41186e3b8d4d4f20d8ed6bf45675091cd",
+      "failures": [],
+      "semantic": {
+        "status": "semantic-outcome-pass",
+        "pass": true,
+        "errors": [],
+        "allocatedOpenRegionCount": 1,
+        "clearanceCoreCount": { "exact": null, "possible": [0, 1] },
+        "enclosedRegionCount": 0,
+        "basinRootCount": 1,
+        "components": [{ "regionIndices": [0], "rootCount": 1, "areaWeight": 909971019070 }],
+        "largestOpenComponentShare": {
+          "numerator": "909971019070",
+          "denominator": "909971019070",
+          "fraction": 1
+        },
+        "scope": "Unchanged policy-1 allocated regions; no fabricated raw clearance labels or EntityIds"
+      }
+    },
+    {
+      "id": "boundary-circumference-min",
+      "inputValid": true,
+      "status": "diagnostics-completed",
+      "fieldKey": "bcef2dbf3bd7e7afd928a278b496c8f0761ac7316b5f814adf7efe52f18c9c8c",
+      "failures": [],
+      "semantic": {
+        "status": "semantic-outcome-pass",
+        "pass": true,
+        "errors": [],
+        "allocatedOpenRegionCount": 1,
+        "clearanceCoreCount": { "exact": null, "possible": [0, 1] },
+        "enclosedRegionCount": 0,
+        "basinRootCount": 1,
+        "components": [{ "regionIndices": [0], "rootCount": 1, "areaWeight": 909951809261 }],
+        "largestOpenComponentShare": {
+          "numerator": "909951809261",
+          "denominator": "909951809261",
+          "fraction": 1
+        },
+        "scope": "Unchanged policy-1 allocated regions; no fabricated raw clearance labels or EntityIds"
+      }
+    },
+    {
+      "id": "boundary-circumference-max",
+      "inputValid": true,
+      "status": "diagnostics-completed",
+      "fieldKey": "bcef2dbf3bd7e7afd928a278b496c8f0761ac7316b5f814adf7efe52f18c9c8c",
+      "failures": [],
+      "semantic": {
+        "status": "semantic-outcome-pass",
+        "pass": true,
+        "errors": [],
+        "allocatedOpenRegionCount": 1,
+        "clearanceCoreCount": { "exact": null, "possible": [0, 1] },
+        "enclosedRegionCount": 0,
+        "basinRootCount": 1,
+        "components": [{ "regionIndices": [0], "rootCount": 1, "areaWeight": 909951809261 }],
+        "largestOpenComponentShare": {
+          "numerator": "909951809261",
+          "denominator": "909951809261",
+          "fraction": 1
+        },
+        "scope": "Unchanged policy-1 allocated regions; no fabricated raw clearance labels or EntityIds"
+      }
+    },
+    {
+      "id": "boundary-both-abundances-max",
+      "inputValid": true,
+      "status": "diagnostics-completed",
+      "fieldKey": "5ff1bc703e46ea486bea45ced4a1feb4d0edc8545ba08a3c8b4e696f91b11cae",
+      "failures": [],
+      "semantic": {
+        "status": "semantic-outcome-pass",
+        "pass": true,
+        "errors": [],
+        "allocatedOpenRegionCount": 4,
+        "clearanceCoreCount": { "exact": 4 },
+        "enclosedRegionCount": 3,
+        "basinRootCount": 1,
+        "components": [
+          { "regionIndices": [0, 1, 2, 3], "rootCount": 1, "areaWeight": 909953769022 }
+        ],
+        "largestOpenComponentShare": {
+          "numerator": "909953769022",
+          "denominator": "909953769022",
+          "fraction": 1
+        },
+        "scope": "Unchanged policy-1 allocated regions; no fabricated raw clearance labels or EntityIds"
+      }
+    }
+  ],
+  "pairs": [
+    {
+      "seed": "1",
+      "polar": {
+        "rawComparison": {
+          "status": "evaluated",
+          "comparisons": {
+            "north": {
+              "oceanVsNeutral": -1,
+              "landVsNeutral": -1,
+              "oceanDelta": -0.34089395525694066,
+              "landDelta": -0.4198176782695023
+            },
+            "south": {
+              "oceanVsNeutral": 1,
+              "landVsNeutral": 1,
+              "oceanDelta": 0.38423127028610937,
+              "landDelta": 0.16746634509209488
+            },
+            "combined": {
+              "oceanVsNeutral": 1,
+              "landVsNeutral": -1,
+              "oceanDelta": 0.021668657514584355,
+              "landDelta": -0.1261756665887037
+            }
+          },
+          "necessaryDirectionPass": false,
+          "generalMonotonicityProved": false,
+          "visualEffectThresholdSelected": false
+        },
+        "prerequisites": {
+          "rows": [
+            {
+              "id": "paired-1-polar-ocean",
+              "geometryValid": true,
+              "completedField": true,
+              "totalCoveragePass": true,
+              "semanticOutcomePass": true
+            },
+            {
+              "id": "paired-1-baseline",
+              "geometryValid": true,
+              "completedField": true,
+              "totalCoveragePass": true,
+              "semanticOutcomePass": true
+            },
+            {
+              "id": "paired-1-polar-land",
+              "geometryValid": true,
+              "completedField": true,
+              "totalCoveragePass": true,
+              "semanticOutcomePass": true
+            }
+          ],
+          "measurementEligible": true,
+          "semanticOutcomesPass": true
+        },
+        "necessaryDirectionPass": false,
+        "completeControlDiagnosticPass": false
+      },
+      "fragmentation": {
+        "status": "source-diagnostic-evaluated",
+        "low": {
+          "primary": [
+            {
+              "id": "owner-0",
+              "quota": 0.13106846473029043,
+              "bodySha256": "02f23610e0f1b5306c950b47fe636739fb9fac0ffe4ef935ec44912d1cb2275d",
+              "quotaNormalizedBodySha256": "13ce5c71ffb48d096375f0d5ebb73506e4a686f399360d90d39185303419c1c9",
+              "bodyArea": 1.631407882071163,
+              "hullArea": 1.8288750515293586,
+              "hullDeficit": 0.10797193022730978
+            },
+            {
+              "id": "owner-1",
+              "quota": 0.13106846473029043,
+              "bodySha256": "68b1f238d2538c6ca095e2a1ba3cdcdb225ba4a75f359cc06d9115697f7fbcf8",
+              "quotaNormalizedBodySha256": "0dbda3f550781ea26caf6e18e38aad528e6b786f5f94b8c047989382cd2ba59e",
+              "bodyArea": 1.6314078820711626,
+              "hullArea": 1.8669624346064333,
+              "hullDeficit": 0.12616994759454114
+            }
+          ],
+          "quotaWeightedHullDeficit": 0.11707093891092546,
+          "scope": "LAEA body concavity; excludes detached islands; not spherical coast length or semantic fragmentation"
+        },
+        "neutral": {
+          "primary": [
+            {
+              "id": "owner-0",
+              "quota": 0.13106846473029043,
+              "bodySha256": "02f23610e0f1b5306c950b47fe636739fb9fac0ffe4ef935ec44912d1cb2275d",
+              "quotaNormalizedBodySha256": "13ce5c71ffb48d096375f0d5ebb73506e4a686f399360d90d39185303419c1c9",
+              "bodyArea": 1.631407882071163,
+              "hullArea": 1.8288750515293586,
+              "hullDeficit": 0.10797193022730978
+            },
+            {
+              "id": "owner-1",
+              "quota": 0.13106846473029043,
+              "bodySha256": "68b1f238d2538c6ca095e2a1ba3cdcdb225ba4a75f359cc06d9115697f7fbcf8",
+              "quotaNormalizedBodySha256": "0dbda3f550781ea26caf6e18e38aad528e6b786f5f94b8c047989382cd2ba59e",
+              "bodyArea": 1.6314078820711626,
+              "hullArea": 1.8669624346064333,
+              "hullDeficit": 0.12616994759454114
+            }
+          ],
+          "quotaWeightedHullDeficit": 0.11707093891092546,
+          "scope": "LAEA body concavity; excludes detached islands; not spherical coast length or semantic fragmentation"
+        },
+        "high": {
+          "primary": [
+            {
+              "id": "owner-0",
+              "quota": 0.13106846473029043,
+              "bodySha256": "02f23610e0f1b5306c950b47fe636739fb9fac0ffe4ef935ec44912d1cb2275d",
+              "quotaNormalizedBodySha256": "13ce5c71ffb48d096375f0d5ebb73506e4a686f399360d90d39185303419c1c9",
+              "bodyArea": 1.631407882071163,
+              "hullArea": 1.8288750515293586,
+              "hullDeficit": 0.10797193022730978
+            },
+            {
+              "id": "owner-1",
+              "quota": 0.13106846473029043,
+              "bodySha256": "68b1f238d2538c6ca095e2a1ba3cdcdb225ba4a75f359cc06d9115697f7fbcf8",
+              "quotaNormalizedBodySha256": "0dbda3f550781ea26caf6e18e38aad528e6b786f5f94b8c047989382cd2ba59e",
+              "bodyArea": 1.6314078820711626,
+              "hullArea": 1.8669624346064333,
+              "hullDeficit": 0.12616994759454114
+            }
+          ],
+          "quotaWeightedHullDeficit": 0.11707093891092546,
+          "scope": "LAEA body concavity; excludes detached islands; not spherical coast length or semantic fragmentation"
+        },
+        "sourceStrictIncrease": false,
+        "exactBodyEquality": true,
+        "prerequisites": {
+          "rows": [
+            {
+              "id": "paired-1-fragmentation-0",
+              "geometryValid": true,
+              "completedField": true,
+              "totalCoveragePass": true,
+              "semanticOutcomePass": true
+            },
+            {
+              "id": "paired-1-baseline",
+              "geometryValid": true,
+              "completedField": true,
+              "totalCoveragePass": true,
+              "semanticOutcomePass": true
+            },
+            {
+              "id": "paired-1-fragmentation-100",
+              "geometryValid": true,
+              "completedField": true,
+              "totalCoveragePass": true,
+              "semanticOutcomePass": true
+            }
+          ],
+          "measurementEligible": true,
+          "semanticOutcomesPass": true
+        },
+        "completeControlDiagnosticPass": false
+      }
+    },
+    {
+      "seed": "180000000000000001",
+      "polar": {
+        "rawComparison": {
+          "status": "evaluated",
+          "comparisons": {
+            "north": {
+              "oceanVsNeutral": -1,
+              "landVsNeutral": 1,
+              "oceanDelta": -0.019821751416820743,
+              "landDelta": 0.15165302846388395
+            },
+            "south": {
+              "oceanVsNeutral": -1,
+              "landVsNeutral": -1,
+              "oceanDelta": -0.5978452839250512,
+              "landDelta": -0.10306873636535568
+            },
+            "combined": {
+              "oceanVsNeutral": -1,
+              "landVsNeutral": 1,
+              "oceanDelta": -0.3088335176709359,
+              "landDelta": 0.02429214604926422
+            }
+          },
+          "necessaryDirectionPass": false,
+          "generalMonotonicityProved": false,
+          "visualEffectThresholdSelected": false
+        },
+        "prerequisites": {
+          "rows": [
+            {
+              "id": "paired-2-polar-ocean",
+              "geometryValid": true,
+              "completedField": true,
+              "totalCoveragePass": true,
+              "semanticOutcomePass": true
+            },
+            {
+              "id": "paired-2-baseline",
+              "geometryValid": true,
+              "completedField": true,
+              "totalCoveragePass": true,
+              "semanticOutcomePass": true
+            },
+            {
+              "id": "paired-2-polar-land",
+              "geometryValid": true,
+              "completedField": true,
+              "totalCoveragePass": true,
+              "semanticOutcomePass": true
+            }
+          ],
+          "measurementEligible": true,
+          "semanticOutcomesPass": true
+        },
+        "necessaryDirectionPass": false,
+        "completeControlDiagnosticPass": false
+      },
+      "fragmentation": {
+        "status": "source-diagnostic-evaluated",
+        "low": {
+          "primary": [
+            {
+              "id": "owner-0",
+              "quota": 0.17451657458563533,
+              "bodySha256": "2ee94902a0488bb5344ecbe6819f2dc1ff15619131912f1bdbc95032709ab294",
+              "quotaNormalizedBodySha256": "d8013544fffa7ba3237daec2c4077f13a1abf80f989036b434ebcb49e3d0072f",
+              "bodyArea": 2.17220607502293,
+              "hullArea": 2.484365861362367,
+              "hullDeficit": 0.12564968436986002
+            }
+          ],
+          "quotaWeightedHullDeficit": 0.12564968436986002,
+          "scope": "LAEA body concavity; excludes detached islands; not spherical coast length or semantic fragmentation"
+        },
+        "neutral": {
+          "primary": [
+            {
+              "id": "owner-0",
+              "quota": 0.17451657458563533,
+              "bodySha256": "2ee94902a0488bb5344ecbe6819f2dc1ff15619131912f1bdbc95032709ab294",
+              "quotaNormalizedBodySha256": "d8013544fffa7ba3237daec2c4077f13a1abf80f989036b434ebcb49e3d0072f",
+              "bodyArea": 2.17220607502293,
+              "hullArea": 2.484365861362367,
+              "hullDeficit": 0.12564968436986002
+            }
+          ],
+          "quotaWeightedHullDeficit": 0.12564968436986002,
+          "scope": "LAEA body concavity; excludes detached islands; not spherical coast length or semantic fragmentation"
+        },
+        "high": {
+          "primary": [
+            {
+              "id": "owner-0",
+              "quota": 0.17451657458563533,
+              "bodySha256": "2ee94902a0488bb5344ecbe6819f2dc1ff15619131912f1bdbc95032709ab294",
+              "quotaNormalizedBodySha256": "d8013544fffa7ba3237daec2c4077f13a1abf80f989036b434ebcb49e3d0072f",
+              "bodyArea": 2.17220607502293,
+              "hullArea": 2.484365861362367,
+              "hullDeficit": 0.12564968436986002
+            }
+          ],
+          "quotaWeightedHullDeficit": 0.12564968436986002,
+          "scope": "LAEA body concavity; excludes detached islands; not spherical coast length or semantic fragmentation"
+        },
+        "sourceStrictIncrease": false,
+        "exactBodyEquality": true,
+        "prerequisites": {
+          "rows": [
+            {
+              "id": "paired-2-fragmentation-0",
+              "geometryValid": true,
+              "completedField": true,
+              "totalCoveragePass": true,
+              "semanticOutcomePass": true
+            },
+            {
+              "id": "paired-2-baseline",
+              "geometryValid": true,
+              "completedField": true,
+              "totalCoveragePass": true,
+              "semanticOutcomePass": true
+            },
+            {
+              "id": "paired-2-fragmentation-100",
+              "geometryValid": true,
+              "completedField": true,
+              "totalCoveragePass": true,
+              "semanticOutcomePass": true
+            }
+          ],
+          "measurementEligible": true,
+          "semanticOutcomesPass": true
+        },
+        "completeControlDiagnosticPass": false
+      }
+    }
+  ],
+  "limitations": [
+    "D1 sampled-component survival and extracted-role correspondence remain unproved",
+    "Rejected visual family is not selected",
+    "Semantic keys are transient analysis indices, not EntityIds"
+  ]
+}
