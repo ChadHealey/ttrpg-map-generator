@@ -1,0 +1,15 @@
+{
+  "state": "state-1",
+  "status": "aborted-harness-error",
+  "reservedMaximumEvaluations": 75836012,
+  "completedRows": 0,
+  "fieldEvaluationCountRetained": null,
+  "inferredExecutedEvaluations": 261124,
+  "inference": "One calibration pass and one preview sampling pass completed before preview tickHash threw; no full sampling or second input was reached. No counter receipt survived.",
+  "artifacts": {
+    "initial-claim.json": "164d36cd42e99e7a1ba08908c86b2706fcb8b78ddcfd8d7e8721d3a962118391",
+    "inputs.json": "8b95e645e5553c78ddb0de0b98dea63ff0b4826ed063673a625339d380cc09f9",
+    "source-manifest.json": "fcd43cdda64a5619ef19c78cea31d278ae65709c8b3dbfe7e240bc28e58fedb7",
+    "sources.json.gz": "141dead788b5d88ff90b8774f7504adf67f63426fba500b4b92053b98abf054b"
+  }
+}
