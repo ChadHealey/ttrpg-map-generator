@@ -1,0 +1,175 @@
+{
+  "assurance": "binary64 arithmetic corroboration, not formal interval certification",
+  "restricted": {
+    "bodyArea": 1.6314078820711624,
+    "peninsulaFloor": 0.08157039410355812,
+    "rootNormalStripBound": 0.06959448545779684,
+    "requiredOverStripBoundMinusOne": 0.17208128728854044,
+    "flatProductBound": 0.07200000000000001,
+    "sampleLambertFactor": 0.88,
+    "sampleCertifiedPlanarStripBound": 0.055756799999999995
+  },
+  "curved": {
+    "scope": "Standalone spherical tapered peninsula; no polygon owner, placement or visual claim.",
+    "r": 0.25,
+    "h": 0.079,
+    "baseArea": 0.085,
+    "tailLength": 0.05,
+    "phi": 2.1767423456382615,
+    "spineLength": 0.5385346745878832,
+    "tailStartPhi": 1.974643720577208,
+    "areaLossUpper": 0.0016935916081147469,
+    "areaLower": 0.08330640839188526,
+    "width": 0.158,
+    "extentLower": 0.4251955445699949,
+    "extentUpper": 0.44815159858569004,
+    "collarDiskBoundaryLower": 0.06124700345342502,
+    "extentWidthRatioLower": 2.6911110415822463
+  },
+  "planar": {
+    "scope": "Standalone trapezoidal collar and tapered feature, evaluated within a declared containing cap.",
+    "feature": [
+      [0.25, 0],
+      [0.06, 0.3],
+      [0, 0.35],
+      [-0.06, 0.3],
+      [-0.25, 0]
+    ],
+    "collar": [
+      [0.25, 0],
+      [0.06, 0.3],
+      [-0.06, 0.3],
+      [-0.25, 0]
+    ],
+    "disk": [0, 0.17],
+    "containingAngularBound": 0.9020536235925247,
+    "c": 0.9,
+    "simple": true,
+    "area": 0.096,
+    "rootLength": 0.5,
+    "farLength": 0.12,
+    "chainDistance": 0.12,
+    "widthLower": 0.108,
+    "rootUpper": 0.5555555555555556,
+    "farUpper": 0.13333333333333333,
+    "firstDiskRadiusLower": 0.10822132357849666,
+    "extentLower": 0.315,
+    "extentUpper": 0.38888888888888884,
+    "extentWidthRatioLower": 2.3625000000000003
+  },
+  "subordinate": {
+    "scope": "Complete B+P subordinate under the frozen certificate; proposed far-bound numbers are diagnostics, not a new-mode certificate.",
+    "candidate": {
+      "id": "local",
+      "primary": false,
+      "interior": [
+        [-0.5, -0.5],
+        [0.2, -0.5],
+        [0.2, -0.3],
+        [0.2, 0.3],
+        [0.2, 0.5],
+        [-0.5, 0.5]
+      ],
+      "interiorWitness": [-0.1, 0],
+      "attachments": [
+        {
+          "id": "local/peninsula-0",
+          "kind": "peninsula",
+          "root": [
+            [0.2, -0.3],
+            [0.2, 0.3]
+          ],
+          "polygon": [
+            [0.2, -0.3],
+            [0.48, -0.06],
+            [0.52, 0],
+            [0.48, 0.06],
+            [0.2, 0.3]
+          ],
+          "collar": {
+            "far": [
+              [0.48, -0.06],
+              [0.48, 0.06]
+            ],
+            "disk": [0.3, 0]
+          }
+        }
+      ],
+      "islands": [],
+      "bodyBoundary": [
+        [-0.5, -0.5],
+        [0.2, -0.5],
+        [0.2, -0.3],
+        [0.48, -0.06],
+        [0.52, 0],
+        [0.48, 0.06],
+        [0.2, 0.3],
+        [0.2, 0.5],
+        [-0.5, 0.5]
+      ]
+    },
+    "quota": 0.06391662514570516,
+    "oldCertificate": {
+      "ok": false,
+      "failures": [
+        {
+          "code": "peninsula-width-max",
+          "featureId": "local/peninsula-0",
+          "actual": 0.6414269808036275,
+          "required": "<= 0.16 with numeric slack"
+        },
+        {
+          "code": "peninsula-ratio",
+          "featureId": "local/peninsula-0",
+          "actual": 0.46666666651111116,
+          "required": ">= 2 with numeric slack"
+        }
+      ],
+      "metrics": {
+        "area": 0.06391662514570516,
+        "bodyArea": 0.06391662514570516,
+        "quotaError": 0,
+        "angularRadius": 0.7227342478134157,
+        "guardRadius": 0.7727342478134157,
+        "roles": [
+          {
+            "id": "local/peninsula-0",
+            "kind": "peninsula",
+            "area": 0.0082123950635418,
+            "share": 0.12848605577689243,
+            "widthLower": 0.11224972141613536,
+            "widthUpper": 0.6414269808036275,
+            "firstDiskRadiusLower": 0.09354143448226564,
+            "opposingChainDistance": 0.12,
+            "collarPolygon": [
+              [0.2, -0.3],
+              [0.48, -0.06],
+              [0.48, 0.06],
+              [0.2, 0.3]
+            ],
+            "distalPolygon": [
+              [0.48, -0.06],
+              [0.52, 0],
+              [0.48, 0.06]
+            ],
+            "collarArea": 0.008021409131831523,
+            "distalArea": 0.00019098593171027435,
+            "extentLower": 0.29933259094191533,
+            "extentUpper": 0.34209438964790323,
+            "extentWidthRatioLower": 0.46666666651111116
+          }
+        ],
+        "vertexCount": 9,
+        "interior": {
+          "radiusLower": 0.28062430400804567,
+          "area": 0.05570423008216337,
+          "share": 0.8715139442231076
+        }
+      }
+    },
+    "absolutePeninsulaArea": 0.10319999999999999,
+    "exceedsLargestPrimaryAbsoluteFloor": true,
+    "proposedFarUpper": 0.1282853963317727,
+    "proposedExtentWidthRatioLower": 2.3333333294444447
+  }
+}

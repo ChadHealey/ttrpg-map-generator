@@ -1,0 +1,218 @@
+{
+  "scope": "Complete B+P subordinate topology witness, no complete primary, islands or world claim",
+  "candidate": {
+    "id": "local",
+    "primary": false,
+    "interior": [
+      [-0.5, -0.5],
+      [0.2, -0.5],
+      [0.2, -0.3],
+      [0.2, 0.3],
+      [0.2, 0.5],
+      [-0.5, 0.5]
+    ],
+    "interiorWitness": [-0.1, 0],
+    "attachments": [
+      {
+        "id": "local/peninsula-0",
+        "kind": "peninsula",
+        "root": [
+          [0.2, -0.3],
+          [0.2, 0.3]
+        ],
+        "polygon": [
+          [0.2, -0.3],
+          [0.48, -0.06],
+          [0.52, 0],
+          [0.48, 0.06],
+          [0.2, 0.3]
+        ],
+        "collar": {
+          "far": [
+            [0.48, -0.06],
+            [0.48, 0.06]
+          ],
+          "disk": [0.3, 0]
+        }
+      }
+    ],
+    "islands": [],
+    "bodyBoundary": [
+      [-0.5, -0.5],
+      [0.2, -0.5],
+      [0.2, -0.3],
+      [0.48, -0.06],
+      [0.52, 0],
+      [0.48, 0.06],
+      [0.2, 0.3],
+      [0.2, 0.5],
+      [-0.5, 0.5]
+    ]
+  },
+  "quota": 0.06391662514570516,
+  "old": {
+    "ok": false,
+    "failures": [
+      {
+        "code": "peninsula-width-max",
+        "featureId": "local/peninsula-0",
+        "actual": 0.6414269808036275,
+        "required": "<= 0.16 with numeric slack"
+      },
+      {
+        "code": "peninsula-ratio",
+        "featureId": "local/peninsula-0",
+        "actual": 0.46666666651111116,
+        "required": ">= 2 with numeric slack"
+      }
+    ],
+    "metrics": {
+      "area": 0.06391662514570516,
+      "bodyArea": 0.06391662514570516,
+      "quotaError": 0,
+      "angularRadius": 0.7227342478134157,
+      "guardRadius": 0.7727342478134157,
+      "roles": [
+        {
+          "id": "local/peninsula-0",
+          "kind": "peninsula",
+          "area": 0.0082123950635418,
+          "share": 0.12848605577689243,
+          "widthLower": 0.11224972141613536,
+          "widthUpper": 0.6414269808036275,
+          "firstDiskRadiusLower": 0.09354143448226564,
+          "opposingChainDistance": 0.12,
+          "collarPolygon": [
+            [0.2, -0.3],
+            [0.48, -0.06],
+            [0.48, 0.06],
+            [0.2, 0.3]
+          ],
+          "distalPolygon": [
+            [0.48, -0.06],
+            [0.52, 0],
+            [0.48, 0.06]
+          ],
+          "collarArea": 0.008021409131831523,
+          "distalArea": 0.00019098593171027435,
+          "extentLower": 0.29933259094191533,
+          "extentUpper": 0.34209438964790323,
+          "extentWidthRatioLower": 0.46666666651111116
+        }
+      ],
+      "vertexCount": 9,
+      "interior": {
+        "radiusLower": 0.28062430400804567,
+        "area": 0.05570423008216337,
+        "share": 0.8715139442231076
+      }
+    }
+  },
+  "root": {
+    "ok": false,
+    "failures": [
+      {
+        "code": "peninsula-width-max",
+        "featureId": "local/peninsula-0",
+        "actual": 0.6414269808036275,
+        "required": "<= 0.16 with numeric slack"
+      },
+      {
+        "code": "peninsula-ratio",
+        "featureId": "local/peninsula-0",
+        "actual": 0.46666666651111116,
+        "required": ">= 2 with numeric slack"
+      }
+    ],
+    "metrics": {
+      "area": 0.06391662514570516,
+      "bodyArea": 0.06391662514570516,
+      "quotaError": 0,
+      "angularRadius": 0.7227342478134157,
+      "guardRadius": 0.7727342478134157,
+      "roles": [
+        {
+          "id": "local/peninsula-0",
+          "kind": "peninsula",
+          "area": 0.0082123950635418,
+          "share": 0.12848605577689243,
+          "widthLower": 0.11224972141613536,
+          "widthUpper": 0.6414269808036275,
+          "firstDiskRadiusLower": 0.09354143448226564,
+          "opposingChainDistance": 0.12,
+          "collarPolygon": [
+            [0.2, -0.3],
+            [0.48, -0.06],
+            [0.48, 0.06],
+            [0.2, 0.3]
+          ],
+          "distalPolygon": [
+            [0.48, -0.06],
+            [0.52, 0],
+            [0.48, 0.06]
+          ],
+          "collarArea": 0.008021409131831523,
+          "distalArea": 0.00019098593171027435,
+          "extentLower": 0.29933259094191533,
+          "extentUpper": 0.34209438964790323,
+          "extentWidthRatioLower": 0.46666666651111116
+        }
+      ],
+      "vertexCount": 9,
+      "interior": {
+        "radiusLower": 0.28062430400804567,
+        "area": 0.05570423008216337,
+        "share": 0.8715139442231076
+      }
+    }
+  },
+  "current": {
+    "ok": true,
+    "failures": [],
+    "metrics": {
+      "area": 0.06391662514570516,
+      "bodyArea": 0.06391662514570516,
+      "quotaError": 0,
+      "angularRadius": 0.7227342478134157,
+      "guardRadius": 0.7727342478134157,
+      "roles": [
+        {
+          "id": "local/peninsula-0",
+          "kind": "peninsula",
+          "area": 0.0082123950635418,
+          "share": 0.12848605577689243,
+          "widthLower": 0.11224972141613536,
+          "widthUpper": 0.1282853963317727,
+          "widthUpperRoot": 0.6414269808036275,
+          "widthUpperFar": 0.1282853963317727,
+          "widthUpperWitness": "far",
+          "firstDiskRadiusLower": 0.09354143448226564,
+          "opposingChainDistance": 0.12,
+          "collarPolygon": [
+            [0.2, -0.3],
+            [0.48, -0.06],
+            [0.48, 0.06],
+            [0.2, 0.3]
+          ],
+          "distalPolygon": [
+            [0.48, -0.06],
+            [0.52, 0],
+            [0.48, 0.06]
+          ],
+          "collarArea": 0.008021409131831523,
+          "distalArea": 0.00019098593171027435,
+          "extentLower": 0.29933259094191533,
+          "extentUpper": 0.34209438964790323,
+          "extentWidthRatioLower": 2.3333333294444447
+        }
+      ],
+      "vertexCount": 9,
+      "collarWidthUpperMode": "root-and-far",
+      "interior": {
+        "radiusLower": 0.28062430400804567,
+        "area": 0.05570423008216337,
+        "share": 0.8715139442231076
+      }
+    }
+  }
+}
