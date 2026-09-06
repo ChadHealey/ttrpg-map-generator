@@ -1,0 +1,33 @@
+{
+  "scope": "Immutable local stage",
+  "entry": "layout-large.mjs",
+  "sources": {
+    "../issue-182/layout-large.mjs": "source-00.mjs.txt",
+    "../issue-172/coast-partition.mjs": "source-01.mjs.txt",
+    "../issue-169/geometry.mjs": "source-02.mjs.txt",
+    "../issue-176/certificates.mjs": "source-03.mjs.txt",
+    "../issue-174/supporting-mouth.mjs": "source-04.mjs.txt",
+    "../issue-176/wedge-mouth.mjs": "source-05.mjs.txt",
+    "../issue-176/wedge-segment.mjs": "source-06.mjs.txt",
+    "../issue-178/certificates.mjs": "source-07.mjs.txt"
+  },
+  "artifacts": {
+    "source-00.mjs.txt": "e2a6b60a597d3eb6a73c64ffbdd2f8be0cb9f6e1c5e3bb9ff61596fd574b48da",
+    "source-01.mjs.txt": "4489dd7f81c918a21ab0463782cc112dbd1e72767affc6dae317a533c43930c8",
+    "source-02.mjs.txt": "bc54bf0c7e5b878d9d26f2fe96658d0818cddf1ae4a7b2f5997c965d98f463bc",
+    "source-03.mjs.txt": "923248025960bf29070533b7216c823245c4dd4956098021b39700615bbe097f",
+    "source-04.mjs.txt": "030978a9df08402fb09673be759c878f1f5ca3ea307d1d29ae725c697db26bb8",
+    "source-05.mjs.txt": "3ae13e28c511e62fe7ddb9a6c7234eee8f46dff2b9fcd9642d8aea5c69cc051e",
+    "source-06.mjs.txt": "b6917fb8fff78c9314a56f10d491daa37ae29ac2fc2a647a6794cebe96e5ae78",
+    "source-07.mjs.txt": "6ac1b753e2f680845c1a4ce22c9e5debe19b139b62ec6fb5b226f4166c796109",
+    "report.json": "af0a42c294383ffbf423c2b8a606878a436934d141d195d5786970d352917a06",
+    "panel.png": "ed9f855ef5e4f08235afebd17d18383ca1bc05c68ea04e3f8befd226d2cd43bd"
+  },
+  "dependencies": {
+    "local-evidence.mjs": "af6e1fc61c460b0ee5375a360788a9f0820c514dea6511da8030d828c1f02ef1",
+    "../issue-177/local-evidence.mjs": "a23c6f6fc48b06121b3be590aaed174eb14e739d664c1e1624c7b1615e612880",
+    "../issue-164/render-comparison.mjs": "9ef4249fe5525a61502ad4319262e05816e93e89bd7d6c9cab377ef9293d5004",
+    "../issue-164/morphology.mjs": "30d5597af6f999fdcdd9013288773f0bb0f445bac219b55cc94f0ebc37e70328",
+    "../issue-169/geometry.mjs": "bc54bf0c7e5b878d9d26f2fe96658d0818cddf1ae4a7b2f5997c965d98f463bc"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "total": 128,
+  "cohorts": {
+    "additional-default": { "total": 128, "statuses": { "geometry-and-placement-pass": 128 } }
+  },
+  "statuses": { "geometry-and-placement-pass": 128 },
+  "constructionFailureCodes": {},
+  "placementFailureCodes": { "placement.attempt-exhausted": 134 },
+  "candidateFailureCodes": {
+    "peninsula-extent-max": 456,
+    "peninsula-width-max": 456,
+    "peninsula-ratio": 336,
+    "bay-opening-max": 456,
+    "construction": 79
+  },
+  "examples": {},
+  "controlFingerprints": []
+}
