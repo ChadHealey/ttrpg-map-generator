@@ -1,0 +1,2947 @@
+{
+  "revision": "issue-180-audit-r1",
+  "scope": "Construction and bounded placement only; no raster or production/semantic qualification",
+  "ordering": "128 additional decimal default seeds, then 32 predeclared same-seed control probes",
+  "probes": [
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-001",
+        "seed": "180000000000000001",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-002",
+        "seed": "180000000000000002",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-003",
+        "seed": "180000000000000003",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-004",
+        "seed": "180000000000000004",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-005",
+        "seed": "180000000000000005",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-006",
+        "seed": "180000000000000006",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-007",
+        "seed": "180000000000000007",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-008",
+        "seed": "180000000000000008",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-009",
+        "seed": "180000000000000009",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-010",
+        "seed": "180000000000000010",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-011",
+        "seed": "180000000000000011",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-012",
+        "seed": "180000000000000012",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-013",
+        "seed": "180000000000000013",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-014",
+        "seed": "180000000000000014",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-015",
+        "seed": "180000000000000015",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-016",
+        "seed": "180000000000000016",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-017",
+        "seed": "180000000000000017",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-018",
+        "seed": "180000000000000018",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-019",
+        "seed": "180000000000000019",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-020",
+        "seed": "180000000000000020",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-021",
+        "seed": "180000000000000021",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-022",
+        "seed": "180000000000000022",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-023",
+        "seed": "180000000000000023",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-024",
+        "seed": "180000000000000024",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-025",
+        "seed": "180000000000000025",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-026",
+        "seed": "180000000000000026",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-027",
+        "seed": "180000000000000027",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-028",
+        "seed": "180000000000000028",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-029",
+        "seed": "180000000000000029",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-030",
+        "seed": "180000000000000030",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-031",
+        "seed": "180000000000000031",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-032",
+        "seed": "180000000000000032",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-033",
+        "seed": "180000000000000033",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-034",
+        "seed": "180000000000000034",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-035",
+        "seed": "180000000000000035",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-036",
+        "seed": "180000000000000036",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-037",
+        "seed": "180000000000000037",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-038",
+        "seed": "180000000000000038",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-039",
+        "seed": "180000000000000039",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-040",
+        "seed": "180000000000000040",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-041",
+        "seed": "180000000000000041",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-042",
+        "seed": "180000000000000042",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-043",
+        "seed": "180000000000000043",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-044",
+        "seed": "180000000000000044",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-045",
+        "seed": "180000000000000045",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-046",
+        "seed": "180000000000000046",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-047",
+        "seed": "180000000000000047",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-048",
+        "seed": "180000000000000048",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-049",
+        "seed": "180000000000000049",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-050",
+        "seed": "180000000000000050",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-051",
+        "seed": "180000000000000051",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-052",
+        "seed": "180000000000000052",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-053",
+        "seed": "180000000000000053",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-054",
+        "seed": "180000000000000054",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-055",
+        "seed": "180000000000000055",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-056",
+        "seed": "180000000000000056",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-057",
+        "seed": "180000000000000057",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-058",
+        "seed": "180000000000000058",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-059",
+        "seed": "180000000000000059",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-060",
+        "seed": "180000000000000060",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-061",
+        "seed": "180000000000000061",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-062",
+        "seed": "180000000000000062",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-063",
+        "seed": "180000000000000063",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-064",
+        "seed": "180000000000000064",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-065",
+        "seed": "180000000000000065",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-066",
+        "seed": "180000000000000066",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-067",
+        "seed": "180000000000000067",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-068",
+        "seed": "180000000000000068",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-069",
+        "seed": "180000000000000069",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-070",
+        "seed": "180000000000000070",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-071",
+        "seed": "180000000000000071",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-072",
+        "seed": "180000000000000072",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-073",
+        "seed": "180000000000000073",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-074",
+        "seed": "180000000000000074",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-075",
+        "seed": "180000000000000075",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-076",
+        "seed": "180000000000000076",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-077",
+        "seed": "180000000000000077",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-078",
+        "seed": "180000000000000078",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-079",
+        "seed": "180000000000000079",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-080",
+        "seed": "180000000000000080",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-081",
+        "seed": "180000000000000081",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-082",
+        "seed": "180000000000000082",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-083",
+        "seed": "180000000000000083",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-084",
+        "seed": "180000000000000084",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-085",
+        "seed": "180000000000000085",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-086",
+        "seed": "180000000000000086",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-087",
+        "seed": "180000000000000087",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-088",
+        "seed": "180000000000000088",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-089",
+        "seed": "180000000000000089",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-090",
+        "seed": "180000000000000090",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-091",
+        "seed": "180000000000000091",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-092",
+        "seed": "180000000000000092",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-093",
+        "seed": "180000000000000093",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-094",
+        "seed": "180000000000000094",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-095",
+        "seed": "180000000000000095",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-096",
+        "seed": "180000000000000096",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-097",
+        "seed": "180000000000000097",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-098",
+        "seed": "180000000000000098",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-099",
+        "seed": "180000000000000099",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-100",
+        "seed": "180000000000000100",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-101",
+        "seed": "180000000000000101",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-102",
+        "seed": "180000000000000102",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-103",
+        "seed": "180000000000000103",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-104",
+        "seed": "180000000000000104",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-105",
+        "seed": "180000000000000105",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-106",
+        "seed": "180000000000000106",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-107",
+        "seed": "180000000000000107",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-108",
+        "seed": "180000000000000108",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-109",
+        "seed": "180000000000000109",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-110",
+        "seed": "180000000000000110",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-111",
+        "seed": "180000000000000111",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-112",
+        "seed": "180000000000000112",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-113",
+        "seed": "180000000000000113",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-114",
+        "seed": "180000000000000114",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-115",
+        "seed": "180000000000000115",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-116",
+        "seed": "180000000000000116",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-117",
+        "seed": "180000000000000117",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-118",
+        "seed": "180000000000000118",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-119",
+        "seed": "180000000000000119",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-120",
+        "seed": "180000000000000120",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-121",
+        "seed": "180000000000000121",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-122",
+        "seed": "180000000000000122",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-123",
+        "seed": "180000000000000123",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-124",
+        "seed": "180000000000000124",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-125",
+        "seed": "180000000000000125",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-126",
+        "seed": "180000000000000126",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-127",
+        "seed": "180000000000000127",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "additional-default",
+      "input": {
+        "id": "default-128",
+        "seed": "180000000000000128",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-baseline",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-circumference-min",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 10000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-circumference-max",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 80000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-water-min",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 45,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-water-max",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 80,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-count-min",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 1,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-count-max",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 8,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-distribution-balanced",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "balanced",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-distribution-dominant",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "oneDominant",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-fragmentation-0",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 0,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-fragmentation-25",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 25,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-fragmentation-26",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 26,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-fragmentation-51",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 51,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-fragmentation-52",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 52,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-fragmentation-77",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 77,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-fragmentation-78",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 78,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-fragmentation-100",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 100,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-islands-0",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 0,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-islands-1",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 1,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-islands-100",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 100,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-archipelagos-0",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 0,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-archipelagos-1",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 1,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-archipelagos-100",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 100,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-ocean-majority",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "connectedMajority",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-ocean-multiple",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "multipleBasins",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-polar-land",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "landBiased"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-polar-ocean",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "oceanBiased"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-combined-min",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 10000,
+          "targetWaterCoveragePercent": 45,
+          "continentCountIntent": 1,
+          "continentDistribution": "balanced",
+          "fragmentationPercent": 0,
+          "islandAbundancePercent": 0,
+          "archipelagoAbundancePercent": 0,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "landBiased"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-combined-max",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 80000,
+          "targetWaterCoveragePercent": 80,
+          "continentCountIntent": 8,
+          "continentDistribution": "oneDominant",
+          "fragmentationPercent": 100,
+          "islandAbundancePercent": 100,
+          "archipelagoAbundancePercent": 100,
+          "oceanConnectivity": "multipleBasins",
+          "polarCharacter": "oceanBiased"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-eight-balanced-low-water",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 45,
+          "continentCountIntent": 8,
+          "continentDistribution": "balanced",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-eight-balanced-high-water",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 80,
+          "continentCountIntent": 8,
+          "continentDistribution": "balanced",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 35,
+          "archipelagoAbundancePercent": 25,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    },
+    {
+      "cohort": "control",
+      "input": {
+        "id": "control-both-abundances-max",
+        "seed": "1",
+        "controls": {
+          "worldCircumferenceKm": 40000,
+          "targetWaterCoveragePercent": 65,
+          "continentCountIntent": 4,
+          "continentDistribution": "varied",
+          "fragmentationPercent": 35,
+          "islandAbundancePercent": 100,
+          "archipelagoAbundancePercent": 100,
+          "oceanConnectivity": "singleGlobal",
+          "polarCharacter": "neutral"
+        }
+      }
+    }
+  ],
+  "previousSeeds": ["1", "2", "3", "4", "1085102592571150095", "18364758544493064720"],
+  "sourceHashes": {
+    "../issue-179/templates-r2.mjs": "a69964ae65e1a7a3308fe1d61a4506d1715c47e11cc940be0a146386e309ac0f",
+    "../issue-164/morphology.mjs": "30d5597af6f999fdcdd9013288773f0bb0f445bac219b55cc94f0ebc37e70328",
+    "../issue-169/geometry.mjs": "bc54bf0c7e5b878d9d26f2fe96658d0818cddf1ae4a7b2f5997c965d98f463bc",
+    "../issue-170/templates.mjs": "566b4fbeb5e568bdfd1e87c2b55622d70614cf36d2fa1393686cb6f404a2f870",
+    "../issue-169/certificates.mjs": "7a1cfacab789829249ceaf72454d212472cb59a49ca8d8e08eedc6442ba8213c",
+    "../issue-172/coast-partition.mjs": "4489dd7f81c918a21ab0463782cc112dbd1e72767affc6dae317a533c43930c8",
+    "../issue-172/coast-utils.mjs": "c5f55bcbf46863feac1254bd232739ae09e6ad9344b6b279e76277920565a3b1",
+    "../issue-178/certificates.mjs": "6ac1b753e2f680845c1a4ce22c9e5debe19b139b62ec6fb5b226f4166c796109",
+    "../issue-174/supporting-mouth.mjs": "030978a9df08402fb09673be759c878f1f5ca3ea307d1d29ae725c697db26bb8",
+    "../issue-176/wedge-mouth.mjs": "3ae13e28c511e62fe7ddb9a6c7234eee8f46dff2b9fcd9642d8aea5c69cc051e",
+    "../issue-176/wedge-segment.mjs": "b6917fb8fff78c9314a56f10d491daa37ae29ac2fc2a647a6794cebe96e5ae78",
+    "../issue-179/layout-b.mjs": "e7fa7731b7e6d01dc3f20308c834ae2792b1229e49d07d4c4170315abe799e7b",
+    "../issue-179/layout-c.mjs": "2e815a05caaeda60bfe97e9c03498eedd7ee4dea44a7fe2f3959efc292eb19db",
+    "../issue-179/layout-r2-a.mjs": "3d55902854f424aab1f65b3b9d5b6b6b0936f64b15c2efb0df3f27fb2d90757f",
+    "../issue-176/certificates.mjs": "923248025960bf29070533b7216c823245c4dd4956098021b39700615bbe097f",
+    "../issue-170/placement.mjs": "3099ee459e7a280f9c6a3776036e81000506a3c51c4782c5b55f188aefb9d833",
+    "../issue-169/field.mjs": "f6e0557ce3e786dae8c9789fd44c95f75bf2ca33fd36fa69145c7a31d854de54",
+    "../issue-169/placement.mjs": "c3fe7988cfff2fbc6391b062d39277cd376dfa9e9efe5cafb0be9d5fa14c5c52",
+    "../issue-180/audit.mjs": "a1b4507984a64b47e56f57155d87805359669d9024541028dab12f0c8f2fce12",
+    "../issue-180/corpus.mjs": "cf0127239f51301e01afb9d5039014e6aef97347210d340c9b0d79dce97adf36"
+  },
+  "sourceSnapshotSha256": "362eb02cd1a8a4856f241425aa074e3c4ff7cda846748c5ec972a2d1df6f8d92",
+  "verifierDependencies": {
+    "run.mjs": "973ed2b4a6a79471bb79d203f9bc0cabbeda619ddd2d8ae6fd4ebd7e1dc0719a",
+    "../issue-177/local-evidence.mjs": "a23c6f6fc48b06121b3be590aaed174eb14e739d664c1e1624c7b1615e612880"
+  },
+  "frozen179RuntimeMatches": [
+    "templates-r2.mjs",
+    "../issue-164/morphology.mjs",
+    "../issue-169/geometry.mjs",
+    "../issue-170/templates.mjs",
+    "../issue-169/certificates.mjs",
+    "../issue-172/coast-partition.mjs",
+    "../issue-172/coast-utils.mjs",
+    "../issue-178/certificates.mjs",
+    "../issue-174/supporting-mouth.mjs",
+    "../issue-176/wedge-mouth.mjs",
+    "../issue-176/wedge-segment.mjs",
+    "layout-b.mjs",
+    "layout-c.mjs",
+    "layout-r2-a.mjs",
+    "../issue-170/placement.mjs",
+    "../issue-169/field.mjs",
+    "../issue-169/placement.mjs"
+  ],
+  "budgets": {
+    "additionalDefaults": 128,
+    "controls": 32,
+    "templateCandidatesPerOwner": 12,
+    "placementAttempts": 64,
+    "directionsPerOwner": 128,
+    "refinementSweeps": 64,
+    "maximumOwners": 8,
+    "maximumIslandsPerOwner": 11,
+    "uniqueVerticesPerOwner": 256,
+    "rasters": 0
+  },
+  "repeatPolicy": "Two complete independent calls per probe; strict deep equality before lossless JSON/gzip artifact serialization"
+}

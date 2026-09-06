@@ -1,0 +1,640 @@
+{
+  "total": 160,
+  "cohorts": {
+    "additional-default": {
+      "total": 128,
+      "statuses": { "construction-no-proposal": 38, "geometry-and-placement-pass": 90 }
+    },
+    "control": {
+      "total": 32,
+      "statuses": {
+        "geometry-and-placement-pass": 25,
+        "construction-no-proposal": 5,
+        "placement-no-proposal": 2
+      }
+    }
+  },
+  "statuses": {
+    "construction-no-proposal": 43,
+    "geometry-and-placement-pass": 115,
+    "placement-no-proposal": 2
+  },
+  "constructionFailureCodes": { "template-budget-exhausted": 51 },
+  "placementFailureCodes": { "placement.attempt-exhausted": 337, "placement.search-exhausted": 2 },
+  "candidateFailureCodes": {
+    "peninsula-extent-max": 516,
+    "peninsula-width-max": 516,
+    "peninsula-ratio": 397,
+    "bay-opening-max": 492,
+    "construction": 102,
+    "bay-support-chart": 24,
+    "interior-radius": 36,
+    "first-disk": 136,
+    "attachment-width": 104,
+    "peninsula-extent-min": 104,
+    "bay-opening-min": 96,
+    "bay-depth": 96
+  },
+  "examples": {
+    "construction-no-proposal": {
+      "id": "default-001",
+      "seed": "180000000000000001",
+      "failures": [
+        {
+          "code": "template-budget-exhausted",
+          "ownerId": "owner-0",
+          "quota": 0.17451657458563533,
+          "candidateCount": 12
+        }
+      ],
+      "issues": []
+    },
+    "placement-no-proposal": {
+      "id": "control-count-max",
+      "seed": "1",
+      "failures": [],
+      "placementFailures": [
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 1,
+          "ownerId": "owner-4",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 2,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 3,
+          "ownerId": "owner-6",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 4,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 5,
+          "ownerId": "owner-6",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 6,
+          "ownerId": "owner-5",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 7,
+          "ownerId": "owner-6",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 8,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 9,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 10,
+          "ownerId": "owner-6",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 11,
+          "ownerId": "owner-4",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 12,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 13,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 14,
+          "ownerId": "owner-6",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 15,
+          "ownerId": "owner-6",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 16,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 17,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 18,
+          "ownerId": "owner-6",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 19,
+          "ownerId": "owner-5",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 20,
+          "ownerId": "owner-6",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 21,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 22,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 23,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 24,
+          "ownerId": "owner-6",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 25,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 26,
+          "ownerId": "owner-4",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 27,
+          "ownerId": "owner-6",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 28,
+          "ownerId": "owner-6",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 29,
+          "ownerId": "owner-6",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 30,
+          "ownerId": "owner-5",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 31,
+          "ownerId": "owner-6",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 32,
+          "ownerId": "owner-6",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 33,
+          "ownerId": "owner-6",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 34,
+          "ownerId": "owner-6",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 35,
+          "ownerId": "owner-6",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 36,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 37,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 38,
+          "ownerId": "owner-6",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 39,
+          "ownerId": "owner-6",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 40,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 41,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 42,
+          "ownerId": "owner-4",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 43,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 44,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 45,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 46,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 47,
+          "ownerId": "owner-6",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 48,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 49,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 50,
+          "ownerId": "owner-6",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 51,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 52,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 53,
+          "ownerId": "owner-6",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 54,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 55,
+          "ownerId": "owner-6",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 56,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 57,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 58,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 59,
+          "ownerId": "owner-4",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 60,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 61,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 62,
+          "ownerId": "owner-4",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 63,
+          "ownerId": "owner-6",
+          "directionCount": 128
+        },
+        {
+          "code": "placement.attempt-exhausted",
+          "attempt": 64,
+          "ownerId": "owner-2",
+          "directionCount": 128
+        },
+        { "code": "placement.search-exhausted", "proof": "search-only-not-infeasibility" }
+      ],
+      "issues": []
+    }
+  },
+  "controlFingerprints": [
+    {
+      "id": "control-baseline",
+      "status": "geometry-and-placement-pass",
+      "geometry": "446acf6d1cb4d9f4c8947b071b877fbea6091b9a7ea7194725cadcbfc64eb0b7",
+      "placement": "f5ca49d5584039619e5ebe38777322aff25c024b33de6c5aa9cacdf5c11acb8d"
+    },
+    {
+      "id": "control-circumference-min",
+      "status": "geometry-and-placement-pass",
+      "geometry": "446acf6d1cb4d9f4c8947b071b877fbea6091b9a7ea7194725cadcbfc64eb0b7",
+      "placement": "f5ca49d5584039619e5ebe38777322aff25c024b33de6c5aa9cacdf5c11acb8d"
+    },
+    {
+      "id": "control-circumference-max",
+      "status": "geometry-and-placement-pass",
+      "geometry": "446acf6d1cb4d9f4c8947b071b877fbea6091b9a7ea7194725cadcbfc64eb0b7",
+      "placement": "f5ca49d5584039619e5ebe38777322aff25c024b33de6c5aa9cacdf5c11acb8d"
+    },
+    {
+      "id": "control-water-min",
+      "status": "construction-no-proposal",
+      "geometry": "b960b9dc1f772fedb63ae52e9fc036e26e81cbb855af824f9eef31b85f3b852b",
+      "placement": null
+    },
+    {
+      "id": "control-water-max",
+      "status": "geometry-and-placement-pass",
+      "geometry": "639d0049065b00ac9664accd43c1b10aee1f1fae89f9d7b38271a29e80b1dd72",
+      "placement": "0a436d217012010279b930fafabbd884b013dabf0398ac7fbf480c59780927b0"
+    },
+    {
+      "id": "control-count-min",
+      "status": "construction-no-proposal",
+      "geometry": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "placement": null
+    },
+    {
+      "id": "control-count-max",
+      "status": "placement-no-proposal",
+      "geometry": "7792b67978dafb9e7686e65fc4b2c35c3ea5cd9642a46b6b0d7c267ccd9af871",
+      "placement": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "id": "control-distribution-balanced",
+      "status": "geometry-and-placement-pass",
+      "geometry": "acfa6364433656bfeb076135eb2fd6ea23b387c1aec35ac7b85cc7b330919b2c",
+      "placement": "33190fc5bfcf4126be6c0c13310075b2104eb2a560ec43a6a685b17b1a117581"
+    },
+    {
+      "id": "control-distribution-dominant",
+      "status": "construction-no-proposal",
+      "geometry": "598fe5fcd933df45464f139d3c212621923c2b8a707ab31e4f2d9cb8c402c6e3",
+      "placement": null
+    },
+    {
+      "id": "control-fragmentation-0",
+      "status": "geometry-and-placement-pass",
+      "geometry": "446acf6d1cb4d9f4c8947b071b877fbea6091b9a7ea7194725cadcbfc64eb0b7",
+      "placement": "f5ca49d5584039619e5ebe38777322aff25c024b33de6c5aa9cacdf5c11acb8d"
+    },
+    {
+      "id": "control-fragmentation-25",
+      "status": "geometry-and-placement-pass",
+      "geometry": "446acf6d1cb4d9f4c8947b071b877fbea6091b9a7ea7194725cadcbfc64eb0b7",
+      "placement": "f5ca49d5584039619e5ebe38777322aff25c024b33de6c5aa9cacdf5c11acb8d"
+    },
+    {
+      "id": "control-fragmentation-26",
+      "status": "geometry-and-placement-pass",
+      "geometry": "446acf6d1cb4d9f4c8947b071b877fbea6091b9a7ea7194725cadcbfc64eb0b7",
+      "placement": "f5ca49d5584039619e5ebe38777322aff25c024b33de6c5aa9cacdf5c11acb8d"
+    },
+    {
+      "id": "control-fragmentation-51",
+      "status": "geometry-and-placement-pass",
+      "geometry": "446acf6d1cb4d9f4c8947b071b877fbea6091b9a7ea7194725cadcbfc64eb0b7",
+      "placement": "f5ca49d5584039619e5ebe38777322aff25c024b33de6c5aa9cacdf5c11acb8d"
+    },
+    {
+      "id": "control-fragmentation-52",
+      "status": "geometry-and-placement-pass",
+      "geometry": "446acf6d1cb4d9f4c8947b071b877fbea6091b9a7ea7194725cadcbfc64eb0b7",
+      "placement": "f5ca49d5584039619e5ebe38777322aff25c024b33de6c5aa9cacdf5c11acb8d"
+    },
+    {
+      "id": "control-fragmentation-77",
+      "status": "geometry-and-placement-pass",
+      "geometry": "446acf6d1cb4d9f4c8947b071b877fbea6091b9a7ea7194725cadcbfc64eb0b7",
+      "placement": "f5ca49d5584039619e5ebe38777322aff25c024b33de6c5aa9cacdf5c11acb8d"
+    },
+    {
+      "id": "control-fragmentation-78",
+      "status": "geometry-and-placement-pass",
+      "geometry": "446acf6d1cb4d9f4c8947b071b877fbea6091b9a7ea7194725cadcbfc64eb0b7",
+      "placement": "f5ca49d5584039619e5ebe38777322aff25c024b33de6c5aa9cacdf5c11acb8d"
+    },
+    {
+      "id": "control-fragmentation-100",
+      "status": "geometry-and-placement-pass",
+      "geometry": "446acf6d1cb4d9f4c8947b071b877fbea6091b9a7ea7194725cadcbfc64eb0b7",
+      "placement": "f5ca49d5584039619e5ebe38777322aff25c024b33de6c5aa9cacdf5c11acb8d"
+    },
+    {
+      "id": "control-islands-0",
+      "status": "geometry-and-placement-pass",
+      "geometry": "c340c2da2123a0a8c90e5d29871d7831071048ec7d2b28f3f7cdc7f627ab6475",
+      "placement": "bb0745f8ca4ced88c0c35ea897e45b1abc16496ae3b49a3184ffea76f06fe907"
+    },
+    {
+      "id": "control-islands-1",
+      "status": "geometry-and-placement-pass",
+      "geometry": "2550542e14f7768e00a88365e52a464346b86bd5a905851af7a3e41bb4daaf25",
+      "placement": "0e14ee5cef8dc8000c18af843b68de349f684576445f8aa17514fc0d485e158c"
+    },
+    {
+      "id": "control-islands-100",
+      "status": "geometry-and-placement-pass",
+      "geometry": "72ab61085e5c587fcf67c3372112551630b52e935c7eb1385765ab9025b0154a",
+      "placement": "0e421cbcf623341d6b24005b7fbb9f53525cf4ef210c244ef4fa21bdcc8a67e7"
+    },
+    {
+      "id": "control-archipelagos-0",
+      "status": "geometry-and-placement-pass",
+      "geometry": "d02a90a76165e97cd254c5d1f2f67b3521488c1e980626e6ff4efa87e373dad3",
+      "placement": "9ece12cb5d80e8fb6bb109a9c565f04c3692ba8456079fed9432ee0bab7061e4"
+    },
+    {
+      "id": "control-archipelagos-1",
+      "status": "geometry-and-placement-pass",
+      "geometry": "f7b345c393bdc05675d5f9f2f5402dc68e7b94fa734702f427764bb2b9bb6261",
+      "placement": "23a8bf43c8d7ff3e85bc292b78f9b1f1fadc9cf5f4c02d4e1d48b6ea43795dca"
+    },
+    {
+      "id": "control-archipelagos-100",
+      "status": "geometry-and-placement-pass",
+      "geometry": "dce9eb064fa98b944f21c095bde4cd9e400466e72ca6a329209885104443e18e",
+      "placement": "b54da5651e86a2f125c0b9ec74438d003e972c5ef43ef0c42d94a29ff0a038e0"
+    },
+    {
+      "id": "control-ocean-majority",
+      "status": "geometry-and-placement-pass",
+      "geometry": "446acf6d1cb4d9f4c8947b071b877fbea6091b9a7ea7194725cadcbfc64eb0b7",
+      "placement": "f5ca49d5584039619e5ebe38777322aff25c024b33de6c5aa9cacdf5c11acb8d"
+    },
+    {
+      "id": "control-ocean-multiple",
+      "status": "geometry-and-placement-pass",
+      "geometry": "446acf6d1cb4d9f4c8947b071b877fbea6091b9a7ea7194725cadcbfc64eb0b7",
+      "placement": "f5ca49d5584039619e5ebe38777322aff25c024b33de6c5aa9cacdf5c11acb8d"
+    },
+    {
+      "id": "control-polar-land",
+      "status": "geometry-and-placement-pass",
+      "geometry": "8eeafbad2bf1a9e087f183ace08945036d1d64348fdf12f3fb593fb989f607eb",
+      "placement": "c1d039cbb756e58ec83f9f00e1e8915d82311364fad71b163d81d5aa8df6bb4b"
+    },
+    {
+      "id": "control-polar-ocean",
+      "status": "geometry-and-placement-pass",
+      "geometry": "4c43617e7ec70b7de77c33cee288fbbe52c495403b07e3206e4ad8f670f680b0",
+      "placement": "07ff9762dd0341cd51d44841b7495791b40445fe8dfd14de2252a356856c9da5"
+    },
+    {
+      "id": "control-combined-min",
+      "status": "construction-no-proposal",
+      "geometry": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "placement": null
+    },
+    {
+      "id": "control-combined-max",
+      "status": "geometry-and-placement-pass",
+      "geometry": "98d4a9ffbe098de0cbde6cf44d5570dab7454a2a6a06c2ae51d7a923bbb93057",
+      "placement": "1bb7fe22f767fa878bf1a58ed0e75b8e77e1f9cdb5a89432a369a88bcb8693a2"
+    },
+    {
+      "id": "control-eight-balanced-low-water",
+      "status": "placement-no-proposal",
+      "geometry": "ee16964eac030e1ed12b55da9a4f2bd492e978bacbc7be7332453ffa43199ec3",
+      "placement": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "id": "control-eight-balanced-high-water",
+      "status": "construction-no-proposal",
+      "geometry": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "placement": null
+    },
+    {
+      "id": "control-both-abundances-max",
+      "status": "geometry-and-placement-pass",
+      "geometry": "5738c921ee92f5b5c54755dce7d22546ffdfb01170a4d16189d47be0e781896f",
+      "placement": "ba65f9f803f5b0294b38034d92540f83feaa94845ac384b9bce511fe0c3a2664"
+    }
+  ]
+}
