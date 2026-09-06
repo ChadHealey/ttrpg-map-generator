@@ -221,6 +221,20 @@ instruction authorizes continuing v3 work with agents and local commits, without
 This adopts the targets, role/applicability rules, reserve ledger and no-proposal policy as
 investigation requirements; it does not establish constructibility or human visual acceptance. No accepted ADR changes here, including ADR-0029.
 
+**Maintainer decision, 2026-09-06 — measurement on the sampled lattice.** After a human review
+that rejected all nine `issue-184/comparison-r2` rows (recorded on
+[issue 161](https://github.com/ChadHealey/ttrpg-map-generator/issues/161)), the maintainer
+approved applying the targets in the table above as **measurements of the sampled production
+partition** (accepted full profile, with preview counterparts) rather than as certificates of
+authored continuous polygons before sampling. The numeric targets, role rules, reserve ledger,
+gap/clearance obligations and no-proposal policy are unchanged. What changes is the object
+measured: the largest inscribed geodesic disk, lobe and peninsula shares/widths, bay depth and
+opening, and the inter-owner gap are computed on the sampled land/water partition and its
+extracted coastline, so the checked geometry is the geometry the atlas shows. A candidate that
+misses a floor is rejected within a fixed finite candidate budget; exhaustion is an explicit
+no-proposal with the failing quantity. This is an investigation-contract change, not a target
+change, and it does not select a family, amend ADR-0029 or accept any image.
+
 This adoption permits a bounded construction/certificate **design** issue for this same
 policy: specify deterministic witnesses, spherical placement with fixed quotas, area/topology and
 contour certificates, finite budgets, ties and explicit failure diagnostics. It would not make a

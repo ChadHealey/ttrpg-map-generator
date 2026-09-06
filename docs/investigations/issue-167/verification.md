@@ -195,3 +195,15 @@ with **no pushes**. Adoption is now **ACCEPTED for design investigation**. This 
 product decision after the completed discovery review. It does not retroactively prove geometry
 feasible, accept any image, select a production field, or alter accepted v1/v2 worlds. The next
 construction/certificate investigation proceeds against the unchanged numeric targets.
+
+## Subsequent maintainer decision: sampled-lattice measurement
+
+On 2026-09-06 the maintainer reviewed all eighteen `issue-184/comparison-r2` images and
+rejected every row as not reading as organic planetary landmasses, while noting separated
+continents, smaller islands, smoother coastlines than v2 and acceptable per-seed polar land.
+The maintainer then approved decision 1 of the independent v3 assessment: apply the adopted
+targets as measurements on the sampled production lattice instead of certificates on authored
+polygons before sampling. Targets, roles, ledger and no-proposal policy are unchanged; the
+measured object changes. The decision is recorded in the [README](README.md#decision-and-conditional-next-step)
+and on issue 161. It authorizes a bounded field-family experiment; it does not select v3,
+accept an image, amend ADR-0029 or make C1–C3 READY.
