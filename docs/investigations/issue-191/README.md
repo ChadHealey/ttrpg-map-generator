@@ -2,8 +2,10 @@
 
 The private structured field and production sampling harness are implemented. **The assistant
 rejects all 18 state-2 rows visually at both sizes**, despite passing sampled coverage, separation
-and quota checks. Maintainer visual decisions and the dedicated read-only review are pending.
-No family is selected and no measurement child should be opened from this evidence yet.
+and quota checks. **The maintainer reviewed the images on 2026-09-06 and also failed all eighteen
+rows** (verbatim decision in [visual-review.md](visual-review.md)). The dedicated read-only review
+is still pending. No family is selected and the measurement child (#192) is not opened from this
+evidence.
 
 [Visual review and all images](visual-review.md) · [Original design](design.md) ·
 [State-2 repair declaration](design-state-2.md) · [Final numeric table](state-2.json)
@@ -120,7 +122,7 @@ configuration was not independently queried. Observed check outcomes are recorde
 | Eighteen row receipts and both images per state                   | All 18 in state 2; none completed in aborted state 1. Unmet for state 1.                                                                                                                           |
 | All 128 preview outcomes and no-proposal rate                     | State 2 retains 128/128; no-proposal rate 0%. State 1 incomplete.                                                                                                                                  |
 | Visibly different organic silhouettes and arrangements            | Seed geometry varies, but intended visual diversity fails the assistant review. Unmet.                                                                                                             |
-| Assistant and verbatim maintainer decisions per row               | Assistant reviewed all 36 state-2 images. Maintainer decisions pending; local comment draft prepared.                                                                                              |
+| Assistant and verbatim maintainer decisions per row               | Assistant reviewed all 36 state-2 images. Maintainer decision recorded 2026-09-06: FAIL all eighteen rows, verbatim in visual-review.md.                                                           |
 | Second state follows diagnosis/table; at most two                 | State 1 abort diagnosis and complete unchanged table precede state 2. Original state-1 artifacts unchanged.                                                                                        |
 | Disposition                                                       | Partial deliverable; state 2 assistant failure. Neither maintainer pass nor visual failure at both states is claimed.                                                                              |
 | Focused checks, formatting/lint and zero-call verify              | Focused 11 tests passed, strict seam typecheck passed, formatting/lint passed; retained verify passed with zero evaluations. The broader gate remains ungreen due the unchanged issue-185 timeout. |
@@ -163,7 +165,7 @@ two were skipped, in 462.44 seconds. All stages skipped by the failing aggregate
 have now been exercised individually. The aggregate `pnpm check` itself remains failed because
 the unchanged issue-185 timeout persists; no complete-green broader check is claimed.
 
-Changes remain local and uncommitted on `codex/issue-191-structured-field`, created directly from
-`codex/v3-certified-anatomy`. No push, PR, GitHub comment, issue closure or measurement-child
-creation occurred. The pending human decision is recorded in `visual-review.md`; the proposed
+The investigation is committed on `codex/issue-191-structured-field` (`9306ce9`), created directly
+from `codex/v3-certified-anatomy`; the maintainer decision is a later commit on the same branch.
+No PR, issue closure or measurement-child execution occurred from this task. The pending human decision is recorded in `visual-review.md`; the proposed
 GitHub handoff text is `github-comment-draft.md`.
