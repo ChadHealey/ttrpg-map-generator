@@ -1,0 +1,17 @@
+import { sampleCoast, partitionCoast } from '../issue-172/coast-partition.mjs';
+export function buildCoast(id) {
+const anchors=[
+ [.68,-.10],[.49,-.08],[.35,.02],[.45,.13],[.70,.12],[.74,.25],
+ [.60,.40],[.47,.66],[.18,.81],[-.18,.82],[-.48,.65],[-.61,.40],[-.64,.24],
+ [-.61,.065],[-.78,.28],[-.92,.15],[-.96,.03],[-.94,-.14],[-.75,-.20],[-.61,-.065],
+ [-.62,-.24],[-.49,-.43],[-.37,-.66],[-.13,-.83],[.06,-.79],[.18,-.49],[.44,-.42],[.61,-.30]
+];
+const coast=sampleCoast(anchors,{steps:3,tension:.12});
+const split=partitionCoast(id,{coast,roles:[
+ {kind:'lobe',start:18,end:33,far:[21,30],disk:[0,.525]},
+ {kind:'lobe',start:63,end:75,far:[66,72],disk:[-.15,-.56]},
+ {kind:'peninsula',start:39,end:57,far:[45,51],disk:[-.73,0]},
+],bay:{start:0,end:12,witness:[.43,.02]},interiorWitness:[0,0]});
+split.bay.polygon.reverse();split.bay.mouthKind='wedge-geodesic';
+return split;
+}

@@ -1,0 +1,149 @@
+[
+  {
+    "q": 0.13106846473029043,
+    "rawArea": 1.5813966577777783,
+    "scale": 1.015689282506016,
+    "ok": true,
+    "failures": [],
+    "guard": 0.9951982998282068,
+    "body": {
+      "radiusLower": 0.36623695921257077,
+      "area": 0.0835913145082437,
+      "share": 0.643885229313995
+    },
+    "roles": [
+      {
+        "share": 0.17887985943347232,
+        "widthLower": 0.4861711309563272,
+        "widthUpper": 0.8687513472125015,
+        "firstDiskRadiusLower": 0.13062278324457358
+      },
+      {
+        "share": 0.10556891658443839,
+        "widthLower": 0.4344683529291983,
+        "widthUpper": 0.8102370148346798,
+        "firstDiskRadiusLower": 0.08998088057810862
+      },
+      {
+        "share": 0.07166599466809438,
+        "widthLower": 0.11756650212231391,
+        "widthUpper": 0.14829443276419607,
+        "extentUpper": 0.4264808684049164,
+        "extentWidthRatioLower": 2.2799927077212927,
+        "firstDiskRadiusLower": 0.08591398227220849
+      }
+    ],
+    "bay": {
+      "mouthKind": "wedge-geodesic",
+      "assurance": "binary64-diagnostic",
+      "acceptance": "water-wedge-and-lambert-lower-bounds",
+      "openingLower": 0.20878719032860427,
+      "openingUpper": 0.263357140898879,
+      "depthLower": 0.23385732200033163,
+      "depthOpeningRatioLower": 0.8879854983318094,
+      "removedAreaLower": 0.005444815989382795,
+      "removedBodyShareLower": 0.04194020171258946,
+      "originDistance": 0.7443850186441361,
+      "witnessLineDistance": 0.2626464870747927,
+      "checkedVertices": 176
+    }
+  },
+  {
+    "q": 0.10494186046511626,
+    "rawArea": 1.5813966577777783,
+    "scale": 0.9088373010651406,
+    "ok": true,
+    "failures": [],
+    "guard": 0.8890225528407284,
+    "body": {
+      "radiusLower": 0.33613665395827386,
+      "area": 0.06692859400826158,
+      "share": 0.6438852293139951
+    },
+    "roles": [
+      {
+        "share": 0.1788798594334723,
+        "widthLower": 0.4462136687544963,
+        "widthUpper": 0.7578658449018923,
+        "firstDiskRadiusLower": 0.1198871500514665
+      },
+      {
+        "share": 0.10556891658443833,
+        "widthLower": 0.3987602417608016,
+        "widthUpper": 0.7068201526133798,
+        "firstDiskRadiusLower": 0.08258552652833606
+      },
+      {
+        "share": 0.07166599466809438,
+        "widthLower": 0.10790393934818063,
+        "widthUpper": 0.12936645906598127,
+        "extentUpper": 0.3720457927293425,
+        "extentWidthRatioLower": 2.398779436220747,
+        "firstDiskRadiusLower": 0.07885287870526263
+      }
+    ],
+    "bay": {
+      "mouthKind": "wedge-geodesic",
+      "assurance": "binary64-diagnostic",
+      "acceptance": "water-wedge-and-lambert-lower-bounds",
+      "openingLower": 0.19162737615913839,
+      "openingUpper": 0.22974281735805785,
+      "depthLower": 0.21463704233959782,
+      "depthOpeningRatioLower": 0.9342491957216776,
+      "removedAreaLower": 0.0043594706094393825,
+      "removedBodyShareLower": 0.04194020171258948,
+      "originDistance": 0.6660746381301449,
+      "witnessLineDistance": 0.2350156967870547,
+      "checkedVertices": 176
+    }
+  },
+  {
+    "q": 0.06666666666666667,
+    "rawArea": 1.5813966577777783,
+    "scale": 0.7243794714376733,
+    "ok": true,
+    "failures": [],
+    "guard": 0.7112739766899445,
+    "body": {
+      "radiusLower": 0.2774621700989338,
+      "area": 0.04251788797570079,
+      "share": 0.643885229313995
+    },
+    "roles": [
+      {
+        "share": 0.17887985943347232,
+        "widthLower": 0.36832464234291057,
+        "widthUpper": 0.5832629774735941,
+        "firstDiskRadiusLower": 0.09896019495535342
+      },
+      {
+        "share": 0.10556891658443836,
+        "widthLower": 0.3291544695061919,
+        "widthUpper": 0.543977577993608,
+        "firstDiskRadiusLower": 0.06816977299730671
+      },
+      {
+        "share": 0.07166599466809438,
+        "widthLower": 0.08906871895196823,
+        "widthUpper": 0.09956203546391633,
+        "extentUpper": 0.28633106804801883,
+        "extentWidthRatioLower": 2.5728007133228328,
+        "firstDiskRadiusLower": 0.065088679183201
+      }
+    ],
+    "bay": {
+      "mouthKind": "wedge-geodesic",
+      "assurance": "binary64-diagnostic",
+      "acceptance": "water-wedge-and-lambert-lower-bounds",
+      "openingLower": 0.15817777387074058,
+      "openingUpper": 0.176812928827687,
+      "depthLower": 0.1771709774874899,
+      "depthOpeningRatioLower": 1.002025014020054,
+      "removedAreaLower": 0.002769451319754656,
+      "removedBodyShareLower": 0.041940201712589456,
+      "originDistance": 0.5308879749337791,
+      "witnessLineDistance": 0.18731685640393977,
+      "checkedVertices": 176
+    }
+  }
+]

@@ -1,0 +1,12 @@
+/** Public rebinding of the original passing integrated-flank scratch; identical geometry. */
+import { buildCoast } from './initial-layout.mjs';
+import { polygonArea, stitchBody } from '../issue-169/geometry.mjs';
+import { certifyCandidate } from '../issue-176/certificates.mjs';
+export function constructPrimary() {
+  const split=buildCoast('integrated-primary');
+  let candidate={id:'integrated-primary',primary:true,...split,islands:[],bodyBoundary:stitchBody(split.interior,split.attachments)};
+  const rawArea=polygonArea(candidate.bodyBoundary),bodyArea=1.631407882,quota=bodyArea/(4*Math.PI),scale=Math.sqrt(bodyArea/rawArea);
+  const map=o=>Array.isArray(o)?o.length===2&&o.every(x=>typeof x==='number')?o.map(x=>x*scale):o.map(map):o&&typeof o==='object'?Object.fromEntries(Object.entries(o).map(([k,v])=>[k,map(v)])):o;
+  candidate=map(candidate);
+  return {rawArea,bodyArea,quota,scale,candidate,certificate:certifyCandidate(candidate,{quota})};
+}

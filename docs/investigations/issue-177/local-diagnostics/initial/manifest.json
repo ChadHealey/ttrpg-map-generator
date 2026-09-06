@@ -1,0 +1,37 @@
+{
+  "scope": "Immutable local stage",
+  "stage": "initial",
+  "kind": "initial",
+  "entry": "initial-primary.mjs",
+  "sources": {
+    "initial-primary.mjs": "source-00.mjs.txt",
+    "initial-layout.mjs": "source-01.mjs.txt",
+    "../issue-172/coast-partition.mjs": "source-02.mjs.txt",
+    "../issue-169/geometry.mjs": "source-03.mjs.txt",
+    "../issue-176/certificates.mjs": "source-04.mjs.txt",
+    "../issue-174/supporting-mouth.mjs": "source-05.mjs.txt",
+    "../issue-176/wedge-mouth.mjs": "source-06.mjs.txt",
+    "../issue-176/wedge-segment.mjs": "source-07.mjs.txt"
+  },
+  "artifacts": {
+    "source-00.mjs.txt": "9c5c1ec0f8fc9ef36e2ae9d09c7501ae8de05bd6aeb4a7b497ca01ebaeae248b",
+    "source-01.mjs.txt": "7a4047d479c1bd7581756f8300f0ee4f38c1109f9a9a7ee9eda0109cb6d63d48",
+    "source-02.mjs.txt": "4489dd7f81c918a21ab0463782cc112dbd1e72767affc6dae317a533c43930c8",
+    "source-03.mjs.txt": "bc54bf0c7e5b878d9d26f2fe96658d0818cddf1ae4a7b2f5997c965d98f463bc",
+    "source-04.mjs.txt": "923248025960bf29070533b7216c823245c4dd4956098021b39700615bbe097f",
+    "source-05.mjs.txt": "030978a9df08402fb09673be759c878f1f5ca3ea307d1d29ae725c697db26bb8",
+    "source-06.mjs.txt": "3ae13e28c511e62fe7ddb9a6c7234eee8f46dff2b9fcd9642d8aea5c69cc051e",
+    "source-07.mjs.txt": "b6917fb8fff78c9314a56f10d491daa37ae29ac2fc2a647a6794cebe96e5ae78",
+    "inputs.json": "03f857c575c5132331282569b26bdb0408173bbf532163898fef6974ffd031d9",
+    "report.json": "d55c09dc21dd0a32140c786e0ea2dcfa3ad934e71db19bac9c948eb75549ba85",
+    "panel.png": "a9e487b44551e676e866dcaa8257d9861fe0114328f3f48da477787c628d473d"
+  },
+  "dependencies": {
+    "local-evidence.mjs": "a23c6f6fc48b06121b3be590aaed174eb14e739d664c1e1624c7b1615e612880",
+    "write-local.mjs": "39644c2b00093b86c3600988bd5d665578cf9fd2201001cfe89f07f1144e6773",
+    "verify-local.mjs": "df8a9838abda553e6feb0a2a8718d1bbfb5e8f369b471ae96737f0184414d292",
+    "../issue-164/render-comparison.mjs": "9ef4249fe5525a61502ad4319262e05816e93e89bd7d6c9cab377ef9293d5004",
+    "../issue-164/morphology.mjs": "30d5597af6f999fdcdd9013288773f0bb0f445bac219b55cc94f0ebc37e70328",
+    "../issue-169/geometry.mjs": "bc54bf0c7e5b878d9d26f2fe96658d0818cddf1ae4a7b2f5997c965d98f463bc"
+  }
+}

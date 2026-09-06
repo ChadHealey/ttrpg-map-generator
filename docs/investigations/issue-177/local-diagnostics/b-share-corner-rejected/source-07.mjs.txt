@@ -1,0 +1,2 @@
+import { buildCoast as original } from './layout-b.mjs';
+export const buildCoast = id => original(id, { anatomy: [-1, 1] });

@@ -1,0 +1,49 @@
+{
+  "scope": "Immutable local stage",
+  "stage": "final",
+  "kind": "cohort",
+  "entry": "templates.mjs",
+  "sources": {
+    "templates.mjs": "source-00.mjs.txt",
+    "../issue-164/morphology.mjs": "source-01.mjs.txt",
+    "../issue-169/geometry.mjs": "source-02.mjs.txt",
+    "../issue-170/templates.mjs": "source-03.mjs.txt",
+    "../issue-169/certificates.mjs": "source-04.mjs.txt",
+    "../issue-172/coast-partition.mjs": "source-05.mjs.txt",
+    "../issue-172/coast-utils.mjs": "source-06.mjs.txt",
+    "../issue-176/certificates.mjs": "source-07.mjs.txt",
+    "../issue-174/supporting-mouth.mjs": "source-08.mjs.txt",
+    "../issue-176/wedge-mouth.mjs": "source-09.mjs.txt",
+    "../issue-176/wedge-segment.mjs": "source-10.mjs.txt",
+    "layout-a.mjs": "source-11.mjs.txt",
+    "layout-b.mjs": "source-12.mjs.txt",
+    "layout-c.mjs": "source-13.mjs.txt"
+  },
+  "artifacts": {
+    "source-00.mjs.txt": "10a42e56bb636fd6497c68867540ffc5e6c2cb378ecdb23b615333a8e310cad8",
+    "source-01.mjs.txt": "30d5597af6f999fdcdd9013288773f0bb0f445bac219b55cc94f0ebc37e70328",
+    "source-02.mjs.txt": "bc54bf0c7e5b878d9d26f2fe96658d0818cddf1ae4a7b2f5997c965d98f463bc",
+    "source-03.mjs.txt": "566b4fbeb5e568bdfd1e87c2b55622d70614cf36d2fa1393686cb6f404a2f870",
+    "source-04.mjs.txt": "7a1cfacab789829249ceaf72454d212472cb59a49ca8d8e08eedc6442ba8213c",
+    "source-05.mjs.txt": "4489dd7f81c918a21ab0463782cc112dbd1e72767affc6dae317a533c43930c8",
+    "source-06.mjs.txt": "c5f55bcbf46863feac1254bd232739ae09e6ad9344b6b279e76277920565a3b1",
+    "source-07.mjs.txt": "923248025960bf29070533b7216c823245c4dd4956098021b39700615bbe097f",
+    "source-08.mjs.txt": "030978a9df08402fb09673be759c878f1f5ca3ea307d1d29ae725c697db26bb8",
+    "source-09.mjs.txt": "3ae13e28c511e62fe7ddb9a6c7234eee8f46dff2b9fcd9642d8aea5c69cc051e",
+    "source-10.mjs.txt": "b6917fb8fff78c9314a56f10d491daa37ae29ac2fc2a647a6794cebe96e5ae78",
+    "source-11.mjs.txt": "94f474df9449a2fd46cbd89c082038b4957b8e60b10285f7e45983f93a76dd4c",
+    "source-12.mjs.txt": "5d4fa3e3726aeb7dbb58d41a0702537c97a13609cb0c5ee05f0cc5f4112c4526",
+    "source-13.mjs.txt": "e0b93b36513d1e624555fde0c4b297f95c1c67d582e6590ae57cd3a867a2a42a",
+    "inputs.json": "03f857c575c5132331282569b26bdb0408173bbf532163898fef6974ffd031d9",
+    "report.json": "82998866eddf01554f95fe4013c5a75cf6b181f5afdc401919cd43145eed9cb8",
+    "panel.png": "c04d8e0476c4ef05744cd547b6ae288cfcc657f5d2298f650336afdc978a8991"
+  },
+  "dependencies": {
+    "local-evidence.mjs": "a23c6f6fc48b06121b3be590aaed174eb14e739d664c1e1624c7b1615e612880",
+    "write-local.mjs": "39644c2b00093b86c3600988bd5d665578cf9fd2201001cfe89f07f1144e6773",
+    "verify-local.mjs": "df8a9838abda553e6feb0a2a8718d1bbfb5e8f369b471ae96737f0184414d292",
+    "../issue-164/render-comparison.mjs": "9ef4249fe5525a61502ad4319262e05816e93e89bd7d6c9cab377ef9293d5004",
+    "../issue-164/morphology.mjs": "30d5597af6f999fdcdd9013288773f0bb0f445bac219b55cc94f0ebc37e70328",
+    "../issue-169/geometry.mjs": "bc54bf0c7e5b878d9d26f2fe96658d0818cddf1ae4a7b2f5997c965d98f463bc"
+  }
+}
