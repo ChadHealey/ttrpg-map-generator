@@ -1,0 +1,507 @@
+{
+  "registryVersion": "issue-185-registry-r1",
+  "authority": {
+    "worldSeed": "81985529216486895",
+    "mapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7",
+    "entityId": "eaa0cecc-8c5d-559f-b18a-bbd0c53248ac",
+    "variantRevision": 0
+  },
+  "matrix": [
+    {
+      "ownerCount": 1,
+      "islandCount": 0,
+      "archipelagoCount": 0,
+      "order": "forward",
+      "variantRevision": 0,
+      "scopeCount": 260,
+      "drawCount": 20744,
+      "canonicalScopeOutputSha256": "6475d57f9097d2c3b27a7e70ecd244e57fab2aadda30638f72e3f2441522f46b"
+    },
+    {
+      "ownerCount": 1,
+      "islandCount": 0,
+      "archipelagoCount": 0,
+      "order": "reverse",
+      "variantRevision": 0,
+      "scopeCount": 260,
+      "drawCount": 20744,
+      "canonicalScopeOutputSha256": "6475d57f9097d2c3b27a7e70ecd244e57fab2aadda30638f72e3f2441522f46b"
+    },
+    {
+      "ownerCount": 1,
+      "islandCount": 0,
+      "archipelagoCount": 7,
+      "order": "forward",
+      "variantRevision": 0,
+      "scopeCount": 372,
+      "drawCount": 21192,
+      "canonicalScopeOutputSha256": "c00e316d1d0e44dc6e1bfb312b5371c7d77d2aa9d7380a876288aea4ca8bd055"
+    },
+    {
+      "ownerCount": 1,
+      "islandCount": 0,
+      "archipelagoCount": 7,
+      "order": "reverse",
+      "variantRevision": 0,
+      "scopeCount": 372,
+      "drawCount": 21192,
+      "canonicalScopeOutputSha256": "c00e316d1d0e44dc6e1bfb312b5371c7d77d2aa9d7380a876288aea4ca8bd055"
+    },
+    {
+      "ownerCount": 1,
+      "islandCount": 4,
+      "archipelagoCount": 0,
+      "order": "forward",
+      "variantRevision": 0,
+      "scopeCount": 324,
+      "drawCount": 21000,
+      "canonicalScopeOutputSha256": "69deb4c90461c020abc82b74374b8cae39182e4647ec2d1793e515e853e0a3d7"
+    },
+    {
+      "ownerCount": 1,
+      "islandCount": 4,
+      "archipelagoCount": 0,
+      "order": "reverse",
+      "variantRevision": 0,
+      "scopeCount": 324,
+      "drawCount": 21000,
+      "canonicalScopeOutputSha256": "69deb4c90461c020abc82b74374b8cae39182e4647ec2d1793e515e853e0a3d7"
+    },
+    {
+      "ownerCount": 1,
+      "islandCount": 4,
+      "archipelagoCount": 7,
+      "order": "forward",
+      "variantRevision": 0,
+      "scopeCount": 436,
+      "drawCount": 21448,
+      "canonicalScopeOutputSha256": "95c4ab7b5b2542edc2dd235c2d46aa07064f73eda8f1ad2b5b9cfe8ca142fdb6"
+    },
+    {
+      "ownerCount": 1,
+      "islandCount": 4,
+      "archipelagoCount": 7,
+      "order": "reverse",
+      "variantRevision": 0,
+      "scopeCount": 436,
+      "drawCount": 21448,
+      "canonicalScopeOutputSha256": "95c4ab7b5b2542edc2dd235c2d46aa07064f73eda8f1ad2b5b9cfe8ca142fdb6"
+    },
+    {
+      "ownerCount": 4,
+      "islandCount": 0,
+      "archipelagoCount": 0,
+      "order": "forward",
+      "variantRevision": 0,
+      "scopeCount": 842,
+      "drawCount": 82394,
+      "canonicalScopeOutputSha256": "9b339bb234daeda8b555adc1a0a42543d8611bc35200cc0e2a23f5b64b464840"
+    },
+    {
+      "ownerCount": 4,
+      "islandCount": 0,
+      "archipelagoCount": 0,
+      "order": "reverse",
+      "variantRevision": 0,
+      "scopeCount": 842,
+      "drawCount": 82394,
+      "canonicalScopeOutputSha256": "9b339bb234daeda8b555adc1a0a42543d8611bc35200cc0e2a23f5b64b464840"
+    },
+    {
+      "ownerCount": 4,
+      "islandCount": 0,
+      "archipelagoCount": 7,
+      "order": "forward",
+      "variantRevision": 0,
+      "scopeCount": 1290,
+      "drawCount": 84186,
+      "canonicalScopeOutputSha256": "815ec29e100b31eecea47dc73bb2c975d26de0e9888814002a848f7662c7d980"
+    },
+    {
+      "ownerCount": 4,
+      "islandCount": 0,
+      "archipelagoCount": 7,
+      "order": "reverse",
+      "variantRevision": 0,
+      "scopeCount": 1290,
+      "drawCount": 84186,
+      "canonicalScopeOutputSha256": "815ec29e100b31eecea47dc73bb2c975d26de0e9888814002a848f7662c7d980"
+    },
+    {
+      "ownerCount": 4,
+      "islandCount": 4,
+      "archipelagoCount": 0,
+      "order": "forward",
+      "variantRevision": 0,
+      "scopeCount": 1098,
+      "drawCount": 83418,
+      "canonicalScopeOutputSha256": "37808e9ab7f50a3f561483477537ba7553fc686a7a72cdd1301220615e1fa004"
+    },
+    {
+      "ownerCount": 4,
+      "islandCount": 4,
+      "archipelagoCount": 0,
+      "order": "reverse",
+      "variantRevision": 0,
+      "scopeCount": 1098,
+      "drawCount": 83418,
+      "canonicalScopeOutputSha256": "37808e9ab7f50a3f561483477537ba7553fc686a7a72cdd1301220615e1fa004"
+    },
+    {
+      "ownerCount": 4,
+      "islandCount": 4,
+      "archipelagoCount": 7,
+      "order": "forward",
+      "variantRevision": 0,
+      "scopeCount": 1546,
+      "drawCount": 85210,
+      "canonicalScopeOutputSha256": "945a37f6bbb798a29f8c194e792951bde4ea48cfab7ee06e89e43502cb3980ca"
+    },
+    {
+      "ownerCount": 4,
+      "islandCount": 4,
+      "archipelagoCount": 7,
+      "order": "reverse",
+      "variantRevision": 0,
+      "scopeCount": 1546,
+      "drawCount": 85210,
+      "canonicalScopeOutputSha256": "945a37f6bbb798a29f8c194e792951bde4ea48cfab7ee06e89e43502cb3980ca"
+    },
+    {
+      "ownerCount": 8,
+      "islandCount": 0,
+      "archipelagoCount": 0,
+      "order": "forward",
+      "variantRevision": 0,
+      "scopeCount": 1618,
+      "drawCount": 164594,
+      "canonicalScopeOutputSha256": "d590fbd31ae47faf5a13ea2054414f757b7afbe18e6ba879fbafd6e9dadcf30d"
+    },
+    {
+      "ownerCount": 8,
+      "islandCount": 0,
+      "archipelagoCount": 0,
+      "order": "reverse",
+      "variantRevision": 0,
+      "scopeCount": 1618,
+      "drawCount": 164594,
+      "canonicalScopeOutputSha256": "d590fbd31ae47faf5a13ea2054414f757b7afbe18e6ba879fbafd6e9dadcf30d"
+    },
+    {
+      "ownerCount": 8,
+      "islandCount": 0,
+      "archipelagoCount": 7,
+      "order": "forward",
+      "variantRevision": 0,
+      "scopeCount": 2514,
+      "drawCount": 168178,
+      "canonicalScopeOutputSha256": "fc49fe98cf2a63025eaee2f359b22bb43332cca967e51e33302afae9db13d7a7"
+    },
+    {
+      "ownerCount": 8,
+      "islandCount": 0,
+      "archipelagoCount": 7,
+      "order": "reverse",
+      "variantRevision": 0,
+      "scopeCount": 2514,
+      "drawCount": 168178,
+      "canonicalScopeOutputSha256": "fc49fe98cf2a63025eaee2f359b22bb43332cca967e51e33302afae9db13d7a7"
+    },
+    {
+      "ownerCount": 8,
+      "islandCount": 4,
+      "archipelagoCount": 0,
+      "order": "forward",
+      "variantRevision": 0,
+      "scopeCount": 2130,
+      "drawCount": 166642,
+      "canonicalScopeOutputSha256": "9eef0634d3d84f90874bf22454816082e78ad67d2f3b23b65152b72b53f1130d"
+    },
+    {
+      "ownerCount": 8,
+      "islandCount": 4,
+      "archipelagoCount": 0,
+      "order": "reverse",
+      "variantRevision": 0,
+      "scopeCount": 2130,
+      "drawCount": 166642,
+      "canonicalScopeOutputSha256": "9eef0634d3d84f90874bf22454816082e78ad67d2f3b23b65152b72b53f1130d"
+    },
+    {
+      "ownerCount": 8,
+      "islandCount": 4,
+      "archipelagoCount": 7,
+      "order": "forward",
+      "variantRevision": 0,
+      "scopeCount": 3026,
+      "drawCount": 170226,
+      "canonicalScopeOutputSha256": "8a16189fcdc2ac64a54cb73f365aaa194c0ba272e2c415453455382de4cb9224"
+    },
+    {
+      "ownerCount": 8,
+      "islandCount": 4,
+      "archipelagoCount": 7,
+      "order": "reverse",
+      "variantRevision": 0,
+      "scopeCount": 3026,
+      "drawCount": 170226,
+      "canonicalScopeOutputSha256": "8a16189fcdc2ac64a54cb73f365aaa194c0ba272e2c415453455382de4cb9224"
+    },
+    {
+      "ownerCount": 1,
+      "islandCount": 0,
+      "archipelagoCount": 0,
+      "order": "forward",
+      "variantRevision": 1,
+      "scopeCount": 260,
+      "drawCount": 20744,
+      "canonicalScopeOutputSha256": "0f7457f0b400705f3699afc4e1acef265e138a9f6e8827dc12cd7e035edd22bb"
+    },
+    {
+      "ownerCount": 1,
+      "islandCount": 0,
+      "archipelagoCount": 0,
+      "order": "reverse",
+      "variantRevision": 1,
+      "scopeCount": 260,
+      "drawCount": 20744,
+      "canonicalScopeOutputSha256": "0f7457f0b400705f3699afc4e1acef265e138a9f6e8827dc12cd7e035edd22bb"
+    },
+    {
+      "ownerCount": 1,
+      "islandCount": 0,
+      "archipelagoCount": 7,
+      "order": "forward",
+      "variantRevision": 1,
+      "scopeCount": 372,
+      "drawCount": 21192,
+      "canonicalScopeOutputSha256": "318a2b30a3b41e64210ed384aac101a791101d08f81c84a6e3c3b2fac3d6effa"
+    },
+    {
+      "ownerCount": 1,
+      "islandCount": 0,
+      "archipelagoCount": 7,
+      "order": "reverse",
+      "variantRevision": 1,
+      "scopeCount": 372,
+      "drawCount": 21192,
+      "canonicalScopeOutputSha256": "318a2b30a3b41e64210ed384aac101a791101d08f81c84a6e3c3b2fac3d6effa"
+    },
+    {
+      "ownerCount": 1,
+      "islandCount": 4,
+      "archipelagoCount": 0,
+      "order": "forward",
+      "variantRevision": 1,
+      "scopeCount": 324,
+      "drawCount": 21000,
+      "canonicalScopeOutputSha256": "0d3c709dd300ca8c3e7c859bac285a2f40a4741bf92fca4490ee53b4c636b941"
+    },
+    {
+      "ownerCount": 1,
+      "islandCount": 4,
+      "archipelagoCount": 0,
+      "order": "reverse",
+      "variantRevision": 1,
+      "scopeCount": 324,
+      "drawCount": 21000,
+      "canonicalScopeOutputSha256": "0d3c709dd300ca8c3e7c859bac285a2f40a4741bf92fca4490ee53b4c636b941"
+    },
+    {
+      "ownerCount": 1,
+      "islandCount": 4,
+      "archipelagoCount": 7,
+      "order": "forward",
+      "variantRevision": 1,
+      "scopeCount": 436,
+      "drawCount": 21448,
+      "canonicalScopeOutputSha256": "1dfa40c0b30e2c67432488b8cba24eb6d41211f513203ea98dacd968900bdc42"
+    },
+    {
+      "ownerCount": 1,
+      "islandCount": 4,
+      "archipelagoCount": 7,
+      "order": "reverse",
+      "variantRevision": 1,
+      "scopeCount": 436,
+      "drawCount": 21448,
+      "canonicalScopeOutputSha256": "1dfa40c0b30e2c67432488b8cba24eb6d41211f513203ea98dacd968900bdc42"
+    },
+    {
+      "ownerCount": 4,
+      "islandCount": 0,
+      "archipelagoCount": 0,
+      "order": "forward",
+      "variantRevision": 1,
+      "scopeCount": 842,
+      "drawCount": 82394,
+      "canonicalScopeOutputSha256": "77e2afbadb0f535241a9a95dfce169838dd8b639ee8caa358a01670301ccf7f8"
+    },
+    {
+      "ownerCount": 4,
+      "islandCount": 0,
+      "archipelagoCount": 0,
+      "order": "reverse",
+      "variantRevision": 1,
+      "scopeCount": 842,
+      "drawCount": 82394,
+      "canonicalScopeOutputSha256": "77e2afbadb0f535241a9a95dfce169838dd8b639ee8caa358a01670301ccf7f8"
+    },
+    {
+      "ownerCount": 4,
+      "islandCount": 0,
+      "archipelagoCount": 7,
+      "order": "forward",
+      "variantRevision": 1,
+      "scopeCount": 1290,
+      "drawCount": 84186,
+      "canonicalScopeOutputSha256": "518d9626a0a5f42b0e6bff11601d8ed9bb189a7388f6b0901e24257ef525e52c"
+    },
+    {
+      "ownerCount": 4,
+      "islandCount": 0,
+      "archipelagoCount": 7,
+      "order": "reverse",
+      "variantRevision": 1,
+      "scopeCount": 1290,
+      "drawCount": 84186,
+      "canonicalScopeOutputSha256": "518d9626a0a5f42b0e6bff11601d8ed9bb189a7388f6b0901e24257ef525e52c"
+    },
+    {
+      "ownerCount": 4,
+      "islandCount": 4,
+      "archipelagoCount": 0,
+      "order": "forward",
+      "variantRevision": 1,
+      "scopeCount": 1098,
+      "drawCount": 83418,
+      "canonicalScopeOutputSha256": "fd40ac999178d9624a11ec7f48565f2559dd14a78db06440a3fe2384c089ddc2"
+    },
+    {
+      "ownerCount": 4,
+      "islandCount": 4,
+      "archipelagoCount": 0,
+      "order": "reverse",
+      "variantRevision": 1,
+      "scopeCount": 1098,
+      "drawCount": 83418,
+      "canonicalScopeOutputSha256": "fd40ac999178d9624a11ec7f48565f2559dd14a78db06440a3fe2384c089ddc2"
+    },
+    {
+      "ownerCount": 4,
+      "islandCount": 4,
+      "archipelagoCount": 7,
+      "order": "forward",
+      "variantRevision": 1,
+      "scopeCount": 1546,
+      "drawCount": 85210,
+      "canonicalScopeOutputSha256": "afa4471cb6a8fc4e79fa41499d247c543087505f035247c5efb3b5f5d00d917b"
+    },
+    {
+      "ownerCount": 4,
+      "islandCount": 4,
+      "archipelagoCount": 7,
+      "order": "reverse",
+      "variantRevision": 1,
+      "scopeCount": 1546,
+      "drawCount": 85210,
+      "canonicalScopeOutputSha256": "afa4471cb6a8fc4e79fa41499d247c543087505f035247c5efb3b5f5d00d917b"
+    },
+    {
+      "ownerCount": 8,
+      "islandCount": 0,
+      "archipelagoCount": 0,
+      "order": "forward",
+      "variantRevision": 1,
+      "scopeCount": 1618,
+      "drawCount": 164594,
+      "canonicalScopeOutputSha256": "4f452d12343170ffbdd6e84bf96dd9b2d1c68f536f7d22b7f59732738f3ca651"
+    },
+    {
+      "ownerCount": 8,
+      "islandCount": 0,
+      "archipelagoCount": 0,
+      "order": "reverse",
+      "variantRevision": 1,
+      "scopeCount": 1618,
+      "drawCount": 164594,
+      "canonicalScopeOutputSha256": "4f452d12343170ffbdd6e84bf96dd9b2d1c68f536f7d22b7f59732738f3ca651"
+    },
+    {
+      "ownerCount": 8,
+      "islandCount": 0,
+      "archipelagoCount": 7,
+      "order": "forward",
+      "variantRevision": 1,
+      "scopeCount": 2514,
+      "drawCount": 168178,
+      "canonicalScopeOutputSha256": "c76afb2ab6184e791f7383892d5fc3b5dd2995389634175991707c5a3e66f176"
+    },
+    {
+      "ownerCount": 8,
+      "islandCount": 0,
+      "archipelagoCount": 7,
+      "order": "reverse",
+      "variantRevision": 1,
+      "scopeCount": 2514,
+      "drawCount": 168178,
+      "canonicalScopeOutputSha256": "c76afb2ab6184e791f7383892d5fc3b5dd2995389634175991707c5a3e66f176"
+    },
+    {
+      "ownerCount": 8,
+      "islandCount": 4,
+      "archipelagoCount": 0,
+      "order": "forward",
+      "variantRevision": 1,
+      "scopeCount": 2130,
+      "drawCount": 166642,
+      "canonicalScopeOutputSha256": "d1696e28f7b7c0ac72693bc1bbba0a1339fd123dc440b2e25093cb48cf353c09"
+    },
+    {
+      "ownerCount": 8,
+      "islandCount": 4,
+      "archipelagoCount": 0,
+      "order": "reverse",
+      "variantRevision": 1,
+      "scopeCount": 2130,
+      "drawCount": 166642,
+      "canonicalScopeOutputSha256": "d1696e28f7b7c0ac72693bc1bbba0a1339fd123dc440b2e25093cb48cf353c09"
+    },
+    {
+      "ownerCount": 8,
+      "islandCount": 4,
+      "archipelagoCount": 7,
+      "order": "forward",
+      "variantRevision": 1,
+      "scopeCount": 3026,
+      "drawCount": 170226,
+      "canonicalScopeOutputSha256": "d4b02d487b4bba9c869d50e9a4f67f2125a79c6a4c456387026e545f0dde83dc"
+    },
+    {
+      "ownerCount": 8,
+      "islandCount": 4,
+      "archipelagoCount": 7,
+      "order": "reverse",
+      "variantRevision": 1,
+      "scopeCount": 3026,
+      "drawCount": 170226,
+      "canonicalScopeOutputSha256": "d4b02d487b4bba9c869d50e9a4f67f2125a79c6a4c456387026e545f0dde83dc"
+    }
+  ],
+  "siblingSentinel": {
+    "input": {
+      "seedDerivationVersion": 1,
+      "deterministicStreamVersion": 1,
+      "worldSeed": "81985529216486895",
+      "generatorId": "worldSurface.landWaterClassification",
+      "generatorVersion": 1,
+      "aspectName": "worldSurface.landWaterClassification",
+      "variantRevision": 0,
+      "seedScope": "map/entity",
+      "mapId": "a6f99996-09e8-4f5f-bf5f-80b6bb38bdb7",
+      "entityId": "eaa0cecc-8c5d-559f-b18a-bbd0c53248ac"
+    },
+    "seedHex": "dcd234d0c12b268315c514d96923e9dde53d68b4e0712c2a13dcb7913ce4afb7"
+  },
+  "claim": "Exact finite stream/name independence; no geometry, placement, visual, cross-platform or production adoption claim."
+}

@@ -1,0 +1,8 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "paths": { "@ttrpg-map/core": ["../../../packages/core/src/index.ts"] }
+  },
+  "include": ["registry.ts"]
+}

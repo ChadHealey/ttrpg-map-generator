@@ -1,0 +1,10 @@
+{
+  "revision": "issue-185-scopes-r1",
+  "sourceHashesVerified": true,
+  "artifacts": {
+    "vectors.json.gz": "1d43bb5b516b507094aca22c5399ac44b90e06391d4aeba4a9a955528ab0e570",
+    "matrix.json": "d7cf3d852404fd63491863d7b8c72c139ba850575b362bebe8fd778f5a80d381"
+  },
+  "matrixRows": 48,
+  "vectors": 6052
+}
