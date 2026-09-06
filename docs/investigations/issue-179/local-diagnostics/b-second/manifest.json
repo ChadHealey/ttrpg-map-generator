@@ -1,0 +1,33 @@
+{
+  "scope": "Immutable local stage",
+  "entry": "layout-b.mjs",
+  "sources": {
+    "../issue-179/layout-b.mjs": "source-00.mjs.txt",
+    "../issue-172/coast-partition.mjs": "source-01.mjs.txt",
+    "../issue-169/geometry.mjs": "source-02.mjs.txt",
+    "../issue-176/certificates.mjs": "source-03.mjs.txt",
+    "../issue-174/supporting-mouth.mjs": "source-04.mjs.txt",
+    "../issue-176/wedge-mouth.mjs": "source-05.mjs.txt",
+    "../issue-176/wedge-segment.mjs": "source-06.mjs.txt",
+    "../issue-178/certificates.mjs": "source-07.mjs.txt"
+  },
+  "artifacts": {
+    "source-00.mjs.txt": "902adeb2858ff1ba21c4af73bb2d4b674158f3119efa127cabaa28672d9acf17",
+    "source-01.mjs.txt": "4489dd7f81c918a21ab0463782cc112dbd1e72767affc6dae317a533c43930c8",
+    "source-02.mjs.txt": "bc54bf0c7e5b878d9d26f2fe96658d0818cddf1ae4a7b2f5997c965d98f463bc",
+    "source-03.mjs.txt": "923248025960bf29070533b7216c823245c4dd4956098021b39700615bbe097f",
+    "source-04.mjs.txt": "030978a9df08402fb09673be759c878f1f5ca3ea307d1d29ae725c697db26bb8",
+    "source-05.mjs.txt": "3ae13e28c511e62fe7ddb9a6c7234eee8f46dff2b9fcd9642d8aea5c69cc051e",
+    "source-06.mjs.txt": "b6917fb8fff78c9314a56f10d491daa37ae29ac2fc2a647a6794cebe96e5ae78",
+    "source-07.mjs.txt": "6ac1b753e2f680845c1a4ce22c9e5debe19b139b62ec6fb5b226f4166c796109",
+    "report.json": "3c44d62ac32ddf46fad02163006b631fd2d20816532dec661b96aded78d9b203",
+    "panel.png": "1275d6ccf473c1c206a3dce4ace205e132cb4f07f02daf84250a6ad07bde8222"
+  },
+  "dependencies": {
+    "local-evidence.mjs": "e580e765f7ff03a00820a3459cf44b332940eb3802684a5cae8784f1a5e97332",
+    "../issue-177/local-evidence.mjs": "a23c6f6fc48b06121b3be590aaed174eb14e739d664c1e1624c7b1615e612880",
+    "../issue-164/render-comparison.mjs": "9ef4249fe5525a61502ad4319262e05816e93e89bd7d6c9cab377ef9293d5004",
+    "../issue-164/morphology.mjs": "30d5597af6f999fdcdd9013288773f0bb0f445bac219b55cc94f0ebc37e70328",
+    "../issue-169/geometry.mjs": "bc54bf0c7e5b878d9d26f2fe96658d0818cddf1ae4a7b2f5997c965d98f463bc"
+  }
+}
